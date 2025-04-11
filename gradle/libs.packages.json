@@ -1,0 +1,24 @@
+{
+  "libs.kotlin.datetime": [
+    "kotlinx.datetime"
+  ],
+  "libs.android.activity.compose": [
+    "androidx.activity.compose"
+  ],
+  "libs.android.datastore": [
+    "androidx.datastore"
+  ],
+  "libs.paho": [
+    "org.eclipse.paho.client.mqttv3"
+  ],
+  "libs.slf4j.kotlin": [
+    "io.github.oshai.kotlinlogging"
+  ],
+  "libs.slf4j.simple": [
+    "org.slf4j.simple"
+  ],
+  "libs.android.appcompat": [],
+  "compose.materialIconsExtended": [
+    "androidx.compose.material.icons"
+  ]
+}
