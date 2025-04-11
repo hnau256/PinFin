@@ -12,7 +12,7 @@ import androidx.compose.ui.Modifier
 import hnau.common.color.material.MaterialHue
 
 @Composable
-fun pinfinTheme(
+fun PinfinTheme(
     content: @Composable () -> Unit,
 ) = MaterialTheme(
     colors = buildColors(

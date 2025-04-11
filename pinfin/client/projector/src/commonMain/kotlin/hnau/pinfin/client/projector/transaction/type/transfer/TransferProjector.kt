@@ -1,0 +1,125 @@
+package hnau.pinfin.client.projector.transaction.type.transfer
+
+import androidx.compose.foundation.layout.padding
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.ui.Modifier
+import hnau.common.compose.uikit.state.StateContent
+import hnau.common.compose.uikit.state.TransitionSpec
+import hnau.common.compose.uikit.table.CellBox
+import hnau.common.compose.uikit.table.Subtable
+import hnau.common.compose.uikit.table.Table
+import hnau.common.compose.uikit.table.TableOrientation
+import hnau.common.compose.uikit.table.TableScope
+import hnau.common.compose.uikit.table.cellShape
+import hnau.common.compose.uikit.utils.Dimens
+import hnau.common.compose.utils.Icon
+import hnau.common.kotlin.coroutines.mapWithScope
+import hnau.pinfin.client.data.budget.AccountInfoResolver
+import hnau.pinfin.client.model.transaction.type.transfer.TransferModel
+import hnau.pinfin.client.model.transaction.type.transfer.TransferSide
+import hnau.pinfin.client.projector.AmountProjector
+import hnau.pinfin.client.projector.transaction.type.utils.ChooseAccountProjector
+import hnau.pinfin.client.projector.utils.ArrowDirection
+import hnau.pinfin.client.projector.utils.ArrowIcon
+import hnau.pinfin.client.projector.utils.account.AccountButton
+import hnau.shuffler.annotations.Shuffle
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.StateFlow
+
+class TransferProjector(
+    private val scope: CoroutineScope,
+    private val model: TransferModel,
+    private val dependencies: Dependencies,
+) {
+
+    @Shuffle
+    interface Dependencies {
+
+        fun chooseAccount(): ChooseAccountProjector.Dependencies
+
+        fun amount(): AmountProjector.Dependencies
+
+        val accountInfoResolver: AccountInfoResolver
+    }
+
+    private val choose: StateFlow<ChooseAccountProjector?> = model
+        .choose
+        .mapWithScope(
+            scope = scope,
+        ) { stateScope, chooseModelOrNull ->
+            chooseModelOrNull?.let { chooseModel ->
+                ChooseAccountProjector(
+                    scope = stateScope,
+                    model = chooseModel,
+                    dependencies = dependencies.chooseAccount(),
+                )
+            }
+        }
+
+    private val amount: AmountProjector = AmountProjector(
+        scope = scope,
+        model = model.amount,
+        dependencies = dependencies.amount(),
+    )
+
+    @Composable
+    fun Content() {
+        choose
+            .collectAsState()
+            .value
+            .StateContent(
+                label = "AccountsOrChoosing",
+                transitionSpec = TransitionSpec.crossfade(),
+                contentKey = { it != null }
+            ) { chooseOrNull ->
+                when (chooseOrNull) {
+                    null -> DefaultContent()
+                    else -> chooseOrNull.Content()
+                }
+            }
+    }
+
+    @Composable
+    private fun TableScope.AccountCell(
+        side: TransferSide,
+    ) {
+        Cell {
+            val (account, onClick) = model.accounts[side]
+            AccountButton(
+                modifier = Modifier.weight(1f),
+                id = account.collectAsState().value,
+                onClick = onClick,
+                shape = cellShape,
+                infoResolver = dependencies.accountInfoResolver,
+            )
+        }
+    }
+
+    @Composable
+    private fun DefaultContent() {
+        Table(
+            orientation = TableOrientation.Vertical,
+        ) {
+            Subtable {
+                AccountCell(
+                    side = TransferSide.From,
+                )
+
+                CellBox {
+                    Icon(
+                        modifier = Modifier.padding(
+                            horizontal = Dimens.separation,
+                        )
+                    ) { ArrowIcon[ArrowDirection.StartToEnd] }
+                }
+                AccountCell(
+                    side = TransferSide.To,
+                )
+            }
+            amount.Content(
+                scope = this,
+            )
+        }
+    }
+}

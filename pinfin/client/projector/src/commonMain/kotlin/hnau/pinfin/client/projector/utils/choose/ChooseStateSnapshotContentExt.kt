@@ -1,4 +1,4 @@
-package hnau.pinfin.client.projector.utils
+package hnau.pinfin.client.projector.utils.choose
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -10,7 +10,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.input.TextFieldValue
 import arrow.core.toNonEmptyListOrNull
 import hnau.common.app.EditingString
 import hnau.common.compose.uikit.TextInput

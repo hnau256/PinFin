@@ -47,6 +47,7 @@ android-datastore = { module = "androidx.datastore:datastore", version = "1.0.0"
 android-appcompat = { module = "androidx.appcompat:appcompat", version = "1.6.1" }
 #compose
 compose-material3 = { module = "androidx.compose.material3:material3", version.ref = "material3" }
+compose-material-iconsExtended = { module = "androidx.compose.material:material-icons-extended", version.ref = "composeDesktop" }
 #arrow
 arrow-core = { module = "io.arrow-kt:arrow-core", version.ref = "arrow" }
 arrow-coroutines = { module = "io.arrow-kt:arrow-fx-coroutines", version.ref = "arrow" }

@@ -4,9 +4,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import hnau.pinfin.client.app.PinFinApp
-import hnau.pinfin.client.compose.utils.pinfinTheme
-import hnau.pinfin.client.projector.init.InitProjector
-import hnau.pinfin.client.projector.init.impl
+import hnau.pinfin.client.compose.utils.PinfinTheme
+import hnau.pinfin.client.projector.InitProjector
+import hnau.pinfin.client.projector.impl
 
 @Composable
 fun PinFinApp.Content() {
@@ -18,7 +18,7 @@ fun PinFinApp.Content() {
                 model = model,
             )
     }
-    pinfinTheme {
+    PinfinTheme {
         projector.Content()
     }
 }

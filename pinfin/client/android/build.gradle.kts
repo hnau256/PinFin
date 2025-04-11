@@ -4,7 +4,7 @@ plugins {
 }
 
 android {
-    namespace = "hnau.pinfin.client"
+    namespace = "hnau.pinfin"
     sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
     sourceSets["main"].res.srcDirs("src/androidMain/res")
     buildTypes {

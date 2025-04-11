@@ -1,0 +1,122 @@
+package hnau.pinfin.client.projector.transaction.type.entry
+
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.key
+import androidx.compose.ui.util.fastForEach
+import arrow.core.NonEmptyList
+import hnau.common.compose.uikit.ContainerStyle
+import hnau.common.compose.uikit.HnauButton
+import hnau.common.compose.uikit.TripleRow
+import hnau.common.compose.utils.Icon
+import hnau.common.kotlin.coroutines.createChild
+import hnau.common.kotlin.coroutines.runningFoldState
+import hnau.common.kotlin.ifNull
+import hnau.pinfin.client.model.transaction.type.entry.EntryModel
+import hnau.pinfin.client.model.transaction.type.entry.record.RecordId
+import hnau.pinfin.client.projector.transaction.type.entry.record.RecordProjector
+import hnau.shuffler.annotations.Shuffle
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.flow.StateFlow
+
+class EntryProjectorRecordsDelegate(
+    scope: CoroutineScope,
+    private val model: EntryModel,
+    dependencies: Dependencies,
+) {
+
+    @Shuffle
+    interface Dependencies {
+
+        fun record(): RecordProjector.Dependencies
+
+    }
+
+    private data class Item(
+        val id: RecordId,
+        val scope: CoroutineScope,
+        val projector: RecordProjector,
+    ) {
+
+        companion object {
+
+            fun create(
+                scope: CoroutineScope,
+                item: EntryModel.RecordItem,
+                dependencies: Dependencies,
+            ): Item {
+                val recordScope = scope.createChild()
+                return Item(
+                    id = item.id,
+                    scope = recordScope,
+                    projector = RecordProjector(
+                        scope = recordScope,
+                        model = item.model,
+                        dependencies = dependencies.record(),
+                    )
+                )
+            }
+        }
+    }
+
+    private val records: StateFlow<NonEmptyList<Item>> = model
+        .records
+        .runningFoldState(
+            scope = scope,
+            createInitial = { records ->
+                records.map { record ->
+                    Item.create(
+                        scope = scope,
+                        item = record,
+                        dependencies = dependencies,
+                    )
+                }
+            },
+            operation = { previous, records ->
+                val cache = previous
+                    .associateBy { item -> item.id }
+                    .toMutableMap()
+                val result = records.map { item ->
+                    cache
+                        .remove(item.id)
+                        .ifNull {
+                            Item.create(
+                                scope = scope,
+                                item = item,
+                                dependencies = dependencies,
+                            )
+                        }
+                }
+                cache.values.forEach { item -> item.scope.cancel() }
+                result
+            }
+        )
+
+    @Composable
+    fun Content() {
+        records
+            .collectAsState()
+            .value
+            .fastForEach { item ->
+                key(item.id.id) {
+                    item.projector.Content()
+                }
+            }
+        HnauButton(
+            content = {
+                //TODO("ComposeForAndroid")
+                TripleRow(
+                    content = { Text("QWERTY"/*stringResource(R.string.add_record)*/) },
+                    leading = { Icon { Icons.Filled.Add } }
+                )
+            },
+            onClick = model::addNewRecord,
+            style = ContainerStyle.Tertiary,
+        )
+    }
+
+}
