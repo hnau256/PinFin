@@ -2,11 +2,10 @@ package hnau.pinfin.client.app
 
 import hnau.common.app.goback.GoBackHandler
 import hnau.common.kotlin.mapper.toMapper
-import hnau.pinfin.client.model.init.InitModel
+import hnau.pinfin.client.model.InitModel
 import hnau.shuffler.annotations.Shuffle
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.serialization.json.Json
-import hnau.common.kotlin.coroutines.toMutableStateFlowAsInitial
 
 class PinFinApp(
     scope: CoroutineScope,
@@ -17,7 +16,7 @@ class PinFinApp(
     @Shuffle
     interface Dependencies {
 
-        fun initStorage(): InitModel.Dependencies
+        fun init(): InitModel.Dependencies
 
         companion object
     }
@@ -37,10 +36,10 @@ class PinFinApp(
         ?: InitModel.Skeleton()
 
     val model = InitModel(
-            scope = scope,
-            skeleton = modelSkeleton,
-            dependencies = dependencies.initStorage(),
-        )
+        scope = scope,
+        skeleton = modelSkeleton,
+        dependencies = dependencies.init(),
+    )
 
     val savableState: SavedState
         get() = modelSkeletonMapper.reverse(modelSkeleton).let(::SavedState)

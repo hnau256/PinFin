@@ -8,13 +8,14 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.createSavedStateHandle
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
-import hnau.common.app.storage.Storage
 import hnau.pinfin.client.app.PinFinApp
 import hnau.pinfin.client.app.SavedState
-import hnau.pinfin.client.app.commonImpl
+import hnau.pinfin.client.app.impl
+import hnau.pinfin.client.data.FileUpdateRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
+import java.io.File
 
 class AppViewModel(
     context: Context,
@@ -25,11 +26,14 @@ class AppViewModel(
 
     val app = PinFinApp(
         scope = scope,
-        dependencies = PinFinApp.Dependencies.commonImpl(
-            storageFactory = Storage.Factory.dataStore(
+        dependencies = PinFinApp.Dependencies.impl(
+            updateRepository = FileUpdateRepository(
+                updatesFile = File(context.filesDir, "updates"),
+            )
+            /*storageFactory = Storage.Factory.dataStore(
                 scope = scope,
                 context = context,
-            ),
+            ),*/
         ),
         savedState = SavedState(
             state

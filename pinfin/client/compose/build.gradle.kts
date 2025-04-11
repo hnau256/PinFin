@@ -6,9 +6,6 @@ plugins {
 
 kotlin {
     sourceSets {
-        jvmMain.dependencies {
-            implementation(project(":pinfin:client:projector"))
-        }
         commonMain.dependencies {
             implementation(compose.materialIconsExtended)
             implementation(project(":common:app"))

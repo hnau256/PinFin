@@ -9,6 +9,8 @@ kotlin {
         commonMain.dependencies {
             implementation(project(":common:app"))
             implementation(project(":pinfin:client:model"))
+            implementation(project(":pinfin:scheme"))
+            implementation(libs.compose.material3)
         }
     }
 }

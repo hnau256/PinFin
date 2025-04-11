@@ -1,7 +1,7 @@
 package hnau.pinfin.client.projector.init
 
 import androidx.compose.runtime.Composable
-import hnau.pinfin.client.model.init.InitModel
+import hnau.pinfin.client.model.InitModel
 import hnau.shuffler.annotations.Shuffle
 import kotlinx.coroutines.CoroutineScope
 

@@ -6,13 +6,10 @@ plugins {
 
 kotlin {
     sourceSets {
-        jvmMain.dependencies {
-            implementation(project(":common:app"))
-            implementation(project(":pinfin:client:model"))
-        }
         commonMain.dependencies {
             implementation(project(":common:app"))
             implementation(project(":pinfin:client:model"))
+            implementation(project(":pinfin:client:data"))
         }
     }
 }

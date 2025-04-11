@@ -7,14 +7,12 @@ import androidx.activity.OnBackPressedCallback
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.lifecycle.lifecycleScope
-import hnau.common.kotlin.castOrThrow
 import hnau.pinfin.client.compose.Content
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import org.slf4j.LoggerFactory
-import org.slf4j.simple.SimpleLogger
 
 class AppActivity : ComponentActivity() {
 
@@ -27,7 +25,6 @@ class AppActivity : ComponentActivity() {
     init {
         LoggerFactory
             .getLogger("AppActivity")
-            .castOrThrow<SimpleLogger>()
             .debug("Start AppActivity")
     }
 

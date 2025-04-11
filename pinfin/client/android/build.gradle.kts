@@ -25,6 +25,7 @@ kotlin {
             implementation(libs.android.datastore)
             implementation(libs.slf4j.simple)
             implementation(project(":common:app"))
+            implementation(project(":pinfin:client:data"))
             implementation(project(":pinfin:client:app"))
             implementation(project(":pinfin:client:compose"))
             implementation(project(":pinfin:client:model"))
