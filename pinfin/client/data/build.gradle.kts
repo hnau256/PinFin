@@ -5,6 +5,9 @@ plugins {
 }
 
 kotlin {
+    jvmToolchain {
+        languageVersion.set(JavaLanguageVersion.of(17))
+    }
     sourceSets {
         commonMain.dependencies {
             implementation(project(":pinfin:scheme"))

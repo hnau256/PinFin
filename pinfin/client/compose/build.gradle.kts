@@ -5,12 +5,16 @@ plugins {
 }
 
 kotlin {
+    jvmToolchain {
+        languageVersion.set(JavaLanguageVersion.of(17))
+    }
     sourceSets {
         commonMain.dependencies {
-            implementation(compose.materialIconsExtended)
-            implementation(compose.material3)
+            implementation(libs.compose.material.iconsExtended)
+            implementation(libs.compose.material3)
             implementation(project(":common:app"))
             implementation(project(":common:color"))
+            implementation(project(":common:compose"))
             implementation(project(":pinfin:client:app"))
             implementation(project(":pinfin:client:model"))
             implementation(project(":pinfin:client:projector"))

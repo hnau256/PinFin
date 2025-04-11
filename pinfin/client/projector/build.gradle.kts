@@ -5,8 +5,12 @@ plugins {
 }
 
 kotlin {
+    jvmToolchain {
+        languageVersion.set(JavaLanguageVersion.of(17))
+    }
     sourceSets {
         commonMain.dependencies {
+            implementation(project(":common:compose"))
             implementation(project(":common:app"))
             implementation(project(":pinfin:client:model"))
             implementation(project(":pinfin:client:data"))

@@ -6,10 +6,8 @@ plugins {
 }
 
 kotlin {
-    jvmToolchain(17)
-    jvm {
-        withJava()
-
+    jvmToolchain {
+        languageVersion.set(JavaLanguageVersion.of(17))
     }
     sourceSets {
         commonMain.dependencies {

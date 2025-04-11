@@ -27,6 +27,7 @@ kotlin {
             implementation(libs.slf4j.simple)
             implementation(project(":common:app"))
             implementation(project(":common:android"))
+            implementation(project(":common:compose"))
             implementation(project(":pinfin:client:data"))
             implementation(project(":pinfin:client:app"))
             implementation(project(":pinfin:client:compose"))

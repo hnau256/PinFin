@@ -55,6 +55,10 @@ internal fun Project.config(
                 }
             }
         }
+        extension.jvmToolchain {
+            this.version = javaVersion
+            //languageVersion.set(JavaLanguageVersion.of(17))
+        }
         extension.jvm {
             compilations.configureEach { jvmCompilation ->
                 jvmCompilation.kotlinOptions {
