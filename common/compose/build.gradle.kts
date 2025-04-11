@@ -6,6 +6,11 @@ plugins {
 }
 
 kotlin {
+    jvmToolchain(17)
+    jvm {
+        withJava()
+
+    }
     sourceSets {
         commonMain.dependencies {
             implementation(libs.compose.material3)

@@ -7,7 +7,10 @@ import androidx.activity.OnBackPressedCallback
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.lifecycle.lifecycleScope
+import hnau.common.android.AndroidDynamicColorsGenerator
+import hnau.pinfin.client.compose.AppContentDependencies
 import hnau.pinfin.client.compose.Content
+import hnau.pinfin.client.compose.impl
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
@@ -34,8 +37,13 @@ class AppActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         initOnBackPressedDispatcherCallback()
+        val dependencies = AppContentDependencies.impl(
+            dynamicColorsGenerator = AndroidDynamicColorsGenerator.createIfSupported(),
+        )
         setContent {
-            viewModel.app.Content()
+            viewModel.app.Content(
+                dependencies = dependencies,
+            )
         }
     }
 

@@ -46,8 +46,6 @@ class InitProjector(
             accountInfoResolver: AccountInfoResolver,
             categoryInfoResolver: CategoryInfoResolver,
         ): MainStackProjector.Dependencies
-
-        companion object
     }
 
     private val bubblesHolder = SharedBubblesHolder(

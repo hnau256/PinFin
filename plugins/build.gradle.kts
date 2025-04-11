@@ -33,6 +33,10 @@ gradlePlugin {
         id = "hnau.android.app"
         implementationClass = "hnau.plugin.HnauAndroidAppPlugin"
     }
+    plugins.create("Android library") {
+        id = "hnau.android.lib"
+        implementationClass = "hnau.plugin.HnauAndroidLibPlugin"
+    }
     plugins.create("Dependencies") {
         id = "hnau.fixdependencies"
         implementationClass = "hnau.plugin.fixdependencies.HnauFixDependenciesPlugin"

@@ -1,4 +1,4 @@
-package hnau.pinfin.client.android
+package hnau.common.android
 
 import android.content.Context
 import androidx.datastore.core.DataStoreFactory
