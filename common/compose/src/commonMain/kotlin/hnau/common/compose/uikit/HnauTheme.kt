@@ -17,29 +17,32 @@ import hnau.common.compose.utils.buildPrettyColorScheme
 @Composable
 fun HnauTheme(
     primaryHueOrDynamicColorsGenerator: Either<MaterialHue, DynamicColorsGenerator>,
-    brightness: ThemeBrightness = ThemeBrightness.system,
+    forcedBrightness: ThemeBrightness? = null,
     content: @Composable () -> Unit,
-) = MaterialTheme(
-    colorScheme = when (primaryHueOrDynamicColorsGenerator) {
-        is Either.Left -> buildPrettyColorScheme(
-            primaryHue = primaryHueOrDynamicColorsGenerator.value,
-            brightness = brightness,
-        )
-
-        is Either.Right -> primaryHueOrDynamicColorsGenerator.value.generateDynamicColors(
-            brightness = brightness,
-        )
-    },
 ) {
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(MaterialTheme.colorScheme.background),
+    val brightness = forcedBrightness ?: ThemeBrightness.system
+    MaterialTheme(
+        colorScheme = when (primaryHueOrDynamicColorsGenerator) {
+            is Either.Left -> buildPrettyColorScheme(
+                primaryHue = primaryHueOrDynamicColorsGenerator.value,
+                brightness = brightness,
+            )
+
+            is Either.Right -> primaryHueOrDynamicColorsGenerator.value.generateDynamicColors(
+                brightness = brightness,
+            )
+        },
     ) {
-        CompositionLocalProvider(
-            LocalContentColor provides MaterialTheme.colorScheme.onBackground,
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(MaterialTheme.colorScheme.background),
         ) {
-            content()
+            CompositionLocalProvider(
+                LocalContentColor provides MaterialTheme.colorScheme.onBackground,
+            ) {
+                content()
+            }
         }
     }
 }

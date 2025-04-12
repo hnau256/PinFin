@@ -6,12 +6,14 @@ import androidx.compose.runtime.rememberCoroutineScope
 import arrow.core.Either
 import hnau.common.color.material.MaterialHue
 import hnau.common.compose.uikit.HnauTheme
+import hnau.common.compose.utils.ThemeBrightness
 import hnau.pinfin.client.app.PinFinApp
 import hnau.pinfin.client.projector.InitProjector
 
 @Composable
 fun PinFinApp.Content(
     dependencies: AppContentDependencies,
+    forcedBrightness: ThemeBrightness? = null,
 ) {
     val projectorScope = rememberCoroutineScope()
     val projector = remember(model, dependencies) {
@@ -22,9 +24,10 @@ fun PinFinApp.Content(
         )
     }
     HnauTheme(
+        forcedBrightness = forcedBrightness,
         primaryHueOrDynamicColorsGenerator = when (val generator =
             dependencies.dynamicColorsGenerator) {
-            null -> Either.Left(MaterialHue.Blue)
+            null -> Either.Left(MaterialHue.Teal)
             else -> Either.Right(generator)
         }
     ) {

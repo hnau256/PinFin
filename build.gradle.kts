@@ -4,6 +4,7 @@ tasks.register<Delete>("clean") {
 
 plugins {
     alias(libs.plugins.compose.desktop) apply false
+    alias(libs.plugins.composeMultiplatform) apply false
     alias(libs.plugins.kotlin.jvm) apply false
     alias(libs.plugins.kotlin.serialization) apply false
     alias(libs.plugins.kotlin.multiplatform) apply false
