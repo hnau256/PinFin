@@ -7,6 +7,7 @@ import org.gradle.api.artifacts.VersionCatalog
 import org.gradle.api.artifacts.VersionCatalogsExtension
 import org.gradle.api.internal.project.DefaultProject
 import org.gradle.api.tasks.testing.Test
+import org.gradle.jvm.toolchain.JavaLanguageVersion
 import org.jetbrains.compose.ComposePlugin
 import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
 
@@ -24,9 +25,11 @@ internal fun Project.config(
         .getByType(VersionCatalogsExtension::class.java)
         .named("libs")
 
-    val javaVersion: JavaVersion = versions
+    val javaVersionString = versions
         .requireVersion("java")
-        .let(JavaVersion::valueOf)
+
+    val javaVersion: JavaVersion =
+        JavaVersion.valueOf(javaVersionString)
 
     plugins.apply("org.jetbrains.kotlin.multiplatform")
     when (androidMode) {
@@ -55,9 +58,10 @@ internal fun Project.config(
                 }
             }
         }
-        extension.jvmToolchain {
-            this.version = javaVersion
-            //languageVersion.set(JavaLanguageVersion.of(17))
+        extension.jvmToolchain {javaToolchainSpec ->
+            javaToolchainSpec
+                .languageVersion
+                .set(JavaLanguageVersion.of(javaVersionString.dropWhile { !it.isDigit() }))
         }
         extension.jvm {
             compilations.configureEach { jvmCompilation ->
