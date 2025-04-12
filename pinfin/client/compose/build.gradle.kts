@@ -8,7 +8,6 @@ kotlin {
     sourceSets {
         commonMain.dependencies {
             implementation(libs.compose.material.iconsExtended)
-            implementation(libs.compose.material3)
             implementation(project(":common:app"))
             implementation(project(":common:color"))
             implementation(project(":common:compose"))

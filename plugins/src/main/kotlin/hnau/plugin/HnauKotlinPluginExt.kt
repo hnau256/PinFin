@@ -42,7 +42,7 @@ internal fun Project.config(
         project.plugins.hasPlugin("org.jetbrains.kotlin.plugin.serialization")
 
     val hasComposePlugin =
-        project.plugins.hasPlugin("org.jetbrains.compose")
+        project.plugins.hasPlugin("org.jetbrains.kotlin.plugin.compose")
 
     val hasKspPlugin =
         project.plugins.hasPlugin("com.google.devtools.ksp")
@@ -89,6 +89,7 @@ internal fun Project.config(
                 }
                 if (hasComposePlugin) {
                     implementation(ComposePlugin.DesktopDependencies.currentOs)
+                    implementation(versions.findLibrary("compose-material3").get().get())
                     if (identitifer != CommonComposeProjectIdentifier) {
                         implementation(project(CommonComposeProjectIdentifier))
                     }

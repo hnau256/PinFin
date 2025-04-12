@@ -8,7 +8,6 @@ plugins {
 kotlin {
     sourceSets {
         commonMain.dependencies {
-            implementation(libs.compose.material3)
             implementation(project(":common:app"))
             implementation(project(":common:color"))
         }

@@ -12,7 +12,6 @@ kotlin {
             implementation(project(":pinfin:client:model"))
             implementation(project(":pinfin:client:data"))
             implementation(project(":pinfin:scheme"))
-            implementation(libs.compose.material3)
             implementation(libs.compose.material.iconsExtended)
             implementation(libs.kotlin.datetime)
         }

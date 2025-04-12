@@ -9,7 +9,6 @@ kotlin {
             implementation(project(":common:app"))
             implementation(project(":common:compose"))
             implementation(libs.android.datastore)
-            implementation(libs.compose.material3)
         }
     }
 }

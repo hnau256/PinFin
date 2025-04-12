@@ -23,7 +23,6 @@ kotlin {
             implementation(libs.android.activity.compose)
             implementation(libs.android.appcompat)
             implementation(libs.android.datastore)
-            implementation(libs.compose.material3)
             implementation(libs.slf4j.simple)
             implementation(project(":common:app"))
             implementation(project(":common:android"))
