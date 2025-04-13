@@ -78,28 +78,21 @@ class InitProjector(
 
     @Composable
     fun Content() {
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(MaterialTheme.colorScheme.background),
-            contentAlignment = Alignment.TopStart,
+        CompositionLocalProvider(
+            LocalContentColor provides MaterialTheme.colorScheme.onBackground,
+            //LocalDensity provides Density(LocalDensity.current.density * 1.1f),
         ) {
-            CompositionLocalProvider(
-                LocalContentColor provides MaterialTheme.colorScheme.onBackground,
-                //LocalDensity provides Density(LocalDensity.current.density * 1.1f),
-            ) {
-                mainSackProjector
-                    .collectAsState()
-                    .value
-                    .LoadableContent(
-                        modifier = Modifier.fillMaxSize(),
-                        transitionSpec = TransitionSpec.both(),
-                    ) { mainStackProjector ->
-                        mainStackProjector.Content()
-                    }
-                backButtonDelegate.Content()
-                bubblesHolder.Content()
-            }
+            mainSackProjector
+                .collectAsState()
+                .value
+                .LoadableContent(
+                    modifier = Modifier.fillMaxSize(),
+                    transitionSpec = TransitionSpec.both(),
+                ) { mainStackProjector ->
+                    mainStackProjector.Content()
+                }
+            backButtonDelegate.Content()
+            bubblesHolder.Content()
         }
     }
 }
