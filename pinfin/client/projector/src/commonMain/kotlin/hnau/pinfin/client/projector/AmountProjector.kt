@@ -19,6 +19,9 @@ import hnau.pinfin.client.projector.utils.AmountFormatter
 import hnau.shuffler.annotations.Shuffle
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
+import org.jetbrains.compose.resources.stringResource
+import pinfin.pinfin.client.projector.generated.resources.Res
+import pinfin.pinfin.client.projector.generated.resources.amount
 
 class AmountProjector(
     private val scope: CoroutineScope,
@@ -71,8 +74,7 @@ class AmountProjector(
                     keyboardOptions = KeyboardOptions(
                         keyboardType = KeyboardType.Companion.Decimal,
                     ),
-                    //TODO("ComposeForAndroid")
-                    placeholder = { Text("QWERTY"/*stringResource(R.string.amount)*/) },
+                    placeholder = { Text(stringResource(Res.string.amount)) },
                     isError = model.error.collectAsState().value,
                 )
             }

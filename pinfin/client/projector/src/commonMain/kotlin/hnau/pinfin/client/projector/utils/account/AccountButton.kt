@@ -13,6 +13,8 @@ import hnau.common.compose.uikit.shape.HnauShape
 import hnau.common.compose.utils.Icon
 import hnau.pinfin.client.data.budget.AccountInfoResolver
 import hnau.pinfin.scheme.AccountId
+import org.jetbrains.compose.resources.stringResource
+import pinfin.pinfin.client.projector.generated.resources.Res
 
 @Composable
 fun AccountButton(
@@ -29,9 +31,8 @@ fun AccountButton(
         shape = shape,
         content = {
             when (id) {
-                //TODO("ComposeForAndroid")
                 null -> TripleRow(
-                    content = { Text("QWERTY"/*stringResource(R.string.account)*/) },
+                    content = { Text("QWERTY"/*stringResource(Res.string.account)*/) },
                     leading = { Icon { Icons.AutoMirrored.Filled.Help } },
                 )
 

@@ -19,6 +19,9 @@ import hnau.pinfin.client.projector.AmountProjector
 import hnau.pinfin.client.projector.utils.category.CategoryButton
 import hnau.shuffler.annotations.Shuffle
 import kotlinx.coroutines.CoroutineScope
+import org.jetbrains.compose.resources.stringResource
+import pinfin.pinfin.client.projector.generated.resources.Res
+import pinfin.pinfin.client.projector.generated.resources.comment
 
 class RecordProjectorMainDelegate(
     scope: CoroutineScope,
@@ -51,8 +54,7 @@ class RecordProjectorMainDelegate(
                         modifier = Modifier.weight(1f),
                         value = model.comment,
                         shape = cellShape,
-                        //TODO("ComposeForAndroid")
-                        placeholder = { Text("QWERTY"/*stringResource(R.string.comment)*/) },
+                        placeholder = { Text(stringResource(Res.string.comment)) },
                     )
                 }
                 model

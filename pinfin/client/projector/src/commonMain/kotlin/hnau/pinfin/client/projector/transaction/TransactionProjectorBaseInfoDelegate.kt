@@ -25,6 +25,9 @@ import hnau.pinfin.client.projector.utils.title
 import hnau.pinfin.scheme.TransactionType
 import hnau.shuffler.annotations.Shuffle
 import kotlinx.coroutines.CoroutineScope
+import org.jetbrains.compose.resources.stringResource
+import pinfin.pinfin.client.projector.generated.resources.Res
+import pinfin.pinfin.client.projector.generated.resources.comment
 
 
 class TransactionProjectorBaseInfoDelegate(
@@ -89,8 +92,7 @@ class TransactionProjectorBaseInfoDelegate(
             }
             Cell {
                 TextInput(
-                    //TODO("ComposeForAndroid")
-                    placeholder = { Text("QWERTY"/*stringResource(R.string.comment)*/) },
+                    placeholder = { Text(stringResource(Res.string.comment)) },
                     value = model.comment,
                     shape = cellShape,
                 )

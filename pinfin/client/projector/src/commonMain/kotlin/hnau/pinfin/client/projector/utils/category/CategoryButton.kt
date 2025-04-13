@@ -13,6 +13,9 @@ import hnau.common.compose.uikit.shape.HnauShape
 import hnau.common.compose.utils.Icon
 import hnau.pinfin.client.data.budget.CategoryInfoResolver
 import hnau.pinfin.scheme.CategoryId
+import org.jetbrains.compose.resources.stringResource
+import pinfin.pinfin.client.projector.generated.resources.Res
+import pinfin.pinfin.client.projector.generated.resources.category
 
 @Composable
 fun CategoryButton(
@@ -28,10 +31,9 @@ fun CategoryButton(
         onClick = onClick,
         shape = shape,
         content = {
-            //TODO("ComposeForAndroid")
             when (id) {
                 null -> TripleRow(
-                    content = { Text("QWERTY"/*stringResource(R.string.category)*/) },
+                    content = { Text(stringResource(Res.string.category)) },
                     leading = { Icon { Icons.AutoMirrored.Filled.Help } },
                 )
 

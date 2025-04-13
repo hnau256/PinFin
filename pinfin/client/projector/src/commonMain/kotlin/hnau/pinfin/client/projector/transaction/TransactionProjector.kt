@@ -39,6 +39,10 @@ import hnau.pinfin.client.projector.transaction.type.transfer.TransferProjector
 import hnau.shuffler.annotations.Shuffle
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.StateFlow
+import org.jetbrains.compose.resources.stringResource
+import pinfin.pinfin.client.projector.generated.resources.Res
+import pinfin.pinfin.client.projector.generated.resources.add
+import pinfin.pinfin.client.projector.generated.resources.save
 
 class TransactionProjector(
     private val scope: CoroutineScope,
@@ -163,14 +167,12 @@ class TransactionProjector(
             },
             text = {
                 Text(
-                    //TODO("ComposeForAndroid")
-                    "QWERTY"
-                    /*stringResource(
+                    text = stringResource(
                         when (model.isNewTransaction) {
-                            true -> R.string.add
-                            false -> R.string.save
+                            true -> Res.string.add
+                            false -> Res.string.save
                         }
-                    )*/
+                    )
                 )
             }
         )

@@ -22,6 +22,9 @@ import hnau.shuffler.annotations.Shuffle
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.StateFlow
+import org.jetbrains.compose.resources.stringResource
+import pinfin.pinfin.client.projector.generated.resources.Res
+import pinfin.pinfin.client.projector.generated.resources.add_record
 
 class EntryProjectorRecordsDelegate(
     scope: CoroutineScope,
@@ -108,9 +111,8 @@ class EntryProjectorRecordsDelegate(
             }
         HnauButton(
             content = {
-                //TODO("ComposeForAndroid")
                 TripleRow(
-                    content = { Text("QWERTY"/*stringResource(R.string.add_record)*/) },
+                    content = { Text(stringResource(Res.string.add_record)) },
                     leading = { Icon { Icons.Filled.Add } }
                 )
             },

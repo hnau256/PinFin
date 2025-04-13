@@ -1,0 +1,20 @@
+<resources>
+    <string name="app_name">PinFin</string>
+    <string name="comment">Заметка</string>
+    <string name="entry">Транзакция</string>
+    <string name="transfer">Перевод</string>
+    <string name="save">Сохранить</string>
+    <string name="add">Добавить</string>
+    <string name="amount">Сумма</string>
+    <string name="date">Дата</string>
+    <string name="time">Время</string>
+    <string name="type">Тип</string>
+    <string name="create">Создать</string>
+    <string name="search_create">Найти/создать</string>
+    <string name="category">Категория</string>
+    <string name="add_record">Добавить запись</string>
+    <string name="account">Счёт</string>
+    <string name="remove_record">Удалить запись?</string>
+    <string name="yes">Да</string>
+    <string name="no">Нет</string>
+</resources>

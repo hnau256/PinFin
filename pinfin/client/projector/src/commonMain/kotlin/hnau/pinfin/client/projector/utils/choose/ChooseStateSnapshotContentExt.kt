@@ -24,6 +24,10 @@ import hnau.common.compose.uikit.utils.Dimens
 import hnau.common.compose.utils.Icon
 import kotlinx.coroutines.flow.MutableStateFlow
 import hnau.pinfin.client.model.utils.choose.ChooseStateSnapshot
+import org.jetbrains.compose.resources.stringResource
+import pinfin.pinfin.client.projector.generated.resources.Res
+import pinfin.pinfin.client.projector.generated.resources.create
+import pinfin.pinfin.client.projector.generated.resources.search_create
 
 @Composable
 fun <T> ChooseStateSnapshot<T>.Content(
@@ -49,8 +53,7 @@ fun <T> ChooseStateSnapshot<T>.Content(
                         .weight(1f),
                     value = query,
                     shape = cellShape,
-                    //TODO("ComposeForAndroid")
-                    placeholder = { Text("QWERTY"/*stringResource(R.string.search_create)*/) },
+                    placeholder = { Text(stringResource(Res.string.search_create)) },
                 )
             }
         }
@@ -86,8 +89,7 @@ fun <T> ChooseStateSnapshot<T>.Content(
                         modifier = Modifier.padding(Dimens.smallSeparation),
                     ) {
                         Text(
-                            //TODO("ComposeForAndroid")
-                            text = "QWERTY",//stringResource(R.string.create),
+                            text = stringResource(Res.string.create),
                             color = MaterialTheme.colorScheme.onSurface,
                             style = MaterialTheme.typography.bodyMedium,
                         )
