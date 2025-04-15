@@ -30,6 +30,8 @@ class RootProjector(
             dateTimeFormatter: DateTimeFormatter,
             amountFormatter: AmountFormatter,
         ): LoadBudgetsProjector.Dependencies
+
+        fun backButtonDelegate(): BackButtonDelegate.Dependencies
     }
 
     private val bubblesHolder = SharedBubblesHolder(
@@ -39,6 +41,7 @@ class RootProjector(
 
     private val backButtonDelegate: BackButtonDelegate = BackButtonDelegate(
         goBackHandler = model.goBackHandler,
+        dependencies = dependencies.backButtonDelegate(),
     )
 
     private val loadBudgets = LoadBudgetsProjector(

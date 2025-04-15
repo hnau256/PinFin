@@ -53,7 +53,9 @@ fun TopAppBar(
             LocalContentColor provides MaterialTheme.colorScheme.primary,
             LocalTextStyle provides MaterialTheme.typography.titleMedium,
         ) {
-            dependencies.backButtonWidthProvider.Space()
+            dependencies.backButtonWidthProvider.Space(
+                dependencies = remember(dependencies) { dependencies.backButtonSpaceDependencies() },
+            )
             val scope: TopAppBarScope = remember(this) {
                 TopAppBarScopeImpl(this)
             }

@@ -13,6 +13,8 @@
     <string name="search_create">Найти/создать</string>
     <string name="category">Категория</string>
     <string name="add_record">Добавить запись</string>
+    <string name="no_transactions">Транзакции отсутствуют</string>
+    <string name="add_transaction">Добавить транзакцию</string>
     <string name="account">Счёт</string>
     <string name="remove_record">Удалить запись?</string>
     <string name="yes">Да</string>

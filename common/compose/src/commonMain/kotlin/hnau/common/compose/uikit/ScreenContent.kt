@@ -14,13 +14,15 @@ import hnau.common.compose.uikit.topappbar.TopAppBar
 import hnau.common.compose.uikit.topappbar.TopAppBarDependencies
 import hnau.common.compose.uikit.topappbar.TopAppBarScope
 import hnau.common.compose.uikit.utils.Dimens
-import hnau.common.compose.uikit.utils.appInsets
+import hnau.common.compose.utils.AppInsets
 import hnau.shuffler.annotations.Shuffle
 
 @Shuffle
 interface ScreenContentDependencies {
 
     fun topAppBar(): TopAppBarDependencies
+
+    val appInsets: AppInsets
 }
 
 @Composable
@@ -32,8 +34,7 @@ fun ScreenContent(
     ) -> Unit,
 ) {
     val layoutDirection = LocalLayoutDirection.current
-    val insets = appInsets
-    //remember(layoutDirection, systemBars) not works
+    val insets = dependencies.appInsets.insets
     val (appBarPaddings, contentPaddings) = run {
         val top = insets.calculateTopPadding()
         val bottom = insets.calculateBottomPadding()

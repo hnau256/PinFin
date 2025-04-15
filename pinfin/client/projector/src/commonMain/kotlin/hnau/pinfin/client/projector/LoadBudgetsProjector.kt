@@ -45,7 +45,7 @@ class LoadBudgetsProjector(
             .value
             .LoadableContent(
                 modifier = Modifier.fillMaxSize(),
-                transitionSpec = TransitionSpec.both(),
+                transitionSpec = TransitionSpec.horizontal(),
             ) { budgetsStackProjector ->
                 budgetsStackProjector.Content()
             }

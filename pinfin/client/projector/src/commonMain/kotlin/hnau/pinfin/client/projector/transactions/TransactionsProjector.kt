@@ -9,7 +9,9 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material3.Button
 import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -17,6 +19,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import hnau.common.compose.uikit.ErrorPanel
+import hnau.common.compose.uikit.HnauButton
 import hnau.common.compose.uikit.ScreenContent
 import hnau.common.compose.uikit.ScreenContentDependencies
 import hnau.common.compose.uikit.bubble.BubblesShower
@@ -33,6 +37,10 @@ import hnau.pinfin.client.projector.utils.AmountFormatter
 import hnau.pinfin.client.projector.utils.DateTimeFormatter
 import hnau.shuffler.annotations.Shuffle
 import kotlinx.coroutines.CoroutineScope
+import org.jetbrains.compose.resources.stringResource
+import pinfin.pinfin.client.projector.generated.resources.Res
+import pinfin.pinfin.client.projector.generated.resources.add_transaction
+import pinfin.pinfin.client.projector.generated.resources.no_transactions
 
 class TransactionsProjector(
     private val scope: CoroutineScope,
@@ -86,12 +94,22 @@ class TransactionsProjector(
                 nonEmptyTransactionsOrNull.NullableStateContent(
                     transitionSpec = TransitionSpec.crossfade(),
                     nullContent = {
-                        //TODO()
-                        Text("No transactions")
+                        ErrorPanel(
+                            title = {
+                                Text(stringResource(Res.string.no_transactions))
+                            },
+                            button = {
+                                OutlinedButton(
+                                    onClick = model.onAddTransactionClick,
+                                ) {
+                                    Text(stringResource(Res.string.add_transaction))
+                                }
+                            }
+                        )
                     },
                 ) { transactions ->
                     LazyColumn(
-                        contentPadding = contentPadding,
+                        contentPadding = contentPadding + PaddingValues(vertical = Dimens.separation),
                         verticalArrangement = Arrangement.spacedBy(Dimens.separation),
                     ) {
                         items(

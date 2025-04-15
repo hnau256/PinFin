@@ -6,6 +6,7 @@ import androidx.compose.animation.core.TweenSpec
 import androidx.compose.animation.core.VectorConverter
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
@@ -20,13 +21,22 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import hnau.common.app.goback.GoBackHandler
+import hnau.common.compose.utils.AppInsets
 import hnau.common.compose.utils.Icon
 import hnau.common.kotlin.coroutines.mapState
+import hnau.shuffler.annotations.Shuffle
 import kotlinx.coroutines.flow.collectLatest
 
 class BackButtonDelegate(
     private val goBackHandler: GoBackHandler,
+    private val dependencies: Dependencies,
 ) : BackButtonWidthProvider {
+
+    @Shuffle
+    interface Dependencies {
+
+        val appInsets: AppInsets
+    }
 
     private val animatable: Animatable<Dp, AnimationVector1D> = Animatable(
         initialValue = 0.dp,
@@ -56,7 +66,7 @@ class BackButtonDelegate(
         val width: Dp by backButtonWidth
         Box(
             modifier = Modifier
-                //.systemBarsPadding()
+                .padding(top = dependencies.appInsets.insets.calculateTopPadding())
                 .size(BackButtonWidthProvider.maxBackButtonSize)
                 .offset(x = width - BackButtonWidthProvider.maxBackButtonSize),
             contentAlignment = Alignment.Center,
