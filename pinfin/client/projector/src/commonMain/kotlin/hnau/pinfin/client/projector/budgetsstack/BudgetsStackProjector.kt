@@ -1,50 +1,50 @@
-package hnau.pinfin.client.projector.mainstack
+package hnau.pinfin.client.projector.budgetsstack
 
 import androidx.compose.runtime.Composable
 import hnau.common.compose.projector.stack.Content
 import hnau.common.compose.projector.stack.StackProjectorTail
-import hnau.pinfin.client.model.mainstack.MainStackElementModel
-import hnau.pinfin.client.model.mainstack.MainStackModel
-import hnau.pinfin.client.projector.main.MainProjector
-import hnau.pinfin.client.projector.transaction.TransactionProjector
+import hnau.pinfin.client.model.budgetsstack.BudgetsStackElementModel
+import hnau.pinfin.client.model.budgetsstack.BudgetsStackModel
+import hnau.pinfin.client.projector.budgetslist.BudgetsListProjector
+import hnau.pinfin.client.projector.LoadBudgetProjector
 import hnau.shuffler.annotations.Shuffle
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.StateFlow
 
-class MainStackProjector(
+class BudgetsStackProjector(
     private val scope: CoroutineScope,
-    private val model: MainStackModel,
+    private val model: BudgetsStackModel,
     private val dependencies: Dependencies,
 ) {
 
     @Shuffle
     interface Dependencies {
 
-        fun main(): MainProjector.Dependencies
+        fun budgets(): BudgetsListProjector.Dependencies
 
-        fun transaction(): TransactionProjector.Dependencies
+        fun budget(): LoadBudgetProjector.Dependencies
     }
 
-    private val tail: StateFlow<StackProjectorTail<Any?, MainStackElementProjector>> =
+    private val tail: StateFlow<StackProjectorTail<Int, BudgetsStackElementProjector>> =
         StackProjectorTail(
             scope = scope,
             modelsStack = model.stack,
             extractKey = { model -> model.key },
             createProjector = { scope, model ->
                 when (model) {
-                    is MainStackElementModel.Main -> MainStackElementProjector.Main(
-                        MainProjector(
+                    is BudgetsStackElementModel.Budgets -> BudgetsStackElementProjector.Budgets(
+                        BudgetsListProjector(
                             scope = scope,
                             model = model.model,
-                            dependencies = dependencies.main(),
+                            dependencies = dependencies.budgets(),
                         )
                     )
 
-                    is MainStackElementModel.Transaction -> MainStackElementProjector.Transaction(
-                        TransactionProjector(
+                    is BudgetsStackElementModel.Budget -> BudgetsStackElementProjector.Budget(
+                        LoadBudgetProjector(
                             scope = scope,
                             model = model.model,
-                            dependencies = dependencies.transaction(),
+                            dependencies = dependencies.budget(),
                         )
                     )
                 }

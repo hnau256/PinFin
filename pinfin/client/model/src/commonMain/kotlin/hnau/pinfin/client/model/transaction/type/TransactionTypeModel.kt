@@ -11,7 +11,7 @@ import kotlinx.serialization.Serializable
 
 sealed interface TransactionTypeModel : GoBackHandlerProvider {
 
-    val key: Any?
+    val key: Int
 
     val result: StateFlow<Transaction.Type?>
 
@@ -21,7 +21,7 @@ sealed interface TransactionTypeModel : GoBackHandlerProvider {
         val model: EntryModel,
     ) : TransactionTypeModel, GoBackHandlerProvider by model {
 
-        override val key: Any
+        override val key: Int
             get() = 0
 
         override val result: StateFlow<Transaction.Type?>
@@ -35,7 +35,7 @@ sealed interface TransactionTypeModel : GoBackHandlerProvider {
         val model: TransferModel,
     ) : TransactionTypeModel, GoBackHandlerProvider by model {
 
-        override val key: Any
+        override val key: Int
             get() = 1
 
         override val result: StateFlow<Transaction.Type?>

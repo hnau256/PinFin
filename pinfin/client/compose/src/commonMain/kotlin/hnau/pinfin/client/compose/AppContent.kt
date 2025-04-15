@@ -8,7 +8,8 @@ import hnau.common.color.material.MaterialHue
 import hnau.common.compose.uikit.HnauTheme
 import hnau.common.compose.utils.ThemeBrightness
 import hnau.pinfin.client.app.PinFinApp
-import hnau.pinfin.client.projector.InitProjector
+import hnau.pinfin.client.projector.LoadBudgetProjector
+import hnau.pinfin.client.projector.RootProjector
 
 @Composable
 fun PinFinApp.Content(
@@ -17,9 +18,9 @@ fun PinFinApp.Content(
 ) {
     val projectorScope = rememberCoroutineScope()
     val projector = remember(model, dependencies) {
-        InitProjector(
+        RootProjector(
             scope = projectorScope,
-            dependencies = dependencies.init(),
+            dependencies = dependencies.root(),
             model = model,
         )
     }

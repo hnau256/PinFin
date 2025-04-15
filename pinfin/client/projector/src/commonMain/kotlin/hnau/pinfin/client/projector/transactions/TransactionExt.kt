@@ -1,4 +1,4 @@
-package hnau.pinfin.client.projector.main
+package hnau.pinfin.client.projector.transactions
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -42,7 +42,7 @@ import kotlinx.datetime.toLocalDateTime
 
 @Composable
 fun Transaction.Content(
-    dependencies: MainProjector.Dependencies,
+    dependencies: TransactionsProjector.Dependencies,
     onClick: () -> Unit,
 ) {
     Table(
@@ -64,7 +64,7 @@ fun Transaction.Content(
 @Composable
 fun Transaction.CellContent(
     cellShape: Shape,
-    dependencies: MainProjector.Dependencies,
+    dependencies: TransactionsProjector.Dependencies,
     onClick: () -> Unit,
 ) {
     val signedAmountOrAmount = signedAmountOrAmount
@@ -117,7 +117,7 @@ fun Transaction.CellContent(
 
 @Composable
 private fun Transaction.TimestampContent(
-    dependencies: MainProjector.Dependencies,
+    dependencies: TransactionsProjector.Dependencies,
 ) {
     val timestamp = timestamp
     val text = remember(timestamp) {
@@ -166,7 +166,7 @@ private fun Transaction.CommentContent() {
 
 @Composable
 private fun EntryContent(
-    dependencies: MainProjector.Dependencies,
+    dependencies: TransactionsProjector.Dependencies,
     entry: Transaction.Type.Entry,
 ) {
     Row(
@@ -223,7 +223,7 @@ private fun EntryContent(
 
 @Composable
 private fun TransferContent(
-    dependencies: MainProjector.Dependencies,
+    dependencies: TransactionsProjector.Dependencies,
     transfer: Transaction.Type.Transfer,
 ) {
     Row(
@@ -245,7 +245,7 @@ private fun TransferContent(
 
 @Composable
 private fun AccountId.Content(
-    dependencies: MainProjector.Dependencies,
+    dependencies: TransactionsProjector.Dependencies,
 ) {
     AccountContent(
         id = this,
@@ -255,7 +255,7 @@ private fun AccountId.Content(
 
 @Composable
 private fun CategoryId.Content(
-    dependencies: MainProjector.Dependencies,
+    dependencies: TransactionsProjector.Dependencies,
 ) {
     CategoryContent(
         id = this,

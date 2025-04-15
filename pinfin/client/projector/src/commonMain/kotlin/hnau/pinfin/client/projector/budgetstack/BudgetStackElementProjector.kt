@@ -1,39 +1,39 @@
-package hnau.pinfin.client.projector.mainstack
+package hnau.pinfin.client.projector.budgetstack
 
 import androidx.compose.runtime.Composable
-import hnau.pinfin.client.projector.main.MainProjector
+import hnau.pinfin.client.projector.transactions.TransactionsProjector
 import hnau.pinfin.client.projector.transaction.TransactionProjector
 
-sealed interface MainStackElementProjector {
+sealed interface BudgetStackElementProjector {
 
     @Composable
     fun Content()
 
-    val key: Any?
+    val key: Int
 
     data class Main(
-        private val projector: MainProjector,
-    ) : MainStackElementProjector {
+        private val projector: TransactionsProjector,
+    ) : BudgetStackElementProjector {
 
         @Composable
         override fun Content() {
             projector.Content()
         }
 
-        override val key: Any
+        override val key: Int
             get() = 0
     }
 
     data class Transaction(
         private val projector: TransactionProjector,
-    ) : MainStackElementProjector {
+    ) : BudgetStackElementProjector {
 
         @Composable
         override fun Content() {
             projector.Content()
         }
 
-        override val key: Any
+        override val key: Int
             get() = 1
     }
 }

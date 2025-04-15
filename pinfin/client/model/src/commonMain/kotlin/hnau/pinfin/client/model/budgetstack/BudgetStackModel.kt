@@ -2,7 +2,7 @@
     MutableStateFlowSerializer::class,
 )
 
-package hnau.pinfin.client.model.mainstack
+package hnau.pinfin.client.model.budgetstack
 
 import hnau.common.app.goback.GoBackHandler
 import hnau.common.app.goback.GoBackHandlerProvider
@@ -15,7 +15,7 @@ import hnau.common.app.model.stack.tailGoBackHandler
 import hnau.common.app.model.stack.tryDropLast
 import hnau.common.kotlin.serialization.MutableStateFlowSerializer
 import hnau.pinfin.client.data.budget.BudgetRepository
-import hnau.pinfin.client.model.MainModel
+import hnau.pinfin.client.model.TransactionsModel
 import hnau.pinfin.client.model.transaction.TransactionModel
 import hnau.pinfin.scheme.Transaction
 import hnau.pinfin.scheme.TransactionType
@@ -26,7 +26,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.UseSerializers
 
-class MainStackModel(
+class BudgetStackModel(
     private val scope: CoroutineScope,
     private val skeleton: Skeleton,
     private val dependencies: Dependencies,
@@ -34,14 +34,14 @@ class MainStackModel(
 
     @Serializable
     data class Skeleton(
-        val stack: MutableStateFlow<NonEmptyStack<MainStackElementModel.Skeleton>> =
-            MutableStateFlow(NonEmptyStack(MainStackElementModel.Skeleton.Main())),
+        val stack: MutableStateFlow<NonEmptyStack<BudgetStackElementModel.Skeleton>> =
+            MutableStateFlow(NonEmptyStack(BudgetStackElementModel.Skeleton.Transactions())),
     )
 
     @Shuffle
     interface Dependencies {
 
-        fun main(): MainModel.Dependencies
+        fun main(): TransactionsModel.Dependencies
 
         fun transaction(): TransactionModel.Dependencies
 
@@ -51,7 +51,7 @@ class MainStackModel(
     val budgetRepository: BudgetRepository
         get() = dependencies.budgetRepository
 
-    val stack: StateFlow<NonEmptyStack<MainStackElementModel>> = run {
+    val stack: StateFlow<NonEmptyStack<BudgetStackElementModel>> = run {
         val stack = skeleton.stack
         StackModelElements(
             scope = scope,
@@ -77,8 +77,8 @@ class MainStackModel(
             ?: TransactionModel.Skeleton.createForNew(
                 transactionType = TransactionType.Transfer,
             )
-        this@MainStackModel.skeleton.stack.push(
-            MainStackElementModel.Skeleton.Transaction(
+        this@BudgetStackModel.skeleton.stack.push(
+            BudgetStackElementModel.Skeleton.Transaction(
                 skeleton = skeleton,
             )
         )
@@ -86,10 +86,10 @@ class MainStackModel(
 
     private fun createModel(
         modelScope: CoroutineScope,
-        skeleton: MainStackElementModel.Skeleton,
-    ): MainStackElementModel = when (skeleton) {
-        is MainStackElementModel.Skeleton.Main -> MainStackElementModel.Main(
-            MainModel(
+        skeleton: BudgetStackElementModel.Skeleton,
+    ): BudgetStackElementModel = when (skeleton) {
+        is BudgetStackElementModel.Skeleton.Transactions -> BudgetStackElementModel.Transactions(
+            TransactionsModel(
                 scope = modelScope,
                 skeleton = skeleton.skeleton,
                 dependencies = dependencies.main(),
@@ -106,12 +106,12 @@ class MainStackModel(
             )
         )
 
-        is MainStackElementModel.Skeleton.Transaction -> MainStackElementModel.Transaction(
+        is BudgetStackElementModel.Skeleton.Transaction -> BudgetStackElementModel.Transaction(
             TransactionModel(
                 scope = modelScope,
                 skeleton = skeleton.skeleton,
                 dependencies = dependencies.transaction(),
-                completed = { this@MainStackModel.skeleton.stack.tryDropLast() }
+                completed = { this@BudgetStackModel.skeleton.stack.tryDropLast() }
             )
         )
     }

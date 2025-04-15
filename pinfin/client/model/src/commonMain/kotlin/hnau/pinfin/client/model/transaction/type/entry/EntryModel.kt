@@ -13,12 +13,11 @@ import hnau.common.app.goback.GoBackHandlerProvider
 import hnau.common.kotlin.coroutines.combineStateWith
 import hnau.common.kotlin.coroutines.createChild
 import hnau.common.kotlin.coroutines.flatMapState
+import hnau.common.kotlin.coroutines.mapNonEmptyListReusable
 import hnau.common.kotlin.coroutines.mapState
 import hnau.common.kotlin.coroutines.mapWithScope
-import hnau.common.kotlin.coroutines.runningFoldState
 import hnau.common.kotlin.coroutines.scopedInState
 import hnau.common.kotlin.coroutines.toMutableStateFlowAsInitial
-import hnau.common.kotlin.ifNull
 import hnau.common.kotlin.serialization.MutableStateFlowSerializer
 import hnau.pinfin.client.model.transaction.type.entry.record.RecordId
 import hnau.pinfin.client.model.transaction.type.entry.record.RecordModel
@@ -30,7 +29,6 @@ import hnau.pinfin.scheme.CategoryId
 import hnau.pinfin.scheme.Transaction
 import hnau.shuffler.annotations.Shuffle
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
@@ -152,25 +150,39 @@ class EntryModel(
 
         skeleton
             .records
-            .runningFoldState(
+            .mapNonEmptyListReusable(
                 scope = scope,
-                createInitial = { skeletons ->
-                    skeletons.map { (id, skeleton) ->
-                        createItem(id, skeleton)
-                    }
+                extractKey = {(id) -> id },
+                transform = {itemScope, (id, skeleton) ->
+                    RecordItem(
+                        id = id,
+                        model = RecordModel(
+                            scope = itemScope,
+                            dependencies = dependencies.record(),
+                            skeleton = skeleton,
+                            remove = this@EntryModel
+                                .skeleton
+                                .records
+                                .mapState(
+                                    scope = scope,
+                                ) { allRecords ->
+                                    val newRecordsOrNull = allRecords
+                                        .filter { it.first != id }
+                                        .toNonEmptyListOrNull()
+                                    newRecordsOrNull?.let { newRecords ->
+                                        {
+                                            this@EntryModel
+                                                .skeleton
+                                                .records
+                                                .value = newRecords
+                                        }
+                                    }
+                                },
+                            localUsedCategories = localUsedCategories,
+                        ),
+                        scope = scope,
+                    )
                 },
-                operation = { previous, newSkeletons ->
-                    val cache = previous
-                        .associateBy { item -> item.id }
-                        .toMutableMap()
-                    val result = newSkeletons.map { (id, skeleton) ->
-                        cache
-                            .remove(id)
-                            .ifNull { createItem(id, skeleton) }
-                    }
-                    cache.values.forEach { item -> item.scope.cancel() }
-                    result
-                }
             )
     }
 

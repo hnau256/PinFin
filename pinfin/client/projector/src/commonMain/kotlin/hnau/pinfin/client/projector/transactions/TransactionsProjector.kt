@@ -1,4 +1,4 @@
-package hnau.pinfin.client.projector.main
+package hnau.pinfin.client.projector.transactions
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -26,15 +26,15 @@ import hnau.common.compose.utils.Icon
 import hnau.common.compose.utils.plus
 import hnau.pinfin.client.data.budget.AccountInfoResolver
 import hnau.pinfin.client.data.budget.CategoryInfoResolver
-import hnau.pinfin.client.model.MainModel
+import hnau.pinfin.client.model.TransactionsModel
 import hnau.pinfin.client.projector.utils.AmountFormatter
 import hnau.pinfin.client.projector.utils.DateTimeFormatter
 import hnau.shuffler.annotations.Shuffle
 import kotlinx.coroutines.CoroutineScope
 
-class MainProjector(
+class TransactionsProjector(
     private val scope: CoroutineScope,
-    private val model: MainModel,
+    private val model: TransactionsModel,
     private val dependencies: Dependencies,
 ) {
 

@@ -12,15 +12,12 @@ import hnau.common.compose.uikit.ContainerStyle
 import hnau.common.compose.uikit.HnauButton
 import hnau.common.compose.uikit.TripleRow
 import hnau.common.compose.utils.Icon
-import hnau.common.kotlin.coroutines.createChild
-import hnau.common.kotlin.coroutines.runningFoldState
-import hnau.common.kotlin.ifNull
+import hnau.common.kotlin.coroutines.mapNonEmptyListReusable
 import hnau.pinfin.client.model.transaction.type.entry.EntryModel
 import hnau.pinfin.client.model.transaction.type.entry.record.RecordId
 import hnau.pinfin.client.projector.transaction.type.entry.record.RecordProjector
 import hnau.shuffler.annotations.Shuffle
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.StateFlow
 import org.jetbrains.compose.resources.stringResource
 import pinfin.pinfin.client.projector.generated.resources.Res
@@ -41,62 +38,24 @@ class EntryProjectorRecordsDelegate(
 
     private data class Item(
         val id: RecordId,
-        val scope: CoroutineScope,
         val projector: RecordProjector,
-    ) {
-
-        companion object {
-
-            fun create(
-                scope: CoroutineScope,
-                item: EntryModel.RecordItem,
-                dependencies: Dependencies,
-            ): Item {
-                val recordScope = scope.createChild()
-                return Item(
-                    id = item.id,
-                    scope = recordScope,
-                    projector = RecordProjector(
-                        scope = recordScope,
-                        model = item.model,
-                        dependencies = dependencies.record(),
-                    )
-                )
-            }
-        }
-    }
+    )
 
     private val records: StateFlow<NonEmptyList<Item>> = model
         .records
-        .runningFoldState(
+        .mapNonEmptyListReusable(
             scope = scope,
-            createInitial = { records ->
-                records.map { record ->
-                    Item.create(
+            extractKey = { it.id },
+            transform = { scope, record ->
+                Item(
+                    id = record.id,
+                    projector = RecordProjector(
                         scope = scope,
-                        item = record,
-                        dependencies = dependencies,
+                        model = record.model,
+                        dependencies = dependencies.record(),
                     )
-                }
+                )
             },
-            operation = { previous, records ->
-                val cache = previous
-                    .associateBy { item -> item.id }
-                    .toMutableMap()
-                val result = records.map { item ->
-                    cache
-                        .remove(item.id)
-                        .ifNull {
-                            Item.create(
-                                scope = scope,
-                                item = item,
-                                dependencies = dependencies,
-                            )
-                        }
-                }
-                cache.values.forEach { item -> item.scope.cancel() }
-                result
-            }
         )
 
     @Composable

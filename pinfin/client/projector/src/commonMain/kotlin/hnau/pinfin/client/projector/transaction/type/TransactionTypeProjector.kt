@@ -9,7 +9,7 @@ sealed interface TransactionTypeProjector {
     @Composable
     fun Content()
 
-    val key: Any?
+    val key: Int
 
     data class Entry(
         private val projector: EntryProjector,
@@ -20,7 +20,7 @@ sealed interface TransactionTypeProjector {
             projector.Content()
         }
 
-        override val key: Any
+        override val key: Int
             get() = 0
     }
 
@@ -33,7 +33,7 @@ sealed interface TransactionTypeProjector {
             projector.Content()
         }
 
-        override val key: Any
+        override val key: Int
             get() = 1
     }
 }

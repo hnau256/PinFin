@@ -13,17 +13,17 @@ import hnau.common.kotlin.coroutines.mapWithScope
 import hnau.common.kotlin.getOrInit
 import hnau.common.kotlin.serialization.MutableStateFlowSerializer
 import hnau.common.kotlin.toAccessor
+import hnau.pinfin.client.data.BudgetsRepository
 import hnau.pinfin.client.data.budget.BudgetRepository
-import hnau.pinfin.client.data.UpdateRepository
-import hnau.pinfin.client.model.mainstack.MainStackModel
+import hnau.pinfin.client.model.budgetstack.BudgetStackModel
+import hnau.pinfin.scheme.BudgetId
 import hnau.shuffler.annotations.Shuffle
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.UseSerializers
 
-class InitModel(
+class LoadBudgetModel(
     scope: CoroutineScope,
     private val skeleton: Skeleton,
     private val dependencies: Dependencies,
@@ -31,51 +31,40 @@ class InitModel(
 
     @Serializable
     data class Skeleton(
-        var mainStack: MainStackModel.Skeleton? = null,
+        val id: BudgetId,
+        var mainStack: BudgetStackModel.Skeleton? = null,
     )
 
     @Shuffle
     interface Dependencies {
 
-        val updateRepository: UpdateRepository
+        val budgetsRepository: BudgetsRepository
 
-        fun mainStack(
+        fun budgetStack(
             budgetRepository: BudgetRepository,
-        ): MainStackModel.Dependencies
+        ): BudgetStackModel.Dependencies
 
         companion object
     }
 
-    data class Initialized(
-        val budgetRepository: BudgetRepository,
-    )
-
-    val mainStackModel: StateFlow<Loadable<MainStackModel>> = LoadableStateFlow(scope) {
-        coroutineScope {
-            val budgetRepository = BudgetRepository.create(
-                scope = scope,
-                updateRepository = dependencies.updateRepository,
-            )
-            Initialized(
-                budgetRepository = budgetRepository,
-            )
-        }
+    val budgetStackModel: StateFlow<Loadable<BudgetStackModel>> = LoadableStateFlow(scope) {
+        dependencies.budgetsRepository[skeleton.id]
     }
-        .mapWithScope(scope) { initializedScope, initializedOrLoading ->
-            initializedOrLoading.map { initialized ->
-                MainStackModel(
+        .mapWithScope(scope) { initializedScope, infoOrLoading ->
+            infoOrLoading.map { info ->
+                BudgetStackModel(
                     scope = initializedScope,
-                    dependencies = dependencies.mainStack(
-                        budgetRepository = initialized.budgetRepository,
+                    dependencies = dependencies.budgetStack(
+                        budgetRepository = info.repository,
                     ),
                     skeleton = skeleton::mainStack
                         .toAccessor()
-                        .getOrInit(MainStackModel::Skeleton),
+                        .getOrInit(BudgetStackModel::Skeleton),
                 )
             }
         }
 
-    override val goBackHandler: StateFlow<(() -> Unit)?> = mainStackModel
+    override val goBackHandler: StateFlow<(() -> Unit)?> = budgetStackModel
         .flatMapState(scope) { currentMainModel ->
             currentMainModel.fold(
                 ifLoading = { NeverGoBackHandler },

@@ -1,6 +1,7 @@
 package hnau.common.kotlin.coroutines
 
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -34,8 +35,3 @@ fun <T> StateFlow<T>.runningFoldState(
     operation = operation,
 )
 
-@PublishedApi
-internal data class Skippable<T>(
-    val skip: Boolean,
-    val value: T,
-)
