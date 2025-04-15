@@ -1,8 +1,10 @@
 package hnau.pinfin.client.model
 
 import hnau.common.app.goback.GoBackHandlerProvider
+import hnau.common.app.goback.NeverGoBackHandler
 import hnau.common.kotlin.Loadable
 import hnau.common.kotlin.LoadableStateFlow
+import hnau.common.kotlin.coroutines.flatMapState
 import hnau.common.kotlin.coroutines.mapWithScope
 import hnau.common.kotlin.getOrInit
 import hnau.common.kotlin.toAccessor
@@ -55,5 +57,13 @@ class LoadBudgetsModel(
                         .getOrInit { BudgetsStackModel.Skeleton() },
                 )
             }
+        }
+
+    override val goBackHandler: StateFlow<(() -> Unit)?> = budgetsStack
+        .flatMapState(scope) { currentMainModel ->
+            currentMainModel.fold(
+                ifLoading = { NeverGoBackHandler },
+                ifReady = GoBackHandlerProvider::goBackHandler,
+            )
         }
 }

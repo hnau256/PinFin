@@ -11,7 +11,7 @@ import androidx.lifecycle.viewmodel.viewModelFactory
 import hnau.pinfin.client.app.PinFinApp
 import hnau.pinfin.client.app.SavedState
 import hnau.pinfin.client.app.impl
-import hnau.pinfin.client.data.FileUpdateRepository
+import hnau.pinfin.client.data.FileBasedBudgetsRepositoryFactory
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
@@ -27,13 +27,9 @@ class AppViewModel(
     val app = PinFinApp(
         scope = scope,
         dependencies = PinFinApp.Dependencies.impl(
-            updateRepository = FileUpdateRepository(
-                updatesFile = File(context.filesDir, "updates"),
-            )
-            /*storageFactory = Storage.Factory.dataStore(
-                scope = scope,
-                context = context,
-            ),*/
+            budgetsRepositoryFactory = FileBasedBudgetsRepositoryFactory(
+                budgetsDirectory = File(context.filesDir, "budgets"),
+            ),
         ),
         savedState = SavedState(
             state

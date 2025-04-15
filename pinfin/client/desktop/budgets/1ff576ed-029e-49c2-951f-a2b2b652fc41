@@ -1,1 +1,0 @@
-{"type":"transaction","id":"d1b6ffe0-ce9e-4094-a72d-c748d9b58700","transaction":{"timestamp":"2025-04-15T09:38:07.975147625Z","comment":"From A to B","type":{"type":"transfer","from":"A","to":"B","amount":102400}}}

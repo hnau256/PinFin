@@ -13,15 +13,17 @@ import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import hnau.common.compose.uikit.ScreenContent
+import hnau.common.compose.uikit.ScreenContentDependencies
 import hnau.common.compose.uikit.bubble.BubblesShower
 import hnau.common.compose.uikit.state.LoadableContent
 import hnau.common.compose.uikit.state.NullableStateContent
 import hnau.common.compose.uikit.state.TransitionSpec
 import hnau.common.compose.uikit.utils.Dimens
-import hnau.common.compose.uikit.utils.appInsets
 import hnau.common.compose.utils.Icon
 import hnau.common.compose.utils.plus
 import hnau.pinfin.client.data.budget.AccountInfoResolver
@@ -51,17 +53,23 @@ class TransactionsProjector(
         val accountInfoResolver: AccountInfoResolver
 
         val categoryInfoResolver: CategoryInfoResolver
+
+        fun screenContent(): ScreenContentDependencies
     }
 
     @Composable
     fun Content() {
-        val contentPadding = appInsets
-        Transactions(
-            contentPadding = contentPadding + PaddingValues(bottom = 96.dp)
-        )
-        AddTransactionButton(
-            contentPadding = contentPadding,
-        )
+        ScreenContent(
+            dependencies = remember(dependencies) { dependencies.screenContent() },
+            topAppBarContent = {},
+        ) { contentPadding ->
+            Transactions(
+                contentPadding = contentPadding + PaddingValues(bottom = 96.dp)
+            )
+            AddTransactionButton(
+                contentPadding = contentPadding,
+            )
+        }
     }
 
     @Composable
