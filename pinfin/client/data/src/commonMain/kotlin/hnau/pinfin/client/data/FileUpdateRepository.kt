@@ -48,7 +48,7 @@ class FileUpdateRepository(
                 )
                 .toByteArray(charset)
             withContext(Dispatchers.IO) {
-                updatesFile.mkdirs()
+                updatesFile.parentFile.mkdirs()
                 FileOutputStream(updatesFile, true).use { output ->
                     output.write(line)
                     output.write(linesSeparator)
