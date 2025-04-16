@@ -34,8 +34,13 @@ fun HnauButton(
             .heightIn(min = 48.dp),
         contentAlignment = Alignment.Center,
     ) {
+        val alpha = when (onClick) {
+            null -> 0.75f
+            else -> 1f
+        }
+        val contentColor = style.content.copy(alpha = alpha)
         CompositionLocalProvider(
-            LocalContentColor provides style.content,
+            LocalContentColor provides contentColor,
         ) {
             content()
         }

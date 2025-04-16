@@ -66,7 +66,9 @@ class BudgetsListProjector(
     fun Content() {
         ScreenContent(
             dependencies = remember(dependencies) { dependencies.screenContent() },
-            topAppBarContent = {},
+            topAppBarContent = {
+                Title("Бюджеты")
+            },
         ) { contentPadding ->
             val items by items.collectAsState()
             LazyColumn(

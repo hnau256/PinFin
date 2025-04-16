@@ -12,6 +12,8 @@ import androidx.compose.ui.layout.MeasureResult
 import androidx.compose.ui.layout.MeasureScope
 import androidx.compose.ui.layout.Placeable
 import androidx.compose.ui.unit.Constraints
+import androidx.compose.ui.unit.constrainHeight
+import androidx.compose.ui.unit.constrainWidth
 import arrow.core.Either
 import hnau.common.compose.uikit.table.TableOrientation
 
@@ -43,6 +45,16 @@ private class TableMeasurePolicyWithoutIntrinsicSizes(
         measurables: List<Measurable>,
         constraints: Constraints,
     ): MeasureResult {
+
+        if (measurables.isEmpty()) {
+            return layout(
+                width = constraints.constrainWidth(0),
+                height = constraints.constrainHeight(0),
+            ) {
+
+            }
+        }
+
         val alongConstraintOrNull = constraints.maxAlong(
             orientation = orientation
         )

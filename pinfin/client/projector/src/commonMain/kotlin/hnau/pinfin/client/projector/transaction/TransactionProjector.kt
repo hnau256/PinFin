@@ -27,6 +27,7 @@ import hnau.common.compose.uikit.ScreenContentDependencies
 import hnau.common.compose.uikit.Separator
 import hnau.common.compose.uikit.state.StateContent
 import hnau.common.compose.uikit.state.TransitionSpec
+import hnau.common.compose.uikit.topappbar.TopAppBarScope
 import hnau.common.compose.uikit.utils.Dimens
 import hnau.common.compose.utils.Icon
 import hnau.common.compose.utils.horizontalDisplayPadding
@@ -73,28 +74,23 @@ class TransactionProjector(
         //TODO progress indicator
         ScreenContent(
             dependencies = remember(dependencies) { dependencies.screenContent() },
-            topAppBarContent = {}
+            topAppBarContent = {
+                Title("Транзакция")
+                saveButton()
+            }
         ) { contentPadding ->
-            Box(
+            Column(
                 modifier = Modifier
                     .fillMaxSize()
+                    .verticalScroll(rememberScrollState())
+                    .padding(contentPadding)
+                    .horizontalDisplayPadding()
+                    .padding(vertical = Dimens.separation)
+                    .padding(bottom = 96.dp)
             ) {
-                Column(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .verticalScroll(rememberScrollState())
-                        .padding(contentPadding)
-                        .horizontalDisplayPadding()
-                        .padding(vertical = Dimens.separation)
-                        .padding(bottom = 96.dp)
-                ) {
-                    baseInfoDelegate.Content()
-                    Separator()
-                    this@TransactionProjector.Type()
-                }
-                SaveButton(
-                    contentPadding = contentPadding,
-                )
+                baseInfoDelegate.Content()
+                Separator()
+                this@TransactionProjector.Type()
             }
         }
     }
@@ -138,43 +134,22 @@ class TransactionProjector(
     }
 
     @Composable
-    private fun BoxScope.SaveButton(
-        contentPadding: PaddingValues,
-    ) {
+    private fun TopAppBarScope.saveButton() {
         val saveFlow by model.save.collectAsState()
         val save = saveFlow?.collectAsState()?.value
         val isSaving = saveFlow != null && save == null
-        ExtendedFloatingActionButton(
-            modifier = Modifier
-                .align(Alignment.BottomEnd)
-                .padding(contentPadding)
-                .padding(Dimens.separation),
-            onClick = { save?.invoke() },
-            containerColor = when (saveFlow) {
-                null -> MaterialTheme.colorScheme.surfaceContainer
-                else -> MaterialTheme.colorScheme.primaryContainer
-            },
-            icon = {
-                when (isSaving) {
-                    true -> CircularProgressIndicator()
-                    false -> Icon {
-                        when (model.isNewTransaction) {
-                            true -> Icons.Filled.Add
-                            false -> Icons.Filled.Save
-                        }
+        Action(
+            onClick = save,
+        ) {
+            when (isSaving) {
+                true -> CircularProgressIndicator()
+                false -> Icon {
+                    when (model.isNewTransaction) {
+                        true -> Icons.Filled.Add
+                        false -> Icons.Filled.Save
                     }
                 }
-            },
-            text = {
-                Text(
-                    text = stringResource(
-                        when (model.isNewTransaction) {
-                            true -> Res.string.add
-                            false -> Res.string.save
-                        }
-                    )
-                )
             }
-        )
+        }
     }
 }

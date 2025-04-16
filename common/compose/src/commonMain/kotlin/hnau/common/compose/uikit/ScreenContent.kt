@@ -10,6 +10,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.unit.dp
+import hnau.common.compose.uikit.backbutton.BackButtonConstants
+import hnau.common.compose.uikit.table.TableScope
 import hnau.common.compose.uikit.topappbar.TopAppBar
 import hnau.common.compose.uikit.topappbar.TopAppBarDependencies
 import hnau.common.compose.uikit.topappbar.TopAppBarScope
@@ -49,7 +51,7 @@ fun ScreenContent(
         val contentPaddings = PaddingValues(
             start = start,
             end = end,
-            top = top + Dimens.rowHeight,
+            top = top + BackButtonConstants.size,
             bottom = bottom,
         )
         appBarPaddings to contentPaddings

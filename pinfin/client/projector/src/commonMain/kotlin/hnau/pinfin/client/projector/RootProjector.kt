@@ -40,6 +40,7 @@ class RootProjector(
 
 
     private val backButtonDelegate: BackButtonDelegate = BackButtonDelegate(
+        scope = scope,
         goBackHandler = model.goBackHandler,
         dependencies = dependencies.backButtonDelegate(),
     )

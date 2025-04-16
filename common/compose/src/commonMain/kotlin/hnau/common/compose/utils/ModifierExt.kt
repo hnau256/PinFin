@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.unit.Dp
 import hnau.common.compose.uikit.utils.Dimens
 
 
@@ -28,10 +29,16 @@ fun Modifier.clickableOption(
     )
 }
 
+val Dimens.horizontalDisplayPadding: Dp
+    get() = separation
+
 fun Modifier.horizontalDisplayPadding(): Modifier = padding(
-    horizontal = Dimens.separation,
+    horizontal = Dimens.horizontalDisplayPadding,
 )
 
+val Dimens.verticalDisplayPadding: Dp
+    get() = separation
+
 fun Modifier.verticalDisplayPadding(): Modifier = padding(
-    vertical = Dimens.separation,
+    vertical = Dimens.verticalDisplayPadding,
 )

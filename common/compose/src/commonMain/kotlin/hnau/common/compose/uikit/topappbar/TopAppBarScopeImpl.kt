@@ -1,37 +1,50 @@
 package hnau.common.compose.uikit.topappbar
 
-import androidx.compose.foundation.layout.RowScope
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.style.TextAlign
+import hnau.common.compose.uikit.HnauButton
+import hnau.common.compose.uikit.table.CellBox
+import hnau.common.compose.uikit.table.TableScope
+import hnau.common.compose.uikit.table.cellShape
+import hnau.common.compose.uikit.utils.Dimens
 
 class TopAppBarScopeImpl(
-    parent: RowScope,
-) : TopAppBarScope, RowScope by parent {
+    parent: TableScope,
+) : TopAppBarScope, TableScope by parent {
 
     @Composable
     override fun Title(
         text: String,
     ) {
-        Text(
+        CellBox(
             modifier = Modifier.weight(1f),
-            text = text,
-            textAlign = TextAlign.Start,
-            maxLines = 1,
-        )
+            contentAlignment = Alignment.CenterStart,
+        ) {
+            Text(
+                modifier = Modifier.padding(
+                    horizontal = Dimens.separation,
+                    vertical = Dimens.smallSeparation,
+                ),
+                text = text,
+                maxLines = 1,
+            )
+        }
     }
 
     @Composable
     override fun Action(
         onClick: (() -> Unit)?,
-        content: @Composable RowScope.() -> Unit,
+        content: @Composable () -> Unit,
     ) {
-        TextButton(
-            onClick = { onClick?.invoke() },
-            enabled = onClick != null,
-            content = content,
-        )
+        Cell {
+            HnauButton(
+                onClick = onClick,
+                shape = cellShape,
+                content = content,
+            )
+        }
     }
 }

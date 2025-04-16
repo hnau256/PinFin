@@ -69,7 +69,9 @@ class TransactionsProjector(
     fun Content() {
         ScreenContent(
             dependencies = remember(dependencies) { dependencies.screenContent() },
-            topAppBarContent = {},
+            topAppBarContent = {
+                Title("Транзакции")
+            },
         ) { contentPadding ->
             Transactions(
                 contentPadding = contentPadding + PaddingValues(bottom = 96.dp)
