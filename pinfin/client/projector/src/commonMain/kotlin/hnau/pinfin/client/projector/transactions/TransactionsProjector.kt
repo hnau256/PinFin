@@ -73,14 +73,7 @@ class TransactionsProjector(
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
     fun Content() {
-        Scaffold(
-            topBar = {
-                TopAppBar(
-                    title = { Text("Транзакции") },
-                    navigationIcon = { globalGoBackHandler.NavigationIcon() },
-                )
-            },
-        ) { contentPadding ->
+        Scaffold { contentPadding ->
             Transactions(
                 contentPadding = contentPadding + PaddingValues(bottom = 96.dp)
             )

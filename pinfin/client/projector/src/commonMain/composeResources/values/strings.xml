@@ -2,6 +2,9 @@
     <string name="app_name">PinFin</string>
     <string name="comment">Заметка</string>
     <string name="entry">Транзакция</string>
+    <string name="transaction">Транзакция</string>
+    <string name="new_transaction">Новая транзакция</string>
+    <string name="budgets">Бюджеты</string>
     <string name="transfer">Перевод</string>
     <string name="save">Сохранить</string>
     <string name="add">Добавить</string>

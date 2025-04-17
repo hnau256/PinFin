@@ -1,6 +1,7 @@
 package hnau.pinfin.client.data
 
 import hnau.common.kotlin.coroutines.mapReusable
+import hnau.common.kotlin.coroutines.mapState
 import hnau.common.kotlin.coroutines.toMutableStateFlowAsInitial
 import hnau.pinfin.scheme.BudgetId
 import kotlinx.coroutines.CoroutineScope
@@ -19,10 +20,7 @@ class BudgetsRepository(
     private val _budgets: MutableStateFlow<List<BudgetId>> =
         initialBudgets.toMutableStateFlowAsInitial()
 
-    val budgets: StateFlow<List<BudgetId>>
-        get() = _budgets
-
-    private val infos: StateFlow<Map<BudgetId, Deferred<BudgetInfo>>> = budgets
+    private val infos: StateFlow<Map<BudgetId, Deferred<BudgetInfo>>> = _budgets
         .mapReusable(
             scope = scope,
             buildState = { ids ->
@@ -35,6 +33,10 @@ class BudgetsRepository(
                 }
             }
         )
+
+    val budgets: StateFlow<List<BudgetId>> = infos.mapState(scope) { infoByIds ->
+        infoByIds.keys.toList()
+    }
 
     suspend operator fun get(
         id: BudgetId,

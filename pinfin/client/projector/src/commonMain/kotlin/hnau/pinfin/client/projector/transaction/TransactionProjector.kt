@@ -38,6 +38,11 @@ import hnau.pinfin.client.projector.transaction.type.transfer.TransferProjector
 import hnau.shuffler.annotations.Shuffle
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.StateFlow
+import org.jetbrains.compose.resources.stringResource
+import pinfin.pinfin.client.projector.generated.resources.Res
+import pinfin.pinfin.client.projector.generated.resources.budgets
+import pinfin.pinfin.client.projector.generated.resources.new_transaction
+import pinfin.pinfin.client.projector.generated.resources.transaction
 
 class TransactionProjector(
     private val scope: CoroutineScope,
@@ -73,11 +78,20 @@ class TransactionProjector(
         Scaffold(
             topBar = {
                 TopAppBar(
-                    title = { Text("Транзакция") },
+                    title = {
+                        Text(
+                            stringResource(
+                                when (model.isNewTransaction) {
+                                    true -> Res.string.new_transaction
+                                    false -> Res.string.transaction
+                                }
+                            )
+                        )
+                    },
                     navigationIcon = { globalGoBackHandler.NavigationIcon() },
                     actions = {
-                        SaveAction()
                         RemoveAction()
+                        SaveAction()
                     }
                 )
             },

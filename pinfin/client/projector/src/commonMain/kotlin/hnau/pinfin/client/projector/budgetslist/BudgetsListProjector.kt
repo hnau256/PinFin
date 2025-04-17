@@ -37,6 +37,7 @@ import kotlinx.coroutines.flow.StateFlow
 import org.jetbrains.compose.resources.stringResource
 import pinfin.pinfin.client.projector.generated.resources.Res
 import pinfin.pinfin.client.projector.generated.resources.add
+import pinfin.pinfin.client.projector.generated.resources.budgets
 
 class BudgetsListProjector(
     scope: CoroutineScope,
@@ -76,7 +77,7 @@ class BudgetsListProjector(
         Scaffold(
             topBar = {
                 TopAppBar(
-                    title = { Text("Бюджеты") },
+                    title = { Text(stringResource(Res.string.budgets)) },
                     navigationIcon = { globalGoBackHandler.NavigationIcon() },
                 )
             },

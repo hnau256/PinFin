@@ -15,6 +15,7 @@ import hnau.pinfin.client.data.budget.AccountInfoResolver
 import hnau.pinfin.scheme.AccountId
 import org.jetbrains.compose.resources.stringResource
 import pinfin.pinfin.client.projector.generated.resources.Res
+import pinfin.pinfin.client.projector.generated.resources.account
 
 @Composable
 fun AccountButton(
@@ -32,7 +33,7 @@ fun AccountButton(
         content = {
             when (id) {
                 null -> TripleRow(
-                    content = { Text("QWERTY"/*stringResource(Res.string.account)*/) },
+                    content = { Text(stringResource(Res.string.account)) },
                     leading = { Icon { Icons.AutoMirrored.Filled.Help } },
                 )
 
