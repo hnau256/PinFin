@@ -6,6 +6,8 @@ package hnau.pinfin.client.model
 
 import arrow.core.NonEmptyList
 import arrow.core.toNonEmptyListOrNull
+import hnau.common.app.goback.GlobalGoBackHandler
+import hnau.common.app.goback.GoBackHandler
 import hnau.common.app.goback.GoBackHandlerProvider
 import hnau.common.kotlin.Loadable
 import hnau.common.kotlin.coroutines.mapState
@@ -35,7 +37,13 @@ class TransactionsModel(
     interface Dependencies {
 
         val budgetRepository: BudgetRepository
+
+        val globalGoBackHandler: GlobalGoBackHandler
     }
+
+    val globalGoBackHandler: GoBackHandler = dependencies
+        .globalGoBackHandler
+        .resolve(scope)
 
     val transactions: StateFlow<Loadable<NonEmptyList<Pair<Transaction.Id, Transaction>>?>>
         get() = dependencies

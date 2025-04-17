@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.runtime.Composable
-import hnau.common.compose.utils.AppInsets
 
 object AndroidAppInsets : AppInsets {
 

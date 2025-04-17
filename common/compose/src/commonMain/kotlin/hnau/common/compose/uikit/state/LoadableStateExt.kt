@@ -4,8 +4,8 @@ import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.ContentTransform
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import hnau.common.kotlin.Loadable
 import hnau.common.compose.uikit.progressindicator.ProgressIndicatorBox
+import hnau.common.kotlin.Loadable
 
 @Composable
 fun <T> Loadable<T>.LoadableContent(

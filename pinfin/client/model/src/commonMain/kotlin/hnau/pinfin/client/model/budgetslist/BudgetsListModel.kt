@@ -1,5 +1,7 @@
 package hnau.pinfin.client.model.budgetslist
 
+import hnau.common.app.goback.GlobalGoBackHandler
+import hnau.common.app.goback.GoBackHandler
 import hnau.common.app.goback.GoBackHandlerProvider
 import hnau.common.kotlin.coroutines.createChild
 import hnau.common.kotlin.coroutines.mapState
@@ -26,8 +28,14 @@ class BudgetsListModel(
 
         val budgetsRepository: BudgetsRepository
 
+        val globalGoBackHandler: GlobalGoBackHandler
+
         fun item(): BudgetItemModel.Dependencies
     }
+
+    val globalGoBackHandler: GoBackHandler = dependencies
+        .globalGoBackHandler
+        .resolve(scope)
 
     @Serializable
     data class Skeleton(

@@ -42,7 +42,6 @@ class AppActivity : ComponentActivity() {
         initOnBackPressedDispatcherCallback()
         val dependencies = AppContentDependencies.impl(
             dynamicColorsGenerator = AndroidDynamicColorsGenerator.createIfSupported(),
-            appInsets = AndroidAppInsets,
         )
         setContent {
             viewModel.app.Content(

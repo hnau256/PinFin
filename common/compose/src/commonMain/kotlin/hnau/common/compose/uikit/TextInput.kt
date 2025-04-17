@@ -51,10 +51,10 @@ fun TextInput(
         disabledContainerColor = MaterialTheme.colorScheme.surfaceContainer,
     ),
 ) {
-    var valueLocal by value.collectAsTextFieldValueMutableState()
+    var valueLocal = value.collectAsTextFieldValueMutableState()
     TextField(
-        value = valueLocal,
-        onValueChange = { valueLocal = it },
+        value = valueLocal.value,
+        onValueChange = valueLocal.component2(),
         modifier = modifier,
         enabled = enabled,
         readOnly = readOnly,

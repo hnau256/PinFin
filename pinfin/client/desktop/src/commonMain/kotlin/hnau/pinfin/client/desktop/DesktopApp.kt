@@ -9,7 +9,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
 import androidx.compose.ui.window.rememberWindowState
-import hnau.common.compose.utils.AppInsets
 import hnau.common.compose.utils.ThemeBrightness
 import hnau.pinfin.client.app.PinFinApp
 import hnau.pinfin.client.app.SavedState
@@ -37,7 +36,6 @@ fun main() = application {
     )
     val appContentDependencies = AppContentDependencies.impl(
         dynamicColorsGenerator = null,
-        appInsets = AppInsets.empty,
     )
     Window(
         onCloseRequest = { exitApplication() },

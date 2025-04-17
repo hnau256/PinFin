@@ -5,6 +5,9 @@
 package hnau.pinfin.client.model.transaction
 
 import hnau.common.app.EditingString
+import hnau.common.app.goback.GlobalGoBackHandler
+import hnau.common.app.goback.GlobalGoBackHandlerImpl
+import hnau.common.app.goback.GoBackHandler
 import hnau.common.app.goback.GoBackHandlerProvider
 import hnau.common.app.toEditingString
 import hnau.common.kotlin.coroutines.actionOrNullIfExecuting
@@ -131,7 +134,13 @@ class TransactionModel(
         fun entry(): EntryModel.Dependencies
 
         fun transfer(): TransferModel.Dependencies
+
+        val globalGoBackHandler: GlobalGoBackHandler
     }
+
+    val globalGoBackHandler: GoBackHandler = dependencies
+        .globalGoBackHandler
+        .resolve(scope)
 
     val type: StateFlow<TransactionTypeModel> = skeleton
         .type

@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 
 @Composable
 fun <T> MutableStateFlow<T>.collectAsMutableState(): MutableState<T> {
-    val state = collectAsState(Dispatchers.Main.immediate)
+    val state = collectAsState(Dispatchers.Unconfined)
     return remember(this, state) {
 
         object : MutableState<T> {

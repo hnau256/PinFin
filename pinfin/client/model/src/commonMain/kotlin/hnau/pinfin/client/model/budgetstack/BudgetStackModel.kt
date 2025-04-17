@@ -111,7 +111,7 @@ class BudgetStackModel(
                 scope = modelScope,
                 skeleton = skeleton.skeleton,
                 dependencies = dependencies.transaction(),
-                completed = { this@BudgetStackModel.skeleton.stack.tryDropLast() }
+                completed = { this@BudgetStackModel.skeleton.stack.tryDropLast() },
             )
         )
     }

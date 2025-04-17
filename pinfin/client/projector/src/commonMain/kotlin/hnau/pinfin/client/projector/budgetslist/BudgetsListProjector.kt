@@ -9,8 +9,11 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExtendedFloatingActionButton
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -18,10 +21,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import hnau.common.compose.uikit.ScreenContent
-import hnau.common.compose.uikit.ScreenContentDependencies
 import hnau.common.compose.uikit.utils.Dimens
 import hnau.common.compose.utils.Icon
+import hnau.common.compose.utils.NavigationIcon
 import hnau.common.compose.utils.horizontalDisplayPadding
 import hnau.common.compose.utils.plus
 import hnau.common.compose.utils.verticalDisplayPadding
@@ -44,8 +46,6 @@ class BudgetsListProjector(
     interface Dependencies {
 
         fun item(): BudgetItemProjector.Dependencies
-
-        fun screenContent(): ScreenContentDependencies
     }
 
     private val items: StateFlow<List<BudgetItemProjector>> = model
@@ -62,12 +62,15 @@ class BudgetsListProjector(
             }
         )
 
+    @OptIn(ExperimentalMaterial3Api::class)
     @Composable
     fun Content() {
-        ScreenContent(
-            dependencies = remember(dependencies) { dependencies.screenContent() },
-            topAppBarContent = {
-                Title("Бюджеты")
+        Scaffold(
+            topBar = {
+                TopAppBar(
+                    title = { Text("Бюджеты") },
+                    navigationIcon = { model.globalGoBackHandler.NavigationIcon() },
+                )
             },
         ) { contentPadding ->
             val items by items.collectAsState()

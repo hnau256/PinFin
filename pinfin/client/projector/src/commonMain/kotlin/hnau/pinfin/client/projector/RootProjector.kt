@@ -4,8 +4,6 @@ import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
-import hnau.common.compose.uikit.backbutton.BackButtonDelegate
-import hnau.common.compose.uikit.backbutton.BackButtonWidthProvider
 import hnau.common.compose.uikit.bubble.BubblesShower
 import hnau.common.compose.uikit.bubble.Content
 import hnau.common.compose.uikit.bubble.SharedBubblesHolder
@@ -26,30 +24,19 @@ class RootProjector(
 
         fun loadBudgets(
             bubblesShower: BubblesShower,
-            backButtonWidthProvider: BackButtonWidthProvider,
             dateTimeFormatter: DateTimeFormatter,
             amountFormatter: AmountFormatter,
         ): LoadBudgetsProjector.Dependencies
-
-        fun backButtonDelegate(): BackButtonDelegate.Dependencies
     }
 
     private val bubblesHolder = SharedBubblesHolder(
         scope = scope,
     )
 
-
-    private val backButtonDelegate: BackButtonDelegate = BackButtonDelegate(
-        scope = scope,
-        goBackHandler = model.goBackHandler,
-        dependencies = dependencies.backButtonDelegate(),
-    )
-
     private val loadBudgets = LoadBudgetsProjector(
         scope = scope,
         dependencies = dependencies.loadBudgets(
             bubblesShower = bubblesHolder,
-            backButtonWidthProvider = backButtonDelegate,
             dateTimeFormatter = DateTimeFormatter.test, //TODO
             amountFormatter = AmountFormatter.test,
         ),
@@ -63,7 +50,6 @@ class RootProjector(
             //LocalDensity provides Density(LocalDensity.current.density * 1.1f),
         ) {
             loadBudgets.Content()
-            backButtonDelegate.Content()
             bubblesHolder.Content()
         }
     }
