@@ -134,13 +134,7 @@ class TransactionModel(
         fun entry(): EntryModel.Dependencies
 
         fun transfer(): TransferModel.Dependencies
-
-        val globalGoBackHandler: GlobalGoBackHandler
     }
-
-    val globalGoBackHandler: GoBackHandler = dependencies
-        .globalGoBackHandler
-        .resolve(scope)
 
     val type: StateFlow<TransactionTypeModel> = skeleton
         .type

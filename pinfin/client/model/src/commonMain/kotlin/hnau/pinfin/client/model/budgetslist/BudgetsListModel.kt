@@ -28,14 +28,8 @@ class BudgetsListModel(
 
         val budgetsRepository: BudgetsRepository
 
-        val globalGoBackHandler: GlobalGoBackHandler
-
         fun item(): BudgetItemModel.Dependencies
     }
-
-    val globalGoBackHandler: GoBackHandler = dependencies
-        .globalGoBackHandler
-        .resolve(scope)
 
     @Serializable
     data class Skeleton(

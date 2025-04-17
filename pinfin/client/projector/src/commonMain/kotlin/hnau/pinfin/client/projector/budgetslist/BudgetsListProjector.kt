@@ -21,6 +21,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import hnau.common.app.goback.GlobalGoBackHandler
+import hnau.common.app.goback.GoBackHandler
 import hnau.common.compose.uikit.utils.Dimens
 import hnau.common.compose.utils.Icon
 import hnau.common.compose.utils.NavigationIcon
@@ -46,7 +48,13 @@ class BudgetsListProjector(
     interface Dependencies {
 
         fun item(): BudgetItemProjector.Dependencies
+
+        val globalGoBackHandler: GlobalGoBackHandler
     }
+
+    private val globalGoBackHandler: GoBackHandler = dependencies
+        .globalGoBackHandler
+        .resolve(scope)
 
     private val items: StateFlow<List<BudgetItemProjector>> = model
         .items
@@ -69,7 +77,7 @@ class BudgetsListProjector(
             topBar = {
                 TopAppBar(
                     title = { Text("Бюджеты") },
-                    navigationIcon = { model.globalGoBackHandler.NavigationIcon() },
+                    navigationIcon = { globalGoBackHandler.NavigationIcon() },
                 )
             },
         ) { contentPadding ->

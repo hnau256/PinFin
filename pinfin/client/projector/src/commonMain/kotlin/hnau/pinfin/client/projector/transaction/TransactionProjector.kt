@@ -20,6 +20,8 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import hnau.common.app.goback.GlobalGoBackHandler
+import hnau.common.app.goback.GoBackHandler
 import hnau.common.compose.uikit.Separator
 import hnau.common.compose.uikit.state.StateContent
 import hnau.common.compose.uikit.state.TransitionSpec
@@ -51,7 +53,13 @@ class TransactionProjector(
         fun transfer(): TransferProjector.Dependencies
 
         fun baseInfoDelegate(): TransactionProjectorBaseInfoDelegate.Dependencies
+
+        val globalGoBackHandler: GlobalGoBackHandler
     }
+
+    private val globalGoBackHandler: GoBackHandler = dependencies
+        .globalGoBackHandler
+        .resolve(scope)
 
     private val baseInfoDelegate = TransactionProjectorBaseInfoDelegate(
         scope = scope,
@@ -66,7 +74,7 @@ class TransactionProjector(
             topBar = {
                 TopAppBar(
                     title = { Text("Транзакция") },
-                    navigationIcon = { model.globalGoBackHandler.NavigationIcon() },
+                    navigationIcon = { globalGoBackHandler.NavigationIcon() },
                     actions = {
                         SaveAction()
                         RemoveAction()

@@ -20,6 +20,8 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import hnau.common.app.goback.GlobalGoBackHandler
+import hnau.common.app.goback.GoBackHandler
 import hnau.common.compose.uikit.ErrorPanel
 import hnau.common.compose.uikit.bubble.BubblesShower
 import hnau.common.compose.uikit.state.LoadableContent
@@ -60,7 +62,13 @@ class TransactionsProjector(
         val accountInfoResolver: AccountInfoResolver
 
         val categoryInfoResolver: CategoryInfoResolver
+
+        val globalGoBackHandler: GlobalGoBackHandler
     }
+
+    private val globalGoBackHandler: GoBackHandler = dependencies
+        .globalGoBackHandler
+        .resolve(scope)
 
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
@@ -69,7 +77,7 @@ class TransactionsProjector(
             topBar = {
                 TopAppBar(
                     title = { Text("Транзакции") },
-                    navigationIcon = { model.globalGoBackHandler.NavigationIcon() },
+                    navigationIcon = { globalGoBackHandler.NavigationIcon() },
                 )
             },
         ) { contentPadding ->

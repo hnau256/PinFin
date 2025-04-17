@@ -37,13 +37,7 @@ class TransactionsModel(
     interface Dependencies {
 
         val budgetRepository: BudgetRepository
-
-        val globalGoBackHandler: GlobalGoBackHandler
     }
-
-    val globalGoBackHandler: GoBackHandler = dependencies
-        .globalGoBackHandler
-        .resolve(scope)
 
     val transactions: StateFlow<Loadable<NonEmptyList<Pair<Transaction.Id, Transaction>>?>>
         get() = dependencies

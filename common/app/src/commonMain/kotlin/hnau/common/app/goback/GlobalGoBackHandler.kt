@@ -1,8 +1,10 @@
 package hnau.common.app.goback
 
-import hnau.common.kotlin.coroutines.flatMapState
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 
 interface GlobalGoBackHandler {
 
@@ -11,18 +13,19 @@ interface GlobalGoBackHandler {
     ): GoBackHandler
 }
 
-class GlobalGoBackHandlerImpl() : GlobalGoBackHandler {
-
-    private val lazy: MutableStateFlow<GoBackHandler> =
-        MutableStateFlow(GoBackHandlerProvider.never.goBackHandler)
-
-    fun init(
-        goBackHandler: GoBackHandler,
-    ) {
-        lazy.value = goBackHandler
-    }
+class GlobalGoBackHandlerImpl(
+    private val goBackHandler: GoBackHandler,
+) : GlobalGoBackHandler {
 
     override fun resolve(
         scope: CoroutineScope,
-    ): GoBackHandler = lazy.flatMapState(scope) { it }
+    ): GoBackHandler {
+        val result = MutableStateFlow(goBackHandler.value)
+        scope.launch {
+            goBackHandler
+                .onEach { delay(100) /*TODO*/ }
+                .collect(result)
+        }
+        return result
+    }
 }

@@ -4,6 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import arrow.core.Either
+import hnau.common.app.goback.GlobalGoBackHandlerImpl
 import hnau.common.color.material.MaterialHue
 import hnau.common.compose.uikit.HnauTheme
 import hnau.common.compose.utils.ThemeBrightness
@@ -20,7 +21,9 @@ fun PinFinApp.Content(
     val projector = remember(model, dependencies) {
         RootProjector(
             scope = projectorScope,
-            dependencies = dependencies.root(),
+            dependencies = dependencies.root(
+                globalGoBackHandler = GlobalGoBackHandlerImpl(model.goBackHandler),
+            ),
             model = model,
         )
     }
