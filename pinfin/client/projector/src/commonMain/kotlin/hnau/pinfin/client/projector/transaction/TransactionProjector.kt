@@ -1,25 +1,19 @@
 package hnau.pinfin.client.projector.transaction
 
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Save
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.ExtendedFloatingActionButton
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import hnau.common.compose.uikit.ScreenContent
@@ -40,10 +34,6 @@ import hnau.pinfin.client.projector.transaction.type.transfer.TransferProjector
 import hnau.shuffler.annotations.Shuffle
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.StateFlow
-import org.jetbrains.compose.resources.stringResource
-import pinfin.pinfin.client.projector.generated.resources.Res
-import pinfin.pinfin.client.projector.generated.resources.add
-import pinfin.pinfin.client.projector.generated.resources.save
 
 class TransactionProjector(
     private val scope: CoroutineScope,
@@ -76,6 +66,7 @@ class TransactionProjector(
             dependencies = remember(dependencies) { dependencies.screenContent() },
             topAppBarContent = {
                 Title("Транзакция")
+                removeButton()
                 saveButton()
             }
         ) { contentPadding ->
@@ -149,6 +140,20 @@ class TransactionProjector(
                         false -> Icons.Filled.Save
                     }
                 }
+            }
+        }
+    }
+
+    @Composable
+    private fun TopAppBarScope.removeButton() {
+        val removeFlow = model.remove ?: return
+        val remove by removeFlow.collectAsState()
+        Action(
+            onClick = remove,
+        ) {
+            when (remove) {
+                null -> CircularProgressIndicator()
+                else -> Icon { Icons.Filled.Delete }
             }
         }
     }

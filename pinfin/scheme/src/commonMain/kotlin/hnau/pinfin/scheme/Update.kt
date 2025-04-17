@@ -16,4 +16,11 @@ sealed interface Update {
         @SerialName("transaction")
         val transaction: TransactionDTO,
     ) : Update
+
+    @Serializable
+    @SerialName("remove_transaction")
+    data class RemoveTransaction(
+        @SerialName("id")
+        val id: TransactionDTO.Id,
+    ) : Update
 }

@@ -58,7 +58,8 @@ class TransactionModel(
                 id: Transaction.Id,
                 transaction: Transaction,
             ): Skeleton {
-                val localDateTime = transaction.timestamp.toLocalDateTime(TimeZone.currentSystemDefault())
+                val localDateTime =
+                    transaction.timestamp.toLocalDateTime(TimeZone.currentSystemDefault())
                 return Skeleton(
                     id = id,
                     comment = transaction.comment.text
@@ -191,7 +192,7 @@ class TransactionModel(
                 scope = scope,
                 a = skeleton.date,
                 b = skeleton.time,
-            ) {date, time ->
+            ) { date, time ->
                 LocalDateTime(date, time).toInstant(TimeZone.currentSystemDefault())
             },
         ) { typeOrNull, timestamp ->
@@ -227,4 +228,17 @@ class TransactionModel(
             }
         }
     }
+
+    val remove: StateFlow<(() -> Unit)?>? = skeleton
+        .id
+        ?.let { id ->
+            actionOrNullIfExecuting(
+                scope = scope,
+            ) {
+                dependencies.budgetRepository.transaction.remove(
+                    id = skeleton.id,
+                )
+                completed()
+            }
+        }
 }

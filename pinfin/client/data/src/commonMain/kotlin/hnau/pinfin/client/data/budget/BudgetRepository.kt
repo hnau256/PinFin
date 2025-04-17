@@ -41,6 +41,9 @@ class BudgetRepository(
                             key = update.id,
                             value = update.transaction,
                         )
+                        is Update.RemoveTransaction -> transactions.remove(
+                            key = update.id,
+                        )
                     }
                 }
             }

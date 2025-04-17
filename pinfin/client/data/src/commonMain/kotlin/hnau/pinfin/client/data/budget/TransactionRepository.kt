@@ -59,4 +59,15 @@ class TransactionRepository(
             it + (actualId to transaction)
         }
     }
+
+    suspend fun remove(
+        id: Transaction.Id,
+    ) {
+        addUpdate(
+            Update.RemoveTransaction(
+                id = id,
+            )
+        )
+        map.update { transactions -> transactions - id }
+    }
 }
