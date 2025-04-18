@@ -7,7 +7,8 @@ import hnau.pinfin.client.data.budget.AccountInfoResolver
 import hnau.pinfin.client.data.budget.CategoryInfoResolver
 import hnau.pinfin.client.model.budgetstack.BudgetStackElementModel
 import hnau.pinfin.client.model.budgetstack.BudgetStackModel
-import hnau.pinfin.client.projector.transactions.TransactionsProjector
+import hnau.pinfin.client.projector.bidget.BudgetProjector
+import hnau.pinfin.client.projector.bidget.transactions.TransactionsProjector
 import hnau.pinfin.client.projector.transaction.TransactionProjector
 import hnau.shuffler.annotations.Shuffle
 import kotlinx.coroutines.CoroutineScope
@@ -25,7 +26,7 @@ class BudgetStackProjector(
         @Shuffle
         interface WithInfo {
 
-            fun main(): TransactionsProjector.Dependencies
+            fun budget(): BudgetProjector.Dependencies
 
             fun transaction(): TransactionProjector.Dependencies
         }
@@ -48,11 +49,11 @@ class BudgetStackProjector(
             extractKey = { model -> model.key },
             createProjector = { scope, model ->
                 when (model) {
-                    is BudgetStackElementModel.Transactions -> BudgetStackElementProjector.Main(
-                        TransactionsProjector(
+                    is BudgetStackElementModel.Budget -> BudgetStackElementProjector.Budget(
+                        BudgetProjector(
                             scope = scope,
                             model = model.model,
-                            dependencies = withInfoDependencies.main(),
+                            dependencies = withInfoDependencies.budget(),
                         )
                     )
 

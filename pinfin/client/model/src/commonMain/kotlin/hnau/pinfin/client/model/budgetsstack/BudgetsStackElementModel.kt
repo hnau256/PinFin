@@ -3,7 +3,7 @@ package hnau.pinfin.client.model.budgetsstack
 import hnau.common.app.goback.GoBackHandlerProvider
 import hnau.pinfin.client.model.budgetslist.BudgetsListModel
 import hnau.pinfin.client.model.LoadBudgetModel
-import hnau.pinfin.client.model.TransactionsModel
+import hnau.pinfin.client.model.budget.TransactionsModel
 import hnau.pinfin.client.model.transaction.TransactionModel
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable

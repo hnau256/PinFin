@@ -3,6 +3,7 @@
     <string name="comment">Заметка</string>
     <string name="entry">Транзакция</string>
     <string name="transaction">Транзакция</string>
+    <string name="transactions">Транзакции</string>
     <string name="new_transaction">Новая транзакция</string>
     <string name="budgets">Бюджеты</string>
     <string name="transfer">Перевод</string>

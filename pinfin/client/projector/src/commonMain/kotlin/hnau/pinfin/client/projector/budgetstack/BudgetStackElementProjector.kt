@@ -1,7 +1,8 @@
 package hnau.pinfin.client.projector.budgetstack
 
 import androidx.compose.runtime.Composable
-import hnau.pinfin.client.projector.transactions.TransactionsProjector
+import hnau.pinfin.client.projector.bidget.BudgetProjector
+import hnau.pinfin.client.projector.bidget.transactions.TransactionsProjector
 import hnau.pinfin.client.projector.transaction.TransactionProjector
 
 sealed interface BudgetStackElementProjector {
@@ -11,8 +12,8 @@ sealed interface BudgetStackElementProjector {
 
     val key: Int
 
-    data class Main(
-        private val projector: TransactionsProjector,
+    data class Budget(
+        private val projector: BudgetProjector,
     ) : BudgetStackElementProjector {
 
         @Composable

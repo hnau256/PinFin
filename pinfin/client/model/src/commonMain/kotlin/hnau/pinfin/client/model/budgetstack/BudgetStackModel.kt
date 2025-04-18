@@ -15,10 +15,9 @@ import hnau.common.app.model.stack.tailGoBackHandler
 import hnau.common.app.model.stack.tryDropLast
 import hnau.common.kotlin.serialization.MutableStateFlowSerializer
 import hnau.pinfin.client.data.budget.BudgetRepository
-import hnau.pinfin.client.model.TransactionsModel
+import hnau.pinfin.client.model.budget.BudgetModel
 import hnau.pinfin.client.model.transaction.TransactionModel
 import hnau.pinfin.scheme.Transaction
-import hnau.pinfin.scheme.TransactionType
 import hnau.shuffler.annotations.Shuffle
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -35,18 +34,32 @@ class BudgetStackModel(
     @Serializable
     data class Skeleton(
         val stack: MutableStateFlow<NonEmptyStack<BudgetStackElementModel.Skeleton>> =
-            MutableStateFlow(NonEmptyStack(BudgetStackElementModel.Skeleton.Transactions())),
+            MutableStateFlow(NonEmptyStack(BudgetStackElementModel.Skeleton.Budget())),
     )
 
     @Shuffle
     interface Dependencies {
 
-        fun main(): TransactionsModel.Dependencies
+        @Shuffle
+        interface WithOpeners {
 
-        fun transaction(): TransactionModel.Dependencies
+            fun budget(): BudgetModel.Dependencies
+
+            fun transaction(): TransactionModel.Dependencies
+        }
+
+        fun withOpeners(
+            editTransactionOpener: EditTransactionOpener,
+            newTransactionOpener: NewTransactionOpener,
+        ): WithOpeners
 
         val budgetRepository: BudgetRepository
     }
+
+    private val dependenciesWithOpeners: Dependencies.WithOpeners = dependencies.withOpeners(
+        editTransactionOpener = ::openTransaction,
+        newTransactionOpener = { openTransaction(null) },
+    )
 
     val budgetRepository: BudgetRepository
         get() = dependencies.budgetRepository
@@ -65,21 +78,13 @@ class BudgetStackModel(
     }
 
     private fun openTransaction(
-        toEdit: Pair<Transaction.Id, Transaction>?,
+        id: Transaction.Id?,
     ) {
-        val skeleton = toEdit
-            ?.let { (id, transaction) ->
-                TransactionModel.Skeleton.createForEdit(
-                    id = id,
-                    transaction = transaction,
-                )
-            }
-            ?: TransactionModel.Skeleton.createForNew(
-                transactionType = TransactionType.Transfer,
-            )
         this@BudgetStackModel.skeleton.stack.push(
             BudgetStackElementModel.Skeleton.Transaction(
-                skeleton = skeleton,
+                skeleton = TransactionModel.Skeleton(
+                    id = id,
+                ),
             )
         )
     }
@@ -88,21 +93,11 @@ class BudgetStackModel(
         modelScope: CoroutineScope,
         skeleton: BudgetStackElementModel.Skeleton,
     ): BudgetStackElementModel = when (skeleton) {
-        is BudgetStackElementModel.Skeleton.Transactions -> BudgetStackElementModel.Transactions(
-            TransactionsModel(
+        is BudgetStackElementModel.Skeleton.Budget -> BudgetStackElementModel.Budget(
+            BudgetModel(
                 scope = modelScope,
                 skeleton = skeleton.skeleton,
-                dependencies = dependencies.main(),
-                onAddTransactionClick = {
-                    openTransaction(
-                        toEdit = null,
-                    )
-                },
-                onEditTransactionClick = { id, transaction ->
-                    openTransaction(
-                        toEdit = id to transaction,
-                    )
-                }
+                dependencies = dependenciesWithOpeners.budget(),
             )
         )
 
@@ -110,7 +105,7 @@ class BudgetStackModel(
             TransactionModel(
                 scope = modelScope,
                 skeleton = skeleton.skeleton,
-                dependencies = dependencies.transaction(),
+                dependencies = dependenciesWithOpeners.transaction(),
                 completed = { this@BudgetStackModel.skeleton.stack.tryDropLast() },
             )
         )

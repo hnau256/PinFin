@@ -1,4 +1,4 @@
-package hnau.pinfin.client.projector.transactions
+package hnau.pinfin.client.projector.bidget.transactions
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable

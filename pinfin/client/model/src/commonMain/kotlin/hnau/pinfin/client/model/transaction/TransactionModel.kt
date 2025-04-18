@@ -5,9 +5,6 @@
 package hnau.pinfin.client.model.transaction
 
 import hnau.common.app.EditingString
-import hnau.common.app.goback.GlobalGoBackHandler
-import hnau.common.app.goback.GlobalGoBackHandlerImpl
-import hnau.common.app.goback.GoBackHandler
 import hnau.common.app.goback.GoBackHandlerProvider
 import hnau.common.app.toEditingString
 import hnau.common.kotlin.coroutines.actionOrNullIfExecuting
@@ -17,7 +14,9 @@ import hnau.common.kotlin.coroutines.flatMapState
 import hnau.common.kotlin.coroutines.mapState
 import hnau.common.kotlin.coroutines.mapWithScope
 import hnau.common.kotlin.coroutines.toMutableStateFlowAsInitial
+import hnau.common.kotlin.getOrInit
 import hnau.common.kotlin.serialization.MutableStateFlowSerializer
+import hnau.common.kotlin.toAccessor
 import hnau.pinfin.client.data.budget.BudgetRepository
 import hnau.pinfin.client.model.transaction.type.TransactionTypeModel
 import hnau.pinfin.client.model.transaction.type.entry.EntryModel
@@ -49,82 +48,89 @@ class TransactionModel(
     @Serializable
     data class Skeleton(
         val id: Transaction.Id?,
-        val comment: MutableStateFlow<EditingString>,
-        val date: MutableStateFlow<LocalDate>,
-        val time: MutableStateFlow<LocalTime>,
-        val type: MutableStateFlow<TransactionTypeModel.Skeleton>,
+        var content: Content? = null,
     ) {
 
-        companion object {
+        @Serializable
+        data class Content(
+            val comment: MutableStateFlow<EditingString>,
+            val date: MutableStateFlow<LocalDate>,
+            val time: MutableStateFlow<LocalTime>,
+            val type: MutableStateFlow<TransactionTypeModel.Skeleton>,
+        )
+    }
 
-            fun createForEdit(
-                id: Transaction.Id,
-                transaction: Transaction,
-            ): Skeleton {
-                val localDateTime =
-                    transaction.timestamp.toLocalDateTime(TimeZone.currentSystemDefault())
-                return Skeleton(
-                    id = id,
-                    comment = transaction.comment.text
-                        .toEditingString()
-                        .toMutableStateFlowAsInitial(),
-                    date = localDateTime.date.toMutableStateFlowAsInitial(),
-                    time = localDateTime.time.toMutableStateFlowAsInitial(),
-                    type = transaction
-                        .type
-                        .let { type ->
-                            when (type) {
-                                is Transaction.Type.Entry -> TransactionTypeModel.Skeleton.Entry(
-                                    skeleton = EntryModel.Skeleton(
-                                        type = type,
-                                    )
-                                )
+    private fun getSkeletonContent(): Skeleton.Content = skeleton::content
+        .toAccessor()
+        .getOrInit {
+            when (val id = skeleton.id) {
+                null -> {
+                    val now = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())
+                    Skeleton.Content(
+                        comment = EditingString().toMutableStateFlowAsInitial(),
+                        date = now.date.toMutableStateFlowAsInitial(),
+                        time = now.time.toMutableStateFlowAsInitial(),
+                        type = when (TransactionType.default) {
+                            TransactionType.Entry -> TransactionTypeModel.Skeleton.Entry(
+                                skeleton = EntryModel.Skeleton.empty
+                            )
 
-                                is Transaction.Type.Transfer -> TransactionTypeModel.Skeleton.Transfer(
-                                    skeleton = TransferModel.Skeleton(
-                                        type
+                            TransactionType.Transfer -> TransactionTypeModel.Skeleton.Transfer(
+                                skeleton = TransferModel.Skeleton.empty
+                            )
+                        }.toMutableStateFlowAsInitial(),
+                    )
+                }
+
+                else -> {
+                    val transaction = dependencies
+                        .budgetRepository
+                        .transaction
+                        .map
+                        .value
+                        .getValue(id)
+                    val localDateTime =
+                        transaction.timestamp.toLocalDateTime(TimeZone.currentSystemDefault())
+                    Skeleton.Content(
+                        comment = transaction.comment.text
+                            .toEditingString()
+                            .toMutableStateFlowAsInitial(),
+                        date = localDateTime.date.toMutableStateFlowAsInitial(),
+                        time = localDateTime.time.toMutableStateFlowAsInitial(),
+                        type = transaction
+                            .type
+                            .let { type ->
+                                when (type) {
+                                    is Transaction.Type.Entry -> TransactionTypeModel.Skeleton.Entry(
+                                        skeleton = EntryModel.Skeleton(
+                                            type = type,
+                                        )
                                     )
-                                )
+
+                                    is Transaction.Type.Transfer -> TransactionTypeModel.Skeleton.Transfer(
+                                        skeleton = TransferModel.Skeleton(
+                                            type
+                                        )
+                                    )
+                                }
                             }
-                        }
-                        .toMutableStateFlowAsInitial(),
-                )
-            }
-
-            fun createForNew(
-                transactionType: TransactionType,
-            ): Skeleton {
-                val now = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())
-                return Skeleton(
-                    id = null,
-                    comment = EditingString().toMutableStateFlowAsInitial(),
-                    date = now.date.toMutableStateFlowAsInitial(),
-                    time = now.time.toMutableStateFlowAsInitial(),
-                    type = when (transactionType) {
-                        TransactionType.Entry -> TransactionTypeModel.Skeleton.Entry(
-                            skeleton = EntryModel.Skeleton.empty
-                        )
-
-                        TransactionType.Transfer -> TransactionTypeModel.Skeleton.Transfer(
-                            skeleton = TransferModel.Skeleton.empty
-                        )
-                    }.toMutableStateFlowAsInitial(),
-                )
+                            .toMutableStateFlowAsInitial(),
+                    )
+                }
             }
         }
-    }
 
     val isNewTransaction: Boolean
         get() = skeleton.id == null
 
     val comment: MutableStateFlow<EditingString>
-        get() = skeleton.comment
+        get() = getSkeletonContent().comment
 
     val date: MutableStateFlow<LocalDate>
-        get() = skeleton.date
+        get() = getSkeletonContent().date
 
     val time: MutableStateFlow<LocalTime>
-        get() = skeleton.time
+        get() = getSkeletonContent().time
 
     @Shuffle
     interface Dependencies {
@@ -136,7 +142,7 @@ class TransactionModel(
         fun transfer(): TransferModel.Dependencies
     }
 
-    val type: StateFlow<TransactionTypeModel> = skeleton
+    val type: StateFlow<TransactionTypeModel> = getSkeletonContent()
         .type
         .mapWithScope(
             scope = scope,
@@ -169,10 +175,11 @@ class TransactionModel(
     fun chooseType(
         type: TransactionType,
     ) {
-        if (skeleton.type.value.type == type) {
+        val skeletonContent = getSkeletonContent()
+        if (skeletonContent.type.value.type == type) {
             return
         }
-        skeleton.type.value = when (type) {
+        skeletonContent.type.value = when (type) {
             TransactionType.Entry -> TransactionTypeModel.Skeleton.Entry(
                 skeleton = EntryModel.Skeleton.empty,
             )
@@ -191,12 +198,14 @@ class TransactionModel(
         }
         .combineStateWith(
             scope = scope,
-            other = combineState(
-                scope = scope,
-                a = skeleton.date,
-                b = skeleton.time,
-            ) { date, time ->
-                LocalDateTime(date, time).toInstant(TimeZone.currentSystemDefault())
+            other = getSkeletonContent().let { skeletonContent ->
+                combineState(
+                    scope = scope,
+                    a = skeletonContent.date,
+                    b = skeletonContent.time,
+                ) { date, time ->
+                    LocalDateTime(date, time).toInstant(TimeZone.currentSystemDefault())
+                }
             },
         ) { typeOrNull, timestamp ->
             typeOrNull?.let { type ->
@@ -205,7 +214,7 @@ class TransactionModel(
         }
         .combineStateWith(
             scope = scope,
-            other = skeleton.comment,
+            other = getSkeletonContent().comment,
         ) { typeWithTimestampOrNull, comment ->
             typeWithTimestampOrNull?.let { (type, timestamp) ->
                 Transaction(

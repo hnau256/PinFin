@@ -1,4 +1,4 @@
-package hnau.pinfin.client.projector.transactions
+package hnau.pinfin.client.projector.bidget.transactions
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -14,7 +14,6 @@ import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
@@ -29,11 +28,10 @@ import hnau.common.compose.uikit.state.NullableStateContent
 import hnau.common.compose.uikit.state.TransitionSpec
 import hnau.common.compose.uikit.utils.Dimens
 import hnau.common.compose.utils.Icon
-import hnau.common.compose.utils.NavigationIcon
 import hnau.common.compose.utils.plus
 import hnau.pinfin.client.data.budget.AccountInfoResolver
 import hnau.pinfin.client.data.budget.CategoryInfoResolver
-import hnau.pinfin.client.model.TransactionsModel
+import hnau.pinfin.client.model.budget.TransactionsModel
 import hnau.pinfin.client.projector.utils.AmountFormatter
 import hnau.pinfin.client.projector.utils.DateTimeFormatter
 import hnau.shuffler.annotations.Shuffle
@@ -72,15 +70,15 @@ class TransactionsProjector(
 
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
-    fun Content() {
-        Scaffold { contentPadding ->
-            Transactions(
-                contentPadding = contentPadding + PaddingValues(bottom = 96.dp)
-            )
-            AddTransactionButton(
-                contentPadding = contentPadding,
-            )
-        }
+    fun Content(
+        contentPadding: PaddingValues,
+    ) {
+        Transactions(
+            contentPadding = contentPadding + PaddingValues(bottom = 96.dp)
+        )
+        AddTransactionButton(
+            contentPadding = contentPadding,
+        )
     }
 
     @Composable
@@ -121,7 +119,7 @@ class TransactionsProjector(
                         ) { (id, transaction) ->
                             transaction.Content(
                                 dependencies = dependencies,
-                                onClick = { model.onEditTransactionClick(id, transaction) },
+                                onClick = { model.onEditTransactionClick(id) },
                             )
                         }
                     }

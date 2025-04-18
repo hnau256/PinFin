@@ -1,0 +1,78 @@
+@file:UseSerializers(
+    MutableStateFlowSerializer::class
+)
+
+package hnau.pinfin.client.model.budget
+
+import hnau.common.app.goback.GoBackHandlerProvider
+import hnau.common.kotlin.coroutines.mapState
+import hnau.common.kotlin.coroutines.toMutableStateFlowAsInitial
+import hnau.common.kotlin.ifNull
+import hnau.common.kotlin.serialization.MutableStateFlowSerializer
+import hnau.shuffler.annotations.Shuffle
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.UseSerializers
+
+class BudgetModel(
+    private val scope: CoroutineScope,
+    private val dependencies: Dependencies,
+    private val skeleton: Skeleton,
+) : GoBackHandlerProvider {
+
+    @Shuffle
+    interface Dependencies {
+
+        fun transactions(): TransactionsModel.Dependencies
+    }
+
+    @Serializable
+    data class Skeleton(
+        val selectedTab: MutableStateFlow<BudgetTab> =
+            BudgetTab.default.toMutableStateFlowAsInitial(),
+        val pages: MutableList<BudgetPageModel.Skeleton> = mutableListOf(),
+    )
+
+    private val tabsCache: MutableList<BudgetPageModel> = mutableListOf()
+
+    private fun getModel(
+        tab: BudgetTab,
+    ): BudgetPageModel {
+
+        fun getSkeleton(): BudgetPageModel.Skeleton = skeleton
+            .pages
+            .firstOrNull { it.tab == tab }
+            .ifNull {
+                when (tab) {
+                    BudgetTab.Transactions -> BudgetPageModel.Skeleton.Transactions()
+                }.also(skeleton.pages::add)
+            }
+
+        return tabsCache
+            .firstOrNull { it.tab == tab }
+            .ifNull {
+                val skeleton = getSkeleton()
+                when (skeleton) {
+                    is BudgetPageModel.Skeleton.Transactions -> BudgetPageModel.Transactions(
+                        TransactionsModel(
+                            scope = scope,
+                            skeleton = skeleton.skeleton,
+                            dependencies = dependencies.transactions(),
+                        )
+                    )
+                }.also(tabsCache::add)
+            }
+    }
+
+    fun selectTab(
+        tab: BudgetTab,
+    ) {
+        skeleton.selectedTab.value = tab
+    }
+
+    val currentModel: StateFlow<BudgetPageModel> = skeleton
+        .selectedTab
+        .mapState(scope, ::getModel)
+}
