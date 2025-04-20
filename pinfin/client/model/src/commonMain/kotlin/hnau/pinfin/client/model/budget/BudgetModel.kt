@@ -26,6 +26,10 @@ class BudgetModel(
     interface Dependencies {
 
         fun transactions(): TransactionsModel.Dependencies
+
+        fun analytics(): AnalyticsModel.Dependencies
+
+        fun config(): BudgetConfigModel.Dependencies
     }
 
     @Serializable
@@ -47,6 +51,8 @@ class BudgetModel(
             .ifNull {
                 when (tab) {
                     BudgetTab.Transactions -> BudgetPageModel.Skeleton.Transactions()
+                    BudgetTab.Analytics -> BudgetPageModel.Skeleton.Analytics()
+                    BudgetTab.Config -> BudgetPageModel.Skeleton.Config()
                 }.also(skeleton.pages::add)
             }
 
@@ -60,6 +66,20 @@ class BudgetModel(
                             scope = scope,
                             skeleton = skeleton.skeleton,
                             dependencies = dependencies.transactions(),
+                        )
+                    )
+                    is BudgetPageModel.Skeleton.Analytics -> BudgetPageModel.Analytics(
+                        AnalyticsModel(
+                            scope = scope,
+                            skeleton = skeleton.skeleton,
+                            dependencies = dependencies.analytics(),
+                        )
+                    )
+                    is BudgetPageModel.Skeleton.Config -> BudgetPageModel.Config(
+                        BudgetConfigModel(
+                            scope = scope,
+                            skeleton = skeleton.skeleton,
+                            dependencies = dependencies.config(),
                         )
                     )
                 }.also(tabsCache::add)

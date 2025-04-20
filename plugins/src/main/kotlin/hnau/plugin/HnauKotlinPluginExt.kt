@@ -6,7 +6,6 @@ import org.gradle.api.Project
 import org.gradle.api.artifacts.VersionCatalog
 import org.gradle.api.artifacts.VersionCatalogsExtension
 import org.gradle.api.internal.project.DefaultProject
-import org.gradle.api.tasks.testing.Test
 import org.gradle.jvm.toolchain.JavaLanguageVersion
 import org.jetbrains.compose.ComposePlugin
 import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
@@ -112,22 +111,6 @@ internal fun Project.config(
         if (useAndroid) {
             dependencies.add("kspAndroid", kspProcessor)
         }
-    }
-
-    versions.findLibrary("kotest-framework-engine").get().get().let {
-        dependencies.add("commonTestImplementation", it)
-    }
-
-    versions.findLibrary("kotest-junit-runner").get().get().let {
-        val configurationName = when (useAndroid) {
-            true -> "androidUnitTestImplementation"
-            false -> "jvmTestImplementation"
-        }
-        dependencies.add(configurationName, it)
-    }
-
-    tasks.withType(Test::class.java).configureEach { testTask ->
-        testTask.useJUnitPlatform()
     }
 
     if (useAndroid) {

@@ -3,6 +3,12 @@ package hnau.pinfin.client.projector.bidget
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.List
+import androidx.compose.material.icons.automirrored.filled.ShowChart
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.QueryStats
+import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material3.FabPosition
+import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
@@ -27,6 +33,8 @@ import kotlinx.coroutines.flow.StateFlow
 import org.jetbrains.compose.resources.stringResource
 import pinfin.pinfin.client.projector.generated.resources.Res
 import pinfin.pinfin.client.projector.generated.resources.transactions
+import pinfin.pinfin.client.projector.generated.resources.analytics
+import pinfin.pinfin.client.projector.generated.resources.config
 
 class BudgetProjector(
     scope: CoroutineScope,
@@ -38,6 +46,10 @@ class BudgetProjector(
     interface Dependencies {
 
         fun transactions(): TransactionsProjector.Dependencies
+
+        fun analytics(): AnalyticsProjector.Dependencies
+
+        fun config(): BudgetConfigProjector.Dependencies
     }
 
     private val tabsCache: MutableMap<BudgetPageModel, Pair<BudgetTab, BudgetPageProjector>> =
@@ -55,6 +67,20 @@ class BudgetProjector(
                             scope = scope,
                             model = model.model,
                             dependencies = dependencies.transactions(),
+                        )
+                    )
+                    is BudgetPageModel.Analytics -> BudgetPageProjector.Analytics(
+                        projector = AnalyticsProjector(
+                            scope = scope,
+                            model = model.model,
+                            dependencies = dependencies.analytics(),
+                        )
+                    )
+                    is BudgetPageModel.Config -> BudgetPageProjector.Config(
+                        projector = BudgetConfigProjector(
+                            scope = scope,
+                            model = model.model,
+                            dependencies = dependencies.config(),
                         )
                     )
                 }
@@ -78,7 +104,7 @@ class BudgetProjector(
                         )
                     }
                 }
-            }
+            },
         ) { contentPadding ->
             tabWithProjector
                 .StateContent(
@@ -88,7 +114,7 @@ class BudgetProjector(
                         when (targetState.first.ordinal > initialState.first.ordinal) {
                             true -> 1f
                             false -> -1f
-                        }
+                        } * 0.25f
                     },
                     label = "BudgetPage",
                 ) { (_, projector) ->
@@ -102,14 +128,18 @@ class BudgetProjector(
     private val BudgetTab.icon: ImageVector
         get() = when (this) {
             BudgetTab.Transactions -> Icons.AutoMirrored.Filled.List
+            BudgetTab.Analytics -> Icons.Filled.QueryStats
+            BudgetTab.Config -> Icons.Filled.Settings
         }
 
     private val BudgetTab.title: String
         @Composable
         get() = stringResource(
             when (this) {
-            BudgetTab.Transactions -> Res.string.transactions
-        }
+                BudgetTab.Transactions -> Res.string.transactions
+                BudgetTab.Analytics -> Res.string.analytics
+                BudgetTab.Config -> Res.string.config
+            }
         )
 
 }

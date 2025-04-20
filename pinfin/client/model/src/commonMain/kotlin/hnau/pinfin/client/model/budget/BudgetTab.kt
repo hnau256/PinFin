@@ -5,8 +5,8 @@ import kotlinx.serialization.Serializable
 @Serializable
 enum class BudgetTab {
     Transactions,
-    /*Statistic,
-    Config,*/
+    Analytics,
+    Config,
     ;
 
     companion object {
@@ -18,15 +18,15 @@ enum class BudgetTab {
 @Serializable
 data class BudgetTabValues<T>(
     val transactions: T,
-    //val statistic: T,
-    //val config: T,
+    val analytics: T,
+    val config: T,
 ) {
 
     operator fun get(
         tab: BudgetTab,
     ): T = when (tab) {
         BudgetTab.Transactions -> transactions
-        /*BudgetTab.Statistic -> statistic
-        BudgetTab.Config -> config*/
+        BudgetTab.Analytics -> analytics
+        BudgetTab.Config -> config
     }
 }

@@ -10,8 +10,9 @@ android {
     buildTypes {
         getByName("release") {
             signingConfig = signingConfigs.getByName("debug")
-            isShrinkResources = true
-            isMinifyEnabled = true
+            isShrinkResources = false
+            isMinifyEnabled = false
+            isDebuggable = false
             proguardFile("proguard-rules.pro")
         }
     }
@@ -32,6 +33,10 @@ kotlin {
             implementation(project(":pinfin:client:compose"))
             implementation(project(":pinfin:client:model"))
             implementation(project(":pinfin:client:projector"))
+            /*implementation("androidx.test:core-ktx:1.6.1")
+            implementation("androidx.test.ext:junit-ktx:1.2.1")
+            implementation("androidx.test:runner:1.6.2")
+            implementation("com.google.errorprone:error_prone_annotations:2.36.0")*/
         }
     }
 }

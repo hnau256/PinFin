@@ -23,10 +23,5 @@ kotlin {
 compose.desktop {
     application {
         mainClass = "hnau.pinfin.client.desktop.DesktopAppKt"
-        /*nativeDistributions {
-            targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
-            packageName = "hnau.kmptest"
-            packageVersion = "1.0.0"
-        }*/
     }
 }

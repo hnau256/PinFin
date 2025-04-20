@@ -16,6 +16,22 @@ sealed interface BudgetPageModel : GoBackHandlerProvider {
             get() = BudgetTab.Transactions
     }
 
+    data class Analytics(
+        val model: AnalyticsModel,
+    ) : BudgetPageModel, GoBackHandlerProvider by model {
+
+        override val tab: BudgetTab
+            get() = BudgetTab.Analytics
+    }
+
+    data class Config(
+        val model: BudgetConfigModel,
+    ) : BudgetPageModel, GoBackHandlerProvider by model {
+
+        override val tab: BudgetTab
+            get() = BudgetTab.Config
+    }
+
     @Serializable
     sealed interface Skeleton {
 
@@ -29,6 +45,26 @@ sealed interface BudgetPageModel : GoBackHandlerProvider {
 
             override val tab: BudgetTab
                 get() = BudgetTab.Transactions
+        }
+
+        @Serializable
+        @SerialName("analytics")
+        data class Analytics(
+            val skeleton: AnalyticsModel.Skeleton = AnalyticsModel.Skeleton(),
+        ) : Skeleton {
+
+            override val tab: BudgetTab
+                get() = BudgetTab.Analytics
+        }
+
+        @Serializable
+        @SerialName("config")
+        data class Config(
+            val skeleton: BudgetConfigModel.Skeleton = BudgetConfigModel.Skeleton(),
+        ) : Skeleton {
+
+            override val tab: BudgetTab
+                get() = BudgetTab.Config
         }
     }
 }

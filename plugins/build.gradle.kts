@@ -8,7 +8,6 @@ dependencies {
     implementation(libs.gradle.plugin.kotlin.jvm)
     implementation(libs.gradle.plugin.android)
     implementation(libs.gradle.plugin.compose)
-    implementation(libs.kotest.framework.multiplatform.plugin)
     implementation(libs.arrow.core)
     implementation(libs.kotlin.serialization.json)
 }

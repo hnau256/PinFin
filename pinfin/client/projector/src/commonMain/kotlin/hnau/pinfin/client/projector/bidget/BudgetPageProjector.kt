@@ -24,4 +24,32 @@ sealed interface BudgetPageProjector {
             )
         }
     }
+
+    data class Analytics(
+        val projector: AnalyticsProjector,
+    ) : BudgetPageProjector {
+
+        @Composable
+        override fun Content(
+            contentPadding: PaddingValues,
+        ) {
+            projector.Content(
+                contentPadding = contentPadding,
+            )
+        }
+    }
+
+    data class Config(
+        val projector: BudgetConfigProjector,
+    ) : BudgetPageProjector {
+
+        @Composable
+        override fun Content(
+            contentPadding: PaddingValues,
+        ) {
+            projector.Content(
+                contentPadding = contentPadding,
+            )
+        }
+    }
 }
