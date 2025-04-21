@@ -25,7 +25,7 @@ import hnau.common.compose.uikit.table.cellShape
 import hnau.common.compose.uikit.utils.Dimens
 import hnau.common.compose.utils.Icon
 import hnau.common.compose.utils.horizontalDisplayPadding
-import hnau.pinfin.client.model.utils.signedAmountOrAmount
+import hnau.pinfin.client.data.utils.signedAmountOrAmount
 import hnau.pinfin.client.projector.utils.AmountContent
 import hnau.pinfin.client.projector.utils.ArrowDirection
 import hnau.pinfin.client.projector.utils.ArrowIcon

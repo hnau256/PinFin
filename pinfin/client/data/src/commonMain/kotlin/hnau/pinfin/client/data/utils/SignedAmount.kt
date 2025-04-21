@@ -1,4 +1,4 @@
-package hnau.pinfin.client.model.utils
+package hnau.pinfin.client.data.utils
 
 import arrow.core.Either
 import hnau.pinfin.scheme.Amount
@@ -58,15 +58,15 @@ val Record.signedAmount: SignedAmount
         }
     )
 
+val Transaction.Type.Entry.signedAmount: SignedAmount
+    get() = records.tail.fold(
+        initial = records.head.signedAmount,
+    ) { acc, record ->
+        acc + record.signedAmount
+    }
+
 val Transaction.signedAmountOrAmount: Either<SignedAmount, Amount>
     get() = when (val type = type) {
-        is Transaction.Type.Entry -> Either.Left(
-            type.records.tail.fold(
-                initial = type.records.head.signedAmount,
-            ) { acc, record ->
-                acc + record.signedAmount
-            }
-        )
-
+        is Transaction.Type.Entry -> Either.Left(type.signedAmount)
         is Transaction.Type.Transfer -> Either.Right(type.amount)
     }

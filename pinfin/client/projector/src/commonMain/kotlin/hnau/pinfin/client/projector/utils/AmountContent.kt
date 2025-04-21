@@ -5,7 +5,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import hnau.pinfin.client.model.utils.SignedAmount
+import hnau.pinfin.client.data.utils.SignedAmount
 import hnau.pinfin.scheme.Amount
 
 

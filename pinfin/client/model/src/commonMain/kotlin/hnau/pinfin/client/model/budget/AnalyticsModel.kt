@@ -1,6 +1,7 @@
 package hnau.pinfin.client.model.budget
 
 import hnau.common.app.goback.GoBackHandlerProvider
+import hnau.pinfin.client.data.budget.BudgetRepository
 import hnau.shuffler.annotations.Shuffle
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.serialization.Serializable
@@ -9,13 +10,16 @@ class AnalyticsModel(
     scope: CoroutineScope,
     dependencies: Dependencies,
     skeleton: Skeleton,
-): GoBackHandlerProvider {
+) : GoBackHandlerProvider {
 
     @Shuffle
-    interface Dependencies
+    interface Dependencies {
+
+        val budgetsRepository: BudgetRepository
+    }
 
     @Serializable
-    data class Skeleton(
-        val a: Int = 0,
-    )
+    /*data*/ class Skeleton
+
+
 }
