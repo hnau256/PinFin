@@ -63,7 +63,7 @@ class ChooseAccountModel(
             scope = scope,
             other = localUsedAccounts,
         ) { accounts, localUsedAccounts ->
-            (accounts + localUsedAccounts).sortedBy { it.title }
+            (accounts + localUsedAccounts).distinct().sortedBy { it.title }
         }
 
     val state: ChooseState<AccountInfo> = ChooseState(

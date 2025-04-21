@@ -63,10 +63,7 @@ class ChooseCategoryModel(
             scope = scope,
             other = localUsedCategories,
         ) { accounts, localUsedCategories ->
-            accounts
-                .toSet()
-                .plus(localUsedCategories)
-                .sorted()
+            (accounts + localUsedCategories).distinct().sorted()
         }
 
     val state = ChooseState(

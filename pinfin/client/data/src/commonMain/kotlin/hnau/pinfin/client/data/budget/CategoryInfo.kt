@@ -1,21 +1,29 @@
 package hnau.pinfin.client.data.budget
 
 import hnau.common.kotlin.castOrNull
+import hnau.common.kotlin.ifNull
 import hnau.pinfin.scheme.CategoryId
 import kotlinx.serialization.Serializable
 
 @Serializable
 data class CategoryInfo(
     val id: CategoryId,
-    val title: String = id.id,
+    val title: String = id.titleBasedOnId,
 ) : Comparable<CategoryInfo> {
 
 
     override fun compareTo(
         other: CategoryInfo,
-    ): Int = title.compareTo(
-        other = other.title,
-    )
+    ): Int = id
+        .direction
+        .compareTo(other.id.direction)
+        .takeIf { it != 0 }
+        .ifNull {
+            title.compareTo(
+                other = other.title,
+            )
+        }
+
 
     override fun equals(
         other: Any?,
