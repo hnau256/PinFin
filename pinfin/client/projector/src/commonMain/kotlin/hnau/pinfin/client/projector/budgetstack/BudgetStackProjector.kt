@@ -3,12 +3,9 @@ package hnau.pinfin.client.projector.budgetstack
 import androidx.compose.runtime.Composable
 import hnau.common.compose.projector.stack.Content
 import hnau.common.compose.projector.stack.StackProjectorTail
-import hnau.pinfin.client.data.budget.AccountInfoResolver
-import hnau.pinfin.client.data.budget.CategoryInfoResolver
 import hnau.pinfin.client.model.budgetstack.BudgetStackElementModel
 import hnau.pinfin.client.model.budgetstack.BudgetStackModel
 import hnau.pinfin.client.projector.bidget.BudgetProjector
-import hnau.pinfin.client.projector.bidget.transactions.TransactionsProjector
 import hnau.pinfin.client.projector.transaction.TransactionProjector
 import hnau.shuffler.annotations.Shuffle
 import kotlinx.coroutines.CoroutineScope
@@ -23,24 +20,10 @@ class BudgetStackProjector(
     @Shuffle
     interface Dependencies {
 
-        @Shuffle
-        interface WithInfo {
+        fun budget(): BudgetProjector.Dependencies
 
-            fun budget(): BudgetProjector.Dependencies
-
-            fun transaction(): TransactionProjector.Dependencies
-        }
-
-        fun withInfo(
-            accountInfoResolver: AccountInfoResolver,
-            categoryInfoResolver: CategoryInfoResolver,
-        ): WithInfo
+        fun transaction(): TransactionProjector.Dependencies
     }
-
-    private val withInfoDependencies = dependencies.withInfo(
-        accountInfoResolver = model.budgetRepository.account,
-        categoryInfoResolver = model.budgetRepository.category,
-    )
 
     private val tail: StateFlow<StackProjectorTail<Int, BudgetStackElementProjector>> =
         StackProjectorTail(
@@ -53,7 +36,7 @@ class BudgetStackProjector(
                         BudgetProjector(
                             scope = scope,
                             model = model.model,
-                            dependencies = withInfoDependencies.budget(),
+                            dependencies = dependencies.budget(),
                         )
                     )
 
@@ -61,7 +44,7 @@ class BudgetStackProjector(
                         TransactionProjector(
                             scope = scope,
                             model = model.model,
-                            dependencies = withInfoDependencies.transaction(),
+                            dependencies = dependencies.transaction(),
                         )
                     )
                 }

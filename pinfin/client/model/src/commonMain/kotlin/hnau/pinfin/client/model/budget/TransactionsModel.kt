@@ -3,12 +3,14 @@ package hnau.pinfin.client.model.budget
 import arrow.core.NonEmptyList
 import arrow.core.toNonEmptyListOrNull
 import hnau.common.app.goback.GoBackHandlerProvider
-import hnau.common.kotlin.Loadable
 import hnau.common.kotlin.coroutines.mapState
 import hnau.pinfin.client.data.budget.BudgetRepository
-import hnau.pinfin.client.model.budgetstack.EditTransactionOpener
-import hnau.pinfin.client.model.budgetstack.NewTransactionOpener
+import hnau.pinfin.client.data.budget.BudgetState
+import hnau.pinfin.client.data.budget.TransactionInfo
+import hnau.pinfin.client.model.budgetstack.BudgetStackOpener
+import hnau.pinfin.client.model.budgetstack.BudgetStackOpenerImpl
 import hnau.pinfin.scheme.Transaction
+import hnau.pinfin.scheme.TransactionType
 import hnau.shuffler.annotations.Shuffle
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.StateFlow
@@ -30,29 +32,28 @@ class TransactionsModel(
 
         val budgetRepository: BudgetRepository
 
-        val newTransactionsOpener: NewTransactionOpener
-
-        val editTransactionOpener: EditTransactionOpener
+        val budgetStackOpener: BudgetStackOpener
     }
 
-    val onAddTransactionClick: () -> Unit
-        get() = dependencies.newTransactionsOpener::openNewTransaction
+    fun onAddTransactionClick() {
+        dependencies
+            .budgetStackOpener
+            .openNewTransaction(
+                transactionType = TransactionType.default,
+            )
+    }
 
-    val onEditTransactionClick: (id: Transaction.Id) -> Unit
-        get() = dependencies.editTransactionOpener::openEditTransaction
+    val onEditTransactionClick: (TransactionInfo) -> Unit
+        get() = dependencies.budgetStackOpener::openEditTransaction
 
-    val transactions: StateFlow<Loadable<NonEmptyList<Pair<Transaction.Id, Transaction>>?>>
+    val transactions: StateFlow<NonEmptyList<TransactionInfo>?>
         get() = dependencies
             .budgetRepository
-            .transaction
+            .transactions
             .list
             .mapState(
                 scope = scope,
-            ) { transactionsOrLoading ->
-                transactionsOrLoading.map { transactions ->
-                    transactions
-                        .asReversed()
-                        .toNonEmptyListOrNull()
-                }
+            ) { transactions ->
+                transactions.toNonEmptyListOrNull()
             }
 }

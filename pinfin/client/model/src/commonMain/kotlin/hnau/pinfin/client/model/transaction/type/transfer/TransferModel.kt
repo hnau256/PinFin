@@ -10,9 +10,10 @@ import hnau.common.kotlin.coroutines.combineStateWith
 import hnau.common.kotlin.coroutines.mapWithScope
 import hnau.common.kotlin.coroutines.toMutableStateFlowAsInitial
 import hnau.common.kotlin.serialization.MutableStateFlowSerializer
+import hnau.pinfin.client.data.budget.AccountInfo
+import hnau.pinfin.client.data.budget.TransactionInfo
 import hnau.pinfin.client.model.AmountModel
 import hnau.pinfin.client.model.transaction.type.utils.ChooseAccountModel
-import hnau.pinfin.scheme.AccountId
 import hnau.pinfin.scheme.Transaction
 import hnau.shuffler.annotations.Shuffle
 import kotlinx.coroutines.CoroutineScope
@@ -37,13 +38,13 @@ class TransferModel(
 
     @Serializable
     data class Skeleton(
-        val accounts: TransferSideValues<MutableStateFlow<AccountId?>>,
+        val accounts: TransferSideValues<MutableStateFlow<AccountInfo?>>,
         val choosing: MutableStateFlow<Pair<TransferSide, ChooseAccountModel.Skeleton>?>,
         val amount: AmountModel.Skeleton,
     ) {
 
         constructor(
-            type: Transaction.Type.Transfer,
+            type: TransactionInfo.Type.Transfer,
         ) : this(
             accounts = TransferSideValues(
                 from = type.from.toMutableStateFlowAsInitial(),
@@ -75,14 +76,12 @@ class TransferModel(
         dependencies = dependencies.amount(),
     )
 
-    private val localUsedAccounts: StateFlow<Set<AccountId>> = combineState(
+    private val localUsedAccounts: StateFlow<Set<AccountInfo>> = combineState(
         scope = scope,
         a = skeleton.accounts.from,
         b = skeleton.accounts.to,
     ) { from, to ->
-        setOfNotNull(
-            from, to
-        )
+        setOfNotNull(from, to)
     }
 
     val choose: StateFlow<ChooseAccountModel?> = skeleton
@@ -104,7 +103,7 @@ class TransferModel(
         }
 
     data class Account(
-        val value: StateFlow<AccountId?>,
+        val value: StateFlow<AccountInfo?>,
         val onClick: () -> Unit,
     )
 
@@ -138,8 +137,8 @@ class TransferModel(
         fromWithToOrNull?.let { (from, to) ->
             amountOrNull?.let { amount ->
                 Transaction.Type.Transfer(
-                    from = from,
-                    to = to,
+                    from = from.id,
+                    to = to.id,
                     amount = amount,
                 )
             }

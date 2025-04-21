@@ -8,12 +8,13 @@ import arrow.core.toOption
 import hnau.common.app.EditingString
 import hnau.common.app.goback.GoBackHandlerProvider
 import hnau.common.app.toEditingString
-import hnau.common.kotlin.Loadable
 import hnau.common.kotlin.coroutines.combineStateWith
 import hnau.common.kotlin.coroutines.mapState
 import hnau.common.kotlin.coroutines.toMutableStateFlowAsInitial
 import hnau.common.kotlin.serialization.MutableStateFlowSerializer
+import hnau.pinfin.client.data.budget.AccountInfo
 import hnau.pinfin.client.data.budget.BudgetRepository
+import hnau.pinfin.client.data.utils.SignedAmount
 import hnau.pinfin.client.model.utils.choose.ChooseState
 import hnau.pinfin.scheme.AccountId
 import hnau.shuffler.annotations.Shuffle
@@ -26,10 +27,10 @@ import kotlinx.serialization.UseSerializers
 class ChooseAccountModel(
     scope: CoroutineScope,
     skeleton: Skeleton,
-    localUsedAccounts: StateFlow<Set<AccountId>>,
+    localUsedAccounts: StateFlow<Set<AccountInfo>>,
     dependencies: Dependencies,
-    selected: StateFlow<AccountId?>,
-    updateSelected: (AccountId) -> Unit,
+    selected: StateFlow<AccountInfo?>,
+    updateSelected: (AccountInfo) -> Unit,
     onReady: () -> Unit,
 ) : GoBackHandlerProvider {
 
@@ -54,35 +55,36 @@ class ChooseAccountModel(
         val repository: BudgetRepository
     }
 
-    private val accounts: StateFlow<Loadable<List<AccountId>>> = dependencies
+    private val accounts: StateFlow<List<AccountInfo>> = dependencies
         .repository
-        .account
+        .accounts
         .list
         .combineStateWith(
             scope = scope,
             other = localUsedAccounts,
-        ) { accountsOrLoading, localUsedAccounts ->
-            accountsOrLoading.map { accounts ->
-                accounts
-                    .toSet()
-                    .plus(localUsedAccounts)
-                    .sorted()
-            }
+        ) { accounts, localUsedAccounts ->
+            (accounts + localUsedAccounts).sortedBy { it.title }
         }
 
-    val state: ChooseState<AccountId> = ChooseState(
+    val state: ChooseState<AccountInfo> = ChooseState(
         scope = scope,
         variants = accounts,
         selected = selected.mapState(scope) { it.toOption() },
         updateSelected = updateSelected,
         query = skeleton.query,
-        extractId = { id },
-        extractAdditionalFields = {
-            //TODO title
-            emptyList()
+        extractId = { it.id.id },
+        extractAdditionalFields = { info ->
+            listOf(
+                info.title
+            )
         },
         createPossibleNewVariantsByQuery = { query ->
-            listOf(AccountId(query))
+            listOf(
+                AccountInfo(
+                    id = AccountId(query),
+                    amount = SignedAmount.zero,
+                )
+            )
         },
         onReady = onReady,
     )

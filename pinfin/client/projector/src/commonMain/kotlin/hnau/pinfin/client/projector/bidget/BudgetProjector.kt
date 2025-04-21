@@ -3,12 +3,8 @@ package hnau.pinfin.client.projector.bidget
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.List
-import androidx.compose.material.icons.automirrored.filled.ShowChart
-import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.QueryStats
 import androidx.compose.material.icons.filled.Settings
-import androidx.compose.material3.FabPosition
-import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
@@ -32,9 +28,9 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.StateFlow
 import org.jetbrains.compose.resources.stringResource
 import pinfin.pinfin.client.projector.generated.resources.Res
-import pinfin.pinfin.client.projector.generated.resources.transactions
 import pinfin.pinfin.client.projector.generated.resources.analytics
 import pinfin.pinfin.client.projector.generated.resources.config
+import pinfin.pinfin.client.projector.generated.resources.transactions
 
 class BudgetProjector(
     scope: CoroutineScope,

@@ -7,16 +7,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import hnau.common.compose.uikit.TripleRow
 import hnau.common.compose.utils.Icon
-import hnau.pinfin.client.data.budget.AccountInfoResolver
-import hnau.pinfin.scheme.AccountId
+import hnau.pinfin.client.data.budget.AccountInfo
+import hnau.pinfin.client.data.budget.BudgetState
 
 @Composable
 fun AccountContent(
-    id: AccountId,
-    infoResolver: AccountInfoResolver,
+    info: AccountInfo,
     modifier: Modifier = Modifier,
 ) {
-    val info = infoResolver[id]
     TripleRow(
         modifier = modifier,
         content = { Text(info.title) },

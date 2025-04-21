@@ -8,12 +8,12 @@ import arrow.core.toOption
 import hnau.common.app.EditingString
 import hnau.common.app.goback.GoBackHandlerProvider
 import hnau.common.app.toEditingString
-import hnau.common.kotlin.Loadable
 import hnau.common.kotlin.coroutines.combineStateWith
 import hnau.common.kotlin.coroutines.mapState
 import hnau.common.kotlin.coroutines.toMutableStateFlowAsInitial
 import hnau.common.kotlin.serialization.MutableStateFlowSerializer
 import hnau.pinfin.client.data.budget.BudgetRepository
+import hnau.pinfin.client.data.budget.CategoryInfo
 import hnau.pinfin.client.model.utils.choose.ChooseState
 import hnau.pinfin.scheme.CategoryDirection
 import hnau.pinfin.scheme.CategoryId
@@ -27,10 +27,10 @@ import kotlinx.serialization.UseSerializers
 class ChooseCategoryModel(
     scope: CoroutineScope,
     skeleton: Skeleton,
-    localUsedCategories: StateFlow<Set<CategoryId>>,
+    localUsedCategories: StateFlow<Set<CategoryInfo>>,
     dependencies: Dependencies,
-    selected: StateFlow<CategoryId?>,
-    updateSelected: (CategoryId) -> Unit,
+    selected: StateFlow<CategoryInfo?>,
+    updateSelected: (CategoryInfo) -> Unit,
     onReady: () -> Unit,
 ) : GoBackHandlerProvider {
 
@@ -55,39 +55,40 @@ class ChooseCategoryModel(
         val repository: BudgetRepository
     }
 
-    private val categories: StateFlow<Loadable<List<CategoryId>>> = dependencies
+    private val categories: StateFlow<List<CategoryInfo>> = dependencies
         .repository
-        .category
+        .categories
         .list
         .combineStateWith(
             scope = scope,
             other = localUsedCategories,
-        ) { accountsOrLoading, localUsedCategories ->
-            accountsOrLoading.map { accounts ->
-                accounts
-                    .toSet()
-                    .plus(localUsedCategories)
-                    .sorted()
-            }
+        ) { accounts, localUsedCategories ->
+            accounts
+                .toSet()
+                .plus(localUsedCategories)
+                .sorted()
         }
 
-    val state: ChooseState<CategoryId> = ChooseState(
+    val state = ChooseState(
         scope = scope,
         variants = categories,
         selected = selected.mapState(scope) { it.toOption() },
         updateSelected = updateSelected,
         query = skeleton.query,
-        extractId = { id },
-        extractAdditionalFields = {
-            //TODO title
-            emptyList()
+        extractId = { it.id.id },
+        extractAdditionalFields = { info ->
+            listOf(
+                info.title
+            )
         },
         createPossibleNewVariantsByQuery = { query ->
             CategoryDirection
                 .entries
                 .map { direction ->
-                    CategoryId(
-                        CategoryId.directionPrefixes[direction] + query
+                    CategoryInfo(
+                        id = CategoryId(
+                            CategoryId.directionPrefixes[direction] + query
+                        )
                     )
                 }
         },

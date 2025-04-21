@@ -25,6 +25,8 @@ import hnau.common.compose.uikit.table.cellShape
 import hnau.common.compose.uikit.utils.Dimens
 import hnau.common.compose.utils.Icon
 import hnau.common.compose.utils.horizontalDisplayPadding
+import hnau.pinfin.client.data.budget.BudgetState
+import hnau.pinfin.client.data.budget.TransactionInfo
 import hnau.pinfin.client.data.utils.signedAmountOrAmount
 import hnau.pinfin.client.projector.utils.AmountContent
 import hnau.pinfin.client.projector.utils.ArrowDirection
@@ -33,15 +35,12 @@ import hnau.pinfin.client.projector.utils.SignedAmountContent
 import hnau.pinfin.client.projector.utils.account.AccountContent
 import hnau.pinfin.client.projector.utils.category.CategoryContent
 import hnau.pinfin.client.projector.utils.color
-import hnau.pinfin.scheme.AccountId
 import hnau.pinfin.scheme.CategoryDirection
-import hnau.pinfin.scheme.CategoryId
-import hnau.pinfin.scheme.Transaction
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 
 @Composable
-fun Transaction.Content(
+fun TransactionInfo.Content(
     dependencies: TransactionsProjector.Dependencies,
     onClick: () -> Unit,
 ) {
@@ -62,7 +61,7 @@ fun Transaction.Content(
 }
 
 @Composable
-fun Transaction.CellContent(
+fun TransactionInfo.CellContent(
     cellShape: Shape,
     dependencies: TransactionsProjector.Dependencies,
     onClick: () -> Unit,
@@ -88,14 +87,13 @@ fun Transaction.CellContent(
                 dependencies = dependencies,
             )
             when (val type = type) {
-                is Transaction.Type.Entry -> EntryContent(
+                is TransactionInfo.Type.Entry -> EntryContent(
                     entry = type,
                     dependencies = dependencies,
                 )
 
-                is Transaction.Type.Transfer -> TransferContent(
+                is TransactionInfo.Type.Transfer -> TransferContent(
                     transfer = type,
-                    dependencies = dependencies,
                 )
             }
             CommentContent()
@@ -116,7 +114,7 @@ fun Transaction.CellContent(
 }
 
 @Composable
-private fun Transaction.TimestampContent(
+private fun TransactionInfo.TimestampContent(
     dependencies: TransactionsProjector.Dependencies,
 ) {
     val timestamp = timestamp
@@ -136,12 +134,12 @@ private fun Transaction.TimestampContent(
 }
 
 @Composable
-private fun Transaction.CommentContent() {
+private fun TransactionInfo.CommentContent() {
     val primary = comment.text.takeIf(String::isNotEmpty)
     val secondary = remember(type) {
         when (val type = type) {
-            is Transaction.Type.Transfer -> null
-            is Transaction.Type.Entry -> type
+            is TransactionInfo.Type.Transfer -> null
+            is TransactionInfo.Type.Entry -> type
                 .records
                 .mapNotNull {record ->
                     record.comment.text.takeIf(String::isNotEmpty)
@@ -167,7 +165,7 @@ private fun Transaction.CommentContent() {
 @Composable
 private fun EntryContent(
     dependencies: TransactionsProjector.Dependencies,
-    entry: Transaction.Type.Entry,
+    entry: TransactionInfo.Type.Entry,
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
@@ -187,9 +185,9 @@ private fun EntryContent(
         Column(
             verticalArrangement = Arrangement.spacedBy(Dimens.smallSeparation)
         ) {
-            categories.fastForEach { categoryId ->
-                categoryId.Content(
-                    dependencies = dependencies,
+            categories.fastForEach { categoryInfo ->
+                CategoryContent(
+                    info = categoryInfo,
                 )
             }
         }
@@ -197,9 +195,9 @@ private fun EntryContent(
             val directions = categories
                 .tail
                 .fold(
-                    initial = nonEmptySetOf(categories.head.direction)
+                    initial = nonEmptySetOf(categories.head.id.direction)
                 ) { acc, category ->
-                    acc + category.direction
+                    acc + category.id.direction
                 }
             directions
                 .takeIf { it.size == 1 }
@@ -215,50 +213,29 @@ private fun EntryContent(
                 ?.color
                 ?: MaterialTheme.colorScheme.onSurface
         ) { ArrowIcon[arrowDirection] }
-        entry.account.Content(
-            dependencies = dependencies,
+        AccountContent(
+            info =  entry.account,
         )
     }
 }
 
 @Composable
 private fun TransferContent(
-    dependencies: TransactionsProjector.Dependencies,
-    transfer: Transaction.Type.Transfer,
+    transfer: TransactionInfo.Type.Transfer,
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        transfer.from.Content(
-            dependencies = dependencies,
+        AccountContent(
+            info = transfer.from,
         )
         Icon(
             modifier = Modifier.padding(
                 horizontal = Dimens.smallSeparation,
             )
         ) { ArrowIcon[ArrowDirection.StartToEnd] }
-        transfer.to.Content(
-            dependencies = dependencies,
+        AccountContent(
+            info = transfer.to,
         )
     }
-}
-
-@Composable
-private fun AccountId.Content(
-    dependencies: TransactionsProjector.Dependencies,
-) {
-    AccountContent(
-        id = this,
-        infoResolver = dependencies.accountInfoResolver,
-    )
-}
-
-@Composable
-private fun CategoryId.Content(
-    dependencies: TransactionsProjector.Dependencies,
-) {
-    CategoryContent(
-        id = this,
-        infoResolver = dependencies.categoryInfoResolver,
-    )
 }

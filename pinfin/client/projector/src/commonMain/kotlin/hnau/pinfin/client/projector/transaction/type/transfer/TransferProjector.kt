@@ -15,7 +15,6 @@ import hnau.common.compose.uikit.table.cellShape
 import hnau.common.compose.uikit.utils.Dimens
 import hnau.common.compose.utils.Icon
 import hnau.common.kotlin.coroutines.mapWithScope
-import hnau.pinfin.client.data.budget.AccountInfoResolver
 import hnau.pinfin.client.model.transaction.type.transfer.TransferModel
 import hnau.pinfin.client.model.transaction.type.transfer.TransferSide
 import hnau.pinfin.client.projector.AmountProjector
@@ -39,8 +38,6 @@ class TransferProjector(
         fun chooseAccount(): ChooseAccountProjector.Dependencies
 
         fun amount(): AmountProjector.Dependencies
-
-        val accountInfoResolver: AccountInfoResolver
     }
 
     private val choose: StateFlow<ChooseAccountProjector?> = model
@@ -88,10 +85,9 @@ class TransferProjector(
             val (account, onClick) = model.accounts[side]
             AccountButton(
                 modifier = Modifier.weight(1f),
-                id = account.collectAsState().value,
+                info = account.collectAsState().value,
                 onClick = onClick,
                 shape = cellShape,
-                infoResolver = dependencies.accountInfoResolver,
             )
         }
     }

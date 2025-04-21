@@ -13,7 +13,6 @@ import hnau.common.compose.uikit.table.Table
 import hnau.common.compose.uikit.table.TableOrientation
 import hnau.common.compose.uikit.table.cellShape
 import hnau.common.compose.utils.Icon
-import hnau.pinfin.client.data.budget.CategoryInfoResolver
 import hnau.pinfin.client.model.transaction.type.entry.record.RecordModel
 import hnau.pinfin.client.projector.AmountProjector
 import hnau.pinfin.client.projector.utils.category.CategoryButton
@@ -31,8 +30,6 @@ class RecordProjectorMainDelegate(
 
     @Shuffle
     interface Dependencies {
-
-        val categoryInfoResolver: CategoryInfoResolver
 
         fun amount(): AmountProjector.Dependencies
     }
@@ -76,9 +73,8 @@ class RecordProjectorMainDelegate(
                     CategoryButton(
                         modifier = Modifier.weight(1f),
                         shape = cellShape,
-                        id = model.category.collectAsState().value,
+                        info = model.category.collectAsState().value,
                         onClick = model::openCategoryChooser,
-                        infoResolver = dependencies.categoryInfoResolver,
                     )
                 }
                 amount.Content(

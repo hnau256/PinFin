@@ -13,6 +13,8 @@ import hnau.common.kotlin.coroutines.mapState
 import hnau.common.kotlin.coroutines.scopedInState
 import hnau.common.kotlin.coroutines.toMutableStateFlowAsInitial
 import hnau.common.kotlin.serialization.MutableStateFlowSerializer
+import hnau.pinfin.client.data.budget.CategoryInfo
+import hnau.pinfin.client.data.budget.TransactionInfo
 import hnau.pinfin.client.model.AmountModel
 import hnau.pinfin.client.model.transaction.type.utils.ChooseCategoryModel
 import hnau.pinfin.scheme.CategoryId
@@ -30,19 +32,19 @@ class RecordModel(
     private val skeleton: Skeleton,
     private val dependencies: Dependencies,
     private val remove: StateFlow<(() -> Unit)?>,
-    localUsedCategories: StateFlow<Set<CategoryId>>,
+    localUsedCategories: StateFlow<Set<CategoryInfo>>,
 ) : GoBackHandlerProvider {
 
     @Serializable
     data class Skeleton(
-        val category: MutableStateFlow<CategoryId?>,
+        val category: MutableStateFlow<CategoryInfo?>,
         val amount: AmountModel.Skeleton,
         val comment: MutableStateFlow<EditingString>,
         val overlapDialog: MutableStateFlow<OverlapDialog?> = null.toMutableStateFlowAsInitial(),
     ) {
 
         constructor(
-            record: Record,
+            record: TransactionInfo.Type.Entry.Record,
         ) : this(
             category = record.category.toMutableStateFlowAsInitial(),
             amount = AmountModel.Skeleton(
@@ -83,7 +85,7 @@ class RecordModel(
         fun chooseCategory(): ChooseCategoryModel.Dependencies
     }
 
-    val category: StateFlow<CategoryId?>
+    val category: StateFlow<CategoryInfo?>
         get() = skeleton.category
 
     fun openCategoryChooser() {
@@ -178,7 +180,7 @@ class RecordModel(
         ) { categoryAndAmountOrNull, comment ->
             val (category, amount) = categoryAndAmountOrNull ?: return@combineStateWith null
             Record(
-                category = category,
+                category = category.id,
                 amount = amount,
                 comment = comment.text.let(::Comment),
             )

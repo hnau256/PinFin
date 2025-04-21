@@ -1,31 +1,52 @@
 package hnau.pinfin.client.data.budget
 
+import hnau.common.kotlin.coroutines.mapState
+import hnau.common.kotlin.coroutines.toMutableStateFlowAsInitial
 import hnau.pinfin.client.data.UpdateRepository
-import hnau.pinfin.scheme.Transaction
 import hnau.pinfin.scheme.Update
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.update
 
 class BudgetRepository(
     scope: CoroutineScope,
-    initialTransactions: Map<Transaction.Id, Transaction>,
+    initialState: BudgetStateBuilder,
     private val addUpdate: suspend (Update) -> Unit,
 ) {
 
-    val transaction = TransactionRepository(
-        scope = scope,
-        initialTransactions,
-        addUpdate = addUpdate,
+    private val stateBuilder: MutableStateFlow<BudgetStateBuilder> =
+        initialState.toMutableStateFlowAsInitial()
+
+    private val state: StateFlow<BudgetState> = stateBuilder.mapState(scope) { stateBuilder ->
+        stateBuilder.toBudgetState()
+    }
+
+    val transactions: BudgetRepositoryTransactionsDelegate = BudgetRepositoryTransactionsDelegate(
+        state = state,
+        addUpdate = ::applyUpdate,
     )
 
-    val account = AccountRepository(
-        scope = scope,
-        transactions = transaction,
+    val categories: BudgetRepositoryCategoriesDelegate = BudgetRepositoryCategoriesDelegate(
+        state = state,
+        addUpdate = ::applyUpdate,
     )
 
-    val category = CategoryRepository(
-        scope = scope,
-        transactions = transaction,
+    val accounts: BudgetRepositoryAccountsDelegate = BudgetRepositoryAccountsDelegate(
+        state = state,
+        addUpdate = ::applyUpdate,
     )
+
+    private suspend fun applyUpdate(
+        update: Update,
+    ) {
+        addUpdate.invoke(update)
+        stateBuilder.update { stateBuilder ->
+            stateBuilder.apply {
+                applyUpdate(update)
+            }
+        }
+    }
 
     companion object {
 
@@ -33,23 +54,15 @@ class BudgetRepository(
             scope: CoroutineScope,
             updateRepository: UpdateRepository,
         ): BudgetRepository {
-            val transactions = HashMap<Transaction.Id, Transaction>()
+            val initialState = BudgetStateBuilder()
             updateRepository.useUpdates { updates ->
                 updates.forEach { update ->
-                    when (update) {
-                        is Update.Transaction -> transactions.set(
-                            key = update.id,
-                            value = update.transaction,
-                        )
-                        is Update.RemoveTransaction -> transactions.remove(
-                            key = update.id,
-                        )
-                    }
+                    initialState.applyUpdate(update)
                 }
             }
             return BudgetRepository(
                 scope = scope,
-                initialTransactions = transactions,
+                initialState = initialState,
                 addUpdate = updateRepository::addUpdate,
             )
         }

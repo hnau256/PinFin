@@ -11,16 +11,14 @@ import hnau.common.compose.uikit.HnauButton
 import hnau.common.compose.uikit.TripleRow
 import hnau.common.compose.uikit.shape.HnauShape
 import hnau.common.compose.utils.Icon
-import hnau.pinfin.client.data.budget.AccountInfoResolver
-import hnau.pinfin.scheme.AccountId
+import hnau.pinfin.client.data.budget.AccountInfo
 import org.jetbrains.compose.resources.stringResource
 import pinfin.pinfin.client.projector.generated.resources.Res
 import pinfin.pinfin.client.projector.generated.resources.account
 
 @Composable
 fun AccountButton(
-    id: AccountId?,
-    infoResolver: AccountInfoResolver,
+    info: AccountInfo?,
     modifier: Modifier = Modifier,
     selected: Boolean = false,
     shape: Shape = HnauShape(),
@@ -31,21 +29,20 @@ fun AccountButton(
         onClick = onClick,
         shape = shape,
         content = {
-            when (id) {
+            when (info) {
                 null -> TripleRow(
                     content = { Text(stringResource(Res.string.account)) },
                     leading = { Icon { Icons.AutoMirrored.Filled.Help } },
                 )
 
                 else -> AccountContent(
-                    id = id,
-                    infoResolver = infoResolver,
+                    info = info,
                 )
             }
         },
         style = when (selected) {
             true -> ContainerStyle.Primary
-            false -> when (id) {
+            false -> when (info) {
                 null -> ContainerStyle.Error
                 else -> ContainerStyle.Neutral
             }

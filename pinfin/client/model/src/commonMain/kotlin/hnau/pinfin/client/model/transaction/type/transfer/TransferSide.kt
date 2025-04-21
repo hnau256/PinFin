@@ -25,4 +25,10 @@ data class TransferSideValues<out T>(
         from = transform(TransferSide.From, from),
         to = transform(TransferSide.To, to),
     )
+
+    inline fun <O> map(
+        transform: (T) -> O,
+    ): TransferSideValues<O> = mapFull { _, value ->
+        transform(value)
+    }
 }

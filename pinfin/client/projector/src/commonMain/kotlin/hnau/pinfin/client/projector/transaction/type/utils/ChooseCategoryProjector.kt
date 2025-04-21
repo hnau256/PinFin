@@ -1,7 +1,6 @@
 package hnau.pinfin.client.projector.transaction.type.utils
 
 import androidx.compose.runtime.Composable
-import hnau.pinfin.client.data.budget.CategoryInfoResolver
 import hnau.pinfin.client.model.transaction.type.utils.ChooseCategoryModel
 import hnau.pinfin.client.projector.utils.category.CategoryButton
 import hnau.pinfin.client.projector.utils.choose.Content
@@ -15,21 +14,17 @@ class ChooseCategoryProjector(
 ) {
 
     @Shuffle
-    interface Dependencies {
-
-        val categoryInfoResolver: CategoryInfoResolver
-    }
+    interface Dependencies
 
     @Composable
     fun Content() {
         model
             .state
-            .Content { id, selected, onClick ->
+            .Content { info, selected, onClick ->
                 CategoryButton(
-                    id = id,
+                    info = info,
                     onClick = onClick,
                     selected = selected,
-                    infoResolver = dependencies.categoryInfoResolver,
                 )
             }
     }

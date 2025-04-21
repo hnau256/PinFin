@@ -12,7 +12,6 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.OutlinedButton
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -23,14 +22,11 @@ import hnau.common.app.goback.GlobalGoBackHandler
 import hnau.common.app.goback.GoBackHandler
 import hnau.common.compose.uikit.ErrorPanel
 import hnau.common.compose.uikit.bubble.BubblesShower
-import hnau.common.compose.uikit.state.LoadableContent
 import hnau.common.compose.uikit.state.NullableStateContent
 import hnau.common.compose.uikit.state.TransitionSpec
 import hnau.common.compose.uikit.utils.Dimens
 import hnau.common.compose.utils.Icon
 import hnau.common.compose.utils.plus
-import hnau.pinfin.client.data.budget.AccountInfoResolver
-import hnau.pinfin.client.data.budget.CategoryInfoResolver
 import hnau.pinfin.client.model.budget.TransactionsModel
 import hnau.pinfin.client.projector.utils.AmountFormatter
 import hnau.pinfin.client.projector.utils.DateTimeFormatter
@@ -56,10 +52,6 @@ class TransactionsProjector(
         val dateTimeFormatter: DateTimeFormatter
 
         val amountFormatter: AmountFormatter
-
-        val accountInfoResolver: AccountInfoResolver
-
-        val categoryInfoResolver: CategoryInfoResolver
 
         val globalGoBackHandler: GlobalGoBackHandler
     }
@@ -89,39 +81,35 @@ class TransactionsProjector(
             .transactions
             .collectAsState()
             .value
-            .LoadableContent(
+            .NullableStateContent(
                 transitionSpec = TransitionSpec.crossfade(),
-            ) { nonEmptyTransactionsOrNull ->
-                nonEmptyTransactionsOrNull.NullableStateContent(
-                    transitionSpec = TransitionSpec.crossfade(),
-                    nullContent = {
-                        ErrorPanel(
-                            title = {
-                                Text(stringResource(Res.string.no_transactions))
-                            },
-                            button = {
-                                OutlinedButton(
-                                    onClick = model.onAddTransactionClick,
-                                ) {
-                                    Text(stringResource(Res.string.add_transaction))
-                                }
+                nullContent = {
+                    ErrorPanel(
+                        title = {
+                            Text(stringResource(Res.string.no_transactions))
+                        },
+                        button = {
+                            OutlinedButton(
+                                onClick = model::onAddTransactionClick,
+                            ) {
+                                Text(stringResource(Res.string.add_transaction))
                             }
-                        )
-                    },
-                ) { transactions ->
-                    LazyColumn(
-                        contentPadding = contentPadding + PaddingValues(vertical = Dimens.separation),
-                        verticalArrangement = Arrangement.spacedBy(Dimens.separation),
-                    ) {
-                        items(
-                            items = transactions,
-                            key = { (id) -> id.id },
-                        ) { (id, transaction) ->
-                            transaction.Content(
-                                dependencies = dependencies,
-                                onClick = { model.onEditTransactionClick(id) },
-                            )
                         }
+                    )
+                },
+            ) { transactions ->
+                LazyColumn(
+                    contentPadding = contentPadding + PaddingValues(vertical = Dimens.separation),
+                    verticalArrangement = Arrangement.spacedBy(Dimens.separation),
+                ) {
+                    items(
+                        items = transactions,
+                        key = { (id) -> id.id },
+                    ) { info ->
+                        info.Content(
+                            dependencies = dependencies,
+                            onClick = { model.onEditTransactionClick(info) },
+                        )
                     }
                 }
             }
@@ -139,7 +127,7 @@ class TransactionsProjector(
             contentAlignment = Alignment.BottomEnd,
         ) {
             FloatingActionButton(
-                onClick = model.onAddTransactionClick,
+                onClick = model::onAddTransactionClick,
             ) {
                 Icon { Icons.Filled.Add }
             }

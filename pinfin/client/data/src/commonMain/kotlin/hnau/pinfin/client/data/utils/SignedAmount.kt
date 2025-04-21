@@ -1,6 +1,8 @@
 package hnau.pinfin.client.data.utils
 
 import arrow.core.Either
+import hnau.pinfin.client.data.budget.BudgetState
+import hnau.pinfin.client.data.budget.TransactionInfo
 import hnau.pinfin.scheme.Amount
 import hnau.pinfin.scheme.CategoryDirection
 import hnau.pinfin.scheme.Record
@@ -49,6 +51,15 @@ value class SignedAmount(
     }
 }
 
+val TransactionInfo.Type.Entry.Record.signedAmount: SignedAmount
+    get() = SignedAmount(
+        amount = amount,
+        positive = when (category.id.direction) {
+            CategoryDirection.Credit -> true
+            CategoryDirection.Debit -> false
+        }
+    )
+
 val Record.signedAmount: SignedAmount
     get() = SignedAmount(
         amount = amount,
@@ -65,8 +76,15 @@ val Transaction.Type.Entry.signedAmount: SignedAmount
         acc + record.signedAmount
     }
 
-val Transaction.signedAmountOrAmount: Either<SignedAmount, Amount>
+val TransactionInfo.Type.Entry.signedAmount: SignedAmount
+    get() = records.tail.fold(
+        initial = records.head.signedAmount,
+    ) { acc, record ->
+        acc + record.signedAmount
+    }
+
+val TransactionInfo.signedAmountOrAmount: Either<SignedAmount, Amount>
     get() = when (val type = type) {
-        is Transaction.Type.Entry -> Either.Left(type.signedAmount)
-        is Transaction.Type.Transfer -> Either.Right(type.amount)
+        is TransactionInfo.Type.Entry -> Either.Left(type.signedAmount)
+        is TransactionInfo.Type.Transfer -> Either.Right(type.amount)
     }

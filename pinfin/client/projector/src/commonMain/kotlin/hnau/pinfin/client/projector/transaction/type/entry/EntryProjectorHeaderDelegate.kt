@@ -13,7 +13,6 @@ import hnau.common.compose.uikit.table.TableOrientation
 import hnau.common.compose.uikit.table.cellShape
 import hnau.common.compose.uikit.utils.Dimens
 import hnau.common.kotlin.coroutines.mapWithScope
-import hnau.pinfin.client.data.budget.AccountInfoResolver
 import hnau.pinfin.client.model.transaction.type.entry.EntryModel
 import hnau.pinfin.client.projector.transaction.type.utils.ChooseAccountProjector
 import hnau.pinfin.client.projector.utils.AmountFormatter
@@ -35,8 +34,6 @@ class EntryProjectorHeaderDelegate(
         fun chooseAccount(): ChooseAccountProjector.Dependencies
 
         val amountFormatter: AmountFormatter
-
-        val accountInfoResolver: AccountInfoResolver
     }
 
     private val chooseAccount: StateFlow<ChooseAccountProjector?> = model
@@ -70,10 +67,9 @@ class EntryProjectorHeaderDelegate(
                         Cell {
                             AccountButton(
                                 modifier = Modifier.weight(1f),
-                                id = model.account.collectAsState().value,
+                                info = model.account.collectAsState().value,
                                 onClick = model::chooseAccount,
                                 shape = cellShape,
-                                infoResolver = dependencies.accountInfoResolver,
                             )
                         }
                         val amount = model

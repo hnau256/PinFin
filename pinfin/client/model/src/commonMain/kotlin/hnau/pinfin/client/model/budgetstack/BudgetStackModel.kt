@@ -9,7 +9,6 @@ import hnau.common.app.goback.GoBackHandlerProvider
 import hnau.common.app.goback.fallback
 import hnau.common.app.model.stack.NonEmptyStack
 import hnau.common.app.model.stack.StackModelElements
-import hnau.common.app.model.stack.push
 import hnau.common.app.model.stack.stackGoBackHandler
 import hnau.common.app.model.stack.tailGoBackHandler
 import hnau.common.app.model.stack.tryDropLast
@@ -17,7 +16,6 @@ import hnau.common.kotlin.serialization.MutableStateFlowSerializer
 import hnau.pinfin.client.data.budget.BudgetRepository
 import hnau.pinfin.client.model.budget.BudgetModel
 import hnau.pinfin.client.model.transaction.TransactionModel
-import hnau.pinfin.scheme.Transaction
 import hnau.shuffler.annotations.Shuffle
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -48,17 +46,17 @@ class BudgetStackModel(
             fun transaction(): TransactionModel.Dependencies
         }
 
-        fun withOpeners(
-            editTransactionOpener: EditTransactionOpener,
-            newTransactionOpener: NewTransactionOpener,
+        fun withOpener(
+            opener: BudgetStackOpener,
         ): WithOpeners
 
         val budgetRepository: BudgetRepository
     }
 
-    private val dependenciesWithOpeners: Dependencies.WithOpeners = dependencies.withOpeners(
-        editTransactionOpener = ::openTransaction,
-        newTransactionOpener = { openTransaction(null) },
+    private val dependenciesWithOpeners: Dependencies.WithOpeners = dependencies.withOpener(
+        opener = BudgetStackOpenerImpl(
+            stack = skeleton.stack,
+        )
     )
 
     val budgetRepository: BudgetRepository
@@ -75,18 +73,6 @@ class BudgetStackModel(
                 skeleton = skeleton,
             )
         }
-    }
-
-    private fun openTransaction(
-        id: Transaction.Id?,
-    ) {
-        this@BudgetStackModel.skeleton.stack.push(
-            BudgetStackElementModel.Skeleton.Transaction(
-                skeleton = TransactionModel.Skeleton(
-                    id = id,
-                ),
-            )
-        )
     }
 
     private fun createModel(

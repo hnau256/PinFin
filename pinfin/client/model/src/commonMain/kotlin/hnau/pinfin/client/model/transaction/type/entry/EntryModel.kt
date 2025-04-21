@@ -19,6 +19,10 @@ import hnau.common.kotlin.coroutines.mapWithScope
 import hnau.common.kotlin.coroutines.scopedInState
 import hnau.common.kotlin.coroutines.toMutableStateFlowAsInitial
 import hnau.common.kotlin.serialization.MutableStateFlowSerializer
+import hnau.pinfin.client.data.budget.AccountInfo
+import hnau.pinfin.client.data.budget.BudgetState
+import hnau.pinfin.client.data.budget.CategoryInfo
+import hnau.pinfin.client.data.budget.TransactionInfo
 import hnau.pinfin.client.model.transaction.type.entry.record.RecordId
 import hnau.pinfin.client.model.transaction.type.entry.record.RecordModel
 import hnau.pinfin.client.model.transaction.type.utils.ChooseAccountModel
@@ -43,13 +47,13 @@ class EntryModel(
 
     @Serializable
     data class Skeleton(
-        val account: MutableStateFlow<AccountId?>,
+        val account: MutableStateFlow<AccountInfo?>,
         val records: MutableStateFlow<NonEmptyList<Pair<RecordId, RecordModel.Skeleton>>>,
         val chooseAccount: MutableStateFlow<ChooseAccountModel.Skeleton?> = null.toMutableStateFlowAsInitial(),
     ) {
 
         constructor(
-            type: Transaction.Type.Entry,
+            type: TransactionInfo.Type.Entry,
         ) : this(
             account = type.account.toMutableStateFlowAsInitial(),
             records = type
@@ -101,8 +105,8 @@ class EntryModel(
                 scope = scope,
             ) { (recordsScope, records) ->
                 records
-                    .fold<_, StateFlow<Set<CategoryId>>>(
-                        initial = emptySet<CategoryId>().toMutableStateFlowAsInitial()
+                    .fold<_, StateFlow<Set<CategoryInfo>>>(
+                        initial = emptySet<CategoryInfo>().toMutableStateFlowAsInitial()
                     ) { accState, record ->
                         accState
                             .combineStateWith(
@@ -207,7 +211,7 @@ class EntryModel(
                 }
         }
 
-    private val localUsedAccounts: StateFlow<Set<AccountId>> = skeleton
+    private val localUsedAccounts: StateFlow<Set<AccountInfo>> = skeleton
         .account
         .mapState(
             scope = scope,
@@ -233,7 +237,7 @@ class EntryModel(
             }
         }
 
-    val account: StateFlow<AccountId?>
+    val account: StateFlow<AccountInfo?>
         get() = skeleton.account
 
     fun chooseAccount() {
@@ -284,7 +288,7 @@ class EntryModel(
                 accountOrNull?.let { account ->
                     Transaction.Type.Entry(
                         records = records,
-                        account = account,
+                        account = account.id,
                     )
                 }
             }
