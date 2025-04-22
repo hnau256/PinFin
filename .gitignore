@@ -4,5 +4,5 @@ local.properties
 build
 *-tcp*/
 storage.json
-pinfin/client/desktop/budgets
+pinfin/desktop/budgets
 finpixconverter/data
