@@ -97,14 +97,16 @@ class BudgetStateBuilder {
         }
 
         return BudgetState(
-            transactions = transactions.map { (id, transaction) ->
-                TransactionInfo.fromTransaction(
-                    id = id,
-                    transaction = transaction,
-                    categories = categories,
-                    accounts = accounts,
-                )
-            },
+            transactions = transactions
+                .map { (id, transaction) ->
+                    TransactionInfo.fromTransaction(
+                        id = id,
+                        transaction = transaction,
+                        categories = categories,
+                        accounts = accounts,
+                    )
+                }
+                .sortedByDescending(TransactionInfo::timestamp),
             categories = categories.values.toList(),
             accounts = accounts.values.toList()
         )

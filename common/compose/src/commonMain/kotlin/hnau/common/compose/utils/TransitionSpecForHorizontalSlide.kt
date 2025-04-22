@@ -45,4 +45,4 @@ fun <T> getTransitionSpecForHorizontalSlide(
     }
 }
 
-private val AnimationDuration = 0.5.seconds
+private val AnimationDuration = 0.3.seconds

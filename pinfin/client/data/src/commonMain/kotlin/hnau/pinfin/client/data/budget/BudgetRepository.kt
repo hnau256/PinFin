@@ -18,7 +18,7 @@ class BudgetRepository(
     private val stateBuilder: MutableStateFlow<BudgetStateBuilder> =
         initialState.toMutableStateFlowAsInitial()
 
-    private val state: StateFlow<BudgetState> = stateBuilder.mapState(scope) { stateBuilder ->
+    val state: StateFlow<BudgetState> = stateBuilder.mapState(scope) { stateBuilder ->
         stateBuilder.toBudgetState()
     }
 

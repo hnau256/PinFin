@@ -382,27 +382,46 @@ fun main() {
                 )
             }
 
+            val type = when (val type = transactions.head.type) {
+                is FinPixTransaction.Type.Transfer -> {
+                    if (transactions.tail.isNotEmpty()) {
+                        error("Unable build group of transfers")
+                    }
+                    if (type.amountTo != type.amountFrom) {
+                        println("AmountFrom=${type.amountFrom}, amountTo=${type.amountTo}")
+                    }
+                    Transaction.Type.Transfer(
+                        from = type.from.accountId,
+                        to = type.to.accountId,
+                        amount = type.amountTo.amount,
+                    )
+                }
+
+                is FinPixTransaction.Type.Income -> buildEntry(type.to)
+                is FinPixTransaction.Type.Outcome -> buildEntry(type.from)
+            }
+
+            val typeComment = when (type) {
+                is Transaction.Type.Entry -> type
+                    .records
+                    .mapNotNull { it.comment.text.trim().takeIf(String::isNotEmpty) }
+                    .joinToString(separator = ", ")
+
+                is Transaction.Type.Transfer -> null
+            }
+
+            val comment = transactions
+                .asSequence()
+                .map { it.comment }
+                .filter { it != typeComment }
+                .mapNotNull { it.trim().takeIf(String::isNotBlank) }
+                .firstOrNull()
+                .orEmpty()
+
             Transaction(
                 timestamp = timestamp,
-                comment = transactions.head.comment.let(::Comment),
-                type = when (val type = transactions.head.type) {
-                    is FinPixTransaction.Type.Transfer -> {
-                        if (transactions.tail.isNotEmpty()) {
-                            error("Unable build group of transfers")
-                        }
-                        if (type.amountTo != type.amountFrom) {
-                            println("AmountFrom=${type.amountFrom}, amountTo=${type.amountTo}")
-                        }
-                        Transaction.Type.Transfer(
-                            from = type.from.accountId,
-                            to = type.to.accountId,
-                            amount = type.amountTo.amount,
-                        )
-                    }
-
-                    is FinPixTransaction.Type.Income -> buildEntry(type.to)
-                    is FinPixTransaction.Type.Outcome -> buildEntry(type.from)
-                }
+                comment = comment.let(::Comment),
+                type = type,
             )
         }
 
