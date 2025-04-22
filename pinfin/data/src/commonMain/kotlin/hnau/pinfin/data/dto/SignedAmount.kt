@@ -1,12 +1,7 @@
-package hnau.pinfin.data.utils
+package hnau.pinfin.data.dto
 
 import arrow.core.Either
-import hnau.pinfin.data.budget.BudgetState
-import hnau.pinfin.data.budget.TransactionInfo
-import hnau.pinfin.data.dto.Amount
-import hnau.pinfin.data.dto.CategoryDirection
-import hnau.pinfin.data.dto.Record
-import hnau.pinfin.data.dto.Transaction
+import hnau.pinfin.data.repository.budget.TransactionInfo
 import kotlinx.serialization.Serializable
 import kotlin.math.absoluteValue
 

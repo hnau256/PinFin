@@ -1,4 +1,4 @@
-package hnau.pinfin.data
+package hnau.pinfin.data.repository
 
 import hnau.pinfin.data.dto.Update
 import kotlinx.coroutines.Dispatchers

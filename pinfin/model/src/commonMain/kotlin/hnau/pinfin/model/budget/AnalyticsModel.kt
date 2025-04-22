@@ -1,8 +1,8 @@
 package hnau.pinfin.model.budget
 
 import hnau.common.app.goback.GoBackHandlerProvider
-import hnau.pinfin.data.budget.BudgetRepository
-import hnau.pinfin.data.budget.BudgetState
+import hnau.pinfin.data.repository.budget.BudgetRepository
+import hnau.pinfin.data.repository.budget.BudgetState
 import hnau.shuffler.annotations.Shuffle
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.StateFlow

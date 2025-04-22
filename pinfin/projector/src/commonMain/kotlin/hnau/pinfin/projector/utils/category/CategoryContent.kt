@@ -7,7 +7,7 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier
 import hnau.common.compose.uikit.TripleRow
 import hnau.common.compose.utils.Icon
-import hnau.pinfin.data.budget.CategoryInfo
+import hnau.pinfin.data.repository.budget.CategoryInfo
 import hnau.pinfin.projector.utils.color
 
 @Composable

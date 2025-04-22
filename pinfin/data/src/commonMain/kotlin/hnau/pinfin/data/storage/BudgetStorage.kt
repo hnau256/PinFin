@@ -1,8 +1,11 @@
-package hnau.pinfin.data
+package hnau.pinfin.data.storage
 
+import hnau.pinfin.data.dto.BudgetId
 import hnau.pinfin.data.dto.Update
 
-interface UpdateRepository {
+interface BudgetStorage {
+
+    val id: BudgetId
 
     suspend fun <R> useUpdates(
         block: (Sequence<Update>) -> R,
@@ -12,5 +15,3 @@ interface UpdateRepository {
         update: Update,
     )
 }
-
-

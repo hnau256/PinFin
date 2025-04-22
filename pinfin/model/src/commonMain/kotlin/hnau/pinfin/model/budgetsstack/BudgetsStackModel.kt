@@ -13,7 +13,7 @@ import hnau.common.app.model.stack.push
 import hnau.common.app.model.stack.stackGoBackHandler
 import hnau.common.app.model.stack.tailGoBackHandler
 import hnau.common.kotlin.serialization.MutableStateFlowSerializer
-import hnau.pinfin.data.BudgetsRepository
+import hnau.pinfin.data.repository.BudgetsRepository
 import hnau.pinfin.model.LoadBudgetModel
 import hnau.pinfin.model.budgetslist.BudgetsListModel
 import hnau.shuffler.annotations.Shuffle

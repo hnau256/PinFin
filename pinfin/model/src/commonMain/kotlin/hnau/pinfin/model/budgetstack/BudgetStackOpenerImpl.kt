@@ -2,9 +2,8 @@ package hnau.pinfin.model.budgetstack
 
 import hnau.common.app.model.stack.NonEmptyStack
 import hnau.common.app.model.stack.push
-import hnau.pinfin.data.budget.TransactionInfo
+import hnau.pinfin.data.repository.budget.TransactionInfo
 import hnau.pinfin.model.transaction.TransactionModel
-import hnau.pinfin.data.dto.Transaction
 import hnau.pinfin.data.dto.TransactionType
 import kotlinx.coroutines.flow.MutableStateFlow
 

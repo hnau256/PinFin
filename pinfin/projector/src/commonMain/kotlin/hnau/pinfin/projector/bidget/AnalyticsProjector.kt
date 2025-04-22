@@ -17,7 +17,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import arrow.core.toNonEmptyListOrNull
 import hnau.common.compose.uikit.utils.Dimens
-import hnau.pinfin.data.budget.AccountInfo
+import hnau.pinfin.data.repository.budget.AccountInfo
 import hnau.pinfin.model.budget.AnalyticsModel
 import hnau.pinfin.projector.utils.AmountFormatter
 import hnau.pinfin.projector.utils.SignedAmountContent

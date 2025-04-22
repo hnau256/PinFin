@@ -1,8 +1,8 @@
-package hnau.pinfin.data.budget
+package hnau.pinfin.data.repository.budget
 
 import hnau.common.kotlin.coroutines.mapState
 import hnau.common.kotlin.coroutines.toMutableStateFlowAsInitial
-import hnau.pinfin.data.UpdateRepository
+import hnau.pinfin.data.repository.UpdateRepository
 import hnau.pinfin.data.dto.Update
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow

@@ -16,7 +16,7 @@ import hnau.pinfin.app.impl
 import hnau.pinfin.compose.AppContentDependencies
 import hnau.pinfin.compose.Content
 import hnau.pinfin.compose.impl
-import hnau.pinfin.data.FileBasedBudgetsRepositoryFactory
+import hnau.pinfin.data.repository.FileBasedBudgetsRepositoryFactory
 import org.slf4j.simple.SimpleLogger
 import java.io.File
 

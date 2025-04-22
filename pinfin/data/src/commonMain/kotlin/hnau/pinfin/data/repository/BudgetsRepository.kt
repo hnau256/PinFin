@@ -1,4 +1,4 @@
-package hnau.pinfin.data
+package hnau.pinfin.data.repository
 
 import hnau.common.kotlin.coroutines.mapReusable
 import hnau.common.kotlin.coroutines.mapState

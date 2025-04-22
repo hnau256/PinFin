@@ -13,8 +13,8 @@ import hnau.common.kotlin.coroutines.mapWithScope
 import hnau.common.kotlin.getOrInit
 import hnau.common.kotlin.serialization.MutableStateFlowSerializer
 import hnau.common.kotlin.toAccessor
-import hnau.pinfin.data.BudgetsRepository
-import hnau.pinfin.data.budget.BudgetRepository
+import hnau.pinfin.data.repository.BudgetsRepository
+import hnau.pinfin.data.repository.budget.BudgetRepository
 import hnau.pinfin.model.budgetstack.BudgetStackModel
 import hnau.pinfin.data.dto.BudgetId
 import hnau.shuffler.annotations.Shuffle

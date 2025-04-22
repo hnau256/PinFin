@@ -11,7 +11,7 @@ import androidx.lifecycle.viewmodel.viewModelFactory
 import hnau.pinfin.app.PinFinApp
 import hnau.pinfin.app.SavedState
 import hnau.pinfin.app.impl
-import hnau.pinfin.data.FileBasedBudgetsRepositoryFactory
+import hnau.pinfin.data.repository.FileBasedBudgetsRepositoryFactory
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel

@@ -1,7 +1,7 @@
-package hnau.pinfin.data
+package hnau.pinfin.data.repository
 
 import hnau.common.kotlin.ifNull
-import hnau.pinfin.data.budget.BudgetRepository
+import hnau.pinfin.data.repository.budget.BudgetRepository
 import hnau.pinfin.data.dto.BudgetId
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers

@@ -25,9 +25,8 @@ import hnau.common.compose.uikit.table.cellShape
 import hnau.common.compose.uikit.utils.Dimens
 import hnau.common.compose.utils.Icon
 import hnau.common.compose.utils.horizontalDisplayPadding
-import hnau.pinfin.data.budget.BudgetState
-import hnau.pinfin.data.budget.TransactionInfo
-import hnau.pinfin.data.utils.signedAmountOrAmount
+import hnau.pinfin.data.repository.budget.TransactionInfo
+import hnau.pinfin.data.dto.signedAmountOrAmount
 import hnau.pinfin.projector.utils.AmountContent
 import hnau.pinfin.projector.utils.ArrowDirection
 import hnau.pinfin.projector.utils.ArrowIcon

@@ -1,7 +1,7 @@
 package hnau.pinfin.model.budgetslist
 
 import hnau.common.kotlin.LoadableStateFlow
-import hnau.pinfin.data.BudgetsRepository
+import hnau.pinfin.data.repository.BudgetsRepository
 import hnau.pinfin.data.dto.BudgetId
 import hnau.shuffler.annotations.Shuffle
 import kotlinx.coroutines.CoroutineScope
