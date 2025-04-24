@@ -22,8 +22,8 @@ import hnau.pinfin.data.dto.BudgetId
 import hnau.pinfin.data.repository.BudgetRepository
 import hnau.pinfin.data.storage.BudgetStorage
 import hnau.pinfin.data.storage.BudgetsStorage
-import hnau.pinfin.model.budgetslist.BudgetsListModel
 import hnau.pinfin.model.LoadBudgetModel
+import hnau.pinfin.model.budgetslist.BudgetsListModel
 import hnau.shuffler.annotations.Shuffle
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Deferred
@@ -50,6 +50,7 @@ class ManageModel(
 
         fun budget(
             deferredBudgetRepository: Deferred<BudgetRepository>,
+            budgetsListOpener: BudgetsListOpener,
         ): LoadBudgetModel.Dependencies
     }
 
@@ -138,7 +139,8 @@ class ManageModel(
                 model = LoadBudgetModel(
                     scope = stateScope,
                     dependencies = dependencies.budget(
-                        deferredBudgetRepository = deferredBudgetRepositoryOrNull.deferredBudgetRepository
+                        deferredBudgetRepository = deferredBudgetRepositoryOrNull.deferredBudgetRepository,
+                        budgetsListOpener = { skeleton.selectedBudget.value = null },
                     ),
                     skeleton = skeleton::stateSkeleton
                         .toAccessor()

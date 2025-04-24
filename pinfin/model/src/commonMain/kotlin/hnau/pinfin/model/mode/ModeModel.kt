@@ -10,8 +10,8 @@ import hnau.common.kotlin.coroutines.flatMapState
 import hnau.common.kotlin.coroutines.mapWithScope
 import hnau.common.kotlin.coroutines.toMutableStateFlowAsInitial
 import hnau.common.kotlin.serialization.MutableStateFlowSerializer
-import hnau.pinfin.model.manage.ManageModel
 import hnau.pinfin.model.SyncModel
+import hnau.pinfin.model.manage.ManageModel
 import hnau.shuffler.annotations.Shuffle
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -22,15 +22,25 @@ import kotlinx.serialization.UseSerializers
 class ModeModel(
     scope: CoroutineScope,
     dependencies: Dependencies,
-    skeleton: Skeleton,
+    private val skeleton: Skeleton,
 ) : GoBackHandlerProvider {
 
     @Shuffle
     interface Dependencies {
 
-        fun budgets(): ManageModel.Dependencies
+        fun budgets(
+            syncOpener: SyncOpener,
+        ): ManageModel.Dependencies
 
-        fun sync(): SyncModel.Dependencies
+        fun sync(
+            manageOpener: ManageOpener,
+        ): SyncModel.Dependencies
+    }
+
+    private fun open(
+        stateSkeleton: ModeStateModel.Skeleton,
+    ) {
+        skeleton.state.value = stateSkeleton
     }
 
     @Serializable
@@ -48,7 +58,9 @@ class ModeModel(
                 is ModeStateModel.Skeleton.Manage -> ModeStateModel.Manage(
                     model = ManageModel(
                         scope = stateScope,
-                        dependencies = dependencies.budgets(),
+                        dependencies = dependencies.budgets(
+                            syncOpener = { open(ModeStateModel.Skeleton.Sync(SyncModel.Skeleton())) },
+                        ),
                         skeleton = stateSkeleton.skeleton,
                     )
                 )
@@ -56,7 +68,9 @@ class ModeModel(
                 is ModeStateModel.Skeleton.Sync -> ModeStateModel.Sync(
                     model = SyncModel(
                         scope = stateScope,
-                        dependencies = dependencies.sync(),
+                        dependencies = dependencies.sync(
+                            manageOpener = { open(ModeStateModel.Skeleton.Manage(ManageModel.Skeleton())) },
+                        ),
                         skeleton = stateSkeleton.skeleton,
                     )
                 )
