@@ -1,7 +1,7 @@
 package hnau.pinfin.data.dto
 
 import arrow.core.Either
-import hnau.pinfin.data.repository.budget.TransactionInfo
+import hnau.pinfin.data.repository.TransactionInfo
 import kotlinx.serialization.Serializable
 import kotlin.math.absoluteValue
 

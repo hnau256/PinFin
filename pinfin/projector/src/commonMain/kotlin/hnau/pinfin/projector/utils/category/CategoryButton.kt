@@ -11,7 +11,7 @@ import hnau.common.compose.uikit.HnauButton
 import hnau.common.compose.uikit.TripleRow
 import hnau.common.compose.uikit.shape.HnauShape
 import hnau.common.compose.utils.Icon
-import hnau.pinfin.data.repository.budget.CategoryInfo
+import hnau.pinfin.data.repository.CategoryInfo
 import org.jetbrains.compose.resources.stringResource
 import hnau.pinfin.projector.Res
 import hnau.pinfin.projector.category

@@ -1,4 +1,4 @@
-package hnau.pinfin.data.repository.budget
+package hnau.pinfin.data.repository
 
 import hnau.common.kotlin.coroutines.mapStateLite
 import hnau.pinfin.data.dto.Transaction

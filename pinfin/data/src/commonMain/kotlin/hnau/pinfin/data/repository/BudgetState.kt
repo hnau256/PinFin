@@ -1,4 +1,4 @@
-package hnau.pinfin.data.repository.budget
+package hnau.pinfin.data.repository
 
 data class BudgetState(
     val transactions: List<TransactionInfo>,

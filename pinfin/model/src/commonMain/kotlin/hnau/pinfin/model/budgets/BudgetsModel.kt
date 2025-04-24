@@ -1,19 +1,29 @@
-package hnau.pinfin.model.budgetslist
+@file:UseSerializers(
+    MutableStateFlowSerializer::class,
+)
 
+package hnau.pinfin.model.budgets
+
+import hnau.common.app.goback.GoBackHandler
 import hnau.common.app.goback.GoBackHandlerProvider
+import hnau.common.app.goback.NeverGoBackHandler
 import hnau.common.kotlin.coroutines.createChild
 import hnau.common.kotlin.coroutines.mapState
 import hnau.common.kotlin.coroutines.runningFoldState
 import hnau.common.kotlin.ifNull
-import hnau.pinfin.data.repository.BudgetsRepository
+import hnau.common.kotlin.serialization.MutableStateFlowSerializer
 import hnau.pinfin.data.dto.BudgetId
+import hnau.pinfin.data.repository.BudgetRepository
+import hnau.pinfin.model.budgets.item.BudgetItemModel
 import hnau.shuffler.annotations.Shuffle
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.UseSerializers
 
-class BudgetsListModel(
+class BudgetsModel(
     private val scope: CoroutineScope,
     private val dependencies: Dependencies,
     private val skeleton: Skeleton,
@@ -24,14 +34,17 @@ class BudgetsListModel(
     @Shuffle
     interface Dependencies {
 
-        val budgetsRepository: BudgetsRepository
+        val deferredBudgetRepositories: StateFlow<Map<BudgetId, Deferred<BudgetRepository>>>
 
-        fun item(): BudgetItemModel.Dependencies
+        fun item(
+            id: BudgetId,
+            deferredRepository: Deferred<BudgetRepository>,
+        ): BudgetItemModel.Dependencies
     }
 
     @Serializable
     data class Skeleton(
-        var itemSkeletons: List<BudgetItemModel.Skeleton> = emptyList(),
+        var itemSkeletons: Map<BudgetId, BudgetItemModel.Skeleton> = emptyMap(),
     )
 
     data class ItemInfo(
@@ -46,26 +59,27 @@ class BudgetsListModel(
     )
 
     private fun updateItems(
-        ids: List<BudgetId>,
+        deferredBudgetRepositories: Map<BudgetId, Deferred<BudgetRepository>>,
         previousItems: List<ItemInfoWithScope>,
     ): List<ItemInfoWithScope> {
-        val skeletonsCache = skeleton
-            .itemSkeletons
-            .associateBy(BudgetItemModel.Skeleton::id)
         val itemsCache = previousItems
             .associateBy { it.info.id }
             .toMutableMap()
-        val result = ids.map { id ->
+        val result = deferredBudgetRepositories.map { (id, deferredRepository) ->
             itemsCache
                 .remove(id)
                 .ifNull {
-                    val skeleton = skeletonsCache[id] ?: BudgetItemModel.Skeleton(
-                        id = id,
-                    )
+                    val skeleton = skeleton
+                        .itemSkeletons[id]
+                        ?: BudgetItemModel.Skeleton()
+
                     val itemScope = scope.createChild()
                     val model = BudgetItemModel(
                         scope = itemScope,
-                        dependencies = dependencies.item(),
+                        dependencies = dependencies.item(
+                            id = id,
+                            deferredRepository = deferredRepository,
+                        ),
                         skeleton = skeleton,
                         onClick = { onBudgetClick(id) }
                     )
@@ -80,24 +94,23 @@ class BudgetsListModel(
                 }
         }
         itemsCache.values.forEach { it.scope.cancel() }
-        skeleton.itemSkeletons = result.map(ItemInfoWithScope::skeleton)
+        skeleton.itemSkeletons = result.associate { it.info.id to it.skeleton }
         return result
     }
 
     val items: StateFlow<List<ItemInfo>> = dependencies
-        .budgetsRepository
-        .budgets
+        .deferredBudgetRepositories
         .runningFoldState(
             scope = scope,
-            createInitial = { ids ->
+            createInitial = { deferredBudgetRepositories ->
                 updateItems(
-                    ids = ids,
+                    deferredBudgetRepositories = deferredBudgetRepositories,
                     previousItems = emptyList(),
                 )
             },
-            operation = { previousItems, ids ->
+            operation = { previousItems, deferredBudgetRepositories ->
                 updateItems(
-                    ids = ids,
+                    deferredBudgetRepositories = deferredBudgetRepositories,
                     previousItems = previousItems,
                 )
             }
@@ -107,4 +120,7 @@ class BudgetsListModel(
         ) { infos ->
             infos.map(ItemInfoWithScope::info)
         }
+
+    override val goBackHandler: GoBackHandler
+        get() = NeverGoBackHandler
 }

@@ -17,7 +17,6 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -30,18 +29,18 @@ import hnau.common.compose.utils.horizontalDisplayPadding
 import hnau.common.compose.utils.plus
 import hnau.common.compose.utils.verticalDisplayPadding
 import hnau.common.kotlin.coroutines.mapListReusable
-import hnau.pinfin.model.budgetslist.BudgetsListModel
+import hnau.pinfin.model.budgets.BudgetsModel
+import hnau.pinfin.projector.Res
+import hnau.pinfin.projector.add
+import hnau.pinfin.projector.budgets
 import hnau.shuffler.annotations.Shuffle
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.StateFlow
 import org.jetbrains.compose.resources.stringResource
-import hnau.pinfin.projector.Res
-import hnau.pinfin.projector.add
-import hnau.pinfin.projector.budgets
 
-class BudgetsListProjector(
+class BudgetsProjector(
     scope: CoroutineScope,
-    private val model: BudgetsListModel,
+    private val model: BudgetsModel,
     private val dependencies: Dependencies,
 ) {
 

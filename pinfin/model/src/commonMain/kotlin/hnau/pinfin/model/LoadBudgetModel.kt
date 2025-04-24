@@ -1,9 +1,6 @@
-@file:UseSerializers(
-    MutableStateFlowSerializer::class,
-)
-
 package hnau.pinfin.model
 
+import hnau.common.app.goback.GoBackHandler
 import hnau.common.app.goback.GoBackHandlerProvider
 import hnau.common.app.goback.NeverGoBackHandler
 import hnau.common.kotlin.Loadable
@@ -11,64 +8,58 @@ import hnau.common.kotlin.LoadableStateFlow
 import hnau.common.kotlin.coroutines.flatMapState
 import hnau.common.kotlin.coroutines.mapWithScope
 import hnau.common.kotlin.getOrInit
-import hnau.common.kotlin.serialization.MutableStateFlowSerializer
 import hnau.common.kotlin.toAccessor
-import hnau.pinfin.data.repository.BudgetsRepository
-import hnau.pinfin.data.repository.budget.BudgetRepository
+import hnau.pinfin.data.repository.BudgetRepository
 import hnau.pinfin.model.budgetstack.BudgetStackModel
-import hnau.pinfin.data.dto.BudgetId
 import hnau.shuffler.annotations.Shuffle
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.UseSerializers
 
 class LoadBudgetModel(
     scope: CoroutineScope,
-    private val skeleton: Skeleton,
-    private val dependencies: Dependencies,
+    dependencies: Dependencies,
+    skeleton: Skeleton,
 ) : GoBackHandlerProvider {
-
-    @Serializable
-    data class Skeleton(
-        val id: BudgetId,
-        var mainStack: BudgetStackModel.Skeleton? = null,
-    )
 
     @Shuffle
     interface Dependencies {
 
-        val budgetsRepository: BudgetsRepository
+        val deferredBudgetRepository: Deferred<BudgetRepository>
 
-        fun budgetStack(
+        fun budget(
             budgetRepository: BudgetRepository,
         ): BudgetStackModel.Dependencies
-
-        companion object
     }
 
-    val budgetStackModel: StateFlow<Loadable<BudgetStackModel>> = LoadableStateFlow(scope) {
-        dependencies.budgetsRepository[skeleton.id]
-    }
-        .mapWithScope(scope) { initializedScope, infoOrLoading ->
-            infoOrLoading.map { info ->
-                BudgetStackModel(
-                    scope = initializedScope,
-                    dependencies = dependencies.budgetStack(
-                        budgetRepository = info.repository,
-                    ),
-                    skeleton = skeleton::mainStack
-                        .toAccessor()
-                        .getOrInit(BudgetStackModel::Skeleton),
-                )
-            }
-        }
+    @Serializable
+    data class Skeleton(
+        var budget: BudgetStackModel.Skeleton? = null,
+    )
 
-    override val goBackHandler: StateFlow<(() -> Unit)?> = budgetStackModel
-        .flatMapState(scope) { currentMainModel ->
-            currentMainModel.fold(
-                ifLoading = { NeverGoBackHandler },
-                ifReady = GoBackHandlerProvider::goBackHandler,
+    val budget: StateFlow<Loadable<BudgetStackModel>> = LoadableStateFlow(scope) {
+        dependencies
+            .deferredBudgetRepository
+            .await()
+    }.mapWithScope(scope) { budgetScope, budgetRepositoryOrLoading ->
+        budgetRepositoryOrLoading.map { budgetRepository ->
+            BudgetStackModel(
+                scope = budgetScope,
+                dependencies = dependencies.budget(
+                    budgetRepository = budgetRepository,
+                ),
+                skeleton = skeleton::budget
+                    .toAccessor()
+                    .getOrInit { BudgetStackModel.Skeleton() },
             )
         }
+    }
+
+    override val goBackHandler: GoBackHandler = budget.flatMapState(scope) { budgetModelOrLoading ->
+        budgetModelOrLoading.fold(
+            ifLoading = { NeverGoBackHandler },
+            ifReady = GoBackHandlerProvider::goBackHandler
+        )
+    }
 }

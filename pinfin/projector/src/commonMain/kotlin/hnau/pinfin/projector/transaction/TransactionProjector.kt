@@ -30,8 +30,8 @@ import hnau.common.compose.utils.Icon
 import hnau.common.compose.utils.NavigationIcon
 import hnau.common.compose.utils.horizontalDisplayPadding
 import hnau.common.kotlin.coroutines.mapWithScope
-import hnau.pinfin.model.transaction.TransactionModel
 import hnau.pinfin.model.transaction.type.TransactionTypeModel
+import hnau.pinfin.model.transaction.TransactionModel
 import hnau.pinfin.projector.transaction.type.TransactionTypeProjector
 import hnau.pinfin.projector.transaction.type.entry.EntryProjector
 import hnau.pinfin.projector.transaction.type.transfer.TransferProjector
@@ -40,7 +40,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.StateFlow
 import org.jetbrains.compose.resources.stringResource
 import hnau.pinfin.projector.Res
-import hnau.pinfin.projector.budgets
 import hnau.pinfin.projector.new_transaction
 import hnau.pinfin.projector.transaction
 

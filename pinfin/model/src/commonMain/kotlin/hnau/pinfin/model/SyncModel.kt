@@ -1,26 +1,24 @@
-package hnau.pinfin.model.budget
+package hnau.pinfin.model
 
 import hnau.common.app.goback.GoBackHandler
 import hnau.common.app.goback.GoBackHandlerProvider
-import hnau.common.app.goback.NeverGoBackHandler
 import hnau.shuffler.annotations.Shuffle
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.serialization.Serializable
 
-class BudgetConfigModel(
+class SyncModel(
     scope: CoroutineScope,
     dependencies: Dependencies,
     skeleton: Skeleton,
 ): GoBackHandlerProvider {
 
     @Shuffle
-    interface Dependencies
+    interface Dependencies {
+
+    }
 
     @Serializable
-    data class Skeleton(
-        val a: Int = 0,
-    )
+    /*data*/ class Skeleton
 
-    override val goBackHandler: GoBackHandler
-        get() = NeverGoBackHandler
+    override val goBackHandler: GoBackHandler = TODO()
 }

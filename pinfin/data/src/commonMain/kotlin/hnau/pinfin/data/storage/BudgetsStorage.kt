@@ -13,4 +13,6 @@ interface BudgetsStorage {
     }
 
     val list: StateFlow<List<BudgetStorage>>
+
+    fun createNewBudget()
 }

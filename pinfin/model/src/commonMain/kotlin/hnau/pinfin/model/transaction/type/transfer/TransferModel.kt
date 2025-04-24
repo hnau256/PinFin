@@ -4,17 +4,19 @@
 
 package hnau.pinfin.model.transaction.type.transfer
 
+import hnau.common.app.goback.GoBackHandler
 import hnau.common.app.goback.GoBackHandlerProvider
+import hnau.common.app.goback.NeverGoBackHandler
 import hnau.common.kotlin.coroutines.combineState
 import hnau.common.kotlin.coroutines.combineStateWith
 import hnau.common.kotlin.coroutines.mapWithScope
 import hnau.common.kotlin.coroutines.toMutableStateFlowAsInitial
 import hnau.common.kotlin.serialization.MutableStateFlowSerializer
-import hnau.pinfin.data.repository.budget.AccountInfo
-import hnau.pinfin.data.repository.budget.TransactionInfo
+import hnau.pinfin.data.dto.Transaction
+import hnau.pinfin.data.repository.AccountInfo
+import hnau.pinfin.data.repository.TransactionInfo
 import hnau.pinfin.model.AmountModel
 import hnau.pinfin.model.transaction.type.utils.ChooseAccountModel
-import hnau.pinfin.data.dto.Transaction
 import hnau.shuffler.annotations.Shuffle
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -144,4 +146,7 @@ class TransferModel(
             }
         }
     }
+
+    override val goBackHandler: GoBackHandler
+        get() = NeverGoBackHandler
 }

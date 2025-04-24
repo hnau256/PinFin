@@ -5,7 +5,9 @@
 package hnau.pinfin.model.transaction
 
 import hnau.common.app.EditingString
+import hnau.common.app.goback.GoBackHandler
 import hnau.common.app.goback.GoBackHandlerProvider
+import hnau.common.app.goback.NeverGoBackHandler
 import hnau.common.app.toEditingString
 import hnau.common.kotlin.coroutines.actionOrNullIfExecuting
 import hnau.common.kotlin.coroutines.combineState
@@ -15,14 +17,14 @@ import hnau.common.kotlin.coroutines.mapState
 import hnau.common.kotlin.coroutines.mapWithScope
 import hnau.common.kotlin.coroutines.toMutableStateFlowAsInitial
 import hnau.common.kotlin.serialization.MutableStateFlowSerializer
-import hnau.pinfin.data.repository.budget.BudgetRepository
-import hnau.pinfin.data.repository.budget.TransactionInfo
-import hnau.pinfin.model.transaction.type.TransactionTypeModel
-import hnau.pinfin.model.transaction.type.entry.EntryModel
-import hnau.pinfin.model.transaction.type.transfer.TransferModel
 import hnau.pinfin.data.dto.Comment
 import hnau.pinfin.data.dto.Transaction
 import hnau.pinfin.data.dto.TransactionType
+import hnau.pinfin.data.repository.BudgetRepository
+import hnau.pinfin.data.repository.TransactionInfo
+import hnau.pinfin.model.transaction.type.TransactionTypeModel
+import hnau.pinfin.model.transaction.type.entry.EntryModel
+import hnau.pinfin.model.transaction.type.transfer.TransferModel
 import hnau.shuffler.annotations.Shuffle
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -241,4 +243,7 @@ class TransactionModel(
                 completed()
             }
         }
+
+    override val goBackHandler: GoBackHandler
+        get() = NeverGoBackHandler
 }

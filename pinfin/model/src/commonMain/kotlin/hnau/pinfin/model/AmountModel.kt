@@ -1,21 +1,17 @@
-@file:UseSerializers(
-    MutableStateFlowSerializer::class,
-)
-
 package hnau.pinfin.model
 
 import hnau.common.app.EditingString
+import hnau.common.app.goback.GoBackHandler
 import hnau.common.app.goback.GoBackHandlerProvider
+import hnau.common.app.goback.NeverGoBackHandler
 import hnau.common.kotlin.coroutines.mapState
 import hnau.common.kotlin.coroutines.toMutableStateFlowAsInitial
-import hnau.common.kotlin.serialization.MutableStateFlowSerializer
 import hnau.pinfin.data.dto.Amount
 import hnau.shuffler.annotations.Shuffle
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.UseSerializers
 
 class AmountModel(
     private val scope: CoroutineScope,
@@ -72,4 +68,7 @@ class AmountModel(
     val error: StateFlow<Boolean> = amount.mapState(
         scope = scope,
     ) { it == null }
+
+    override val goBackHandler: GoBackHandler
+        get() = NeverGoBackHandler
 }

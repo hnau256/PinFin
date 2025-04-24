@@ -1,9 +1,9 @@
-package hnau.pinfin.data.repository.budget
+package hnau.pinfin.data.repository
 
 import hnau.common.kotlin.coroutines.mapState
 import hnau.common.kotlin.coroutines.toMutableStateFlowAsInitial
-import hnau.pinfin.data.repository.UpdateRepository
 import hnau.pinfin.data.dto.Update
+import hnau.pinfin.data.storage.BudgetStorage
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -52,10 +52,10 @@ class BudgetRepository(
 
         suspend fun create(
             scope: CoroutineScope,
-            updateRepository: UpdateRepository,
+            budgetStorage: BudgetStorage,
         ): BudgetRepository {
             val initialState = BudgetStateBuilder()
-            updateRepository.useUpdates { updates ->
+            budgetStorage.useUpdates { updates ->
                 updates.forEach { update ->
                     initialState.applyUpdate(update)
                 }
@@ -63,7 +63,7 @@ class BudgetRepository(
             return BudgetRepository(
                 scope = scope,
                 initialState = initialState,
-                addUpdate = updateRepository::addUpdate,
+                addUpdate = budgetStorage::addUpdate,
             )
         }
     }

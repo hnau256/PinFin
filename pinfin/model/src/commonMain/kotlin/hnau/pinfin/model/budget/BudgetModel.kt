@@ -4,6 +4,7 @@
 
 package hnau.pinfin.model.budget
 
+import hnau.common.app.goback.GoBackHandler
 import hnau.common.app.goback.GoBackHandlerProvider
 import hnau.common.kotlin.coroutines.mapState
 import hnau.common.kotlin.coroutines.toMutableStateFlowAsInitial
@@ -68,6 +69,7 @@ class BudgetModel(
                             dependencies = dependencies.transactions(),
                         )
                     )
+
                     is BudgetPageModel.Skeleton.Analytics -> BudgetPageModel.Analytics(
                         AnalyticsModel(
                             scope = scope,
@@ -75,6 +77,7 @@ class BudgetModel(
                             dependencies = dependencies.analytics(),
                         )
                     )
+
                     is BudgetPageModel.Skeleton.Config -> BudgetPageModel.Config(
                         BudgetConfigModel(
                             scope = scope,
@@ -95,4 +98,15 @@ class BudgetModel(
     val currentModel: StateFlow<BudgetPageModel> = skeleton
         .selectedTab
         .mapState(scope, ::getModel)
+
+    override val goBackHandler: GoBackHandler = skeleton
+        .selectedTab
+        .mapState(scope) { selectedTab ->
+            when (selectedTab) {
+                BudgetTab.default -> null
+                else -> {
+                    { skeleton.selectedTab.value = BudgetTab.default }
+                }
+            }
+        }
 }

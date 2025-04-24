@@ -10,6 +10,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.withContext
 import java.io.File
 
@@ -32,6 +33,12 @@ class FileBasedBudgetsStorage private constructor(
             id = BudgetId.stringMapper.direct(name),
             budgetFile = budgetFile,
         )
+    }
+
+    override fun createNewBudget() {
+        namesList.update { existingBudgetsIds ->
+            existingBudgetsIds + BudgetId.new().let(BudgetId.stringMapper.reverse)
+        }
     }
 
     class Factory(

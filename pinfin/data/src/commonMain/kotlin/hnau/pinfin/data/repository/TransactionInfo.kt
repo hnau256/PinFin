@@ -1,4 +1,4 @@
-package hnau.pinfin.data.repository.budget
+package hnau.pinfin.data.repository
 
 import arrow.core.NonEmptyList
 import hnau.pinfin.data.dto.Amount

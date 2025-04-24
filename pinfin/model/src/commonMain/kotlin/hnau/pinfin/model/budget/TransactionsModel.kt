@@ -2,12 +2,14 @@ package hnau.pinfin.model.budget
 
 import arrow.core.NonEmptyList
 import arrow.core.toNonEmptyListOrNull
+import hnau.common.app.goback.GoBackHandler
 import hnau.common.app.goback.GoBackHandlerProvider
+import hnau.common.app.goback.NeverGoBackHandler
 import hnau.common.kotlin.coroutines.mapState
-import hnau.pinfin.data.repository.budget.BudgetRepository
-import hnau.pinfin.data.repository.budget.TransactionInfo
-import hnau.pinfin.model.budgetstack.BudgetStackOpener
 import hnau.pinfin.data.dto.TransactionType
+import hnau.pinfin.data.repository.BudgetRepository
+import hnau.pinfin.data.repository.TransactionInfo
+import hnau.pinfin.model.budgetstack.BudgetStackOpener
 import hnau.shuffler.annotations.Shuffle
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.StateFlow
@@ -53,4 +55,7 @@ class TransactionsModel(
             ) { transactions ->
                 transactions.toNonEmptyListOrNull()
             }
+
+    override val goBackHandler: GoBackHandler
+        get() = NeverGoBackHandler
 }

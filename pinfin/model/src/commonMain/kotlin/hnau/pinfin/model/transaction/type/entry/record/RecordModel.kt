@@ -5,7 +5,9 @@
 package hnau.pinfin.model.transaction.type.entry.record
 
 import hnau.common.app.EditingString
+import hnau.common.app.goback.GoBackHandler
 import hnau.common.app.goback.GoBackHandlerProvider
+import hnau.common.app.goback.NeverGoBackHandler
 import hnau.common.app.toEditingString
 import hnau.common.kotlin.coroutines.combineStateWith
 import hnau.common.kotlin.coroutines.flatMapState
@@ -13,12 +15,12 @@ import hnau.common.kotlin.coroutines.mapState
 import hnau.common.kotlin.coroutines.scopedInState
 import hnau.common.kotlin.coroutines.toMutableStateFlowAsInitial
 import hnau.common.kotlin.serialization.MutableStateFlowSerializer
-import hnau.pinfin.data.repository.budget.CategoryInfo
-import hnau.pinfin.data.repository.budget.TransactionInfo
+import hnau.pinfin.data.repository.CategoryInfo
+import hnau.pinfin.data.repository.TransactionInfo
 import hnau.pinfin.model.AmountModel
-import hnau.pinfin.model.transaction.type.utils.ChooseCategoryModel
 import hnau.pinfin.data.dto.Comment
 import hnau.pinfin.data.dto.Record
+import hnau.pinfin.model.transaction.type.utils.ChooseCategoryModel
 import hnau.shuffler.annotations.Shuffle
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -184,4 +186,7 @@ class RecordModel(
                 comment = comment.text.let(::Comment),
             )
         }
+
+    override val goBackHandler: GoBackHandler
+        get() = NeverGoBackHandler
 }

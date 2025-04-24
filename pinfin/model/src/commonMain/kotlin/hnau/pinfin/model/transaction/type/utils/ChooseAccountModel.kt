@@ -6,14 +6,16 @@ package hnau.pinfin.model.transaction.type.utils
 
 import arrow.core.toOption
 import hnau.common.app.EditingString
+import hnau.common.app.goback.GoBackHandler
 import hnau.common.app.goback.GoBackHandlerProvider
+import hnau.common.app.goback.NeverGoBackHandler
 import hnau.common.app.toEditingString
 import hnau.common.kotlin.coroutines.combineStateWith
 import hnau.common.kotlin.coroutines.mapState
 import hnau.common.kotlin.coroutines.toMutableStateFlowAsInitial
 import hnau.common.kotlin.serialization.MutableStateFlowSerializer
-import hnau.pinfin.data.repository.budget.AccountInfo
-import hnau.pinfin.data.repository.budget.BudgetRepository
+import hnau.pinfin.data.repository.AccountInfo
+import hnau.pinfin.data.repository.BudgetRepository
 import hnau.pinfin.data.dto.SignedAmount
 import hnau.pinfin.model.utils.choose.ChooseState
 import hnau.pinfin.data.dto.AccountId
@@ -88,4 +90,7 @@ class ChooseAccountModel(
         },
         onReady = onReady,
     )
+
+    override val goBackHandler: GoBackHandler
+        get() = NeverGoBackHandler
 }

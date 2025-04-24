@@ -27,9 +27,9 @@ class LoadBudgetProjector(
     }
 
     private val mainSackProjector: StateFlow<Loadable<BudgetStackProjector>> = model
-        .budgetStackModel
-        .mapWithScope(scope) { scope, mainStackOrLoading ->
-            mainStackOrLoading.map { budgetStack ->
+        .budget
+        .mapWithScope(scope) { scope, budgetStackOrLoading ->
+            budgetStackOrLoading.map { budgetStack ->
                 BudgetStackProjector(
                     scope = scope,
                     model = budgetStack,

@@ -1,8 +1,10 @@
 package hnau.pinfin.model.budget
 
+import hnau.common.app.goback.GoBackHandler
 import hnau.common.app.goback.GoBackHandlerProvider
-import hnau.pinfin.data.repository.budget.BudgetRepository
-import hnau.pinfin.data.repository.budget.BudgetState
+import hnau.common.app.goback.NeverGoBackHandler
+import hnau.pinfin.data.repository.BudgetRepository
+import hnau.pinfin.data.repository.BudgetState
 import hnau.shuffler.annotations.Shuffle
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.StateFlow
@@ -27,4 +29,7 @@ class AnalyticsModel(
         get() = dependencies
             .budgetsRepository
             .state
+
+    override val goBackHandler: GoBackHandler
+        get() = NeverGoBackHandler
 }

@@ -9,7 +9,9 @@ import arrow.core.NonEmptyList
 import arrow.core.nonEmptyListOf
 import arrow.core.serialization.NonEmptyListSerializer
 import arrow.core.toNonEmptyListOrNull
+import hnau.common.app.goback.GoBackHandler
 import hnau.common.app.goback.GoBackHandlerProvider
+import hnau.common.app.goback.NeverGoBackHandler
 import hnau.common.kotlin.coroutines.combineStateWith
 import hnau.common.kotlin.coroutines.createChild
 import hnau.common.kotlin.coroutines.flatMapState
@@ -19,9 +21,9 @@ import hnau.common.kotlin.coroutines.mapWithScope
 import hnau.common.kotlin.coroutines.scopedInState
 import hnau.common.kotlin.coroutines.toMutableStateFlowAsInitial
 import hnau.common.kotlin.serialization.MutableStateFlowSerializer
-import hnau.pinfin.data.repository.budget.AccountInfo
-import hnau.pinfin.data.repository.budget.CategoryInfo
-import hnau.pinfin.data.repository.budget.TransactionInfo
+import hnau.pinfin.data.repository.AccountInfo
+import hnau.pinfin.data.repository.CategoryInfo
+import hnau.pinfin.data.repository.TransactionInfo
 import hnau.pinfin.model.transaction.type.entry.record.RecordId
 import hnau.pinfin.model.transaction.type.entry.record.RecordModel
 import hnau.pinfin.model.transaction.type.utils.ChooseAccountModel
@@ -56,7 +58,7 @@ class EntryModel(
             records = type
                 .records
                 .map { record ->
-                    val id = RecordId.new()
+                    val id = RecordId.Companion.new()
                     val skeleton = RecordModel.Skeleton(
                         record = record,
                     )
@@ -71,7 +73,7 @@ class EntryModel(
                 get() = Skeleton(
                     account = null.toMutableStateFlowAsInitial(),
                     records = nonEmptyListOf(
-                        RecordId.new() to RecordModel.Skeleton.empty,
+                        RecordId.Companion.new() to RecordModel.Skeleton.empty,
                     ).toMutableStateFlowAsInitial(),
                 )
         }
@@ -243,7 +245,7 @@ class EntryModel(
 
     fun addNewRecord() {
         skeleton.records.update { records ->
-            val newItem = RecordId.new() to RecordModel.Skeleton.empty
+            val newItem = RecordId.Companion.new() to RecordModel.Skeleton.empty
             records + newItem
         }
     }
@@ -290,4 +292,7 @@ class EntryModel(
                 }
             }
         }
+
+    override val goBackHandler: GoBackHandler
+        get() = NeverGoBackHandler
 }

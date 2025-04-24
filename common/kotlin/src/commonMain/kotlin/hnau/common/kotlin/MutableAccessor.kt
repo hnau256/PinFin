@@ -29,7 +29,13 @@ fun <I, O> MutableAccessor<I>.map(
     }
 )
 
-inline fun <T, reified R : T> MutableAccessor<Option<T>>.shrinkType(): MutableAccessor<Option<R>> =
+inline fun <T, reified R : T> MutableAccessor<T?>.shrinkType(): MutableAccessor<R?> =
+    MutableAccessor<R?>(
+        get = { get() as? R },
+        set = set,
+    )
+
+inline fun <T, reified R : T> MutableAccessor<Option<T>>.shrinkOptionType(): MutableAccessor<Option<R>> =
     MutableAccessor(
         get = {
             get().flatMap { value ->
