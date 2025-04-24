@@ -1,19 +1,19 @@
-package hnau.pinfin.projector.budgetsorbudget
+package hnau.pinfin.projector.manage
 
 import androidx.compose.runtime.Composable
-import hnau.pinfin.projector.budgetslist.BudgetsProjector
+import hnau.pinfin.projector.budgetslist.BudgetsListProjector
 import hnau.pinfin.projector.LoadBudgetProjector
 
-sealed interface BudgetsOrBudgetElementProjector {
+sealed interface ManageElementProjector {
 
     @Composable
     fun Content()
 
     val key: Int
 
-    data class Budgets(
-        private val projector: BudgetsProjector,
-    ) : BudgetsOrBudgetElementProjector {
+    data class BudgetsList(
+        private val projector: BudgetsListProjector,
+    ) : ManageElementProjector {
 
         @Composable
         override fun Content() {
@@ -26,7 +26,7 @@ sealed interface BudgetsOrBudgetElementProjector {
 
     data class Budget(
         private val projector: LoadBudgetProjector,
-    ) : BudgetsOrBudgetElementProjector {
+    ) : ManageElementProjector {
 
         @Composable
         override fun Content() {

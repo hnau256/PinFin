@@ -9,7 +9,7 @@ import hnau.common.compose.uikit.state.TransitionSpec
 import hnau.common.kotlin.Loadable
 import hnau.common.kotlin.coroutines.mapWithScope
 import hnau.pinfin.model.LoadBudgetsModel
-import hnau.pinfin.projector.budgetsorsync.BudgetsOrSyncProjector
+import hnau.pinfin.projector.manageorsync.ManageOrSyncProjector
 import hnau.shuffler.annotations.Shuffle
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.StateFlow
@@ -23,14 +23,14 @@ class LoadBudgetsProjector(
     @Shuffle
     interface Dependencies {
 
-        fun budgetsOrSync(): BudgetsOrSyncProjector.Dependencies
+        fun budgetsOrSync(): ManageOrSyncProjector.Dependencies
     }
 
-    private val budgetsSackProjector: StateFlow<Loadable<BudgetsOrSyncProjector>> = model
+    private val budgetsSackProjector: StateFlow<Loadable<ManageOrSyncProjector>> = model
         .budgetsOrSync
         .mapWithScope(scope) { scope, budgetsOrSyncModelOrLoading ->
             budgetsOrSyncModelOrLoading.map { budgetsOrSyncModel ->
-                BudgetsOrSyncProjector(
+                ManageOrSyncProjector(
                     scope = scope,
                     model = budgetsOrSyncModel,
                     dependencies = dependencies.budgetsOrSync(),

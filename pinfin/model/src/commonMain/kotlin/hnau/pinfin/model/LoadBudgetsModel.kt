@@ -9,7 +9,7 @@ import hnau.common.kotlin.coroutines.mapWithScope
 import hnau.common.kotlin.getOrInit
 import hnau.common.kotlin.toAccessor
 import hnau.pinfin.data.storage.BudgetsStorage
-import hnau.pinfin.model.budgetsorsync.BudgetsOrSyncModel
+import hnau.pinfin.model.budgetsorsync.ManageOrSyncModel
 import hnau.shuffler.annotations.Shuffle
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.StateFlow
@@ -28,15 +28,15 @@ class LoadBudgetsModel(
 
         fun budgetsOrSync(
             budgetsStorage: BudgetsStorage,
-        ): BudgetsOrSyncModel.Dependencies
+        ): ManageOrSyncModel.Dependencies
     }
 
     @Serializable
     data class Skeleton(
-        var budgetsOrSync: BudgetsOrSyncModel.Skeleton? = null,
+        var budgetsOrSync: ManageOrSyncModel.Skeleton? = null,
     )
 
-    val budgetsOrSync: StateFlow<Loadable<BudgetsOrSyncModel>> = LoadableStateFlow(
+    val budgetsOrSync: StateFlow<Loadable<ManageOrSyncModel>> = LoadableStateFlow(
         scope = scope,
     ) {
         dependencies.budgetsStorageFactory.createBudgetsStorage(
@@ -47,14 +47,14 @@ class LoadBudgetsModel(
             scope = scope,
         ) { stateScope, budgetsStorageOrLoading ->
             budgetsStorageOrLoading.map { budgetsStorage ->
-                BudgetsOrSyncModel(
+                ManageOrSyncModel(
                     scope = stateScope,
                     dependencies = dependencies.budgetsOrSync(
                         budgetsStorage = budgetsStorage,
                     ),
                     skeleton = skeleton::budgetsOrSync
                         .toAccessor()
-                        .getOrInit { BudgetsOrSyncModel.Skeleton() },
+                        .getOrInit { ManageOrSyncModel.Skeleton() },
                 )
             }
         }

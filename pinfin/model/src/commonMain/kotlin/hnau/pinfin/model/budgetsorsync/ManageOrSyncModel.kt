@@ -10,7 +10,7 @@ import hnau.common.kotlin.coroutines.flatMapState
 import hnau.common.kotlin.coroutines.mapWithScope
 import hnau.common.kotlin.coroutines.toMutableStateFlowAsInitial
 import hnau.common.kotlin.serialization.MutableStateFlowSerializer
-import hnau.pinfin.model.budgetsorbudget.BudgetsOrBudgetModel
+import hnau.pinfin.model.manage.ManageModel
 import hnau.pinfin.model.SyncModel
 import hnau.shuffler.annotations.Shuffle
 import kotlinx.coroutines.CoroutineScope
@@ -19,7 +19,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.UseSerializers
 
-class BudgetsOrSyncModel(
+class ManageOrSyncModel(
     scope: CoroutineScope,
     dependencies: Dependencies,
     skeleton: Skeleton,
@@ -28,32 +28,32 @@ class BudgetsOrSyncModel(
     @Shuffle
     interface Dependencies {
 
-        fun budgets(): BudgetsOrBudgetModel.Dependencies
+        fun budgets(): ManageModel.Dependencies
 
         fun sync(): SyncModel.Dependencies
     }
 
     @Serializable
     data class Skeleton(
-        val state: MutableStateFlow<BudgetsOrSyncStateModel.Skeleton> =
-            BudgetsOrSyncStateModel.Skeleton.Budgets(
-                skeleton = BudgetsOrBudgetModel.Skeleton()
+        val state: MutableStateFlow<ManageOrSyncStateModel.Skeleton> =
+            ManageOrSyncStateModel.Skeleton.Manage(
+                skeleton = ManageModel.Skeleton()
             ).toMutableStateFlowAsInitial(),
     )
 
-    val state: StateFlow<BudgetsOrSyncStateModel> = skeleton
+    val state: StateFlow<ManageOrSyncStateModel> = skeleton
         .state
         .mapWithScope(scope) { stateScope, stateSkeleton ->
             when (stateSkeleton) {
-                is BudgetsOrSyncStateModel.Skeleton.Budgets -> BudgetsOrSyncStateModel.Budgets(
-                    model = BudgetsOrBudgetModel(
+                is ManageOrSyncStateModel.Skeleton.Manage -> ManageOrSyncStateModel.Manage(
+                    model = ManageModel(
                         scope = stateScope,
                         dependencies = dependencies.budgets(),
                         skeleton = stateSkeleton.skeleton,
                     )
                 )
 
-                is BudgetsOrSyncStateModel.Skeleton.Sync -> BudgetsOrSyncStateModel.Sync(
+                is ManageOrSyncStateModel.Skeleton.Sync -> ManageOrSyncStateModel.Sync(
                     model = SyncModel(
                         scope = stateScope,
                         dependencies = dependencies.sync(),

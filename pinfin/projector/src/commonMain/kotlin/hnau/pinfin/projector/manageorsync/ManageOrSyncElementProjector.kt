@@ -1,19 +1,19 @@
-package hnau.pinfin.projector.budgetsorsync
+package hnau.pinfin.projector.manageorsync
 
 import androidx.compose.runtime.Composable
 import hnau.pinfin.projector.SyncProjector
-import hnau.pinfin.projector.budgetsorbudget.BudgetsOrBudgetProjector
+import hnau.pinfin.projector.manage.ManageProjector
 
-sealed interface BudgetsOrSyncElementProjector {
+sealed interface ManageOrSyncElementProjector {
 
     @Composable
     fun Content()
 
     val key: Int
 
-    data class Budgets(
-        private val projector: BudgetsOrBudgetProjector,
-    ) : BudgetsOrSyncElementProjector {
+    data class Manage(
+        private val projector: ManageProjector,
+    ) : ManageOrSyncElementProjector {
 
         @Composable
         override fun Content() {
@@ -26,7 +26,7 @@ sealed interface BudgetsOrSyncElementProjector {
 
     data class Sync(
         private val projector: SyncProjector,
-    ) : BudgetsOrSyncElementProjector {
+    ) : ManageOrSyncElementProjector {
 
         @Composable
         override fun Content() {

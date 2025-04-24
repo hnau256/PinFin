@@ -23,7 +23,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.UseSerializers
 
-class BudgetsModel(
+class BudgetsListModel(
     private val scope: CoroutineScope,
     private val dependencies: Dependencies,
     private val skeleton: Skeleton,

@@ -2,7 +2,7 @@
     MutableStateFlowSerializer::class,
 )
 
-package hnau.pinfin.model.budgetsorbudget
+package hnau.pinfin.model.manage
 
 import arrow.core.identity
 import hnau.common.app.goback.GoBackHandler
@@ -22,7 +22,7 @@ import hnau.pinfin.data.dto.BudgetId
 import hnau.pinfin.data.repository.BudgetRepository
 import hnau.pinfin.data.storage.BudgetStorage
 import hnau.pinfin.data.storage.BudgetsStorage
-import hnau.pinfin.model.budgets.BudgetsModel
+import hnau.pinfin.model.budgets.BudgetsListModel
 import hnau.pinfin.model.LoadBudgetModel
 import hnau.shuffler.annotations.Shuffle
 import kotlinx.coroutines.CoroutineScope
@@ -33,7 +33,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.UseSerializers
 
-class BudgetsOrBudgetModel(
+class ManageModel(
     scope: CoroutineScope,
     dependencies: Dependencies,
     skeleton: Skeleton,
@@ -44,9 +44,9 @@ class BudgetsOrBudgetModel(
 
         val budgetsStorage: BudgetsStorage
 
-        fun budgets(
+        fun budgetsList(
             deferredBudgetRepositories: StateFlow<Map<BudgetId, Deferred<BudgetRepository>>>,
-        ): BudgetsModel.Dependencies
+        ): BudgetsListModel.Dependencies
 
         fun budget(
             deferredBudgetRepository: Deferred<BudgetRepository>,
@@ -56,7 +56,7 @@ class BudgetsOrBudgetModel(
     @Serializable
     data class Skeleton(
         val selectedBudget: MutableStateFlow<BudgetId?> = null.toMutableStateFlowAsInitial(),
-        var stateSkeleton: BudgetsOrBudgetStateModel.Skeleton? = null,
+        var stateSkeleton: ManageStateModel.Skeleton? = null,
     )
 
     private data class DeferredBudgetRepositoryWrapper(
@@ -96,7 +96,7 @@ class BudgetsOrBudgetModel(
                 deferredRepositoriesList.associate(::identity)
             }
 
-    val state: StateFlow<BudgetsOrBudgetStateModel> = combineState(
+    val state: StateFlow<ManageStateModel> = combineState(
         scope = scope,
         a = deferredBudgetRepositories,
         b = skeleton.selectedBudget,
@@ -114,18 +114,18 @@ class BudgetsOrBudgetModel(
         scope = scope,
     ) { stateScope, deferredBudgetRepositoryOrNull ->
         when (deferredBudgetRepositoryOrNull) {
-            null -> BudgetsOrBudgetStateModel.Budgets(
-                model = BudgetsModel(
+            null -> ManageStateModel.BudgetsList(
+                model = BudgetsListModel(
                     scope = stateScope,
-                    dependencies = dependencies.budgets(
+                    dependencies = dependencies.budgetsList(
                         deferredBudgetRepositories = deferredBudgetRepositories,
                     ),
                     skeleton = skeleton::stateSkeleton
                         .toAccessor()
-                        .shrinkType<_, BudgetsOrBudgetStateModel.Skeleton.Budgets>()
+                        .shrinkType<_, ManageStateModel.Skeleton.BudgetsList>()
                         .getOrInit {
-                            BudgetsOrBudgetStateModel.Skeleton.Budgets(
-                                BudgetsModel.Skeleton()
+                            ManageStateModel.Skeleton.BudgetsList(
+                                BudgetsListModel.Skeleton()
                             )
                         }
                         .skeleton,
@@ -134,7 +134,7 @@ class BudgetsOrBudgetModel(
                 )
             )
 
-            else -> BudgetsOrBudgetStateModel.Budget(
+            else -> ManageStateModel.Budget(
                 model = LoadBudgetModel(
                     scope = stateScope,
                     dependencies = dependencies.budget(
@@ -142,9 +142,9 @@ class BudgetsOrBudgetModel(
                     ),
                     skeleton = skeleton::stateSkeleton
                         .toAccessor()
-                        .shrinkType<_, BudgetsOrBudgetStateModel.Skeleton.Budget>()
+                        .shrinkType<_, ManageStateModel.Skeleton.Budget>()
                         .getOrInit {
-                            BudgetsOrBudgetStateModel.Skeleton.Budget(
+                            ManageStateModel.Skeleton.Budget(
                                 LoadBudgetModel.Skeleton()
                             )
                         }

@@ -1,18 +1,18 @@
 package hnau.pinfin.model.budgetsorsync
 
 import hnau.common.app.goback.GoBackHandlerProvider
-import hnau.pinfin.model.budgetsorbudget.BudgetsOrBudgetModel
+import hnau.pinfin.model.manage.ManageModel
 import hnau.pinfin.model.SyncModel
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
-sealed interface BudgetsOrSyncStateModel: GoBackHandlerProvider {
+sealed interface ManageOrSyncStateModel: GoBackHandlerProvider {
 
     val id: Int
 
-    data class Budgets(
-        val model: BudgetsOrBudgetModel,
-    ): GoBackHandlerProvider by model, BudgetsOrSyncStateModel {
+    data class Manage(
+        val model: ManageModel,
+    ): GoBackHandlerProvider by model, ManageOrSyncStateModel {
 
         override val id: Int
             get() = 0
@@ -20,7 +20,7 @@ sealed interface BudgetsOrSyncStateModel: GoBackHandlerProvider {
 
     data class Sync(
         val model: SyncModel,
-    ): GoBackHandlerProvider by model, BudgetsOrSyncStateModel {
+    ): GoBackHandlerProvider by model, ManageOrSyncStateModel {
 
         override val id: Int
             get() = 1
@@ -30,9 +30,9 @@ sealed interface BudgetsOrSyncStateModel: GoBackHandlerProvider {
     sealed interface Skeleton {
 
         @Serializable
-        @SerialName("budgets")
-        data class Budgets(
-            val skeleton: BudgetsOrBudgetModel.Skeleton,
+        @SerialName("manage")
+        data class Manage(
+            val skeleton: ManageModel.Skeleton,
         ): Skeleton
 
         @Serializable

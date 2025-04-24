@@ -1,4 +1,4 @@
-package hnau.pinfin.projector.budgetsorsync
+package hnau.pinfin.projector.manage
 
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
@@ -7,44 +7,44 @@ import androidx.compose.ui.Modifier
 import hnau.common.compose.uikit.state.StateContent
 import hnau.common.compose.uikit.state.TransitionSpec
 import hnau.common.kotlin.coroutines.mapWithScope
-import hnau.pinfin.model.budgetsorsync.BudgetsOrSyncModel
-import hnau.pinfin.model.budgetsorsync.BudgetsOrSyncStateModel
-import hnau.pinfin.projector.SyncProjector
-import hnau.pinfin.projector.budgetsorbudget.BudgetsOrBudgetProjector
+import hnau.pinfin.model.manage.ManageModel
+import hnau.pinfin.model.manage.ManageStateModel
+import hnau.pinfin.projector.LoadBudgetProjector
+import hnau.pinfin.projector.budgetslist.BudgetsListProjector
 import hnau.shuffler.annotations.Shuffle
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.StateFlow
 
-class BudgetsOrSyncProjector(
+class ManageProjector(
     scope: CoroutineScope,
-    model: BudgetsOrSyncModel,
+    model: ManageModel,
     dependencies: Dependencies,
 ) {
 
     @Shuffle
     interface Dependencies {
 
-        fun budgets(): BudgetsOrBudgetProjector.Dependencies
+        fun budgetsList(): BudgetsListProjector.Dependencies
 
-        fun sync(): SyncProjector.Dependencies
+        fun budget(): LoadBudgetProjector.Dependencies
     }
 
-    private val state: StateFlow<BudgetsOrSyncElementProjector> = model
+    private val state: StateFlow<ManageElementProjector> = model
         .state
         .mapWithScope(scope) { stateScope, state ->
             when (state) {
-                is BudgetsOrSyncStateModel.Budgets -> BudgetsOrSyncElementProjector.Budgets(
-                    projector = BudgetsOrBudgetProjector(
+                is ManageStateModel.BudgetsList -> ManageElementProjector.BudgetsList(
+                    projector = BudgetsListProjector(
                         scope = stateScope,
-                        dependencies = dependencies.budgets(),
+                        dependencies = dependencies.budgetsList(),
                         model = state.model,
                     )
                 )
 
-                is BudgetsOrSyncStateModel.Sync -> BudgetsOrSyncElementProjector.Sync(
-                    projector = SyncProjector(
+                is ManageStateModel.Budget -> ManageElementProjector.Budget(
+                    projector = LoadBudgetProjector(
                         scope = stateScope,
-                        dependencies = dependencies.sync(),
+                        dependencies = dependencies.budget(),
                         model = state.model,
                     )
                 )
@@ -58,9 +58,9 @@ class BudgetsOrSyncProjector(
             .value
             .StateContent(
                 modifier = Modifier.fillMaxSize(),
-                label = "BudgetsOrSync",
+                label = "Manage",
                 transitionSpec = TransitionSpec.crossfade(),
-                contentKey = BudgetsOrSyncElementProjector::key,
+                contentKey = ManageElementProjector::key,
             ) { elementProjector ->
                 elementProjector.Content()
             }
