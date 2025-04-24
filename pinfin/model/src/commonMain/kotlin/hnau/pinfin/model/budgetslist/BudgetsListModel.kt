@@ -7,6 +7,7 @@ package hnau.pinfin.model.budgetslist
 import hnau.common.app.goback.GoBackHandler
 import hnau.common.app.goback.GoBackHandlerProvider
 import hnau.common.app.goback.NeverGoBackHandler
+import hnau.common.app.preferences.Preferences
 import hnau.common.kotlin.coroutines.createChild
 import hnau.common.kotlin.coroutines.mapState
 import hnau.common.kotlin.coroutines.runningFoldState
@@ -14,6 +15,7 @@ import hnau.common.kotlin.ifNull
 import hnau.common.kotlin.serialization.MutableStateFlowSerializer
 import hnau.pinfin.data.dto.BudgetId
 import hnau.pinfin.data.repository.BudgetRepository
+import hnau.pinfin.data.storage.BudgetsStorage
 import hnau.pinfin.model.budgetslist.item.BudgetItemModel
 import hnau.shuffler.annotations.Shuffle
 import kotlinx.coroutines.CoroutineScope
@@ -27,12 +29,12 @@ class BudgetsListModel(
     private val scope: CoroutineScope,
     private val dependencies: Dependencies,
     private val skeleton: Skeleton,
-    private val onBudgetClick: (BudgetId) -> Unit,
-    val onAddBudgetClick: () -> Unit,
 ) : GoBackHandlerProvider {
 
     @Shuffle
     interface Dependencies {
+
+        val budgetsStorage: BudgetsStorage
 
         val deferredBudgetRepositories: StateFlow<Map<BudgetId, Deferred<BudgetRepository>>>
 
@@ -81,7 +83,6 @@ class BudgetsListModel(
                             deferredRepository = deferredRepository,
                         ),
                         skeleton = skeleton,
-                        onClick = { onBudgetClick(id) }
                     )
                     ItemInfoWithScope(
                         info = ItemInfo(
@@ -120,6 +121,10 @@ class BudgetsListModel(
         ) { infos ->
             infos.map(ItemInfoWithScope::info)
         }
+
+    fun createNewBudget() {
+        dependencies.budgetsStorage.createNewBudget()
+    }
 
     override val goBackHandler: GoBackHandler
         get() = NeverGoBackHandler

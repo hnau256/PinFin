@@ -1,7 +1,8 @@
-package hnau.pinfin.model
+package hnau.pinfin.model.loadbudgets
 
 import hnau.common.app.goback.GoBackHandlerProvider
 import hnau.common.app.goback.NeverGoBackHandler
+import hnau.common.app.preferences.Preferences
 import hnau.common.kotlin.Loadable
 import hnau.common.kotlin.LoadableStateFlow
 import hnau.common.kotlin.coroutines.flatMapState
@@ -12,6 +13,8 @@ import hnau.pinfin.data.storage.BudgetsStorage
 import hnau.pinfin.model.mode.ModeModel
 import hnau.shuffler.annotations.Shuffle
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.async
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.serialization.Serializable
 
@@ -24,9 +27,12 @@ class LoadBudgetsModel(
     @Shuffle
     interface Dependencies {
 
+        val preferencesFactory: Preferences.Factory
+
         val budgetsStorageFactory: BudgetsStorage.Factory
 
         fun budgetsOrSync(
+            preferences: Preferences,
             budgetsStorage: BudgetsStorage,
         ): ModeModel.Dependencies
     }
@@ -36,21 +42,40 @@ class LoadBudgetsModel(
         var budgetsOrSync: ModeModel.Skeleton? = null,
     )
 
+    private data class Ready(
+        val budgetsStorage: BudgetsStorage,
+        val preferences: Preferences,
+    )
+
     val budgetsOrSync: StateFlow<Loadable<ModeModel>> = LoadableStateFlow(
         scope = scope,
     ) {
-        dependencies.budgetsStorageFactory.createBudgetsStorage(
-            scope = scope,
-        )
+        coroutineScope {
+            val deferredBudgetsStorage = async {
+                dependencies.budgetsStorageFactory.createBudgetsStorage(
+                    scope = scope,
+                )
+            }
+            val deferredPreferences = async {
+                dependencies.preferencesFactory.createPreferences(
+                    scope = scope,
+                )
+            }
+            Ready(
+                budgetsStorage = deferredBudgetsStorage.await(),
+                preferences = deferredPreferences.await(),
+            )
+        }
     }
         .mapWithScope(
             scope = scope,
-        ) { stateScope, budgetsStorageOrLoading ->
-            budgetsStorageOrLoading.map { budgetsStorage ->
+        ) { stateScope, readyOrLoading ->
+            readyOrLoading.map { ready ->
                 ModeModel(
                     scope = stateScope,
                     dependencies = dependencies.budgetsOrSync(
-                        budgetsStorage = budgetsStorage,
+                        budgetsStorage = ready.budgetsStorage,
+                        preferences = ready.preferences,
                     ),
                     skeleton = skeleton::budgetsOrSync
                         .toAccessor()

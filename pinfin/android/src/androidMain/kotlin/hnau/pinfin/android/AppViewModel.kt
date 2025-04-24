@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.createSavedStateHandle
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
+import hnau.common.app.preferences.impl.FileBasedPreferences
 import hnau.pinfin.app.PinFinApp
 import hnau.pinfin.app.SavedState
 import hnau.pinfin.app.impl
@@ -24,11 +25,15 @@ class AppViewModel(
 
     private val scope = CoroutineScope(SupervisorJob())
 
+    val appFilesDir: File = context.filesDir
     val app = PinFinApp(
         scope = scope,
         dependencies = PinFinApp.Dependencies.impl(
             budgetsStorageFactory = FileBasedBudgetsStorage.Factory(
-                budgetsDir = File(context.filesDir, "budgets"),
+                budgetsDir = File(appFilesDir, "budgets"),
+            ),
+            preferencesFactory = FileBasedPreferences.Factory(
+                preferencesFile = File(appFilesDir, "preferences.txt")
             ),
         ),
         savedState = SavedState(

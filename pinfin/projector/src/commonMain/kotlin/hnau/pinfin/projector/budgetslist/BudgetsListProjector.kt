@@ -29,6 +29,8 @@ import hnau.common.compose.utils.horizontalDisplayPadding
 import hnau.common.compose.utils.plus
 import hnau.common.compose.utils.verticalDisplayPadding
 import hnau.common.kotlin.coroutines.mapListReusable
+import hnau.pinfin.data.storage.BudgetStorage
+import hnau.pinfin.data.storage.BudgetsStorage
 import hnau.pinfin.model.budgetslist.BudgetsListModel
 import hnau.pinfin.projector.Res
 import hnau.pinfin.projector.add
@@ -102,7 +104,7 @@ class BudgetsListProjector(
                 contentAlignment = Alignment.BottomEnd,
             ) {
                 ExtendedFloatingActionButton(
-                    onClick = model.onAddBudgetClick,
+                    onClick = model::createNewBudget,
                     icon = { Icon { Icons.Filled.Add } },
                     text = { Text(stringResource(Res.string.add)) },
                 )

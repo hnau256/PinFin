@@ -4,6 +4,7 @@ import hnau.common.app.goback.GoBackHandler
 import hnau.common.app.goback.GoBackHandlerProvider
 import hnau.common.kotlin.getOrInit
 import hnau.common.kotlin.toAccessor
+import hnau.pinfin.model.loadbudgets.LoadBudgetsModel
 import hnau.shuffler.annotations.Shuffle
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.serialization.Serializable

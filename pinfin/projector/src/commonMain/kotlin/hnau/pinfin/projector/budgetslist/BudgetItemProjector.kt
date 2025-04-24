@@ -40,7 +40,7 @@ class BudgetItemProjector(
                     modifier = Modifier
                         .clip(cellShape)
                         .background(MaterialTheme.colorScheme.surfaceContainer)
-                        .clickable(onClick = model.onClick)
+                        .clickable(onClick = model::open)
                         .padding(
                             horizontal = Dimens.separation,
                             vertical = Dimens.smallSeparation,

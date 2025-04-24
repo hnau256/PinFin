@@ -1,9 +1,11 @@
 package hnau.pinfin.model.budgetslist.item
 
 import arrow.core.Either
+import hnau.common.kotlin.coroutines.InProgressRegistry
 import hnau.pinfin.data.dto.BudgetId
 import hnau.pinfin.data.repository.BudgetRepository
 import hnau.pinfin.data.repository.BudgetState
+import hnau.pinfin.model.manage.BudgetOpener
 import hnau.shuffler.annotations.Shuffle
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Deferred
@@ -14,13 +16,13 @@ import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
 
 class BudgetItemModel(
-    scope: CoroutineScope,
+    private val scope: CoroutineScope,
     private val dependencies: Dependencies,
     private val skeleton: Skeleton,
-    val onClick: () -> Unit,
 ) {
 
     @Shuffle
@@ -29,10 +31,26 @@ class BudgetItemModel(
         val id: BudgetId
 
         val deferredRepository: Deferred<BudgetRepository>
+
+        val budgetOpener: BudgetOpener
     }
 
     @Serializable
     /*data*/ class Skeleton
+
+    private val inProgressRegistry = InProgressRegistry()
+
+    //TODO
+    val inProgress: StateFlow<Boolean>
+        get() = inProgressRegistry.isProgress
+
+    fun open() {
+        scope.launch {
+            inProgressRegistry.executeRegistered {
+                dependencies.budgetOpener.openBudget(id)
+            }
+        }
+    }
 
     //TODO remove use info
     val id: BudgetId

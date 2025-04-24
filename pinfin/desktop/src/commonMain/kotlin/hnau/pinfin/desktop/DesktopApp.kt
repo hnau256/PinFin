@@ -9,6 +9,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
 import androidx.compose.ui.window.rememberWindowState
+import hnau.common.app.preferences.impl.FileBasedPreferences
 import hnau.common.compose.utils.ThemeBrightness
 import hnau.pinfin.app.PinFinApp
 import hnau.pinfin.app.SavedState
@@ -32,6 +33,9 @@ fun main() = application {
             budgetsStorageFactory = FileBasedBudgetsStorage.Factory(
                 budgetsDir = File("budgets"),
             ),
+            preferencesFactory = FileBasedPreferences.Factory(
+                preferencesFile = File("preferences.txt")
+            )
         ),
     )
     val appContentDependencies = AppContentDependencies.impl(
