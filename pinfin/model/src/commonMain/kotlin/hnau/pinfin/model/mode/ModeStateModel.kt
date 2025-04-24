@@ -1,4 +1,4 @@
-package hnau.pinfin.model.budgetsorsync
+package hnau.pinfin.model.mode
 
 import hnau.common.app.goback.GoBackHandlerProvider
 import hnau.pinfin.model.manage.ManageModel
@@ -6,13 +6,13 @@ import hnau.pinfin.model.SyncModel
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
-sealed interface ManageOrSyncStateModel: GoBackHandlerProvider {
+sealed interface ModeStateModel: GoBackHandlerProvider {
 
     val id: Int
 
     data class Manage(
         val model: ManageModel,
-    ): GoBackHandlerProvider by model, ManageOrSyncStateModel {
+    ): GoBackHandlerProvider by model, ModeStateModel {
 
         override val id: Int
             get() = 0
@@ -20,7 +20,7 @@ sealed interface ManageOrSyncStateModel: GoBackHandlerProvider {
 
     data class Sync(
         val model: SyncModel,
-    ): GoBackHandlerProvider by model, ManageOrSyncStateModel {
+    ): GoBackHandlerProvider by model, ModeStateModel {
 
         override val id: Int
             get() = 1

@@ -1,4 +1,4 @@
-package hnau.pinfin.projector.manageorsync
+package hnau.pinfin.projector.mode
 
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
@@ -7,17 +7,17 @@ import androidx.compose.ui.Modifier
 import hnau.common.compose.uikit.state.StateContent
 import hnau.common.compose.uikit.state.TransitionSpec
 import hnau.common.kotlin.coroutines.mapWithScope
-import hnau.pinfin.model.budgetsorsync.ManageOrSyncModel
-import hnau.pinfin.model.budgetsorsync.ManageOrSyncStateModel
+import hnau.pinfin.model.mode.ModeModel
+import hnau.pinfin.model.mode.ModeStateModel
 import hnau.pinfin.projector.SyncProjector
 import hnau.pinfin.projector.manage.ManageProjector
 import hnau.shuffler.annotations.Shuffle
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.StateFlow
 
-class ManageOrSyncProjector(
+class ModeProjector(
     scope: CoroutineScope,
-    model: ManageOrSyncModel,
+    model: ModeModel,
     dependencies: Dependencies,
 ) {
 
@@ -29,11 +29,11 @@ class ManageOrSyncProjector(
         fun sync(): SyncProjector.Dependencies
     }
 
-    private val state: StateFlow<ManageOrSyncElementProjector> = model
+    private val state: StateFlow<ModeStateProjector> = model
         .state
         .mapWithScope(scope) { stateScope, state ->
             when (state) {
-                is ManageOrSyncStateModel.Manage -> ManageOrSyncElementProjector.Manage(
+                is ModeStateModel.Manage -> ModeStateProjector.Manage(
                     projector = ManageProjector(
                         scope = stateScope,
                         dependencies = dependencies.manage(),
@@ -41,7 +41,7 @@ class ManageOrSyncProjector(
                     )
                 )
 
-                is ManageOrSyncStateModel.Sync -> ManageOrSyncElementProjector.Sync(
+                is ModeStateModel.Sync -> ModeStateProjector.Sync(
                     projector = SyncProjector(
                         scope = stateScope,
                         dependencies = dependencies.sync(),
@@ -60,7 +60,7 @@ class ManageOrSyncProjector(
                 modifier = Modifier.fillMaxSize(),
                 label = "BudgetsOrSync",
                 transitionSpec = TransitionSpec.crossfade(),
-                contentKey = ManageOrSyncElementProjector::key,
+                contentKey = ModeStateProjector::key,
             ) { elementProjector ->
                 elementProjector.Content()
             }

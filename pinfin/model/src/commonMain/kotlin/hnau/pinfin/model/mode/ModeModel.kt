@@ -2,7 +2,7 @@
     MutableStateFlowSerializer::class,
 )
 
-package hnau.pinfin.model.budgetsorsync
+package hnau.pinfin.model.mode
 
 import hnau.common.app.goback.GoBackHandler
 import hnau.common.app.goback.GoBackHandlerProvider
@@ -19,7 +19,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.UseSerializers
 
-class ManageOrSyncModel(
+class ModeModel(
     scope: CoroutineScope,
     dependencies: Dependencies,
     skeleton: Skeleton,
@@ -35,17 +35,17 @@ class ManageOrSyncModel(
 
     @Serializable
     data class Skeleton(
-        val state: MutableStateFlow<ManageOrSyncStateModel.Skeleton> =
-            ManageOrSyncStateModel.Skeleton.Manage(
+        val state: MutableStateFlow<ModeStateModel.Skeleton> =
+            ModeStateModel.Skeleton.Manage(
                 skeleton = ManageModel.Skeleton()
             ).toMutableStateFlowAsInitial(),
     )
 
-    val state: StateFlow<ManageOrSyncStateModel> = skeleton
+    val state: StateFlow<ModeStateModel> = skeleton
         .state
         .mapWithScope(scope) { stateScope, stateSkeleton ->
             when (stateSkeleton) {
-                is ManageOrSyncStateModel.Skeleton.Manage -> ManageOrSyncStateModel.Manage(
+                is ModeStateModel.Skeleton.Manage -> ModeStateModel.Manage(
                     model = ManageModel(
                         scope = stateScope,
                         dependencies = dependencies.budgets(),
@@ -53,7 +53,7 @@ class ManageOrSyncModel(
                     )
                 )
 
-                is ManageOrSyncStateModel.Skeleton.Sync -> ManageOrSyncStateModel.Sync(
+                is ModeStateModel.Skeleton.Sync -> ModeStateModel.Sync(
                     model = SyncModel(
                         scope = stateScope,
                         dependencies = dependencies.sync(),

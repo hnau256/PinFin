@@ -1,10 +1,10 @@
-package hnau.pinfin.projector.manageorsync
+package hnau.pinfin.projector.mode
 
 import androidx.compose.runtime.Composable
 import hnau.pinfin.projector.SyncProjector
 import hnau.pinfin.projector.manage.ManageProjector
 
-sealed interface ManageOrSyncElementProjector {
+sealed interface ModeStateProjector {
 
     @Composable
     fun Content()
@@ -13,7 +13,7 @@ sealed interface ManageOrSyncElementProjector {
 
     data class Manage(
         private val projector: ManageProjector,
-    ) : ManageOrSyncElementProjector {
+    ) : ModeStateProjector {
 
         @Composable
         override fun Content() {
@@ -26,7 +26,7 @@ sealed interface ManageOrSyncElementProjector {
 
     data class Sync(
         private val projector: SyncProjector,
-    ) : ManageOrSyncElementProjector {
+    ) : ModeStateProjector {
 
         @Composable
         override fun Content() {
