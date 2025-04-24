@@ -1,4 +1,4 @@
-package hnau.pinfin.model.budgets.item
+package hnau.pinfin.model.budgetslist.item
 
 import arrow.core.Either
 import hnau.pinfin.data.dto.BudgetId

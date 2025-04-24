@@ -16,7 +16,7 @@ import hnau.common.compose.uikit.table.Table
 import hnau.common.compose.uikit.table.TableOrientation
 import hnau.common.compose.uikit.table.cellShape
 import hnau.common.compose.uikit.utils.Dimens
-import hnau.pinfin.model.budgets.item.BudgetItemModel
+import hnau.pinfin.model.budgetslist.item.BudgetItemModel
 import hnau.shuffler.annotations.Shuffle
 import kotlinx.coroutines.CoroutineScope
 

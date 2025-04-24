@@ -24,7 +24,7 @@ sealed interface ManageElementProjector {
             get() = 0
     }
 
-    data class Budget(
+    data class LoadBudget(
         private val projector: LoadBudgetProjector,
     ) : ManageElementProjector {
 

@@ -26,7 +26,7 @@ class ManageProjector(
 
         fun budgetsList(): BudgetsListProjector.Dependencies
 
-        fun budget(): LoadBudgetProjector.Dependencies
+        fun loadBudget(): LoadBudgetProjector.Dependencies
     }
 
     private val state: StateFlow<ManageElementProjector> = model
@@ -41,10 +41,10 @@ class ManageProjector(
                     )
                 )
 
-                is ManageStateModel.Budget -> ManageElementProjector.Budget(
+                is ManageStateModel.LoadBudget -> ManageElementProjector.LoadBudget(
                     projector = LoadBudgetProjector(
                         scope = stateScope,
-                        dependencies = dependencies.budget(),
+                        dependencies = dependencies.loadBudget(),
                         model = state.model,
                     )
                 )

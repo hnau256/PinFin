@@ -2,7 +2,7 @@
     MutableStateFlowSerializer::class,
 )
 
-package hnau.pinfin.model.budgets
+package hnau.pinfin.model.budgetslist
 
 import hnau.common.app.goback.GoBackHandler
 import hnau.common.app.goback.GoBackHandlerProvider
@@ -14,7 +14,7 @@ import hnau.common.kotlin.ifNull
 import hnau.common.kotlin.serialization.MutableStateFlowSerializer
 import hnau.pinfin.data.dto.BudgetId
 import hnau.pinfin.data.repository.BudgetRepository
-import hnau.pinfin.model.budgets.item.BudgetItemModel
+import hnau.pinfin.model.budgetslist.item.BudgetItemModel
 import hnau.shuffler.annotations.Shuffle
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Deferred

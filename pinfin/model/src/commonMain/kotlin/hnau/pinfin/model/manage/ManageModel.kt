@@ -22,7 +22,7 @@ import hnau.pinfin.data.dto.BudgetId
 import hnau.pinfin.data.repository.BudgetRepository
 import hnau.pinfin.data.storage.BudgetStorage
 import hnau.pinfin.data.storage.BudgetsStorage
-import hnau.pinfin.model.budgets.BudgetsListModel
+import hnau.pinfin.model.budgetslist.BudgetsListModel
 import hnau.pinfin.model.LoadBudgetModel
 import hnau.shuffler.annotations.Shuffle
 import kotlinx.coroutines.CoroutineScope
@@ -134,7 +134,7 @@ class ManageModel(
                 )
             )
 
-            else -> ManageStateModel.Budget(
+            else -> ManageStateModel.LoadBudget(
                 model = LoadBudgetModel(
                     scope = stateScope,
                     dependencies = dependencies.budget(
@@ -142,9 +142,9 @@ class ManageModel(
                     ),
                     skeleton = skeleton::stateSkeleton
                         .toAccessor()
-                        .shrinkType<_, ManageStateModel.Skeleton.Budget>()
+                        .shrinkType<_, ManageStateModel.Skeleton.LoadBudget>()
                         .getOrInit {
-                            ManageStateModel.Skeleton.Budget(
+                            ManageStateModel.Skeleton.LoadBudget(
                                 LoadBudgetModel.Skeleton()
                             )
                         }
