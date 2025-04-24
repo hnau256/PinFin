@@ -25,6 +25,7 @@ import hnau.shuffler.annotations.Shuffle
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.UseSerializers
 
@@ -58,10 +59,15 @@ class RecordModel(
                 .toMutableStateFlowAsInitial(),
         )
 
+        @Serializable
         sealed interface OverlapDialog {
 
+            @Serializable
+            @SerialName("remove")
             data object Remove : OverlapDialog
 
+            @Serializable
+            @SerialName("choose_category")
             data class ChooseCategory(
                 val chooseCategorySkeleton: ChooseCategoryModel.Skeleton,
             ) : OverlapDialog

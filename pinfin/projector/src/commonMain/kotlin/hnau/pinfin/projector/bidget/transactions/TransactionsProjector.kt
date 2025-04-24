@@ -27,6 +27,7 @@ import hnau.common.compose.uikit.state.TransitionSpec
 import hnau.common.compose.uikit.utils.Dimens
 import hnau.common.compose.utils.Icon
 import hnau.common.compose.utils.plus
+import hnau.common.compose.utils.toLazyListState
 import hnau.pinfin.model.budget.TransactionsModel
 import hnau.pinfin.projector.utils.AmountFormatter
 import hnau.pinfin.projector.utils.DateTimeFormatter
@@ -101,6 +102,7 @@ class TransactionsProjector(
                 LazyColumn(
                     contentPadding = contentPadding + PaddingValues(vertical = Dimens.separation),
                     verticalArrangement = Arrangement.spacedBy(Dimens.separation),
+                    state = model.scrollState.toLazyListState(),
                 ) {
                     items(
                         items = transactions,

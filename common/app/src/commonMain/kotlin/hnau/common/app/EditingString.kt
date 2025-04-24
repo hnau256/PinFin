@@ -48,6 +48,7 @@ data class EditingString(
                             endIndex = textSelectionSeparatorIndex.coerceAtLeast(0),
                         )
                         .split(selectionPartsSeparator)
+                        .filter(String::isNotEmpty)
                         .map(String::toInt)
                         .let { selectionParts ->
                             when (selectionParts.size) {

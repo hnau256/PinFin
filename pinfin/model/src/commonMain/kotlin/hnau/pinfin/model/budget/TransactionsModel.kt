@@ -1,19 +1,28 @@
+@file:UseSerializers(
+    MutableStateFlowSerializer::class,
+)
+
 package hnau.pinfin.model.budget
 
 import arrow.core.NonEmptyList
 import arrow.core.toNonEmptyListOrNull
+import hnau.common.app.ListScrollState
 import hnau.common.app.goback.GoBackHandler
 import hnau.common.app.goback.GoBackHandlerProvider
 import hnau.common.app.goback.NeverGoBackHandler
 import hnau.common.kotlin.coroutines.mapState
+import hnau.common.kotlin.coroutines.toMutableStateFlowAsInitial
+import hnau.common.kotlin.serialization.MutableStateFlowSerializer
 import hnau.pinfin.data.dto.TransactionType
 import hnau.pinfin.data.repository.BudgetRepository
 import hnau.pinfin.data.repository.TransactionInfo
 import hnau.pinfin.model.budgetstack.BudgetStackOpener
 import hnau.shuffler.annotations.Shuffle
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.UseSerializers
 
 class TransactionsModel(
     private val scope: CoroutineScope,
@@ -23,8 +32,12 @@ class TransactionsModel(
 
     @Serializable
     data class Skeleton(
-        val a: Int = 0,
+        val scrollState: MutableStateFlow<ListScrollState> =
+            ListScrollState.initial.toMutableStateFlowAsInitial(),
     )
+
+    val scrollState: MutableStateFlow<ListScrollState>
+        get() = skeleton.scrollState
 
     @Shuffle
     interface Dependencies {

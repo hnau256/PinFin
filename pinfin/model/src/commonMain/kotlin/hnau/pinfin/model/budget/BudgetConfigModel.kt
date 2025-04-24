@@ -17,9 +17,7 @@ class BudgetConfigModel(
     interface Dependencies
 
     @Serializable
-    data class Skeleton(
-        val a: Int = 0,
-    )
+    /*data*/ class Skeleton
 
     override val goBackHandler: GoBackHandler
         get() = NeverGoBackHandler

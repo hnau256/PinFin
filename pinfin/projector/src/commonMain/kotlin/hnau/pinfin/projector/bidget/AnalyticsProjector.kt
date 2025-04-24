@@ -17,6 +17,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import arrow.core.toNonEmptyListOrNull
 import hnau.common.compose.uikit.utils.Dimens
+import hnau.common.compose.utils.toLazyListState
 import hnau.pinfin.data.repository.AccountInfo
 import hnau.pinfin.model.budget.AnalyticsModel
 import hnau.pinfin.projector.utils.AmountFormatter
@@ -48,6 +49,7 @@ class AnalyticsProjector(
         val state by model.budgetState.collectAsState()
         LazyColumn(
             modifier = Modifier.fillMaxSize(),
+            state = model.scrollState.toLazyListState(),
             contentPadding = contentPadding,
         ) {
             state

@@ -1,3 +1,7 @@
+@file:UseSerializers(
+    MutableStateFlowSerializer::class,
+)
+
 package hnau.pinfin.model.budgetsorsync
 
 import hnau.common.app.goback.GoBackHandler
@@ -5,6 +9,7 @@ import hnau.common.app.goback.GoBackHandlerProvider
 import hnau.common.kotlin.coroutines.flatMapState
 import hnau.common.kotlin.coroutines.mapWithScope
 import hnau.common.kotlin.coroutines.toMutableStateFlowAsInitial
+import hnau.common.kotlin.serialization.MutableStateFlowSerializer
 import hnau.pinfin.model.budgetsorbudget.BudgetsOrBudgetModel
 import hnau.pinfin.model.SyncModel
 import hnau.shuffler.annotations.Shuffle
@@ -12,6 +17,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.UseSerializers
 
 class BudgetsOrSyncModel(
     scope: CoroutineScope,

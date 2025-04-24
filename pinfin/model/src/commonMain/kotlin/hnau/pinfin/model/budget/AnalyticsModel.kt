@@ -1,19 +1,28 @@
+@file:UseSerializers(
+    MutableStateFlowSerializer::class,
+)
+
 package hnau.pinfin.model.budget
 
+import hnau.common.app.ListScrollState
 import hnau.common.app.goback.GoBackHandler
 import hnau.common.app.goback.GoBackHandlerProvider
 import hnau.common.app.goback.NeverGoBackHandler
+import hnau.common.kotlin.coroutines.toMutableStateFlowAsInitial
+import hnau.common.kotlin.serialization.MutableStateFlowSerializer
 import hnau.pinfin.data.repository.BudgetRepository
 import hnau.pinfin.data.repository.BudgetState
 import hnau.shuffler.annotations.Shuffle
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.UseSerializers
 
 class AnalyticsModel(
     scope: CoroutineScope,
     private val dependencies: Dependencies,
-    skeleton: Skeleton,
+    private val skeleton: Skeleton,
 ) : GoBackHandlerProvider {
 
     @Shuffle
@@ -23,7 +32,13 @@ class AnalyticsModel(
     }
 
     @Serializable
-    /*data*/ class Skeleton
+    data class Skeleton(
+        val scrollState: MutableStateFlow<ListScrollState> =
+            ListScrollState.initial.toMutableStateFlowAsInitial(),
+    )
+
+    val scrollState: MutableStateFlow<ListScrollState>
+        get() = skeleton.scrollState
 
     val budgetState: StateFlow<BudgetState>
         get() = dependencies
