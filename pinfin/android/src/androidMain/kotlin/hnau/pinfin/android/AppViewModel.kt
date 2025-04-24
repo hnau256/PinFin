@@ -6,6 +6,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.createSavedStateHandle
+import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import hnau.common.app.preferences.impl.FileBasedPreferences
@@ -13,9 +14,6 @@ import hnau.pinfin.app.PinFinApp
 import hnau.pinfin.app.SavedState
 import hnau.pinfin.app.impl
 import hnau.pinfin.data.storage.impl.FileBasedBudgetsStorage
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.cancel
 import java.io.File
 
 class AppViewModel(
@@ -23,11 +21,9 @@ class AppViewModel(
     private val state: SavedStateHandle,
 ) : ViewModel() {
 
-    private val scope = CoroutineScope(SupervisorJob())
-
     val appFilesDir: File = context.filesDir
     val app = PinFinApp(
-        scope = scope,
+        scope = viewModelScope,
         dependencies = PinFinApp.Dependencies.impl(
             budgetsStorageFactory = FileBasedBudgetsStorage.Factory(
                 budgetsDir = File(appFilesDir, "budgets"),
@@ -47,11 +43,6 @@ class AppViewModel(
         state.setSavedStateProvider(StateKey) {
             Bundle().apply { putString(StateKey, app.savableState.savedState) }
         }
-    }
-
-    override fun onCleared() {
-        super.onCleared()
-        scope.cancel()
     }
 
     companion object {
