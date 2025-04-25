@@ -34,7 +34,7 @@ import hnau.pinfin.projector.utils.SignedAmountContent
 import hnau.pinfin.projector.utils.account.AccountContent
 import hnau.pinfin.projector.utils.category.CategoryContent
 import hnau.pinfin.projector.utils.color
-import hnau.pinfin.data.CategoryDirection
+import hnau.pinfin.repository.dto.CategoryDirection
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 

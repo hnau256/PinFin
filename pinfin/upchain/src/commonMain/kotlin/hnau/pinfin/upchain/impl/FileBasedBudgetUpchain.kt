@@ -1,13 +1,12 @@
 package hnau.pinfin.upchain.impl
 
-import hnau.pinfin.data.Update
 import hnau.pinfin.upchain.BudgetUpchain
+import hnau.pinfin.upchain.Update
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
-import kotlinx.serialization.json.Json
 import java.io.File
 import java.io.FileOutputStream
 import java.nio.charset.Charset
@@ -28,12 +27,7 @@ class FileBasedBudgetUpchain(
                 true -> budgetFile.useLines(
                     charset = charset,
                 ) { lines ->
-                    val updates = lines.map { line ->
-                        json.decodeFromString(
-                            deserializer = Update.serializer(),
-                            string = line,
-                        )
-                    }
+                    val updates = lines.map(::Update)
                     block(updates)
                 }
             }
@@ -44,11 +38,8 @@ class FileBasedBudgetUpchain(
         update: Update,
     ) {
         accessUpdatesMutex.withLock {
-            val line: ByteArray = json
-                .encodeToString(
-                    serializer = Update.serializer(),
-                    value = update
-                )
+            val line: ByteArray = update
+                .value
                 .toByteArray(charset)
             withContext(Dispatchers.IO) {
                 budgetFile.parentFile.mkdirs()
@@ -65,7 +56,5 @@ class FileBasedBudgetUpchain(
         private val charset: Charset = Charsets.UTF_8
 
         private val linesSeparator: ByteArray = "\n".toByteArray(charset)
-
-        private val json: Json = Json.Default
     }
 }

@@ -1,11 +1,11 @@
-package hnau.pinfin.data
+package hnau.pinfin.repository.dto
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import hnau.pinfin.data.Transaction as TransactionDTO
+import hnau.pinfin.repository.dto.Transaction as TransactionDTO
 
 @Serializable
-sealed interface Update {
+sealed interface UpdateType {
 
     @Serializable
     @SerialName("transaction")
@@ -15,12 +15,12 @@ sealed interface Update {
 
         @SerialName("transaction")
         val transaction: TransactionDTO,
-    ) : Update
+    ) : UpdateType
 
     @Serializable
     @SerialName("remove_transaction")
     data class RemoveTransaction(
         @SerialName("id")
         val id: TransactionDTO.Id,
-    ) : Update
+    ) : UpdateType
 }

@@ -29,7 +29,7 @@ import hnau.pinfin.model.transaction.type.entry.record.RecordModel
 import hnau.pinfin.model.transaction.type.utils.ChooseAccountModel
 import hnau.pinfin.repository.SignedAmount
 import hnau.pinfin.repository.signedAmount
-import hnau.pinfin.data.Transaction
+import hnau.pinfin.repository.dto.Transaction
 import hnau.shuffler.annotations.Shuffle
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow

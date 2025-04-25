@@ -10,7 +10,7 @@ dependencies {
     implementation(libs.kotlin.serialization.json)
     implementation(libs.ooxml)
     implementation(project(":common:kotlin"))
-    implementation(project(":pinfin:data"))
+    implementation(project(":pinfin:repository"))
 }
 
 application {

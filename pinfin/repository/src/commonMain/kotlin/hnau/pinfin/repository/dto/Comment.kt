@@ -1,4 +1,4 @@
-package hnau.pinfin.data
+package hnau.pinfin.repository.dto
 
 import hnau.common.kotlin.mapper.Mapper
 import kotlinx.serialization.Serializable

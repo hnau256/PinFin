@@ -1,10 +1,10 @@
 package hnau.pinfin.repository
 
 import arrow.core.Either
-import hnau.pinfin.data.Amount
-import hnau.pinfin.data.CategoryDirection
-import hnau.pinfin.data.Record
-import hnau.pinfin.data.Transaction
+import hnau.pinfin.repository.dto.Amount
+import hnau.pinfin.repository.dto.CategoryDirection
+import hnau.pinfin.repository.dto.Record
+import hnau.pinfin.repository.dto.Transaction
 import kotlinx.serialization.Serializable
 import kotlin.math.absoluteValue
 

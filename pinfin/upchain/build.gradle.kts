@@ -1,5 +1,4 @@
 plugins {
-    alias(libs.plugins.ksp)
     alias(libs.plugins.kotlin.serialization)
     id("hnau.kotlin.multiplatform")
 }
@@ -7,7 +6,6 @@ plugins {
 kotlin {
     sourceSets {
         commonMain.dependencies {
-            api(project(":pinfin:data"))
         }
     }
 }

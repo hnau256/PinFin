@@ -1,4 +1,4 @@
-package hnau.pinfin.data
+package hnau.pinfin.repository.dto
 
 import arrow.core.NonEmptyList
 import arrow.core.serialization.NonEmptyListSerializer

@@ -1,11 +1,11 @@
 package hnau.pinfin.repository
 
 import hnau.common.kotlin.castOrNull
-import hnau.pinfin.data.AccountId
-import hnau.pinfin.data.CategoryId
-import hnau.pinfin.data.Record
-import hnau.pinfin.data.Transaction
-import hnau.pinfin.data.Update
+import hnau.pinfin.repository.dto.AccountId
+import hnau.pinfin.repository.dto.CategoryId
+import hnau.pinfin.repository.dto.Record
+import hnau.pinfin.repository.dto.Transaction
+import hnau.pinfin.repository.dto.UpdateType
 
 class BudgetStateBuilder {
 
@@ -15,15 +15,15 @@ class BudgetStateBuilder {
 
 
     fun applyUpdate(
-        update: Update,
+        update: UpdateType,
     ) {
         updatesCount++
         when (update) {
-            is Update.RemoveTransaction -> transactions.remove(
+            is UpdateType.RemoveTransaction -> transactions.remove(
                 key = update.id,
             )
 
-            is Update.Transaction -> transactions.set(
+            is UpdateType.Transaction -> transactions.set(
                 key = update.id,
                 value = update.transaction,
             )

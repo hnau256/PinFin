@@ -17,8 +17,8 @@ import hnau.common.kotlin.serialization.MutableStateFlowSerializer
 import hnau.pinfin.repository.BudgetRepository
 import hnau.pinfin.repository.CategoryInfo
 import hnau.pinfin.model.utils.choose.ChooseState
-import hnau.pinfin.data.CategoryDirection
-import hnau.pinfin.data.CategoryId
+import hnau.pinfin.repository.dto.CategoryDirection
+import hnau.pinfin.repository.dto.CategoryId
 import hnau.shuffler.annotations.Shuffle
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow

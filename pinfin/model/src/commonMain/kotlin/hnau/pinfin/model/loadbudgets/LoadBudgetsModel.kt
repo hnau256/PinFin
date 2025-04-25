@@ -9,7 +9,7 @@ import hnau.common.kotlin.coroutines.flatMapState
 import hnau.common.kotlin.coroutines.mapWithScope
 import hnau.common.kotlin.getOrInit
 import hnau.common.kotlin.toAccessor
-import hnau.pinfin.repository.storage.BudgetsStorage
+import hnau.pinfin.upchain.BudgetsStorage
 import hnau.pinfin.model.mode.ModeModel
 import hnau.shuffler.annotations.Shuffle
 import kotlinx.coroutines.CoroutineScope

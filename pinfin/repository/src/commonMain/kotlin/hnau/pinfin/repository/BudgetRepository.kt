@@ -2,17 +2,19 @@ package hnau.pinfin.repository
 
 import hnau.common.kotlin.coroutines.mapState
 import hnau.common.kotlin.coroutines.toMutableStateFlowAsInitial
-import hnau.pinfin.data.Update
+import hnau.pinfin.repository.dto.UpdateType
 import hnau.pinfin.upchain.BudgetUpchain
+import hnau.pinfin.upchain.Update
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.serialization.json.Json
 
 class BudgetRepository(
     scope: CoroutineScope,
     initialState: BudgetStateBuilder,
-    private val addUpdate: suspend (Update) -> Unit,
+    private val addUpdate: suspend (UpdateType) -> Unit,
 ) {
 
     private val stateBuilder: MutableStateFlow<BudgetStateBuilder> =
@@ -38,7 +40,7 @@ class BudgetRepository(
     )
 
     private suspend fun applyUpdate(
-        update: Update,
+        update: UpdateType,
     ) {
         addUpdate.invoke(update)
         stateBuilder.update { stateBuilder ->
@@ -57,14 +59,29 @@ class BudgetRepository(
             val initialState = BudgetStateBuilder()
             budgetUpchain.useUpdates { updates ->
                 updates.forEach { update ->
-                    initialState.applyUpdate(update)
+                    val updateType = json.decodeFromString(
+                        UpdateType.serializer(),
+                        update.value,
+                    )
+                    initialState.applyUpdate(updateType)
                 }
             }
             return BudgetRepository(
                 scope = scope,
                 initialState = initialState,
-                addUpdate = budgetUpchain::addUpdate,
+                addUpdate = { updateType ->
+                    val update = json
+                        .encodeToString(
+                            UpdateType.serializer(),
+                            updateType,
+                        )
+                        .let(::Update)
+                    budgetUpchain.addUpdate(update)
+                },
             )
         }
+
+
+        private val json: Json = Json.Default
     }
 }

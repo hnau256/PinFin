@@ -18,8 +18,8 @@ import hnau.common.kotlin.serialization.MutableStateFlowSerializer
 import hnau.pinfin.repository.CategoryInfo
 import hnau.pinfin.repository.TransactionInfo
 import hnau.pinfin.model.AmountModel
-import hnau.pinfin.data.Comment
-import hnau.pinfin.data.Record
+import hnau.pinfin.repository.dto.Comment
+import hnau.pinfin.repository.dto.Record
 import hnau.pinfin.model.transaction.type.utils.ChooseCategoryModel
 import hnau.shuffler.annotations.Shuffle
 import kotlinx.coroutines.CoroutineScope

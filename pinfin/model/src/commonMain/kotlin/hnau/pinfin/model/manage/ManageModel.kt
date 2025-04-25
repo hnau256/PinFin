@@ -24,11 +24,11 @@ import hnau.common.kotlin.mapper.takeIf
 import hnau.common.kotlin.serialization.MutableStateFlowSerializer
 import hnau.common.kotlin.shrinkType
 import hnau.common.kotlin.toAccessor
-import hnau.pinfin.data.BudgetId
+import hnau.pinfin.upchain.BudgetId
 import hnau.pinfin.model.LoadBudgetModel
 import hnau.pinfin.model.budgetslist.BudgetsListModel
 import hnau.pinfin.repository.BudgetRepository
-import hnau.pinfin.repository.storage.BudgetsStorage
+import hnau.pinfin.upchain.BudgetsStorage
 import hnau.shuffler.annotations.Shuffle
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Deferred

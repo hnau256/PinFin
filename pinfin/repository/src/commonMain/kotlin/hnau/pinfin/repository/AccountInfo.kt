@@ -1,7 +1,7 @@
 package hnau.pinfin.repository
 
 import hnau.common.kotlin.castOrNull
-import hnau.pinfin.data.AccountId
+import hnau.pinfin.repository.dto.AccountId
 import kotlinx.serialization.Serializable
 
 @Serializable

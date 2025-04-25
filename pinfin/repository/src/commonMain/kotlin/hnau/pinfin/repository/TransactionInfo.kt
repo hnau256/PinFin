@@ -1,9 +1,9 @@
 package hnau.pinfin.repository
 
 import arrow.core.NonEmptyList
-import hnau.pinfin.data.Amount
-import hnau.pinfin.data.Comment
-import hnau.pinfin.data.Transaction
+import hnau.pinfin.repository.dto.Amount
+import hnau.pinfin.repository.dto.Comment
+import hnau.pinfin.repository.dto.Transaction
 import kotlinx.datetime.Instant
 
 data class TransactionInfo(

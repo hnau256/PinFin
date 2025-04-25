@@ -2,7 +2,7 @@ package hnau.pinfin.model.budgetslist.item
 
 import arrow.core.Either
 import hnau.common.kotlin.coroutines.InProgressRegistry
-import hnau.pinfin.data.BudgetId
+import hnau.pinfin.upchain.BudgetId
 import hnau.pinfin.repository.BudgetRepository
 import hnau.pinfin.repository.BudgetState
 import hnau.pinfin.model.manage.BudgetOpener

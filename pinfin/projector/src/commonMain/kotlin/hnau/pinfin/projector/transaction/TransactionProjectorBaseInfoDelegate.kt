@@ -22,7 +22,7 @@ import hnau.common.compose.utils.Icon
 import hnau.pinfin.model.transaction.TransactionModel
 import hnau.pinfin.projector.utils.DateTimeFormatter
 import hnau.pinfin.projector.utils.title
-import hnau.pinfin.data.TransactionType
+import hnau.pinfin.repository.dto.TransactionType
 import hnau.shuffler.annotations.Shuffle
 import kotlinx.coroutines.CoroutineScope
 import org.jetbrains.compose.resources.stringResource

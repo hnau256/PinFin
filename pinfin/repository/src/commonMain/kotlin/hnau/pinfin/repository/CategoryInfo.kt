@@ -2,7 +2,7 @@ package hnau.pinfin.repository
 
 import hnau.common.kotlin.castOrNull
 import hnau.common.kotlin.ifNull
-import hnau.pinfin.data.CategoryId
+import hnau.pinfin.repository.dto.CategoryId
 import kotlinx.serialization.Serializable
 
 @Serializable

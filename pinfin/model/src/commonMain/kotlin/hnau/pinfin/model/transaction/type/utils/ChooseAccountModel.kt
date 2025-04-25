@@ -18,7 +18,7 @@ import hnau.pinfin.repository.AccountInfo
 import hnau.pinfin.repository.BudgetRepository
 import hnau.pinfin.repository.SignedAmount
 import hnau.pinfin.model.utils.choose.ChooseState
-import hnau.pinfin.data.AccountId
+import hnau.pinfin.repository.dto.AccountId
 import hnau.shuffler.annotations.Shuffle
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow

@@ -1,7 +1,7 @@
 package hnau.pinfin.projector.utils
 
 import androidx.compose.runtime.Composable
-import hnau.pinfin.data.TransactionType
+import hnau.pinfin.repository.dto.TransactionType
 import org.jetbrains.compose.resources.stringResource
 import hnau.pinfin.projector.Res
 import hnau.pinfin.projector.entry

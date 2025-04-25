@@ -4,7 +4,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowCircleDown
 import androidx.compose.material.icons.filled.ArrowCircleUp
 import androidx.compose.ui.graphics.vector.ImageVector
-import hnau.pinfin.data.CategoryDirection
+import hnau.pinfin.repository.dto.CategoryDirection
 
 val CategoryDirection.icon: ImageVector
     get() = when (this) {

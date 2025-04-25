@@ -1,13 +1,13 @@
 package hnau.pinfin.repository
 
 import hnau.common.kotlin.coroutines.mapStateLite
-import hnau.pinfin.data.Transaction
-import hnau.pinfin.data.Update
+import hnau.pinfin.repository.dto.Transaction
+import hnau.pinfin.repository.dto.UpdateType
 import kotlinx.coroutines.flow.StateFlow
 
 class BudgetRepositoryTransactionsDelegate(
     state: StateFlow<BudgetState>,
-    private val addUpdate: suspend (Update) -> Unit,
+    private val addUpdate: suspend (UpdateType) -> Unit,
 ) {
 
     val list: StateFlow<List<TransactionInfo>> =
@@ -18,7 +18,7 @@ class BudgetRepositoryTransactionsDelegate(
         transaction: Transaction,
     ) {
         addUpdate(
-            Update.Transaction(
+            UpdateType.Transaction(
                 id = id ?: Transaction.Id.new(),
                 transaction = transaction,
             )
@@ -29,7 +29,7 @@ class BudgetRepositoryTransactionsDelegate(
         id: Transaction.Id,
     ) {
         addUpdate(
-            Update.RemoveTransaction(
+            UpdateType.RemoveTransaction(
                 id = id,
             )
         )

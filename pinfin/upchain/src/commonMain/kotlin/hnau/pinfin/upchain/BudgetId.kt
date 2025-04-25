@@ -1,4 +1,4 @@
-package hnau.pinfin.data
+package hnau.pinfin.upchain
 
 import hnau.common.kotlin.mapper.Mapper
 import hnau.common.kotlin.mapper.plus
@@ -25,6 +25,6 @@ value class BudgetId(
         )
 
         val stringMapper: Mapper<String, BudgetId> =
-            Mapper.stringToUUID + uuidMapper
+            Mapper.Companion.stringToUUID + uuidMapper
     }
 }

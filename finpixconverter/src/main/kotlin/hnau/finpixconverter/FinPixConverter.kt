@@ -2,14 +2,14 @@ package hnau.finpixconverter
 
 import arrow.core.toNonEmptyListOrNull
 import hnau.common.kotlin.ifNull
-import hnau.pinfin.data.AccountId
-import hnau.pinfin.data.Amount
-import hnau.pinfin.data.CategoryDirection
-import hnau.pinfin.data.CategoryId
-import hnau.pinfin.data.Comment
-import hnau.pinfin.data.Record
-import hnau.pinfin.data.Transaction
-import hnau.pinfin.data.Update
+import hnau.pinfin.repository.dto.AccountId
+import hnau.pinfin.repository.dto.Amount
+import hnau.pinfin.repository.dto.CategoryDirection
+import hnau.pinfin.repository.dto.CategoryId
+import hnau.pinfin.repository.dto.Comment
+import hnau.pinfin.repository.dto.Record
+import hnau.pinfin.repository.dto.Transaction
+import hnau.pinfin.repository.dto.UpdateType
 import kotlinx.datetime.Instant
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toInstant
@@ -432,13 +432,13 @@ fun main() {
     out.mkdirs()
     FileOutputStream(File(out, UUID.randomUUID().toString())).use { output ->
         pinFinTransactions.forEach { transaction ->
-            val update = Update.Transaction(
+            val update = UpdateType.Transaction(
                 id = Transaction.Id.new(),
                 transaction = transaction,
             )
             val line: ByteArray = Json
                 .encodeToString(
-                    serializer = Update.serializer(),
+                    serializer = UpdateType.serializer(),
                     value = update
                 )
                 .toByteArray(charset)
