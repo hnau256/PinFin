@@ -3,8 +3,8 @@ package hnau.pinfin.model.transaction.type
 import hnau.common.app.goback.GoBackHandlerProvider
 import hnau.pinfin.model.transaction.type.entry.EntryModel
 import hnau.pinfin.model.transaction.type.transfer.TransferModel
-import hnau.pinfin.data.dto.Transaction
-import hnau.pinfin.data.dto.TransactionType
+import hnau.pinfin.data.Transaction
+import hnau.pinfin.data.TransactionType
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable

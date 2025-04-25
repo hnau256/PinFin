@@ -4,7 +4,7 @@ import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
-import hnau.pinfin.data.dto.CategoryDirection
+import hnau.pinfin.data.CategoryDirection
 
 fun CategoryDirection.getColor(
     colors: ColorScheme,

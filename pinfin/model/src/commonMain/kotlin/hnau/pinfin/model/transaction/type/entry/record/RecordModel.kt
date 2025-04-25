@@ -15,11 +15,11 @@ import hnau.common.kotlin.coroutines.mapState
 import hnau.common.kotlin.coroutines.scopedInState
 import hnau.common.kotlin.coroutines.toMutableStateFlowAsInitial
 import hnau.common.kotlin.serialization.MutableStateFlowSerializer
-import hnau.pinfin.data.repository.CategoryInfo
-import hnau.pinfin.data.repository.TransactionInfo
+import hnau.pinfin.repository.CategoryInfo
+import hnau.pinfin.repository.TransactionInfo
 import hnau.pinfin.model.AmountModel
-import hnau.pinfin.data.dto.Comment
-import hnau.pinfin.data.dto.Record
+import hnau.pinfin.data.Comment
+import hnau.pinfin.data.Record
 import hnau.pinfin.model.transaction.type.utils.ChooseCategoryModel
 import hnau.shuffler.annotations.Shuffle
 import kotlinx.coroutines.CoroutineScope

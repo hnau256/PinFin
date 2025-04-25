@@ -1,6 +1,6 @@
 package hnau.pinfin.projector.utils
 
-import hnau.pinfin.data.dto.Amount
+import hnau.pinfin.data.Amount
 
 interface AmountFormatter {
 

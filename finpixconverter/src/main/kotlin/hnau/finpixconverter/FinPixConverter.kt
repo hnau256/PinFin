@@ -2,14 +2,14 @@ package hnau.finpixconverter
 
 import arrow.core.toNonEmptyListOrNull
 import hnau.common.kotlin.ifNull
-import hnau.pinfin.data.dto.AccountId
-import hnau.pinfin.data.dto.Amount
-import hnau.pinfin.data.dto.CategoryDirection
-import hnau.pinfin.data.dto.CategoryId
-import hnau.pinfin.data.dto.Comment
-import hnau.pinfin.data.dto.Record
-import hnau.pinfin.data.dto.Transaction
-import hnau.pinfin.data.dto.Update
+import hnau.pinfin.data.AccountId
+import hnau.pinfin.data.Amount
+import hnau.pinfin.data.CategoryDirection
+import hnau.pinfin.data.CategoryId
+import hnau.pinfin.data.Comment
+import hnau.pinfin.data.Record
+import hnau.pinfin.data.Transaction
+import hnau.pinfin.data.Update
 import kotlinx.datetime.Instant
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toInstant

@@ -13,7 +13,7 @@ import hnau.common.app.preferences.impl.FileBasedPreferences
 import hnau.pinfin.app.PinFinApp
 import hnau.pinfin.app.SavedState
 import hnau.pinfin.app.impl
-import hnau.pinfin.data.storage.impl.FileBasedBudgetsStorage
+import hnau.pinfin.repository.storage.impl.FileBasedBudgetsStorage
 import java.io.File
 
 class AppViewModel(

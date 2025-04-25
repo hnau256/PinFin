@@ -1,6 +1,6 @@
 package hnau.pinfin.model.manage
 
-import hnau.pinfin.data.dto.BudgetId
+import hnau.pinfin.data.BudgetId
 
 fun interface BudgetOpener {
 

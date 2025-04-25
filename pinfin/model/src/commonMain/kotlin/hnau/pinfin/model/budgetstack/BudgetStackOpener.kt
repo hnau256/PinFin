@@ -1,7 +1,7 @@
 package hnau.pinfin.model.budgetstack
 
-import hnau.pinfin.data.repository.TransactionInfo
-import hnau.pinfin.data.dto.TransactionType
+import hnau.pinfin.repository.TransactionInfo
+import hnau.pinfin.data.TransactionType
 
 interface BudgetStackOpener {
 

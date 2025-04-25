@@ -7,7 +7,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import hnau.common.compose.uikit.TripleRow
 import hnau.common.compose.utils.Icon
-import hnau.pinfin.data.repository.AccountInfo
+import hnau.pinfin.repository.AccountInfo
 
 @Composable
 fun AccountContent(

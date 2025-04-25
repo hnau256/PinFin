@@ -24,12 +24,11 @@ import hnau.common.kotlin.mapper.takeIf
 import hnau.common.kotlin.serialization.MutableStateFlowSerializer
 import hnau.common.kotlin.shrinkType
 import hnau.common.kotlin.toAccessor
-import hnau.pinfin.data.dto.BudgetId
-import hnau.pinfin.data.repository.BudgetRepository
-import hnau.pinfin.data.storage.BudgetStorage
-import hnau.pinfin.data.storage.BudgetsStorage
+import hnau.pinfin.data.BudgetId
 import hnau.pinfin.model.LoadBudgetModel
 import hnau.pinfin.model.budgetslist.BudgetsListModel
+import hnau.pinfin.repository.BudgetRepository
+import hnau.pinfin.repository.storage.BudgetsStorage
 import hnau.shuffler.annotations.Shuffle
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Deferred
@@ -100,12 +99,12 @@ class ManageModel(
             .list
             .mapListReusable(
                 scope = scope,
-                extractKey = BudgetStorage::id,
-                transform = { deferredScope, budgetStorage ->
-                    budgetStorage.id to deferredScope.async {
+                extractKey = { (id) -> id },
+                transform = { deferredScope, (id, budgetUpchain) ->
+                    id to deferredScope.async {
                         BudgetRepository.create(
                             scope = deferredScope,
-                            budgetStorage = budgetStorage,
+                            budgetUpchain = budgetUpchain,
                         )
                     }
                 }

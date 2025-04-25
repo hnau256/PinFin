@@ -2,9 +2,9 @@ package hnau.pinfin.model.budgetslist.item
 
 import arrow.core.Either
 import hnau.common.kotlin.coroutines.InProgressRegistry
-import hnau.pinfin.data.dto.BudgetId
-import hnau.pinfin.data.repository.BudgetRepository
-import hnau.pinfin.data.repository.BudgetState
+import hnau.pinfin.data.BudgetId
+import hnau.pinfin.repository.BudgetRepository
+import hnau.pinfin.repository.BudgetState
 import hnau.pinfin.model.manage.BudgetOpener
 import hnau.shuffler.annotations.Shuffle
 import kotlinx.coroutines.CoroutineScope

@@ -5,8 +5,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import hnau.pinfin.data.dto.SignedAmount
-import hnau.pinfin.data.dto.Amount
+import hnau.pinfin.repository.SignedAmount
+import hnau.pinfin.data.Amount
 
 
 @Composable

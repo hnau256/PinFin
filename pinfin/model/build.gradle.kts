@@ -8,7 +8,7 @@ kotlin {
     sourceSets {
         commonMain.dependencies {
             implementation(project(":common:app"))
-            implementation(project(":pinfin:data"))
+            implementation(project(":pinfin:repository"))
             implementation(libs.kotlin.datetime)
         }
     }
