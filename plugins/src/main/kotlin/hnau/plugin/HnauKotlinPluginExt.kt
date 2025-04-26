@@ -84,7 +84,6 @@ internal fun Project.config(
                 if (hasSerializationPlugin) {
                     implementation(versions.findLibrary("arrow-serialization").get().get())
                     implementation(versions.findLibrary("kotlin-serialization-core").get().get())
-                    implementation(versions.findLibrary("kotlin-serialization-json").get().get())
                 }
                 if (hasComposePlugin) {
                     implementation(ComposePlugin.DesktopDependencies.currentOs)

@@ -6,7 +6,7 @@ interface BudgetUpchain {
         block: (Sequence<Update>) -> R,
     ): R
 
-    suspend fun addUpdate(
-        update: Update,
+    suspend fun addUpdates(
+        updates: List<Update>,
     )
 }

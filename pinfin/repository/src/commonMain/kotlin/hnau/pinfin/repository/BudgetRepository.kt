@@ -76,7 +76,7 @@ class BudgetRepository(
                             updateType,
                         )
                         .let(::Update)
-                    budgetUpchain.addUpdate(update)
+                    budgetUpchain.addUpdates(listOf(update))
                 },
             )
         }

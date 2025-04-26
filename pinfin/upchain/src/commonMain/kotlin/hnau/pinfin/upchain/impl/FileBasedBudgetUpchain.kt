@@ -34,18 +34,20 @@ class FileBasedBudgetUpchain(
         }
     }
 
-    override suspend fun addUpdate(
-        update: Update,
+    override suspend fun addUpdates(
+        updates: List<Update>,
     ) {
         accessUpdatesMutex.withLock {
-            val line: ByteArray = update
-                .value
-                .toByteArray(charset)
             withContext(Dispatchers.IO) {
                 budgetFile.parentFile.mkdirs()
                 FileOutputStream(budgetFile, true).use { output ->
-                    output.write(line)
-                    output.write(linesSeparator)
+                    updates.forEach { update ->
+                        val line: ByteArray = update
+                            .value
+                            .toByteArray(charset)
+                        output.write(line)
+                        output.write(linesSeparator)
+                    }
                 }
             }
         }

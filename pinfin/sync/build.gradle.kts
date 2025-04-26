@@ -8,6 +8,7 @@ kotlin {
     sourceSets {
         commonMain.dependencies {
             api(project(":pinfin:upchain"))
+            api(libs.kotlin.serialization.cbor)
         }
     }
 }

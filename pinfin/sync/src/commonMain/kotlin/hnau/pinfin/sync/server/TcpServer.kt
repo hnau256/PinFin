@@ -1,60 +1,72 @@
 package hnau.pinfin.sync.server
 
-import hnau.pinfin.sync.common.SyncApi
+import hnau.pinfin.sync.common.ApiResponse
 import hnau.pinfin.sync.common.SyncConstants
 import hnau.pinfin.sync.common.SyncHandle
-import hnau.pinfin.sync.common.SyncJson
+import hnau.pinfin.sync.server.dto.ServerPort
+import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.awaitCancellation
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.yield
+import kotlinx.serialization.ExperimentalSerializationApi
+import java.io.InputStream
 import java.net.ServerSocket
 
 suspend fun tcpServer(
     port: ServerPort,
     api: SyncApi,
-): Result<Nothing> = runCatching {
-    coroutineScope {
-        val serverSocket = ServerSocket(port.port)
-        while (true) {
-            launch(Dispatchers.IO) {
-                serverSocket.accept().use { clientSocket ->
-                    val requestBytes = clientSocket
-                        .inputStream
-                        .use { input -> input.readAllBytes() }
-                    val responseBytes = api.handle(requestBytes).getOrThrow()
-                    clientSocket
-                        .outputStream
-                        .use { output ->
-                            output.write(responseBytes)
-                            output.flush()
-                        }
+    onThrowable: (Throwable) -> Unit,
+): Result<Nothing> {
+    val coroutineExceptionHandler = CoroutineExceptionHandler { _, th ->
+        onThrowable(th)
+    }
+    return runCatching {
+        coroutineScope {
+            val serverSocket = ServerSocket(port.port)
+            while (true) {
+                yield()
+                val clientSocket = serverSocket.accept()
+                launch(Dispatchers.IO + coroutineExceptionHandler) {
+                    clientSocket.use { clientSocket ->
+                        val requestBytes = clientSocket
+                            .inputStream
+                            .use(InputStream::readAllBytes)
+                        val responseBytes = api.handle(requestBytes)
+                        clientSocket
+                            .outputStream
+                            .use { output ->
+                                output.write(responseBytes)
+                                output.flush()
+                            }
+                    }
                 }
             }
         }
+        awaitCancellation()
     }
-    awaitCancellation()
 }
 
+@OptIn(ExperimentalSerializationApi::class)
 private suspend fun SyncApi.handle(
     request: ByteArray,
-): Result<ByteArray> {
-    val requestString = request.toString(SyncConstants.charset)
-    val typedRequest = SyncJson.decodeFromString(
+): ByteArray {
+    val typedRequest = SyncConstants.cbor.decodeFromByteArray(
         SyncHandle.serializer,
-        requestString,
+        request,
     )
-    return handleTyped(typedRequest).map { response ->
-        response.toByteArray(SyncConstants.charset)
-    }
+    return handleTyped(typedRequest)
 }
 
 
+@OptIn(ExperimentalSerializationApi::class)
 private suspend fun <O, I : SyncHandle<O>> SyncApi.handleTyped(
     request: I,
-): Result<String> = handle(request).map { typedResult ->
-    SyncJson.encodeToString(
-        request.responseSerializer,
+): ByteArray {
+    val typedResult = handle(request)
+    return SyncConstants.cbor.encodeToByteArray(
+        ApiResponse.serializer(request.responseSerializer),
         typedResult,
     )
 }
