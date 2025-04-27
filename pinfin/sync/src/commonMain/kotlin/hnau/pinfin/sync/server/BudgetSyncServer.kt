@@ -5,20 +5,32 @@ import hnau.pinfin.sync.common.UpchainHash
 import hnau.pinfin.sync.common.UpchainState
 import hnau.pinfin.upchain.BudgetUpchain
 import hnau.pinfin.upchain.Update
+import hnau.shuffler.annotations.Shuffle
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.async
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
+import kotlinx.serialization.Serializable
 
 class BudgetSyncServer(
     scope: CoroutineScope,
-    private val upchain: BudgetUpchain,
+    private val dependencies: Dependencies,
+    skeleton: Skeleton,
 ) {
 
+    @Shuffle
+    interface Dependencies {
+
+        val upchain: BudgetUpchain
+    }
+
+    @Serializable
+    /*data*/ class Skeleton
+
     private var deferredState: Deferred<UpchainState> = scope.async {
-        upchain.useUpdates { updates ->
+        dependencies.upchain.useUpdates { updates ->
             updates.fold(
                 initial = UpchainState.empty,
             ) { state, update ->
@@ -69,7 +81,7 @@ class BudgetSyncServer(
         if (state.peekHash != after) {
             return@withState ApiResponse.Error("$after is not last upchain hash of bidget")
         }
-        upchain.addUpdates(updates)
+        dependencies.upchain.addUpdates(updates)
         val stateWithUpdates = updates.fold(
             initial = state,
         ) { state, update ->

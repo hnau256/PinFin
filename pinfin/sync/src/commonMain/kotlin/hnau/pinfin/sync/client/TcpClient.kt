@@ -3,6 +3,7 @@ package hnau.pinfin.sync.client
 import hnau.pinfin.sync.common.ApiResponse
 import hnau.pinfin.sync.common.SyncConstants
 import hnau.pinfin.sync.common.SyncHandle
+import hnau.pinfin.sync.common.SyncApi
 import hnau.pinfin.sync.server.dto.ServerAddress
 import hnau.pinfin.sync.server.dto.ServerPort
 import kotlinx.coroutines.Dispatchers
@@ -13,10 +14,10 @@ import java.net.Socket
 class TcpClient(
     private val address: ServerAddress,
     private val port: ServerPort,
-) {
+): SyncApi {
 
     @OptIn(ExperimentalSerializationApi::class)
-    suspend fun <O, I : SyncHandle<O>> handle(
+    override suspend fun <O, I : SyncHandle<O>> handle(
         request: I,
     ): ApiResponse<O> = try {
         val requestBytes = withContext(Dispatchers.Default) {

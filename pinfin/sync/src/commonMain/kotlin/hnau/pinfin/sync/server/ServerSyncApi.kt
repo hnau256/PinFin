@@ -1,19 +1,38 @@
 package hnau.pinfin.sync.server
 
+import hnau.common.kotlin.getOrInit
+import hnau.common.kotlin.toAccessor
 import hnau.pinfin.sync.common.ApiResponse
+import hnau.pinfin.sync.common.SyncApi
 import hnau.pinfin.sync.common.SyncHandle
 import hnau.pinfin.sync.common.map
-import hnau.pinfin.upchain.BudgetsStorage
+import hnau.shuffler.annotations.Shuffle
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.serialization.Serializable
 
 class ServerSyncApi(
     scope: CoroutineScope,
-    budgetsStorage: BudgetsStorage,
+    dependencies: Dependencies,
+    skeleton: Skeleton,
 ) : SyncApi {
+
+    @Shuffle
+    interface Dependencies {
+
+        fun budgetsSyncServer(): BudgetsSyncServer.Dependencies
+    }
+
+    @Serializable
+    data class Skeleton(
+        var budgets: BudgetsSyncServer.Skeleton? = null,
+    )
 
     private val syncServer = BudgetsSyncServer(
         scope = scope,
-        budgetsStorage = budgetsStorage,
+        dependencies = dependencies.budgetsSyncServer(),
+        skeleton = skeleton::budgets
+            .toAccessor()
+            .getOrInit { BudgetsSyncServer.Skeleton() },
     )
 
     @Suppress("UNCHECKED_CAST")

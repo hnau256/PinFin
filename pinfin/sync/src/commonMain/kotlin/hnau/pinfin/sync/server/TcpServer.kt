@@ -1,6 +1,7 @@
 package hnau.pinfin.sync.server
 
 import hnau.pinfin.sync.common.ApiResponse
+import hnau.pinfin.sync.common.SyncApi
 import hnau.pinfin.sync.common.SyncConstants
 import hnau.pinfin.sync.common.SyncHandle
 import hnau.pinfin.sync.server.dto.ServerPort

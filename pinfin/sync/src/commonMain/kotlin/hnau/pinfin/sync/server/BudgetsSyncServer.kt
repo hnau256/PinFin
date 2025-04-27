@@ -3,21 +3,43 @@ package hnau.pinfin.sync.server
 import arrow.core.identity
 import hnau.common.kotlin.coroutines.mapListReusable
 import hnau.common.kotlin.coroutines.mapState
+import hnau.common.kotlin.getOrInit
+import hnau.common.kotlin.toAccessor
 import hnau.pinfin.sync.common.ApiResponse
 import hnau.pinfin.sync.common.UpchainHash
 import hnau.pinfin.sync.server.BudgetSyncServer.GetUpdatesResult
 import hnau.pinfin.upchain.BudgetId
+import hnau.pinfin.upchain.BudgetUpchain
 import hnau.pinfin.upchain.BudgetsStorage
 import hnau.pinfin.upchain.Update
+import hnau.shuffler.annotations.Shuffle
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.serialization.Serializable
 
 class BudgetsSyncServer(
     scope: CoroutineScope,
-    budgetsStorage: BudgetsStorage,
+    dependencies: Dependencies,
+    skeleton: Skeleton,
 ) {
 
-    private val budgetsUpdates: StateFlow<Map<BudgetId, BudgetSyncServer>> = budgetsStorage
+    @Shuffle
+    interface Dependencies {
+
+        val budgetsStorage: BudgetsStorage
+
+        fun budgetSyncServer(
+            upchain: BudgetUpchain,
+        ): BudgetSyncServer.Dependencies
+    }
+
+    @Serializable
+    data class Skeleton(
+        var budget: BudgetSyncServer.Skeleton? = null,
+    )
+
+    private val budgetsUpdates: StateFlow<Map<BudgetId, BudgetSyncServer>> = dependencies
+        .budgetsStorage
         .list
         .mapListReusable(
             scope = scope,
@@ -25,7 +47,12 @@ class BudgetsSyncServer(
             transform = { budgetScope, (id, upchain) ->
                 val budgetSyncServer = BudgetSyncServer(
                     scope = budgetScope,
-                    upchain = upchain,
+                    dependencies = dependencies.budgetSyncServer(
+                        upchain = upchain,
+                    ),
+                    skeleton = skeleton::budget
+                        .toAccessor()
+                        .getOrInit { BudgetSyncServer.Skeleton() },
                 )
                 id to budgetSyncServer
             }
