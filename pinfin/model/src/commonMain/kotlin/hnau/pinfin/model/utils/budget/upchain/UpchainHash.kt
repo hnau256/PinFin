@@ -1,22 +1,29 @@
 package hnau.pinfin.model.utils.budget.upchain
 
+import hnau.common.kotlin.castOrNull
 import hnau.common.kotlin.mapper.Mapper
 import hnau.common.kotlin.mapper.plus
-import hnau.common.kotlin.mapper.stringAsHexByteArray
+import hnau.common.kotlin.mapper.stringAsBase64ByteArray
 import hnau.common.kotlin.serialization.MappingKSerializer
-import hnau.pinfin.model.utils.budget.upchain.Update
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.builtins.serializer
 import java.security.MessageDigest
 
 @Serializable(UpchainHash.Serializer::class)
-@JvmInline
-value class UpchainHash private constructor(
+class UpchainHash private constructor(
     val hash: ByteArray,
 ) {
 
     override fun toString(): String =
-        "UpchainHash($stringMapper.reverse(this))"
+        "UpchainHash(${stringMapper.reverse(this)})"
+
+    override fun equals(
+        other: Any?,
+    ): Boolean = other
+        ?.castOrNull<UpchainHash>()
+        ?.takeIf { hash.contentEquals(it.hash) } != null
+
+    override fun hashCode(): Int = hash.contentHashCode()
 
     object Serializer : MappingKSerializer<String, UpchainHash>(
         base = String.serializer(),
@@ -41,7 +48,7 @@ value class UpchainHash private constructor(
         }
 
         val stringMapper: Mapper<String, UpchainHash> =
-            Mapper.stringAsHexByteArray + Mapper(::UpchainHash, UpchainHash::hash)
+            Mapper.stringAsBase64ByteArray + Mapper(::UpchainHash, UpchainHash::hash)
 
         private fun createDigest(): MessageDigest =
             MessageDigest.getInstance("SHA-256")
