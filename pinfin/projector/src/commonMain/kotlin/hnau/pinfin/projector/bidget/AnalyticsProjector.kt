@@ -18,7 +18,7 @@ import androidx.compose.ui.Modifier
 import arrow.core.toNonEmptyListOrNull
 import hnau.common.compose.uikit.utils.Dimens
 import hnau.common.compose.utils.toLazyListState
-import hnau.pinfin.repository.AccountInfo
+import hnau.pinfin.model.utils.budget.state.AccountInfo
 import hnau.pinfin.model.budget.AnalyticsModel
 import hnau.pinfin.projector.utils.AmountFormatter
 import hnau.pinfin.projector.utils.SignedAmountContent

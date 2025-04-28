@@ -1,6 +1,6 @@
 package hnau.pinfin.sync.common
 
-import hnau.pinfin.upchain.BudgetId
+import hnau.pinfin.data.BudgetId
 import hnau.pinfin.upchain.Update
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.SerialName

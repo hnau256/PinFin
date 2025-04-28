@@ -9,7 +9,7 @@ kotlin {
         commonMain.dependencies {
             implementation(project(":common:app"))
             implementation(project(":pinfin:model"))
-            implementation(project(":pinfin:repository"))
+            implementation(libs.kotlin.serialization.json)
         }
     }
 }

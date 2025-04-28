@@ -17,11 +17,11 @@ import hnau.common.kotlin.coroutines.mapState
 import hnau.common.kotlin.coroutines.mapWithScope
 import hnau.common.kotlin.coroutines.toMutableStateFlowAsInitial
 import hnau.common.kotlin.serialization.MutableStateFlowSerializer
-import hnau.pinfin.repository.dto.Comment
-import hnau.pinfin.repository.dto.Transaction
-import hnau.pinfin.repository.dto.TransactionType
-import hnau.pinfin.repository.BudgetRepository
-import hnau.pinfin.repository.TransactionInfo
+import hnau.pinfin.data.Comment
+import hnau.pinfin.data.Transaction
+import hnau.pinfin.data.TransactionType
+import hnau.pinfin.model.utils.budget.repository.BudgetRepository
+import hnau.pinfin.model.utils.budget.state.TransactionInfo
 import hnau.pinfin.model.transaction.type.TransactionTypeModel
 import hnau.pinfin.model.transaction.type.entry.EntryModel
 import hnau.pinfin.model.transaction.type.transfer.TransferModel

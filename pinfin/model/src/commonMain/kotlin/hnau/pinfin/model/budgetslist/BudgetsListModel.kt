@@ -7,21 +7,22 @@ package hnau.pinfin.model.budgetslist
 import hnau.common.app.goback.GoBackHandler
 import hnau.common.app.goback.GoBackHandlerProvider
 import hnau.common.app.goback.NeverGoBackHandler
-import hnau.common.app.preferences.Preferences
+import hnau.common.kotlin.coroutines.InProgressRegistry
 import hnau.common.kotlin.coroutines.createChild
 import hnau.common.kotlin.coroutines.mapState
 import hnau.common.kotlin.coroutines.runningFoldState
 import hnau.common.kotlin.ifNull
 import hnau.common.kotlin.serialization.MutableStateFlowSerializer
-import hnau.pinfin.upchain.BudgetId
-import hnau.pinfin.repository.BudgetRepository
-import hnau.pinfin.upchain.BudgetsStorage
+import hnau.pinfin.data.BudgetId
 import hnau.pinfin.model.budgetslist.item.BudgetItemModel
+import hnau.pinfin.model.utils.budget.repository.BudgetRepository
+import hnau.pinfin.model.utils.budget.repository.BudgetsRepository
 import hnau.shuffler.annotations.Shuffle
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.UseSerializers
 
@@ -34,7 +35,7 @@ class BudgetsListModel(
     @Shuffle
     interface Dependencies {
 
-        val budgetsStorage: BudgetsStorage
+        val budgetsRepository: BudgetsRepository
 
         val deferredBudgetRepositories: StateFlow<Map<BudgetId, Deferred<BudgetRepository>>>
 
@@ -122,8 +123,20 @@ class BudgetsListModel(
             infos.map(ItemInfoWithScope::info)
         }
 
+    private val inProgressRegistry = InProgressRegistry()
+
+    //TODO use
+    val isProgress: StateFlow<Boolean>
+        get() = inProgressRegistry.isProgress
+
     fun createNewBudget() {
-        dependencies.budgetsStorage.createNewBudget()
+        scope.launch {
+            inProgressRegistry.executeRegistered {
+                dependencies.budgetsRepository.createNewBudget(
+                    id = BudgetId.new(),
+                )
+            }
+        }
     }
 
     override val goBackHandler: GoBackHandler

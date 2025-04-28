@@ -24,11 +24,11 @@ import hnau.common.kotlin.mapper.takeIf
 import hnau.common.kotlin.serialization.MutableStateFlowSerializer
 import hnau.common.kotlin.shrinkType
 import hnau.common.kotlin.toAccessor
-import hnau.pinfin.upchain.BudgetId
+import hnau.pinfin.data.BudgetId
 import hnau.pinfin.model.LoadBudgetModel
 import hnau.pinfin.model.budgetslist.BudgetsListModel
-import hnau.pinfin.repository.BudgetRepository
-import hnau.pinfin.upchain.BudgetsStorage
+import hnau.pinfin.model.utils.budget.repository.BudgetRepository
+import hnau.pinfin.model.utils.budget.repository.BudgetsRepository
 import hnau.shuffler.annotations.Shuffle
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Deferred
@@ -48,7 +48,7 @@ class ManageModel(
 
         val preferences: Preferences
 
-        val budgetsStorage: BudgetsStorage
+        val budgetsRepository: BudgetsRepository
 
         fun budgetsList(
             deferredBudgetRepositories: StateFlow<Map<BudgetId, Deferred<BudgetRepository>>>,
@@ -95,17 +95,14 @@ class ManageModel(
 
     private val deferredBudgetRepositories: StateFlow<Map<BudgetId, Deferred<BudgetRepository>>> =
         dependencies
-            .budgetsStorage
+            .budgetsRepository
             .list
             .mapListReusable(
                 scope = scope,
                 extractKey = { (id) -> id },
-                transform = { deferredScope, (id, budgetUpchain) ->
+                transform = { deferredScope, (id, deferredInfo) ->
                     id to deferredScope.async {
-                        BudgetRepository.create(
-                            scope = deferredScope,
-                            budgetUpchain = budgetUpchain,
-                        )
+                        deferredInfo.await().repository
                     }
                 }
             )

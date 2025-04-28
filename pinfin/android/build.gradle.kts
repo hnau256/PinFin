@@ -28,7 +28,6 @@ kotlin {
             implementation(project(":common:app"))
             implementation(project(":common:android"))
             implementation(project(":common:compose"))
-            implementation(project(":pinfin:repository"))
             implementation(project(":pinfin:app"))
             implementation(project(":pinfin:compose"))
             implementation(project(":pinfin:model"))

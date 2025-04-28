@@ -1,0 +1,60 @@
+package hnau.pinfin.model.utils.budget.repository
+
+import hnau.common.kotlin.coroutines.mapListReusable
+import hnau.pinfin.data.BudgetId
+import hnau.pinfin.model.utils.budget.storage.BudgetsStorage
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Deferred
+import kotlinx.coroutines.async
+import kotlinx.coroutines.flow.StateFlow
+
+class BudgetsRepository(
+    scope: CoroutineScope,
+    private val budgetsStorage: BudgetsStorage,
+) {
+
+    val list: StateFlow<List<Pair<BudgetId, Deferred<BudgetInfo>>>> = budgetsStorage
+        .list
+        .mapListReusable(
+            scope = scope,
+            extractKey = { idWithBudget -> idWithBudget.first },
+            transform = { budgetScope, (id, deferredUpchainStorage) ->
+                val deferredInfo = budgetScope.async {
+                    val upchainStorage = deferredUpchainStorage.await()
+                    BudgetInfo(
+                        upchainStorage = upchainStorage,
+                        repository = BudgetRepository(
+                            scope = budgetScope,
+                            upchainStorage = upchainStorage,
+                        )
+                    )
+                }
+                id to deferredInfo
+            }
+        )
+
+    suspend fun createNewBudget(
+        id: BudgetId,
+    ) {
+        budgetsStorage.createNewBudget(
+            id = id,
+        )
+    }
+
+    companion object {
+
+        suspend fun create(
+            scope: CoroutineScope,
+            budgetsStorageFactory: BudgetsStorage.Factory,
+        ): BudgetsRepository {
+            val budgetsStorage = budgetsStorageFactory.createBudgetsStorage(
+                scope = scope,
+            )
+
+            return BudgetsRepository(
+                scope = scope,
+                budgetsStorage = budgetsStorage,
+            )
+        }
+    }
+}

@@ -13,9 +13,9 @@ import hnau.common.app.goback.NeverGoBackHandler
 import hnau.common.kotlin.coroutines.mapState
 import hnau.common.kotlin.coroutines.toMutableStateFlowAsInitial
 import hnau.common.kotlin.serialization.MutableStateFlowSerializer
-import hnau.pinfin.repository.dto.TransactionType
-import hnau.pinfin.repository.BudgetRepository
-import hnau.pinfin.repository.TransactionInfo
+import hnau.pinfin.data.TransactionType
+import hnau.pinfin.model.utils.budget.repository.BudgetRepository
+import hnau.pinfin.model.utils.budget.state.TransactionInfo
 import hnau.pinfin.model.budgetstack.BudgetStackOpener
 import hnau.shuffler.annotations.Shuffle
 import kotlinx.coroutines.CoroutineScope

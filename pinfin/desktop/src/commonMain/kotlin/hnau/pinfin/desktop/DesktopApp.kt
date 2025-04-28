@@ -17,7 +17,7 @@ import hnau.pinfin.app.impl
 import hnau.pinfin.compose.AppContentDependencies
 import hnau.pinfin.compose.Content
 import hnau.pinfin.compose.impl
-import hnau.pinfin.upchain.impl.FileBasedBudgetsStorage
+import hnau.pinfin.model.utils.budget.storage.impl.FileBasedBudgetsStorage
 import org.slf4j.simple.SimpleLogger
 import java.io.File
 

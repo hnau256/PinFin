@@ -1,6 +1,6 @@
 package hnau.pinfin.sync.client
 
-import hnau.pinfin.upchain.BudgetId
+import hnau.pinfin.data.BudgetId
 import kotlinx.coroutines.flow.StateFlow
 
 sealed interface SyncClientState {

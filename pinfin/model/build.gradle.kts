@@ -8,8 +8,9 @@ kotlin {
     sourceSets {
         commonMain.dependencies {
             implementation(project(":common:app"))
-            implementation(project(":pinfin:repository"))
+            implementation(project(":pinfin:data"))
             implementation(libs.kotlin.datetime)
+            implementation(libs.kotlin.serialization.json)
         }
     }
 }

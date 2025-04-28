@@ -12,7 +12,6 @@ kotlin {
             implementation(project(":common:compose"))
             implementation(project(":common:app"))
             implementation(project(":pinfin:app"))
-            implementation(project(":pinfin:repository"))
             implementation(project(":pinfin:compose"))
             implementation(project(":pinfin:projector"))
             implementation(project(":pinfin:model"))

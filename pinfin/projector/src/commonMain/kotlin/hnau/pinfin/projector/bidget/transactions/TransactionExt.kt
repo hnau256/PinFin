@@ -25,8 +25,8 @@ import hnau.common.compose.uikit.table.cellShape
 import hnau.common.compose.uikit.utils.Dimens
 import hnau.common.compose.utils.Icon
 import hnau.common.compose.utils.horizontalDisplayPadding
-import hnau.pinfin.repository.TransactionInfo
-import hnau.pinfin.repository.signedAmountOrAmount
+import hnau.pinfin.model.utils.budget.state.TransactionInfo
+import hnau.pinfin.model.utils.budget.state.signedAmountOrAmount
 import hnau.pinfin.projector.utils.AmountContent
 import hnau.pinfin.projector.utils.ArrowDirection
 import hnau.pinfin.projector.utils.ArrowIcon
@@ -34,7 +34,7 @@ import hnau.pinfin.projector.utils.SignedAmountContent
 import hnau.pinfin.projector.utils.account.AccountContent
 import hnau.pinfin.projector.utils.category.CategoryContent
 import hnau.pinfin.projector.utils.color
-import hnau.pinfin.repository.dto.CategoryDirection
+import hnau.pinfin.data.CategoryDirection
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 

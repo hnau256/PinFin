@@ -9,8 +9,9 @@ import hnau.common.kotlin.coroutines.flatMapState
 import hnau.common.kotlin.coroutines.mapWithScope
 import hnau.common.kotlin.getOrInit
 import hnau.common.kotlin.toAccessor
-import hnau.pinfin.upchain.BudgetsStorage
 import hnau.pinfin.model.mode.ModeModel
+import hnau.pinfin.model.utils.budget.repository.BudgetsRepository
+import hnau.pinfin.model.utils.budget.storage.BudgetsStorage
 import hnau.shuffler.annotations.Shuffle
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.async
@@ -33,7 +34,7 @@ class LoadBudgetsModel(
 
         fun budgetsOrSync(
             preferences: Preferences,
-            budgetsStorage: BudgetsStorage,
+            budgetsRepository: BudgetsRepository,
         ): ModeModel.Dependencies
     }
 
@@ -43,7 +44,7 @@ class LoadBudgetsModel(
     )
 
     private data class Ready(
-        val budgetsStorage: BudgetsStorage,
+        val budgetsRepository: BudgetsRepository,
         val preferences: Preferences,
     )
 
@@ -51,9 +52,10 @@ class LoadBudgetsModel(
         scope = scope,
     ) {
         coroutineScope {
-            val deferredBudgetsStorage = async {
-                dependencies.budgetsStorageFactory.createBudgetsStorage(
+            val deferredBudgetsRepository = async {
+                BudgetsRepository.create(
                     scope = scope,
+                    budgetsStorageFactory = dependencies.budgetsStorageFactory,
                 )
             }
             val deferredPreferences = async {
@@ -62,7 +64,7 @@ class LoadBudgetsModel(
                 )
             }
             Ready(
-                budgetsStorage = deferredBudgetsStorage.await(),
+                budgetsRepository = deferredBudgetsRepository.await(),
                 preferences = deferredPreferences.await(),
             )
         }
@@ -74,7 +76,7 @@ class LoadBudgetsModel(
                 ModeModel(
                     scope = stateScope,
                     dependencies = dependencies.budgetsOrSync(
-                        budgetsStorage = ready.budgetsStorage,
+                        budgetsRepository = ready.budgetsRepository,
                         preferences = ready.preferences,
                     ),
                     skeleton = skeleton::budgetsOrSync
