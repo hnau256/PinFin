@@ -3,7 +3,8 @@ package hnau.pinfin.projector.sync
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.AlertDialog
+import androidx.compose.material.AlertDialog
+import androidx.compose.material3.BasicAlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -18,6 +19,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import hnau.common.app.goback.GlobalGoBackHandler
 import hnau.common.app.goback.GoBackHandler
+import hnau.common.compose.uikit.AlertDialogContent
 import hnau.common.compose.uikit.ErrorPanel
 import hnau.common.compose.uikit.utils.Dimens
 import hnau.common.compose.utils.NavigationIcon
@@ -82,27 +84,31 @@ class SyncServerProjector(
         ConfirmGoBackDialog()
     }
 
+    @OptIn(ExperimentalMaterial3Api::class)
     @Composable
     private fun ConfirmGoBackDialog() {
         val displayConfirmGoBack by model.stopServerDialogIsOpened.collectAsState()
         if (!displayConfirmGoBack) {
             return
         }
-        AlertDialog(
-            title = { Text(stringResource(Res.string.stop_sync_server)) },
-            confirmButton = {
-                TextButton(
-                    onClick = model::confirmStopServerDialog,
-                    content = { Text(stringResource(Res.string.yes)) },
-                )
-            },
-            dismissButton = {
-                TextButton(
-                    onClick = model::cancelStopServerDialog,
-                    content = { Text(stringResource(Res.string.no)) },
-                )
-            },
+        BasicAlertDialog(
             onDismissRequest = model::cancelStopServerDialog
-        )
+        ) {
+            AlertDialogContent(
+                title = { Text(stringResource(Res.string.stop_sync_server)) },
+                confirmButton = {
+                    TextButton(
+                        onClick = model::confirmStopServerDialog,
+                        content = { Text(stringResource(Res.string.yes)) },
+                    )
+                },
+                dismissButton = {
+                    TextButton(
+                        onClick = model::cancelStopServerDialog,
+                        content = { Text(stringResource(Res.string.no)) },
+                    )
+                }
+            )
+        }
     }
 }
