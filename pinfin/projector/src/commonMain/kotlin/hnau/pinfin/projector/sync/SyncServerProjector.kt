@@ -3,7 +3,6 @@ package hnau.pinfin.projector.sync
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material.AlertDialog
 import androidx.compose.material3.BasicAlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
@@ -81,14 +80,14 @@ class SyncServerProjector(
                     }
                 })
         }
-        ConfirmGoBackDialog()
+        StopServerDialog()
     }
 
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
-    private fun ConfirmGoBackDialog() {
-        val displayConfirmGoBack by model.stopServerDialogIsOpened.collectAsState()
-        if (!displayConfirmGoBack) {
+    private fun StopServerDialog() {
+        val stopServerDialogIsOpened by model.stopServerDialogIsOpened.collectAsState()
+        if (!stopServerDialogIsOpened) {
             return
         }
         BasicAlertDialog(
