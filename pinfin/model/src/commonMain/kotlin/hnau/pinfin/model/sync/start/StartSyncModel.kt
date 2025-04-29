@@ -1,0 +1,148 @@
+@file:UseSerializers(
+    MutableStateFlowSerializer::class,
+)
+
+package hnau.pinfin.model.sync.start
+
+import hnau.common.app.EditingString
+import hnau.common.app.goback.GoBackHandler
+import hnau.common.app.goback.GoBackHandlerProvider
+import hnau.common.app.goback.NeverGoBackHandler
+import hnau.common.app.preferences.Preference
+import hnau.common.app.preferences.Preferences
+import hnau.common.app.preferences.map
+import hnau.common.app.toEditingString
+import hnau.common.kotlin.coroutines.combineState
+import hnau.common.kotlin.coroutines.filterSet
+import hnau.common.kotlin.coroutines.mapState
+import hnau.common.kotlin.coroutines.toMutableStateFlowAsInitial
+import hnau.common.kotlin.mapper.Mapper
+import hnau.common.kotlin.mapper.plus
+import hnau.common.kotlin.mapper.stringToInt
+import hnau.common.kotlin.serialization.MutableStateFlowSerializer
+import hnau.pinfin.model.mode.ManageOpener
+import hnau.pinfin.model.sync.SyncModeOpener
+import hnau.pinfin.model.sync.utils.ServerAddress
+import hnau.pinfin.model.sync.utils.ServerPort
+import hnau.shuffler.annotations.Shuffle
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.UseSerializers
+
+class StartSyncModel(
+    scope: CoroutineScope,
+    private val dependencies: Dependencies,
+    private val skeleton: Skeleton,
+) : GoBackHandlerProvider {
+
+    @Shuffle
+    interface Dependencies {
+
+        val manageOpener: ManageOpener
+
+        val preferences: Preferences
+
+        val syncModeOpener: SyncModeOpener
+    }
+
+    fun returnToBudgets() {
+        dependencies.manageOpener.openManage()
+    }
+
+    private val serverAddressPreference: Preference<ServerAddress> = dependencies
+        .preferences["sync_server_address"]
+        .map(
+            scope = scope,
+            mapper = Mapper(::ServerAddress, ServerAddress::address),
+        )
+
+    val serverAddressPlaceholder: ServerAddress? = serverAddressPreference
+        .value
+        .value
+        .getOrNull()
+
+    private val portPreference: Preference<ServerPort> = dependencies
+        .preferences["sync_port"]
+        .map(
+            scope = scope,
+            mapper = Mapper.stringToInt + Mapper(::ServerPort, ServerPort::port),
+        )
+
+    val portPlaceholder: ServerPort = portPreference
+        .value
+        .value
+        .getOrNull()
+        ?: ServerPort.default
+
+    @Serializable
+    data class Skeleton(
+        val serverAddress: MutableStateFlow<EditingString> =
+            "".toEditingString().toMutableStateFlowAsInitial(),
+
+        val port: MutableStateFlow<EditingString> =
+            "".toEditingString().toMutableStateFlowAsInitial(),
+    )
+
+    val portInput: MutableStateFlow<EditingString> =
+        skeleton.port.filterSet { it.text.length <= ServerPort.maxLength && it.text.all { it.isDigit() } }
+
+    private val port: StateFlow<ServerPort?> = skeleton.port.mapState(
+        scope = scope,
+    ) { portInput ->
+        val inputString = portInput.text.trim().takeIf(String::isNotEmpty)
+        when (inputString) {
+            null -> portPlaceholder
+            else -> ServerPort.tryParse(inputString)
+        }
+    }
+
+    val portIsCorrect: StateFlow<Boolean> =
+        port.mapState(scope) { it != null }
+
+    val serverAddressInput: MutableStateFlow<EditingString>
+        get() = skeleton.serverAddress
+
+    private val serverAddress: StateFlow<ServerAddress?> = skeleton.serverAddress.mapState(
+        scope = scope,
+    ) { serverAddressInput ->
+        val inputString = serverAddressInput.text.trim().takeIf(String::isNotEmpty)
+        when (inputString) {
+            null -> serverAddressPlaceholder
+            else -> ServerAddress.tryParse(inputString)
+        }
+    }
+
+    val serverAddressIsCorrect: StateFlow<Boolean> =
+        serverAddress.mapState(scope) { it != null }
+
+    val startServer: StateFlow<(() -> Unit)?> = port.mapState(scope) { portOrNull ->
+        portOrNull?.let { port ->
+            {
+                dependencies
+                    .syncModeOpener
+                    .openSyncServer(port)
+            }
+        }
+    }
+
+    val openClient: StateFlow<(() -> Unit)?> = combineState(
+        scope = scope,
+        a = port,
+        b = serverAddress,
+    ) { portOrNull, serverAddressOrNull ->
+        portOrNull?.let { port ->
+            serverAddressOrNull?.let { serverAddress ->
+                {
+                    dependencies
+                        .syncModeOpener
+                        .openSyncClient(serverAddress, port)
+                }
+            }
+        }
+    }
+
+    override val goBackHandler: GoBackHandler
+        get() = NeverGoBackHandler
+}

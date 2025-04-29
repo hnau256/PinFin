@@ -1,7 +1,7 @@
 package hnau.pinfin.projector.mode
 
 import androidx.compose.runtime.Composable
-import hnau.pinfin.projector.SyncProjector
+import hnau.pinfin.projector.sync.SyncStackProjector
 import hnau.pinfin.projector.manage.ManageProjector
 
 sealed interface ModeStateProjector {
@@ -25,7 +25,7 @@ sealed interface ModeStateProjector {
     }
 
     data class Sync(
-        private val projector: SyncProjector,
+        private val projector: SyncStackProjector,
     ) : ModeStateProjector {
 
         @Composable

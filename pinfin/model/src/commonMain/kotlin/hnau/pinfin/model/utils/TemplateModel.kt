@@ -1,26 +1,26 @@
-package hnau.pinfin.model
+@file:UseSerializers(
+    MutableStateFlowSerializer::class,
+)
+
+package hnau.pinfin.model.utils
 
 import hnau.common.app.goback.GoBackHandler
 import hnau.common.app.goback.GoBackHandlerProvider
-import hnau.pinfin.model.mode.ManageOpener
+import hnau.common.kotlin.serialization.MutableStateFlowSerializer
 import hnau.shuffler.annotations.Shuffle
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.UseSerializers
 
-class SyncModel(
+class TemplateModel(
     scope: CoroutineScope,
-    private val dependencies: Dependencies,
+    dependencies: Dependencies,
     skeleton: Skeleton,
-) : GoBackHandlerProvider {
+): GoBackHandlerProvider {
 
     @Shuffle
     interface Dependencies {
 
-        val manageOpener: ManageOpener
-    }
-
-    fun manageOpen() {
-        dependencies.manageOpener.openManage()
     }
 
     @Serializable

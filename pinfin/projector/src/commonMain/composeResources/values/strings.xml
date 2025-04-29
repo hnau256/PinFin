@@ -26,4 +26,10 @@
     <string name="yes">Да</string>
     <string name="no">Нет</string>
     <string name="accounts">Счета</string>
+    <string name="to_budgets_list">К списку бюджетов</string>
+    <string name="budgets_sync">Синхронизация бюджетов</string>
+    <string name="start_server">Запустить сервер</string>
+    <string name="open_client">Открыть клиент</string>
+    <string name="address">Адрес</string>
+    <string name="port">Порт</string>
 </resources>

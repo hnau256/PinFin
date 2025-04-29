@@ -9,7 +9,7 @@ import hnau.common.compose.uikit.state.TransitionSpec
 import hnau.common.kotlin.coroutines.mapWithScope
 import hnau.pinfin.model.mode.ModeModel
 import hnau.pinfin.model.mode.ModeStateModel
-import hnau.pinfin.projector.SyncProjector
+import hnau.pinfin.projector.sync.SyncStackProjector
 import hnau.pinfin.projector.manage.ManageProjector
 import hnau.shuffler.annotations.Shuffle
 import kotlinx.coroutines.CoroutineScope
@@ -26,7 +26,7 @@ class ModeProjector(
 
         fun manage(): ManageProjector.Dependencies
 
-        fun sync(): SyncProjector.Dependencies
+        fun sync(): SyncStackProjector.Dependencies
     }
 
     private val state: StateFlow<ModeStateProjector> = model
@@ -42,7 +42,7 @@ class ModeProjector(
                 )
 
                 is ModeStateModel.Sync -> ModeStateProjector.Sync(
-                    projector = SyncProjector(
+                    projector = SyncStackProjector(
                         scope = stateScope,
                         dependencies = dependencies.sync(),
                         model = state.model,

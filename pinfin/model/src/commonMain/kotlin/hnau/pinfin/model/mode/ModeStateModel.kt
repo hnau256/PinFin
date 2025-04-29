@@ -2,7 +2,7 @@ package hnau.pinfin.model.mode
 
 import hnau.common.app.goback.GoBackHandlerProvider
 import hnau.pinfin.model.manage.ManageModel
-import hnau.pinfin.model.SyncModel
+import hnau.pinfin.model.sync.SyncStackModel
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -19,7 +19,7 @@ sealed interface ModeStateModel: GoBackHandlerProvider {
     }
 
     data class Sync(
-        val model: SyncModel,
+        val model: SyncStackModel,
     ): GoBackHandlerProvider by model, ModeStateModel {
 
         override val id: Int
@@ -38,7 +38,7 @@ sealed interface ModeStateModel: GoBackHandlerProvider {
         @Serializable
         @SerialName("sync")
         data class Sync(
-            val skeleton: SyncModel.Skeleton,
+            val skeleton: SyncStackModel.Skeleton,
         ): Skeleton
     }
 }

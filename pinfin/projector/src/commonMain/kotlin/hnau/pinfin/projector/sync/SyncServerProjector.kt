@@ -1,14 +1,14 @@
-package hnau.pinfin.projector
+package hnau.pinfin.projector.sync
 
 import androidx.compose.runtime.Composable
-import hnau.pinfin.model.SyncModel
-import hnau.pinfin.model.utils.choose.TemplateModel
+import hnau.pinfin.model.sync.server.SyncServerModel
+import hnau.pinfin.model.utils.TemplateModel
 import hnau.shuffler.annotations.Shuffle
 import kotlinx.coroutines.CoroutineScope
 
-class SyncProjector(
+class SyncServerProjector(
     scope: CoroutineScope,
-    model: SyncModel,
+    model: SyncServerModel,
     dependencies: Dependencies,
 ) {
 

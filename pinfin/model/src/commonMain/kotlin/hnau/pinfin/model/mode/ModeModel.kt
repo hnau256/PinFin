@@ -10,7 +10,7 @@ import hnau.common.kotlin.coroutines.flatMapState
 import hnau.common.kotlin.coroutines.mapWithScope
 import hnau.common.kotlin.coroutines.toMutableStateFlowAsInitial
 import hnau.common.kotlin.serialization.MutableStateFlowSerializer
-import hnau.pinfin.model.SyncModel
+import hnau.pinfin.model.sync.SyncStackModel
 import hnau.pinfin.model.manage.ManageModel
 import hnau.shuffler.annotations.Shuffle
 import kotlinx.coroutines.CoroutineScope
@@ -34,7 +34,7 @@ class ModeModel(
 
         fun sync(
             manageOpener: ManageOpener,
-        ): SyncModel.Dependencies
+        ): SyncStackModel.Dependencies
     }
 
     private fun open(
@@ -59,14 +59,14 @@ class ModeModel(
                     model = ManageModel(
                         scope = stateScope,
                         dependencies = dependencies.budgets(
-                            syncOpener = { open(ModeStateModel.Skeleton.Sync(SyncModel.Skeleton())) },
+                            syncOpener = { open(ModeStateModel.Skeleton.Sync(SyncStackModel.Skeleton())) },
                         ),
                         skeleton = stateSkeleton.skeleton,
                     )
                 )
 
                 is ModeStateModel.Skeleton.Sync -> ModeStateModel.Sync(
-                    model = SyncModel(
+                    model = SyncStackModel(
                         scope = stateScope,
                         dependencies = dependencies.sync(
                             manageOpener = { open(ModeStateModel.Skeleton.Manage(ManageModel.Skeleton())) },
