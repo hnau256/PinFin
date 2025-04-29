@@ -12,7 +12,13 @@ import java.util.UUID
 value class BudgetId(
     @Serializable(UUIDSerializer::class)
     val id: UUID,
-) {
+) : Comparable<BudgetId> {
+
+    override fun compareTo(
+        other: BudgetId,
+    ): Int = id.compareTo(
+        other = other.id,
+    )
 
     companion object {
 

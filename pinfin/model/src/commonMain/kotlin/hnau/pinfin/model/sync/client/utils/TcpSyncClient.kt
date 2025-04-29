@@ -1,4 +1,4 @@
-package hnau.pinfin.model.sync.client
+package hnau.pinfin.model.sync.client.utils
 
 import arrow.core.flatMap
 import hnau.pinfin.model.sync.utils.ApiResponse
@@ -12,7 +12,7 @@ import kotlinx.coroutines.withContext
 import kotlinx.serialization.ExperimentalSerializationApi
 import java.net.Socket
 
-class TcpClient(
+class TcpSyncClient(
     private val address: ServerAddress,
     private val port: ServerPort,
 ) : SyncApi {
@@ -22,7 +22,7 @@ class TcpClient(
         request: I,
     ): Result<O> = runCatching {
         val requestBytes = withContext(Dispatchers.Default) {
-            SyncConstants.cbor.encodeToByteArray(SyncHandle.serializer, request)
+            SyncConstants.cbor.encodeToByteArray(SyncHandle.Companion.serializer, request)
         }
         val responseBytes = withContext(Dispatchers.IO) {
             Socket(

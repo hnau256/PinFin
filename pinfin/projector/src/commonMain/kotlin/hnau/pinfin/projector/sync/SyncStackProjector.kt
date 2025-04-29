@@ -5,6 +5,7 @@ import hnau.common.compose.projector.stack.Content
 import hnau.common.compose.projector.stack.StackProjectorTail
 import hnau.pinfin.model.sync.SyncStackElementModel
 import hnau.pinfin.model.sync.SyncStackModel
+import hnau.pinfin.projector.sync.client.SyncClientStackProjector
 import hnau.shuffler.annotations.Shuffle
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.StateFlow
@@ -20,7 +21,7 @@ class SyncStackProjector(
 
         fun start(): StartSyncProjector.Dependencies
 
-        fun client(): SyncClientProjector.Dependencies
+        fun client(): SyncClientStackProjector.Dependencies
 
         fun server(): SyncServerProjector.Dependencies
     }
@@ -41,7 +42,7 @@ class SyncStackProjector(
                     )
 
                     is SyncStackElementModel.Client -> SyncStackElementProjector.Client(
-                        SyncClientProjector(
+                        SyncClientStackProjector(
                             scope = scope,
                             model = model.model,
                             dependencies = dependencies.client(),
