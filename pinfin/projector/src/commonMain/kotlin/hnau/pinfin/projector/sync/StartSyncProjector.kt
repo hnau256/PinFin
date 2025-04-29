@@ -43,6 +43,7 @@ import hnau.pinfin.model.sync.start.StartSyncModel
 import hnau.pinfin.projector.Res
 import hnau.pinfin.projector.address
 import hnau.pinfin.projector.budgets
+import hnau.pinfin.projector.budgets_sync
 import hnau.pinfin.projector.open_client
 import hnau.pinfin.projector.port
 import hnau.pinfin.projector.start_server
@@ -74,7 +75,7 @@ class StartSyncProjector(
             modifier = Modifier.fillMaxSize(),
             topBar = {
                 TopAppBar(
-                    title = { Text(stringResource(Res.string.budgets)) },
+                    title = { Text(stringResource(Res.string.budgets_sync)) },
                     navigationIcon = { globalGoBackHandler.NavigationIcon() },
                     actions = {
                         IconButton(

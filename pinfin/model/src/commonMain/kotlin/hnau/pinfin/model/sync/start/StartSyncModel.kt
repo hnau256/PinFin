@@ -12,6 +12,7 @@ import hnau.common.app.preferences.Preference
 import hnau.common.app.preferences.Preferences
 import hnau.common.app.preferences.map
 import hnau.common.app.toEditingString
+import hnau.common.kotlin.coroutines.InProgressRegistry
 import hnau.common.kotlin.coroutines.combineState
 import hnau.common.kotlin.coroutines.filterSet
 import hnau.common.kotlin.coroutines.mapState
@@ -28,11 +29,12 @@ import hnau.shuffler.annotations.Shuffle
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.UseSerializers
 
 class StartSyncModel(
-    scope: CoroutineScope,
+    private val scope: CoroutineScope,
     private val dependencies: Dependencies,
     private val skeleton: Skeleton,
 ) : GoBackHandlerProvider {
@@ -75,6 +77,12 @@ class StartSyncModel(
         .value
         .getOrNull()
         ?: ServerPort.default
+
+    private val inProgressRegistry = InProgressRegistry()
+
+    //TODO use
+    val inProgress: StateFlow<Boolean>
+        get() = inProgressRegistry.isProgress
 
     @Serializable
     data class Skeleton(
@@ -120,6 +128,19 @@ class StartSyncModel(
     val startServer: StateFlow<(() -> Unit)?> = port.mapState(scope) { portOrNull ->
         portOrNull?.let { port ->
             {
+                startSyncServer(
+                    port = port,
+                )
+            }
+        }
+    }
+
+    private fun startSyncServer(
+        port: ServerPort,
+    ) {
+        scope.launch {
+            inProgressRegistry.executeRegistered {
+                portPreference.update(port)
                 dependencies
                     .syncModeOpener
                     .openSyncServer(port)
@@ -135,10 +156,26 @@ class StartSyncModel(
         portOrNull?.let { port ->
             serverAddressOrNull?.let { serverAddress ->
                 {
-                    dependencies
-                        .syncModeOpener
-                        .openSyncClient(serverAddress, port)
+                    openSyncClient(
+                        serverAddress = serverAddress,
+                        port = port,
+                    )
                 }
+            }
+        }
+    }
+
+    private fun openSyncClient(
+        serverAddress: ServerAddress,
+        port: ServerPort,
+    ) {
+        scope.launch {
+            inProgressRegistry.executeRegistered {
+                serverAddressPreference.update(serverAddress)
+                portPreference.update(port)
+                dependencies
+                    .syncModeOpener
+                    .openSyncClient(serverAddress, port)
             }
         }
     }
