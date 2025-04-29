@@ -1,8 +1,8 @@
 package hnau.pinfin.sync.server
 
-import hnau.pinfin.sync.common.ApiResponse
-import hnau.pinfin.sync.common.UpchainHash
-import hnau.pinfin.sync.common.UpchainState
+import hnau.pinfin.model.sync.utils.ApiResponse
+import hnau.pinfin.model.sync.utils.UpchainHash
+import hnau.pinfin.model.sync.utils.UpchainState
 import hnau.pinfin.upchain.BudgetUpchain
 import hnau.pinfin.upchain.Update
 import hnau.shuffler.annotations.Shuffle

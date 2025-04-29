@@ -1,29 +1,30 @@
-package hnau.pinfin.sync.server
+package hnau.pinfin.model.sync.server.utils
 
 import hnau.pinfin.model.sync.utils.ApiResponse
+import hnau.pinfin.model.sync.utils.ServerPort
 import hnau.pinfin.model.sync.utils.SyncApi
 import hnau.pinfin.model.sync.utils.SyncConstants
 import hnau.pinfin.model.sync.utils.SyncHandle
-import hnau.pinfin.sync.server.dto.ServerPort
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.awaitCancellation
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import kotlinx.coroutines.yield
 import kotlinx.serialization.ExperimentalSerializationApi
 import java.io.InputStream
 import java.net.ServerSocket
 
-suspend fun tcpServer(
+suspend fun tcpSyncServer(
     port: ServerPort,
     api: SyncApi,
     onThrowable: (Throwable) -> Unit,
-): Result<Nothing> {
+): Result<Nothing> = withContext(Dispatchers.IO) {
     val coroutineExceptionHandler = CoroutineExceptionHandler { _, th ->
         onThrowable(th)
     }
-    return runCatching {
+    runCatching {
         coroutineScope {
             val serverSocket = ServerSocket(port.port)
             while (true) {
@@ -65,7 +66,10 @@ private suspend fun SyncApi.handle(
 private suspend fun <O, I : SyncHandle<O>> SyncApi.handleTyped(
     request: I,
 ): ByteArray {
-    val typedResult = handle(request)
+    val typedResult = handle(request).fold(
+        onSuccess = {result -> ApiResponse.Success(result) },
+        onFailure = { error -> ApiResponse.Error(error.message) }
+    )
     return SyncConstants.cbor.encodeToByteArray(
         ApiResponse.serializer(request.responseSerializer),
         typedResult,

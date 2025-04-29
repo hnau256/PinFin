@@ -2,10 +2,10 @@ package hnau.pinfin.sync.server
 
 import hnau.common.kotlin.getOrInit
 import hnau.common.kotlin.toAccessor
-import hnau.pinfin.sync.common.ApiResponse
-import hnau.pinfin.sync.common.SyncApi
-import hnau.pinfin.sync.common.SyncHandle
-import hnau.pinfin.sync.common.map
+import hnau.pinfin.model.sync.utils.ApiResponse
+import hnau.pinfin.model.sync.utils.SyncApi
+import hnau.pinfin.model.sync.utils.SyncHandle
+import hnau.pinfin.model.sync.utils.map
 import hnau.shuffler.annotations.Shuffle
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.serialization.Serializable

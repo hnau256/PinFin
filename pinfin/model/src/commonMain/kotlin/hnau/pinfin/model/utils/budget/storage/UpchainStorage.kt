@@ -8,6 +8,7 @@ interface UpchainStorage {
     val upchain: StateFlow<Upchain>
 
     suspend fun setNewUpchain(
+        currentUpchainToCheck: Upchain,
         newUpchain: Upchain,
-    )
+    ): Boolean
 }

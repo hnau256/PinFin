@@ -2,8 +2,8 @@ package hnau.pinfin.sync.client
 
 import hnau.common.kotlin.coroutines.mapStateLite
 import hnau.common.kotlin.coroutines.toMutableStateFlowAsInitial
-import hnau.pinfin.sync.common.UpchainHash
-import hnau.pinfin.sync.common.UpchainState
+import hnau.pinfin.model.sync.utils.UpchainHash
+import hnau.pinfin.model.sync.utils.UpchainState
 import hnau.pinfin.upchain.BudgetUpchain
 import hnau.shuffler.annotations.Shuffle
 import kotlinx.coroutines.CoroutineScope

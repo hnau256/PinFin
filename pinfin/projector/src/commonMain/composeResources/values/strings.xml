@@ -32,4 +32,8 @@
     <string name="open_client">Открыть клиент</string>
     <string name="address">Адрес</string>
     <string name="port">Порт</string>
+    <string name="sync_server">Сервер синхронизации</string>
+    <string name="sync_server_is_active">Сервер синхронизации запущен</string>
+    <string name="stop">Остановить</string>
+    <string name="stop_sync_server">Остановить сервер синхронизации</string>
 </resources>

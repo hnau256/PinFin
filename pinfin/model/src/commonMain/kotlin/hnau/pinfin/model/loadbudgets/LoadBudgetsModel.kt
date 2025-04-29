@@ -34,6 +34,7 @@ class LoadBudgetsModel(
 
         fun budgetsOrSync(
             preferences: Preferences,
+            budgetsStorage: BudgetsStorage,
             budgetsRepository: BudgetsRepository,
         ): ModeModel.Dependencies
     }
@@ -44,7 +45,7 @@ class LoadBudgetsModel(
     )
 
     private data class Ready(
-        val budgetsRepository: BudgetsRepository,
+        val budgetsStorage: BudgetsStorage,
         val preferences: Preferences,
     )
 
@@ -52,10 +53,9 @@ class LoadBudgetsModel(
         scope = scope,
     ) {
         coroutineScope {
-            val deferredBudgetsRepository = async {
-                BudgetsRepository.create(
+            val budgetsStorage = async {
+                dependencies.budgetsStorageFactory.createBudgetsStorage(
                     scope = scope,
-                    budgetsStorageFactory = dependencies.budgetsStorageFactory,
                 )
             }
             val deferredPreferences = async {
@@ -64,7 +64,7 @@ class LoadBudgetsModel(
                 )
             }
             Ready(
-                budgetsRepository = deferredBudgetsRepository.await(),
+                budgetsStorage = budgetsStorage.await(),
                 preferences = deferredPreferences.await(),
             )
         }
@@ -76,7 +76,11 @@ class LoadBudgetsModel(
                 ModeModel(
                     scope = stateScope,
                     dependencies = dependencies.budgetsOrSync(
-                        budgetsRepository = ready.budgetsRepository,
+                        budgetsRepository = BudgetsRepository(
+                            scope = scope,
+                            budgetsStorage = ready.budgetsStorage,
+                        ),
+                        budgetsStorage = ready.budgetsStorage,
                         preferences = ready.preferences,
                     ),
                     skeleton = skeleton::budgetsOrSync

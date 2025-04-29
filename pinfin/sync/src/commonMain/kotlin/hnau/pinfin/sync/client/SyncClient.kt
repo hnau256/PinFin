@@ -11,10 +11,10 @@ import hnau.common.kotlin.coroutines.mapWithScope
 import hnau.common.kotlin.coroutines.scopedInState
 import hnau.common.kotlin.coroutines.toLoadableStateFlow
 import hnau.common.kotlin.coroutines.toMutableStateFlowAsInitial
-import hnau.pinfin.sync.common.ApiResponse
-import hnau.pinfin.sync.common.SyncApi
-import hnau.pinfin.sync.common.SyncHandle
-import hnau.pinfin.sync.common.UpchainHash
+import hnau.pinfin.model.sync.utils.ApiResponse
+import hnau.pinfin.model.sync.utils.SyncApi
+import hnau.pinfin.model.sync.utils.SyncHandle
+import hnau.pinfin.model.sync.utils.UpchainHash
 import hnau.pinfin.data.BudgetId
 import hnau.pinfin.upchain.BudgetUpchain
 import hnau.pinfin.upchain.BudgetsStorage

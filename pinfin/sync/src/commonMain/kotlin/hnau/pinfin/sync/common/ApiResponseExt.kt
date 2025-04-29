@@ -1,4 +1,4 @@
-package hnau.pinfin.sync.common
+package hnau.pinfin.model.sync.utils
 
 
 inline fun <T, R> ApiResponse<T>.fold(

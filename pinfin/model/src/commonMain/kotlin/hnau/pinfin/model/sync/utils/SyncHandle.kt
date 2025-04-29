@@ -1,7 +1,9 @@
 package hnau.pinfin.model.sync.utils
 
 import hnau.pinfin.data.BudgetId
-import hnau.pinfin.upchain.Update
+import hnau.pinfin.model.utils.budget.upchain.Upchain
+import hnau.pinfin.model.utils.budget.upchain.UpchainHash
+import hnau.pinfin.model.utils.budget.upchain.Update
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -11,17 +13,6 @@ import kotlinx.serialization.builtins.serializer
 sealed interface SyncHandle<O> {
 
     val responseSerializer: KSerializer<O>
-
-    @Serializable
-    @SerialName("ping")
-    data object Ping : SyncHandle<Ping.Response> {
-
-        override val responseSerializer: KSerializer<Response>
-            get() = Response.serializer()
-
-        @Serializable
-        data object Response
-    }
 
     @Serializable
     @SerialName("get_budgets")
@@ -38,51 +29,35 @@ sealed interface SyncHandle<O> {
             @Serializable
             data class Budget(
                 val id: BudgetId,
-                val peekHash: UpchainHash,
+                val peekHash: UpchainHash?,
             )
         }
     }
 
     @Serializable
-    @SerialName("check_contains_one_of_hashes")
-    data class CheckContainsOneOfHashes(
-        val budgetId: BudgetId,
-        val hashes: List<UpchainHash>,
-    ) : SyncHandle<CheckContainsOneOfHashes.Response> {
-
-        override val responseSerializer: KSerializer<Response>
-            get() = Response.serializer()
-
-        @Serializable
-        data class Response(
-            val foundHash: UpchainHash?,
-        )
-    }
-
-    @Serializable
     @SerialName("get_updates")
-    data class GetUpdates(
+    data class GetMaxToMinUpdates(
         val budgetId: BudgetId,
-        val after: UpchainHash,
-    ) : SyncHandle<GetUpdates.Response> {
+        val before: UpchainHash?,
+    ) : SyncHandle<GetMaxToMinUpdates.Response> {
 
         override val responseSerializer: KSerializer<Response>
             get() = Response.serializer()
 
         @Serializable
         data class Response(
-            val updates: List<Update>,
+            val updates: List<Upchain.Item>,
             val hasMoreUpdates: Boolean,
         )
     }
 
     @Serializable
-    @SerialName("add_updates")
-    data class AddUpdates(
+    @SerialName("append_updates")
+    data class AppendUpdates(
         val budgetId: BudgetId,
-        val after: UpchainHash,
+        val peekHashToCheck: UpchainHash?,
         val updates: List<Update>,
-    ) : SyncHandle<AddUpdates.Response> {
+    ) : SyncHandle<AppendUpdates.Response> {
 
         override val responseSerializer: KSerializer<Response>
             get() = Response.serializer()

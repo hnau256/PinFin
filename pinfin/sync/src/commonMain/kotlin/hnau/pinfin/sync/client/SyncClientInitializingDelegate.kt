@@ -1,6 +1,6 @@
 package hnau.pinfin.sync.client
 
-import hnau.pinfin.sync.common.SyncApi
+import hnau.pinfin.model.sync.utils.SyncApi
 import hnau.pinfin.upchain.BudgetsStorage
 import kotlinx.coroutines.CoroutineScope
 

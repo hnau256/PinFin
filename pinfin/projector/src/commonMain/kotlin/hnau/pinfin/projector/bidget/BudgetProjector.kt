@@ -88,6 +88,7 @@ class BudgetProjector(
     fun Content() {
         val tabWithProjector by projector.collectAsState()
         Scaffold(
+            modifier = Modifier.fillMaxSize(),
             bottomBar = {
                 NavigationBar {
                     val selectedTab = tabWithProjector.first

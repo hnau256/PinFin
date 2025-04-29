@@ -15,13 +15,6 @@ sealed interface ApiResponse<out T> {
     @Serializable
     @SerialName("error")
     data class Error(
-        val error: ApiError,
-    ) : ApiResponse<Nothing> {
-
-        constructor(
-            message: String?,
-        ) : this(
-            error = ApiError(message = message),
-        )
-    }
+        val error: String?,
+    ) : ApiResponse<Nothing>
 }

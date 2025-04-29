@@ -8,24 +8,29 @@ import hnau.common.app.goback.GoBackHandler
 import hnau.common.app.goback.GoBackHandlerProvider
 import hnau.common.kotlin.coroutines.toMutableStateFlowAsInitial
 import hnau.common.kotlin.serialization.MutableStateFlowSerializer
-import hnau.pinfin.model.mode.ManageOpener
+import hnau.pinfin.model.sync.server.utils.ServerSyncApi
+import hnau.pinfin.model.sync.server.utils.tcpSyncServer
 import hnau.pinfin.model.sync.utils.ServerPort
 import hnau.shuffler.annotations.Shuffle
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.UseSerializers
 
 class SyncServerModel(
     scope: CoroutineScope,
     dependencies: Dependencies,
-    skeleton: Skeleton,
+    private val skeleton: Skeleton,
     private val goBack: () -> Unit,
 ) : GoBackHandlerProvider {
 
     @Shuffle
     interface Dependencies {
+
+        fun serverSyncApi(): ServerSyncApi.Dependencies
     }
 
     @Serializable
@@ -34,6 +39,34 @@ class SyncServerModel(
         val stopServerDialogIsOpened: MutableStateFlow<Boolean> =
             false.toMutableStateFlowAsInitial(),
     )
+
+    init {
+        scope.launch {
+            tcpSyncServer(
+                port = skeleton.port,
+                api = ServerSyncApi(
+                    scope = scope,
+                    dependencies = dependencies.serverSyncApi(),
+                ),
+                onThrowable = {/*TODO*/ },
+            )
+        }
+    }
+
+    val stopServerDialogIsOpened: StateFlow<Boolean>
+        get() = skeleton.stopServerDialogIsOpened
+
+    fun stopServer() {
+        skeleton.stopServerDialogIsOpened.value = true
+    }
+
+    fun confirmStopServerDialog() {
+        goBack()
+    }
+
+    fun cancelStopServerDialog() {
+        skeleton.stopServerDialogIsOpened.value = false
+    }
 
     override val goBackHandler: GoBackHandler = {
         skeleton.stopServerDialogIsOpened.update { !it }

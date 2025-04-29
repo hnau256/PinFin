@@ -1,4 +1,4 @@
-package hnau.pinfin.sync.common
+package hnau.pinfin.model.sync.utils
 
 import hnau.common.kotlin.serialization.UUIDSerializer
 import kotlinx.serialization.Serializable

@@ -11,6 +11,7 @@ kotlin {
             implementation(project(":pinfin:data"))
             implementation(libs.kotlin.datetime)
             implementation(libs.kotlin.serialization.json)
+            implementation(libs.kotlin.serialization.cbor)
         }
     }
 }

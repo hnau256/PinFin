@@ -40,21 +40,4 @@ class BudgetsRepository(
             id = id,
         )
     }
-
-    companion object {
-
-        suspend fun create(
-            scope: CoroutineScope,
-            budgetsStorageFactory: BudgetsStorage.Factory,
-        ): BudgetsRepository {
-            val budgetsStorage = budgetsStorageFactory.createBudgetsStorage(
-                scope = scope,
-            )
-
-            return BudgetsRepository(
-                scope = scope,
-                budgetsStorage = budgetsStorage,
-            )
-        }
-    }
 }

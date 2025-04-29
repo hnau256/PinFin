@@ -71,6 +71,7 @@ class StartSyncProjector(
     @Composable
     fun Content() {
         Scaffold(
+            modifier = Modifier.fillMaxSize(),
             topBar = {
                 TopAppBar(
                     title = { Text(stringResource(Res.string.budgets)) },

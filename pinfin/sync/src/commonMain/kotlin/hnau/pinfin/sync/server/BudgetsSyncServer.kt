@@ -5,8 +5,8 @@ import hnau.common.kotlin.coroutines.mapListReusable
 import hnau.common.kotlin.coroutines.mapState
 import hnau.common.kotlin.getOrInit
 import hnau.common.kotlin.toAccessor
-import hnau.pinfin.sync.common.ApiResponse
-import hnau.pinfin.sync.common.UpchainHash
+import hnau.pinfin.model.sync.utils.ApiResponse
+import hnau.pinfin.model.sync.utils.UpchainHash
 import hnau.pinfin.sync.server.BudgetSyncServer.GetUpdatesResult
 import hnau.pinfin.data.BudgetId
 import hnau.pinfin.upchain.BudgetUpchain

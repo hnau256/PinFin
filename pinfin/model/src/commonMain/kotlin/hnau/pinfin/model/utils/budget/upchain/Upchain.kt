@@ -1,12 +1,14 @@
 package hnau.pinfin.model.utils.budget.upchain
 
 import hnau.common.kotlin.castOrNull
+import kotlinx.serialization.Serializable
 
 class Upchain private constructor(
     val items: List<Item>,
     val indexesByHash: Map<UpchainHash, Int>,
 ) {
 
+    @Serializable
     data class Item(
         val update: Update,
         val hash: UpchainHash,
