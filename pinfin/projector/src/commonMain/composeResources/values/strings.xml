@@ -36,4 +36,8 @@
     <string name="sync_server_is_active">Сервер синхронизации запущен</string>
     <string name="stop">Остановить</string>
     <string name="stop_sync_server">Остановить сервер синхронизации</string>
+    <string name="budgets_to_synchronization">Бюджеты для синхронизации</string>
+    <string name="error_while_loading_budgets_list_from_server">Ошибка загрузки бюджетов с сервера</string>
+    <string name="try_again">Попробовать снова</string>
+    <string name="there_is_no_budgets_for_synchronization">Отсутствуют бюджеты для синхронизации</string>
 </resources>

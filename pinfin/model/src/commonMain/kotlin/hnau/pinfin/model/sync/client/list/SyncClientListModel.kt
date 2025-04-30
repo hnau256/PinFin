@@ -1,14 +1,17 @@
 package hnau.pinfin.model.sync.client.list
 
 import arrow.core.Ior
+import arrow.core.NonEmptyList
+import arrow.core.toNonEmptyListOrNull
 import hnau.common.app.goback.GoBackHandler
 import hnau.common.app.goback.GoBackHandlerProvider
 import hnau.common.app.goback.NeverGoBackHandler
 import hnau.common.kotlin.Loadable
-import hnau.common.kotlin.Loading
-import hnau.common.kotlin.Ready
+import hnau.common.kotlin.LoadableStateFlow
 import hnau.common.kotlin.coroutines.combineState
+import hnau.common.kotlin.coroutines.flatMapState
 import hnau.common.kotlin.coroutines.mapReusable
+import hnau.common.kotlin.coroutines.scopedInState
 import hnau.common.kotlin.coroutines.toMutableStateFlowAsInitial
 import hnau.common.kotlin.map
 import hnau.pinfin.data.BudgetId
@@ -21,10 +24,8 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.mapLatest
-import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.update
 import kotlinx.serialization.Serializable
 
 class SyncClientListModel(
@@ -52,20 +53,21 @@ class SyncClientListModel(
     @OptIn(ExperimentalCoroutinesApi::class)
     private val serverBudgets: StateFlow<Loadable<Result<List<SyncHandle.GetBudgets.Response.Budget>>>> =
         serverBudgetsRequestIndex
-            .mapLatest {
-                dependencies
-                    .tcpSyncClient
-                    .handle(SyncHandle.GetBudgets)
-                    .map(SyncHandle.GetBudgets.Response::budgets)
-                    .let(::Ready)
+            .scopedInState(scope)
+            .flatMapState(scope) { (attemptScope) ->
+                LoadableStateFlow(attemptScope) {
+                    dependencies
+                        .tcpSyncClient
+                        .handle(SyncHandle.GetBudgets)
+                        .map(SyncHandle.GetBudgets.Response::budgets)
+                }
             }
-            .stateIn(
-                scope = scope,
-                started = SharingStarted.Eagerly,
-                initialValue = Loading,
-            )
 
-    val items: StateFlow<Loadable<Result<List<SyncClientListItemModel>>>> = combineState(
+    fun reload() {
+        serverBudgetsRequestIndex.update(Int::inc)
+    }
+
+    val items: StateFlow<Loadable<Result<NonEmptyList<Pair<BudgetId, SyncClientListItemModel>>?>>> = combineState(
         scope = scope,
         a = serverBudgets,
         b = dependencies.budgetsRepository.list,
@@ -95,22 +97,25 @@ class SyncClientListModel(
                                 id to Ior.Right(serverPeekHash)
                             }
                     )
-                }.sortedBy { it.first }
+                }
+                    .sortedBy { it.first }
+                    .toNonEmptyListOrNull()
             }
         }
     }.mapReusable(scope) { itemsOrErrorOrLoading ->
         itemsOrErrorOrLoading.map { itemsOrError ->
             itemsOrError.map { items ->
-                items.map { (id, localOrServer: Ior<Deferred<BudgetRepository>, ServerBudgetPeekHash>) ->
+                items?.map { (id, localOrServer: Ior<Deferred<BudgetRepository>, ServerBudgetPeekHash>) ->
                     getOrPutItem(
                         key = id,
                     ) { itemScope ->
-                        SyncClientListItemModel(
+                        val itemModel = SyncClientListItemModel(
                             id = id,
                             scope = itemScope,
                             dependencies = dependencies.item(),
                             localOrServer = localOrServer,
                         )
+                        id to itemModel
                     }
                 }
             }

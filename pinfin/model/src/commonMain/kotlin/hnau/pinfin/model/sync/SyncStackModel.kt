@@ -10,7 +10,7 @@ import hnau.common.app.model.stack.stackGoBackHandler
 import hnau.common.app.model.stack.tailGoBackHandler
 import hnau.common.app.model.stack.tryDropLast
 import hnau.common.kotlin.coroutines.toMutableStateFlowAsInitial
-import hnau.pinfin.model.sync.client.SyncClientStackModel
+import hnau.pinfin.model.sync.client.SyncClientModel
 import hnau.pinfin.model.sync.server.SyncServerModel
 import hnau.pinfin.model.sync.start.StartSyncModel
 import hnau.shuffler.annotations.Shuffle
@@ -32,7 +32,7 @@ class SyncStackModel(
             syncModeOpener: SyncModeOpener,
         ): StartSyncModel.Dependencies
 
-        fun client(): SyncClientStackModel.Dependencies
+        fun client(): SyncClientModel.Dependencies
 
         fun server(): SyncServerModel.Dependencies
     }
@@ -51,7 +51,7 @@ class SyncStackModel(
             openSyncClient = { address, port ->
                 switchToState(
                     SyncStackElementModel.Skeleton.Client(
-                        skeleton = SyncClientStackModel.Skeleton(
+                        skeleton = SyncClientModel.Skeleton(
                             address = address,
                             port = port,
                         )
@@ -107,7 +107,7 @@ class SyncStackModel(
         )
 
         is SyncStackElementModel.Skeleton.Client -> SyncStackElementModel.Client(
-            SyncClientStackModel(
+            SyncClientModel(
                 scope = modelScope,
                 skeleton = skeleton.skeleton,
                 dependencies = dependencies.client(),

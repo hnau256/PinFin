@@ -1,7 +1,7 @@
 package hnau.pinfin.projector.sync
 
 import androidx.compose.runtime.Composable
-import hnau.pinfin.projector.sync.client.SyncClientStackProjector
+import hnau.pinfin.projector.sync.client.SyncClientProjector
 
 sealed interface SyncStackElementProjector {
 
@@ -24,7 +24,7 @@ sealed interface SyncStackElementProjector {
     }
 
     data class Client(
-        private val projector: SyncClientStackProjector,
+        private val projector: SyncClientProjector,
     ) : SyncStackElementProjector {
 
         @Composable

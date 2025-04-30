@@ -11,11 +11,12 @@ import hnau.common.app.preferences.Preference
 import hnau.common.app.preferences.Preferences
 import hnau.common.app.preferences.map
 import hnau.common.kotlin.castOrNull
-import hnau.common.kotlin.coroutines.combineState
 import hnau.common.kotlin.coroutines.flatMapState
 import hnau.common.kotlin.coroutines.mapListReusable
 import hnau.common.kotlin.coroutines.mapState
 import hnau.common.kotlin.coroutines.mapWithScope
+import hnau.common.kotlin.coroutines.scopedInState
+import hnau.common.kotlin.coroutines.toMutableStateFlowAsInitial
 import hnau.common.kotlin.getOrInit
 import hnau.common.kotlin.mapper.Mapper
 import hnau.common.kotlin.mapper.nullable
@@ -110,62 +111,62 @@ class ManageModel(
                 deferredRepositoriesList.associate(::identity)
             }
 
-    val state: StateFlow<ManageStateModel> = combineState(
-        scope = scope,
-        a = deferredBudgetRepositories,
-        b = selectedBudgetPreference.value,
-    ) { deferredBudgetRepositories, selectedOrNone ->
-        selectedOrNone.getOrNull()?.let { selectedId ->
-            deferredBudgetRepositories[selectedId]?.let { deferredBudgetRepository ->
-                DeferredBudgetRepositoryWrapper(
-                    id = selectedId,
-                    deferredBudgetRepository = deferredBudgetRepository,
+    val state: StateFlow<ManageStateModel> = selectedBudgetPreference
+        .value
+        .scopedInState(scope)
+        .flatMapState(scope) { (selectedScope, selectedOrNone) ->
+            val selected = selectedOrNone.getOrNull()
+            when (selected) {
+                null -> null.toMutableStateFlowAsInitial()
+                else -> deferredBudgetRepositories.mapState(
+                    scope = selectedScope,
+                    transform = { it[selected] },
                 )
             }
         }
-    }.mapWithScope(
-        scope = scope,
-    ) { stateScope, deferredBudgetRepositoryOrNull ->
-        when (deferredBudgetRepositoryOrNull) {
-            null -> ManageStateModel.BudgetsList(
-                model = BudgetsListModel(
-                    scope = stateScope,
-                    dependencies = dependencies.budgetsList(
-                        deferredBudgetRepositories = deferredBudgetRepositories,
-                        budgetOpener = selectedBudgetPreference.update
-                    ),
-                    skeleton = skeleton::stateSkeleton
-                        .toAccessor()
-                        .shrinkType<_, ManageStateModel.Skeleton.BudgetsList>()
-                        .getOrInit {
-                            ManageStateModel.Skeleton.BudgetsList(
-                                BudgetsListModel.Skeleton()
-                            )
-                        }
-                        .skeleton,
+        .mapWithScope(
+            scope = scope,
+        ) { stateScope, deferredBudgetRepositoryOrNull ->
+            when (deferredBudgetRepositoryOrNull) {
+                null -> ManageStateModel.BudgetsList(
+                    model = BudgetsListModel(
+                        scope = stateScope,
+                        dependencies = dependencies.budgetsList(
+                            deferredBudgetRepositories = deferredBudgetRepositories,
+                            budgetOpener = selectedBudgetPreference.update
+                        ),
+                        skeleton = skeleton::stateSkeleton
+                            .toAccessor()
+                            .shrinkType<_, ManageStateModel.Skeleton.BudgetsList>()
+                            .getOrInit {
+                                ManageStateModel.Skeleton.BudgetsList(
+                                    BudgetsListModel.Skeleton()
+                                )
+                            }
+                            .skeleton,
+                    )
                 )
-            )
 
-            else -> ManageStateModel.LoadBudget(
-                model = LoadBudgetModel(
-                    scope = stateScope,
-                    dependencies = dependencies.budget(
-                        deferredBudgetRepository = deferredBudgetRepositoryOrNull.deferredBudgetRepository,
-                        budgetsListOpener = { selectedBudgetPreference.update(null) },
-                    ),
-                    skeleton = skeleton::stateSkeleton
-                        .toAccessor()
-                        .shrinkType<_, ManageStateModel.Skeleton.LoadBudget>()
-                        .getOrInit {
-                            ManageStateModel.Skeleton.LoadBudget(
-                                LoadBudgetModel.Skeleton()
-                            )
-                        }
-                        .skeleton,
+                else -> ManageStateModel.LoadBudget(
+                    model = LoadBudgetModel(
+                        scope = stateScope,
+                        dependencies = dependencies.budget(
+                            deferredBudgetRepository = deferredBudgetRepositoryOrNull,
+                            budgetsListOpener = { selectedBudgetPreference.update(null) },
+                        ),
+                        skeleton = skeleton::stateSkeleton
+                            .toAccessor()
+                            .shrinkType<_, ManageStateModel.Skeleton.LoadBudget>()
+                            .getOrInit {
+                                ManageStateModel.Skeleton.LoadBudget(
+                                    LoadBudgetModel.Skeleton()
+                                )
+                            }
+                            .skeleton,
+                    )
                 )
-            )
+            }
         }
-    }
 
     override val goBackHandler: GoBackHandler = state
         .flatMapState(scope, GoBackHandlerProvider::goBackHandler)

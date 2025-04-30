@@ -27,7 +27,7 @@ import kotlinx.serialization.UseSerializers
 class SyncClientListItemModel(
     private val scope: CoroutineScope,
     dependencies: Dependencies,
-    id: BudgetId,
+    val id: BudgetId,
     localOrServer: Ior<Deferred<BudgetRepository>, ServerBudgetPeekHash>,
 ) : GoBackHandlerProvider {
 

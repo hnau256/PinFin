@@ -1,13 +1,13 @@
-package hnau.pinfin.projector.sync.client
+package hnau.pinfin.projector.sync.client.budget
 
 import androidx.compose.runtime.Composable
-import hnau.pinfin.model.sync.client.SyncClientStackModel
+import hnau.pinfin.model.sync.client.budget.SyncClientBudgetModel
 import hnau.shuffler.annotations.Shuffle
 import kotlinx.coroutines.CoroutineScope
 
-class SyncClientStackProjector(
+class SyncClientBudgetProjector(
     scope: CoroutineScope,
-    model: SyncClientStackModel,
+    model: SyncClientBudgetModel,
     dependencies: Dependencies,
 ) {
 
@@ -15,6 +15,7 @@ class SyncClientStackProjector(
     interface Dependencies {
 
     }
+
 
     @Composable
     fun Content() {

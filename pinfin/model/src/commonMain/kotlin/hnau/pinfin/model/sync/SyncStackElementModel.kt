@@ -1,7 +1,7 @@
 package hnau.pinfin.model.sync
 
 import hnau.common.app.goback.GoBackHandlerProvider
-import hnau.pinfin.model.sync.client.SyncClientStackModel
+import hnau.pinfin.model.sync.client.SyncClientModel
 import hnau.pinfin.model.sync.server.SyncServerModel
 import hnau.pinfin.model.sync.start.StartSyncModel
 import kotlinx.serialization.SerialName
@@ -20,7 +20,7 @@ sealed interface SyncStackElementModel: GoBackHandlerProvider {
     }
 
     data class Client(
-        val model: SyncClientStackModel,
+        val model: SyncClientModel,
     ): GoBackHandlerProvider by model, SyncStackElementModel {
 
         override val key: Int
@@ -47,7 +47,7 @@ sealed interface SyncStackElementModel: GoBackHandlerProvider {
         @Serializable
         @SerialName("client")
         data class Client(
-            val skeleton: SyncClientStackModel.Skeleton,
+            val skeleton: SyncClientModel.Skeleton,
         ) : Skeleton
 
         @Serializable
