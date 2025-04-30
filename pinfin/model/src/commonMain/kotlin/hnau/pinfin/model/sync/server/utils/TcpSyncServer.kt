@@ -1,6 +1,5 @@
 package hnau.pinfin.model.sync.server.utils
 
-import arrow.core.raise.result
 import hnau.pinfin.model.sync.utils.ApiResponse
 import hnau.pinfin.model.sync.utils.ServerPort
 import hnau.pinfin.model.sync.utils.SyncApi
@@ -8,7 +7,11 @@ import hnau.pinfin.model.sync.utils.SyncConstants
 import hnau.pinfin.model.sync.utils.SyncHandle
 import hnau.pinfin.model.sync.utils.readSizeWithBytes
 import hnau.pinfin.model.sync.utils.writeSizeWithBytes
-import kotlinx.coroutines.CancellationException
+import io.ktor.network.selector.SelectorManager
+import io.ktor.network.sockets.ServerSocket
+import io.ktor.network.sockets.aSocket
+import io.ktor.network.sockets.openReadChannel
+import io.ktor.network.sockets.openWriteChannel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.awaitCancellation
@@ -17,21 +20,17 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import kotlinx.coroutines.yield
 import kotlinx.serialization.ExperimentalSerializationApi
-import java.io.DataInputStream
-import java.io.DataOutputStream
-import java.net.ServerSocket
 
 suspend fun tcpSyncServer(
     port: ServerPort,
     api: SyncApi,
     onThrowable: (Throwable) -> Unit,
-): Result<Nothing> = result {
-    val serverSocket = runCatching {
-        withContext(Dispatchers.IO) {
-            ServerSocket(port.port)
-        }
-    }.bind()
-    try {
+): Result<Nothing> = runCatching {
+    withContext(Dispatchers.IO) {
+        val serverSocket = aSocket(SelectorManager(Dispatchers.IO))
+            .tcp()
+            .bind(port = port.port)
+        println("QWERTY: Server address: ${serverSocket.localAddress}")
         coroutineScope {
             while (true) {
                 try {
@@ -45,9 +44,6 @@ suspend fun tcpSyncServer(
             }
         }
         awaitCancellation()
-    } catch (ex: CancellationException) {
-        runCatching { serverSocket.close() }.bind()
-        throw ex
     }
 }
 
@@ -55,21 +51,16 @@ private suspend fun CoroutineScope.circleUnsafe(
     serverSocket: ServerSocket,
     api: SyncApi,
 ) {
-    withContext(Dispatchers.IO) {
-        yield()
-        val clientSocket = serverSocket.accept()
-        launch(Dispatchers.IO) {
-            clientSocket.use { clientSocket ->
-                val requestBytes = clientSocket
-                    .inputStream
-                    .let(::DataInputStream)
-                    .readSizeWithBytes()
-                val responseBytes = api.handle(requestBytes)
-                clientSocket
-                    .outputStream
-                    .let(::DataOutputStream)
-                    .writeSizeWithBytes(responseBytes)
-            }
+    val clientSocket = serverSocket.accept()
+    launch {
+        clientSocket.use { clientSocket ->
+            val requestBytes = clientSocket
+                .openReadChannel()
+                .readSizeWithBytes()
+            val responseBytes = api.handle(requestBytes)
+            clientSocket
+                .openWriteChannel()
+                .writeSizeWithBytes(responseBytes)
         }
     }
 }

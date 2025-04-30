@@ -10,6 +10,7 @@ kotlin {
             implementation(project(":common:app"))
             implementation(project(":pinfin:data"))
             implementation(libs.kotlin.datetime)
+            implementation(libs.ktor.network)
             implementation(libs.kotlin.serialization.json)
             implementation(libs.kotlin.serialization.cbor)
         }

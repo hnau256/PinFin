@@ -9,12 +9,14 @@ import hnau.pinfin.model.sync.utils.SyncConstants
 import hnau.pinfin.model.sync.utils.SyncHandle
 import hnau.pinfin.model.sync.utils.readSizeWithBytes
 import hnau.pinfin.model.sync.utils.writeSizeWithBytes
+import io.ktor.network.selector.SelectorManager
+import io.ktor.network.sockets.InetSocketAddress
+import io.ktor.network.sockets.aSocket
+import io.ktor.network.sockets.openReadChannel
+import io.ktor.network.sockets.openWriteChannel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.ExperimentalSerializationApi
-import java.io.DataInputStream
-import java.io.DataOutputStream
-import java.net.Socket
 
 class TcpSyncClient(
     private val address: ServerAddress,
@@ -29,19 +31,23 @@ class TcpSyncClient(
             SyncConstants.cbor.encodeToByteArray(SyncHandle.Companion.serializer, request)
         }
         val responseBytes = withContext(Dispatchers.IO) {
-            Socket(
-                address.address,
-                port.port,
-            ).use { socket ->
-                socket
-                    .outputStream
-                    .let(::DataOutputStream)
-                    .writeSizeWithBytes(requestBytes)
-                socket
-                    .inputStream
-                    .let(::DataInputStream)
-                    .readSizeWithBytes()
-            }
+
+            aSocket(SelectorManager(Dispatchers.IO))
+                .tcp()
+                .connect(
+                    InetSocketAddress(
+                        hostname = address.address,
+                        port = port.port,
+                    )
+                )
+                .use { socket ->
+                    socket
+                        .openWriteChannel()
+                        .writeSizeWithBytes(requestBytes)
+                    socket
+                        .openReadChannel()
+                        .readSizeWithBytes()
+                }
         }
         val response = withContext(Dispatchers.Default) {
             ApiResponse
