@@ -6,13 +6,13 @@ import hnau.pinfin.model.sync.client.list.SyncClientListModel
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
-sealed interface SyncClientStateModel : GoBackHandlerProvider {
+sealed interface SyncClientStackElementModel : GoBackHandlerProvider {
 
     val key: Int
 
     data class List(
         val model: SyncClientListModel,
-    ) : SyncClientStateModel, GoBackHandlerProvider by model {
+    ) : SyncClientStackElementModel, GoBackHandlerProvider by model {
 
         override val key: Int
             get() = 0
@@ -20,7 +20,7 @@ sealed interface SyncClientStateModel : GoBackHandlerProvider {
 
     data class Budget(
         val model: SyncClientLoadBudgetModel,
-    ) : SyncClientStateModel, GoBackHandlerProvider by model {
+    ) : SyncClientStackElementModel, GoBackHandlerProvider by model {
 
         override val key: Int
             get() = 1

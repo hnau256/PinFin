@@ -8,23 +8,26 @@ import hnau.common.app.goback.GoBackHandler
 import hnau.common.app.goback.GoBackHandlerProvider
 import hnau.common.app.goback.fallback
 import hnau.common.kotlin.Loadable
+import hnau.common.kotlin.LoadableStateFlow
 import hnau.common.kotlin.Loading
 import hnau.common.kotlin.Ready
 import hnau.common.kotlin.coroutines.flatMapState
 import hnau.common.kotlin.coroutines.mapWithScope
 import hnau.common.kotlin.coroutines.scopedInState
-import hnau.common.kotlin.coroutines.toLoadableStateFlow
 import hnau.common.kotlin.coroutines.toMutableStateFlowAsInitial
 import hnau.common.kotlin.getOrInit
 import hnau.common.kotlin.map
 import hnau.common.kotlin.serialization.MutableStateFlowSerializer
 import hnau.common.kotlin.toAccessor
+import hnau.pinfin.data.BudgetId
 import hnau.pinfin.model.utils.budget.repository.BudgetRepository
+import hnau.pinfin.model.utils.budget.repository.BudgetsRepository
 import hnau.shuffler.annotations.Shuffle
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.mapNotNull
 import kotlinx.coroutines.flow.update
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.UseSerializers
@@ -39,15 +42,17 @@ class SyncClientLoadBudgetModel(
     @Shuffle
     interface Dependencies {
 
-        val budgetRepository: Deferred<BudgetRepository>
+        val budgetsRepository: BudgetsRepository
 
         fun budget(
+            id: BudgetId,
             repository: BudgetRepository,
         ): SyncClientBudgetModel.Dependencies
     }
 
     @Serializable
     data class Skeleton(
+        val id: BudgetId,
         var state: SyncClientBudgetModel.Skeleton? = null,
         val isStopSyncDialogVisible: MutableStateFlow<Boolean> =
             false.toMutableStateFlowAsInitial(),
@@ -56,23 +61,34 @@ class SyncClientLoadBudgetModel(
     val isStopSyncDialogVisible: MutableStateFlow<Boolean>
         get() = skeleton.isStopSyncDialogVisible
 
-    val state: StateFlow<Loadable<SyncClientBudgetModel>> = dependencies
-        .budgetRepository
-        .toLoadableStateFlow(scope)
-        .mapWithScope(scope) { repositoryScope, repositoryOrLoading ->
-            repositoryOrLoading.map { repository ->
-                SyncClientBudgetModel(
-                    scope = repositoryScope,
-                    dependencies = dependencies.budget(
-                        repository = repository,
-                    ),
-                    skeleton = skeleton::state
-                        .toAccessor()
-                        .getOrInit { SyncClientBudgetModel.Skeleton() },
-                    goBack = goBack,
-                )
+    val state: StateFlow<Loadable<SyncClientBudgetModel>> = LoadableStateFlow(scope) {
+        val repository = dependencies.budgetsRepository
+        val id = skeleton.id
+        repository.createNewBudgetIfNotExists(id)
+        repository
+            .list
+            .mapNotNull {
+                it
+                    .firstOrNull { it.first == id }
+                    ?.second
             }
+            .first()
+            .await()
+    }.mapWithScope(scope) { repositoryScope, repositoryOrLoading ->
+        repositoryOrLoading.map { repository ->
+            SyncClientBudgetModel(
+                scope = repositoryScope,
+                dependencies = dependencies.budget(
+                    id = skeleton.id,
+                    repository = repository,
+                ),
+                skeleton = skeleton::state
+                    .toAccessor()
+                    .getOrInit { SyncClientBudgetModel.Skeleton() },
+                goBack = goBack,
+            )
         }
+    }
 
     fun stopSyncConfirm() {
         goBack()

@@ -1,13 +1,10 @@
 package hnau.pinfin.projector.sync.client
 
 import androidx.compose.runtime.Composable
-import hnau.pinfin.projector.sync.SyncStackProjector
-import hnau.pinfin.projector.manage.ManageProjector
-import hnau.pinfin.projector.sync.client.budget.SyncClientBudgetProjector
 import hnau.pinfin.projector.sync.client.budget.SyncClientLoadBudgetProjector
 import hnau.pinfin.projector.sync.client.list.SyncClientListProjector
 
-sealed interface SyncClientStateProjector {
+sealed interface SyncClientStackElementProjector {
 
     @Composable
     fun Content()
@@ -16,7 +13,7 @@ sealed interface SyncClientStateProjector {
 
     data class List(
         private val projector: SyncClientListProjector,
-    ) : SyncClientStateProjector {
+    ) : SyncClientStackElementProjector {
 
         @Composable
         override fun Content() {
@@ -29,7 +26,7 @@ sealed interface SyncClientStateProjector {
 
     data class Budget(
         private val projector: SyncClientLoadBudgetProjector,
-    ) : SyncClientStateProjector {
+    ) : SyncClientStackElementProjector {
 
         @Composable
         override fun Content() {

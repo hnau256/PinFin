@@ -9,7 +9,7 @@ interface BudgetsStorage {
 
     val list: StateFlow<List<Pair<BudgetId, Deferred<UpchainStorage>>>>
 
-    suspend fun createNewBudget(
+    suspend fun createNewBudgetIfNotExists(
         id: BudgetId,
     )
 

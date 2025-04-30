@@ -30,10 +30,10 @@ class BudgetsRepository(
             }
         )
 
-    suspend fun createNewBudget(
+    suspend fun createNewBudgetIfNotExists(
         id: BudgetId,
     ) {
-        budgetsStorage.createNewBudget(
+        budgetsStorage.createNewBudgetIfNotExists(
             id = id,
         )
     }

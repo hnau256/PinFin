@@ -2,6 +2,7 @@ package hnau.pinfin.model.utils.budget.storage.impl
 
 import arrow.core.identity
 import hnau.common.kotlin.coroutines.mapListReusable
+import hnau.common.kotlin.coroutines.mapState
 import hnau.common.kotlin.coroutines.toMutableStateFlowAsInitial
 import hnau.pinfin.data.BudgetId
 import hnau.pinfin.model.utils.budget.storage.BudgetsStorage
@@ -19,30 +20,35 @@ import java.io.File
 class FileBasedBudgetsStorage private constructor(
     private val scope: CoroutineScope,
     private val budgetsDir: File,
-    initialBudgetsNames: List<String>,
+    initialBudgetsNames: Set<String>,
 ) : BudgetsStorage {
 
-    private val namesList: MutableStateFlow<List<String>> =
+    private val namesList: MutableStateFlow<Set<String>> =
         initialBudgetsNames.toMutableStateFlowAsInitial()
 
     override val list: StateFlow<List<Pair<BudgetId, Deferred<UpchainStorage>>>> =
-        namesList.mapListReusable(
-            scope = scope,
-            extractKey = ::identity,
-        ) { budgetScope, name ->
+        namesList
+            .mapState(
+                scope = scope,
+                transform = Iterable<String>::toList,
+            )
+            .mapListReusable(
+                scope = scope,
+                extractKey = ::identity,
+            ) { budgetScope, name ->
 
-            val id = BudgetId.Companion.stringMapper.direct(name)
-            val upchainStorage = budgetScope.async {
-                FileBasedUpchainStorage.create(
-                    scope = budgetScope,
-                    budgetFile = File(budgetsDir, name),
-                )
+                val id = BudgetId.Companion.stringMapper.direct(name)
+                val upchainStorage = budgetScope.async {
+                    FileBasedUpchainStorage.create(
+                        scope = budgetScope,
+                        budgetFile = File(budgetsDir, name),
+                    )
+                }
+
+                id to upchainStorage
             }
 
-            id to upchainStorage
-        }
-
-    override suspend fun createNewBudget(
+    override suspend fun createNewBudgetIfNotExists(
         id: BudgetId,
     ) {
         namesList.update { existingBudgetsIds ->
@@ -58,7 +64,10 @@ class FileBasedBudgetsStorage private constructor(
             scope: CoroutineScope,
         ): BudgetsStorage {
             val names = withContext(Dispatchers.IO) {
-                budgetsDir.list().orEmpty().toList()
+                budgetsDir
+                    .list()
+                    .orEmpty()
+                    .toSet()
             }
             return FileBasedBudgetsStorage(
                 scope = scope,

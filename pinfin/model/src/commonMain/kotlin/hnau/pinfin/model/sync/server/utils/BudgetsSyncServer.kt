@@ -5,7 +5,6 @@ import arrow.core.raise.result
 import hnau.common.kotlin.coroutines.mapListReusable
 import hnau.common.kotlin.coroutines.mapState
 import hnau.common.kotlin.fold
-import hnau.common.kotlin.ifNull
 import hnau.pinfin.data.BudgetId
 import hnau.pinfin.model.sync.utils.SyncHandle
 import hnau.pinfin.model.utils.budget.repository.BudgetRepository
@@ -95,14 +94,11 @@ class BudgetsSyncServer(
         budgetId: BudgetId,
         peekHashToCheck: UpchainHash?,
         updates: List<Update>,
-    ): Result<Unit> = budgetsUpdates
-        .value[budgetId]
-        .ifNull {
-            dependencies.budgetsStorage.createNewBudget(budgetId)
-            budgetsUpdates.mapNotNull { it[budgetId] }.first()
-        }
-        .appendUpdates(
-            peekHashToCheck = peekHashToCheck,
-            updates = updates,
-        )
+    ): Result<Unit> = run {
+        dependencies.budgetsStorage.createNewBudgetIfNotExists(budgetId)
+        budgetsUpdates.mapNotNull { it[budgetId] }.first()
+    }.appendUpdates(
+        peekHashToCheck = peekHashToCheck,
+        updates = updates,
+    )
 }

@@ -132,7 +132,7 @@ class BudgetsListModel(
     fun createNewBudget() {
         scope.launch {
             inProgressRegistry.executeRegistered {
-                dependencies.budgetsRepository.createNewBudget(
+                dependencies.budgetsRepository.createNewBudgetIfNotExists(
                     id = BudgetId.new(),
                 )
             }

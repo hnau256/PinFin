@@ -1,0 +1,143 @@
+@file:UseSerializers(
+    MutableStateFlowSerializer::class,
+)
+
+package hnau.pinfin.model.sync.client
+
+import hnau.common.app.goback.GoBackHandler
+import hnau.common.app.goback.GoBackHandlerProvider
+import hnau.common.app.goback.fallback
+import hnau.common.app.goback.stateGoBackHandler
+import hnau.common.app.model.stack.NonEmptyStack
+import hnau.common.app.model.stack.StackModelElements
+import hnau.common.app.model.stack.push
+import hnau.common.app.model.stack.stackGoBackHandler
+import hnau.common.app.model.stack.tailGoBackHandler
+import hnau.common.app.model.stack.tryDropLast
+import hnau.common.kotlin.coroutines.flatMapState
+import hnau.common.kotlin.coroutines.mapState
+import hnau.common.kotlin.coroutines.mapWithScope
+import hnau.common.kotlin.coroutines.scopedInState
+import hnau.common.kotlin.coroutines.toMutableStateFlowAsInitial
+import hnau.common.kotlin.getOrInit
+import hnau.common.kotlin.serialization.MutableStateFlowSerializer
+import hnau.common.kotlin.shrinkType
+import hnau.common.kotlin.toAccessor
+import hnau.pinfin.data.BudgetId
+import hnau.pinfin.model.sync.client.budget.SyncClientLoadBudgetModel
+import hnau.pinfin.model.sync.client.list.SyncClientListModel
+import hnau.pinfin.model.sync.client.utils.TcpSyncClient
+import hnau.pinfin.model.sync.utils.ServerAddress
+import hnau.pinfin.model.sync.utils.ServerPort
+import hnau.pinfin.model.utils.budget.repository.BudgetRepository
+import hnau.pinfin.model.utils.budget.repository.BudgetsRepository
+import hnau.shuffler.annotations.Shuffle
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Deferred
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.UseSerializers
+
+class SyncClientStackModel(
+    scope: CoroutineScope,
+    dependencies: Dependencies,
+    private val skeleton: Skeleton,
+) : GoBackHandlerProvider {
+
+    @Shuffle
+    interface Dependencies {
+
+        val budgetsRepository: BudgetsRepository
+
+        @Shuffle
+        interface WithSyncClient {
+
+            fun list(
+                budgetOpener: BudgetSyncOpener,
+            ): SyncClientListModel.Dependencies
+
+            fun budget(): SyncClientLoadBudgetModel.Dependencies
+        }
+
+        fun withSyncClient(
+            tcpSyncClient: TcpSyncClient,
+        ): WithSyncClient
+    }
+
+    private val dependenciesWithSyncClient: Dependencies.WithSyncClient =
+        dependencies.withSyncClient(
+            tcpSyncClient = TcpSyncClient(
+                address = skeleton.address,
+                port = skeleton.port,
+            )
+        )
+
+    @Serializable
+    data class Skeleton(
+        val port: ServerPort,
+        val address: ServerAddress,
+        val stack: MutableStateFlow<NonEmptyStack<SyncClientStackElementModel.Skeleton>> =
+            MutableStateFlow(NonEmptyStack(SyncClientStackElementModel.Skeleton.List())),
+    )
+
+    val stack: StateFlow<NonEmptyStack<SyncClientStackElementModel>> = run {
+        val stack = skeleton.stack
+        StackModelElements(
+            scope = scope,
+            skeletonsStack = stack,
+        ) { modelScope, skeleton ->
+            createModel(
+                modelScope = modelScope,
+                skeleton = skeleton,
+            )
+        }
+    }
+
+    private fun createModel(
+        modelScope: CoroutineScope,
+        skeleton: SyncClientStackElementModel.Skeleton,
+    ): SyncClientStackElementModel = when (skeleton) {
+        is SyncClientStackElementModel.Skeleton.List -> SyncClientStackElementModel.List(
+            SyncClientListModel(
+                scope = modelScope,
+                skeleton = skeleton.skeleton,
+                dependencies = dependenciesWithSyncClient.list(
+                    budgetOpener = { budgetId ->
+                        this@SyncClientStackModel
+                            .skeleton
+                            .stack
+                            .push(
+                                SyncClientStackElementModel.Skeleton.Budget(
+                                    SyncClientLoadBudgetModel.Skeleton(
+                                        id = budgetId,
+                                    )
+                                )
+                            )
+                    }
+                ),
+            )
+        )
+
+        is SyncClientStackElementModel.Skeleton.Budget -> SyncClientStackElementModel.Budget(
+            SyncClientLoadBudgetModel(
+                scope = modelScope,
+                skeleton = skeleton.skeleton,
+                dependencies = dependenciesWithSyncClient.budget(),
+                goBack = {
+                    this@SyncClientStackModel
+                        .skeleton
+                        .stack
+                        .tryDropLast()
+                },
+            )
+        )
+    }
+
+    override val goBackHandler: GoBackHandler = stack
+        .tailGoBackHandler(scope)
+        .fallback(
+            scope = scope,
+            fallback = skeleton.stack.stackGoBackHandler(scope),
+        )
+}
