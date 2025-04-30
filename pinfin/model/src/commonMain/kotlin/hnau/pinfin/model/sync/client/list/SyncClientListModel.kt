@@ -57,7 +57,7 @@ class SyncClientListModel(
                     .tcpSyncClient
                     .handle(SyncHandle.GetBudgets)
                     .map(SyncHandle.GetBudgets.Response::budgets)
-                    .let { Ready(it) }
+                    .let(::Ready)
             }
             .stateIn(
                 scope = scope,

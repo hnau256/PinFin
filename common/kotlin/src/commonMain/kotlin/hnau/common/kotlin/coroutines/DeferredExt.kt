@@ -17,7 +17,7 @@ fun <T> Deferred<T>.toLoadableStateFlow(
     val result = await()
     emit(result)
 }
-    .map { Ready(it) }
+    .map(::Ready)
     .stateIn(
         scope = lifecycleScope,
         initialValue = Loading,
