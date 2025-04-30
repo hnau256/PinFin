@@ -76,6 +76,8 @@ class SyncClientBudgetModel(
             onSuccess = { wasSaved ->
                 if (!wasSaved) {
                     println("QWERTY: Was not saved")
+                } else {
+                    println("QWERTY: Saved")
                 }
                 wasSaved
             },

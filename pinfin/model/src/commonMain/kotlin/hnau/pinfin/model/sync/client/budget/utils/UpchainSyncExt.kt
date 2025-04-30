@@ -21,18 +21,23 @@ suspend fun Upchain.syncWithRemote(
     var remotePeek: UpchainHash? = null
     val updatesToPush: MutableList<Update> = mutableListOf()
 
-    suspend fun flushUpdates(): Result<Unit> = remote
-        .handle(
-            SyncHandle.AppendUpdates(
-                budgetId = budgetId,
-                peekHashToCheck = remotePeek,
-                updates = updatesToPush,
-            )
-        )
-        .map { }
-        .onSuccess {
-            updatesToPush.clear()
+    suspend fun flushUpdates(): Result<Unit> {
+        if (updatesToPush.isEmpty()) {
+            return Result.success(Unit)
         }
+        return remote
+            .handle(
+                SyncHandle.AppendUpdates(
+                    budgetId = budgetId,
+                    peekHashToCheck = remotePeek,
+                    updates = updatesToPush,
+                )
+            )
+            .map { }
+            .onSuccess {
+                updatesToPush.clear()
+            }
+    }
 
     val result = merge(
         getNextMaxToMinOtherItem = {
