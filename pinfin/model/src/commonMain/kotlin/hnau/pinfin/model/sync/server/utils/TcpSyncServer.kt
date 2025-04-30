@@ -1,5 +1,6 @@
 package hnau.pinfin.model.sync.server.utils
 
+import arrow.core.raise.result
 import hnau.pinfin.model.sync.utils.ApiResponse
 import hnau.pinfin.model.sync.utils.ServerPort
 import hnau.pinfin.model.sync.utils.SyncApi
@@ -7,11 +8,11 @@ import hnau.pinfin.model.sync.utils.SyncConstants
 import hnau.pinfin.model.sync.utils.SyncHandle
 import hnau.pinfin.model.sync.utils.readSizeWithBytes
 import hnau.pinfin.model.sync.utils.writeSizeWithBytes
-import kotlinx.coroutines.CoroutineExceptionHandler
+import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.awaitCancellation
 import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import kotlinx.coroutines.yield
@@ -24,36 +25,52 @@ suspend fun tcpSyncServer(
     port: ServerPort,
     api: SyncApi,
     onThrowable: (Throwable) -> Unit,
-): Result<Nothing> = withContext(Dispatchers.IO) {
-    val coroutineExceptionHandler = CoroutineExceptionHandler { _, th ->
-        onThrowable(th)
-    }
-    runCatching {
+): Result<Nothing> = result {
+    val serverSocket = runCatching {
+        withContext(Dispatchers.IO) {
+            ServerSocket(port.port)
+        }
+    }.bind()
+    try {
         coroutineScope {
-            val serverSocket = ServerSocket(port.port)
             while (true) {
-                yield()
-                val clientSocket = serverSocket.accept()
-                launch(Dispatchers.IO + coroutineExceptionHandler) {
-                    clientSocket.use { clientSocket ->
-                        val requestBytes = clientSocket
-                            .inputStream
-                            .let(::DataInputStream)
-                            .readSizeWithBytes()
-                        val responseBytes = api.handle(requestBytes)
-                        clientSocket
-                            .outputStream
-                            .let(::DataOutputStream)
-                            .writeSizeWithBytes(responseBytes)
-                        delay(5000)
-                        println("Response was sent")
-                    }
+                try {
+                    circleUnsafe(
+                        serverSocket = serverSocket,
+                        api = api,
+                    )
+                } catch (th: Throwable) {
+                    onThrowable(th)
                 }
             }
         }
         awaitCancellation()
-    }.onFailure {
-        throw it
+    } catch (ex: CancellationException) {
+        runCatching { serverSocket.close() }.bind()
+        throw ex
+    }
+}
+
+private suspend fun CoroutineScope.circleUnsafe(
+    serverSocket: ServerSocket,
+    api: SyncApi,
+) {
+    withContext(Dispatchers.IO) {
+        yield()
+        val clientSocket = serverSocket.accept()
+        launch(Dispatchers.IO) {
+            clientSocket.use { clientSocket ->
+                val requestBytes = clientSocket
+                    .inputStream
+                    .let(::DataInputStream)
+                    .readSizeWithBytes()
+                val responseBytes = api.handle(requestBytes)
+                clientSocket
+                    .outputStream
+                    .let(::DataOutputStream)
+                    .writeSizeWithBytes(responseBytes)
+            }
+        }
     }
 }
 
