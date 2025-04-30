@@ -8,39 +8,34 @@ import kotlinx.coroutines.flow.stateIn
 
 sealed class Loadable<out T> {
 
-    data object Loading : Loadable<Nothing>()
-
-    data class Ready<out T>(val value: T) : Loadable<T>()
-
-    inline fun <R> fold(
-        ifLoading: () -> R,
-        ifReady: (T) -> R,
-    ): R =
-        when (this) {
-            is Loading -> ifLoading()
-            is Ready -> ifReady(value)
-        }
-
-    inline fun <R> map(
-        transform: (T) -> R,
-    ): Loadable<R> =
-        fold(
-            ifLoading = { Loading },
-            ifReady = { Ready(transform(it)) },
-        )
-
-    inline fun <R> flatMap(
-        transform: (T) -> Loadable<R>,
-    ): Loadable<R> =
-        fold(
-            ifLoading = { Loading },
-            ifReady = transform,
-        )
-
-    fun orNull(): T? = valueOrElse { null }
-
     companion object
 }
+
+data object Loading : Loadable<Nothing>()
+
+data class Ready<out T>(val value: T) : Loadable<T>()
+
+inline fun <I, O> Loadable<I>.fold(
+    ifLoading: () -> O,
+    ifReady: (I) -> O,
+): O = when (this) {
+    is Loading -> ifLoading()
+    is Ready -> ifReady(value)
+}
+
+inline fun <I, O> Loadable<I>.map(
+    transform: (I) -> O,
+): Loadable<O> = fold(
+    ifLoading = { Loading },
+    ifReady = { Ready(transform(it)) },
+)
+
+inline fun <I, O> Loadable<I>.flatMap(
+    transform: (I) -> Loadable<O>,
+): Loadable<O> = fold(
+    ifLoading = { Loading },
+    ifReady = transform,
+)
 
 inline fun <T> Loadable<T>.valueOrElse(
     ifLoading: () -> T,
@@ -55,9 +50,9 @@ fun <T> LoadableStateFlow(
     get: suspend () -> T,
 ): StateFlow<Loadable<T>> = flow {
     val value = get()
-    emit(Loadable.Ready(value))
+    emit(Ready(value))
 }.stateIn(
     scope = scope,
-    initialValue = Loadable.Loading,
+    initialValue = Loading,
     started = SharingStarted.Eagerly,
 )

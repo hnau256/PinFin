@@ -129,8 +129,8 @@ class SyncClient(
     }
         .mapWithScope(scope) { stateScope, (localBudgets, serverBudgetsOrLoading) ->
             when (serverBudgetsOrLoading) {
-                Loadable.Loading -> SyncClientState.Initializing
-                is Loadable.Ready -> when (val serverBudgets = serverBudgetsOrLoading.value) {
+                Loading -> SyncClientState.Initializing
+                is Ready -> when (val serverBudgets = serverBudgetsOrLoading.value) {
                     is ApiResponse.Error -> SyncClientState.Error
                     is ApiResponse.Success -> joinLocalAndServerBudgets(
                         scope = stateScope,

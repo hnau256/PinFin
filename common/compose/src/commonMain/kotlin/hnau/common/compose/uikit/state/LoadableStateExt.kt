@@ -6,6 +6,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import hnau.common.compose.uikit.progressindicator.ProgressIndicatorBox
 import hnau.common.kotlin.Loadable
+import hnau.common.kotlin.fold
 
 @Composable
 fun <T> Loadable<T>.LoadableContent(

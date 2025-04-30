@@ -7,7 +7,9 @@ import hnau.common.kotlin.Loadable
 import hnau.common.kotlin.LoadableStateFlow
 import hnau.common.kotlin.coroutines.flatMapState
 import hnau.common.kotlin.coroutines.mapWithScope
+import hnau.common.kotlin.fold
 import hnau.common.kotlin.getOrInit
+import hnau.common.kotlin.map
 import hnau.common.kotlin.toAccessor
 import hnau.pinfin.model.mode.ModeModel
 import hnau.pinfin.model.utils.budget.repository.BudgetsRepository

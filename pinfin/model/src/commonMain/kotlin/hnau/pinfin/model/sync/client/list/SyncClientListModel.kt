@@ -1,34 +1,25 @@
 package hnau.pinfin.model.sync.client.list
 
 import arrow.core.Ior
-import arrow.core.NonEmptyList
-import arrow.core.toNonEmptyListOrNull
 import hnau.common.app.goback.GoBackHandler
 import hnau.common.app.goback.GoBackHandlerProvider
 import hnau.common.app.goback.NeverGoBackHandler
 import hnau.common.kotlin.Loadable
+import hnau.common.kotlin.Loading
+import hnau.common.kotlin.Ready
 import hnau.common.kotlin.coroutines.combineState
-import hnau.common.kotlin.coroutines.flatMapState
-import hnau.common.kotlin.coroutines.mapListReusable
 import hnau.common.kotlin.coroutines.mapReusable
-import hnau.common.kotlin.coroutines.mapState
-import hnau.common.kotlin.coroutines.mapWithScope
-import hnau.common.kotlin.coroutines.scopedInState
-import hnau.common.kotlin.coroutines.toLoadableStateFlow
 import hnau.common.kotlin.coroutines.toMutableStateFlowAsInitial
+import hnau.common.kotlin.map
 import hnau.pinfin.data.BudgetId
-import hnau.pinfin.model.sync.client.BudgetSyncOpener
 import hnau.pinfin.model.sync.client.utils.TcpSyncClient
 import hnau.pinfin.model.sync.utils.SyncHandle
 import hnau.pinfin.model.utils.budget.repository.BudgetInfo
 import hnau.pinfin.model.utils.budget.repository.BudgetsRepository
-import hnau.pinfin.model.utils.budget.upchain.Upchain
-import hnau.pinfin.model.utils.budget.upchain.UpchainHash
 import hnau.shuffler.annotations.Shuffle
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -66,12 +57,12 @@ class SyncClientListModel(
                     .tcpSyncClient
                     .handle(SyncHandle.GetBudgets)
                     .map(SyncHandle.GetBudgets.Response::budgets)
-                    .let { Loadable.Ready(it) }
+                    .let { Ready(it) }
             }
             .stateIn(
                 scope = scope,
                 started = SharingStarted.Eagerly,
-                initialValue = Loadable.Loading,
+                initialValue = Loading,
             )
 
     val items: StateFlow<Loadable<Result<List<SyncClientListItemModel>>>> = combineState(
@@ -104,7 +95,7 @@ class SyncClientListModel(
                                 id to Ior.Right(serverPeekHash)
                             }
                     )
-                }.sortedBy(Pair<BudgetId, _>::first)
+                }.sortedBy { it.first }
             }
         }
     }.mapReusable(scope) { itemsOrErrorOrLoading ->

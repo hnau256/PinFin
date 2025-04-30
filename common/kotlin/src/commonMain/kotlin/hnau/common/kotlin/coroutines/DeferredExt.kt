@@ -1,6 +1,8 @@
 package hnau.common.kotlin.coroutines
 
 import hnau.common.kotlin.Loadable
+import hnau.common.kotlin.Loading
+import hnau.common.kotlin.Ready
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.flow.SharingStarted
@@ -15,9 +17,9 @@ fun <T> Deferred<T>.toLoadableStateFlow(
     val result = await()
     emit(result)
 }
-    .map { Loadable.Ready(it) }
+    .map { Ready(it) }
     .stateIn(
         scope = lifecycleScope,
-        initialValue = Loadable.Loading,
+        initialValue = Loading,
         started = SharingStarted.Eagerly,
     )

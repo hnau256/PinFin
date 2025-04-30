@@ -9,9 +9,11 @@ import hnau.common.app.goback.GoBackHandler
 import hnau.common.app.goback.GoBackHandlerProvider
 import hnau.common.app.goback.NeverGoBackHandler
 import hnau.common.kotlin.Loadable
+import hnau.common.kotlin.Ready
 import hnau.common.kotlin.coroutines.mapState
 import hnau.common.kotlin.coroutines.toLoadableStateFlow
 import hnau.common.kotlin.coroutines.toMutableStateFlowAsInitial
+import hnau.common.kotlin.map
 import hnau.common.kotlin.serialization.MutableStateFlowSerializer
 import hnau.pinfin.data.BudgetId
 import hnau.pinfin.model.sync.client.BudgetSyncOpener
@@ -51,7 +53,7 @@ class SyncClientListItemModel(
     val state: StateFlow<Loadable<State>> = run {
         val sync = { dependencies.budgetOpener.openBudgetToSync(id) }
         when (localOrServer) {
-            is Ior.Right -> Loadable.Ready(
+            is Ior.Right -> Ready(
                 State.Syncable(
                     sync = sync,
                     mode = State.Syncable.Mode.OnlyOnServer,
@@ -75,7 +77,7 @@ class SyncClientListItemModel(
                     }
                 }
 
-            is Ior.Left -> Loadable.Ready(
+            is Ior.Left -> Ready(
                 State.Syncable(
                     sync = sync,
                     mode = State.Syncable.Mode.OnlyLocal,

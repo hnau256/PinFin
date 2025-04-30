@@ -8,6 +8,7 @@ import hnau.common.compose.uikit.state.LoadableContent
 import hnau.common.compose.uikit.state.TransitionSpec
 import hnau.common.kotlin.Loadable
 import hnau.common.kotlin.coroutines.mapWithScope
+import hnau.common.kotlin.map
 import hnau.pinfin.model.LoadBudgetModel
 import hnau.pinfin.projector.budgetstack.BudgetStackProjector
 import hnau.shuffler.annotations.Shuffle
