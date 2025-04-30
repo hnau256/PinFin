@@ -43,7 +43,7 @@ class BudgetsSyncServer(
         .list
         .mapListReusable(
             scope = scope,
-            extractKey = { (id) -> id },
+            extractKey = Pair<BudgetId, *>::first,
             transform = { budgetScope, (id, upchain) ->
                 val budgetSyncServer = BudgetSyncServer(
                     scope = budgetScope,

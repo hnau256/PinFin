@@ -36,7 +36,6 @@ class LoadBudgetsModel(
 
         fun budgetsOrSync(
             preferences: Preferences,
-            budgetsStorage: BudgetsStorage,
             budgetsRepository: BudgetsRepository,
         ): ModeModel.Dependencies
     }
@@ -47,7 +46,7 @@ class LoadBudgetsModel(
     )
 
     private data class Ready(
-        val budgetsStorage: BudgetsStorage,
+        val budgetsRepository: BudgetsRepository,
         val preferences: Preferences,
     )
 
@@ -66,7 +65,10 @@ class LoadBudgetsModel(
                 )
             }
             Ready(
-                budgetsStorage = budgetsStorage.await(),
+                budgetsRepository = BudgetsRepository(
+                    scope = scope,
+                    budgetsStorage = budgetsStorage.await()
+                ),
                 preferences = deferredPreferences.await(),
             )
         }
@@ -78,11 +80,7 @@ class LoadBudgetsModel(
                 ModeModel(
                     scope = stateScope,
                     dependencies = dependencies.budgetsOrSync(
-                        budgetsRepository = BudgetsRepository(
-                            scope = scope,
-                            budgetsStorage = ready.budgetsStorage,
-                        ),
-                        budgetsStorage = ready.budgetsStorage,
+                        budgetsRepository = ready.budgetsRepository,
                         preferences = ready.preferences,
                     ),
                     skeleton = skeleton::budgetsOrSync

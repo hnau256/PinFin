@@ -17,7 +17,7 @@ import hnau.common.kotlin.map
 import hnau.common.kotlin.serialization.MutableStateFlowSerializer
 import hnau.pinfin.data.BudgetId
 import hnau.pinfin.model.sync.client.BudgetSyncOpener
-import hnau.pinfin.model.utils.budget.repository.BudgetInfo
+import hnau.pinfin.model.utils.budget.repository.BudgetRepository
 import hnau.shuffler.annotations.Shuffle
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Deferred
@@ -28,7 +28,7 @@ class SyncClientListItemModel(
     private val scope: CoroutineScope,
     dependencies: Dependencies,
     id: BudgetId,
-    localOrServer: Ior<Deferred<BudgetInfo>, ServerBudgetPeekHash>,
+    localOrServer: Ior<Deferred<BudgetRepository>, ServerBudgetPeekHash>,
 ) : GoBackHandlerProvider {
 
     @Shuffle
@@ -63,9 +63,9 @@ class SyncClientListItemModel(
             is Ior.Both -> localOrServer
                 .leftValue
                 .toLoadableStateFlow(scope)
-                .mapState(scope) { infoOrLoading ->
-                    infoOrLoading.map { info ->
-                        val localPeekHash = info.upchainStorage.upchain.value.peekHash
+                .mapState(scope) { repositoryOrLoading ->
+                    repositoryOrLoading.map { repository ->
+                        val localPeekHash = repository.upchainStorage.upchain.value.peekHash
                         val serverPeekHash = localOrServer.rightValue.peekHash
                         when (localPeekHash) {
                             serverPeekHash -> State.Actual

@@ -5,6 +5,8 @@ import arrow.core.raise.result
 import hnau.common.kotlin.coroutines.mapListReusable
 import hnau.common.kotlin.coroutines.mapState
 import hnau.pinfin.data.BudgetId
+import hnau.pinfin.model.utils.budget.repository.BudgetRepository
+import hnau.pinfin.model.utils.budget.repository.BudgetsRepository
 import hnau.pinfin.model.utils.budget.storage.BudgetsStorage
 import hnau.pinfin.model.utils.budget.storage.UpchainStorage
 import hnau.pinfin.model.utils.budget.upchain.UpchainHash
@@ -25,10 +27,10 @@ class BudgetsSyncServer(
     @Shuffle
     interface Dependencies {
 
-        val budgetsStorage: BudgetsStorage
+        val budgetsStorage: BudgetsRepository
 
         fun budgetSyncServer(
-            upchain: Deferred<UpchainStorage>,
+            upchain: Deferred<BudgetRepository>,
         ): BudgetSyncServer.Dependencies
     }
 
@@ -37,11 +39,11 @@ class BudgetsSyncServer(
         .list
         .mapListReusable(
             scope = scope,
-            extractKey = { (id) -> id },
-            transform = { budgetScope, (id, upchain) ->
+            extractKey = Pair<BudgetId, *>::first,
+            transform = { budgetScope, (id, deferredRepository) ->
                 val budgetSyncServer = BudgetSyncServer(
                     dependencies = dependencies.budgetSyncServer(
-                        upchain = upchain,
+                        upchain = deferredRepository,
                     ),
                 )
                 id to budgetSyncServer

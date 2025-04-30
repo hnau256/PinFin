@@ -1,6 +1,7 @@
 package hnau.pinfin.model.sync.server.utils
 
 import arrow.core.raise.result
+import hnau.pinfin.model.utils.budget.repository.BudgetRepository
 import hnau.pinfin.model.utils.budget.storage.UpchainStorage
 import hnau.pinfin.model.utils.budget.storage.update
 import hnau.pinfin.model.utils.budget.upchain.UpchainHash
@@ -20,7 +21,7 @@ class BudgetSyncServer(
     @Shuffle
     interface Dependencies {
 
-        val upchainStorage: Deferred<UpchainStorage>
+        val budgetRepository: Deferred<BudgetRepository>
     }
 
     private val accessStateMutex: Mutex = Mutex()
@@ -29,8 +30,9 @@ class BudgetSyncServer(
         block: (UpchainStorage) -> R,
     ): R = accessStateMutex.withLock {
         dependencies
-            .upchainStorage
+            .budgetRepository
             .await()
+            .upchainStorage
             .let(block)
     }
 

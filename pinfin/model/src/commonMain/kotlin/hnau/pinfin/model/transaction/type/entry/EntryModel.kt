@@ -21,6 +21,7 @@ import hnau.common.kotlin.coroutines.mapWithScope
 import hnau.common.kotlin.coroutines.scopedInState
 import hnau.common.kotlin.coroutines.toMutableStateFlowAsInitial
 import hnau.common.kotlin.serialization.MutableStateFlowSerializer
+import hnau.pinfin.data.BudgetId
 import hnau.pinfin.model.utils.budget.state.AccountInfo
 import hnau.pinfin.model.utils.budget.state.CategoryInfo
 import hnau.pinfin.model.utils.budget.state.TransactionInfo
@@ -155,7 +156,7 @@ class EntryModel(
             .records
             .mapNonEmptyListReusable(
                 scope = scope,
-                extractKey = {(id) -> id },
+                extractKey = Pair<RecordId, *>::first,
                 transform = {itemScope, (id, skeleton) ->
                     RecordItem(
                         id = id,

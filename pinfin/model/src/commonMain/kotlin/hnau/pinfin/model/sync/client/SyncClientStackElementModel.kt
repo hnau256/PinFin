@@ -2,6 +2,7 @@ package hnau.pinfin.model.sync.client
 
 import hnau.common.app.goback.GoBackHandlerProvider
 import hnau.pinfin.model.sync.client.budget.SyncClientBudgetModel
+import hnau.pinfin.model.sync.client.budget.SyncClientLoadBudgetModel
 import hnau.pinfin.model.sync.client.list.SyncClientListModel
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -19,7 +20,7 @@ sealed interface SyncClientStackElementModel : GoBackHandlerProvider {
     }
 
     data class Budget(
-        val model: SyncClientBudgetModel,
+        val model: SyncClientLoadBudgetModel,
     ) : SyncClientStackElementModel, GoBackHandlerProvider by model {
 
         override val key: Int
@@ -38,7 +39,7 @@ sealed interface SyncClientStackElementModel : GoBackHandlerProvider {
         @Serializable
         @SerialName("budget")
         data class Budget(
-            val skeleton: SyncClientBudgetModel.Skeleton,
+            val skeleton: SyncClientLoadBudgetModel.Skeleton,
         ) : Skeleton
     }
 }

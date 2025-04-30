@@ -13,7 +13,7 @@ class BudgetsRepository(
     private val budgetsStorage: BudgetsStorage,
 ) {
 
-    val list: StateFlow<List<Pair<BudgetId, Deferred<BudgetInfo>>>> = budgetsStorage
+    val list: StateFlow<List<Pair<BudgetId, Deferred<BudgetRepository>>>> = budgetsStorage
         .list
         .mapListReusable(
             scope = scope,
@@ -21,12 +21,9 @@ class BudgetsRepository(
             transform = { budgetScope, (id, deferredUpchainStorage) ->
                 val deferredInfo = budgetScope.async {
                     val upchainStorage = deferredUpchainStorage.await()
-                    BudgetInfo(
+                    BudgetRepository(
+                        scope = budgetScope,
                         upchainStorage = upchainStorage,
-                        repository = BudgetRepository(
-                            scope = budgetScope,
-                            upchainStorage = upchainStorage,
-                        )
                     )
                 }
                 id to deferredInfo

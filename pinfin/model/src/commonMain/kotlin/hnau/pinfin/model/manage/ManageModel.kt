@@ -99,10 +99,10 @@ class ManageModel(
             .list
             .mapListReusable(
                 scope = scope,
-                extractKey = { (id) -> id },
-                transform = { deferredScope, (id, deferredInfo) ->
+                extractKey = Pair<BudgetId, *>::first,
+                transform = { deferredScope, (id, deferredRepository) ->
                     id to deferredScope.async {
-                        deferredInfo.await().repository
+                        deferredRepository.await()
                     }
                 }
             )

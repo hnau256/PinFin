@@ -14,6 +14,7 @@ import hnau.common.app.model.stack.stackGoBackHandler
 import hnau.common.app.model.stack.tailGoBackHandler
 import hnau.common.kotlin.serialization.MutableStateFlowSerializer
 import hnau.pinfin.model.sync.client.budget.SyncClientBudgetModel
+import hnau.pinfin.model.sync.client.budget.SyncClientLoadBudgetModel
 import hnau.pinfin.model.sync.client.list.SyncClientListModel
 import hnau.pinfin.model.sync.client.utils.TcpSyncClient
 import hnau.pinfin.model.sync.utils.ServerAddress
@@ -41,7 +42,7 @@ class SyncClientStackModel(
                 budgetOpener: BudgetSyncOpener,
             ): SyncClientListModel.Dependencies
 
-            fun budget(): SyncClientBudgetModel.Dependencies
+            fun budget(): SyncClientLoadBudgetModel.Dependencies
         }
 
         fun withSyncClient(
@@ -93,7 +94,7 @@ class SyncClientStackModel(
                             .stack
                             .push(
                                 SyncClientStackElementModel.Skeleton.Budget(
-                                    SyncClientBudgetModel.Skeleton(
+                                    SyncClientLoadBudgetModel.Skeleton(
                                         budgetId = budgetId,
                                     )
                                 )
@@ -104,7 +105,7 @@ class SyncClientStackModel(
         )
 
         is SyncClientStackElementModel.Skeleton.Budget -> SyncClientStackElementModel.Budget(
-            SyncClientBudgetModel(
+            SyncClientLoadBudgetModel(
                 scope = modelScope,
                 skeleton = skeleton.skeleton,
                 dependencies = dependenciesWithSyncClient.budget(),

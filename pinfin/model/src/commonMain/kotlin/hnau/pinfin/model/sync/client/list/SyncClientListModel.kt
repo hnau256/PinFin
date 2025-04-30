@@ -14,7 +14,7 @@ import hnau.common.kotlin.map
 import hnau.pinfin.data.BudgetId
 import hnau.pinfin.model.sync.client.utils.TcpSyncClient
 import hnau.pinfin.model.sync.utils.SyncHandle
-import hnau.pinfin.model.utils.budget.repository.BudgetInfo
+import hnau.pinfin.model.utils.budget.repository.BudgetRepository
 import hnau.pinfin.model.utils.budget.repository.BudgetsRepository
 import hnau.shuffler.annotations.Shuffle
 import kotlinx.coroutines.CoroutineScope
@@ -101,7 +101,7 @@ class SyncClientListModel(
     }.mapReusable(scope) { itemsOrErrorOrLoading ->
         itemsOrErrorOrLoading.map { itemsOrError ->
             itemsOrError.map { items ->
-                items.map { (id, localOrServer: Ior<Deferred<BudgetInfo>, ServerBudgetPeekHash>) ->
+                items.map { (id, localOrServer: Ior<Deferred<BudgetRepository>, ServerBudgetPeekHash>) ->
                     getOrPutItem(
                         key = id,
                     ) { itemScope ->

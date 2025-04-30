@@ -12,7 +12,6 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
-import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -30,14 +29,14 @@ import hnau.common.compose.utils.Icon
 import hnau.common.compose.utils.plus
 import hnau.common.compose.utils.toLazyListState
 import hnau.pinfin.model.budget.TransactionsModel
+import hnau.pinfin.projector.Res
+import hnau.pinfin.projector.add_transaction
+import hnau.pinfin.projector.no_transactions
 import hnau.pinfin.projector.utils.AmountFormatter
 import hnau.pinfin.projector.utils.DateTimeFormatter
 import hnau.shuffler.annotations.Shuffle
 import kotlinx.coroutines.CoroutineScope
 import org.jetbrains.compose.resources.stringResource
-import hnau.pinfin.projector.Res
-import hnau.pinfin.projector.add_transaction
-import hnau.pinfin.projector.no_transactions
 
 class TransactionsProjector(
     private val scope: CoroutineScope,
@@ -107,7 +106,7 @@ class TransactionsProjector(
                 ) {
                     items(
                         items = transactions,
-                        key = { (id) -> id.id },
+                        key = { it.id.id },
                     ) { info ->
                         info.Content(
                             dependencies = dependencies,
