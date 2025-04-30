@@ -52,6 +52,7 @@ class SyncClientModel(
             ): SyncClientListModel.Dependencies
 
             fun budget(
+                id: BudgetId,
                 budgetRepository: Deferred<BudgetRepository>,
             ): SyncClientLoadBudgetModel.Dependencies
         }
@@ -125,6 +126,7 @@ class SyncClientModel(
                         dependencies = run {
                             val (id, repository) = idWithDeferredRepositoryOrNull
                             dependenciesWithSyncClient.budget(
+                                id = id,
                                 budgetRepository = repository,
                             )
                         },

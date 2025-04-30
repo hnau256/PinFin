@@ -1,13 +1,14 @@
 package hnau.pinfin.model.sync.server.utils
 
 import arrow.core.raise.result
+import hnau.pinfin.model.sync.client.budget.utils.RemoteUpchain.GetMaxToMinUpdatesResult
+import hnau.pinfin.model.sync.utils.SyncHandle
 import hnau.pinfin.model.utils.budget.repository.BudgetRepository
 import hnau.pinfin.model.utils.budget.storage.UpchainStorage
 import hnau.pinfin.model.utils.budget.storage.update
 import hnau.pinfin.model.utils.budget.upchain.UpchainHash
 import hnau.pinfin.model.utils.budget.upchain.Update
 import hnau.pinfin.model.utils.budget.upchain.plus
-import hnau.pinfin.model.utils.budget.upchain.utils.RemoteUpchain.GetMaxToMinUpdatesResult
 import hnau.pinfin.model.utils.budget.upchain.utils.UpchainSyncConstants
 import hnau.shuffler.annotations.Shuffle
 import kotlinx.coroutines.Deferred
@@ -42,7 +43,7 @@ class BudgetSyncServer(
 
     suspend fun getMaxToMinUpdates(
         before: UpchainHash?,
-    ): Result<GetMaxToMinUpdatesResult> = withUpchain { upchainStorage ->
+    ): Result<SyncHandle.GetMaxToMinUpdates.Response> = withUpchain { upchainStorage ->
         result {
             val upchain = upchainStorage.upchain.value
             val totalCount = upchain.items.size
@@ -53,7 +54,7 @@ class BudgetSyncServer(
                 null -> 0
                 else -> totalCount - beforeIndex
             }
-            GetMaxToMinUpdatesResult(
+            SyncHandle.GetMaxToMinUpdates.Response(
                 updates = upchain
                     .items
                     .asReversed()

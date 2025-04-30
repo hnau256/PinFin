@@ -40,4 +40,9 @@
     <string name="error_while_loading_budgets_list_from_server">Ошибка загрузки бюджетов с сервера</string>
     <string name="try_again">Попробовать снова</string>
     <string name="there_is_no_budgets_for_synchronization">Отсутствуют бюджеты для синхронизации</string>
+    <string name="stop_sync">Остановить синхронизацию</string>
+    <string name="budget_sync">Синхронизация бюджета</string>
+    <string name="butget_was_synchronized">Бюджет успешно синхронизирован</string>
+    <string name="error_while_budget_synchronization">Ошибка синхронизации бюджета</string>
+    <string name="back">Назад</string>
 </resources>

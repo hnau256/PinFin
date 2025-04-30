@@ -6,11 +6,13 @@ package hnau.pinfin.model.sync.client.budget
 
 import hnau.common.app.goback.GoBackHandler
 import hnau.common.app.goback.GoBackHandlerProvider
+import hnau.common.app.goback.fallback
 import hnau.common.kotlin.Loadable
 import hnau.common.kotlin.Loading
 import hnau.common.kotlin.Ready
 import hnau.common.kotlin.coroutines.flatMapState
 import hnau.common.kotlin.coroutines.mapWithScope
+import hnau.common.kotlin.coroutines.scopedInState
 import hnau.common.kotlin.coroutines.toLoadableStateFlow
 import hnau.common.kotlin.coroutines.toMutableStateFlowAsInitial
 import hnau.common.kotlin.getOrInit
@@ -51,6 +53,9 @@ class SyncClientLoadBudgetModel(
             false.toMutableStateFlowAsInitial(),
     )
 
+    val isStopSyncDialogVisible: MutableStateFlow<Boolean>
+        get() = skeleton.isStopSyncDialogVisible
+
     val state: StateFlow<Loadable<SyncClientBudgetModel>> = dependencies
         .budgetRepository
         .toLoadableStateFlow(scope)
@@ -64,6 +69,7 @@ class SyncClientLoadBudgetModel(
                     skeleton = skeleton::state
                         .toAccessor()
                         .getOrInit { SyncClientBudgetModel.Skeleton() },
+                    goBack = goBack,
                 )
             }
         }
@@ -78,13 +84,18 @@ class SyncClientLoadBudgetModel(
             .value = false
     }
 
-    override val goBackHandler: GoBackHandler = state.flatMapState(scope) { budgetOrLoading ->
-        when (budgetOrLoading) {
-            Loading -> {
-                { skeleton.isStopSyncDialogVisible.update(Boolean::not) }.toMutableStateFlowAsInitial()
-            }
+    private val fallbackGoBackHandler: GoBackHandler =
+        { skeleton.isStopSyncDialogVisible.update(Boolean::not) }.toMutableStateFlowAsInitial()
 
-            is Ready -> budgetOrLoading.value.goBackHandler
+    override val goBackHandler: GoBackHandler = state
+        .scopedInState(scope)
+        .flatMapState(scope) { (budgetScope, budgetOrLoading) ->
+            when (budgetOrLoading) {
+                Loading -> fallbackGoBackHandler
+                is Ready -> budgetOrLoading.value.goBackHandler.fallback(
+                    scope = budgetScope,
+                    fallback = fallbackGoBackHandler
+                )
+            }
         }
-    }
 }

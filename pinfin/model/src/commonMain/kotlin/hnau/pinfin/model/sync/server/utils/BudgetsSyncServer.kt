@@ -4,24 +4,26 @@ import arrow.core.identity
 import arrow.core.raise.result
 import hnau.common.kotlin.coroutines.mapListReusable
 import hnau.common.kotlin.coroutines.mapState
+import hnau.common.kotlin.fold
+import hnau.common.kotlin.ifNull
 import hnau.pinfin.data.BudgetId
+import hnau.pinfin.model.sync.utils.SyncHandle
 import hnau.pinfin.model.utils.budget.repository.BudgetRepository
 import hnau.pinfin.model.utils.budget.repository.BudgetsRepository
-import hnau.pinfin.model.utils.budget.storage.BudgetsStorage
-import hnau.pinfin.model.utils.budget.storage.UpchainStorage
 import hnau.pinfin.model.utils.budget.upchain.UpchainHash
 import hnau.pinfin.model.utils.budget.upchain.Update
-import hnau.pinfin.model.utils.budget.upchain.utils.RemoteUpchain.GetMaxToMinUpdatesResult
 import hnau.shuffler.annotations.Shuffle
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.mapNotNull
 
 class BudgetsSyncServer(
     scope: CoroutineScope,
-    dependencies: Dependencies,
+    private val dependencies: Dependencies,
 ) {
 
     @Shuffle
@@ -71,35 +73,36 @@ class BudgetsSyncServer(
     suspend fun getMaxToMinUpdates(
         budgetId: BudgetId,
         before: UpchainHash?,
-    ): Result<GetMaxToMinUpdatesResult> = withBudget(
-        budgetId = budgetId,
-    ) { budgetSyncServer ->
-        budgetSyncServer.getMaxToMinUpdates(
-            before = before,
+    ): Result<SyncHandle.GetMaxToMinUpdates.Response> = budgetsUpdates
+        .value[budgetId]
+        .fold(
+            ifNull = {
+                Result.success(
+                    SyncHandle.GetMaxToMinUpdates.Response(
+                        updates = emptyList(),
+                        hasMoreUpdates = false,
+                    )
+                )
+            },
+            ifNotNull = { budgetSyncServer ->
+                budgetSyncServer.getMaxToMinUpdates(
+                    before = before,
+                )
+            }
         )
-    }
 
     suspend fun appendUpdates(
         budgetId: BudgetId,
         peekHashToCheck: UpchainHash?,
         updates: List<Update>,
-    ): Result<Unit> = withBudget(
-        budgetId = budgetId,
-    ) { budgetSyncServer ->
-        budgetSyncServer.appendUpdates(
+    ): Result<Unit> = budgetsUpdates
+        .value[budgetId]
+        .ifNull {
+            dependencies.budgetsStorage.createNewBudget(budgetId)
+            budgetsUpdates.mapNotNull { it[budgetId] }.first()
+        }
+        .appendUpdates(
             peekHashToCheck = peekHashToCheck,
             updates = updates,
         )
-    }
-
-    private inline fun <R> withBudget(
-        budgetId: BudgetId,
-        block: (BudgetSyncServer) -> Result<R>,
-    ): Result<R> {
-        val budget: BudgetSyncServer? = budgetsUpdates.value[budgetId]
-        return when (budget) {
-            null -> Result.failure(Throwable("Has no budget with id $budgetId"))
-            else -> block(budget)
-        }
-    }
 }

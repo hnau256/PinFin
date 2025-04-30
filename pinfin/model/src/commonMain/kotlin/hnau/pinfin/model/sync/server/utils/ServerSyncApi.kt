@@ -59,12 +59,6 @@ class ServerSyncApi(
             budgetId = request.budgetId,
             before = request.before,
         )
-        .map { result ->
-            SyncHandle.GetMaxToMinUpdates.Response(
-                updates = result.updates,
-                hasMoreUpdates = result.hasMoreUpdates,
-            )
-        }
 
     private suspend fun appendUpdates(
         request: SyncHandle.AppendUpdates,

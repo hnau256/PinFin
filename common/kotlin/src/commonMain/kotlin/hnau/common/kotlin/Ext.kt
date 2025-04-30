@@ -17,3 +17,12 @@ inline fun <reified O> Any?.castOrThrow() = this as O
 
 @Suppress("NOTHING_TO_INLINE")
 inline fun <T> it(it: T) = it
+
+
+inline fun <T, R> T?.fold(
+    ifNull: () -> R,
+    ifNotNull: (T & Any) -> R,
+): R = when (this) {
+    null -> ifNull()
+    else -> ifNotNull(this)
+}

@@ -18,7 +18,7 @@ import hnau.common.compose.utils.horizontalDisplayPadding
 fun ErrorPanel(
     title: @Composable () -> Unit,
     modifier: Modifier = Modifier,
-    button: (@Composable () -> Unit)? = null,
+    button: @Composable (() -> Unit)? = null,
 ) = Column(
     modifier = modifier
         .horizontalDisplayPadding()

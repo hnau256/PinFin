@@ -1,24 +1,122 @@
 package hnau.pinfin.projector.sync.client.budget
 
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.BasicAlertDialog
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.ui.Modifier
+import hnau.common.app.goback.GlobalGoBackHandler
+import hnau.common.app.goback.GoBackHandler
+import hnau.common.compose.uikit.AlertDialogContent
+import hnau.common.compose.uikit.state.LoadableContent
+import hnau.common.compose.uikit.state.TransitionSpec
+import hnau.common.compose.utils.NavigationIcon
+import hnau.common.kotlin.Loadable
+import hnau.common.kotlin.coroutines.mapWithScope
+import hnau.common.kotlin.map
 import hnau.pinfin.model.sync.client.budget.SyncClientLoadBudgetModel
+import hnau.pinfin.projector.Res
+import hnau.pinfin.projector.budget_sync
+import hnau.pinfin.projector.budgets_to_synchronization
+import hnau.pinfin.projector.no
+import hnau.pinfin.projector.stop_sync
+import hnau.pinfin.projector.yes
 import hnau.shuffler.annotations.Shuffle
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.StateFlow
+import org.jetbrains.compose.resources.stringResource
 
 class SyncClientLoadBudgetProjector(
     scope: CoroutineScope,
-    model: SyncClientLoadBudgetModel,
+    private val model: SyncClientLoadBudgetModel,
     dependencies: Dependencies,
 ) {
 
     @Shuffle
     interface Dependencies {
 
+        fun budget(): SyncClientBudgetProjector.Dependencies
+
+        val globalGoBackHandler: GlobalGoBackHandler
     }
 
+    private val globalGoBackHandler: GoBackHandler = dependencies
+        .globalGoBackHandler
+        .resolve(scope)
 
+    private val state: StateFlow<Loadable<SyncClientBudgetProjector>> = model
+        .state
+        .mapWithScope(scope) { stateScope, stateOrLoading ->
+            stateOrLoading.map { state ->
+                SyncClientBudgetProjector(
+                    scope = stateScope,
+                    dependencies = dependencies.budget(),
+                    model = state,
+                )
+            }
+        }
+
+
+    @OptIn(ExperimentalMaterial3Api::class)
     @Composable
     fun Content() {
+        Scaffold(
+            modifier = Modifier.fillMaxSize(),
+            topBar = {
+                TopAppBar(
+                    title = { Text(stringResource(Res.string.budget_sync)) },
+                    navigationIcon = { globalGoBackHandler.NavigationIcon() },
+                )
+            },
+        ) { contentPadding ->
+            state
+                .collectAsState()
+                .value
+                .LoadableContent(
+                    modifier = Modifier
+                        .fillMaxSize(),
+                    transitionSpec = TransitionSpec.crossfade(),
+                ) { budgetProjector ->
+                    budgetProjector.Content(
+                        contentPadding = contentPadding,
+                    )
+                }
+            StopSyncDialog()
+        }
+    }
 
+    @OptIn(ExperimentalMaterial3Api::class)
+    @Composable
+    private fun StopSyncDialog() {
+        val stopServerDialogIsOpened by model.isStopSyncDialogVisible.collectAsState()
+        if (!stopServerDialogIsOpened) {
+            return
+        }
+        BasicAlertDialog(
+            onDismissRequest = model::stopSyncCancel
+        ) {
+            AlertDialogContent(
+                title = { Text(stringResource(Res.string.stop_sync)) },
+                confirmButton = {
+                    TextButton(
+                        onClick = model::stopSyncConfirm,
+                        content = { Text(stringResource(Res.string.yes)) },
+                    )
+                },
+                dismissButton = {
+                    TextButton(
+                        onClick = model::stopSyncCancel,
+                        content = { Text(stringResource(Res.string.no)) },
+                    )
+                }
+            )
+        }
     }
 }

@@ -34,10 +34,7 @@ class SyncClientListItemProjector(
 ) {
 
     @Shuffle
-    interface Dependencies {
-
-    }
-
+    interface Dependencies
 
     @Composable
     fun Content() {

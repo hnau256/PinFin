@@ -1,4 +1,4 @@
-package hnau.pinfin.model.utils.budget.upchain.utils
+package hnau.pinfin.model.sync.client.budget.utils
 
 import hnau.pinfin.model.utils.budget.upchain.Upchain
 import hnau.pinfin.model.utils.budget.upchain.UpchainHash
