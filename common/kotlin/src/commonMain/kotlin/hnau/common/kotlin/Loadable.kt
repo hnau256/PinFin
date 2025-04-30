@@ -38,6 +38,8 @@ sealed class Loadable<out T> {
         )
 
     fun orNull(): T? = valueOrElse { null }
+
+    companion object
 }
 
 inline fun <T> Loadable<T>.valueOrElse(
