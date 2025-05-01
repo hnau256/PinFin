@@ -1,7 +1,5 @@
 package hnau.pinfin.projector.sync.client.list
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CloudDone
@@ -10,7 +8,6 @@ import androidx.compose.material.icons.filled.CloudUpload
 import androidx.compose.material.icons.filled.Sync
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
@@ -20,10 +17,10 @@ import hnau.common.compose.uikit.HnauButton
 import hnau.common.compose.uikit.table.CellBox
 import hnau.common.compose.uikit.table.Table
 import hnau.common.compose.uikit.table.TableOrientation
-import hnau.common.compose.uikit.utils.Dimens
 import hnau.common.compose.utils.Icon
 import hnau.common.kotlin.fold
 import hnau.pinfin.model.sync.client.list.SyncClientListItemModel
+import hnau.pinfin.projector.utils.BidgetInfoLoadableContent
 import hnau.shuffler.annotations.Shuffle
 import kotlinx.coroutines.CoroutineScope
 
@@ -44,16 +41,11 @@ class SyncClientListItemProjector(
             CellBox(
                 modifier = Modifier.weight(1f),
             ) {
-                Text(
-                    modifier = Modifier
-                        .background(MaterialTheme.colorScheme.surfaceContainer)
-                        .padding(
-                            horizontal = Dimens.separation,
-                            vertical = Dimens.smallSeparation,
-                        ),
-                    text = model.id.id.toString(),
-                    style = MaterialTheme.typography.titleLarge,
-                    color = MaterialTheme.colorScheme.onSurface,
+                BidgetInfoLoadableContent(
+                    info = model
+                        .info
+                        .collectAsState()
+                        .value
                 )
             }
             model

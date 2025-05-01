@@ -43,10 +43,11 @@ class ServerSyncApi(
         .map { budgets ->
             SyncHandle.GetBudgets.Response(
                 budgets = budgets
-                    .map { (id, peekHash) ->
+                    .map { budget ->
                         SyncHandle.GetBudgets.Response.Budget(
-                            id = id,
-                            peekHash = peekHash,
+                            id = budget.id,
+                            peekHash = budget.peekHash,
+                            info = budget.info,
                         )
                     }
             )

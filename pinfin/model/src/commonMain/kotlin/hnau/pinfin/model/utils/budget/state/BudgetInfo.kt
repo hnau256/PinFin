@@ -2,7 +2,9 @@ package hnau.pinfin.model.utils.budget.state
 
 import hnau.pinfin.data.BudgetConfig
 import hnau.pinfin.data.BudgetId
+import kotlinx.serialization.Serializable
 
+@Serializable
 data class BudgetInfo(
     val title: String,
 ) {

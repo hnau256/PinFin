@@ -19,6 +19,8 @@ import hnau.pinfin.model.sync.client.utils.TcpSyncClient
 import hnau.pinfin.model.sync.utils.SyncHandle
 import hnau.pinfin.model.utils.budget.repository.BudgetRepository
 import hnau.pinfin.model.utils.budget.repository.BudgetsRepository
+import hnau.pinfin.model.utils.budget.state.BudgetInfo
+import hnau.pinfin.model.utils.budget.upchain.UpchainHash
 import hnau.shuffler.annotations.Shuffle
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Deferred
@@ -67,60 +69,71 @@ class SyncClientListModel(
         serverBudgetsRequestIndex.update(Int::inc)
     }
 
-    val items: StateFlow<Loadable<Result<NonEmptyList<Pair<BudgetId, SyncClientListItemModel>>?>>> = combineState(
-        scope = scope,
-        a = serverBudgets,
-        b = dependencies.budgetsRepository.list,
-    ) { serverBudgetsOrErrorOrLoading, local ->
-        serverBudgetsOrErrorOrLoading.map { serverBudgetsOrError ->
-            serverBudgetsOrError.map { serverBudgets ->
-                val serverHashes: MutableMap<BudgetId, ServerBudgetPeekHash> = serverBudgets
-                    .associate { (id, peekHash) -> id to ServerBudgetPeekHash(peekHash) }
-                    .toMutableMap()
-                buildList {
-                    addAll(
-                        local.map { (id, localBudget) ->
-                            val serverPeekHash = serverHashes.remove(id)
-                            val content = when (serverPeekHash) {
-                                null -> Ior.Left(localBudget)
-                                else -> Ior.Both(
-                                    leftValue = localBudget,
-                                    rightValue = serverPeekHash,
-                                )
-                            }
-                            id to content
+    data class ServerBudget(
+        val peekHash: UpchainHash?,
+        val info: BudgetInfo,
+    )
+
+    val items: StateFlow<Loadable<Result<NonEmptyList<Pair<BudgetId, SyncClientListItemModel>>?>>> =
+        combineState(
+            scope = scope,
+            a = serverBudgets,
+            b = dependencies.budgetsRepository.list,
+        ) { serverBudgetsOrErrorOrLoading, local ->
+            serverBudgetsOrErrorOrLoading.map { serverBudgetsOrError ->
+                serverBudgetsOrError.map { serverBudgets ->
+                    val serverBudgets: MutableMap<BudgetId, ServerBudget> = serverBudgets
+                        .associate { budget ->
+                            budget.id to ServerBudget(
+                                peekHash = budget.peekHash,
+                                info = budget.info,
+                            )
                         }
-                    )
-                    addAll(
-                        serverHashes
-                            .map { (id, serverPeekHash) ->
-                                id to Ior.Right(serverPeekHash)
+                        .toMutableMap()
+                    buildList {
+                        addAll(
+                            local.map { (id, localBudget) ->
+                                val serverPeekHash = serverBudgets.remove(id)
+                                val content = when (serverPeekHash) {
+                                    null -> Ior.Left(localBudget)
+                                    else -> Ior.Both(
+                                        leftValue = localBudget,
+                                        rightValue = serverPeekHash,
+                                    )
+                                }
+                                id to content
                             }
-                    )
-                }
-                    .sortedBy { it.first }
-                    .toNonEmptyListOrNull()
-            }
-        }
-    }.mapReusable(scope) { itemsOrErrorOrLoading ->
-        itemsOrErrorOrLoading.map { itemsOrError ->
-            itemsOrError.map { items ->
-                items?.map { (id, localOrServer: Ior<Deferred<BudgetRepository>, ServerBudgetPeekHash>) ->
-                    getOrPutItem(
-                        key = id,
-                    ) { itemScope ->
-                        val itemModel = SyncClientListItemModel(
-                            id = id,
-                            scope = itemScope,
-                            dependencies = dependencies.item(),
-                            localOrServer = localOrServer,
                         )
-                        id to itemModel
+                        addAll(
+                            serverBudgets
+                                .map { (id, serverPeekHash) ->
+                                    id to Ior.Right(serverPeekHash)
+                                }
+                        )
+                    }
+                        .sortedBy { it.first }
+                        .toNonEmptyListOrNull()
+                }
+            }
+        }.mapReusable(scope) { itemsOrErrorOrLoading ->
+            itemsOrErrorOrLoading.map { itemsOrError ->
+                itemsOrError.map { items ->
+                    items?.map { (id, localOrServer: Ior<Deferred<BudgetRepository>, ServerBudget>) ->
+                        getOrPutItem(
+                            key = id,
+                        ) { itemScope ->
+                            val itemModel = SyncClientListItemModel(
+                                id = id,
+                                scope = itemScope,
+                                dependencies = dependencies.item(),
+                                localOrServer = localOrServer,
+                            )
+                            id to itemModel
+                        }
                     }
                 }
             }
         }
-    }
 
     override val goBackHandler: GoBackHandler
         get() = NeverGoBackHandler

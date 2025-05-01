@@ -9,6 +9,7 @@ import hnau.pinfin.data.BudgetId
 import hnau.pinfin.model.sync.utils.SyncHandle
 import hnau.pinfin.model.utils.budget.repository.BudgetRepository
 import hnau.pinfin.model.utils.budget.repository.BudgetsRepository
+import hnau.pinfin.model.utils.budget.state.BudgetInfo
 import hnau.pinfin.model.utils.budget.upchain.UpchainHash
 import hnau.pinfin.model.utils.budget.upchain.Update
 import hnau.shuffler.annotations.Shuffle
@@ -55,15 +56,27 @@ class BudgetsSyncServer(
         }
 
 
-    suspend fun getBudgets(): Result<Map<BudgetId, UpchainHash?>> = result {
+
+    data class Budget(
+        val id: BudgetId,
+        val peekHash: UpchainHash?,
+        val info: BudgetInfo,
+    )
+
+    suspend fun getBudgets(): Result<List<Budget>> = result {
         coroutineScope {
             budgetsUpdates.value.let { servers ->
                 servers
                     .mapValues { (_, server) ->
-                        async { server.getPeekHash() }
+                        async { server.getBudget() }
                     }
-                    .mapValues { (_, deferredPeek) ->
-                        deferredPeek.await()
+                    .map { (id, deferredBudget) ->
+                        val budget = deferredBudget.await()
+                        Budget(
+                            id = id,
+                            peekHash = budget.peekHash,
+                            info = budget.info,
+                        )
                     }
             }
         }

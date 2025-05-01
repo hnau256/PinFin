@@ -1,6 +1,7 @@
 package hnau.pinfin.model.sync.utils
 
 import hnau.pinfin.data.BudgetId
+import hnau.pinfin.model.utils.budget.state.BudgetInfo
 import hnau.pinfin.model.utils.budget.upchain.Upchain
 import hnau.pinfin.model.utils.budget.upchain.UpchainHash
 import hnau.pinfin.model.utils.budget.upchain.Update
@@ -30,6 +31,7 @@ sealed interface SyncHandle<O> {
             data class Budget(
                 val id: BudgetId,
                 val peekHash: UpchainHash?,
+                val info: BudgetInfo,
             )
         }
     }

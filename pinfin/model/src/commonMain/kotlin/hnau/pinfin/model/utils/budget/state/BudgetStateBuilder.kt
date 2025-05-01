@@ -160,7 +160,7 @@ data class BudgetStateBuilder(
 
         val empty = BudgetStateBuilder(
             hash = null,
-            config = BudgetConfig(),
+            config = BudgetConfig.empty,
             transactions = emptyMap(),
         )
     }

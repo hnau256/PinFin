@@ -1,10 +1,9 @@
 package hnau.pinfin.model.sync.server.utils
 
 import arrow.core.raise.result
-import hnau.pinfin.model.sync.client.budget.utils.RemoteUpchain.GetMaxToMinUpdatesResult
 import hnau.pinfin.model.sync.utils.SyncHandle
 import hnau.pinfin.model.utils.budget.repository.BudgetRepository
-import hnau.pinfin.model.utils.budget.storage.UpchainStorage
+import hnau.pinfin.model.utils.budget.state.BudgetInfo
 import hnau.pinfin.model.utils.budget.storage.update
 import hnau.pinfin.model.utils.budget.upchain.UpchainHash
 import hnau.pinfin.model.utils.budget.upchain.Update
@@ -27,25 +26,37 @@ class BudgetSyncServer(
 
     private val accessStateMutex: Mutex = Mutex()
 
-    private suspend inline fun <R> withUpchain(
-        block: (UpchainStorage) -> R,
+    private suspend inline fun <R> withRepository(
+        block: (BudgetRepository) -> R,
     ): R = accessStateMutex.withLock {
         dependencies
             .budgetRepository
             .await()
-            .upchainStorage
             .let(block)
     }
 
-    suspend fun getPeekHash(): UpchainHash? = withUpchain { upchainStorage ->
-        upchainStorage.upchain.value.peekHash
+
+    data class Budget(
+        val peekHash: UpchainHash?,
+        val info: BudgetInfo,
+    )
+
+    suspend fun getBudget(): Budget = withRepository { budgetRepository ->
+        Budget(
+            peekHash = budgetRepository.upchainStorage.upchain.value.peekHash,
+            info = budgetRepository.state.value.info,
+        )
+
     }
 
     suspend fun getMaxToMinUpdates(
         before: UpchainHash?,
-    ): Result<SyncHandle.GetMaxToMinUpdates.Response> = withUpchain { upchainStorage ->
+    ): Result<SyncHandle.GetMaxToMinUpdates.Response> = withRepository { budgetRepository ->
         result {
-            val upchain = upchainStorage.upchain.value
+            val upchain = budgetRepository
+                    .upchainStorage
+                    .upchain
+                    .value
             val totalCount = upchain.items.size
             val beforeIndex = before?.let { beforeNotNull ->
                 runCatching { upchain.indexesByHash.getValue(beforeNotNull) }.bind()
@@ -70,14 +81,16 @@ class BudgetSyncServer(
     suspend fun appendUpdates(
         peekHashToCheck: UpchainHash?,
         updates: List<Update>,
-    ): Result<Unit> = withUpchain { upchainStorage ->
+    ): Result<Unit> = withRepository { budgetRepository ->
         result {
-            upchainStorage.update { currentUpchain ->
-                if (currentUpchain.peekHash != peekHashToCheck) {
-                    raise(IllegalStateException("Incorrect peek hash"))
+            budgetRepository
+                .upchainStorage
+                .update { currentUpchain ->
+                    if (currentUpchain.peekHash != peekHashToCheck) {
+                        raise(IllegalStateException("Incorrect peek hash"))
+                    }
+                    currentUpchain + updates
                 }
-                currentUpchain + updates
-            }
         }
     }
 }
