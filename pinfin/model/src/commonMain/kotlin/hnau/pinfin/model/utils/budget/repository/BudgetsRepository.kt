@@ -21,7 +21,7 @@ class BudgetsRepository(
             transform = { budgetScope, (id, deferredUpchainStorage) ->
                 val deferredInfo = budgetScope.async {
                     val upchainStorage = deferredUpchainStorage.await()
-                    BudgetRepository(
+                    BudgetRepository.create(
                         scope = budgetScope,
                         upchainStorage = upchainStorage,
                     )

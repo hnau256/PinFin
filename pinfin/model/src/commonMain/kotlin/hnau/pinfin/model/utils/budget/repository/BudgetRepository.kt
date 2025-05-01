@@ -1,7 +1,5 @@
 package hnau.pinfin.model.utils.budget.repository
 
-import hnau.common.kotlin.coroutines.mapState
-import hnau.common.kotlin.coroutines.runningFoldState
 import hnau.pinfin.data.UpdateType
 import hnau.pinfin.model.utils.budget.state.BudgetState
 import hnau.pinfin.model.utils.budget.state.BudgetStateBuilder
@@ -10,13 +8,17 @@ import hnau.pinfin.model.utils.budget.storage.UpchainStorage
 import hnau.pinfin.model.utils.budget.storage.addUpdate
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.runningFold
+import kotlinx.coroutines.flow.stateIn
 
 class BudgetRepository(
     scope: CoroutineScope,
+    val state: StateFlow<BudgetState>,
     val upchainStorage: UpchainStorage,
 ) {
 
-    val state: StateFlow<BudgetState> = upchainStorage.upchain
+    /*val state: StateFlow<BudgetState> = upchainStorage.upchain
         .runningFoldState(
             scope = scope,
             createInitial = { upchain ->
@@ -29,7 +31,7 @@ class BudgetRepository(
         }
         .mapState(scope) { stateBuilder ->
             stateBuilder.toBudgetState()
-        }
+        }*/
 
     val transactions: BudgetRepositoryTransactionsDelegate = BudgetRepositoryTransactionsDelegate(
         state = state,
@@ -52,5 +54,31 @@ class BudgetRepository(
         upchainStorage.addUpdate(
             UpdateType.updateTypeMapper.reverse(update)
         )
+    }
+
+    companion object {
+
+        suspend fun create(
+            scope: CoroutineScope,
+            upchainStorage: UpchainStorage,
+        ): BudgetRepository {
+            val upchainFlow = upchainStorage.upchain
+            val initialState = BudgetStateBuilder
+                .empty
+                .withNewUpchain(upchainFlow.value)
+            val state = upchainFlow
+                .runningFold(
+                    initial = initialState,
+                ) { acc, upchain ->
+                    acc.withNewUpchain(upchain)
+                }
+                .map(BudgetStateBuilder::toBudgetState)
+                .stateIn(scope)
+            return BudgetRepository(
+                scope = scope,
+                state = state,
+                upchainStorage = upchainStorage,
+            )
+        }
     }
 }

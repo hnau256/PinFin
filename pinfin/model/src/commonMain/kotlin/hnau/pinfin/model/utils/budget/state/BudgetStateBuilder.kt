@@ -11,6 +11,8 @@ import hnau.pinfin.model.utils.budget.upchain.UpchainHash
 import hnau.pinfin.model.utils.budget.upchain.Update
 import hnau.pinfin.model.utils.budget.upchain.plus
 import hnau.pinfin.model.utils.budget.upchain.utils.getUpdatesAfterHashIfPossible
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 data class BudgetStateBuilder(
     private val hash: UpchainHash?,
@@ -25,7 +27,7 @@ data class BudgetStateBuilder(
 
     override fun hashCode(): Int = hash.hashCode()
 
-    operator fun plus(
+    private operator fun plus(
         update: Update,
     ): BudgetStateBuilder {
         val updateType = UpdateType.updateTypeMapper.direct(update)
@@ -40,32 +42,24 @@ data class BudgetStateBuilder(
         )
     }
 
-    fun withNewUpchain(
+    suspend fun withNewUpchain(
         newUpchain: Upchain,
-    ): BudgetStateBuilder {
+    ): BudgetStateBuilder = withContext(Dispatchers.Default) {
 
         val additionalUpdates = newUpchain.getUpdatesAfterHashIfPossible(
             hash = hash,
         )
         val (state, updates) = when (additionalUpdates) {
             null -> empty to newUpchain.items.map(Upchain.Item::update)
-            else -> this to additionalUpdates
+            else -> this@BudgetStateBuilder to additionalUpdates
         }
-        return updates.fold(
+        updates.fold(
             initial = state,
             operation = BudgetStateBuilder::plus,
         )
     }
 
-    companion object {
-
-        val empty = BudgetStateBuilder(
-            hash = null,
-            transactions = emptyMap(),
-        )
-    }
-
-    fun toBudgetState(): BudgetState {
+    suspend fun toBudgetState(): BudgetState = withContext(Dispatchers.Default) {
 
         val categories: MutableMap<CategoryId, CategoryInfo> = mutableMapOf()
         val accounts: MutableMap<AccountId, AccountInfo> = mutableMapOf()
@@ -129,7 +123,7 @@ data class BudgetStateBuilder(
             }
         }
 
-        return BudgetState(
+        BudgetState(
             transactions = transactions
                 .map { (id, transaction) ->
                     TransactionInfo.Companion.fromTransaction(
@@ -142,6 +136,14 @@ data class BudgetStateBuilder(
                 .sortedByDescending(TransactionInfo::timestamp),
             categories = categories.values.toList(),
             accounts = accounts.values.toList()
+        )
+    }
+
+    companion object {
+
+        val empty = BudgetStateBuilder(
+            hash = null,
+            transactions = emptyMap(),
         )
     }
 }
