@@ -45,4 +45,5 @@
     <string name="butget_was_synchronized">Бюджет успешно синхронизирован</string>
     <string name="error_while_budget_synchronization">Ошибка синхронизации бюджета</string>
     <string name="back">Назад</string>
+    <string name="budget_name">Название бюджета</string>
 </resources>

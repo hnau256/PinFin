@@ -1,5 +1,6 @@
 package hnau.pinfin.model.utils.budget.repository
 
+import hnau.pinfin.data.BudgetConfig
 import hnau.pinfin.data.BudgetId
 import hnau.pinfin.data.UpdateType
 import hnau.pinfin.model.utils.budget.state.BudgetState
@@ -32,6 +33,21 @@ class BudgetRepository(
         state = state,
         addUpdate = ::applyUpdate,
     )
+
+    suspend fun config(
+        config: BudgetConfig,
+    ) {
+        val info = state.value.info
+        val newInfo = info + config
+        if (info == newInfo) {
+            return
+        }
+        applyUpdate(
+            update = UpdateType.Config(
+                config = config,
+            )
+        )
+    }
 
     private suspend fun applyUpdate(
         update: UpdateType,

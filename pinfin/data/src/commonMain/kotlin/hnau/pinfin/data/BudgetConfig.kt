@@ -7,5 +7,15 @@ data class BudgetConfig(
     val title: String? = null,
 ) {
 
-    companion object
+    operator fun plus(
+        other: BudgetConfig,
+    ): BudgetConfig = BudgetConfig(
+        title = other.title ?: title,
+    )
+
+    companion object {
+
+        val empty = BudgetConfig()
+    }
 }
+

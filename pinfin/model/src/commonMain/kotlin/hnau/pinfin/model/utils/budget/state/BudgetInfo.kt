@@ -9,13 +9,19 @@ data class BudgetInfo(
     val title: String,
 ) {
 
+    operator fun plus(
+        config: BudgetConfig,
+    ): BudgetInfo = BudgetInfo(
+        title = config.title ?: title,
+    )
+
     companion object {
 
         fun create(
             id: BudgetId,
             config: BudgetConfig,
         ): BudgetInfo = BudgetInfo(
-            title = config.title ?: "Budget title placeholder" /*id.id.toString()*/,
+            title = config.title ?: id.id.toString(),
         )
     }
 }

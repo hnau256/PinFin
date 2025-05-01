@@ -29,6 +29,7 @@ import kotlinx.coroutines.flow.StateFlow
 import org.jetbrains.compose.resources.stringResource
 import hnau.pinfin.projector.Res
 import hnau.pinfin.projector.analytics
+import hnau.pinfin.projector.budget.config.BudgetConfigProjector
 import hnau.pinfin.projector.config
 import hnau.pinfin.projector.transactions
 
