@@ -68,6 +68,10 @@ class BudgetEditNameModel(
         }
     )
 
+    fun cancel() {
+        onDone()
+    }
+
     override val goBackHandler: GoBackHandler =
         onDone.toMutableStateFlowAsInitial()
 }
