@@ -1,4 +1,4 @@
-package hnau.pinfin.projector.bidget
+package hnau.pinfin.projector.budget
 
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.icons.Icons
@@ -22,7 +22,7 @@ import hnau.common.kotlin.coroutines.mapState
 import hnau.pinfin.model.budget.BudgetModel
 import hnau.pinfin.model.budget.BudgetPageModel
 import hnau.pinfin.model.budget.BudgetTab
-import hnau.pinfin.projector.bidget.transactions.TransactionsProjector
+import hnau.pinfin.projector.budget.transactions.TransactionsProjector
 import hnau.shuffler.annotations.Shuffle
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.StateFlow

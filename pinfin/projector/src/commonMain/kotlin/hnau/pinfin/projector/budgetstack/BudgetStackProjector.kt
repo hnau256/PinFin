@@ -5,7 +5,7 @@ import hnau.common.compose.projector.stack.Content
 import hnau.common.compose.projector.stack.StackProjectorTail
 import hnau.pinfin.model.budgetstack.BudgetStackElementModel
 import hnau.pinfin.model.budgetstack.BudgetStackModel
-import hnau.pinfin.projector.bidget.BudgetProjector
+import hnau.pinfin.projector.budget.BudgetProjector
 import hnau.pinfin.projector.transaction.TransactionProjector
 import hnau.shuffler.annotations.Shuffle
 import kotlinx.coroutines.CoroutineScope

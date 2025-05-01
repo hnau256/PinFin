@@ -1,4 +1,4 @@
-package hnau.pinfin.projector.bidget.transactions
+package hnau.pinfin.projector.budget.transactions
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box

@@ -1,8 +1,8 @@
-package hnau.pinfin.projector.bidget
+package hnau.pinfin.projector.budget
 
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.runtime.Composable
-import hnau.pinfin.projector.bidget.transactions.TransactionsProjector
+import hnau.pinfin.projector.budget.transactions.TransactionsProjector
 
 sealed interface BudgetPageProjector {
 
