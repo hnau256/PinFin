@@ -1,6 +1,8 @@
 package hnau.pinfin.projector.budget.config
 
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.Done
@@ -14,6 +16,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardCapitalization
 import hnau.common.compose.uikit.TextInput
 import hnau.common.compose.uikit.state.StateContent
 import hnau.common.compose.uikit.state.TransitionSpec
@@ -40,6 +44,11 @@ class BudgetEditNameProjector(
                 TextInput(
                     modifier = Modifier.fillMaxWidth().focusRequester(focusRequester),
                     value = model.name,
+                    keyboardActions = KeyboardActions { model.save.value?.invoke() },
+                    keyboardOptions = KeyboardOptions(
+                        imeAction = ImeAction.Done,
+                        capitalization = KeyboardCapitalization.Sentences,
+                    )
                 )
                 LaunchedEffect(Unit) { focusRequester.requestFocus() }
             },
