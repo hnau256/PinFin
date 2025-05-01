@@ -13,25 +13,9 @@ import kotlinx.coroutines.flow.runningFold
 import kotlinx.coroutines.flow.stateIn
 
 class BudgetRepository(
-    scope: CoroutineScope,
     val state: StateFlow<BudgetState>,
     val upchainStorage: UpchainStorage,
 ) {
-
-    /*val state: StateFlow<BudgetState> = upchainStorage.upchain
-        .runningFoldState(
-            scope = scope,
-            createInitial = { upchain ->
-                BudgetStateBuilder
-                    .empty
-                    .withNewUpchain(upchain)
-            },
-        ) { stateBuilder, upchain ->
-            stateBuilder.withNewUpchain(upchain)
-        }
-        .mapState(scope) { stateBuilder ->
-            stateBuilder.toBudgetState()
-        }*/
 
     val transactions: BudgetRepositoryTransactionsDelegate = BudgetRepositoryTransactionsDelegate(
         state = state,
@@ -75,7 +59,6 @@ class BudgetRepository(
                 .map(BudgetStateBuilder::toBudgetState)
                 .stateIn(scope)
             return BudgetRepository(
-                scope = scope,
                 state = state,
                 upchainStorage = upchainStorage,
             )
