@@ -93,7 +93,7 @@ class FileBasedPreferences(
                 )
 
                 val entriesStringsMapper: Mapper<String, List<String>> =
-                    Mapper.stringToStringsBySeparator(separator = '|')
+                    Mapper.stringToStringsBySeparator(separator = '\n')
 
                 entriesStringsMapper + entriesMapper
             }
