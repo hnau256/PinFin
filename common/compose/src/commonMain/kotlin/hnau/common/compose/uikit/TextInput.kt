@@ -8,7 +8,9 @@ import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldColors
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
@@ -18,8 +20,10 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.VisualTransformation
 import hnau.common.app.EditingString
 import hnau.common.compose.uikit.shape.HnauShape
-import hnau.common.compose.utils.collectAsTextFieldValueMutableState
+import hnau.common.compose.utils.textFieldValueMapper
 import kotlinx.coroutines.flow.MutableStateFlow
+
+private val mapper = EditingString.textFieldValueMapper
 
 @Composable
 fun TextInput(
@@ -51,10 +55,18 @@ fun TextInput(
         disabledContainerColor = MaterialTheme.colorScheme.surfaceContainer,
     ),
 ) {
-    var valueLocal = value.collectAsTextFieldValueMutableState()
+    var localValue by remember { mutableStateOf(value.value.let(mapper.direct)) }
+    LaunchedEffect(value) {
+        value.collect { value ->
+            localValue = value.let(mapper.direct)
+        }
+    }
     TextField(
-        value = valueLocal.value,
-        onValueChange = valueLocal.component2(),
+        value = localValue,
+        onValueChange = { newValue ->
+            value.value = newValue.let(mapper.reverse)
+            localValue = newValue
+        },
         modifier = modifier,
         enabled = enabled,
         readOnly = readOnly,

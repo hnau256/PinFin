@@ -7,6 +7,7 @@ import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.remember
 import hnau.common.kotlin.mapper.Mapper
 
+/*
 inline fun <T, R> State<T>.map(
     crossinline transform: (T) -> R,
 ): State<R> = derivedStateOf {
@@ -38,4 +39,4 @@ fun <I, O> MutableState<I>.mapRemembered(
 ): MutableState<O> = remember(this, mapper) {
     @Suppress("DEPRECATION")
     map(mapper)
-}
+}*/
