@@ -2,6 +2,8 @@ package hnau.pinfin.model.utils.budget.state
 
 import hnau.common.kotlin.castOrNull
 import hnau.pinfin.data.AccountId
+import hnau.pinfin.data.BudgetConfig
+import hnau.pinfin.data.BudgetId
 import hnau.pinfin.data.CategoryId
 import hnau.pinfin.data.Record
 import hnau.pinfin.data.Transaction
@@ -16,6 +18,7 @@ import kotlinx.coroutines.withContext
 
 data class BudgetStateBuilder(
     private val hash: UpchainHash?,
+    private val config: BudgetConfig,
     private val transactions: Map<Transaction.Id, Transaction> = mutableMapOf(),
 ) {
 
@@ -31,14 +34,22 @@ data class BudgetStateBuilder(
         update: Update,
     ): BudgetStateBuilder {
         val updateType = UpdateType.updateTypeMapper.direct(update)
-        val newTransactions = when (updateType) {
-            is UpdateType.RemoveTransaction -> transactions - updateType.id
+        val transactions = transactions.toMutableMap()
+        var info = config
+        when (updateType) {
+            is UpdateType.RemoveTransaction ->
+                transactions -= updateType.id
 
-            is UpdateType.Transaction -> transactions + (updateType.id to updateType.transaction)
+            is UpdateType.Transaction ->
+                transactions += (updateType.id to updateType.transaction)
+
+            is UpdateType.Config ->
+                info += updateType.config
         }
         return BudgetStateBuilder(
             hash = hash + update,
-            transactions = newTransactions,
+            transactions = transactions,
+            config = info,
         )
     }
 
@@ -59,7 +70,9 @@ data class BudgetStateBuilder(
         )
     }
 
-    suspend fun toBudgetState(): BudgetState = withContext(Dispatchers.Default) {
+    suspend fun toBudgetState(
+        id: BudgetId,
+    ): BudgetState = withContext(Dispatchers.Default) {
 
         val categories: MutableMap<CategoryId, CategoryInfo> = mutableMapOf()
         val accounts: MutableMap<AccountId, AccountInfo> = mutableMapOf()
@@ -135,7 +148,11 @@ data class BudgetStateBuilder(
                 }
                 .sortedByDescending(TransactionInfo::timestamp),
             categories = categories.values.toList(),
-            accounts = accounts.values.toList()
+            accounts = accounts.values.toList(),
+            info = BudgetInfo.create(
+                id = id,
+                config = config,
+            )
         )
     }
 
@@ -143,6 +160,7 @@ data class BudgetStateBuilder(
 
         val empty = BudgetStateBuilder(
             hash = null,
+            config = BudgetConfig(),
             transactions = emptyMap(),
         )
     }

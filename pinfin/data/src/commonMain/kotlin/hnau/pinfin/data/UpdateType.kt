@@ -23,4 +23,10 @@ sealed interface UpdateType {
         @SerialName("id")
         val id: TransactionDTO.Id,
     ) : UpdateType
+
+    @Serializable
+    @SerialName("config")
+    data class Config(
+        val config: BudgetConfig,
+    ) : UpdateType
 }

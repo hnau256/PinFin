@@ -4,6 +4,7 @@
 
 package hnau.pinfin.model.sync.client.list
 
+import arrow.core.Either
 import arrow.core.Ior
 import hnau.common.app.goback.GoBackHandler
 import hnau.common.app.goback.GoBackHandlerProvider
@@ -13,11 +14,14 @@ import hnau.common.kotlin.Ready
 import hnau.common.kotlin.coroutines.mapState
 import hnau.common.kotlin.coroutines.toLoadableStateFlow
 import hnau.common.kotlin.coroutines.toMutableStateFlowAsInitial
+import hnau.common.kotlin.ifNull
 import hnau.common.kotlin.map
 import hnau.common.kotlin.serialization.MutableStateFlowSerializer
 import hnau.pinfin.data.BudgetId
 import hnau.pinfin.model.sync.client.BudgetSyncOpener
 import hnau.pinfin.model.utils.budget.repository.BudgetRepository
+import hnau.pinfin.model.utils.budget.state.BudgetInfo
+import hnau.pinfin.model.utils.toBudgetInfoStateFlow
 import hnau.shuffler.annotations.Shuffle
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Deferred
@@ -49,6 +53,19 @@ class SyncClientListItemModel(
             enum class Mode { OnlyOnServer, OnlyLocal, Both }
         }
     }
+
+    //TODO use in Projector
+    val info: StateFlow<Either<BudgetId, Loadable<BudgetInfo>>> = localOrServer
+        .leftOrNull()
+        ?.toBudgetInfoStateFlow(scope)
+        ?.mapState(scope) { info ->
+            Either.Right(info)
+        }
+        .ifNull {
+            Either
+                .Left(id)
+                .toMutableStateFlowAsInitial()
+        }
 
     val state: StateFlow<Loadable<State>> = run {
         val sync = { dependencies.budgetOpener.openBudgetToSync(id) }

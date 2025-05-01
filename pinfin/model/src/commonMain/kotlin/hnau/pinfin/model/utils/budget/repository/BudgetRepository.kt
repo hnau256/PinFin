@@ -1,5 +1,6 @@
 package hnau.pinfin.model.utils.budget.repository
 
+import hnau.pinfin.data.BudgetId
 import hnau.pinfin.data.UpdateType
 import hnau.pinfin.model.utils.budget.state.BudgetState
 import hnau.pinfin.model.utils.budget.state.BudgetStateBuilder
@@ -44,6 +45,7 @@ class BudgetRepository(
 
         suspend fun create(
             scope: CoroutineScope,
+            id: BudgetId,
             upchainStorage: UpchainStorage,
         ): BudgetRepository {
             val upchainFlow = upchainStorage.upchain
@@ -56,7 +58,11 @@ class BudgetRepository(
                 ) { acc, upchain ->
                     acc.withNewUpchain(upchain)
                 }
-                .map(BudgetStateBuilder::toBudgetState)
+                .map { budgetStateBuilder ->
+                    budgetStateBuilder.toBudgetState(
+                        id = id,
+                    )
+                }
                 .stateIn(scope)
             return BudgetRepository(
                 state = state,

@@ -22,6 +22,7 @@ class BudgetsRepository(
                 val deferredInfo = budgetScope.async {
                     val upchainStorage = deferredUpchainStorage.await()
                     BudgetRepository.create(
+                        id = id,
                         scope = budgetScope,
                         upchainStorage = upchainStorage,
                     )
