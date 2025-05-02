@@ -9,8 +9,10 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Sync
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExtendedFloatingActionButton
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
@@ -79,6 +81,13 @@ class BudgetsListProjector(
                 TopAppBar(
                     title = { Text(stringResource(Res.string.budgets)) },
                     navigationIcon = { globalGoBackHandler.NavigationIcon() },
+                    actions = {
+                        IconButton(
+                            onClick = model::openSync,
+                        ) {
+                            Icon { Icons.Filled.Sync }
+                        }
+                    }
                 )
             },
         ) { contentPadding ->

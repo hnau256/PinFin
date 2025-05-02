@@ -77,12 +77,6 @@ class StartSyncProjector(
                 TopAppBar(
                     title = { Text(stringResource(Res.string.budgets_sync)) },
                     navigationIcon = { globalGoBackHandler.NavigationIcon() },
-                    actions = {
-                        IconButton(
-                            onClick = model::returnToBudgets,
-                            content = { Icon { Icons.AutoMirrored.Filled.List } },
-                        )
-                    }
                 )
             },
         ) { contentPadding ->

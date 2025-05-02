@@ -12,7 +12,6 @@ import hnau.common.kotlin.coroutines.scopedInState
 import hnau.common.kotlin.coroutines.toMutableStateFlowAsInitial
 import hnau.common.kotlin.fold
 import hnau.pinfin.model.manage.BudgetsListOpener
-import hnau.pinfin.model.mode.SyncOpener
 import hnau.pinfin.model.utils.budget.repository.BudgetRepository
 import hnau.shuffler.annotations.Shuffle
 import kotlinx.coroutines.CoroutineScope
@@ -29,8 +28,6 @@ class BudgetConfigModel(
 
     @Shuffle
     interface Dependencies {
-
-        val syncOpener: SyncOpener
 
         val budgetsListOpener: BudgetsListOpener
 
@@ -50,10 +47,6 @@ class BudgetConfigModel(
     //TODO
     val inProgress: StateFlow<Boolean>
         get() = inProgressRegistry.isProgress
-
-    fun openSync() {
-        dependencies.syncOpener.openSync()
-    }
 
     fun openBudgetsList() {
         scope.launch {

@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.List
 import androidx.compose.material.icons.filled.Badge
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.IconButton
@@ -15,6 +16,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
 import arrow.core.Either
 import hnau.common.compose.uikit.state.StateContent
 import hnau.common.compose.uikit.state.TransitionSpec
@@ -23,7 +25,6 @@ import hnau.common.kotlin.coroutines.mapWithScope
 import hnau.pinfin.model.budget.config.BudgetConfigModel
 import hnau.pinfin.projector.Res
 import hnau.pinfin.projector.budget_name
-import hnau.pinfin.projector.budgets_sync
 import hnau.pinfin.projector.to_budgets_list
 import hnau.shuffler.annotations.Shuffle
 import kotlinx.coroutines.CoroutineScope
@@ -54,10 +55,7 @@ class BudgetConfigProjector(
             button(
                 titleRes = Res.string.to_budgets_list,
                 onClick = model::openBudgetsList,
-            )
-            button(
-                titleRes = Res.string.budgets_sync,
-                onClick = model::openSync,
+                icon = { Icons.AutoMirrored.Filled.List },
             )
             name()
         }
@@ -113,6 +111,7 @@ class BudgetConfigProjector(
     }
 
     private fun LazyListScope.button(
+        icon: () -> ImageVector,
         titleRes: StringResource,
         onClick: () -> Unit,
     ) {
@@ -120,6 +119,7 @@ class BudgetConfigProjector(
             key = "button_${titleRes.key}",
         ) {
             ListItem(
+                leadingContent = { Icon(chooseIcon = icon) },
                 modifier = Modifier.Companion.clickable(onClick = onClick),
                 headlineContent = { Text(stringResource(titleRes)) },
             )

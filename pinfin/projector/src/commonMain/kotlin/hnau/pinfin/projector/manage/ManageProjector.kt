@@ -11,6 +11,7 @@ import hnau.pinfin.model.manage.ManageModel
 import hnau.pinfin.model.manage.ManageStateModel
 import hnau.pinfin.projector.LoadBudgetProjector
 import hnau.pinfin.projector.budgetslist.BudgetsListProjector
+import hnau.pinfin.projector.budgetsstack.BudgetsStackProjector
 import hnau.shuffler.annotations.Shuffle
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.StateFlow
@@ -24,7 +25,7 @@ class ManageProjector(
     @Shuffle
     interface Dependencies {
 
-        fun budgetsList(): BudgetsListProjector.Dependencies
+        fun budgetsStack(): BudgetsStackProjector.Dependencies
 
         fun loadBudget(): LoadBudgetProjector.Dependencies
     }
@@ -33,10 +34,10 @@ class ManageProjector(
         .state
         .mapWithScope(scope) { stateScope, state ->
             when (state) {
-                is ManageStateModel.BudgetsList -> ManageElementProjector.BudgetsList(
-                    projector = BudgetsListProjector(
+                is ManageStateModel.BudgetsStack -> ManageElementProjector.BudgetsStack(
+                    projector = BudgetsStackProjector(
                         scope = stateScope,
-                        dependencies = dependencies.budgetsList(),
+                        dependencies = dependencies.budgetsStack(),
                         model = state.model,
                     )
                 )

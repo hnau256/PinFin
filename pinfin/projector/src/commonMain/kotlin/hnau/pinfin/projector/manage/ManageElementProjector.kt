@@ -3,6 +3,7 @@ package hnau.pinfin.projector.manage
 import androidx.compose.runtime.Composable
 import hnau.pinfin.projector.budgetslist.BudgetsListProjector
 import hnau.pinfin.projector.LoadBudgetProjector
+import hnau.pinfin.projector.budgetsstack.BudgetsStackProjector
 
 sealed interface ManageElementProjector {
 
@@ -11,8 +12,8 @@ sealed interface ManageElementProjector {
 
     val key: Int
 
-    data class BudgetsList(
-        private val projector: BudgetsListProjector,
+    data class BudgetsStack(
+        private val projector: BudgetsStackProjector,
     ) : ManageElementProjector {
 
         @Composable

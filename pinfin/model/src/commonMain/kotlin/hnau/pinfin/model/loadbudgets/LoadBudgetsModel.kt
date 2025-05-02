@@ -11,7 +11,8 @@ import hnau.common.kotlin.fold
 import hnau.common.kotlin.getOrInit
 import hnau.common.kotlin.map
 import hnau.common.kotlin.toAccessor
-import hnau.pinfin.model.mode.ModeModel
+import hnau.pinfin.model.budgetsstack.BudgetsStackModel
+import hnau.pinfin.model.manage.ManageModel
 import hnau.pinfin.model.utils.budget.repository.BudgetsRepository
 import hnau.pinfin.model.utils.budget.storage.BudgetsStorage
 import hnau.shuffler.annotations.Shuffle
@@ -34,15 +35,15 @@ class LoadBudgetsModel(
 
         val budgetsStorageFactory: BudgetsStorage.Factory
 
-        fun budgetsOrSync(
+        fun manage(
             preferences: Preferences,
             budgetsRepository: BudgetsRepository,
-        ): ModeModel.Dependencies
+        ): ManageModel.Dependencies
     }
 
     @Serializable
     data class Skeleton(
-        var budgetsOrSync: ModeModel.Skeleton? = null,
+        var manage: ManageModel.Skeleton? = null,
     )
 
     private data class Ready(
@@ -50,7 +51,7 @@ class LoadBudgetsModel(
         val preferences: Preferences,
     )
 
-    val budgetsOrSync: StateFlow<Loadable<ModeModel>> = LoadableStateFlow(
+    val budgetsOrSync: StateFlow<Loadable<ManageModel>> = LoadableStateFlow(
         scope = scope,
     ) {
         coroutineScope {
@@ -77,15 +78,15 @@ class LoadBudgetsModel(
             scope = scope,
         ) { stateScope, readyOrLoading ->
             readyOrLoading.map { ready ->
-                ModeModel(
+                ManageModel(
                     scope = stateScope,
-                    dependencies = dependencies.budgetsOrSync(
+                    dependencies = dependencies.manage(
                         budgetsRepository = ready.budgetsRepository,
                         preferences = ready.preferences,
                     ),
-                    skeleton = skeleton::budgetsOrSync
+                    skeleton = skeleton::manage
                         .toAccessor()
-                        .getOrInit { ModeModel.Skeleton() },
+                        .getOrInit { ManageModel.Skeleton() },
                 )
             }
         }

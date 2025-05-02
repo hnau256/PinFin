@@ -2,20 +2,19 @@
     MutableStateFlowSerializer::class,
 )
 
-package hnau.pinfin.model.budgetstack
+package hnau.pinfin.model.budgetsstack
 
 import hnau.common.app.goback.GoBackHandler
 import hnau.common.app.goback.GoBackHandlerProvider
 import hnau.common.app.goback.fallback
 import hnau.common.app.model.stack.NonEmptyStack
 import hnau.common.app.model.stack.StackModelElements
+import hnau.common.app.model.stack.push
 import hnau.common.app.model.stack.stackGoBackHandler
 import hnau.common.app.model.stack.tailGoBackHandler
-import hnau.common.app.model.stack.tryDropLast
 import hnau.common.kotlin.serialization.MutableStateFlowSerializer
-import hnau.pinfin.model.utils.budget.repository.BudgetRepository
-import hnau.pinfin.model.budget.BudgetModel
-import hnau.pinfin.model.transaction.TransactionModel
+import hnau.pinfin.model.budgetslist.BudgetsListModel
+import hnau.pinfin.model.sync.SyncStackModel
 import hnau.shuffler.annotations.Shuffle
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -23,7 +22,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.UseSerializers
 
-class BudgetStackModel(
+class BudgetsStackModel(
     private val scope: CoroutineScope,
     private val skeleton: Skeleton,
     private val dependencies: Dependencies,
@@ -31,35 +30,21 @@ class BudgetStackModel(
 
     @Serializable
     data class Skeleton(
-        val stack: MutableStateFlow<NonEmptyStack<BudgetStackElementModel.Skeleton>> =
-            MutableStateFlow(NonEmptyStack(BudgetStackElementModel.Skeleton.Budget())),
+        val stack: MutableStateFlow<NonEmptyStack<BudgetsStackElementModel.Skeleton>> =
+            MutableStateFlow(NonEmptyStack(BudgetsStackElementModel.Skeleton.List())),
     )
 
     @Shuffle
     interface Dependencies {
 
-        @Shuffle
-        interface WithOpeners {
+        fun list(
+            syncOpener: SyncOpener,
+        ): BudgetsListModel.Dependencies
 
-            fun budget(): BudgetModel.Dependencies
-
-            fun transaction(): TransactionModel.Dependencies
-        }
-
-        fun withOpener(
-            opener: BudgetStackOpener,
-        ): WithOpeners
-
-        val budgetRepository: BudgetRepository
+        fun sync(): SyncStackModel.Dependencies
     }
 
-    private val dependenciesWithOpeners: Dependencies.WithOpeners = dependencies.withOpener(
-        opener = BudgetStackOpenerImpl(
-            stack = skeleton.stack,
-        )
-    )
-
-    val stack: StateFlow<NonEmptyStack<BudgetStackElementModel>> = run {
+    val stack: StateFlow<NonEmptyStack<BudgetsStackElementModel>> = run {
         val stack = skeleton.stack
         StackModelElements(
             scope = scope,
@@ -74,22 +59,28 @@ class BudgetStackModel(
 
     private fun createModel(
         modelScope: CoroutineScope,
-        skeleton: BudgetStackElementModel.Skeleton,
-    ): BudgetStackElementModel = when (skeleton) {
-        is BudgetStackElementModel.Skeleton.Budget -> BudgetStackElementModel.Budget(
-            BudgetModel(
+        skeleton: BudgetsStackElementModel.Skeleton,
+    ): BudgetsStackElementModel = when (skeleton) {
+        is BudgetsStackElementModel.Skeleton.List -> BudgetsStackElementModel.List(
+            BudgetsListModel(
                 scope = modelScope,
                 skeleton = skeleton.skeleton,
-                dependencies = dependenciesWithOpeners.budget(),
+                dependencies = dependencies.list(
+                    syncOpener = {
+                        this@BudgetsStackModel
+                            .skeleton
+                            .stack
+                            .push(BudgetsStackElementModel.Skeleton.Sync())
+                    }
+                ),
             )
         )
 
-        is BudgetStackElementModel.Skeleton.Transaction -> BudgetStackElementModel.Transaction(
-            TransactionModel(
+        is BudgetsStackElementModel.Skeleton.Sync -> BudgetsStackElementModel.Sync(
+            SyncStackModel(
                 scope = modelScope,
                 skeleton = skeleton.skeleton,
-                dependencies = dependenciesWithOpeners.transaction(),
-                completed = { this@BudgetStackModel.skeleton.stack.tryDropLast() },
+                dependencies = dependencies.sync(),
             )
         )
     }

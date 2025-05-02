@@ -21,7 +21,6 @@ import hnau.common.kotlin.mapper.Mapper
 import hnau.common.kotlin.mapper.plus
 import hnau.common.kotlin.mapper.stringToInt
 import hnau.common.kotlin.serialization.MutableStateFlowSerializer
-import hnau.pinfin.model.mode.ManageOpener
 import hnau.pinfin.model.sync.SyncModeOpener
 import hnau.pinfin.model.sync.utils.ServerAddress
 import hnau.pinfin.model.sync.utils.ServerPort
@@ -42,15 +41,9 @@ class StartSyncModel(
     @Shuffle
     interface Dependencies {
 
-        val manageOpener: ManageOpener
-
         val preferences: Preferences
 
         val syncModeOpener: SyncModeOpener
-    }
-
-    fun returnToBudgets() {
-        dependencies.manageOpener.openManage()
     }
 
     private val serverAddressPreference: Preference<ServerAddress> = dependencies

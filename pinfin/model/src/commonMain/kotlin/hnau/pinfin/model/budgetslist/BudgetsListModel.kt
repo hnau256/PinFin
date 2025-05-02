@@ -15,6 +15,7 @@ import hnau.common.kotlin.ifNull
 import hnau.common.kotlin.serialization.MutableStateFlowSerializer
 import hnau.pinfin.data.BudgetId
 import hnau.pinfin.model.budgetslist.item.BudgetItemModel
+import hnau.pinfin.model.budgetsstack.SyncOpener
 import hnau.pinfin.model.utils.budget.repository.BudgetRepository
 import hnau.pinfin.model.utils.budget.repository.BudgetsRepository
 import hnau.shuffler.annotations.Shuffle
@@ -35,6 +36,8 @@ class BudgetsListModel(
     @Shuffle
     interface Dependencies {
 
+        val syncOpener: SyncOpener
+
         val budgetsRepository: BudgetsRepository
 
         val deferredBudgetRepositories: StateFlow<Map<BudgetId, Deferred<BudgetRepository>>>
@@ -49,6 +52,10 @@ class BudgetsListModel(
     data class Skeleton(
         var itemSkeletons: Map<BudgetId, BudgetItemModel.Skeleton> = emptyMap(),
     )
+
+    fun openSync() {
+        dependencies.syncOpener.openSync()
+    }
 
     data class ItemInfo(
         val id: BudgetId,

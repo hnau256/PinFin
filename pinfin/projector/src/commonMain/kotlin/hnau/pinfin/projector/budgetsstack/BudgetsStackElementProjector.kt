@@ -1,19 +1,21 @@
-package hnau.pinfin.projector.mode
+package hnau.pinfin.projector.budgetsstack
 
 import androidx.compose.runtime.Composable
+import hnau.pinfin.projector.budget.BudgetProjector
+import hnau.pinfin.projector.budgetslist.BudgetsListProjector
 import hnau.pinfin.projector.sync.SyncStackProjector
-import hnau.pinfin.projector.manage.ManageProjector
+import hnau.pinfin.projector.transaction.TransactionProjector
 
-sealed interface ModeStateProjector {
+sealed interface BudgetsStackElementProjector {
 
     @Composable
     fun Content()
 
     val key: Int
 
-    data class Manage(
-        private val projector: ManageProjector,
-    ) : ModeStateProjector {
+    data class List(
+        private val projector: BudgetsListProjector,
+    ) : BudgetsStackElementProjector {
 
         @Composable
         override fun Content() {
@@ -26,7 +28,7 @@ sealed interface ModeStateProjector {
 
     data class Sync(
         private val projector: SyncStackProjector,
-    ) : ModeStateProjector {
+    ) : BudgetsStackElementProjector {
 
         @Composable
         override fun Content() {

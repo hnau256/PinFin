@@ -28,6 +28,7 @@ import hnau.common.kotlin.toAccessor
 import hnau.pinfin.data.BudgetId
 import hnau.pinfin.model.LoadBudgetModel
 import hnau.pinfin.model.budgetslist.BudgetsListModel
+import hnau.pinfin.model.budgetsstack.BudgetsStackModel
 import hnau.pinfin.model.utils.budget.repository.BudgetRepository
 import hnau.pinfin.model.utils.budget.repository.BudgetsRepository
 import hnau.shuffler.annotations.Shuffle
@@ -51,10 +52,10 @@ class ManageModel(
 
         val budgetsRepository: BudgetsRepository
 
-        fun budgetsList(
+        fun budgetsStack(
             deferredBudgetRepositories: StateFlow<Map<BudgetId, Deferred<BudgetRepository>>>,
             budgetOpener: BudgetOpener,
-        ): BudgetsListModel.Dependencies
+        ): BudgetsStackModel.Dependencies
 
         fun budget(
             deferredBudgetRepository: Deferred<BudgetRepository>,
@@ -128,19 +129,19 @@ class ManageModel(
             scope = scope,
         ) { stateScope, deferredBudgetRepositoryOrNull ->
             when (deferredBudgetRepositoryOrNull) {
-                null -> ManageStateModel.BudgetsList(
-                    model = BudgetsListModel(
+                null -> ManageStateModel.BudgetsStack(
+                    model = BudgetsStackModel(
                         scope = stateScope,
-                        dependencies = dependencies.budgetsList(
+                        dependencies = dependencies.budgetsStack(
                             deferredBudgetRepositories = deferredBudgetRepositories,
                             budgetOpener = selectedBudgetPreference.update
                         ),
                         skeleton = skeleton::stateSkeleton
                             .toAccessor()
-                            .shrinkType<_, ManageStateModel.Skeleton.BudgetsList>()
+                            .shrinkType<_, ManageStateModel.Skeleton.BudgetsStack>()
                             .getOrInit {
-                                ManageStateModel.Skeleton.BudgetsList(
-                                    BudgetsListModel.Skeleton()
+                                ManageStateModel.Skeleton.BudgetsStack(
+                                    BudgetsStackModel.Skeleton()
                                 )
                             }
                             .skeleton,

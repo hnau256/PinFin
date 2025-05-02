@@ -1,4 +1,4 @@
-package hnau.pinfin.model.mode
+package hnau.pinfin.model.budgetsstack
 
 fun interface SyncOpener {
 
