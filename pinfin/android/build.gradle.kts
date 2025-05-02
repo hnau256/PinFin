@@ -1,3 +1,6 @@
+import com.android.build.gradle.internal.tasks.AppPreBuildTask
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.compose.desktop)
     id("hnau.android.app")
@@ -8,8 +11,20 @@ android {
     namespace = "hnau.pinfin"
 
     defaultConfig {
-        versionCode = 1
-        versionName = "1.0.0"
+        val versionPropsFile = file("version.properties")
+        val versionProps = Properties().apply {
+            load(versionPropsFile.inputStream())
+        }
+        val localVersionCode = (versionProps["versionCode"] as String).toInt()
+        versionName = versionProps["versionName"] as String + "." + localVersionCode
+        versionCode = localVersionCode
+
+        tasks.named("preBuild") {
+            doFirst {
+                versionProps.setProperty("versionCode", (localVersionCode + 1).toString())
+                versionProps.store(versionPropsFile.outputStream(), null)
+            }
+        }
     }
 
     sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
