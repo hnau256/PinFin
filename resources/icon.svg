@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="16"
+   height="16"
+   viewBox="0 0 16 16.000001"
+   version="1.1"
+   id="svg1"
+   inkscape:version="1.4.1 (93de688d07, 2025-03-30)"
+   sodipodi:docname="icon.svg"
+   inkscape:export-filename="растровый.png"
+   inkscape:export-xdpi="1920"
+   inkscape:export-ydpi="1920"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview1"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25882353"
+     inkscape:showpageshadow="true"
+     inkscape:pageopacity="0"
+     inkscape:pagecheckerboard="true"
+     inkscape:deskcolor="#484848"
+     inkscape:document-units="px"
+     showgrid="true"
+     labelstyle="default"
+     borderlayer="true"
+     inkscape:clip-to-page="false"
+     shape-rendering="auto"
+     showborder="true"
+     inkscape:zoom="32"
+     inkscape:cx="8.046875"
+     inkscape:cy="7.109375"
+     inkscape:window-width="1440"
+     inkscape:window-height="867"
+     inkscape:window-x="0"
+     inkscape:window-y="33"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="layer1"
+     inkscape:export-bgcolor="#ffffffff">
+    <inkscape:grid
+       id="grid1"
+       units="px"
+       originx="0"
+       originy="0"
+       spacingx="1"
+       spacingy="1.0000001"
+       empcolor="#0099e5"
+       empopacity="0.30196078"
+       color="#0099e5"
+       opacity="0.14901961"
+       empspacing="8"
+       dotted="false"
+       gridanglex="30"
+       gridanglez="30"
+       visible="true" />
+  </sodipodi:namedview>
+  <defs
+     id="defs1" />
+  <g
+     inkscape:label="Слой 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <circle
+       style="fill:#add8e6;fill-opacity:1;stroke-width:2.66667;stroke-linecap:round;stroke-linejoin:round"
+       id="path12"
+       cx="8"
+       cy="8"
+       r="8" />
+    <rect
+       style="fill:#383105;fill-opacity:1;stroke-width:2.66667;stroke-linecap:round;stroke-linejoin:round"
+       id="rect9"
+       width="6"
+       height="5.6249995"
+       x="5"
+       y="4.0000005" />
+    <circle
+       style="fill:#36454f;fill-opacity:1;stroke-width:2.66667;stroke-linecap:round;stroke-linejoin:round"
+       id="path2"
+       cx="8"
+       cy="4"
+       r="3" />
+    <ellipse
+       style="fill:#daa520;stroke-width:2.66667;stroke-linecap:round;stroke-linejoin:round;fill-opacity:1"
+       id="path1"
+       cx="8"
+       cy="9"
+       rx="5"
+       ry="5.0000005" />
+    <circle
+       style="fill:#b8860b;fill-opacity:1;stroke-width:2.66667;stroke-linecap:round;stroke-linejoin:round"
+       id="ellipse9"
+       cx="8"
+       cy="9"
+       r="4" />
+    <path
+       style="fill:#dbb31c;fill-opacity:1;stroke-width:2.66667;stroke-linecap:round;stroke-linejoin:round"
+       d="m 8,3.0000002 -1.5,1 h 3 z"
+       id="path3"
+       sodipodi:nodetypes="cccc" />
+    <path
+       style="fill:#8a6300;fill-opacity:1;stroke-width:2.66667;stroke-linecap:round;stroke-linejoin:round"
+       d="m 8,5.0000002 1.5,-1 h -3 z"
+       id="path4"
+       sodipodi:nodetypes="cccc" />
+    <path
+       id="path5"
+       style="fill:#ffffe0;fill-opacity:1;stroke-width:2.66667;stroke-linecap:round;stroke-linejoin:round"
+       d="M 6.5 2.5 A 0.5 0.5 0 0 0 6 3 A 0.5 0.5 0 0 0 6.0664062 3.25 A 0.5 0.5 0 0 1 6.5 3 A 0.5 0.5 0 0 1 6.9335938 3.25 A 0.5 0.5 0 0 0 7 3 A 0.5 0.5 0 0 0 6.5 2.5 z M 9.5 2.5 A 0.5 0.5 0 0 0 9 3 A 0.5 0.5 0 0 0 9.0664062 3.25 A 0.5 0.5 0 0 1 9.5 3 A 0.5 0.5 0 0 1 9.9335938 3.25 A 0.5 0.5 0 0 0 10 3 A 0.5 0.5 0 0 0 9.5 2.5 z " />
+    <path
+       id="path8"
+       style="fill:#ffd700;fill-opacity:1;stroke-width:2.66657;stroke-linecap:round;stroke-linejoin:round"
+       d="M 4.7207031 10.458984 L 2.1582031 12.021484 L 4.5742188 14.0625 L 5.4277344 13.541016 L 4.7207031 10.458984 z M 11.279297 10.458984 L 10.572266 13.541016 L 11.425781 14.0625 L 13.841797 12.021484 L 11.279297 10.458984 z " />
+    <path
+       id="path10"
+       style="fill:#4a5564;fill-opacity:1;stroke-width:2.66667;stroke-linecap:round;stroke-linejoin:round"
+       d="M 4.2871094,5.2871094 C 3.5468949,6.0274612 3.0449318,6.972213 2.8457031,8 L 6.5,8.5 Z m 7.4257816,0 L 9.5,8.5 13.154297,8 C 12.955068,6.972213 12.453105,6.0274613 11.712891,5.2871094 Z"
+       sodipodi:nodetypes="cccccccc" />
+  </g>
+</svg>

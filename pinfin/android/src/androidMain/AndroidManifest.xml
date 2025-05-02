@@ -5,6 +5,7 @@
 
     <application
         android:label="@string/pinfin"
+        android:icon="@drawable/ic_launcher"
         android:theme="@style/Theme.pinfin"
         android:enableOnBackInvokedCallback="true">
 
