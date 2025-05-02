@@ -85,7 +85,7 @@ class BudgetsListProjector(
                         IconButton(
                             onClick = model::openSync,
                         ) {
-                            Icon { Icons.Filled.Sync }
+                            Icon(Icons.Filled.Sync)
                         }
                     }
                 )
@@ -113,7 +113,7 @@ class BudgetsListProjector(
             ) {
                 ExtendedFloatingActionButton(
                     onClick = model::createNewBudget,
-                    icon = { Icon { Icons.Filled.Add } },
+                    icon = { Icon(Icons.Filled.Add) },
                     text = { Text(stringResource(Res.string.add)) },
                 )
             }

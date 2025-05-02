@@ -9,10 +9,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.List
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
@@ -34,7 +31,6 @@ import hnau.common.compose.uikit.table.TableOrientation
 import hnau.common.compose.uikit.table.TableScope
 import hnau.common.compose.uikit.table.cellShape
 import hnau.common.compose.uikit.utils.Dimens
-import hnau.common.compose.utils.Icon
 import hnau.common.compose.utils.NavigationIcon
 import hnau.common.compose.utils.horizontalDisplayPadding
 import hnau.common.compose.utils.plus
@@ -42,7 +38,6 @@ import hnau.common.compose.utils.verticalDisplayPadding
 import hnau.pinfin.model.sync.start.StartSyncModel
 import hnau.pinfin.projector.Res
 import hnau.pinfin.projector.address
-import hnau.pinfin.projector.budgets
 import hnau.pinfin.projector.budgets_sync
 import hnau.pinfin.projector.open_client
 import hnau.pinfin.projector.port

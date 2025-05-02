@@ -18,16 +18,16 @@ import androidx.compose.ui.Modifier
 import arrow.core.toNonEmptyListOrNull
 import hnau.common.compose.uikit.utils.Dimens
 import hnau.common.compose.utils.toLazyListState
-import hnau.pinfin.model.utils.budget.state.AccountInfo
 import hnau.pinfin.model.budget.AnalyticsModel
+import hnau.pinfin.model.utils.budget.state.AccountInfo
+import hnau.pinfin.projector.Res
+import hnau.pinfin.projector.accounts
 import hnau.pinfin.projector.utils.AmountFormatter
 import hnau.pinfin.projector.utils.SignedAmountContent
 import hnau.pinfin.projector.utils.account.AccountContent
 import hnau.shuffler.annotations.Shuffle
 import kotlinx.coroutines.CoroutineScope
 import org.jetbrains.compose.resources.stringResource
-import hnau.pinfin.projector.Res
-import hnau.pinfin.projector.accounts
 
 class AnalyticsProjector(
     scope: CoroutineScope,

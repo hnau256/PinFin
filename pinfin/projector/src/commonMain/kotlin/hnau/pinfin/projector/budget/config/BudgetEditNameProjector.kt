@@ -56,7 +56,7 @@ class BudgetEditNameProjector(
                 IconButton(
                     onClick = model::cancel,
                 ) {
-                    Icon { Icons.Filled.Clear }
+                    Icon(Icons.Filled.Clear)
                 }
             },
             trailingContent = {
@@ -76,7 +76,7 @@ class BudgetEditNameProjector(
                                 IconButton(
                                     onClick = save,
                                 ) {
-                                    Icon { Icons.Filled.Done }
+                                    Icon(Icons.Filled.Done)
                                 }
                             }
                         )

@@ -21,7 +21,7 @@ fun CategoryContent(
         TripleRow(
             modifier = modifier,
             content = { Text(info.title) },
-            leading = { Icon { info.id.direction.icon } }
+            leading = { Icon(info.id.direction.icon) }
         )
     }
 }

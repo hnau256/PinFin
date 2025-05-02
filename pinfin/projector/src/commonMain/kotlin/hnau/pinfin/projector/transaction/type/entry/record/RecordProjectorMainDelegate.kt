@@ -15,12 +15,12 @@ import hnau.common.compose.uikit.table.cellShape
 import hnau.common.compose.utils.Icon
 import hnau.pinfin.model.transaction.type.entry.record.RecordModel
 import hnau.pinfin.projector.AmountProjector
+import hnau.pinfin.projector.Res
+import hnau.pinfin.projector.comment
 import hnau.pinfin.projector.utils.category.CategoryButton
 import hnau.shuffler.annotations.Shuffle
 import kotlinx.coroutines.CoroutineScope
 import org.jetbrains.compose.resources.stringResource
-import hnau.pinfin.projector.Res
-import hnau.pinfin.projector.comment
 
 class RecordProjectorMainDelegate(
     scope: CoroutineScope,
@@ -62,7 +62,7 @@ class RecordProjectorMainDelegate(
                         Cell {
                             HnauButton(
                                 shape = cellShape,
-                                content = { Icon { Icons.Filled.Clear } },
+                                content = { Icon(Icons.Filled.Clear) },
                                 onClick = openRemoveOverlap,
                             )
                         }

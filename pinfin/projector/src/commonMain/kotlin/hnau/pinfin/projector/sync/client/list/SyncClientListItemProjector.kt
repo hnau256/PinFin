@@ -71,9 +71,8 @@ class SyncClientListItemProjector(
                                     ) {
                                         Icon(
                                             tint = MaterialTheme.colorScheme.primary,
-                                        ) {
-                                            Icons.Filled.CloudDone
-                                        }
+                                            icon = Icons.Filled.CloudDone,
+                                        )
                                     }
 
                                 is SyncClientListItemModel.State.Syncable -> Cell {
@@ -82,8 +81,8 @@ class SyncClientListItemProjector(
                                             .width(buttonWidth),
                                         onClick = state.sync,
                                     ) {
-                                        Icon {
-                                            when (state.mode) {
+                                        Icon(
+                                            icon = when (state.mode) {
                                                 SyncClientListItemModel.State.Syncable.Mode.OnlyOnServer ->
                                                     Icons.Filled.CloudDownload
 
@@ -93,7 +92,7 @@ class SyncClientListItemProjector(
                                                 SyncClientListItemModel.State.Syncable.Mode.Both ->
                                                     Icons.Filled.Sync
                                             }
-                                        }
+                                        )
                                     }
                                 }
                             }

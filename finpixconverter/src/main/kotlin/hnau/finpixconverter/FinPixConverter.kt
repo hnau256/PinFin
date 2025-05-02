@@ -7,7 +7,6 @@ import hnau.pinfin.repository.dto.Amount
 import hnau.pinfin.repository.dto.CategoryDirection
 import hnau.pinfin.repository.dto.CategoryId
 import hnau.pinfin.repository.dto.Comment
-import hnau.pinfin.repository.dto.Record
 import hnau.pinfin.repository.dto.Transaction
 import hnau.pinfin.repository.dto.UpdateType
 import kotlinx.datetime.Instant

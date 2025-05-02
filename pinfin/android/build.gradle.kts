@@ -1,4 +1,3 @@
-import com.android.build.gradle.internal.tasks.AppPreBuildTask
 import java.util.Properties
 
 plugins {

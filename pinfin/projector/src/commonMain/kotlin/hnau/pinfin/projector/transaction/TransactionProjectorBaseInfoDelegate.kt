@@ -1,6 +1,5 @@
 package hnau.pinfin.projector.transaction
 
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CalendarMonth
 import androidx.compose.material.icons.filled.Done
@@ -10,7 +9,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.util.fastForEach
 import hnau.common.compose.uikit.ContainerStyle
 import hnau.common.compose.uikit.HnauButton
@@ -21,15 +19,15 @@ import hnau.common.compose.uikit.table.Table
 import hnau.common.compose.uikit.table.TableOrientation
 import hnau.common.compose.uikit.table.cellShape
 import hnau.common.compose.utils.Icon
+import hnau.pinfin.data.TransactionType
 import hnau.pinfin.model.transaction.TransactionModel
+import hnau.pinfin.projector.Res
+import hnau.pinfin.projector.comment
 import hnau.pinfin.projector.utils.DateTimeFormatter
 import hnau.pinfin.projector.utils.title
-import hnau.pinfin.data.TransactionType
 import hnau.shuffler.annotations.Shuffle
 import kotlinx.coroutines.CoroutineScope
 import org.jetbrains.compose.resources.stringResource
-import hnau.pinfin.projector.Res
-import hnau.pinfin.projector.comment
 
 
 class TransactionProjectorBaseInfoDelegate(
@@ -56,7 +54,7 @@ class TransactionProjectorBaseInfoDelegate(
                         shape = cellShape,
                         onClick = {}, content = {
                             TripleRow(
-                                leading = { Icon { Icons.Filled.CalendarMonth } },
+                                leading = { Icon(Icons.Filled.CalendarMonth) },
                                 content = {
                                     Text(
                                         text = model
@@ -77,7 +75,7 @@ class TransactionProjectorBaseInfoDelegate(
                         onClick = {},
                         content = {
                             TripleRow(
-                                leading = { Icon { Icons.Filled.Schedule } },
+                                leading = { Icon(Icons.Filled.Schedule) },
                                 content = {
                                     Text(
                                         text = model
@@ -119,7 +117,7 @@ class TransactionProjectorBaseInfoDelegate(
                                         leading = when (type) {
                                             selectedType -> {
                                                 {
-                                                    Icon { Icons.Filled.Done }
+                                                    Icon(Icons.Filled.Done)
                                                 }
                                             }
 

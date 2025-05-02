@@ -12,9 +12,9 @@ import hnau.common.compose.uikit.TripleRow
 import hnau.common.compose.uikit.shape.HnauShape
 import hnau.common.compose.utils.Icon
 import hnau.pinfin.model.utils.budget.state.CategoryInfo
-import org.jetbrains.compose.resources.stringResource
 import hnau.pinfin.projector.Res
 import hnau.pinfin.projector.category
+import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun CategoryButton(
@@ -32,7 +32,7 @@ fun CategoryButton(
             when (info) {
                 null -> TripleRow(
                     content = { Text(stringResource(Res.string.category)) },
-                    leading = { Icon { Icons.AutoMirrored.Filled.Help } },
+                    leading = { Icon(Icons.AutoMirrored.Filled.Help) },
                 )
 
                 else -> CategoryContent(

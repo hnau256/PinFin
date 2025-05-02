@@ -12,8 +12,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import arrow.core.toNonEmptyListOrNull
 import hnau.common.app.EditingString
-import hnau.common.compose.uikit.TextInput
 import hnau.common.compose.uikit.HnauButton
+import hnau.common.compose.uikit.TextInput
 import hnau.common.compose.uikit.row.ChipsFlowRow
 import hnau.common.compose.uikit.table.CellBox
 import hnau.common.compose.uikit.table.Subtable
@@ -22,12 +22,12 @@ import hnau.common.compose.uikit.table.TableOrientation
 import hnau.common.compose.uikit.table.cellShape
 import hnau.common.compose.uikit.utils.Dimens
 import hnau.common.compose.utils.Icon
-import kotlinx.coroutines.flow.MutableStateFlow
 import hnau.pinfin.model.utils.choose.ChooseStateSnapshot
-import org.jetbrains.compose.resources.stringResource
 import hnau.pinfin.projector.Res
 import hnau.pinfin.projector.create
 import hnau.pinfin.projector.search_create
+import kotlinx.coroutines.flow.MutableStateFlow
+import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun <T> ChooseStateSnapshot<T>.Content(
@@ -42,7 +42,7 @@ fun <T> ChooseStateSnapshot<T>.Content(
         Subtable {
             Cell {
                 HnauButton(
-                    content = { Icon { Icons.Filled.ArrowBack } },
+                    content = { Icon(Icons.Filled.ArrowBack) },
                     shape = cellShape,
                     onClick = onReady,
                 )

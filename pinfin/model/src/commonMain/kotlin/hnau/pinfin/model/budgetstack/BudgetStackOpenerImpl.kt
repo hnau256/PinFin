@@ -3,8 +3,8 @@ package hnau.pinfin.model.budgetstack
 import hnau.common.app.model.stack.NonEmptyStack
 import hnau.common.app.model.stack.push
 import hnau.pinfin.data.TransactionType
-import hnau.pinfin.model.utils.budget.state.TransactionInfo
 import hnau.pinfin.model.transaction.TransactionModel
+import hnau.pinfin.model.utils.budget.state.TransactionInfo
 import kotlinx.coroutines.flow.MutableStateFlow
 
 class BudgetStackOpenerImpl(

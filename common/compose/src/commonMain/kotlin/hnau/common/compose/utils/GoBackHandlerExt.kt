@@ -13,6 +13,6 @@ fun GoBackHandler.NavigationIcon() {
     IconButton(
         onClick = onClick,
     ) {
-        Icon { Icons.AutoMirrored.Filled.ArrowBack }
+        Icon(Icons.AutoMirrored.Filled.ArrowBack)
     }
 }

@@ -9,7 +9,6 @@ import hnau.common.color.material.MaterialHue
 import hnau.common.compose.uikit.HnauTheme
 import hnau.common.compose.utils.ThemeBrightness
 import hnau.pinfin.app.PinFinApp
-import hnau.pinfin.projector.LoadBudgetProjector
 import hnau.pinfin.projector.RootProjector
 
 @Composable

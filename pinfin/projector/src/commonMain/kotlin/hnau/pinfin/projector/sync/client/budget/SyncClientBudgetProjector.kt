@@ -14,7 +14,6 @@ import hnau.common.compose.uikit.state.TransitionSpec
 import hnau.pinfin.model.sync.client.budget.SyncClientBudgetModel
 import hnau.pinfin.projector.Res
 import hnau.pinfin.projector.back
-import hnau.pinfin.projector.budget_sync
 import hnau.pinfin.projector.butget_was_synchronized
 import hnau.pinfin.projector.error_while_budget_synchronization
 import hnau.pinfin.projector.try_again

@@ -1,7 +1,7 @@
 package hnau.pinfin.model.budgetstack
 
-import hnau.pinfin.model.utils.budget.state.TransactionInfo
 import hnau.pinfin.data.TransactionType
+import hnau.pinfin.model.utils.budget.state.TransactionInfo
 
 interface BudgetStackOpener {
 

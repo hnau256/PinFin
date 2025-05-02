@@ -30,8 +30,11 @@ import hnau.common.compose.utils.Icon
 import hnau.common.compose.utils.NavigationIcon
 import hnau.common.compose.utils.horizontalDisplayPadding
 import hnau.common.kotlin.coroutines.mapWithScope
-import hnau.pinfin.model.transaction.type.TransactionTypeModel
 import hnau.pinfin.model.transaction.TransactionModel
+import hnau.pinfin.model.transaction.type.TransactionTypeModel
+import hnau.pinfin.projector.Res
+import hnau.pinfin.projector.new_transaction
+import hnau.pinfin.projector.transaction
 import hnau.pinfin.projector.transaction.type.TransactionTypeProjector
 import hnau.pinfin.projector.transaction.type.entry.EntryProjector
 import hnau.pinfin.projector.transaction.type.transfer.TransferProjector
@@ -39,9 +42,6 @@ import hnau.shuffler.annotations.Shuffle
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.StateFlow
 import org.jetbrains.compose.resources.stringResource
-import hnau.pinfin.projector.Res
-import hnau.pinfin.projector.new_transaction
-import hnau.pinfin.projector.transaction
 
 class TransactionProjector(
     private val scope: CoroutineScope,
@@ -160,7 +160,7 @@ class TransactionProjector(
         ) {
             when (isSaving) {
                 true -> CircularProgressIndicator()
-                false -> Icon { Icons.Filled.Save }
+                false -> Icon(Icons.Filled.Save)
             }
         }
     }
@@ -175,7 +175,7 @@ class TransactionProjector(
         ) {
             when (remove) {
                 null -> CircularProgressIndicator()
-                else -> Icon { Icons.Filled.Delete }
+                else -> Icon(Icons.Filled.Delete)
             }
         }
     }

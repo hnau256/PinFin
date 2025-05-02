@@ -25,6 +25,7 @@ import hnau.common.compose.uikit.table.cellShape
 import hnau.common.compose.uikit.utils.Dimens
 import hnau.common.compose.utils.Icon
 import hnau.common.compose.utils.horizontalDisplayPadding
+import hnau.pinfin.data.CategoryDirection
 import hnau.pinfin.model.utils.budget.state.TransactionInfo
 import hnau.pinfin.model.utils.budget.state.signedAmountOrAmount
 import hnau.pinfin.projector.utils.AmountContent
@@ -34,7 +35,6 @@ import hnau.pinfin.projector.utils.SignedAmountContent
 import hnau.pinfin.projector.utils.account.AccountContent
 import hnau.pinfin.projector.utils.category.CategoryContent
 import hnau.pinfin.projector.utils.color
-import hnau.pinfin.data.CategoryDirection
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 
@@ -210,8 +210,9 @@ private fun EntryContent(
         Icon(
             tint = allDirectionOrNull
                 ?.color
-                ?: MaterialTheme.colorScheme.onSurface
-        ) { ArrowIcon[arrowDirection] }
+                ?: MaterialTheme.colorScheme.onSurface,
+            icon = ArrowIcon[arrowDirection],
+        )
         AccountContent(
             info =  entry.account,
         )
@@ -231,8 +232,9 @@ private fun TransferContent(
         Icon(
             modifier = Modifier.padding(
                 horizontal = Dimens.smallSeparation,
-            )
-        ) { ArrowIcon[ArrowDirection.StartToEnd] }
+            ),
+            icon = ArrowIcon[ArrowDirection.StartToEnd],
+        )
         AccountContent(
             info = transfer.to,
         )

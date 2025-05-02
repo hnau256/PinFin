@@ -1,7 +1,6 @@
 package hnau.pinfin.projector.sync.client.budget
 
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.BasicAlertDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
@@ -24,7 +23,6 @@ import hnau.common.kotlin.map
 import hnau.pinfin.model.sync.client.budget.SyncClientLoadBudgetModel
 import hnau.pinfin.projector.Res
 import hnau.pinfin.projector.budget_sync
-import hnau.pinfin.projector.budgets_to_synchronization
 import hnau.pinfin.projector.no
 import hnau.pinfin.projector.stop_sync
 import hnau.pinfin.projector.yes

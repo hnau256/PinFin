@@ -10,7 +10,6 @@ import hnau.common.kotlin.coroutines.mapWithScope
 import hnau.pinfin.model.manage.ManageModel
 import hnau.pinfin.model.manage.ManageStateModel
 import hnau.pinfin.projector.LoadBudgetProjector
-import hnau.pinfin.projector.budgetslist.BudgetsListProjector
 import hnau.pinfin.projector.budgetsstack.BudgetsStackProjector
 import hnau.shuffler.annotations.Shuffle
 import kotlinx.coroutines.CoroutineScope

@@ -15,13 +15,13 @@ import hnau.common.compose.utils.Icon
 import hnau.common.kotlin.coroutines.mapNonEmptyListReusable
 import hnau.pinfin.model.transaction.type.entry.EntryModel
 import hnau.pinfin.model.transaction.type.entry.record.RecordId
+import hnau.pinfin.projector.Res
+import hnau.pinfin.projector.add_record
 import hnau.pinfin.projector.transaction.type.entry.record.RecordProjector
 import hnau.shuffler.annotations.Shuffle
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.StateFlow
 import org.jetbrains.compose.resources.stringResource
-import hnau.pinfin.projector.Res
-import hnau.pinfin.projector.add_record
 
 class EntryProjectorRecordsDelegate(
     scope: CoroutineScope,
@@ -72,7 +72,7 @@ class EntryProjectorRecordsDelegate(
             content = {
                 TripleRow(
                     content = { Text(stringResource(Res.string.add_record)) },
-                    leading = { Icon { Icons.Filled.Add } }
+                    leading = { Icon(Icons.Filled.Add) }
                 )
             },
             onClick = model::addNewRecord,

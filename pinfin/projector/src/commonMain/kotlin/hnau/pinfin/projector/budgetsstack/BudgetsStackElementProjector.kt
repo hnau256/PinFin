@@ -1,10 +1,8 @@
 package hnau.pinfin.projector.budgetsstack
 
 import androidx.compose.runtime.Composable
-import hnau.pinfin.projector.budget.BudgetProjector
 import hnau.pinfin.projector.budgetslist.BudgetsListProjector
 import hnau.pinfin.projector.sync.SyncStackProjector
-import hnau.pinfin.projector.transaction.TransactionProjector
 
 sealed interface BudgetsStackElementProjector {
 

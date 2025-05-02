@@ -106,8 +106,9 @@ class TransferProjector(
                     Icon(
                         modifier = Modifier.padding(
                             horizontal = Dimens.separation,
-                        )
-                    ) { ArrowIcon[ArrowDirection.StartToEnd] }
+                        ),
+                        icon = ArrowIcon[ArrowDirection.StartToEnd],
+                    )
                 }
                 AccountCell(
                     side = TransferSide.To,

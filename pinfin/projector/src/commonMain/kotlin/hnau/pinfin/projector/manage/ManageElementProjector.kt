@@ -1,7 +1,6 @@
 package hnau.pinfin.projector.manage
 
 import androidx.compose.runtime.Composable
-import hnau.pinfin.projector.budgetslist.BudgetsListProjector
 import hnau.pinfin.projector.LoadBudgetProjector
 import hnau.pinfin.projector.budgetsstack.BudgetsStackProjector
 

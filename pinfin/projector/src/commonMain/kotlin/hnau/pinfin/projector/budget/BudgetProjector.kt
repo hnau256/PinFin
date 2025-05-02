@@ -22,16 +22,16 @@ import hnau.common.kotlin.coroutines.mapState
 import hnau.pinfin.model.budget.BudgetModel
 import hnau.pinfin.model.budget.BudgetPageModel
 import hnau.pinfin.model.budget.BudgetTab
+import hnau.pinfin.projector.Res
+import hnau.pinfin.projector.analytics
+import hnau.pinfin.projector.budget.config.BudgetConfigProjector
 import hnau.pinfin.projector.budget.transactions.TransactionsProjector
+import hnau.pinfin.projector.config
+import hnau.pinfin.projector.transactions
 import hnau.shuffler.annotations.Shuffle
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.StateFlow
 import org.jetbrains.compose.resources.stringResource
-import hnau.pinfin.projector.Res
-import hnau.pinfin.projector.analytics
-import hnau.pinfin.projector.budget.config.BudgetConfigProjector
-import hnau.pinfin.projector.config
-import hnau.pinfin.projector.transactions
 
 class BudgetProjector(
     scope: CoroutineScope,
@@ -66,6 +66,7 @@ class BudgetProjector(
                             dependencies = dependencies.transactions(),
                         )
                     )
+
                     is BudgetPageModel.Analytics -> BudgetPageProjector.Analytics(
                         projector = AnalyticsProjector(
                             scope = scope,
@@ -73,6 +74,7 @@ class BudgetProjector(
                             dependencies = dependencies.analytics(),
                         )
                     )
+
                     is BudgetPageModel.Config -> BudgetPageProjector.Config(
                         projector = BudgetConfigProjector(
                             scope = scope,
@@ -96,7 +98,7 @@ class BudgetProjector(
                     BudgetTab.entries.fastForEach { tab ->
                         NavigationBarItem(
                             selected = tab == selectedTab,
-                            icon = { Icon { tab.icon } },
+                            icon = { Icon(tab.icon) },
                             label = { Text(tab.title) },
                             onClick = { model.selectTab(tab) },
                         )

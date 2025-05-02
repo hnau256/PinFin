@@ -131,7 +131,7 @@ class TransactionsProjector(
             FloatingActionButton(
                 onClick = model::onAddTransactionClick,
             ) {
-                Icon { Icons.Filled.Add }
+                Icon(Icons.Filled.Add)
             }
         }
     }

@@ -55,7 +55,7 @@ class BudgetConfigProjector(
             button(
                 titleRes = Res.string.to_budgets_list,
                 onClick = model::openBudgetsList,
-                icon = { Icons.AutoMirrored.Filled.List },
+                icon = Icons.AutoMirrored.Filled.List,
             )
             name()
         }
@@ -96,10 +96,10 @@ class BudgetConfigProjector(
                                     IconButton(
                                         onClick = edit,
                                     ) {
-                                        Icon { Icons.Filled.Edit }
+                                        Icon(Icons.Filled.Edit)
                                     }
                                 },
-                                leadingContent = { Icon { Icons.Filled.Badge } },
+                                leadingContent = { Icon(Icons.Filled.Badge) },
                             )
                         },
                         ifRight = { editNameProjector ->
@@ -111,7 +111,7 @@ class BudgetConfigProjector(
     }
 
     private fun LazyListScope.button(
-        icon: () -> ImageVector,
+        icon: ImageVector,
         titleRes: StringResource,
         onClick: () -> Unit,
     ) {
@@ -119,7 +119,7 @@ class BudgetConfigProjector(
             key = "button_${titleRes.key}",
         ) {
             ListItem(
-                leadingContent = { Icon(chooseIcon = icon) },
+                leadingContent = { Icon(icon = icon) },
                 modifier = Modifier.Companion.clickable(onClick = onClick),
                 headlineContent = { Text(stringResource(titleRes)) },
             )

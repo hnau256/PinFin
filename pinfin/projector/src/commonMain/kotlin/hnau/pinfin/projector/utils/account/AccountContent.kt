@@ -17,6 +17,6 @@ fun AccountContent(
     TripleRow(
         modifier = modifier,
         content = { Text(info.title) },
-        leading = { Icon { Icons.Filled.Wallet } },
+        leading = { Icon(Icons.Filled.Wallet) },
     )
 }
