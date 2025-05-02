@@ -1,13 +1,14 @@
 [versions]
 #tools
 kotlin = "2.1.20"
-kotest = "5.8.0"
+#kotest = "5.8.0"
 java = "VERSION_17"
 androidGradlePlugin = "8.9.2"
 androidCompileSdk = "35"
 androidMinSdk = "24"
 androidBuildTools = "35.0.0"
 composeDesktop = "1.7.3"
+googleServices = "4.4.2"
 #libs
 arrow = "1.2.1"
 kotlinSerialization = "1.8.1"
@@ -29,6 +30,7 @@ kotlin-multiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref 
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 compose-desktop = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 composeMultiplatform = { id = "org.jetbrains.compose", version.ref = "composeDesktop" }
+googleServices = { id = "com.google.gms.google-services", version.ref = "googleServices" }
 
 [libraries]
 #plugins as libraries
@@ -40,10 +42,10 @@ kotlin-serialization-core = { module = "org.jetbrains.kotlinx:kotlinx-serializat
 kotlin-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinSerialization" }
 kotlin-serialization-cbor = { module = "org.jetbrains.kotlinx:kotlinx-serialization-cbor", version.ref = "kotlinSerialization" }
 kotlin-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinCoroutines" }
-kotest-framework-multiplatform-plugin = { module = "io.kotest:kotest-framework-multiplatform-plugin-gradle", version.ref = "kotest" }
-kotest-assertions = { module = "io.kotest:kotest-assertions-core", version.ref = "kotest" }
-kotest-junit-runner = { module = "io.kotest:kotest-runner-junit5-jvm", version.ref = "kotest" }
-kotest-framework-engine = { module = "io.kotest:kotest-framework-engine", version.ref = "kotest" }
+#kotest-framework-multiplatform-plugin = { module = "io.kotest:kotest-framework-multiplatform-plugin-gradle", version.ref = "kotest" }
+#kotest-assertions = { module = "io.kotest:kotest-assertions-core", version.ref = "kotest" }
+#kotest-junit-runner = { module = "io.kotest:kotest-runner-junit5-jvm", version.ref = "kotest" }
+#kotest-framework-engine = { module = "io.kotest:kotest-framework-engine", version.ref = "kotest" }
 kotlin-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlin-date-time" }
 #android
 android-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "compose-activity" }

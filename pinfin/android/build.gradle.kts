@@ -1,19 +1,41 @@
 plugins {
     alias(libs.plugins.compose.desktop)
     id("hnau.android.app")
+    alias(libs.plugins.googleServices)
 }
 
 android {
     namespace = "hnau.pinfin"
+
+    defaultConfig {
+        versionCode = 1
+        versionName = "1.0.0"
+    }
+
     sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
     sourceSets["main"].res.srcDirs("src/androidMain/res")
+
+    signingConfigs {
+        create("firebase") {
+            storeFile = file("keystores/firebase.keystore")
+            storePassword = "password"
+            keyAlias = "firebase"
+            keyPassword = "password"
+        }
+    }
+
     buildTypes {
         getByName("release") {
-            signingConfig = signingConfigs.getByName("debug")
-            isShrinkResources = false
-            isMinifyEnabled = false
+            isShrinkResources = true
+            isMinifyEnabled = true
             isDebuggable = false
             proguardFile("proguard-rules.pro")
+
+        }
+        create("firebase") {
+            initWith(getByName("release"))
+            matchingFallbacks += listOf("release")
+            signingConfig = signingConfigs.getByName("firebase")
         }
     }
 }

@@ -11,4 +11,5 @@ plugins {
     alias(libs.plugins.ksp) apply false
     alias(libs.plugins.android.app) apply false
     alias(libs.plugins.android.lib) apply false
+    alias(libs.plugins.googleServices) apply false
 }

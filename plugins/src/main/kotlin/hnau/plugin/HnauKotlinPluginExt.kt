@@ -106,11 +106,27 @@ internal fun Project.config(
         val kspProcessor = versions.findLibrary("shuffler-processor").get().get()
         dependencies.add("kspCommonMainMetadata", kspProcessor)
         dependencies.add("kspJvm", kspProcessor)
-        dependencies.add("kspJvmTest", kspProcessor)
+        //dependencies.add("kspJvmTest", kspProcessor)
         if (useAndroid) {
             dependencies.add("kspAndroid", kspProcessor)
         }
     }
+
+/*    versions.findLibrary("kotest-framework-engine").get().get().let {
+        dependencies.add("commonTestImplementation", it)
+    }
+
+    versions.findLibrary("kotest-junit-runner").get().get().let {
+        val configurationName = when (useAndroid) {
+            true -> "androidUnitTestImplementation"
+            false -> "jvmTestImplementation"
+        }
+        dependencies.add(configurationName, it)
+    }
+
+    tasks.withType(Test::class.java).configureEach { testTask ->
+        testTask.useJUnitPlatform()
+    }*/
 
     if (useAndroid) {
         extensions.configure(BaseExtension::class.java) { extension ->

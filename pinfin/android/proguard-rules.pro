@@ -10,3 +10,8 @@
 -keep class androidx.compose.ui.res.** { *; }
 -keep class android.content.res.** { *; }
 -keep class android.util.** { *; }
+#-keep class hnau.common.compose.utils.BuildPrettyColorSchemeKt
+-keep class hnau.common.android.AndroidDynamicColorsGenerator
+
+-dontwarn androidx.test.platform.app.InstrumentationRegistry
+-dontwarn org.jetbrains.compose.resources.AndroidContextProviderKt
