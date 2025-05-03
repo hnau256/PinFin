@@ -50,6 +50,7 @@ android {
             initWith(getByName("release"))
             matchingFallbacks += listOf("release")
             signingConfig = signingConfigs.getByName("firebase")
+            applicationIdSuffix =".firebase"
         }
     }
 }

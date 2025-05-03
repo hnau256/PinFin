@@ -7,9 +7,9 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:5262923558:android:3b3ed10854b915ade6d3e7",
+        "mobilesdk_app_id": "1:5262923558:android:223db65a578495c3e6d3e7",
         "android_client_info": {
-          "package_name": "hnau.pinfin"
+          "package_name": "hnau.pinfin.firebase"
         }
       },
       "oauth_client": [],
