@@ -86,21 +86,17 @@ private class ReusableStateScopeImpl<in K, ITEM>(
         key: K,
         build: (CoroutineScope) -> ITEM,
     ): ITEM {
-        val scope = scope.createChild()
         val hasInCache = lastCache.containsKey(key)
         val value = when (hasInCache) {
-            true -> {
-                val valueFromCache = lastCache.getValue(key).value
-                lastCache.remove(key)
-                valueFromCache
-            }
+            true -> lastCache.remove(key) as Scoped<ITEM>
 
-            false -> build(scope)
+            false -> {
+                val itemScope = scope.createChild()
+                val item = build(itemScope)
+                Scoped(itemScope, item)
+            }
         }
-        newCache[key] = Scoped(
-            value = value,
-            scope = scope,
-        )
-        return value
+        newCache[key] = value
+        return value.value
     }
 }

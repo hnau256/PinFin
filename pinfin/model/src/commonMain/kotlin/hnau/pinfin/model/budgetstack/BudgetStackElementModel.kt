@@ -29,16 +29,26 @@ sealed interface BudgetStackElementModel : GoBackHandlerProvider {
     @Serializable
     sealed interface Skeleton {
 
+        val key: Int
+
         @Serializable
         @SerialName("budget")
         data class Budget(
             val skeleton: BudgetModel.Skeleton = BudgetModel.Skeleton(),
-        ) : Skeleton
+        ) : Skeleton {
+
+            override val key: Int
+                get() = 0
+        }
 
         @Serializable
         @SerialName("transaction")
         data class Transaction(
             val skeleton: TransactionModel.Skeleton,
-        ) : Skeleton
+        ) : Skeleton {
+
+            override val key: Int
+                get() = 1
+        }
     }
 }

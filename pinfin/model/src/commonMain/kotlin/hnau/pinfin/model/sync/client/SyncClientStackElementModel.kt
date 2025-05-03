@@ -29,16 +29,26 @@ sealed interface SyncClientStackElementModel : GoBackHandlerProvider {
     @Serializable
     sealed interface Skeleton {
 
+        val key: Int
+
         @Serializable
         @SerialName("list")
         data class List(
             val skeleton: SyncClientListModel.Skeleton = SyncClientListModel.Skeleton(),
-        ) : Skeleton
+        ) : Skeleton {
+
+            override val key: Int
+                get() = 0
+        }
 
         @Serializable
         @SerialName("budget")
         data class Budget(
             val skeleton: SyncClientLoadBudgetModel.Skeleton,
-        ) : Skeleton
+        ) : Skeleton {
+
+            override val key: Int
+                get() = 1
+        }
     }
 }

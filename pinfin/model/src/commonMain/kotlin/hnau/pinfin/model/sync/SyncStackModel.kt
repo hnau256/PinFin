@@ -15,8 +15,10 @@ import hnau.pinfin.model.sync.server.SyncServerModel
 import hnau.pinfin.model.sync.start.StartSyncModel
 import hnau.shuffler.annotations.Shuffle
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.awaitCancellation
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
 
 class SyncStackModel(
@@ -70,17 +72,15 @@ class SyncStackModel(
         )
     }
 
-    val stack: StateFlow<NonEmptyStack<SyncStackElementModel>> = run {
-        val stack = skeleton.stack
-        StackModelElements(
-            scope = scope,
-            skeletonsStack = stack,
-        ) { modelScope, skeleton ->
-            createModel(
-                modelScope = modelScope,
-                skeleton = skeleton,
-            )
-        }
+    val stack: StateFlow<NonEmptyStack<SyncStackElementModel>> = StackModelElements(
+        scope = scope,
+        getKey = SyncStackElementModel.Skeleton::key,
+        skeletonsStack = skeleton.stack,
+    ) { modelScope, skeleton ->
+        createModel(
+            modelScope = modelScope,
+            skeleton = skeleton,
+        )
     }
 
     private fun createModel(

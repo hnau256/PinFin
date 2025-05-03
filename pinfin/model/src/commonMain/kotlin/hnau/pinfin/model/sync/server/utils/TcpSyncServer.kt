@@ -12,10 +12,10 @@ import io.ktor.network.sockets.ServerSocket
 import io.ktor.network.sockets.aSocket
 import io.ktor.network.sockets.openReadChannel
 import io.ktor.network.sockets.openWriteChannel
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.awaitCancellation
-import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.ExperimentalSerializationApi
@@ -29,20 +29,29 @@ suspend fun tcpSyncServer(
         val serverSocket = aSocket(SelectorManager(Dispatchers.IO))
             .tcp()
             .bind(port = port.port)
-        println("QWERTY: Server address: ${serverSocket.localAddress}")
-        coroutineScope {
+        try {
             while (true) {
                 try {
                     circleUnsafe(
                         serverSocket = serverSocket,
                         api = api,
                     )
+                } catch (ex: CancellationException) {
+                    throw ex
                 } catch (th: Throwable) {
                     onThrowable(th)
                 }
             }
+            awaitCancellation()
+        } finally {
+            try {
+                serverSocket.close()
+            } catch (ex: CancellationException) {
+                throw ex
+            } catch (th: Throwable) {
+                onThrowable(th)
+            }
         }
-        awaitCancellation()
     }
 }
 

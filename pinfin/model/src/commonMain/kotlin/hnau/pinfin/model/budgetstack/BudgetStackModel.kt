@@ -63,6 +63,7 @@ class BudgetStackModel(
         val stack = skeleton.stack
         StackModelElements(
             scope = scope,
+            getKey = BudgetStackElementModel.Skeleton::key,
             skeletonsStack = stack,
         ) { modelScope, skeleton ->
             createModel(

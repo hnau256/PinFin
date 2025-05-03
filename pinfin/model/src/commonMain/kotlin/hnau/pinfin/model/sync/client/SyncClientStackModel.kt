@@ -73,6 +73,7 @@ class SyncClientStackModel(
         val stack = skeleton.stack
         StackModelElements(
             scope = scope,
+            getKey = SyncClientStackElementModel.Skeleton::key,
             skeletonsStack = stack,
         ) { modelScope, skeleton ->
             createModel(
