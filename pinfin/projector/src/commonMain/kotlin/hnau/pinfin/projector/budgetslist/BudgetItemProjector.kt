@@ -17,7 +17,7 @@ import hnau.common.compose.uikit.table.TableOrientation
 import hnau.common.compose.uikit.table.cellShape
 import hnau.common.compose.uikit.utils.Dimens
 import hnau.pinfin.model.budgetslist.item.BudgetItemModel
-import hnau.pinfin.projector.utils.BidgetInfoLoadableContent
+import hnau.pinfin.projector.utils.BidgetInfoContent
 import hnau.shuffler.annotations.Shuffle
 import kotlinx.coroutines.CoroutineScope
 
@@ -49,7 +49,7 @@ class BudgetItemProjector(
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.spacedBy(Dimens.smallSeparation),
                 ) {
-                    BidgetInfoLoadableContent(
+                    BidgetInfoContent(
                         info = model.info.collectAsState().value,
                     )
                 }

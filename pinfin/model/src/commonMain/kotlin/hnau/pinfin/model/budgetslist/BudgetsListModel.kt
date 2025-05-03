@@ -17,10 +17,9 @@ import hnau.pinfin.data.BudgetId
 import hnau.pinfin.model.budgetslist.item.BudgetItemModel
 import hnau.pinfin.model.budgetsstack.SyncOpener
 import hnau.pinfin.model.utils.budget.repository.BudgetRepository
-import hnau.pinfin.model.utils.budget.repository.BudgetsRepository
+import hnau.pinfin.model.utils.budget.storage.BudgetsStorage
 import hnau.shuffler.annotations.Shuffle
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -38,13 +37,13 @@ class BudgetsListModel(
 
         val syncOpener: SyncOpener
 
-        val budgetsRepository: BudgetsRepository
+        val budgetsStorage: BudgetsStorage
 
-        val deferredBudgetRepositories: StateFlow<Map<BudgetId, Deferred<BudgetRepository>>>
+        val deferredBudgetRepositories: StateFlow<Map<BudgetId, BudgetRepository>>
 
         fun item(
             id: BudgetId,
-            deferredRepository: Deferred<BudgetRepository>,
+            deferredRepository: BudgetRepository,
         ): BudgetItemModel.Dependencies
     }
 
@@ -69,7 +68,7 @@ class BudgetsListModel(
     )
 
     private fun updateItems(
-        deferredBudgetRepositories: Map<BudgetId, Deferred<BudgetRepository>>,
+        deferredBudgetRepositories: Map<BudgetId, BudgetRepository>,
         previousItems: List<ItemInfoWithScope>,
     ): List<ItemInfoWithScope> {
         val itemsCache = previousItems
@@ -139,7 +138,7 @@ class BudgetsListModel(
     fun createNewBudget() {
         scope.launch {
             inProgressRegistry.executeRegistered {
-                dependencies.budgetsRepository.createNewBudgetIfNotExists(
+                dependencies.budgetsStorage.createNewBudgetIfNotExists(
                     id = BudgetId.new(),
                 )
             }

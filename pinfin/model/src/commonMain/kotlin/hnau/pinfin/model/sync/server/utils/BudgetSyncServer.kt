@@ -21,7 +21,7 @@ class BudgetSyncServer(
     @Shuffle
     interface Dependencies {
 
-        val budgetRepository: Deferred<BudgetRepository>
+        val budgetRepository: BudgetRepository
     }
 
     private val accessStateMutex: Mutex = Mutex()
@@ -31,7 +31,6 @@ class BudgetSyncServer(
     ): R = accessStateMutex.withLock {
         dependencies
             .budgetRepository
-            .await()
             .let(block)
     }
 

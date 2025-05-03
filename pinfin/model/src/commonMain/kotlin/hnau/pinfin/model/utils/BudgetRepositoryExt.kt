@@ -15,18 +15,8 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.flow.StateFlow
 
-fun Deferred<BudgetRepository>.toBudgetInfoStateFlow(
+fun BudgetRepository.toBudgetInfoStateFlow(
     scope: CoroutineScope,
-): StateFlow<Loadable<BudgetInfo>> = this
-    .toLoadableStateFlow(scope)
-    .scopedInState(scope)
-    .flatMapState(scope) { (stateScope, repositoryOrLoading) ->
-        repositoryOrLoading.fold(
-            ifLoading = { Loading.toMutableStateFlowAsInitial() },
-            ifReady = { repository ->
-                repository.state.mapState(stateScope) { state ->
-                    state.info.let(::Ready)
-                }
-            }
-        )
-    }
+): StateFlow<BudgetInfo> = state.mapState(scope) { state ->
+    state.info
+}

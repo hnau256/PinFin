@@ -17,7 +17,8 @@ import hnau.pinfin.app.impl
 import hnau.pinfin.compose.AppContentDependencies
 import hnau.pinfin.compose.Content
 import hnau.pinfin.compose.impl
-import hnau.pinfin.model.utils.budget.storage.impl.FileBasedBudgetsStorage
+import hnau.pinfin.model.utils.budget.storage.BudgetsStorage
+import hnau.pinfin.model.utils.budget.storage.impl.files
 import org.slf4j.simple.SimpleLogger
 import java.io.File
 
@@ -30,7 +31,7 @@ fun main() = application {
         scope = appScope,
         savedState = SavedState(null),
         dependencies = PinFinApp.Dependencies.impl(
-            budgetsStorageFactory = FileBasedBudgetsStorage.Factory(
+            budgetsStorageFactory = BudgetsStorage.Factory.files(
                 budgetsDir = File("budgets"),
             ),
             preferencesFactory = FileBasedPreferences.Factory(

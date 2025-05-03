@@ -2,10 +2,12 @@ package hnau.pinfin.model.budgetslist.item
 
 import hnau.common.kotlin.Loadable
 import hnau.common.kotlin.coroutines.InProgressRegistry
+import hnau.common.kotlin.coroutines.mapStateLite
 import hnau.pinfin.data.BudgetId
 import hnau.pinfin.model.manage.BudgetOpener
 import hnau.pinfin.model.utils.budget.repository.BudgetRepository
 import hnau.pinfin.model.utils.budget.state.BudgetInfo
+import hnau.pinfin.model.utils.budget.state.BudgetState
 import hnau.pinfin.model.utils.toBudgetInfoStateFlow
 import hnau.shuffler.annotations.Shuffle
 import kotlinx.coroutines.CoroutineScope
@@ -25,7 +27,7 @@ class BudgetItemModel(
 
         val id: BudgetId
 
-        val deferredRepository: Deferred<BudgetRepository>
+        val deferredRepository: BudgetRepository
 
         val budgetOpener: BudgetOpener
     }
@@ -35,9 +37,10 @@ class BudgetItemModel(
 
     private val inProgressRegistry = InProgressRegistry()
 
-    val info: StateFlow<Loadable<BudgetInfo>> = dependencies
+    val info: StateFlow<BudgetInfo> = dependencies
         .deferredRepository
-        .toBudgetInfoStateFlow(scope)
+        .state
+        .mapStateLite(BudgetState::info)
 
     //TODO
     val inProgress: StateFlow<Boolean>

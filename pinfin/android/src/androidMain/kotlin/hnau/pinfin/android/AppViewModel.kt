@@ -13,7 +13,8 @@ import hnau.common.app.preferences.impl.FileBasedPreferences
 import hnau.pinfin.app.PinFinApp
 import hnau.pinfin.app.SavedState
 import hnau.pinfin.app.impl
-import hnau.pinfin.model.utils.budget.storage.impl.FileBasedBudgetsStorage
+import hnau.pinfin.model.utils.budget.storage.BudgetsStorage
+import hnau.pinfin.model.utils.budget.storage.impl.files
 import java.io.File
 
 class AppViewModel(
@@ -25,7 +26,7 @@ class AppViewModel(
     val app = PinFinApp(
         scope = viewModelScope,
         dependencies = PinFinApp.Dependencies.impl(
-            budgetsStorageFactory = FileBasedBudgetsStorage.Factory(
+            budgetsStorageFactory = BudgetsStorage.Factory.files(
                 budgetsDir = File(appFilesDir, "budgets"),
             ),
             preferencesFactory = FileBasedPreferences.Factory(

@@ -18,12 +18,11 @@ import hnau.pinfin.data.BudgetId
 import hnau.pinfin.model.sync.client.utils.TcpSyncClient
 import hnau.pinfin.model.sync.utils.SyncHandle
 import hnau.pinfin.model.utils.budget.repository.BudgetRepository
-import hnau.pinfin.model.utils.budget.repository.BudgetsRepository
 import hnau.pinfin.model.utils.budget.state.BudgetInfo
+import hnau.pinfin.model.utils.budget.storage.BudgetsStorage
 import hnau.pinfin.model.utils.budget.upchain.UpchainHash
 import hnau.shuffler.annotations.Shuffle
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -41,7 +40,7 @@ class SyncClientListModel(
 
         val tcpSyncClient: TcpSyncClient
 
-        val budgetsRepository: BudgetsRepository
+        val budgetsStorage: BudgetsStorage
 
         fun item(): SyncClientListItemModel.Dependencies
     }
@@ -78,7 +77,7 @@ class SyncClientListModel(
         combineState(
             scope = scope,
             a = serverBudgets,
-            b = dependencies.budgetsRepository.list,
+            b = dependencies.budgetsStorage.list,
         ) { serverBudgetsOrErrorOrLoading, local ->
             serverBudgetsOrErrorOrLoading.map { serverBudgetsOrError ->
                 serverBudgetsOrError.map { serverBudgets ->
@@ -118,7 +117,7 @@ class SyncClientListModel(
         }.mapReusable(scope) { itemsOrErrorOrLoading ->
             itemsOrErrorOrLoading.map { itemsOrError ->
                 itemsOrError.map { items ->
-                    items?.map { (id, localOrServer: Ior<Deferred<BudgetRepository>, ServerBudget>) ->
+                    items?.map { (id, localOrServer: Ior<BudgetRepository, ServerBudget>) ->
                         getOrPutItem(
                             key = id,
                         ) { itemScope ->

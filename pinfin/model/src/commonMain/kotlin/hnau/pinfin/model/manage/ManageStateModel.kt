@@ -1,8 +1,8 @@
 package hnau.pinfin.model.manage
 
 import hnau.common.app.goback.GoBackHandlerProvider
-import hnau.pinfin.model.LoadBudgetModel
 import hnau.pinfin.model.budgetsstack.BudgetsStackModel
+import hnau.pinfin.model.budgetstack.BudgetStackModel
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -18,8 +18,8 @@ sealed interface ManageStateModel : GoBackHandlerProvider {
             get() = 0
     }
 
-    data class LoadBudget(
-        val model: LoadBudgetModel,
+    data class BudgetStack(
+        val model: BudgetStackModel,
     ) : GoBackHandlerProvider by model, ManageStateModel {
 
         override val id: Int
@@ -36,9 +36,9 @@ sealed interface ManageStateModel : GoBackHandlerProvider {
         ) : Skeleton
 
         @Serializable
-        @SerialName("load_budget")
-        data class LoadBudget(
-            val skeleton: LoadBudgetModel.Skeleton,
+        @SerialName("budget_stack")
+        data class BudgetStack(
+            val skeleton: BudgetStackModel.Skeleton,
         ) : Skeleton
     }
 }

@@ -21,7 +21,7 @@ import hnau.common.kotlin.serialization.MutableStateFlowSerializer
 import hnau.common.kotlin.toAccessor
 import hnau.pinfin.data.BudgetId
 import hnau.pinfin.model.utils.budget.repository.BudgetRepository
-import hnau.pinfin.model.utils.budget.repository.BudgetsRepository
+import hnau.pinfin.model.utils.budget.storage.BudgetsStorage
 import hnau.shuffler.annotations.Shuffle
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -42,7 +42,7 @@ class SyncClientLoadBudgetModel(
     @Shuffle
     interface Dependencies {
 
-        val budgetsRepository: BudgetsRepository
+        val budgetsStorage: BudgetsStorage
 
         fun budget(
             id: BudgetId,
@@ -62,7 +62,7 @@ class SyncClientLoadBudgetModel(
         get() = skeleton.isStopSyncDialogVisible
 
     val state: StateFlow<Loadable<SyncClientBudgetModel>> = LoadableStateFlow(scope) {
-        val repository = dependencies.budgetsRepository
+        val repository = dependencies.budgetsStorage
         val id = skeleton.id
         repository.createNewBudgetIfNotExists(id)
         repository
@@ -73,7 +73,6 @@ class SyncClientLoadBudgetModel(
                     ?.second
             }
             .first()
-            .await()
     }.mapWithScope(scope) { repositoryScope, repositoryOrLoading ->
         repositoryOrLoading.map { repository ->
             SyncClientBudgetModel(

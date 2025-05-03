@@ -12,7 +12,6 @@ import hnau.common.app.preferences.Preferences
 import hnau.common.app.preferences.map
 import hnau.common.kotlin.castOrNull
 import hnau.common.kotlin.coroutines.flatMapState
-import hnau.common.kotlin.coroutines.mapListReusable
 import hnau.common.kotlin.coroutines.mapState
 import hnau.common.kotlin.coroutines.mapWithScope
 import hnau.common.kotlin.coroutines.scopedInState
@@ -26,14 +25,12 @@ import hnau.common.kotlin.serialization.MutableStateFlowSerializer
 import hnau.common.kotlin.shrinkType
 import hnau.common.kotlin.toAccessor
 import hnau.pinfin.data.BudgetId
-import hnau.pinfin.model.LoadBudgetModel
+import hnau.pinfin.model.budgetstack.BudgetStackModel
 import hnau.pinfin.model.budgetsstack.BudgetsStackModel
 import hnau.pinfin.model.utils.budget.repository.BudgetRepository
-import hnau.pinfin.model.utils.budget.repository.BudgetsRepository
+import hnau.pinfin.model.utils.budget.storage.BudgetsStorage
 import hnau.shuffler.annotations.Shuffle
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Deferred
-import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.UseSerializers
@@ -49,17 +46,17 @@ class ManageModel(
 
         val preferences: Preferences
 
-        val budgetsRepository: BudgetsRepository
+        val budgetsStorage: BudgetsStorage
 
         fun budgetsStack(
-            deferredBudgetRepositories: StateFlow<Map<BudgetId, Deferred<BudgetRepository>>>,
+            deferredBudgetRepositories: StateFlow<Map<BudgetId, BudgetRepository>>,
             budgetOpener: BudgetOpener,
         ): BudgetsStackModel.Dependencies
 
         fun budget(
-            deferredBudgetRepository: Deferred<BudgetRepository>,
+            deferredBudgetRepository: BudgetRepository,
             budgetsListOpener: BudgetsListOpener,
-        ): LoadBudgetModel.Dependencies
+        ): BudgetStackModel.Dependencies
     }
 
     @Serializable
@@ -79,7 +76,7 @@ class ManageModel(
 
     private data class DeferredBudgetRepositoryWrapper(
         val id: BudgetId,
-        val deferredBudgetRepository: Deferred<BudgetRepository>,
+        val deferredBudgetRepository: BudgetRepository,
     ) {
 
         override fun equals(
@@ -94,19 +91,10 @@ class ManageModel(
             id.id.hashCode()
     }
 
-    private val deferredBudgetRepositories: StateFlow<Map<BudgetId, Deferred<BudgetRepository>>> =
+    private val deferredBudgetRepositories: StateFlow<Map<BudgetId, BudgetRepository>> =
         dependencies
-            .budgetsRepository
+            .budgetsStorage
             .list
-            .mapListReusable(
-                scope = scope,
-                extractKey = Pair<BudgetId, *>::first,
-                transform = { deferredScope, (id, deferredRepository) ->
-                    id to deferredScope.async {
-                        deferredRepository.await()
-                    }
-                }
-            )
             .mapState(scope) { deferredRepositoriesList ->
                 deferredRepositoriesList.associate(::identity)
             }
@@ -147,8 +135,8 @@ class ManageModel(
                     )
                 )
 
-                else -> ManageStateModel.LoadBudget(
-                    model = LoadBudgetModel(
+                else -> ManageStateModel.BudgetStack(
+                    model = BudgetStackModel(
                         scope = stateScope,
                         dependencies = dependencies.budget(
                             deferredBudgetRepository = deferredBudgetRepositoryOrNull,
@@ -156,10 +144,10 @@ class ManageModel(
                         ),
                         skeleton = skeleton::stateSkeleton
                             .toAccessor()
-                            .shrinkType<_, ManageStateModel.Skeleton.LoadBudget>()
+                            .shrinkType<_, ManageStateModel.Skeleton.BudgetStack>()
                             .getOrInit {
-                                ManageStateModel.Skeleton.LoadBudget(
-                                    LoadBudgetModel.Skeleton()
+                                ManageStateModel.Skeleton.BudgetStack(
+                                    BudgetStackModel.Skeleton()
                                 )
                             }
                             .skeleton,

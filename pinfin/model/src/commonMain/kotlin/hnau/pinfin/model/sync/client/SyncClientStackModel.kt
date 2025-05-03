@@ -19,7 +19,7 @@ import hnau.pinfin.model.sync.client.list.SyncClientListModel
 import hnau.pinfin.model.sync.client.utils.TcpSyncClient
 import hnau.pinfin.model.sync.utils.ServerAddress
 import hnau.pinfin.model.sync.utils.ServerPort
-import hnau.pinfin.model.utils.budget.repository.BudgetsRepository
+import hnau.pinfin.model.utils.budget.storage.BudgetsStorage
 import hnau.shuffler.annotations.Shuffle
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -36,7 +36,7 @@ class SyncClientStackModel(
     @Shuffle
     interface Dependencies {
 
-        val budgetsRepository: BudgetsRepository
+        val budgetsStorage: BudgetsStorage
 
         @Shuffle
         interface WithSyncClient {

@@ -9,8 +9,8 @@ import hnau.common.compose.uikit.state.TransitionSpec
 import hnau.common.kotlin.coroutines.mapWithScope
 import hnau.pinfin.model.manage.ManageModel
 import hnau.pinfin.model.manage.ManageStateModel
-import hnau.pinfin.projector.LoadBudgetProjector
 import hnau.pinfin.projector.budgetsstack.BudgetsStackProjector
+import hnau.pinfin.projector.budgetstack.BudgetStackProjector
 import hnau.shuffler.annotations.Shuffle
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.StateFlow
@@ -26,7 +26,7 @@ class ManageProjector(
 
         fun budgetsStack(): BudgetsStackProjector.Dependencies
 
-        fun loadBudget(): LoadBudgetProjector.Dependencies
+        fun budgetStack(): BudgetStackProjector.Dependencies
     }
 
     private val state: StateFlow<ManageElementProjector> = model
@@ -41,10 +41,10 @@ class ManageProjector(
                     )
                 )
 
-                is ManageStateModel.LoadBudget -> ManageElementProjector.LoadBudget(
-                    projector = LoadBudgetProjector(
+                is ManageStateModel.BudgetStack -> ManageElementProjector.BudgetStack(
+                    projector = BudgetStackProjector(
                         scope = stateScope,
-                        dependencies = dependencies.loadBudget(),
+                        dependencies = dependencies.budgetStack(),
                         model = state.model,
                     )
                 )

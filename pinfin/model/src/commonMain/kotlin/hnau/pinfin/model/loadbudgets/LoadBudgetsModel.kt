@@ -12,7 +12,6 @@ import hnau.common.kotlin.getOrInit
 import hnau.common.kotlin.map
 import hnau.common.kotlin.toAccessor
 import hnau.pinfin.model.manage.ManageModel
-import hnau.pinfin.model.utils.budget.repository.BudgetsRepository
 import hnau.pinfin.model.utils.budget.storage.BudgetsStorage
 import hnau.shuffler.annotations.Shuffle
 import kotlinx.coroutines.CoroutineScope
@@ -36,7 +35,7 @@ class LoadBudgetsModel(
 
         fun manage(
             preferences: Preferences,
-            budgetsRepository: BudgetsRepository,
+            budgetsStorage: BudgetsStorage,
         ): ManageModel.Dependencies
     }
 
@@ -46,7 +45,7 @@ class LoadBudgetsModel(
     )
 
     private data class Ready(
-        val budgetsRepository: BudgetsRepository,
+        val budgetsStorage: BudgetsStorage,
         val preferences: Preferences,
     )
 
@@ -65,10 +64,7 @@ class LoadBudgetsModel(
                 )
             }
             Ready(
-                budgetsRepository = BudgetsRepository(
-                    scope = scope,
-                    budgetsStorage = budgetsStorage.await()
-                ),
+                budgetsStorage = budgetsStorage.await(),
                 preferences = deferredPreferences.await(),
             )
         }
@@ -80,7 +76,7 @@ class LoadBudgetsModel(
                 ManageModel(
                     scope = stateScope,
                     dependencies = dependencies.manage(
-                        budgetsRepository = ready.budgetsRepository,
+                        budgetsStorage = ready.budgetsStorage,
                         preferences = ready.preferences,
                     ),
                     skeleton = skeleton::manage

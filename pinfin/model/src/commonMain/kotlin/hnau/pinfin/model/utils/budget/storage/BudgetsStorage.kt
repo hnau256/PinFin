@@ -1,19 +1,19 @@
 package hnau.pinfin.model.utils.budget.storage
 
 import hnau.pinfin.data.BudgetId
+import hnau.pinfin.model.utils.budget.repository.BudgetRepository
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.flow.StateFlow
 
 interface BudgetsStorage {
 
-    val list: StateFlow<List<Pair<BudgetId, Deferred<UpchainStorage>>>>
+    val list: StateFlow<List<Pair<BudgetId, BudgetRepository>>>
 
     suspend fun createNewBudgetIfNotExists(
         id: BudgetId,
     )
 
-    interface Factory {
+    fun interface Factory {
 
         suspend fun createBudgetsStorage(
             scope: CoroutineScope,
