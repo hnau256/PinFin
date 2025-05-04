@@ -30,27 +30,30 @@ android {
     sourceSets["main"].res.srcDirs("src/androidMain/res")
 
     signingConfigs {
-        create("firebase") {
-            storeFile = file("keystores/firebase.keystore")
+        create("qa") {
+            storeFile = file("keystores/qa.keystore")
             storePassword = "password"
-            keyAlias = "firebase"
+            keyAlias = "qa"
             keyPassword = "password"
         }
     }
 
     buildTypes {
+        getByName("debug") {
+            applicationIdSuffix =".debug"
+        }
         getByName("release") {
             isShrinkResources = true
             isMinifyEnabled = true
             isDebuggable = false
             proguardFile("proguard-rules.pro")
-
+            //signingConfig = signingConfigs.getByName("release")
         }
-        create("firebase") {
+        create("qa") {
             initWith(getByName("release"))
             matchingFallbacks += listOf("release")
-            signingConfig = signingConfigs.getByName("firebase")
-            applicationIdSuffix =".firebase"
+            signingConfig = signingConfigs.getByName("qa")
+            applicationIdSuffix =".qa"
         }
     }
 }

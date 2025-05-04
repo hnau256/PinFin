@@ -7,9 +7,28 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:5262923558:android:223db65a578495c3e6d3e7",
+        "mobilesdk_app_id": "1:5262923558:android:821b0b0b74fd014ae6d3e7",
         "android_client_info": {
-          "package_name": "hnau.pinfin.firebase"
+          "package_name": "hnau.pinfin.debug"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD5Lj6_7AYEmyJphIHsexKvdy5tHJXoHTs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:5262923558:android:e05101ffa2bcd416e6d3e7",
+        "android_client_info": {
+          "package_name": "hnau.pinfin.qa"
         }
       },
       "oauth_client": [],
