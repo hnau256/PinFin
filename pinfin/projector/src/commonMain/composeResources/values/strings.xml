@@ -46,4 +46,6 @@
     <string name="error_while_budget_synchronization">Ошибка синхронизации бюджета</string>
     <string name="back">Назад</string>
     <string name="budget_name">Название бюджета</string>
+    <string name="no_budgets">Бюджеты отсутствуют</string>
+    <string name="create_new_budget">Создать новый бюджет</string>
 </resources>

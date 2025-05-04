@@ -4,11 +4,15 @@
 
 package hnau.pinfin.model.budgetslist
 
+import arrow.core.NonEmptyList
+import arrow.core.NonEmptySet
+import arrow.core.toNonEmptySetOrNull
 import hnau.common.app.goback.GoBackHandler
 import hnau.common.app.goback.GoBackHandlerProvider
 import hnau.common.app.goback.NeverGoBackHandler
 import hnau.common.kotlin.coroutines.InProgressRegistry
 import hnau.common.kotlin.coroutines.createChild
+import hnau.common.kotlin.coroutines.mapListReusable
 import hnau.common.kotlin.coroutines.mapState
 import hnau.common.kotlin.coroutines.runningFoldState
 import hnau.common.kotlin.ifNull
@@ -106,27 +110,33 @@ class BudgetsListModel(
         return result
     }
 
-    val items: StateFlow<List<ItemInfo>> = dependencies
+    val items: StateFlow<NonEmptySet<ItemInfo>?> = dependencies
         .deferredBudgetRepositories
-        .runningFoldState(
+        .mapState(scope) { repositories -> repositories.toList() }
+        .mapListReusable(
             scope = scope,
-            createInitial = { deferredBudgetRepositories ->
-                updateItems(
-                    deferredBudgetRepositories = deferredBudgetRepositories,
-                    previousItems = emptyList(),
+            extractKey = Pair<BudgetId, *>::first,
+            transform = { budgetScope, (id, repository) ->
+                val skeleton = skeleton
+                    .itemSkeletons[id]
+                    ?: BudgetItemModel.Skeleton()
+
+                val model = BudgetItemModel(
+                    scope = budgetScope,
+                    dependencies = dependencies.item(
+                        id = id,
+                        deferredRepository = repository,
+                    ),
+                    skeleton = skeleton,
                 )
-            },
-            operation = { previousItems, deferredBudgetRepositories ->
-                updateItems(
-                    deferredBudgetRepositories = deferredBudgetRepositories,
-                    previousItems = previousItems,
+                ItemInfo(
+                    id = id,
+                    model = model,
                 )
             }
         )
-        .mapState(
-            scope = scope,
-        ) { infos ->
-            infos.map(ItemInfoWithScope::info)
+        .mapState(scope) { items ->
+            items.toNonEmptySetOrNull()
         }
 
     private val inProgressRegistry = InProgressRegistry()
