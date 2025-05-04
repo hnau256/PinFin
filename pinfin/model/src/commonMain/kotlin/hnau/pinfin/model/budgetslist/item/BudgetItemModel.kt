@@ -27,7 +27,7 @@ class BudgetItemModel(
 
         val id: BudgetId
 
-        val deferredRepository: BudgetRepository
+        val repository: BudgetRepository
 
         val budgetOpener: BudgetOpener
     }
@@ -38,7 +38,7 @@ class BudgetItemModel(
     private val inProgressRegistry = InProgressRegistry()
 
     val info: StateFlow<BudgetInfo> = dependencies
-        .deferredRepository
+        .repository
         .state
         .mapStateLite(BudgetState::info)
 

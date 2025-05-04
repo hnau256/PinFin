@@ -95,8 +95,8 @@ class ManageModel(
         dependencies
             .budgetsStorage
             .list
-            .mapState(scope) { deferredRepositoriesList ->
-                deferredRepositoriesList.associate(::identity)
+            .mapState(scope) { repositoriesListList ->
+                repositoriesListList.associate(::identity)
             }
 
     val state: StateFlow<ManageStateModel> = selectedBudgetPreference

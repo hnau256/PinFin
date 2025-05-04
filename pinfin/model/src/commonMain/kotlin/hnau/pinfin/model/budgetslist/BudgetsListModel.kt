@@ -47,7 +47,7 @@ class BudgetsListModel(
 
         fun item(
             id: BudgetId,
-            deferredRepository: BudgetRepository,
+            repository: BudgetRepository,
         ): BudgetItemModel.Dependencies
     }
 
@@ -78,7 +78,7 @@ class BudgetsListModel(
         val itemsCache = previousItems
             .associateBy { it.info.id }
             .toMutableMap()
-        val result = deferredBudgetRepositories.map { (id, deferredRepository) ->
+        val result = deferredBudgetRepositories.map { (id, repository) ->
             itemsCache
                 .remove(id)
                 .ifNull {
@@ -91,7 +91,7 @@ class BudgetsListModel(
                         scope = itemScope,
                         dependencies = dependencies.item(
                             id = id,
-                            deferredRepository = deferredRepository,
+                            repository = repository,
                         ),
                         skeleton = skeleton,
                     )
@@ -125,7 +125,7 @@ class BudgetsListModel(
                     scope = budgetScope,
                     dependencies = dependencies.item(
                         id = id,
-                        deferredRepository = repository,
+                        repository = repository,
                     ),
                     skeleton = skeleton,
                 )
