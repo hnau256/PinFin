@@ -4,7 +4,6 @@
 
 package hnau.pinfin.model.budgetslist
 
-import arrow.core.NonEmptyList
 import arrow.core.NonEmptySet
 import arrow.core.toNonEmptySetOrNull
 import hnau.common.app.goback.GoBackHandler
@@ -14,19 +13,23 @@ import hnau.common.kotlin.coroutines.InProgressRegistry
 import hnau.common.kotlin.coroutines.createChild
 import hnau.common.kotlin.coroutines.mapListReusable
 import hnau.common.kotlin.coroutines.mapState
-import hnau.common.kotlin.coroutines.runningFoldState
 import hnau.common.kotlin.ifNull
 import hnau.common.kotlin.serialization.MutableStateFlowSerializer
 import hnau.pinfin.data.BudgetId
 import hnau.pinfin.model.budgetslist.item.BudgetItemModel
 import hnau.pinfin.model.budgetsstack.SyncOpener
 import hnau.pinfin.model.utils.budget.repository.BudgetRepository
+import hnau.pinfin.model.utils.budget.repository.DemoBudget
 import hnau.pinfin.model.utils.budget.storage.BudgetsStorage
+import hnau.pinfin.model.utils.budget.storage.addUpdates
+import hnau.pinfin.model.utils.budget.storage.createNewBudgetIfNotExistsAndGet
 import hnau.shuffler.annotations.Shuffle
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.UseSerializers
 
@@ -151,6 +154,22 @@ class BudgetsListModel(
                 dependencies.budgetsStorage.createNewBudgetIfNotExists(
                     id = BudgetId.new(),
                 )
+            }
+        }
+    }
+
+    fun createDemoBudget() {
+        scope.launch {
+            inProgressRegistry.executeRegistered {
+                val updates = withContext(Dispatchers.Default) {
+                    DemoBudget
+                        .updates
+                }
+                dependencies
+                    .budgetsStorage
+                    .createNewBudgetIfNotExistsAndGet(DemoBudget.id)
+                    .upchainStorage
+                    .addUpdates(updates)
             }
         }
     }

@@ -2,12 +2,20 @@ package hnau.pinfin.data
 
 import hnau.common.kotlin.mapper.Mapper
 import kotlinx.serialization.Serializable
+import kotlin.text.plus
 
 @Serializable
 @JvmInline
 value class CategoryId(
     val id: String,
 ): Comparable<CategoryId> {
+
+    constructor(
+        direction: CategoryDirection,
+        title: String,
+    ): this(
+        id = directionPrefixes[direction] + title,
+    )
 
     override fun compareTo(other: CategoryId): Int =
         id.compareTo(other.id)

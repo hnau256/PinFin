@@ -86,7 +86,8 @@ class ChooseCategoryModel(
                 .map { direction ->
                     CategoryInfo(
                         id = CategoryId(
-                            CategoryId.directionPrefixes[direction] + query
+                            direction = direction,
+                            title = query,
                         )
                     )
                 }

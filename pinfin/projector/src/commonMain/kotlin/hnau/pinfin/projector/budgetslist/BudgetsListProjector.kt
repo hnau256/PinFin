@@ -42,6 +42,7 @@ import hnau.pinfin.projector.Res
 import hnau.pinfin.projector.add
 import hnau.pinfin.projector.budgets
 import hnau.pinfin.projector.budgets_sync
+import hnau.pinfin.projector.create_demo_budget
 import hnau.pinfin.projector.create_new_budget
 import hnau.pinfin.projector.no_budgets
 import hnau.shuffler.annotations.Shuffle
@@ -116,6 +117,11 @@ class BudgetsListProjector(
                                     ) {
                                         Text(stringResource(Res.string.budgets_sync))
                                     }
+                                    OutlinedButton(
+                                        onClick = model::createDemoBudget,
+                                    ) {
+                                        Text(stringResource(Res.string.create_demo_budget))
+                                    }
                                 }
                             })
                     },
@@ -142,7 +148,9 @@ class BudgetsListProjector(
                                 text = { Text(stringResource(Res.string.add)) },
                             )
                         }
-                    })
+                    }
+            )
+
         }
     }
 }
