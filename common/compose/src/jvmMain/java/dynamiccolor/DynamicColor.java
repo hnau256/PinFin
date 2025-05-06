@@ -19,8 +19,8 @@ package dynamiccolor;
 import static java.lang.Math.max;
 import static java.lang.Math.min;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
+
+
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -100,14 +100,14 @@ public final class DynamicColor {
    *     colors. One of them must be the color being constructed.
    */
   public DynamicColor(
-      @NonNull String name,
-      @NonNull Function<DynamicScheme, TonalPalette> palette,
-      @NonNull Function<DynamicScheme, Double> tone,
+      String name,
+      Function<DynamicScheme, TonalPalette> palette,
+      Function<DynamicScheme, Double> tone,
       boolean isBackground,
-      @Nullable Function<DynamicScheme, DynamicColor> background,
-      @Nullable Function<DynamicScheme, DynamicColor> secondBackground,
-      @Nullable ContrastCurve contrastCurve,
-      @Nullable Function<DynamicScheme, ToneDeltaPair> toneDeltaPair) {
+       Function<DynamicScheme, DynamicColor> background,
+       Function<DynamicScheme, DynamicColor> secondBackground,
+       ContrastCurve contrastCurve,
+       Function<DynamicScheme, ToneDeltaPair> toneDeltaPair) {
 
     this.name = name;
     this.palette = palette;
@@ -151,15 +151,15 @@ public final class DynamicColor {
    * @param opacity A function returning the opacity of a color, as a number between 0 and 1.
    */
   public DynamicColor(
-      @NonNull String name,
-      @NonNull Function<DynamicScheme, TonalPalette> palette,
-      @NonNull Function<DynamicScheme, Double> tone,
+      String name,
+      Function<DynamicScheme, TonalPalette> palette,
+      Function<DynamicScheme, Double> tone,
       boolean isBackground,
-      @Nullable Function<DynamicScheme, DynamicColor> background,
-      @Nullable Function<DynamicScheme, DynamicColor> secondBackground,
-      @Nullable ContrastCurve contrastCurve,
-      @Nullable Function<DynamicScheme, ToneDeltaPair> toneDeltaPair,
-      @Nullable Function<DynamicScheme, Double> opacity) {
+       Function<DynamicScheme, DynamicColor> background,
+       Function<DynamicScheme, DynamicColor> secondBackground,
+       ContrastCurve contrastCurve,
+       Function<DynamicScheme, ToneDeltaPair> toneDeltaPair,
+       Function<DynamicScheme, Double> opacity) {
     this.name = name;
     this.palette = palette;
     this.tone = tone;
@@ -192,11 +192,10 @@ public final class DynamicColor {
    *     a tonal palette, when contrast adjustments are made, intended chroma can be preserved.
    * @param tone Function that provides a tone, given a DynamicScheme.
    */
-  @NonNull
-  public static DynamicColor fromPalette(
-      @NonNull String name,
-      @NonNull Function<DynamicScheme, TonalPalette> palette,
-      @NonNull Function<DynamicScheme, Double> tone) {
+    public static DynamicColor fromPalette(
+      String name,
+      Function<DynamicScheme, TonalPalette> palette,
+      Function<DynamicScheme, Double> tone) {
     return new DynamicColor(
         name,
         palette,
@@ -231,11 +230,10 @@ public final class DynamicColor {
    * @param isBackground Whether this dynamic color is a background, with some other color as the
    *     foreground.
    */
-  @NonNull
-  public static DynamicColor fromPalette(
-      @NonNull String name,
-      @NonNull Function<DynamicScheme, TonalPalette> palette,
-      @NonNull Function<DynamicScheme, Double> tone,
+    public static DynamicColor fromPalette(
+      String name,
+      Function<DynamicScheme, TonalPalette> palette,
+      Function<DynamicScheme, Double> tone,
       boolean isBackground) {
     return new DynamicColor(
         name,
@@ -256,8 +254,7 @@ public final class DynamicColor {
    * @param name The name of the dynamic color.
    * @param argb The source color from which to extract the hue and chroma.
    */
-  @NonNull
-  public static DynamicColor fromArgb(@NonNull String name, int argb) {
+    public static DynamicColor fromArgb(String name, int argb) {
     Hct hct = Hct.fromInt(argb);
     TonalPalette palette = TonalPalette.fromInt(argb);
     return DynamicColor.fromPalette(name, (s) -> palette, (s) -> hct.getTone());
@@ -269,7 +266,7 @@ public final class DynamicColor {
    * @param scheme Defines the conditions of the user interface, for example, whether or not it is
    *     dark mode or light mode, and what the desired contrast level is.
    */
-  public int getArgb(@NonNull DynamicScheme scheme) {
+  public int getArgb(DynamicScheme scheme) {
     int argb = getHct(scheme).toInt();
     if (opacity == null) {
       return argb;
@@ -285,8 +282,7 @@ public final class DynamicColor {
    * @param scheme Defines the conditions of the user interface, for example, whether or not it is
    *     dark mode or light mode, and what the desired contrast level is.
    */
-  @NonNull
-  public Hct getHct(@NonNull DynamicScheme scheme) {
+    public Hct getHct(DynamicScheme scheme) {
     Hct cachedAnswer = hctCache.get(scheme);
     if (cachedAnswer != null) {
       return cachedAnswer;
@@ -309,7 +305,7 @@ public final class DynamicColor {
   }
 
   /** Returns the tone in HCT, ranging from 0 to 100, of the resolved color given scheme. */
-  public double getTone(@NonNull DynamicScheme scheme) {
+  public double getTone(DynamicScheme scheme) {
     boolean decreasingContrast = scheme.contrastLevel < 0;
 
     // Case 1: dual foreground, pair of colors with delta constraint.

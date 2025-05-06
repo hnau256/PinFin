@@ -86,8 +86,10 @@ internal fun Project.config(
                     implementation(versions.findLibrary("kotlin-serialization-core").get().get())
                 }
                 if (hasComposePlugin) {
-                    implementation(ComposePlugin.DesktopDependencies.currentOs)
-                    implementation(versions.findLibrary("compose-material3").get().get())
+                    val composeDependencies = ComposePlugin.Dependencies(project)
+                    implementation(composeDependencies.desktop.currentOs)
+                    implementation(composeDependencies.material3)
+                    implementation(composeDependencies.materialIconsExtended)
                     if (identitifer != CommonComposeProjectIdentifier) {
                         implementation(project(CommonComposeProjectIdentifier))
                     }

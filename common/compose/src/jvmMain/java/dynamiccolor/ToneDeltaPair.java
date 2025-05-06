@@ -16,7 +16,7 @@
 
 package dynamiccolor;
 
-import androidx.annotation.NonNull;
+
 
 /**
  * Documents a constraint between two DynamicColors, in which their tones must have a certain
@@ -78,13 +78,11 @@ public final class ToneDeltaPair {
     this.stayTogether = stayTogether;
   }
 
-  @NonNull
-  public DynamicColor getRoleA() {
+    public DynamicColor getRoleA() {
     return roleA;
   }
 
-  @NonNull
-  public DynamicColor getRoleB() {
+    public DynamicColor getRoleB() {
     return roleB;
   }
 
@@ -92,8 +90,7 @@ public final class ToneDeltaPair {
     return delta;
   }
 
-  @NonNull
-  public TonePolarity getPolarity() {
+    public TonePolarity getPolarity() {
     return polarity;
   }
 

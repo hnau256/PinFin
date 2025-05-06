@@ -7,7 +7,6 @@ plugins {
 kotlin {
     sourceSets {
         commonMain.dependencies {
-            implementation(libs.compose.material.iconsExtended)
             implementation(project(":common:app"))
             implementation(project(":common:color"))
             implementation(project(":common:compose"))

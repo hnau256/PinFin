@@ -16,7 +16,7 @@
 
 package dynamiccolor;
 
-import androidx.annotation.NonNull;
+
 
 import java.util.Arrays;
 import java.util.List;
@@ -47,54 +47,47 @@ public final class MaterialDynamicColors {
     this.isExtendedFidelity = isExtendedFidelity;
   }
 
-  @NonNull
-  public DynamicColor highestSurface(@NonNull DynamicScheme s) {
+    public DynamicColor highestSurface(DynamicScheme s) {
     return s.isDark ? surfaceBright() : surfaceDim();
   }
 
   // Compatibility Keys Colors for Android
-  @NonNull
-  public DynamicColor primaryPaletteKeyColor() {
+    public DynamicColor primaryPaletteKeyColor() {
     return DynamicColor.fromPalette(
         /* name= */ "primary_palette_key_color",
         /* palette= */ (s) -> s.primaryPalette,
         /* tone= */ (s) -> s.primaryPalette.getKeyColor().getTone());
   }
 
-  @NonNull
-  public DynamicColor secondaryPaletteKeyColor() {
+    public DynamicColor secondaryPaletteKeyColor() {
     return DynamicColor.fromPalette(
         /* name= */ "secondary_palette_key_color",
         /* palette= */ (s) -> s.secondaryPalette,
         /* tone= */ (s) -> s.secondaryPalette.getKeyColor().getTone());
   }
 
-  @NonNull
-  public DynamicColor tertiaryPaletteKeyColor() {
+    public DynamicColor tertiaryPaletteKeyColor() {
     return DynamicColor.fromPalette(
         /* name= */ "tertiary_palette_key_color",
         /* palette= */ (s) -> s.tertiaryPalette,
         /* tone= */ (s) -> s.tertiaryPalette.getKeyColor().getTone());
   }
 
-  @NonNull
-  public DynamicColor neutralPaletteKeyColor() {
+    public DynamicColor neutralPaletteKeyColor() {
     return DynamicColor.fromPalette(
         /* name= */ "neutral_palette_key_color",
         /* palette= */ (s) -> s.neutralPalette,
         /* tone= */ (s) -> s.neutralPalette.getKeyColor().getTone());
   }
 
-  @NonNull
-  public DynamicColor neutralVariantPaletteKeyColor() {
+    public DynamicColor neutralVariantPaletteKeyColor() {
     return DynamicColor.fromPalette(
         /* name= */ "neutral_variant_palette_key_color",
         /* palette= */ (s) -> s.neutralVariantPalette,
         /* tone= */ (s) -> s.neutralVariantPalette.getKeyColor().getTone());
   }
 
-  @NonNull
-  public DynamicColor background() {
+    public DynamicColor background() {
     return new DynamicColor(
         /* name= */ "background",
         /* palette= */ (s) -> s.neutralPalette,
@@ -106,8 +99,7 @@ public final class MaterialDynamicColors {
         /* toneDeltaPair= */ null);
   }
 
-  @NonNull
-  public DynamicColor onBackground() {
+    public DynamicColor onBackground() {
     return new DynamicColor(
         /* name= */ "on_background",
         /* palette= */ (s) -> s.neutralPalette,
@@ -119,8 +111,7 @@ public final class MaterialDynamicColors {
         /* toneDeltaPair= */ null);
   }
 
-  @NonNull
-  public DynamicColor surface() {
+    public DynamicColor surface() {
     return new DynamicColor(
         /* name= */ "surface",
         /* palette= */ (s) -> s.neutralPalette,
@@ -132,8 +123,7 @@ public final class MaterialDynamicColors {
         /* toneDeltaPair= */ null);
   }
 
-  @NonNull
-  public DynamicColor surfaceDim() {
+    public DynamicColor surfaceDim() {
     return new DynamicColor(
         /* name= */ "surface_dim",
         /* palette= */ (s) -> s.neutralPalette,
@@ -146,8 +136,7 @@ public final class MaterialDynamicColors {
         /* toneDeltaPair= */ null);
   }
 
-  @NonNull
-  public DynamicColor surfaceBright() {
+    public DynamicColor surfaceBright() {
     return new DynamicColor(
         /* name= */ "surface_bright",
         /* palette= */ (s) -> s.neutralPalette,
@@ -160,8 +149,7 @@ public final class MaterialDynamicColors {
         /* toneDeltaPair= */ null);
   }
 
-  @NonNull
-  public DynamicColor surfaceContainerLowest() {
+    public DynamicColor surfaceContainerLowest() {
     return new DynamicColor(
         /* name= */ "surface_container_lowest",
         /* palette= */ (s) -> s.neutralPalette,
@@ -174,8 +162,7 @@ public final class MaterialDynamicColors {
         /* toneDeltaPair= */ null);
   }
 
-  @NonNull
-  public DynamicColor surfaceContainerLow() {
+    public DynamicColor surfaceContainerLow() {
     return new DynamicColor(
         /* name= */ "surface_container_low",
         /* palette= */ (s) -> s.neutralPalette,
@@ -190,8 +177,7 @@ public final class MaterialDynamicColors {
         /* toneDeltaPair= */ null);
   }
 
-  @NonNull
-  public DynamicColor surfaceContainer() {
+    public DynamicColor surfaceContainer() {
     return new DynamicColor(
         /* name= */ "surface_container",
         /* palette= */ (s) -> s.neutralPalette,
@@ -206,8 +192,7 @@ public final class MaterialDynamicColors {
         /* toneDeltaPair= */ null);
   }
 
-  @NonNull
-  public DynamicColor surfaceContainerHigh() {
+    public DynamicColor surfaceContainerHigh() {
     return new DynamicColor(
         /* name= */ "surface_container_high",
         /* palette= */ (s) -> s.neutralPalette,
@@ -222,8 +207,7 @@ public final class MaterialDynamicColors {
         /* toneDeltaPair= */ null);
   }
 
-  @NonNull
-  public DynamicColor surfaceContainerHighest() {
+    public DynamicColor surfaceContainerHighest() {
     return new DynamicColor(
         /* name= */ "surface_container_highest",
         /* palette= */ (s) -> s.neutralPalette,
@@ -238,8 +222,7 @@ public final class MaterialDynamicColors {
         /* toneDeltaPair= */ null);
   }
 
-  @NonNull
-  public DynamicColor onSurface() {
+    public DynamicColor onSurface() {
     return new DynamicColor(
         /* name= */ "on_surface",
         /* palette= */ (s) -> s.neutralPalette,
@@ -251,8 +234,7 @@ public final class MaterialDynamicColors {
         /* toneDeltaPair= */ null);
   }
 
-  @NonNull
-  public DynamicColor surfaceVariant() {
+    public DynamicColor surfaceVariant() {
     return new DynamicColor(
         /* name= */ "surface_variant",
         /* palette= */ (s) -> s.neutralVariantPalette,
@@ -264,8 +246,7 @@ public final class MaterialDynamicColors {
         /* toneDeltaPair= */ null);
   }
 
-  @NonNull
-  public DynamicColor onSurfaceVariant() {
+    public DynamicColor onSurfaceVariant() {
     return new DynamicColor(
         /* name= */ "on_surface_variant",
         /* palette= */ (s) -> s.neutralVariantPalette,
@@ -277,8 +258,7 @@ public final class MaterialDynamicColors {
         /* toneDeltaPair= */ null);
   }
 
-  @NonNull
-  public DynamicColor inverseSurface() {
+    public DynamicColor inverseSurface() {
     return new DynamicColor(
         /* name= */ "inverse_surface",
         /* palette= */ (s) -> s.neutralPalette,
@@ -290,8 +270,7 @@ public final class MaterialDynamicColors {
         /* toneDeltaPair= */ null);
   }
 
-  @NonNull
-  public DynamicColor inverseOnSurface() {
+    public DynamicColor inverseOnSurface() {
     return new DynamicColor(
         /* name= */ "inverse_on_surface",
         /* palette= */ (s) -> s.neutralPalette,
@@ -303,8 +282,7 @@ public final class MaterialDynamicColors {
         /* toneDeltaPair= */ null);
   }
 
-  @NonNull
-  public DynamicColor outline() {
+    public DynamicColor outline() {
     return new DynamicColor(
         /* name= */ "outline",
         /* palette= */ (s) -> s.neutralVariantPalette,
@@ -316,8 +294,7 @@ public final class MaterialDynamicColors {
         /* toneDeltaPair= */ null);
   }
 
-  @NonNull
-  public DynamicColor outlineVariant() {
+    public DynamicColor outlineVariant() {
     return new DynamicColor(
         /* name= */ "outline_variant",
         /* palette= */ (s) -> s.neutralVariantPalette,
@@ -329,8 +306,7 @@ public final class MaterialDynamicColors {
         /* toneDeltaPair= */ null);
   }
 
-  @NonNull
-  public DynamicColor shadow() {
+    public DynamicColor shadow() {
     return new DynamicColor(
         /* name= */ "shadow",
         /* palette= */ (s) -> s.neutralPalette,
@@ -342,8 +318,7 @@ public final class MaterialDynamicColors {
         /* toneDeltaPair= */ null);
   }
 
-  @NonNull
-  public DynamicColor scrim() {
+    public DynamicColor scrim() {
     return new DynamicColor(
         /* name= */ "scrim",
         /* palette= */ (s) -> s.neutralPalette,
@@ -355,8 +330,7 @@ public final class MaterialDynamicColors {
         /* toneDeltaPair= */ null);
   }
 
-  @NonNull
-  public DynamicColor surfaceTint() {
+    public DynamicColor surfaceTint() {
     return new DynamicColor(
         /* name= */ "surface_tint",
         /* palette= */ (s) -> s.primaryPalette,
@@ -368,8 +342,7 @@ public final class MaterialDynamicColors {
         /* toneDeltaPair= */ null);
   }
 
-  @NonNull
-  public DynamicColor primary() {
+    public DynamicColor primary() {
     return new DynamicColor(
         /* name= */ "primary",
         /* palette= */ (s) -> s.primaryPalette,
@@ -387,8 +360,7 @@ public final class MaterialDynamicColors {
             new ToneDeltaPair(primaryContainer(), primary(), 10.0, TonePolarity.NEARER, false));
   }
 
-  @NonNull
-  public DynamicColor onPrimary() {
+    public DynamicColor onPrimary() {
     return new DynamicColor(
         /* name= */ "on_primary",
         /* palette= */ (s) -> s.primaryPalette,
@@ -405,8 +377,7 @@ public final class MaterialDynamicColors {
         /* toneDeltaPair= */ null);
   }
 
-  @NonNull
-  public DynamicColor primaryContainer() {
+    public DynamicColor primaryContainer() {
     return new DynamicColor(
         /* name= */ "primary_container",
         /* palette= */ (s) -> s.primaryPalette,
@@ -427,8 +398,7 @@ public final class MaterialDynamicColors {
             new ToneDeltaPair(primaryContainer(), primary(), 10.0, TonePolarity.NEARER, false));
   }
 
-  @NonNull
-  public DynamicColor onPrimaryContainer() {
+    public DynamicColor onPrimaryContainer() {
     return new DynamicColor(
         /* name= */ "on_primary_container",
         /* palette= */ (s) -> s.primaryPalette,
@@ -448,8 +418,7 @@ public final class MaterialDynamicColors {
         /* toneDeltaPair= */ null);
   }
 
-  @NonNull
-  public DynamicColor inversePrimary() {
+    public DynamicColor inversePrimary() {
     return new DynamicColor(
         /* name= */ "inverse_primary",
         /* palette= */ (s) -> s.primaryPalette,
@@ -461,8 +430,7 @@ public final class MaterialDynamicColors {
         /* toneDeltaPair= */ null);
   }
 
-  @NonNull
-  public DynamicColor secondary() {
+    public DynamicColor secondary() {
     return new DynamicColor(
         /* name= */ "secondary",
         /* palette= */ (s) -> s.secondaryPalette,
@@ -475,8 +443,7 @@ public final class MaterialDynamicColors {
             new ToneDeltaPair(secondaryContainer(), secondary(), 10.0, TonePolarity.NEARER, false));
   }
 
-  @NonNull
-  public DynamicColor onSecondary() {
+    public DynamicColor onSecondary() {
     return new DynamicColor(
         /* name= */ "on_secondary",
         /* palette= */ (s) -> s.secondaryPalette,
@@ -494,8 +461,7 @@ public final class MaterialDynamicColors {
         /* toneDeltaPair= */ null);
   }
 
-  @NonNull
-  public DynamicColor secondaryContainer() {
+    public DynamicColor secondaryContainer() {
     return new DynamicColor(
         /* name= */ "secondary_container",
         /* palette= */ (s) -> s.secondaryPalette,
@@ -518,8 +484,7 @@ public final class MaterialDynamicColors {
             new ToneDeltaPair(secondaryContainer(), secondary(), 10.0, TonePolarity.NEARER, false));
   }
 
-  @NonNull
-  public DynamicColor onSecondaryContainer() {
+    public DynamicColor onSecondaryContainer() {
     return new DynamicColor(
         /* name= */ "on_secondary_container",
         /* palette= */ (s) -> s.secondaryPalette,
@@ -539,8 +504,7 @@ public final class MaterialDynamicColors {
         /* toneDeltaPair= */ null);
   }
 
-  @NonNull
-  public DynamicColor tertiary() {
+    public DynamicColor tertiary() {
     return new DynamicColor(
         /* name= */ "tertiary",
         /* palette= */ (s) -> s.tertiaryPalette,
@@ -558,8 +522,7 @@ public final class MaterialDynamicColors {
             new ToneDeltaPair(tertiaryContainer(), tertiary(), 10.0, TonePolarity.NEARER, false));
   }
 
-  @NonNull
-  public DynamicColor onTertiary() {
+    public DynamicColor onTertiary() {
     return new DynamicColor(
         /* name= */ "on_tertiary",
         /* palette= */ (s) -> s.tertiaryPalette,
@@ -576,8 +539,7 @@ public final class MaterialDynamicColors {
         /* toneDeltaPair= */ null);
   }
 
-  @NonNull
-  public DynamicColor tertiaryContainer() {
+    public DynamicColor tertiaryContainer() {
     return new DynamicColor(
         /* name= */ "tertiary_container",
         /* palette= */ (s) -> s.tertiaryPalette,
@@ -599,8 +561,7 @@ public final class MaterialDynamicColors {
             new ToneDeltaPair(tertiaryContainer(), tertiary(), 10.0, TonePolarity.NEARER, false));
   }
 
-  @NonNull
-  public DynamicColor onTertiaryContainer() {
+    public DynamicColor onTertiaryContainer() {
     return new DynamicColor(
         /* name= */ "on_tertiary_container",
         /* palette= */ (s) -> s.tertiaryPalette,
@@ -620,8 +581,7 @@ public final class MaterialDynamicColors {
         /* toneDeltaPair= */ null);
   }
 
-  @NonNull
-  public DynamicColor error() {
+    public DynamicColor error() {
     return new DynamicColor(
         /* name= */ "error",
         /* palette= */ (s) -> s.errorPalette,
@@ -634,8 +594,7 @@ public final class MaterialDynamicColors {
             new ToneDeltaPair(errorContainer(), error(), 10.0, TonePolarity.NEARER, false));
   }
 
-  @NonNull
-  public DynamicColor onError() {
+    public DynamicColor onError() {
     return new DynamicColor(
         /* name= */ "on_error",
         /* palette= */ (s) -> s.errorPalette,
@@ -647,8 +606,7 @@ public final class MaterialDynamicColors {
         /* toneDeltaPair= */ null);
   }
 
-  @NonNull
-  public DynamicColor errorContainer() {
+    public DynamicColor errorContainer() {
     return new DynamicColor(
         /* name= */ "error_container",
         /* palette= */ (s) -> s.errorPalette,
@@ -661,8 +619,7 @@ public final class MaterialDynamicColors {
             new ToneDeltaPair(errorContainer(), error(), 10.0, TonePolarity.NEARER, false));
   }
 
-  @NonNull
-  public DynamicColor onErrorContainer() {
+    public DynamicColor onErrorContainer() {
     return new DynamicColor(
         /* name= */ "on_error_container",
         /* palette= */ (s) -> s.errorPalette,
@@ -679,8 +636,7 @@ public final class MaterialDynamicColors {
         /* toneDeltaPair= */ null);
   }
 
-  @NonNull
-  public DynamicColor primaryFixed() {
+    public DynamicColor primaryFixed() {
     return new DynamicColor(
         /* name= */ "primary_fixed",
         /* palette= */ (s) -> s.primaryPalette,
@@ -693,8 +649,7 @@ public final class MaterialDynamicColors {
             new ToneDeltaPair(primaryFixed(), primaryFixedDim(), 10.0, TonePolarity.LIGHTER, true));
   }
 
-  @NonNull
-  public DynamicColor primaryFixedDim() {
+    public DynamicColor primaryFixedDim() {
     return new DynamicColor(
         /* name= */ "primary_fixed_dim",
         /* palette= */ (s) -> s.primaryPalette,
@@ -707,8 +662,7 @@ public final class MaterialDynamicColors {
             new ToneDeltaPair(primaryFixed(), primaryFixedDim(), 10.0, TonePolarity.LIGHTER, true));
   }
 
-  @NonNull
-  public DynamicColor onPrimaryFixed() {
+    public DynamicColor onPrimaryFixed() {
     return new DynamicColor(
         /* name= */ "on_primary_fixed",
         /* palette= */ (s) -> s.primaryPalette,
@@ -720,8 +674,7 @@ public final class MaterialDynamicColors {
         /* toneDeltaPair= */ null);
   }
 
-  @NonNull
-  public DynamicColor onPrimaryFixedVariant() {
+    public DynamicColor onPrimaryFixedVariant() {
     return new DynamicColor(
         /* name= */ "on_primary_fixed_variant",
         /* palette= */ (s) -> s.primaryPalette,
@@ -733,8 +686,7 @@ public final class MaterialDynamicColors {
         /* toneDeltaPair= */ null);
   }
 
-  @NonNull
-  public DynamicColor secondaryFixed() {
+    public DynamicColor secondaryFixed() {
     return new DynamicColor(
         /* name= */ "secondary_fixed",
         /* palette= */ (s) -> s.secondaryPalette,
@@ -748,8 +700,7 @@ public final class MaterialDynamicColors {
                 secondaryFixed(), secondaryFixedDim(), 10.0, TonePolarity.LIGHTER, true));
   }
 
-  @NonNull
-  public DynamicColor secondaryFixedDim() {
+    public DynamicColor secondaryFixedDim() {
     return new DynamicColor(
         /* name= */ "secondary_fixed_dim",
         /* palette= */ (s) -> s.secondaryPalette,
@@ -763,8 +714,7 @@ public final class MaterialDynamicColors {
                 secondaryFixed(), secondaryFixedDim(), 10.0, TonePolarity.LIGHTER, true));
   }
 
-  @NonNull
-  public DynamicColor onSecondaryFixed() {
+    public DynamicColor onSecondaryFixed() {
     return new DynamicColor(
         /* name= */ "on_secondary_fixed",
         /* palette= */ (s) -> s.secondaryPalette,
@@ -776,8 +726,7 @@ public final class MaterialDynamicColors {
         /* toneDeltaPair= */ null);
   }
 
-  @NonNull
-  public DynamicColor onSecondaryFixedVariant() {
+    public DynamicColor onSecondaryFixedVariant() {
     return new DynamicColor(
         /* name= */ "on_secondary_fixed_variant",
         /* palette= */ (s) -> s.secondaryPalette,
@@ -789,8 +738,7 @@ public final class MaterialDynamicColors {
         /* toneDeltaPair= */ null);
   }
 
-  @NonNull
-  public DynamicColor tertiaryFixed() {
+    public DynamicColor tertiaryFixed() {
     return new DynamicColor(
         /* name= */ "tertiary_fixed",
         /* palette= */ (s) -> s.tertiaryPalette,
@@ -804,8 +752,7 @@ public final class MaterialDynamicColors {
                 tertiaryFixed(), tertiaryFixedDim(), 10.0, TonePolarity.LIGHTER, true));
   }
 
-  @NonNull
-  public DynamicColor tertiaryFixedDim() {
+    public DynamicColor tertiaryFixedDim() {
     return new DynamicColor(
         /* name= */ "tertiary_fixed_dim",
         /* palette= */ (s) -> s.tertiaryPalette,
@@ -819,8 +766,7 @@ public final class MaterialDynamicColors {
                 tertiaryFixed(), tertiaryFixedDim(), 10.0, TonePolarity.LIGHTER, true));
   }
 
-  @NonNull
-  public DynamicColor onTertiaryFixed() {
+    public DynamicColor onTertiaryFixed() {
     return new DynamicColor(
         /* name= */ "on_tertiary_fixed",
         /* palette= */ (s) -> s.tertiaryPalette,
@@ -832,8 +778,7 @@ public final class MaterialDynamicColors {
         /* toneDeltaPair= */ null);
   }
 
-  @NonNull
-  public DynamicColor onTertiaryFixedVariant() {
+    public DynamicColor onTertiaryFixedVariant() {
     return new DynamicColor(
         /* name= */ "on_tertiary_fixed_variant",
         /* palette= */ (s) -> s.tertiaryPalette,
@@ -858,8 +803,7 @@ public final class MaterialDynamicColors {
   // colorAccent documented as colorSecondary in M3 and colorPrimary in GM3.
   // Android used Material's Container as Primary/Secondary/Tertiary at launch.
   // Therefore, this is a duplicated version of Primary Container.
-  @NonNull
-  public DynamicColor controlActivated() {
+    public DynamicColor controlActivated() {
     return DynamicColor.fromPalette(
         "control_activated", (s) -> s.primaryPalette, (s) -> s.isDark ? 30.0 : 90.0);
   }
@@ -867,8 +811,7 @@ public final class MaterialDynamicColors {
   // colorControlNormal documented as textColorSecondary in M3 & GM3.
   // In Material, textColorSecondary points to onSurfaceVariant in the non-disabled state,
   // which is Neutral Variant T30/80 in light/dark.
-  @NonNull
-  public DynamicColor controlNormal() {
+    public DynamicColor controlNormal() {
     return DynamicColor.fromPalette(
         "control_normal", (s) -> s.neutralVariantPalette, (s) -> s.isDark ? 80.0 : 30.0);
   }
@@ -881,8 +824,7 @@ public final class MaterialDynamicColors {
   // DynamicColors do not support alpha currently, and _may_ not need it for this use case,
   // depending on how MDC resolved alpha for the other cases.
   // Returning black in dark mode, white in light mode.
-  @NonNull
-  public DynamicColor controlHighlight() {
+    public DynamicColor controlHighlight() {
     return new DynamicColor(
         /* name= */ "control_highlight",
         /* palette= */ (s) -> s.neutralPalette,
@@ -896,16 +838,14 @@ public final class MaterialDynamicColors {
   }
 
   // textColorPrimaryInverse documented, in both M3 & GM3, documented as N10/N90.
-  @NonNull
-  public DynamicColor textPrimaryInverse() {
+    public DynamicColor textPrimaryInverse() {
     return DynamicColor.fromPalette(
         "text_primary_inverse", (s) -> s.neutralPalette, (s) -> s.isDark ? 10.0 : 90.0);
   }
 
   // textColorSecondaryInverse and textColorTertiaryInverse both documented, in both M3 & GM3, as
   // NV30/NV80
-  @NonNull
-  public DynamicColor textSecondaryAndTertiaryInverse() {
+    public DynamicColor textSecondaryAndTertiaryInverse() {
     return DynamicColor.fromPalette(
         "text_secondary_and_tertiary_inverse",
         (s) -> s.neutralVariantPalette,
@@ -913,8 +853,7 @@ public final class MaterialDynamicColors {
   }
 
   // textColorPrimaryInverseDisableOnly documented, in both M3 & GM3, as N10/N90
-  @NonNull
-  public DynamicColor textPrimaryInverseDisableOnly() {
+    public DynamicColor textPrimaryInverseDisableOnly() {
     return DynamicColor.fromPalette(
         "text_primary_inverse_disable_only",
         (s) -> s.neutralPalette,
@@ -923,8 +862,7 @@ public final class MaterialDynamicColors {
 
   // textColorSecondaryInverse and textColorTertiaryInverse in disabled state both documented,
   // in both M3 & GM3, as N10/N90
-  @NonNull
-  public DynamicColor textSecondaryAndTertiaryInverseDisabled() {
+    public DynamicColor textSecondaryAndTertiaryInverseDisabled() {
     return DynamicColor.fromPalette(
         "text_secondary_and_tertiary_inverse_disabled",
         (s) -> s.neutralPalette,
@@ -932,8 +870,7 @@ public final class MaterialDynamicColors {
   }
 
   // textColorHintInverse documented, in both M3 & GM3, as N10/N90
-  @NonNull
-  public DynamicColor textHintInverse() {
+    public DynamicColor textHintInverse() {
     return DynamicColor.fromPalette(
         "text_hint_inverse", (s) -> s.neutralPalette, (s) -> s.isDark ? 10.0 : 90.0);
   }

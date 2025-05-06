@@ -52,7 +52,8 @@ class TransactionProjectorBaseInfoDelegate(
                     HnauButton(
                         modifier = Modifier.weight(1f),
                         shape = cellShape,
-                        onClick = {}, content = {
+                        onClick = model::chooseDate,
+                        content = {
                             TripleRow(
                                 leading = { Icon(Icons.Filled.CalendarMonth) },
                                 content = {

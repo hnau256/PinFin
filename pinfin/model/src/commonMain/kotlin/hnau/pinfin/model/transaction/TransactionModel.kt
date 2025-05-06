@@ -60,7 +60,7 @@ class TransactionModel(
             null.toMutableStateFlowAsInitial(),
     ) {
 
-        enum class Dialog { ExitUnsaved, Remove }
+        enum class Dialog { ExitUnsaved, Remove, PickDate }
 
         companion object {
 
@@ -269,7 +269,6 @@ class TransactionModel(
         ifNotNull = { id ->
             skeleton.visibleDialog.mapState(scope) { dialog ->
                 when (dialog) {
-                    Skeleton.Dialog.ExitUnsaved, null -> null
                     Skeleton.Dialog.Remove -> RemoveDialogInfo(
                         dismiss = ::closeAnyDialog,
                         remove = {
@@ -281,6 +280,8 @@ class TransactionModel(
                             }
                         }
                     )
+
+                    else -> null
                 }
             }
         }
@@ -297,7 +298,6 @@ class TransactionModel(
         .scopedInState(scope)
         .flatMapState(scope) { (dialogScope, visibleDialog) ->
             when (visibleDialog) {
-                Skeleton.Dialog.Remove, null -> null.toMutableStateFlowAsInitial()
                 Skeleton.Dialog.ExitUnsaved -> saveAction.mapState(dialogScope) { saveOrNull ->
                     ExitUnsavedDialogInfo(
                         dismiss = ::closeAnyDialog,
@@ -313,6 +313,32 @@ class TransactionModel(
                         },
                     )
                 }
+
+                else -> null.toMutableStateFlowAsInitial()
+            }
+        }
+
+    data class PickDateDialogInfo(
+        val dismiss: () -> Unit,
+        val save: (LocalDate) -> Unit,
+    )
+
+    fun chooseDate() {
+        skeleton.visibleDialog.value = Skeleton.Dialog.PickDate
+    }
+
+    val pickDatDialogInfo: StateFlow<PickDateDialogInfo?> =
+        skeleton.visibleDialog.mapState(scope) { dialog ->
+            when (dialog) {
+                Skeleton.Dialog.PickDate -> PickDateDialogInfo(
+                    dismiss = ::closeAnyDialog,
+                    save = { date ->
+                        skeleton.date.value = date
+                        closeAnyDialog()
+                    }
+                )
+
+                else -> null
             }
         }
 
