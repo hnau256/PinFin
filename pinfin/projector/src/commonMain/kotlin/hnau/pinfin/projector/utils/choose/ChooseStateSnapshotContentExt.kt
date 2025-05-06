@@ -15,7 +15,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
-import arrow.core.toNonEmptyListOrNull
 import hnau.common.app.EditingString
 import hnau.common.compose.uikit.HnauButton
 import hnau.common.compose.uikit.TextInput
