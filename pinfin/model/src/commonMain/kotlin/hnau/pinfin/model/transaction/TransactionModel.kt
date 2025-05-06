@@ -7,15 +7,17 @@ package hnau.pinfin.model.transaction
 import hnau.common.app.EditingString
 import hnau.common.app.goback.GoBackHandler
 import hnau.common.app.goback.GoBackHandlerProvider
-import hnau.common.app.goback.NeverGoBackHandler
 import hnau.common.app.toEditingString
+import hnau.common.kotlin.coroutines.InProgressRegistry
 import hnau.common.kotlin.coroutines.actionOrNullIfExecuting
 import hnau.common.kotlin.coroutines.combineState
 import hnau.common.kotlin.coroutines.combineStateWith
 import hnau.common.kotlin.coroutines.flatMapState
 import hnau.common.kotlin.coroutines.mapState
 import hnau.common.kotlin.coroutines.mapWithScope
+import hnau.common.kotlin.coroutines.scopedInState
 import hnau.common.kotlin.coroutines.toMutableStateFlowAsInitial
+import hnau.common.kotlin.foldNullable
 import hnau.common.kotlin.serialization.MutableStateFlowSerializer
 import hnau.pinfin.data.Comment
 import hnau.pinfin.data.Transaction
@@ -29,6 +31,7 @@ import hnau.shuffler.annotations.Shuffle
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.launch
 import kotlinx.datetime.Clock
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalDateTime
@@ -43,7 +46,7 @@ class TransactionModel(
     private val scope: CoroutineScope,
     private val skeleton: Skeleton,
     private val dependencies: Dependencies,
-    private val completed: () -> Unit,
+    private val onReady: () -> Unit,
 ) : GoBackHandlerProvider {
 
     @Serializable
@@ -53,7 +56,11 @@ class TransactionModel(
         val date: MutableStateFlow<LocalDate>,
         val time: MutableStateFlow<LocalTime>,
         val type: MutableStateFlow<TransactionTypeModel.Skeleton>,
+        val visibleDialog: MutableStateFlow<Dialog?> =
+            null.toMutableStateFlowAsInitial(),
     ) {
+
+        enum class Dialog { ExitUnsaved }
 
         companion object {
 
@@ -112,6 +119,11 @@ class TransactionModel(
             }
         }
     }
+
+    private val inProgressRegistry = InProgressRegistry()
+
+    val inProgress: StateFlow<Boolean>
+        get() = inProgressRegistry.inProgress
 
     val isNewTransaction: Boolean
         get() = skeleton.id == null
@@ -215,21 +227,29 @@ class TransactionModel(
             }
         }
 
-    val save: StateFlow<StateFlow<(() -> Unit)?>?> = result.mapWithScope(
+    private val saveAction: StateFlow<(suspend () -> Unit)?> = result.mapWithScope(
         scope = scope,
     ) { transactionScope, transactionOrNull ->
         transactionOrNull?.let { transaction ->
-            actionOrNullIfExecuting(
-                scope = transactionScope,
-            ) {
+            {
                 dependencies.budgetRepository.transactions.addOrUpdate(
                     id = skeleton.id,
                     transaction = transaction,
                 )
-                completed()
+                onReady()
             }
         }
     }
+
+    val save: StateFlow<StateFlow<(() -> Unit)?>?> =
+        saveAction.mapWithScope(scope) { saveScope, saveOrNull ->
+            saveOrNull?.let { save ->
+                actionOrNullIfExecuting(
+                    scope = saveScope,
+                    action = save,
+                )
+            }
+        }
 
     val remove: StateFlow<(() -> Unit)?>? = skeleton
         .id
@@ -240,10 +260,48 @@ class TransactionModel(
                 dependencies.budgetRepository.transactions.remove(
                     id = skeleton.id,
                 )
-                completed()
+                onReady()
             }
         }
 
-    override val goBackHandler: GoBackHandler
-        get() = NeverGoBackHandler
+    data class ExitUnsavedDialogInfo(
+        val dismiss: () -> Unit,
+        val exitWithoutSaving: () -> Unit,
+        val save: (() -> Unit)?,
+    )
+
+    val exitUnsavedDialogInfo: StateFlow<ExitUnsavedDialogInfo?> = skeleton
+        .visibleDialog
+        .scopedInState(scope)
+        .flatMapState(scope) { (dialogScope, visibleDialog) ->
+            when (visibleDialog) {
+                null -> null.toMutableStateFlowAsInitial()
+                Skeleton.Dialog.ExitUnsaved -> saveAction.mapState(dialogScope) { saveOrNull ->
+                    ExitUnsavedDialogInfo(
+                        dismiss = { skeleton.visibleDialog.value = null },
+                        exitWithoutSaving = onReady,
+                        save = saveOrNull?.let { save ->
+                            {
+                                scope.launch {
+                                    inProgressRegistry.executeRegistered {
+                                        save()
+                                    }
+                                }
+                            }
+                        },
+                    )
+                }
+            }
+        }
+
+    override val goBackHandler: GoBackHandler = skeleton
+        .visibleDialog
+        .mapState(scope) { visibleDialog ->
+            {
+                skeleton.visibleDialog.value = visibleDialog.foldNullable(
+                    ifNotNull = { null },
+                    ifNull = { Skeleton.Dialog.ExitUnsaved },
+                )
+            }
+        }
 }

@@ -90,7 +90,7 @@ class BudgetStackModel(
                 scope = modelScope,
                 skeleton = skeleton.skeleton,
                 dependencies = dependenciesWithOpeners.transaction(),
-                completed = { this@BudgetStackModel.skeleton.stack.tryDropLast() },
+                onReady = { this@BudgetStackModel.skeleton.stack.tryDropLast() },
             )
         )
     }

@@ -92,7 +92,14 @@ fun AlertDialogContent(
                 ProvideContentColorTextStyle(
                     contentColor = buttonContentColor,
                     textStyle = MaterialTheme.typography.labelLarge,
-                    content = buttons
+                    content = {
+                        AlertDialogFlowRow(
+                            mainAxisSpacing = ButtonsMainAxisSpacing,
+                            crossAxisSpacing = ButtonsCrossAxisSpacing
+                        ) {
+                            buttons()
+                        }
+                    }
                 )
             }
         }
@@ -103,7 +110,7 @@ fun AlertDialogContent(
 internal fun ProvideContentColorTextStyle(
     contentColor: Color,
     textStyle: TextStyle,
-    content: @Composable () -> Unit
+    content: @Composable () -> Unit,
 ) {
     val mergedStyle = LocalTextStyle.current.merge(textStyle)
     CompositionLocalProvider(
@@ -123,13 +130,8 @@ fun AlertDialogContent(
 ) {
     AlertDialogContent(
         buttons = {
-            AlertDialogFlowRow(
-                mainAxisSpacing = ButtonsMainAxisSpacing,
-                crossAxisSpacing = ButtonsCrossAxisSpacing
-            ) {
-                dismissButton?.invoke()
-                confirmButton()
-            }
+            dismissButton?.invoke()
+            confirmButton()
         },
         icon = icon,
         title = title,
@@ -141,7 +143,7 @@ fun AlertDialogContent(
 fun AlertDialogFlowRow(
     mainAxisSpacing: Dp,
     crossAxisSpacing: Dp,
-    content: @Composable () -> Unit
+    content: @Composable () -> Unit,
 ) {
     Layout(content) { measurables, constraints ->
         val sequences = mutableListOf<List<Placeable>>()

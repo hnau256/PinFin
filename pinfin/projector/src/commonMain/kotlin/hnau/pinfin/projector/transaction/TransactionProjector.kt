@@ -10,10 +10,12 @@ import androidx.compose.material.IconButton
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Save
+import androidx.compose.material3.BasicAlertDialog
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -22,7 +24,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import hnau.common.app.goback.GlobalGoBackHandler
 import hnau.common.app.goback.GoBackHandler
+import hnau.common.compose.uikit.AlertDialogContent
 import hnau.common.compose.uikit.Separator
+import hnau.common.compose.uikit.progressindicator.InProgress
 import hnau.common.compose.uikit.state.StateContent
 import hnau.common.compose.uikit.state.TransitionSpec
 import hnau.common.compose.uikit.utils.Dimens
@@ -30,10 +34,16 @@ import hnau.common.compose.utils.Icon
 import hnau.common.compose.utils.NavigationIcon
 import hnau.common.compose.utils.horizontalDisplayPadding
 import hnau.common.kotlin.coroutines.mapWithScope
+import hnau.common.kotlin.foldNullable
+import hnau.common.kotlin.ifFalse
 import hnau.pinfin.model.transaction.TransactionModel
 import hnau.pinfin.model.transaction.type.TransactionTypeModel
 import hnau.pinfin.projector.Res
+import hnau.pinfin.projector.close
+import hnau.pinfin.projector.save_changes
 import hnau.pinfin.projector.new_transaction
+import hnau.pinfin.projector.not_save
+import hnau.pinfin.projector.save
 import hnau.pinfin.projector.transaction
 import hnau.pinfin.projector.transaction.type.TransactionTypeProjector
 import hnau.pinfin.projector.transaction.type.entry.EntryProjector
@@ -108,6 +118,8 @@ class TransactionProjector(
                 Separator()
                 this@TransactionProjector.Type()
             }
+            ExitUnsavedDialog()
+            InProgress(model.inProgress)
         }
     }
 
@@ -177,6 +189,40 @@ class TransactionProjector(
                 null -> CircularProgressIndicator()
                 else -> Icon(Icons.Filled.Delete)
             }
+        }
+    }
+
+    @OptIn(ExperimentalMaterial3Api::class)
+    @Composable
+    private fun ExitUnsavedDialog() {
+        val info = model.exitUnsavedDialogInfo.collectAsState().value ?: return
+        BasicAlertDialog(
+            onDismissRequest = info.dismiss,
+        ) {
+            AlertDialogContent(
+                title = { Text(stringResource(Res.string.save_changes)) },
+                buttons = {
+                    TextButton(
+                        onClick = info.exitWithoutSaving,
+                        content = { Text(stringResource(Res.string.not_save)) },
+                    )
+                    info.save.foldNullable(
+                        ifNull = {
+                            TextButton(
+                                onClick = info.dismiss,
+                                content = { Text(stringResource(Res.string.close)) },
+                            )
+                        },
+                        ifNotNull = { save ->
+                            TextButton(
+                                onClick = save,
+                                content = { Text(stringResource(Res.string.save)) },
+                            )
+                        }
+                    )
+
+                }
+            )
         }
     }
 }

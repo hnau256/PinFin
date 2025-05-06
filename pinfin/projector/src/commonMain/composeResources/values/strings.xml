@@ -9,7 +9,6 @@
     <string name="new_transaction">Новая транзакция</string>
     <string name="budgets">Бюджеты</string>
     <string name="transfer">Перевод</string>
-    <string name="save">Сохранить</string>
     <string name="add">Добавить</string>
     <string name="amount">Сумма</string>
     <string name="date">Дата</string>
@@ -25,7 +24,11 @@
     <string name="remove_record">Удалить запись?</string>
     <string name="yes">Да</string>
     <string name="no">Нет</string>
+    <string name="close">Закрыть</string>
+    <string name="save">Сохранить</string>
+    <string name="not_save">Не сохранять</string>
     <string name="accounts">Счета</string>
+    <string name="save_changes">Сохранить изменения?</string>
     <string name="to_budgets_list">К списку бюджетов</string>
     <string name="budgets_sync">Синхронизация бюджетов</string>
     <string name="start_server">Запустить сервер</string>
