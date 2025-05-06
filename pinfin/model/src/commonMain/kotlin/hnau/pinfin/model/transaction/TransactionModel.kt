@@ -60,7 +60,7 @@ class TransactionModel(
             null.toMutableStateFlowAsInitial(),
     ) {
 
-        enum class Dialog { ExitUnsaved }
+        enum class Dialog { ExitUnsaved, Remove }
 
         companion object {
 
@@ -251,18 +251,40 @@ class TransactionModel(
             }
         }
 
-    val remove: StateFlow<(() -> Unit)?>? = skeleton
-        .id
-        ?.let { id ->
-            actionOrNullIfExecuting(
-                scope = scope,
-            ) {
-                dependencies.budgetRepository.transactions.remove(
-                    id = skeleton.id,
-                )
-                onReady()
+    val remove: (() -> Unit)? = skeleton.id?.let { id ->
+        { skeleton.visibleDialog.value = Skeleton.Dialog.Remove }
+    }
+
+    private fun closeAnyDialog() {
+        skeleton.visibleDialog.value = null
+    }
+
+    data class RemoveDialogInfo(
+        val dismiss: () -> Unit,
+        val remove: () -> Unit,
+    )
+
+    val removeDialogInfo: StateFlow<RemoveDialogInfo?> = skeleton.id.foldNullable(
+        ifNull = { null.toMutableStateFlowAsInitial() },
+        ifNotNull = { id ->
+            skeleton.visibleDialog.mapState(scope) { dialog ->
+                when (dialog) {
+                    Skeleton.Dialog.ExitUnsaved, null -> null
+                    Skeleton.Dialog.Remove -> RemoveDialogInfo(
+                        dismiss = ::closeAnyDialog,
+                        remove = {
+                            scope.launch {
+                                inProgressRegistry.executeRegistered {
+                                    dependencies.budgetRepository.transactions.remove(id)
+                                    onReady()
+                                }
+                            }
+                        }
+                    )
+                }
             }
         }
+    )
 
     data class ExitUnsavedDialogInfo(
         val dismiss: () -> Unit,
@@ -275,10 +297,10 @@ class TransactionModel(
         .scopedInState(scope)
         .flatMapState(scope) { (dialogScope, visibleDialog) ->
             when (visibleDialog) {
-                null -> null.toMutableStateFlowAsInitial()
+                Skeleton.Dialog.Remove, null -> null.toMutableStateFlowAsInitial()
                 Skeleton.Dialog.ExitUnsaved -> saveAction.mapState(dialogScope) { saveOrNull ->
                     ExitUnsavedDialogInfo(
-                        dismiss = { skeleton.visibleDialog.value = null },
+                        dismiss = ::closeAnyDialog,
                         exitWithoutSaving = onReady,
                         save = saveOrNull?.let { save ->
                             {
@@ -297,11 +319,9 @@ class TransactionModel(
     override val goBackHandler: GoBackHandler = skeleton
         .visibleDialog
         .mapState(scope) { visibleDialog ->
-            {
-                skeleton.visibleDialog.value = visibleDialog.foldNullable(
-                    ifNotNull = { null },
-                    ifNull = { Skeleton.Dialog.ExitUnsaved },
-                )
-            }
+            visibleDialog.foldNullable(
+                ifNotNull = { { closeAnyDialog() } },
+                ifNull = { { skeleton.visibleDialog.value = Skeleton.Dialog.ExitUnsaved } },
+            )
         }
 }

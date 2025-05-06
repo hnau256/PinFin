@@ -53,6 +53,7 @@
     <string name="create_new_budget">Создать новый бюджет</string>
     <string name="create_demo_budget">Создать Demo бюджет</string>
     <string name="remove_budget">Удалить бюджет</string>
+    <string name="remove_transaction">Удалить транзакцию</string>
     <string name="categories_not_found">Категории не найдены</string>
     <string name="accounts_not_found">Счета не найдены</string>
     <string name="create_new_category">Создать новую категорию</string>

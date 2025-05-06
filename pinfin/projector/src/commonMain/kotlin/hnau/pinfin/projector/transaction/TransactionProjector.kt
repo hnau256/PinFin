@@ -35,19 +35,21 @@ import hnau.common.compose.utils.NavigationIcon
 import hnau.common.compose.utils.horizontalDisplayPadding
 import hnau.common.kotlin.coroutines.mapWithScope
 import hnau.common.kotlin.foldNullable
-import hnau.common.kotlin.ifFalse
 import hnau.pinfin.model.transaction.TransactionModel
 import hnau.pinfin.model.transaction.type.TransactionTypeModel
 import hnau.pinfin.projector.Res
 import hnau.pinfin.projector.close
-import hnau.pinfin.projector.save_changes
 import hnau.pinfin.projector.new_transaction
+import hnau.pinfin.projector.no
 import hnau.pinfin.projector.not_save
+import hnau.pinfin.projector.remove_transaction
 import hnau.pinfin.projector.save
+import hnau.pinfin.projector.save_changes
 import hnau.pinfin.projector.transaction
 import hnau.pinfin.projector.transaction.type.TransactionTypeProjector
 import hnau.pinfin.projector.transaction.type.entry.EntryProjector
 import hnau.pinfin.projector.transaction.type.transfer.TransferProjector
+import hnau.pinfin.projector.yes
 import hnau.shuffler.annotations.Shuffle
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.StateFlow
@@ -119,6 +121,7 @@ class TransactionProjector(
                 this@TransactionProjector.Type()
             }
             ExitUnsavedDialog()
+            RemoveDialog()
             InProgress(model.inProgress)
         }
     }
@@ -179,16 +182,11 @@ class TransactionProjector(
 
     @Composable
     private fun RowScope.RemoveAction() {
-        val removeFlow = model.remove ?: return
-        val remove by removeFlow.collectAsState()
+        val remove = model.remove ?: return
         IconButton(
-            enabled = remove != null,
-            onClick = { remove?.invoke() },
+            onClick = remove,
         ) {
-            when (remove) {
-                null -> CircularProgressIndicator()
-                else -> Icon(Icons.Filled.Delete)
-            }
+            Icon(Icons.Filled.Delete)
         }
     }
 
@@ -220,7 +218,32 @@ class TransactionProjector(
                             )
                         }
                     )
+                }
+            )
+        }
+    }
 
+
+    @OptIn(ExperimentalMaterial3Api::class)
+    @Composable
+    private fun RemoveDialog() {
+        val info = model.removeDialogInfo.collectAsState().value ?: return
+        BasicAlertDialog(
+            onDismissRequest = info.dismiss,
+        ) {
+            AlertDialogContent(
+                title = { Text(stringResource(Res.string.remove_transaction)) },
+                dismissButton = {
+                    TextButton(
+                        onClick = info.dismiss,
+                        content = { Text(stringResource(Res.string.no)) },
+                    )
+                },
+                confirmButton = {
+                    TextButton(
+                        onClick = info.remove,
+                        content = { Text(stringResource(Res.string.yes)) },
+                    )
                 }
             )
         }
