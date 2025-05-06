@@ -1,16 +1,17 @@
 package hnau.pinfin.model.budget.config
 
-import arrow.core.Either
-import arrow.core.left
-import arrow.core.right
+import hnau.common.app.EditingString
 import hnau.common.app.goback.GoBackHandler
 import hnau.common.app.goback.GoBackHandlerProvider
+import hnau.common.app.toEditingString
 import hnau.common.kotlin.coroutines.InProgressRegistry
+import hnau.common.kotlin.coroutines.actionOrNullIfExecuting
 import hnau.common.kotlin.coroutines.flatMapState
 import hnau.common.kotlin.coroutines.mapState
 import hnau.common.kotlin.coroutines.scopedInState
 import hnau.common.kotlin.coroutines.toMutableStateFlowAsInitial
 import hnau.common.kotlin.foldNullable
+import hnau.pinfin.data.BudgetConfig
 import hnau.pinfin.model.manage.BudgetsListOpener
 import hnau.pinfin.model.utils.budget.repository.BudgetRepository
 import hnau.shuffler.annotations.Shuffle
@@ -32,20 +33,42 @@ class BudgetConfigModel(
         val budgetsListOpener: BudgetsListOpener
 
         val repository: BudgetRepository
-
-        fun editName(): BudgetEditNameModel.Dependencies
     }
 
     @Serializable
     data class Skeleton(
-        val editName: MutableStateFlow<BudgetEditNameModel.Skeleton?> =
+        val editName: MutableStateFlow<MutableStateFlow<EditingString>?> =
             null.toMutableStateFlowAsInitial(),
+        val removeDialogVisible: MutableStateFlow<Boolean> =
+            false.toMutableStateFlowAsInitial(),
     )
+
+    val removeDialogVisible: MutableStateFlow<Boolean>
+        get() = skeleton.removeDialogVisible
 
     private val inProgressRegistry = InProgressRegistry()
 
     val inProgress: StateFlow<Boolean>
         get() = inProgressRegistry.inProgress
+
+    fun removeClick() {
+        skeleton.removeDialogVisible.value = true
+    }
+
+    fun removeConfirm() {
+        removeCancel()
+        scope.launch {
+            inProgressRegistry.executeRegistered {
+                dependencies
+                    .repository
+                    .remove()
+            }
+        }
+    }
+
+    fun removeCancel() {
+        skeleton.removeDialogVisible.value = false
+    }
 
     fun openBudgetsList() {
         scope.launch {
@@ -55,7 +78,21 @@ class BudgetConfigModel(
         }
     }
 
-    val nameOrEdit: StateFlow<Either<Pair<String, () -> Unit>, BudgetEditNameModel>> = skeleton
+    sealed interface NameOrEdit {
+
+        data class Name(
+            val name: String,
+            val edit: () -> Unit,
+        ) : NameOrEdit
+
+        data class Edit(
+            val input: MutableStateFlow<EditingString>,
+            val save: StateFlow<(() -> Unit)?>,
+            val cancel: () -> Unit,
+        ) : NameOrEdit
+    }
+
+    val nameOrEdit: StateFlow<NameOrEdit> = skeleton
         .editName
         .scopedInState(scope)
         .flatMapState(scope) { (stateScope, editNameSkeletonOrNull) ->
@@ -65,33 +102,50 @@ class BudgetConfigModel(
                         .repository
                         .state
                         .mapState(stateScope) {
-                            val name = it.info.title
-                            val edit = {
-                                skeleton.editName.value = BudgetEditNameModel.Skeleton(
-                                    info = dependencies.repository.state.value.info,
-                                )
-                            }
-                            (name to edit).left()
+                            NameOrEdit.Name(
+                                name = it.info.title,
+                                edit = {
+                                    skeleton.editName.value = dependencies
+                                        .repository
+                                        .state
+                                        .value
+                                        .info
+                                        .title
+                                        .toEditingString()
+                                        .toMutableStateFlowAsInitial()
+                                }
+                            )
                         }
 
                 },
-                ifNotNull = { editNameSkeleton ->
-                    BudgetEditNameModel(
-                        scope = stateScope,
-                        skeleton = editNameSkeleton,
-                        dependencies = dependencies.editName(),
-                        onDone = { skeleton.editName.value = null },
-                    )
-                        .right()
+                ifNotNull = { nameEditStringState ->
+                    val cancel = { skeleton.editName.value = null }
+                    NameOrEdit
+                        .Edit(
+                            input = nameEditStringState,
+                            save = actionOrNullIfExecuting(stateScope) {
+                                inProgressRegistry.executeRegistered {
+                                    dependencies
+                                        .repository
+                                        .config(
+                                            config = BudgetConfig(
+                                                title = nameEditStringState.value.text.trim()
+                                            )
+                                        )
+                                    cancel()
+                                }
+                            },
+                            cancel = cancel,
+                        )
                         .toMutableStateFlowAsInitial()
                 }
             )
         }
 
-    override val goBackHandler: GoBackHandler = nameOrEdit.flatMapState(scope) { nameOrEditModel ->
+    override val goBackHandler: GoBackHandler = nameOrEdit.mapState(scope) { nameOrEditModel ->
         when (nameOrEditModel) {
-            is Either.Left -> null.toMutableStateFlowAsInitial()
-            is Either.Right -> nameOrEditModel.value.goBackHandler
+            is NameOrEdit.Edit -> nameOrEditModel.cancel
+            is NameOrEdit.Name -> null
         }
     }
 }

@@ -14,3 +14,10 @@ inline fun <R> Boolean.ifTrue(
     ifTrue = block,
     ifFalse = { null },
 )
+
+inline fun <R> Boolean.ifFalse(
+    block: () -> R,
+): R? = foldBoolean(
+    ifTrue = { null },
+    ifFalse = block,
+)

@@ -20,36 +20,44 @@ fun BudgetsStorage.Factory.Companion.files(
 
     val accessStoragesMutex = Mutex()
 
+    var storages: MutableStateFlow<List<Pair<BudgetId, BudgetRepository>>>? = null
+
     val createBudgetRepository: suspend (
         id: BudgetId,
     ) -> BudgetRepository = { id ->
+        val file = File(budgetsDir, id.let(BudgetId.stringMapper.reverse))
         val upchainStorage = FileBasedUpchainStorage.create(
             scope = scope,
-            budgetFile = File(budgetsDir, id.let(BudgetId.stringMapper.reverse)),
+            budgetFile = file,
         )
         BudgetRepository.create(
             scope = scope,
             id = id,
             upchainStorage = upchainStorage,
+            remove = {
+                file.delete()
+                accessStoragesMutex.withLock {
+                    storages!!.update { it.filter { it.first != id } }
+                }
+            }
         )
     }
 
-    val storages: MutableStateFlow<List<Pair<BudgetId, BudgetRepository>>> =
-        withContext(Dispatchers.IO) {
-            budgetsDir
-                .list()
-                .orEmpty()
-                .map { budgetName ->
-                    val id: BudgetId = BudgetId.stringMapper.direct(budgetName)
-                    val deferredBudgetRepository = scope.async { createBudgetRepository(id) }
-                    id to deferredBudgetRepository
-                }
-                .map { (id, deferredBudgetRepository) ->
-                    val budgetRepository = deferredBudgetRepository.await()
-                    id to budgetRepository
-                }
-                .toMutableStateFlowAsInitial()
-        }
+    storages = withContext(Dispatchers.IO) {
+        budgetsDir
+            .list()
+            .orEmpty()
+            .map { budgetName ->
+                val id: BudgetId = BudgetId.stringMapper.direct(budgetName)
+                val deferredBudgetRepository = scope.async { createBudgetRepository(id) }
+                id to deferredBudgetRepository
+            }
+            .map { (id, deferredBudgetRepository) ->
+                val budgetRepository = deferredBudgetRepository.await()
+                id to budgetRepository
+            }
+            .toMutableStateFlowAsInitial()
+    }
 
     object : BudgetsStorage {
 

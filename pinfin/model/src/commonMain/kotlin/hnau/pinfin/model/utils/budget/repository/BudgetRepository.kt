@@ -17,6 +17,7 @@ import kotlinx.coroutines.flow.stateIn
 class BudgetRepository(
     val state: StateFlow<BudgetState>,
     val upchainStorage: UpchainStorage,
+    val remove: suspend () -> Unit,
 ) {
 
     val transactions: BudgetRepositoryTransactionsDelegate = BudgetRepositoryTransactionsDelegate(
@@ -63,6 +64,7 @@ class BudgetRepository(
             scope: CoroutineScope,
             id: BudgetId,
             upchainStorage: UpchainStorage,
+            remove: suspend () -> Unit,
         ): BudgetRepository {
             val upchainFlow = upchainStorage.upchain
             val initialState = BudgetStateBuilder
@@ -83,6 +85,7 @@ class BudgetRepository(
             return BudgetRepository(
                 state = state,
                 upchainStorage = upchainStorage,
+                remove = remove,
             )
         }
     }

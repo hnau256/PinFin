@@ -49,4 +49,5 @@
     <string name="no_budgets">Бюджеты отсутствуют</string>
     <string name="create_new_budget">Создать новый бюджет</string>
     <string name="create_demo_budget">Создать Demo бюджет</string>
+    <string name="remove_budget">Удалить бюджет</string>
 </resources>
