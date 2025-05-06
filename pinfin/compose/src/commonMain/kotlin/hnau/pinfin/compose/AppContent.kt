@@ -28,11 +28,12 @@ fun PinFinApp.Content(
     }
     HnauTheme(
         forcedBrightness = forcedBrightness,
-        primaryHueOrDynamicColorsGenerator = when (val generator =
+        primaryHueOrDynamicColorsGenerator = /*when (val generator =
             dependencies.dynamicColorsGenerator) {
             null -> Either.Left(MaterialHue.Teal)
             else -> Either.Right(generator)
-        }
+        }*/ //TODO config from settings
+            Either.Left(MaterialHue.LightGreen)
     ) {
         projector.Content()
     }
