@@ -4,7 +4,7 @@ import arrow.core.identity
 import arrow.core.raise.result
 import hnau.common.kotlin.coroutines.mapListReusable
 import hnau.common.kotlin.coroutines.mapState
-import hnau.common.kotlin.fold
+import hnau.common.kotlin.foldNullable
 import hnau.pinfin.data.BudgetId
 import hnau.pinfin.model.sync.utils.SyncHandle
 import hnau.pinfin.model.utils.budget.repository.BudgetRepository
@@ -86,7 +86,7 @@ class BudgetsSyncServer(
         before: UpchainHash?,
     ): Result<SyncHandle.GetMaxToMinUpdates.Response> = budgetsUpdates
         .value[budgetId]
-        .fold(
+        .foldNullable(
             ifNull = {
                 Result.success(
                     SyncHandle.GetMaxToMinUpdates.Response(

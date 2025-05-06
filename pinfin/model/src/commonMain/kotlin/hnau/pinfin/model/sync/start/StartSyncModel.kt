@@ -73,9 +73,8 @@ class StartSyncModel(
 
     private val inProgressRegistry = InProgressRegistry()
 
-    //TODO use
     val inProgress: StateFlow<Boolean>
-        get() = inProgressRegistry.isProgress
+        get() = inProgressRegistry.inProgress
 
     @Serializable
     data class Skeleton(

@@ -10,12 +10,13 @@ import arrow.core.identity
 fun Boolean.BooleanStateContent(
     modifier: Modifier = Modifier,
     transitionSpec: AnimatedContentTransitionScope<Boolean>.() -> ContentTransform,
+    label: String = "Boolean",
     falseContent: @Composable () -> Unit = {},
     trueContent: @Composable () -> Unit,
 ) {
     StateContent(
         modifier = modifier,
-        label = "Boolean",
+        label = label,
         contentKey = ::identity,
         transitionSpec = transitionSpec,
     ) { localValue ->

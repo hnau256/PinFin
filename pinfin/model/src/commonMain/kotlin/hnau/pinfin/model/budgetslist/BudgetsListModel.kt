@@ -27,6 +27,7 @@ import hnau.shuffler.annotations.Shuffle
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.cancel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -144,9 +145,8 @@ class BudgetsListModel(
 
     private val inProgressRegistry = InProgressRegistry()
 
-    //TODO use
-    val isProgress: StateFlow<Boolean>
-        get() = inProgressRegistry.isProgress
+    val inProgress: StateFlow<Boolean>
+        get() = inProgressRegistry.inProgress
 
     fun createNewBudget() {
         scope.launch {

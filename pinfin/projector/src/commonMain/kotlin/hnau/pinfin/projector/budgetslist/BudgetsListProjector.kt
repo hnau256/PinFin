@@ -28,6 +28,7 @@ import arrow.core.NonEmptyList
 import hnau.common.app.goback.GlobalGoBackHandler
 import hnau.common.app.goback.GoBackHandler
 import hnau.common.compose.uikit.ErrorPanel
+import hnau.common.compose.uikit.progressindicator.InProgress
 import hnau.common.compose.uikit.state.NullableStateContent
 import hnau.common.compose.uikit.state.TransitionSpec
 import hnau.common.compose.uikit.utils.Dimens
@@ -150,7 +151,9 @@ class BudgetsListProjector(
                         }
                     }
             )
-
+            InProgress(
+                inProgress = model.inProgress,
+            )
         }
     }
 }

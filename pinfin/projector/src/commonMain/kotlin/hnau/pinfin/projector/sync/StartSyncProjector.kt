@@ -23,6 +23,7 @@ import hnau.common.app.goback.GlobalGoBackHandler
 import hnau.common.app.goback.GoBackHandler
 import hnau.common.compose.uikit.HnauButton
 import hnau.common.compose.uikit.TextInput
+import hnau.common.compose.uikit.progressindicator.InProgress
 import hnau.common.compose.uikit.table.CellBox
 import hnau.common.compose.uikit.table.CellScope
 import hnau.common.compose.uikit.table.Subtable
@@ -94,6 +95,7 @@ class StartSyncProjector(
                     Client()
                 }
             }
+            InProgress(model.inProgress)
         }
     }
 

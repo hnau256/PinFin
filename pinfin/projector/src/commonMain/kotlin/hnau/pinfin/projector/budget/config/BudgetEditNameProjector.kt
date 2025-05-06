@@ -22,7 +22,7 @@ import hnau.common.compose.uikit.TextInput
 import hnau.common.compose.uikit.state.StateContent
 import hnau.common.compose.uikit.state.TransitionSpec
 import hnau.common.compose.utils.Icon
-import hnau.common.kotlin.fold
+import hnau.common.kotlin.foldNullable
 import hnau.pinfin.model.budget.config.BudgetEditNameModel
 import hnau.shuffler.annotations.Shuffle
 import kotlinx.coroutines.CoroutineScope
@@ -70,7 +70,7 @@ class BudgetEditNameProjector(
                         label = "SaveBudgetNameOrSaving",
                         contentKey = { it != null },
                     ) { saveOrNull ->
-                        saveOrNull.fold(
+                        saveOrNull.foldNullable(
                             ifNull = { CircularProgressIndicator() },
                             ifNotNull = { save ->
                                 IconButton(

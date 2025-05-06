@@ -4,7 +4,7 @@ import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.ContentTransform
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import hnau.common.compose.uikit.progressindicator.ProgressIndicatorBox
+import hnau.common.compose.uikit.progressindicator.ProgressIndicatorInBox
 import hnau.common.kotlin.Loadable
 import hnau.common.kotlin.fold
 
@@ -12,7 +12,7 @@ import hnau.common.kotlin.fold
 fun <T> Loadable<T>.LoadableContent(
     modifier: Modifier = Modifier,
     transitionSpec: AnimatedContentTransitionScope<Loadable<T>>.() -> ContentTransform,
-    loadingContent: @Composable () -> Unit = { ProgressIndicatorBox() },
+    loadingContent: @Composable () -> Unit = { ProgressIndicatorInBox() },
     readyContent: @Composable (value: T) -> Unit,
 ) {
     StateContent(

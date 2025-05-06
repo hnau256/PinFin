@@ -10,7 +10,7 @@ import hnau.common.kotlin.coroutines.flatMapState
 import hnau.common.kotlin.coroutines.mapState
 import hnau.common.kotlin.coroutines.scopedInState
 import hnau.common.kotlin.coroutines.toMutableStateFlowAsInitial
-import hnau.common.kotlin.fold
+import hnau.common.kotlin.foldNullable
 import hnau.pinfin.model.manage.BudgetsListOpener
 import hnau.pinfin.model.utils.budget.repository.BudgetRepository
 import hnau.shuffler.annotations.Shuffle
@@ -44,9 +44,8 @@ class BudgetConfigModel(
 
     private val inProgressRegistry = InProgressRegistry()
 
-    //TODO
     val inProgress: StateFlow<Boolean>
-        get() = inProgressRegistry.isProgress
+        get() = inProgressRegistry.inProgress
 
     fun openBudgetsList() {
         scope.launch {
@@ -60,7 +59,7 @@ class BudgetConfigModel(
         .editName
         .scopedInState(scope)
         .flatMapState(scope) { (stateScope, editNameSkeletonOrNull) ->
-            editNameSkeletonOrNull.fold(
+            editNameSkeletonOrNull.foldNullable(
                 ifNull = {
                     dependencies
                         .repository

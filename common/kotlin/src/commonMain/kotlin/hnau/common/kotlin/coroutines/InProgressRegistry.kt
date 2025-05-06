@@ -1,5 +1,6 @@
 package hnau.common.kotlin.coroutines
 
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
 
@@ -7,7 +8,7 @@ class InProgressRegistry {
 
     private val activitiesCount = MutableStateFlow(0)
 
-    val isProgress = activitiesCount
+    val inProgress = activitiesCount
         .mapStateLite { activitiesCount -> activitiesCount > 0 }
 
     @PublishedApi

@@ -19,7 +19,7 @@ inline fun <reified O> Any?.castOrThrow() = this as O
 inline fun <T> it(it: T) = it
 
 
-inline fun <T, R> T?.fold(
+inline fun <T, R> T?.foldNullable(
     ifNull: () -> R,
     ifNotNull: (T & Any) -> R,
 ): R = when (this) {

@@ -18,6 +18,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import arrow.core.Either
+import hnau.common.compose.uikit.progressindicator.InProgress
 import hnau.common.compose.uikit.state.StateContent
 import hnau.common.compose.uikit.state.TransitionSpec
 import hnau.common.compose.utils.Icon
@@ -59,6 +60,7 @@ class BudgetConfigProjector(
             )
             name()
         }
+        InProgress(model.inProgress)
     }
 
     private val nameOrEdit: StateFlow<Either<Pair<String, () -> Unit>, BudgetEditNameProjector>> =
