@@ -50,4 +50,10 @@
     <string name="create_new_budget">Создать новый бюджет</string>
     <string name="create_demo_budget">Создать Demo бюджет</string>
     <string name="remove_budget">Удалить бюджет</string>
+    <string name="categories_not_found">Категории не найдены</string>
+    <string name="accounts_not_found">Счета не найдены</string>
+    <string name="create_new_category">Создать новую категорию</string>
+    <string name="create_new_account">Создать новый счёт</string>
+    <string name="there_are_no_categories">Категории отсутствуют, введите название новой категории</string>
+    <string name="there_are_no_accounts">Счета отсутствуют, введите название нового счёта</string>
 </resources>

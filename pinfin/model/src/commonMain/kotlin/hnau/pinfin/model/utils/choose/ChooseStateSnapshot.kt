@@ -1,14 +1,28 @@
 package hnau.pinfin.model.utils.choose
 
+import arrow.core.NonEmptyList
 import arrow.core.None
 import arrow.core.Option
 import arrow.core.Some
+import arrow.core.toNonEmptyListOrNull
 import hnau.common.app.EditingString
+import hnau.common.kotlin.foldNullable
 
-data class ChooseStateSnapshot<T>(
-    val visibleVariants: List<Pair<T, Boolean>>,
+data class ChooseStateSnapshot<out T>(
+    val visibleVariants: VisibleVariants<T>,
     val possibleVariantsToAdd: List<T>,
 ) {
+
+    sealed interface VisibleVariants<out T> {
+
+        data object Empty : VisibleVariants<Nothing>
+
+        data object NotFound : VisibleVariants<Nothing>
+
+        data class List<out T>(
+            val list: NonEmptyList<Pair<T, Boolean>>,
+        ) : VisibleVariants<T>
+    }
 
     companion object {
 
@@ -30,42 +44,55 @@ data class ChooseStateSnapshot<T>(
             val ids = variantsWithIdsAndFields
                 .map { it.second }
                 .toSet()
-            return query
+            val nonEmptyQuery = query
                 .text
                 .trim()
                 .takeIf(String::isNotEmpty)
-                .let { nonEmptyQuery ->
-                    ChooseStateSnapshot(
-                        visibleVariants = when (nonEmptyQuery) {
-                            null -> variantsWithIdsAndFields
-                            else -> variantsWithIdsAndFields.filter { (_, id, fields) ->
-                                buildList {
-                                    add(id)
-                                    addAll(fields)
-                                }
-                                    .map(String::trim)
-                                    .any { field ->
-                                        field.contains(
-                                            other = nonEmptyQuery,
-                                            ignoreCase = true,
-                                        )
+            return ChooseStateSnapshot(
+                visibleVariants = variantsWithIdsAndFields
+                    .toNonEmptyListOrNull()
+                    .foldNullable(
+                        ifNull = { VisibleVariants.Empty },
+                        ifNotNull = { variants ->
+                            nonEmptyQuery
+                                .foldNullable(
+                                    ifNull = { variants },
+                                    ifNotNull = { query ->
+                                        variants.filter { (_, id, fields) ->
+                                            buildList {
+                                                add(id)
+                                                addAll(fields)
+                                            }
+                                                .map(String::trim)
+                                                .any { field ->
+                                                    field.contains(
+                                                        other = query,
+                                                        ignoreCase = true,
+                                                    )
+                                                }
+                                        }
                                     }
-                            }
-                        }
-                            .map { (item, id) ->
-                                val isSelected = when (selectedId) {
-                                    None -> false
-                                    is Some<*> -> selectedId.value == id
+                                )
+                                .map { (item, id) ->
+                                    val isSelected = when (selectedId) {
+                                        None -> false
+                                        is Some<*> -> selectedId.value == id
+                                    }
+                                    item to isSelected
                                 }
-                                item to isSelected
-                            },
-                        possibleVariantsToAdd = when (nonEmptyQuery) {
-                            null -> emptyList()
-                            else -> createPossibleNewVariantsByQuery(nonEmptyQuery)
-                                .filter { it.extractId() !in ids }
-                        },
-                    )
-                }
+                                .toNonEmptyListOrNull()
+                                .foldNullable(
+                                    ifNull = { VisibleVariants.NotFound },
+                                    ifNotNull = { VisibleVariants.List(it) }
+                                )
+                        }
+                    ),
+                possibleVariantsToAdd = when (nonEmptyQuery) {
+                    null -> emptyList()
+                    else -> createPossibleNewVariantsByQuery(nonEmptyQuery)
+                        .filter { it.extractId() !in ids }
+                },
+            )
         }
     }
 }

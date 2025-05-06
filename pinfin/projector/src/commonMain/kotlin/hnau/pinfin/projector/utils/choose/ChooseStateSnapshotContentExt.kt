@@ -8,8 +8,13 @@ import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.graphics.Color
 import arrow.core.toNonEmptyListOrNull
 import hnau.common.app.EditingString
 import hnau.common.compose.uikit.HnauButton
@@ -19,12 +24,12 @@ import hnau.common.compose.uikit.table.CellBox
 import hnau.common.compose.uikit.table.Subtable
 import hnau.common.compose.uikit.table.Table
 import hnau.common.compose.uikit.table.TableOrientation
+import hnau.common.compose.uikit.table.TableScope
 import hnau.common.compose.uikit.table.cellShape
 import hnau.common.compose.uikit.utils.Dimens
 import hnau.common.compose.utils.Icon
 import hnau.pinfin.model.utils.choose.ChooseStateSnapshot
 import hnau.pinfin.projector.Res
-import hnau.pinfin.projector.create
 import hnau.pinfin.projector.search_create
 import kotlinx.coroutines.flow.MutableStateFlow
 import org.jetbrains.compose.resources.stringResource
@@ -34,6 +39,7 @@ fun <T> ChooseStateSnapshot<T>.Content(
     query: MutableStateFlow<EditingString>,
     onReady: () -> Unit,
     updateSelected: (T) -> Unit,
+    messages: ChooseMessages,
     itemContent: @Composable (value: T, selected: Boolean, onClick: () -> Unit) -> Unit,
 ) {
     Table(
@@ -48,36 +54,57 @@ fun <T> ChooseStateSnapshot<T>.Content(
                 )
             }
             Cell {
+                val focusRequester = remember { FocusRequester() }
                 TextInput(
                     modifier = Modifier.Companion
-                        .weight(1f),
+                        .weight(1f)
+                        .focusRequester(focusRequester),
                     value = query,
                     shape = cellShape,
                     placeholder = { Text(stringResource(Res.string.search_create)) },
                 )
-            }
-        }
-        visibleVariants
-            .toNonEmptyListOrNull()
-            ?.let { visibleVariantsNotEmpty ->
-                CellBox(
-                    contentAlignment = Alignment.TopStart,
-                ) {
-                    ChipsFlowRow(
-                        all = visibleVariantsNotEmpty,
-                        modifier = Modifier.padding(Dimens.smallSeparation),
-                    ) { (item, selected) ->
-                        itemContent(
-                            item,
-                            selected,
-                            {
-                                updateSelected(item)
-                                onReady()
-                            },
-                        )
+                val requestFocus = when (visibleVariants) {
+                    ChooseStateSnapshot.VisibleVariants.Empty -> true
+                    is ChooseStateSnapshot.VisibleVariants.List,
+                    ChooseStateSnapshot.VisibleVariants.NotFound,
+                        -> false
+                }
+                LaunchedEffect(focusRequester, requestFocus) {
+                    if (requestFocus) {
+                        focusRequester.requestFocus()
                     }
                 }
             }
+        }
+        when (val visibleVariants = visibleVariants) {
+            ChooseStateSnapshot.VisibleVariants.Empty -> MessageCell(
+                message = messages.noVariants,
+                color = MaterialTheme.colorScheme.onSurface,
+            )
+
+            ChooseStateSnapshot.VisibleVariants.NotFound -> MessageCell(
+                message = messages.notFound,
+                color = MaterialTheme.colorScheme.error,
+            )
+
+            is ChooseStateSnapshot.VisibleVariants.List -> CellBox(
+                contentAlignment = Alignment.TopStart,
+            ) {
+                ChipsFlowRow(
+                    all = visibleVariants.list,
+                    modifier = Modifier.padding(Dimens.smallSeparation),
+                ) { (item, selected) ->
+                    itemContent(
+                        item,
+                        selected,
+                        {
+                            updateSelected(item)
+                            onReady()
+                        },
+                    )
+                }
+            }
+        }
         possibleVariantsToAdd
             .toNonEmptyListOrNull()
             ?.let { possibleVariantsToAddNotEmpty ->
@@ -86,10 +113,13 @@ fun <T> ChooseStateSnapshot<T>.Content(
                 ) {
                     Column(
                         verticalArrangement = Arrangement.spacedBy(Dimens.smallSeparation),
-                        modifier = Modifier.padding(Dimens.smallSeparation),
+                        modifier = Modifier.padding(
+                            horizontal = Dimens.separation,
+                            vertical = Dimens.smallSeparation,
+                        ),
                     ) {
                         Text(
-                            text = stringResource(Res.string.create),
+                            text = messages.createNew,
                             color = MaterialTheme.colorScheme.onSurface,
                             style = MaterialTheme.typography.bodyMedium,
                         )
@@ -108,5 +138,25 @@ fun <T> ChooseStateSnapshot<T>.Content(
                     }
                 }
             }
+    }
+}
+
+@Composable
+private fun TableScope.MessageCell(
+    message: String,
+    color: Color,
+) {
+    CellBox(
+        contentAlignment = Alignment.CenterStart,
+    ) {
+        Text(
+            text = message,
+            modifier = Modifier.padding(
+                Dimens.separation,
+                Dimens.smallSeparation,
+            ),
+            style = MaterialTheme.typography.titleMedium,
+            color = color,
+        )
     }
 }
