@@ -47,7 +47,7 @@ class BudgetsListModel(
 
         val budgetsStorage: BudgetsStorage
 
-        val deferredBudgetRepositories: StateFlow<Map<BudgetId, BudgetRepository>>
+        val budgetRepositories: StateFlow<Map<BudgetId, BudgetRepository>>
 
         fun item(
             id: BudgetId,
@@ -76,13 +76,13 @@ class BudgetsListModel(
     )
 
     private fun updateItems(
-        deferredBudgetRepositories: Map<BudgetId, BudgetRepository>,
+        budgetRepositories: Map<BudgetId, BudgetRepository>,
         previousItems: List<ItemInfoWithScope>,
     ): List<ItemInfoWithScope> {
         val itemsCache = previousItems
             .associateBy { it.info.id }
             .toMutableMap()
-        val result = deferredBudgetRepositories.map { (id, repository) ->
+        val result = budgetRepositories.map { (id, repository) ->
             itemsCache
                 .remove(id)
                 .ifNull {
@@ -115,7 +115,7 @@ class BudgetsListModel(
     }
 
     val items: StateFlow<NonEmptySet<ItemInfo>?> = dependencies
-        .deferredBudgetRepositories
+        .budgetRepositories
         .mapState(scope) { repositories -> repositories.toList() }
         .mapListReusable(
             scope = scope,

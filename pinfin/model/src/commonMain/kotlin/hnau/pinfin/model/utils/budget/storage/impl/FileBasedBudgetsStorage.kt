@@ -49,11 +49,11 @@ fun BudgetsStorage.Factory.Companion.files(
             .orEmpty()
             .map { budgetName ->
                 val id: BudgetId = BudgetId.stringMapper.direct(budgetName)
-                val deferredBudgetRepository = scope.async { createBudgetRepository(id) }
-                id to deferredBudgetRepository
+                val budgetRepository = scope.async { createBudgetRepository(id) }
+                id to budgetRepository
             }
-            .map { (id, deferredBudgetRepository) ->
-                val budgetRepository = deferredBudgetRepository.await()
+            .map { (id, budgetRepository) ->
+                val budgetRepository = budgetRepository.await()
                 id to budgetRepository
             }
             .toMutableStateFlowAsInitial()

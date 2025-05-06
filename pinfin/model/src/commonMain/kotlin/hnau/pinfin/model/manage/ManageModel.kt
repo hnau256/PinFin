@@ -49,12 +49,12 @@ class ManageModel(
         val budgetsStorage: BudgetsStorage
 
         fun budgetsStack(
-            deferredBudgetRepositories: StateFlow<Map<BudgetId, BudgetRepository>>,
+            budgetRepositories: StateFlow<Map<BudgetId, BudgetRepository>>,
             budgetOpener: BudgetOpener,
         ): BudgetsStackModel.Dependencies
 
         fun budget(
-            deferredBudgetRepository: BudgetRepository,
+            budgetRepository: BudgetRepository,
             budgetsListOpener: BudgetsListOpener,
         ): BudgetStackModel.Dependencies
     }
@@ -76,7 +76,7 @@ class ManageModel(
 
     private data class DeferredBudgetRepositoryWrapper(
         val id: BudgetId,
-        val deferredBudgetRepository: BudgetRepository,
+        val budgetRepository: BudgetRepository,
     ) {
 
         override fun equals(
@@ -91,7 +91,7 @@ class ManageModel(
             id.id.hashCode()
     }
 
-    private val deferredBudgetRepositories: StateFlow<Map<BudgetId, BudgetRepository>> =
+    private val budgetRepositories: StateFlow<Map<BudgetId, BudgetRepository>> =
         dependencies
             .budgetsStorage
             .list
@@ -106,7 +106,7 @@ class ManageModel(
             val selected = selectedOrNone.getOrNull()
             when (selected) {
                 null -> null.toMutableStateFlowAsInitial()
-                else -> deferredBudgetRepositories.mapState(
+                else -> budgetRepositories.mapState(
                     scope = selectedScope,
                     transform = { it[selected] },
                 )
@@ -114,13 +114,13 @@ class ManageModel(
         }
         .mapWithScope(
             scope = scope,
-        ) { stateScope, deferredBudgetRepositoryOrNull ->
-            when (deferredBudgetRepositoryOrNull) {
+        ) { stateScope, budgetRepositoryOrNull ->
+            when (budgetRepositoryOrNull) {
                 null -> ManageStateModel.BudgetsStack(
                     model = BudgetsStackModel(
                         scope = stateScope,
                         dependencies = dependencies.budgetsStack(
-                            deferredBudgetRepositories = deferredBudgetRepositories,
+                            budgetRepositories = budgetRepositories,
                             budgetOpener = selectedBudgetPreference.update
                         ),
                         skeleton = skeleton::stateSkeleton
@@ -139,7 +139,7 @@ class ManageModel(
                     model = BudgetStackModel(
                         scope = stateScope,
                         dependencies = dependencies.budget(
-                            deferredBudgetRepository = deferredBudgetRepositoryOrNull,
+                            budgetRepository = budgetRepositoryOrNull,
                             budgetsListOpener = { selectedBudgetPreference.update(null) },
                         ),
                         skeleton = skeleton::stateSkeleton
