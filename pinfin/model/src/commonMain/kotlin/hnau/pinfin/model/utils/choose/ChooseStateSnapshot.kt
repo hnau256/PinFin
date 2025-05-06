@@ -10,12 +10,14 @@ import hnau.common.kotlin.foldNullable
 
 data class ChooseStateSnapshot<out T>(
     val visibleVariants: VisibleVariants<T>,
-    val possibleVariantsToAdd: List<T>,
+    val possibleVariantsToAdd: NonEmptyList<T>?,
 ) {
 
     sealed interface VisibleVariants<out T> {
 
         data object Empty : VisibleVariants<Nothing>
+
+        data object InputToCreateNewMessage : VisibleVariants<Nothing>
 
         data object NotFound : VisibleVariants<Nothing>
 
@@ -48,11 +50,22 @@ data class ChooseStateSnapshot<out T>(
                 .text
                 .trim()
                 .takeIf(String::isNotEmpty)
+            val possibleVariantsToAdd: NonEmptyList<T>? = when (nonEmptyQuery) {
+                null -> null
+                else -> createPossibleNewVariantsByQuery(nonEmptyQuery)
+                    .filter { it.extractId() !in ids }
+                    .toNonEmptyListOrNull()
+            }
             return ChooseStateSnapshot(
                 visibleVariants = variantsWithIdsAndFields
                     .toNonEmptyListOrNull()
                     .foldNullable(
-                        ifNull = { VisibleVariants.Empty },
+                        ifNull = {
+                            possibleVariantsToAdd.foldNullable(
+                                ifNull = { VisibleVariants.InputToCreateNewMessage },
+                                ifNotNull = { VisibleVariants.Empty },
+                            )
+                        },
                         ifNotNull = { variants ->
                             nonEmptyQuery
                                 .foldNullable(
@@ -87,11 +100,7 @@ data class ChooseStateSnapshot<out T>(
                                 )
                         }
                     ),
-                possibleVariantsToAdd = when (nonEmptyQuery) {
-                    null -> emptyList()
-                    else -> createPossibleNewVariantsByQuery(nonEmptyQuery)
-                        .filter { it.extractId() !in ids }
-                },
+                possibleVariantsToAdd = possibleVariantsToAdd,
             )
         }
     }

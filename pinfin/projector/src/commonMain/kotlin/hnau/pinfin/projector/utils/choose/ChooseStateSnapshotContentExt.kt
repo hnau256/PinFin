@@ -64,7 +64,10 @@ fun <T> ChooseStateSnapshot<T>.Content(
                     placeholder = { Text(stringResource(Res.string.search_create)) },
                 )
                 val requestFocus = when (visibleVariants) {
-                    ChooseStateSnapshot.VisibleVariants.Empty -> true
+                    ChooseStateSnapshot.VisibleVariants.Empty,
+                    ChooseStateSnapshot.VisibleVariants.InputToCreateNewMessage,
+                        -> true
+
                     is ChooseStateSnapshot.VisibleVariants.List,
                     ChooseStateSnapshot.VisibleVariants.NotFound,
                         -> false
@@ -77,10 +80,12 @@ fun <T> ChooseStateSnapshot<T>.Content(
             }
         }
         when (val visibleVariants = visibleVariants) {
-            ChooseStateSnapshot.VisibleVariants.Empty -> MessageCell(
+            ChooseStateSnapshot.VisibleVariants.InputToCreateNewMessage -> MessageCell(
                 message = messages.noVariants,
                 color = MaterialTheme.colorScheme.onSurface,
             )
+
+            ChooseStateSnapshot.VisibleVariants.Empty -> Unit
 
             ChooseStateSnapshot.VisibleVariants.NotFound -> MessageCell(
                 message = messages.notFound,
@@ -105,9 +110,7 @@ fun <T> ChooseStateSnapshot<T>.Content(
                 }
             }
         }
-        possibleVariantsToAdd
-            .toNonEmptyListOrNull()
-            ?.let { possibleVariantsToAddNotEmpty ->
+        possibleVariantsToAdd?.let { possibleVariantsToAddNotEmpty ->
                 CellBox(
                     contentAlignment = Alignment.TopStart,
                 ) {
