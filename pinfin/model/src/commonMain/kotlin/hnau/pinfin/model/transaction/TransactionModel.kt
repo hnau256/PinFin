@@ -58,9 +58,13 @@ class TransactionModel(
         val type: MutableStateFlow<TransactionTypeModel.Skeleton>,
         val visibleDialog: MutableStateFlow<Dialog?> =
             null.toMutableStateFlowAsInitial(),
+        val mainContent: MutableStateFlow<MainContent> =
+            MainContent.Config.toMutableStateFlowAsInitial(),
     ) {
 
-        enum class Dialog { ExitUnsaved, Remove, PickDate }
+        enum class MainContent { Config, Date }
+
+        enum class Dialog { ExitUnsaved, Remove }
 
         companion object {
 
@@ -128,14 +132,26 @@ class TransactionModel(
     val isNewTransaction: Boolean
         get() = skeleton.id == null
 
-    val comment: MutableStateFlow<EditingString>
-        get() = skeleton.comment
 
-    val date: MutableStateFlow<LocalDate>
-        get() = skeleton.date
+    sealed interface MainContent {
 
-    val time: MutableStateFlow<LocalTime>
-        get() = skeleton.time
+        data class Config(
+            val comment: MutableStateFlow<EditingString>,
+            val date: StateFlow<LocalDate>,
+            val time: StateFlow<LocalTime>,
+            val chooseDate: () -> Unit,
+            val typeVariant: StateFlow<TransactionType>,
+            val chooseType: (TransactionType) -> Unit,
+        ) : MainContent
+
+        data class Date(
+            val initialDate: LocalDate,
+            val save: (LocalDate) -> Unit,
+            val cancel: () -> Unit,
+        ) : MainContent
+    }
+
+
 
     @Shuffle
     interface Dependencies {
@@ -171,27 +187,50 @@ class TransactionModel(
             }
         }
 
-    val typeVariant: StateFlow<TransactionType> = type.mapState(
-        scope = scope,
-    ) { transactionTypeModel ->
-        transactionTypeModel.type
-    }
+    val mainContent: StateFlow<MainContent> = run {
+        val switch: (Skeleton.MainContent) -> Unit = { skeleton.mainContent.value = it }
+        val switchToConfig = { switch(Skeleton.MainContent.Config) }
+        skeleton
+            .mainContent
+            .mapWithScope(scope) { stateScope, mainContent ->
+                when (mainContent) {
 
-    fun chooseType(
-        type: TransactionType,
-    ) {
-        if (skeleton.type.value.type == type) {
-            return
-        }
-        skeleton.type.value = when (type) {
-            TransactionType.Entry -> TransactionTypeModel.Skeleton.Entry(
-                skeleton = EntryModel.Skeleton.empty,
-            )
+                    Skeleton.MainContent.Config -> MainContent.Config(
+                        comment = skeleton.comment,
+                        date = skeleton.date,
+                        time = skeleton.time,
+                        chooseDate = { switch(Skeleton.MainContent.Date) },
+                        typeVariant = type.mapState(
+                            scope = stateScope,
+                        ) { transactionTypeModel ->
+                            transactionTypeModel.type
+                        },
+                        chooseType = { type ->
+                            if (skeleton.type.value.type == type) {
+                                return@Config
+                            }
+                            skeleton.type.value = when (type) {
+                                TransactionType.Entry -> TransactionTypeModel.Skeleton.Entry(
+                                    skeleton = EntryModel.Skeleton.empty,
+                                )
 
-            TransactionType.Transfer -> TransactionTypeModel.Skeleton.Transfer(
-                skeleton = TransferModel.Skeleton.empty,
-            )
-        }
+                                TransactionType.Transfer -> TransactionTypeModel.Skeleton.Transfer(
+                                    skeleton = TransferModel.Skeleton.empty,
+                                )
+                            }
+                        }
+                    )
+
+                    Skeleton.MainContent.Date -> MainContent.Date(
+                        initialDate = skeleton.date.value,
+                        save = { newDate ->
+                            skeleton.date.value = newDate
+                            switchToConfig()
+                        },
+                        cancel = switchToConfig,
+                    )
+                }
+            }
     }
 
     private val result: StateFlow<Transaction?> = type
@@ -315,30 +354,6 @@ class TransactionModel(
                 }
 
                 else -> null.toMutableStateFlowAsInitial()
-            }
-        }
-
-    data class PickDateDialogInfo(
-        val dismiss: () -> Unit,
-        val save: (LocalDate) -> Unit,
-    )
-
-    fun chooseDate() {
-        skeleton.visibleDialog.value = Skeleton.Dialog.PickDate
-    }
-
-    val pickDatDialogInfo: StateFlow<PickDateDialogInfo?> =
-        skeleton.visibleDialog.mapState(scope) { dialog ->
-            when (dialog) {
-                Skeleton.Dialog.PickDate -> PickDateDialogInfo(
-                    dismiss = ::closeAnyDialog,
-                    save = { date ->
-                        skeleton.date.value = date
-                        closeAnyDialog()
-                    }
-                )
-
-                else -> null
             }
         }
 

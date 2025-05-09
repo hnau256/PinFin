@@ -57,7 +57,9 @@ class TransactionProjector(
 
         fun transfer(): TransferProjector.Dependencies
 
-        fun baseInfoDelegate(): TransactionProjectorBaseInfoDelegate.Dependencies
+        fun mainInfoConfigDelegate(): TransactionProjectorMainInfoConfigDelegate.Dependencies
+
+        fun mainInfoDateDelegate(): TransactionProjectorMainInfoDateDelegate.Dependencies
 
         val globalGoBackHandler: GlobalGoBackHandler
     }
@@ -66,11 +68,26 @@ class TransactionProjector(
         .globalGoBackHandler
         .resolve(scope)
 
-    private val baseInfoDelegate = TransactionProjectorBaseInfoDelegate(
-        scope = scope,
-        model = model,
-        dependencies = dependencies.baseInfoDelegate(),
-    )
+    private val mainContent: StateFlow<Pair<Int, @Composable () -> Unit>> =
+        model.mainContent.mapWithScope(scope) { stateScope, mainContent ->
+            when (mainContent) {
+                is TransactionModel.MainContent.Config -> TransactionProjectorMainInfoConfigDelegate(
+                    scope = stateScope,
+                    model = mainContent,
+                    dependencies = dependencies.mainInfoConfigDelegate(),
+                ).let { delegate ->
+                    0 to { delegate.Content() }
+                }
+
+                is TransactionModel.MainContent.Date -> TransactionProjectorMainInfoDateDelegate(
+                    scope = stateScope,
+                    model = mainContent,
+                    dependencies = dependencies.mainInfoDateDelegate(),
+                ).let { delegate ->
+                    1 to { delegate.Content() }
+                }
+            }
+        }
 
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
@@ -105,7 +122,16 @@ class TransactionProjector(
                     .padding(vertical = Dimens.separation)
                     .padding(bottom = 96.dp)
             ) {
-                baseInfoDelegate.Content()
+                mainContent
+                    .collectAsState()
+                    .value
+                    .StateContent(
+                        label = "TransactionMainContent",
+                        contentKey = Pair<Int, *>::first,
+                        transitionSpec = TransitionSpec.vertical(),
+                    ) { (_, content) ->
+                        content()
+                    }
                 Separator()
                 this@TransactionProjector.Type()
             }

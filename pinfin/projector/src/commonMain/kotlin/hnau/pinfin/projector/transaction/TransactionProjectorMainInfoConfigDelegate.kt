@@ -30,9 +30,9 @@ import kotlinx.coroutines.CoroutineScope
 import org.jetbrains.compose.resources.stringResource
 
 
-class TransactionProjectorBaseInfoDelegate(
+class TransactionProjectorMainInfoConfigDelegate(
     scope: CoroutineScope,
-    private val model: TransactionModel,
+    private val model: TransactionModel.MainContent.Config,
     private val dependencies: Dependencies,
 ) {
 
@@ -52,7 +52,7 @@ class TransactionProjectorBaseInfoDelegate(
                     HnauButton(
                         modifier = Modifier.weight(1f),
                         shape = cellShape,
-                        onClick = model::chooseDate,
+                        onClick = model.chooseDate,
                         content = {
                             TripleRow(
                                 leading = { Icon(Icons.Filled.CalendarMonth) },
