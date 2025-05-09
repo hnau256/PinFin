@@ -1,4 +1,4 @@
-package hnau.pinfin.projector.utils
+package hnau.pinfin.projector.utils.formatter
 
 import hnau.pinfin.data.Amount
 

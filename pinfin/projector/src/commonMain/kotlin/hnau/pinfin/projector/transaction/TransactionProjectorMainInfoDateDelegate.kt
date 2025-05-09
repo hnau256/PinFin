@@ -62,7 +62,7 @@ class TransactionProjectorMainInfoDateDelegate(
                     state = state,
                     modifier = Modifier
                         .clip(cellShape)
-                        .size(432.dp),
+                        .size(480.dp),
                 )
             }
             Subtable {

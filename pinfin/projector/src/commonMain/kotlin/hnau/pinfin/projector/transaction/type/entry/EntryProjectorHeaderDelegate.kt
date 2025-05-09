@@ -15,7 +15,7 @@ import hnau.common.compose.uikit.utils.Dimens
 import hnau.common.kotlin.coroutines.mapWithScope
 import hnau.pinfin.model.transaction.type.entry.EntryModel
 import hnau.pinfin.projector.transaction.type.utils.ChooseAccountProjector
-import hnau.pinfin.projector.utils.AmountFormatter
+import hnau.pinfin.projector.utils.formatter.AmountFormatter
 import hnau.pinfin.projector.utils.SignedAmountContent
 import hnau.pinfin.projector.utils.account.AccountButton
 import hnau.shuffler.annotations.Shuffle

@@ -15,7 +15,7 @@ import hnau.common.kotlin.coroutines.mapMutableState
 import hnau.common.kotlin.ifNull
 import hnau.common.kotlin.mapper.Mapper
 import hnau.pinfin.model.AmountModel
-import hnau.pinfin.projector.utils.AmountFormatter
+import hnau.pinfin.projector.utils.formatter.AmountFormatter
 import hnau.shuffler.annotations.Shuffle
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow

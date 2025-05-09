@@ -8,8 +8,9 @@ import hnau.common.compose.uikit.bubble.BubblesShower
 import hnau.common.compose.uikit.bubble.Content
 import hnau.common.compose.uikit.bubble.SharedBubblesHolder
 import hnau.pinfin.model.RootModel
-import hnau.pinfin.projector.utils.AmountFormatter
-import hnau.pinfin.projector.utils.DateTimeFormatter
+import hnau.pinfin.projector.utils.formatter.AmountFormatter
+import hnau.pinfin.projector.utils.formatter.datetime.DateTimeFormatter
+import hnau.pinfin.projector.utils.formatter.datetime.JavaDateTimeFormatter
 import hnau.shuffler.annotations.Shuffle
 import kotlinx.coroutines.CoroutineScope
 
@@ -37,7 +38,7 @@ class RootProjector(
         scope = scope,
         dependencies = dependencies.loadBudgets(
             bubblesShower = bubblesHolder,
-            dateTimeFormatter = DateTimeFormatter.test, //TODO
+            dateTimeFormatter = JavaDateTimeFormatter(), //TODO
             amountFormatter = AmountFormatter.test,
         ),
         model = model.loadBudgets,
