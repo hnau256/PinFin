@@ -61,6 +61,8 @@ class TransactionProjector(
 
         fun mainInfoDateDelegate(): TransactionProjectorMainInfoDateDelegate.Dependencies
 
+        fun mainInfoTimeDelegate(): TransactionProjectorMainInfoTimeDelegate.Dependencies
+
         val globalGoBackHandler: GlobalGoBackHandler
     }
 
@@ -85,6 +87,14 @@ class TransactionProjector(
                     dependencies = dependencies.mainInfoDateDelegate(),
                 ).let { delegate ->
                     1 to { delegate.Content() }
+                }
+
+                is TransactionModel.MainContent.Time -> TransactionProjectorMainInfoTimeDelegate(
+                    scope = stateScope,
+                    model = mainContent,
+                    dependencies = dependencies.mainInfoTimeDelegate(),
+                ).let { delegate ->
+                    2 to { delegate.Content() }
                 }
             }
         }

@@ -62,7 +62,7 @@ class TransactionModel(
             MainContent.Config.toMutableStateFlowAsInitial(),
     ) {
 
-        enum class MainContent { Config, Date }
+        enum class MainContent { Config, Date, Time }
 
         enum class Dialog { ExitUnsaved, Remove }
 
@@ -140,6 +140,7 @@ class TransactionModel(
             val date: StateFlow<LocalDate>,
             val time: StateFlow<LocalTime>,
             val chooseDate: () -> Unit,
+            val chooseTime: () -> Unit,
             val typeVariant: StateFlow<TransactionType>,
             val chooseType: (TransactionType) -> Unit,
         ) : MainContent
@@ -147,6 +148,12 @@ class TransactionModel(
         data class Date(
             val initialDate: LocalDate,
             val save: (LocalDate) -> Unit,
+            val cancel: () -> Unit,
+        ) : MainContent
+
+        data class Time(
+            val initialTime: LocalTime,
+            val save: (LocalTime) -> Unit,
             val cancel: () -> Unit,
         ) : MainContent
     }
@@ -200,6 +207,7 @@ class TransactionModel(
                         date = skeleton.date,
                         time = skeleton.time,
                         chooseDate = { switch(Skeleton.MainContent.Date) },
+                        chooseTime = { switch(Skeleton.MainContent.Time) },
                         typeVariant = type.mapState(
                             scope = stateScope,
                         ) { transactionTypeModel ->
@@ -225,6 +233,15 @@ class TransactionModel(
                         initialDate = skeleton.date.value,
                         save = { newDate ->
                             skeleton.date.value = newDate
+                            switchToConfig()
+                        },
+                        cancel = switchToConfig,
+                    )
+
+                    Skeleton.MainContent.Time -> MainContent.Time(
+                        initialTime = skeleton.time.value,
+                        save = { newTime ->
+                            skeleton.time.value = newTime
                             switchToConfig()
                         },
                         cancel = switchToConfig,

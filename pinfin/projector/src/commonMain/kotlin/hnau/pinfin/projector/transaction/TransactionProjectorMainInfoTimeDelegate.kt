@@ -4,10 +4,10 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.Done
-import androidx.compose.material3.DatePicker
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
-import androidx.compose.material3.rememberDatePickerState
+import androidx.compose.material3.TimePicker
+import androidx.compose.material3.rememberTimePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -25,17 +25,13 @@ import hnau.pinfin.projector.cancel
 import hnau.pinfin.projector.save
 import hnau.shuffler.annotations.Shuffle
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.datetime.Instant
-import kotlinx.datetime.TimeZone
-import kotlinx.datetime.atStartOfDayIn
-import kotlinx.datetime.toLocalDateTime
+import kotlinx.datetime.LocalTime
 import org.jetbrains.compose.resources.stringResource
-import kotlin.time.Duration.Companion.days
 
 
-class TransactionProjectorMainInfoDateDelegate(
+class TransactionProjectorMainInfoTimeDelegate(
     scope: CoroutineScope,
-    private val model: TransactionModel.MainContent.Date,
+    private val model: TransactionModel.MainContent.Time,
     private val dependencies: Dependencies,
 ) {
 
@@ -46,23 +42,19 @@ class TransactionProjectorMainInfoDateDelegate(
     @Composable
     fun Content() {
 
-        val state = rememberDatePickerState(
-            initialSelectedDateMillis = model
-                .initialDate
-                .atStartOfDayIn(TimeZone.currentSystemDefault())
-                .plus(0.5.days)
-                .toEpochMilliseconds()
+        val state = rememberTimePickerState(
+            initialHour = model.initialTime.hour,
+            initialMinute = model.initialTime.minute,
         )
 
         Table(
             orientation = TableOrientation.Vertical,
         ) {
             Cell {
-                DatePicker(
+                TimePicker(
                     state = state,
                     modifier = Modifier
-                        .clip(cellShape)
-                        .size(432.dp),
+                        .clip(cellShape),
                 )
             }
             Subtable {
@@ -89,12 +81,12 @@ class TransactionProjectorMainInfoDateDelegate(
                         shape = cellShape,
                         onClick = {
                             model.save(
-                                state
-                                    .selectedDateMillis
-                                    ?.let(Instant.Companion::fromEpochMilliseconds)
-                                    ?.toLocalDateTime(TimeZone.currentSystemDefault())
-                                    ?.date
-                                    ?: model.initialDate
+                                LocalTime(
+                                    hour = state.hour,
+                                    minute = state.minute,
+                                    second = 0,
+                                    nanosecond = 0,
+                                )
                             )
                         },
                         content = {

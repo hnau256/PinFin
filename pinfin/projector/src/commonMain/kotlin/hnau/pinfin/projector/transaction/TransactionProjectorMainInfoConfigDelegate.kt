@@ -73,7 +73,7 @@ class TransactionProjectorMainInfoConfigDelegate(
                     HnauButton(
                         modifier = Modifier.weight(1f),
                         shape = cellShape,
-                        onClick = {},
+                        onClick = model.chooseTime,
                         content = {
                             TripleRow(
                                 leading = { Icon(Icons.Filled.Schedule) },
