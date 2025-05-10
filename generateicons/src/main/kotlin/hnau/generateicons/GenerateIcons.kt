@@ -60,7 +60,7 @@ fun main() {
         ) { icon ->
             """
             IconInfo(
-                key = Key("${icon.name}"),
+                key = Icon("${icon.name}"),
                 name = "${icon.prettyName}",
                 icon = Icons.Default.${icon.propertyName},
                 tags = nonEmptySetOf(${icon.nonEmptyTags.joinToString { "\"$it\"" }}),
@@ -79,20 +79,16 @@ fun main() {
         import androidx.compose.ui.graphics.vector.ImageVector
         import arrow.core.NonEmptySet
         import arrow.core.nonEmptySetOf
+        import hnau.pinfin.data.Icon
 
         data class IconInfo(
-            val key: Key,
+            val key: Icon,
             val name: String,
             val icon: ImageVector,
             val tags: NonEmptySet<String>,
             val category: Category,
             val popularity: Int,
         ) {
-    
-            @JvmInline
-            value class Key(
-                val key: String,
-            )
     
             enum class Category {
                 ${categories.joinToString(separator = ",\n                ")}
@@ -104,7 +100,7 @@ fun main() {
 $entries,
                 )
 
-                val byKey: Map<Key, IconInfo> = 
+                val byKey: Map<Icon, IconInfo> = 
                     list.associateBy(IconInfo::key)
            }
         }
