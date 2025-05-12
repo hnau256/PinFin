@@ -40,7 +40,7 @@ fun main() {
         .icons
         .filter { it.name !in iconNamesToExclude }
         .sortedByDescending { it.popularity }
-        .take(1024)
+        .take(256)
 
     val categories = icons.map(Icon::category).toSet()
     println(categories)

@@ -28,6 +28,8 @@ class RootProjector(
             dateTimeFormatter: DateTimeFormatter,
             amountFormatter: AmountFormatter,
         ): LoadBudgetsProjector.Dependencies
+
+        fun icon(): IconProjector.Dependencies
     }
 
     private val bubblesHolder = SharedBubblesHolder(
@@ -44,14 +46,21 @@ class RootProjector(
         model = model.loadBudgets,
     )
 
+    private val icon = IconProjector(
+        scope = scope,
+        dependencies = dependencies.icon(),
+        model = model.icon,
+    )
+
     @Composable
     fun Content() {
         CompositionLocalProvider(
             LocalContentColor provides MaterialTheme.colorScheme.onBackground,
             //LocalDensity provides Density(LocalDensity.current.density * 1.1f),
         ) {
-            loadBudgets.Content()
-            bubblesHolder.Content()
+            /*loadBudgets.Content()
+            bubblesHolder.Content()*/
+            icon.Content()
         }
     }
 }

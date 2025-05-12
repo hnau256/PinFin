@@ -61,4 +61,7 @@
     <string name="create_new_account">Создать новый счёт</string>
     <string name="there_are_no_categories">Категории отсутствуют, введите название новой категории</string>
     <string name="there_are_no_accounts">Счета отсутствуют, введите название нового счёта</string>
+    <string name="select_icon">Выберите иконку</string>
+    <string name="search">Поиск</string>
+    <string name="no_icons_found">Иконки по этим критериям не найдены</string>
 </resources>
