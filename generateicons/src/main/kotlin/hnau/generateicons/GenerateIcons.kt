@@ -6,9 +6,10 @@ import arrow.core.NonEmptyList
 import arrow.core.NonEmptySet
 import arrow.core.toNonEmptyListOrNull
 import arrow.core.toNonEmptySetOrNull
+import hnau.common.ktgen.Importable
+import hnau.common.ktgen.inject
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
-import java.io.File
 import java.io.InputStreamReader
 import java.net.URL
 
@@ -44,73 +45,93 @@ fun main() {
     val categories = icons.map(Icon::category).toSet()
     println(categories)
 
-    val imports = icons
-        .map { it.propertyName }
-        .sorted()
-        .joinToString(
-            separator = "\n        ",
-        ) { name ->
-            "import androidx.compose.material.icons.filled.$name"
-        }
+    val modelProject = ":pinfin:model"
+    val modelSubpackage = "utils.icons"
 
-    val entries = icons
-        .sortedByDescending { it.popularity }
-        .joinToString(
-            separator = ",\n",
-        ) { icon ->
-            """
-            IconInfo(
-                key = Icon("${icon.name}"),
-                name = "${icon.prettyName}",
-                icon = Icons.Default.${icon.propertyName},
-                tags = nonEmptySetOf(${icon.nonEmptyTags.joinToString { "\"$it\"" }}),
-                category = Category.${icon.category},
-                popularity = ${icon.popularity},
-            )
-        """.replaceIndent("                    ")
-        }
+    val categoryClassName = "IconCategory"
 
-    val content = """
-        //This file is generated
-        package hnau.pinfin.projector.utils
-
-        import androidx.compose.material.icons.Icons
-        $imports
-        import androidx.compose.ui.graphics.vector.ImageVector
-        import arrow.core.NonEmptySet
-        import arrow.core.nonEmptySetOf
-        import hnau.pinfin.data.Icon
-
-        data class IconInfo(
-            val key: Icon,
-            val name: String,
-            val icon: ImageVector,
-            val tags: NonEmptySet<String>,
-            val category: Category,
-            val popularity: Int,
-        ) {
-    
-            enum class Category {
-                ${categories.joinToString(separator = ",\n                ")}
+    createKtFile(
+        projectName = modelProject,
+        subpackage = modelSubpackage,
+        name = categoryClassName,
+    ) {
+        +"enum class $categoryClassName {"
+        indent {
+            categories.forEach { category ->
+                +"$category,"
             }
-            
-            companion object {
-                
-                val list: List<IconInfo> = listOf(
-$entries,
-                )
-
-                val byKey: Map<Icon, IconInfo> = 
-                    list.associateBy(IconInfo::key)
-           }
         }
-    """.trimIndent()
+        +"}"
+    }
 
-    File("pinfin/projector/src/commonMain/kotlin/hnau/pinfin/projector/utils/IconInfo.kt").writeText(
-        content
-    )
+    val iconImportable = Importable("hnau.pinfin.data", "Icon")
 
-    println(icons.size)
+    val iconInfoClassName = "IconInfo"
+
+    createKtFile(
+        projectName = modelProject,
+        subpackage = modelSubpackage,
+        name = iconInfoClassName,
+    ) {
+        +"enum class $iconInfoClassName("
+        indent {
+            +"val key: ${inject(iconImportable)},"
+            +"val title: String,"
+            +"val tags: ${inject("arrow.core", "NonEmptySet")}<String>,"
+            +"val category: $categoryClassName,"
+            +"val popularity: Int,"
+        }
+        +") {"
+        indent {
+            icons.forEach { icon ->
+                +"${icon.propertyName}("
+                indent {
+                    +"key = Icon(\"${icon.name}\"),"
+                    +"title = \"${icon.prettyName}\","
+                    +"tags = ${
+                        inject(
+                            "arrow.core",
+                            "nonEmptySetOf"
+                        )
+                    }(${icon.nonEmptyTags.joinToString { "\"$it\"" }}),"
+                    +"category = $categoryClassName.${icon.category},"
+                    +"popularity = ${icon.popularity},"
+                }
+                +"),"
+            }
+        }
+        +"}"
+    }
+
+    val iconInfoImportable = Importable("hnau.pinfin.model.$modelSubpackage", iconInfoClassName)
+    val imageVectorImportable = Importable("androidx.compose.ui.graphics.vector", "ImageVector")
+    createKtFile(
+        projectName = ":pinfin:projector",
+        subpackage = "utils",
+        name = "IconInfoExt",
+    ) {
+        val IconInfo = inject(iconInfoImportable)
+        val ImageVector = inject(imageVectorImportable)
+        val Icons = inject("androidx.compose.material.icons", "Icons")
+        +"private val iconInfoImages: MutableMap<$IconInfo, $ImageVector> = mutableMapOf()"
+        +""
+        +"val $IconInfo.image: $ImageVector"
+        indent {
+            +"get() = iconInfoImages.getOrPut(this) {"
+            indent {
+                +"when (this) {"
+                indent {
+                    icons.forEach { icon ->
+                        val key = icon.propertyName
+                        val Key = inject("androidx.compose.material.icons.filled", key)
+                        +"$IconInfo.$key -> $Icons.Default.$Key"
+                    }
+                }
+                +"}"
+            }
+        }
+        +"}"
+    }
 }
 
 private val Icon.category: String
