@@ -5,7 +5,8 @@ import hnau.common.app.goback.GoBackHandlerProvider
 import hnau.common.kotlin.getOrInit
 import hnau.common.kotlin.toAccessor
 import hnau.pinfin.model.loadbudgets.LoadBudgetsModel
-import hnau.pinfin.model.utils.icons.IconInfo
+import hnau.pinfin.model.utils.icons.IconVariant
+import hnau.pinfin.model.utils.icons.icon
 import hnau.shuffler.annotations.Shuffle
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.serialization.Serializable
@@ -44,7 +45,7 @@ class RootModel(
         skeleton = skeleton::icon
             .toAccessor()
             .getOrInit { IconModel.Skeleton() },
-        selected = IconInfo.entries[12].key,
+        selected = IconVariant.entries[12].icon,
         onSelect = {},
     )
 

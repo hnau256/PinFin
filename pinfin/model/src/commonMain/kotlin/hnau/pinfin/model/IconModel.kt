@@ -22,7 +22,11 @@ import hnau.common.kotlin.foldBoolean
 import hnau.common.kotlin.serialization.MutableStateFlowSerializer
 import hnau.pinfin.data.Icon
 import hnau.pinfin.model.utils.icons.IconCategory
-import hnau.pinfin.model.utils.icons.IconInfo
+import hnau.pinfin.model.utils.icons.IconVariant
+import hnau.pinfin.model.utils.icons.category
+import hnau.pinfin.model.utils.icons.icon
+import hnau.pinfin.model.utils.icons.popularity
+import hnau.pinfin.model.utils.icons.tags
 import hnau.shuffler.annotations.Shuffle
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -72,7 +76,7 @@ class IconModel(
         }
     }
 
-    val icons: StateFlow<Loadable<NonEmptyList<Pair<IconInfo, Boolean>>?>> = combine(
+    val icons: StateFlow<Loadable<NonEmptyList<Pair<IconVariant, Boolean>>?>> = combine(
         flow = skeleton.query,
         flow2 = skeleton.selectedCategories,
     ) { queryRaw, selectedCategoriesRaw ->
@@ -81,27 +85,27 @@ class IconModel(
             val selectedCategories = selectedCategoriesRaw
                 .toNonEmptySetOrNull()
                 ?: IconCategory.entries.toNonEmptySetOrNull()!!
-            IconInfo
+            IconVariant
                 .entries
-                .mapNotNull { info ->
-                    if (info.category !in selectedCategories) {
+                .mapNotNull { variant ->
+                    if (variant.category !in selectedCategories) {
                         return@mapNotNull null
                     }
                     if (query == null) {
-                        return@mapNotNull true to info
+                        return@mapNotNull true to variant
                     }
-                    val bestSearchIndex = info.tags
+                    val bestSearchIndex = variant.tags
                         .minOfOrNull { tag -> tag.indexOf(query) }
                         ?.takeIf { it >= 0 }
                         ?: return@mapNotNull null
                     val fromStart = bestSearchIndex == 0
-                    fromStart to info
+                    fromStart to variant
                 }
-                .sortedByDescending { (queryFromStart, info) ->
-                    info.popularity - (if (queryFromStart) 0 else Int.MAX_VALUE / 2)
+                .sortedByDescending { (queryFromStart, variant) ->
+                    variant.popularity - (if (queryFromStart) 0 else Int.MAX_VALUE / 2)
                 }
-                .map { (_, info) ->
-                    info to (info.key == selected)
+                .map { (_, variant) ->
+                    variant to (variant.icon == selected)
                 }
                 .toNonEmptyListOrNull()
                 .let(::Ready)
