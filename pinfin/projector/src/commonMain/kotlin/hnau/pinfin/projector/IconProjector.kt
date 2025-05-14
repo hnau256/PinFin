@@ -39,8 +39,7 @@ import hnau.common.kotlin.Ready
 import hnau.common.kotlin.foldBoolean
 import hnau.common.kotlin.foldNullable
 import hnau.pinfin.model.IconModel
-import hnau.pinfin.model.utils.icons.IconVariant
-import hnau.pinfin.model.utils.icons.title
+import hnau.pinfin.model.utils.icons.IconInfo
 import hnau.pinfin.projector.utils.image
 import hnau.shuffler.annotations.Shuffle
 import kotlinx.coroutines.CoroutineScope
@@ -138,7 +137,7 @@ class IconProjector(
 
     @Composable
     private fun Icons(
-        icons: NonEmptyList<Pair<IconVariant, Boolean>>,
+        icons: NonEmptyList<Pair<IconInfo, Boolean>>,
     ) {
         LazyVerticalGrid(
             columns = GridCells.Adaptive(

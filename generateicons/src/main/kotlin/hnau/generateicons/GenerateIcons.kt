@@ -4,11 +4,9 @@ package hnau.generateicons
 
 import arrow.core.NonEmptyList
 import arrow.core.NonEmptySet
-import arrow.core.nonEmptySetOf
 import arrow.core.toNonEmptyListOrNull
 import arrow.core.toNonEmptySetOrNull
 import hnau.common.ktgen.Importable
-import hnau.common.ktgen.KtFile
 import hnau.common.ktgen.inject
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
@@ -42,7 +40,7 @@ fun main() {
         .icons
         .filter { it.name !in iconNamesToExclude }
         .sortedByDescending { it.popularity }
-        .take(512)
+        .take(256)
 
     val categories = icons.map(Icon::category).toSet()
     println(categories)
@@ -68,117 +66,56 @@ fun main() {
 
     val iconImportable = Importable("hnau.pinfin.data", "Icon")
 
-    val iconVariantClassName = "IconVariant"
+    val iconInfoClassName = "IconInfo"
 
     createKtFile(
         projectName = modelProject,
         subpackage = modelSubpackage,
-        name = iconVariantClassName,
+        name = iconInfoClassName,
     ) {
-        +"@Suppress(\"EnumEntryName\", \"unused\")"
-        +"enum class $iconVariantClassName {"
+        +"enum class $iconInfoClassName("
+        indent {
+            +"val key: ${inject(iconImportable)},"
+            +"val title: String,"
+            +"val tags: ${inject("arrow.core", "NonEmptySet")}<String>,"
+            +"val category: $categoryClassName,"
+            +"val popularity: Int,"
+        }
+        +") {"
         indent {
             icons.forEach { icon ->
-                +"${icon.propertyName},"
+                +"${icon.propertyName}("
+                indent {
+                    +"key = Icon(\"${icon.name}\"),"
+                    +"title = \"${icon.prettyName}\","
+                    +"tags = ${
+                        inject(
+                            "arrow.core",
+                            "nonEmptySetOf"
+                        )
+                    }(${icon.nonEmptyTags.joinToString { "\"$it\"" }}),"
+                    +"category = $categoryClassName.${icon.category},"
+                    +"popularity = ${icon.popularity},"
+                }
+                +"),"
             }
         }
         +"}"
     }
 
-    createKtFile(
-        projectName = modelProject,
-        subpackage = modelSubpackage,
-        name = iconVariantClassName + "Ext",
-    ) {
-        +"val $iconVariantClassName.icon: ${inject(iconImportable)}"
-        indent {
-            +"get() = Icon(name)"
-        }
-        +""
-        +"private val variantsByIcons: Map<${inject(iconImportable)}, IconVariant> ="
-        indent {
-            +"$iconVariantClassName.entries.associateBy { Icon(key = it.name) }"
-        }
-        +""
-        +"val ${inject(iconImportable)}.variant: $iconVariantClassName?"
-        indent {
-            +"get() = variantsByIcons.getValue(this)"
-        }
-    }
-
-    fun createVariantExtFile(
-        propertyName: String,
-        extract: Icon.() -> String,
-        importables: Iterable<Importable> = emptyList(),
-        typeName: String,
-    ) {
-        val uppercaseName = propertyName.uppercaseFirst
-        createKtFile(
-            projectName = modelProject,
-            subpackage = modelSubpackage,
-            name = iconVariantClassName + uppercaseName + "Ext",
-        ) {
-            importables.forEach { importable -> addImport(importable) }
-            +"val $iconVariantClassName.$propertyName: $typeName"
-            indent {
-                +"get() = variant$uppercaseName[ordinal]"
-            }
-            +""
-            +"private val variant$uppercaseName: List<$typeName> = listOf("
-            indent {
-                icons.forEach {icon ->
-                    +(icon.extract() + ",")
-                }
-            }
-            +")"
-        }
-    }
-
-    createVariantExtFile(
-        propertyName = "tags",
-        importables = listOf(
-            Importable("arrow.core", "NonEmptySet"),
-            Importable("arrow.core", "nonEmptySetOf"),
-        ),
-        typeName = "NonEmptySet<String>",
-        extract = {
-            val tags = nonEmptyTags.joinToString { "\"$it\"" }
-            "nonEmptySetOf($tags)"
-        },
-    )
-
-    createVariantExtFile(
-        propertyName = "title",
-        typeName = "String",
-        extract = {"\"$prettyName\""},
-    )
-
-    createVariantExtFile(
-        propertyName = "popularity",
-        typeName = "Int",
-        extract = {popularity.toString()},
-    )
-
-    createVariantExtFile(
-        propertyName = "category",
-        typeName = "IconCategory",
-        extract = { "IconCategory.$category" },
-    )
-
-    val iconVariantImportable =
-        Importable("hnau.pinfin.model.$modelSubpackage", iconVariantClassName)
+    val iconInfoImportable = Importable("hnau.pinfin.model.$modelSubpackage", iconInfoClassName)
     val imageVectorImportable = Importable("androidx.compose.ui.graphics.vector", "ImageVector")
     createKtFile(
         projectName = ":pinfin:projector",
         subpackage = "utils",
         name = "IconInfoExt",
     ) {
-        val IconVariant = inject(iconVariantImportable)
+        val IconInfo = inject(iconInfoImportable)
         val ImageVector = inject(imageVectorImportable)
         val Icons = inject("androidx.compose.material.icons", "Icons")
-        +"private val iconInfoImages: MutableMap<$IconVariant, $ImageVector> = mutableMapOf()"
+        +"private val iconInfoImages: MutableMap<$IconInfo, $ImageVector> = mutableMapOf()"
         +""
-        +"val $IconVariant.image: $ImageVector"
+        +"val $IconInfo.image: $ImageVector"
         indent {
             +"get() = iconInfoImages.getOrPut(this) {"
             indent {
@@ -187,7 +124,7 @@ fun main() {
                     icons.forEach { icon ->
                         val key = icon.propertyName
                         val Key = inject("androidx.compose.material.icons.filled", key)
-                        +"$IconVariant.${icon.propertyName} -> $Icons.Default.$Key"
+                        +"$IconInfo.$key -> $Icons.Default.$Key"
                     }
                 }
                 +"}"
