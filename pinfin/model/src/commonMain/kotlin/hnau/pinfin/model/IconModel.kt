@@ -6,7 +6,6 @@ package hnau.pinfin.model
 
 import arrow.core.NonEmptyList
 import arrow.core.toNonEmptyListOrNull
-import arrow.core.toNonEmptySetOrNull
 import hnau.common.app.EditingString
 import hnau.common.app.goback.GoBackHandler
 import hnau.common.app.goback.GoBackHandlerProvider
@@ -19,6 +18,7 @@ import hnau.common.kotlin.coroutines.mapState
 import hnau.common.kotlin.coroutines.scopedInState
 import hnau.common.kotlin.coroutines.toMutableStateFlowAsInitial
 import hnau.common.kotlin.foldBoolean
+import hnau.common.kotlin.foldNullable
 import hnau.common.kotlin.serialization.MutableStateFlowSerializer
 import hnau.pinfin.data.Icon
 import hnau.pinfin.model.utils.icons.IconCategory
@@ -49,8 +49,8 @@ class IconModel(
 
     @Serializable
     data class Skeleton(
-        val selectedCategories: MutableStateFlow<Set<IconCategory>> =
-            emptySet<IconCategory>().toMutableStateFlowAsInitial(),
+        val selectedCategory: MutableStateFlow<IconCategory?> =
+            null.toMutableStateFlowAsInitial(),
         val query: MutableStateFlow<EditingString> =
             "".toEditingString().toMutableStateFlowAsInitial(),
     )
@@ -58,41 +58,39 @@ class IconModel(
     val query: MutableStateFlow<EditingString>
         get() = skeleton.query
 
-    val selectedCategories: StateFlow<Set<IconCategory>>
-        get() = skeleton.selectedCategories
+    val selectedCategory: StateFlow<IconCategory?>
+        get() = skeleton.selectedCategory
 
     fun onCategoryClick(
         category: IconCategory,
     ) {
-        skeleton.selectedCategories.update { selectedCategories ->
-            when (category in selectedCategories) {
-                false -> selectedCategories + category
-                true -> selectedCategories - category
-            }
+        skeleton.selectedCategory.update { selectedCategory ->
+            category.takeIf { it != selectedCategory }
         }
     }
 
     val icons: StateFlow<Loadable<NonEmptyList<Pair<IconInfo, Boolean>>?>> = combine(
         flow = skeleton.query,
-        flow2 = skeleton.selectedCategories,
-    ) { queryRaw, selectedCategoriesRaw ->
+        flow2 = skeleton.selectedCategory,
+    ) { queryRaw, selectedCategory ->
         withContext(Dispatchers.Default) {
             val query = queryRaw.text.lowercase().takeIf(String::isNotEmpty)
-            val selectedCategories = selectedCategoriesRaw
-                .toNonEmptySetOrNull()
-                ?: IconCategory.entries.toNonEmptySetOrNull()!!
             IconInfo
                 .entries
                 .mapNotNull { info ->
-                    if (info.category !in selectedCategories) {
+                    if (selectedCategory != null && info.category != selectedCategory) {
                         return@mapNotNull null
                     }
                     if (query == null) {
                         return@mapNotNull true to info
                     }
                     val bestSearchIndex = info.tags
-                        .minOfOrNull { tag -> tag.indexOf(query) }
-                        ?.takeIf { it >= 0 }
+                        .mapNotNull { tag ->
+                            tag
+                                .indexOf(query)
+                                .takeIf { it >= 0 }
+                        }
+                        .minOrNull()
                         ?: return@mapNotNull null
                     val fromStart = bestSearchIndex == 0
                     fromStart to info
@@ -114,18 +112,17 @@ class IconModel(
         )
 
     override val goBackHandler: GoBackHandler = skeleton
-        .selectedCategories
+        .selectedCategory
         .scopedInState(scope)
         .flatMapState(scope) { (selectionScope, selectedCategories) ->
             selectedCategories
-                .isNotEmpty()
-                .foldBoolean(
-                    ifTrue = {
+                .foldNullable(
+                    ifNotNull = {
                         {
-                            skeleton.selectedCategories.value = emptySet()
+                            skeleton.selectedCategory.value = null
                         }.toMutableStateFlowAsInitial()
                     },
-                    ifFalse = {
+                    ifNull = {
                         skeleton
                             .query
                             .mapState(selectionScope) { query ->
@@ -134,9 +131,11 @@ class IconModel(
                                     .isNotEmpty()
                                     .foldBoolean(
                                         ifTrue = {
-                                            { skeleton.query.value = "".toEditingString() }
+                                            {
+                                                skeleton.query.value = "".toEditingString()
+                                            }
                                         },
-                                        ifFalse = { null }
+                                        ifFalse = { null },
                                     )
                             }
                     }

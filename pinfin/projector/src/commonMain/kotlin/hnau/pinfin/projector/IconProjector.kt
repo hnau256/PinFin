@@ -8,9 +8,13 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Done
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
@@ -18,27 +22,44 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import arrow.core.NonEmptyList
 import hnau.common.app.goback.GlobalGoBackHandler
 import hnau.common.app.goback.GoBackHandler
+import hnau.common.compose.uikit.ContainerStyle
 import hnau.common.compose.uikit.ErrorPanel
+import hnau.common.compose.uikit.HnauButton
+import hnau.common.compose.uikit.TextInput
+import hnau.common.compose.uikit.TripleRow
 import hnau.common.compose.uikit.progressindicator.ProgressIndicatorInBox
 import hnau.common.compose.uikit.shape.HnauShape
+import hnau.common.compose.uikit.shape.create
+import hnau.common.compose.uikit.shape.inRow
 import hnau.common.compose.uikit.state.StateContent
 import hnau.common.compose.uikit.state.TransitionSpec
 import hnau.common.compose.uikit.utils.Dimens
 import hnau.common.compose.utils.Icon
 import hnau.common.compose.utils.NavigationIcon
+import hnau.common.compose.utils.copy
+import hnau.common.compose.utils.horizontalDisplayPadding
+import hnau.common.compose.utils.plus
+import hnau.common.compose.utils.verticalDisplayPadding
 import hnau.common.kotlin.Loading
 import hnau.common.kotlin.Ready
 import hnau.common.kotlin.foldBoolean
 import hnau.common.kotlin.foldNullable
+import hnau.common.kotlin.ifTrue
 import hnau.pinfin.model.IconModel
+import hnau.pinfin.model.utils.icons.IconCategory
 import hnau.pinfin.model.utils.icons.IconInfo
 import hnau.pinfin.projector.utils.image
 import hnau.shuffler.annotations.Shuffle
@@ -77,15 +98,25 @@ class IconProjector(
                 Icons(
                     modifier = Modifier
                         .weight(1f)
-                        .fillMaxWidth()
+                        .fillMaxWidth(),
+                    contentPadding = contentPadding.copy(
+                        bottom = 0.dp,
+                    ),
                 )
                 Categories(
                     modifier = Modifier
-                        .fillMaxWidth()
+                        .fillMaxWidth(),
+                    contentPadding = contentPadding.copy(
+                        top = 0.dp,
+                        bottom = 0.dp,
+                    ),
                 )
                 Search(
                     modifier = Modifier
-                        .fillMaxWidth()
+                        .fillMaxWidth(),
+                    contentPadding = contentPadding.copy(
+                        top = 0.dp,
+                    ),
                 )
             }
         }
@@ -94,6 +125,7 @@ class IconProjector(
     @Composable
     private fun Icons(
         modifier: Modifier = Modifier,
+        contentPadding: PaddingValues,
     ) {
         model
             .icons
@@ -127,6 +159,7 @@ class IconProjector(
                             },
                             ifNotNull = { icons ->
                                 Icons(
+                                    contentPadding = contentPadding,
                                     icons = icons,
                                 )
                             }
@@ -137,6 +170,7 @@ class IconProjector(
 
     @Composable
     private fun Icons(
+        contentPadding: PaddingValues,
         icons: NonEmptyList<Pair<IconInfo, Boolean>>,
     ) {
         LazyVerticalGrid(
@@ -144,10 +178,13 @@ class IconProjector(
                 minSize = 72.dp,
             ),
             reverseLayout = true,
-            contentPadding = PaddingValues(
+            contentPadding = contentPadding + PaddingValues(
                 horizontal = Dimens.separation,
             ),
-            verticalArrangement = Arrangement.spacedBy(Dimens.separation),
+            verticalArrangement = Arrangement.spacedBy(
+                space = Dimens.separation,
+                alignment = Alignment.Bottom,
+            ),
             horizontalArrangement = Arrangement.spacedBy(Dimens.separation),
         ) {
             items(icons) { (icon, selected) ->
@@ -199,15 +236,63 @@ class IconProjector(
 
     @Composable
     private fun Categories(
+        contentPadding: PaddingValues,
         modifier: Modifier = Modifier,
     ) {
-
+        val selectedCategory by model.selectedCategory.collectAsState()
+        val categories = IconCategory.entries
+        val categoriesCount = categories.size
+        LazyRow(
+            modifier = modifier,
+            contentPadding = contentPadding +
+                    PaddingValues(horizontal = Dimens.horizontalDisplayPadding),
+            horizontalArrangement = Arrangement.spacedBy(Dimens.chipsSeparation),
+        ) {
+            items(
+                count = categoriesCount,
+            ) { i ->
+                val category = categories[i]
+                val selected = category == selectedCategory
+                HnauButton(
+                    onClick = { model.onCategoryClick(category) },
+                    style = selected.foldBoolean(
+                        ifTrue = { ContainerStyle.Primary },
+                        ifFalse = { ContainerStyle.Neutral }
+                    ),
+                    shape = HnauShape.inRow.create(
+                        index = i,
+                        totalCount = categoriesCount,
+                    ),
+                ) {
+                    TripleRow(
+                        leading = selected.ifTrue {
+                            { Icon(Icons.Default.Done) }
+                        },
+                        content = { Text(category.name) }
+                    )
+                }
+            }
+        }
     }
 
     @Composable
     private fun Search(
+        contentPadding: PaddingValues,
         modifier: Modifier = Modifier,
     ) {
-
+        val focusRequester = remember { FocusRequester() }
+        TextInput(
+            value = model.query,
+            modifier = modifier
+                .padding(contentPadding)
+                .padding(
+                    start = Dimens.horizontalDisplayPadding,
+                    end = Dimens.horizontalDisplayPadding,
+                    bottom = Dimens.verticalDisplayPadding,
+                )
+                .focusRequester(focusRequester),
+            leadingIcon = { Icon(Icons.Default.Search) },
+        )
+        LaunchedEffect(Unit) { focusRequester.requestFocus() }
     }
 }
