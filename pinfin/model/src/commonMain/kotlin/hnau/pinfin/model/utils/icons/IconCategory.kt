@@ -20,4 +20,5 @@ enum class IconCategory {
     Device,
     Places,
     Search,
+    Home,
 }

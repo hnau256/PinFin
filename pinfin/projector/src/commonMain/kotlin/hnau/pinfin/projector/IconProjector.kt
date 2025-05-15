@@ -60,7 +60,8 @@ import hnau.common.kotlin.foldNullable
 import hnau.common.kotlin.ifTrue
 import hnau.pinfin.model.IconModel
 import hnau.pinfin.model.utils.icons.IconCategory
-import hnau.pinfin.model.utils.icons.IconInfo
+import hnau.pinfin.model.utils.icons.IconVariant
+import hnau.pinfin.model.utils.icons.title
 import hnau.pinfin.projector.utils.image
 import hnau.shuffler.annotations.Shuffle
 import kotlinx.coroutines.CoroutineScope
@@ -171,7 +172,7 @@ class IconProjector(
     @Composable
     private fun Icons(
         contentPadding: PaddingValues,
-        icons: NonEmptyList<Pair<IconInfo, Boolean>>,
+        icons: NonEmptyList<Pair<IconVariant, Boolean>>,
     ) {
         LazyVerticalGrid(
             columns = GridCells.Adaptive(
@@ -187,7 +188,7 @@ class IconProjector(
             ),
             horizontalArrangement = Arrangement.spacedBy(Dimens.separation),
         ) {
-            items(icons) { (icon, selected) ->
+            items(icons) { (variant, selected) ->
                 Column(
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.spacedBy(Dimens.extraSmallSeparation),
@@ -219,12 +220,12 @@ class IconProjector(
                         ifTrue = { MaterialTheme.colorScheme.primary },
                     )
                     Icon(
-                        icon = icon.image,
+                        icon = variant.image,
                         tint = tint,
                     )
                     Text(
                         textAlign = TextAlign.Center,
-                        text = icon.title,
+                        text = variant.title,
                         style = MaterialTheme.typography.labelSmall,
                         color = tint,
                         maxLines = 1,
