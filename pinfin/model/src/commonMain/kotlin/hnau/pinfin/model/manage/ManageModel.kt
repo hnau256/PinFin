@@ -162,16 +162,6 @@ class ManageModel(
             }
         }
 
-    val icon = IconModel(
-        scope = scope,
-        dependencies = dependencies.icon(),
-        skeleton = skeleton::icon
-            .toAccessor()
-            .getOrInit { IconModel.Skeleton() },
-        selected = null,
-        onSelect = {},
-    )
-
     override val goBackHandler: GoBackHandler = state
         .flatMapState(scope, GoBackHandlerProvider::goBackHandler)
 }

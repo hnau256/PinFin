@@ -54,16 +54,9 @@ class ManageProjector(
             }
         }
 
-    private val icon = IconProjector(
-        scope = scope,
-        dependencies = dependencies.icon(),
-        model = model.icon,
-    )
-
     @Composable
     fun Content() {
-        icon.Content()
-        /*state
+        state
             .collectAsState()
             .value
             .StateContent(
@@ -73,6 +66,6 @@ class ManageProjector(
                 contentKey = ManageElementProjector::key,
             ) { elementProjector ->
                 elementProjector.Content()
-            }*/
+            }
     }
 }
