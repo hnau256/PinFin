@@ -25,8 +25,8 @@ import hnau.pinfin.model.utils.icons.IconCategory
 import hnau.pinfin.model.utils.icons.IconVariant
 import hnau.pinfin.model.utils.icons.category
 import hnau.pinfin.model.utils.icons.icon
-import hnau.pinfin.model.utils.icons.popularity
 import hnau.pinfin.model.utils.icons.tags
+import hnau.pinfin.model.utils.icons.weight
 import hnau.shuffler.annotations.Shuffle
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -44,8 +44,8 @@ class IconModel(
     scope: CoroutineScope,
     dependencies: Dependencies,
     private val skeleton: Skeleton,
-    private val selected: Icon?,
-    val onSelect: (Icon) -> Unit,
+    private val selected: IconVariant?,
+    val onSelect: (IconVariant) -> Unit,
 ) : GoBackHandlerProvider {
 
     @Shuffle
@@ -100,10 +100,10 @@ class IconModel(
                     fromStart to variant
                 }
                 .sortedByDescending { (queryFromStart, info) ->
-                    info.popularity - (if (queryFromStart) 0 else Int.MAX_VALUE / 2)
+                    info.weight - (if (queryFromStart) 0 else Int.MAX_VALUE / 2)
                 }
                 .map { (_, variant) ->
-                    variant to (variant.icon == selected)
+                    variant to (variant == selected)
                 }
                 .toNonEmptyListOrNull()
                 .let(::Ready)

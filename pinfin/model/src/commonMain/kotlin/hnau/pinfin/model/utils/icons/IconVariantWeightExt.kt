@@ -2,93 +2,127 @@
 
 package hnau.pinfin.model.utils.icons
 
-val IconVariant.popularity: Int
-    get() = variantPopularity[ordinal]
+val IconVariant.weight: Int
+    get() = variantWeight[ordinal]
 
-private val variantPopularity: List<Int> = buildList {
-    addAll(getPopularity0())
-    addAll(getPopularity1())
-    addAll(getPopularity2())
-    addAll(getPopularity3())
-    addAll(getPopularity4())
-    addAll(getPopularity5())
-    addAll(getPopularity6())
-    addAll(getPopularity7())
-    addAll(getPopularity8())
-    addAll(getPopularity9())
-    addAll(getPopularity10())
-    addAll(getPopularity11())
-    addAll(getPopularity12())
-    addAll(getPopularity13())
-    addAll(getPopularity14())
-    addAll(getPopularity15())
-    addAll(getPopularity16())
-    addAll(getPopularity17())
-    addAll(getPopularity18())
-    addAll(getPopularity19())
-    addAll(getPopularity20())
-    addAll(getPopularity21())
-    addAll(getPopularity22())
-    addAll(getPopularity23())
-    addAll(getPopularity24())
-    addAll(getPopularity25())
-    addAll(getPopularity26())
-    addAll(getPopularity27())
-    addAll(getPopularity28())
-    addAll(getPopularity29())
-    addAll(getPopularity30())
-    addAll(getPopularity31())
-    addAll(getPopularity32())
-    addAll(getPopularity33())
-    addAll(getPopularity34())
-    addAll(getPopularity35())
-    addAll(getPopularity36())
-    addAll(getPopularity37())
-    addAll(getPopularity38())
-    addAll(getPopularity39())
-    addAll(getPopularity40())
-    addAll(getPopularity41())
-    addAll(getPopularity42())
+private val variantWeight: List<Int> = buildList {
+    addAll(getWeight0())
+    addAll(getWeight1())
+    addAll(getWeight2())
+    addAll(getWeight3())
+    addAll(getWeight4())
+    addAll(getWeight5())
+    addAll(getWeight6())
+    addAll(getWeight7())
+    addAll(getWeight8())
+    addAll(getWeight9())
+    addAll(getWeight10())
+    addAll(getWeight11())
+    addAll(getWeight12())
+    addAll(getWeight13())
+    addAll(getWeight14())
+    addAll(getWeight15())
+    addAll(getWeight16())
+    addAll(getWeight17())
+    addAll(getWeight18())
+    addAll(getWeight19())
+    addAll(getWeight20())
+    addAll(getWeight21())
+    addAll(getWeight22())
+    addAll(getWeight23())
+    addAll(getWeight24())
+    addAll(getWeight25())
+    addAll(getWeight26())
+    addAll(getWeight27())
+    addAll(getWeight28())
+    addAll(getWeight29())
+    addAll(getWeight30())
+    addAll(getWeight31())
+    addAll(getWeight32())
+    addAll(getWeight33())
+    addAll(getWeight34())
+    addAll(getWeight35())
+    addAll(getWeight36())
+    addAll(getWeight37())
+    addAll(getWeight38())
+    addAll(getWeight39())
+    addAll(getWeight40())
+    addAll(getWeight41())
+    addAll(getWeight42())
 }
 
-private fun getPopularity0(): List<Int> = listOf(
-    846381, //Search
-    775950, //Home
-    628523, //AccountCircle
-    595615, //Settings
-    520439, //Done
+private fun getWeight0(): List<Int> = listOf(
+    1775945, //Home
+    1314679, //ShoppingCart
+    1188196, //Call
+    1098121, //School
+    1090075, //AccountBalance
+    1072556, //AccountBalanceWallet
+    1068860, //Store
+    1059609, //Savings
+    1052246, //Storefront
+    1045660, //Payment
+    1045274, //Restaurant
+    1042196, //DirectionsCar
+    1039183, //AlternateEmail
+    1035498, //HealthAndSafety
+    1032008, //SportsEsports
+    1028929, //Flight
+    1028197, //FitnessCenter
+    1026181, //DirectionsRun
+    1024245, //BusinessCenter
+    1023479, //Redeem
+    1022333, //MedicalServices
+    1020323, //Celebration
+    1020149, //LunchDining
+    1017326, //DirectionsBus
+    1013290, //Checkroom
+    1011999, //LocalFlorist
+    1011389, //Hiking
+    1010791, //Coffee
+    1010502, //ElectricalServices
+    1008827, //Liquor
+    1007700, //SportsBasketball
+    1006376, //BakeryDining
+    1006134, //Outlet
+    1004514, //Toys
+    846379, //Search
+    628516, //AccountCircle
+    595611, //Settings
+    520434, //Done
     456971, //Info
-    424972, //Close
-    410347, //CheckCircle
-    380113, //Delete
-    370476, //Person
-    366870, //Menu
-    352799, //ExpandMore
-    345390, //Add
-    323699, //Visibility
-    314679, //ShoppingCart
-    308342, //Edit
-    277903, //Favorite
-    272895, //Email
+    424970, //Close
+    410343, //CheckCircle
+    380111, //Delete
+    370471, //Person
+    366869, //Menu
+    352797, //ExpandMore
+    345385, //Add
+    323697, //Visibility
+    308340, //Edit
+    277901, //Favorite
+    272894, //Email
+)
+
+private fun getWeight1(): List<Int> = listOf(
     263033, //Description
-    255786, //Logout
-    245824, //ArrowBack
-    225560, //FavoriteBorder
-    221515, //ChevronRight
+    255785, //Logout
+    245823, //ArrowBack
+    225559, //FavoriteBorder
+    221513, //ChevronRight
     219866, //LocalShipping
     219704, //Lock
-    206909, //LocationOn
+    206908, //LocationOn
     205735, //Schedule
     204644, //Notifications
-    188197, //Call
-    185732, //Language
-    181369, //FileDownload
+    185729, //Language
+    181368, //FileDownload
     174651, //ArrowForwardIos
     173538, //ArrowBackIos
-    173454, //Groups
-    172520, //Cancel
-    167668, //HelpOutline
-    161925, //ArrowDropDown
+    173452, //Groups
+    172519, //Cancel
+    167667, //HelpOutline
+    161924, //ArrowDropDown
     159205, //Face
     158597, //Verified
     157486, //ManageAccounts
@@ -98,98 +132,94 @@ private fun getPopularity0(): List<Int> = listOf(
     147953, //AddCircleOutline
     147287, //ThumbUp
     144895, //FilterAlt
-    141109, //Event
+    141108, //Event
     140777, //Dashboard
     140740, //Star
     139535, //Fingerprint
-)
-
-private fun getPopularity1(): List<Int> = listOf(
     138635, //List
-    137236, //ContentCopy
-    135338, //People
+    137234, //ContentCopy
+    135337, //People
     132716, //CheckCircleOutline
     131768, //AddCircle
-    131323, //VisibilityOff
+    131322, //VisibilityOff
     130528, //Login
-    128291, //Send
-    127901, //ArrowForward
-    127348, //ChevronLeft
-    126648, //Warning
+    128290, //Send
+    127900, //ArrowForward
+    127347, //ChevronLeft
+    126644, //Warning
     126033, //CalendarToday
-    125356, //CheckBox
+    125355, //CheckBox
     123717, //Share
-    122883, //HighlightOff
+    122882, //HighlightOff
     120349, //NavigateNext
     116445, //Help
     115791, //Phone
-    113933, //Paid
+    113932, //Paid
+)
+
+private fun getWeight2(): List<Int> = listOf(
     112652, //TaskAlt
-    111081, //QuestionAnswer
-    109314, //ExpandLess
-    107884, //Error
+    111080, //QuestionAnswer
+    109313, //ExpandLess
+    107881, //Error
     107611, //Check
     107003, //Clear
     105931, //DateRange
     105274, //Article
     103013, //PhotoCamera
-    102693, //OpenInNew
-    101916, //CheckBoxOutlineBlank
+    102690, //OpenInNew
+    101915, //CheckBoxOutlineBlank
     101738, //MoreHoriz
     99163, //Image
-    98121, //School
     97712, //ShoppingBag
-    96947, //Refresh
+    96945, //Refresh
     96729, //SupportAgent
     96293, //Lightbulb
     96113, //PersonOutline
     94299, //CreditCard
-    93796, //FileUpload
-    93194, //History
+    93795, //FileUpload
+    93193, //History
     92679, //PermIdentity
     90716, //TrendingUp
-    90075, //AccountBalance
     89889, //DeleteOutline
     88921, //AttachMoney
-    88068, //PersonAdd
-    87117, //Save
+    88067, //PersonAdd
+    87115, //Save
     87025, //Public
     86002, //VerifiedUser
-)
-
-private fun getPopularity2(): List<Int> = listOf(
-    85312, //RadioButtonUnchecked
+    85310, //RadioButtonUnchecked
     85163, //ErrorOutline
     84676, //FactCheck
-    83611, //Assignment
+    83610, //Assignment
     83403, //Mail
-    83374, //ReportProblem
-    82179, //Link
+    83373, //ReportProblem
+    82177, //Link
     79964, //EmojiEvents
     79784, //StarRate
     78237, //PlayCircleFilled
-    77735, //Remove
+    77733, //Remove
     77135, //Download
-    76385, //Business
-    74480, //Apps
-    74379, //CalendarMonth
+    76384, //Business
+    74479, //Apps
+    74378, //CalendarMonth
     74206, //ArrowRightAlt
     74063, //FilterList
-    73814, //Chat
+    73811, //Chat
     73228, //Payments
     72944, //MenuBook
     72769, //Folder
-    72556, //AccountBalanceWallet
-    71526, //Autorenew
+)
+
+private fun getWeight3(): List<Int> = listOf(
+    71525, //Autorenew
     70778, //Build
     70295, //ViewList
     70092, //KeyboardArrowDown
     68909, //Tune
-    68860, //Store
     68778, //Work
     68753, //Print
-    68326, //Videocam
-    67954, //Analytics
+    68325, //Videocam
+    67953, //Analytics
     67922, //DeleteForever
     67477, //RadioButtonChecked
     67233, //PhoneIphone
@@ -202,81 +232,74 @@ private fun getPopularity2(): List<Int> = listOf(
     64053, //East
     63655, //PictureAsPdf
     62862, //Mic
-    62508, //LockOpen
-    62485, //Group
+    62507, //LockOpen
+    62484, //Group
     62308, //WatchLater
     61741, //Inventory2
     61594, //ReceiptLong
     61467, //VolumeUp
-)
-
-private fun getPopularity3(): List<Int> = listOf(
-    61385, //Grade
+    61384, //Grade
     60703, //Update
     60545, //LocalOffer
     60016, //Badge
     59778, //Inventory
-    59738, //Circle
-    59609, //Savings
+    59737, //Circle
     59192, //Room
     59157, //EditNote
     58976, //Code
-    58938, //Map
+    58937, //Map
     58460, //LightMode
     57936, //AddShoppingCart
     57648, //ContactSupport
-    57449, //Category
-    57141, //Insights
+    57448, //Category
+    57140, //Insights
     56646, //Receipt
     56142, //PowerSettingsNew
     55761, //Campaign
-    55336, //WarningAmber
+    55333, //WarningAmber
     55280, //FormatListBulleted
-    54635, //StarBorder
+    54634, //StarBorder
     54593, //RestartAlt
     54352, //Pause
+)
+
+private fun getWeight4(): List<Int> = listOf(
     54110, //DoneAll
     53805, //RemoveCircleOutline
     53189, //Pets
     52878, //ArrowBackIosNew
     52816, //Wifi
     52331, //ListAlt
-    52246, //Storefront
     52207, //Engineering
     51757, //ModeEdit
     51356, //ToggleOn
     51123, //NotificationsActive
     51112, //Sort
-    51086, //Bolt
+    51085, //Bolt
     50966, //DarkMode
     50747, //Construction
     50243, //QrCodeScanner
     49963, //ArrowDownward
-    49935, //Explore
+    49933, //Explore
     49572, //AttachFile
     49423, //Bookmark
     49060, //MonetizationOn
     48824, //VpnKey
     48684, //AccountBox
-    48641, //NoteAdd
+    48640, //NoteAdd
     48311, //Timer
     47694, //Reorder
-)
-
-private fun getPopularity4(): List<Int> = listOf(
     47649, //PendingActions
     47262, //UploadFile
     47106, //ArrowRight
-    46888, //BookmarkBorder
+    46887, //BookmarkBorder
     46702, //AccountTree
     46537, //Smartphone
     46238, //Flag
     45902, //Apartment
     45900, //ShoppingBasket
     45806, //Sync
-    45660, //Payment
     45311, //PeopleAlt
-    45274, //Restaurant
     44862, //PlayCircleOutline
     44830, //Reply
     44786, //Task
@@ -286,44 +309,42 @@ private fun getPopularity4(): List<Int> = listOf(
     43847, //DragIndicator
     43793, //TouchApp
     43784, //SupervisorAccount
-    43744, //Pending
+    43743, //Pending
     43631, //MenuOpen
     43079, //ZoomIn
     42928, //GroupAdd
-    42804, //AutoAwesome
-    42803, //PriorityHigh
+    42803, //AutoAwesome
+)
+
+private fun getWeight5(): List<Int> = listOf(
+    42802, //PriorityHigh
     42800, //PushPin
     42698, //RemoveCircle
     42510, //Assessment
     42355, //Leaderboard
     42226, //Summarize
-    42196, //DirectionsCar
     42133, //Block
     42007, //LocalFireDepartment
     41826, //ThumbUpOffAlt
-    41412, //ChatBubbleOutline
+    41411, //ChatBubbleOutline
     41411, //EventAvailable
     40751, //Feed
     40408, //OpenInFull
     40298, //AutoStories
-    40188, //Calculate
+    40187, //Calculate
     40185, //PostAdd
     39817, //CloudUpload
-    39183, //AlternateEmail
     38881, //BarChart
     38661, //DoneOutline
     38645, //Password
-    38613, //Preview
-)
-
-private fun getPopularity5(): List<Int> = listOf(
+    38612, //Preview
     38343, //AssignmentInd
     38333, //Collections
     38322, //PublishedWithChanges
-    38238, //Create
+    38237, //Create
     38168, //Psychology
     38047, //ExitToApp
-    38009, //Checklist
+    38008, //Checklist
     37801, //VolunteerActivism
     37641, //StarOutline
     37396, //CardGiftcard
@@ -334,19 +355,21 @@ private fun getPopularity5(): List<Int> = listOf(
     36327, //AddAPhoto
     36207, //ViewInAr
     36077, //Fullscreen
-    35836, //TipsAndUpdates
-    35498, //HealthAndSafety
-    35174, //Feedback
+    35834, //TipsAndUpdates
+    35173, //Feedback
     35009, //ArrowDropUp
     34926, //Label
-    34839, //TravelExplore
+    34837, //TravelExplore
     34836, //UnfoldMore
     34773, //WaterDrop
     34690, //SwapHoriz
     34617, //Computer
     34570, //Palette
     34472, //KeyboardArrowRight
-    34231, //Timeline
+    34229, //Timeline
+)
+
+private fun getWeight6(): List<Int> = listOf(
     34076, //Stars
     33986, //AssignmentTurnedIn
     33942, //SyncAlt
@@ -363,25 +386,21 @@ private fun getPopularity5(): List<Int> = listOf(
     33522, //LibraryBooks
     33467, //Forum
     33149, //EmojiEmotions
-    33124, //Devices
+    33122, //Devices
     32912, //ChatBubble
     32817, //FolderOpen
     32729, //MapsHomeWork
-)
-
-private fun getPopularity6(): List<Int> = listOf(
     32689, //FiberManualRecord
     32657, //ContentPaste
     32537, //Cloud
     32426, //Security
     32337, //TextSnippet
     32316, //RemoveRedEye
-    32170, //MyLocation
-    32008, //SportsEsports
+    32168, //MyLocation
     31826, //RequestQuote
     31637, //Textsms
     31534, //Alarm
-    31394, //SettingsSuggest
+    31392, //SettingsSuggest
     31309, //SpaceDashboard
     31186, //ToggleOff
     31169, //Speed
@@ -396,11 +415,14 @@ private fun getPopularity6(): List<Int> = listOf(
     30687, //Stop
     30663, //Gavel
     30530, //RocketLaunch
-    30470, //Quiz
+    30469, //Quiz
     30467, //PanTool
     30462, //EditCalendar
     30343, //QuestionMark
-    30336, //CloudDownload
+    30335, //CloudDownload
+)
+
+private fun getWeight7(): List<Int> = listOf(
     30288, //FileCopy
     30250, //PersonSearch
     29981, //ContactMail
@@ -413,25 +435,20 @@ private fun getPopularity6(): List<Int> = listOf(
     29126, //DesktopWindows
     29029, //Extension
     28946, //IosShare
-    28929, //Flight
     28676, //PrecisionManufacturing
     28494, //QrCode2
     28385, //LocalMall
     28231, //MusicNote
-    28197, //FitnessCenter
     27815, //Backspace
-)
-
-private fun getPopularity7(): List<Int> = listOf(
     27770, //Android
     27758, //SmartDisplay
     27680, //NearMe
     27630, //DragHandle
     27513, //RecordVoiceOver
-    27511, //GetApp
+    27510, //GetApp
     27502, //Accessibility
     27181, //AddTask
-    27077, //Shield
+    27076, //Shield
     27056, //West
     27000, //Message
     26908, //HourglassEmpty
@@ -441,22 +458,24 @@ private fun getPopularity7(): List<Int> = listOf(
     26785, //InsertDriveFile
     26766, //Science
     26762, //Handyman
-    26706, //DriveFileRenameOutline
+    26705, //DriveFileRenameOutline
     26666, //HelpCenter
     26631, //PersonAddAlt
     26587, //MilitaryTech
     26469, //TrendingFlat
-    26181, //DirectionsRun
     25988, //Rule
     25862, //Movie
     25846, //EmojiObjects
-    25574, //AccessibilityNew
+    25573, //AccessibilityNew
     25526, //ThumbDown
     25112, //ConfirmationNumber
     25049, //EventNote
     24970, //Contacts
     24851, //FormatQuote
-    24773, //Comment
+    24772, //Comment
+)
+
+private fun getWeight8(): List<Int> = listOf(
     24569, //AdsClick
     24554, //SwapVert
     24456, //RestaurantMenu
@@ -464,8 +483,7 @@ private fun getPopularity7(): List<Int> = listOf(
     24423, //HistoryEdu
     24353, //SkipPrevious
     24262, //Archive
-    24252, //SettingsApplications
-    24245, //BusinessCenter
+    24251, //SettingsApplications
     24231, //Upload
     24222, //StickyNote2
     24213, //Source
@@ -473,14 +491,10 @@ private fun getPopularity7(): List<Int> = listOf(
     24047, //CreditScore
     24004, //Cake
     23951, //QueryStats
-)
-
-private fun getPopularity8(): List<Int> = listOf(
     23873, //DashboardCustomize
     23838, //NewReleases
-    23807, //SaveAlt
+    23806, //SaveAlt
     23682, //PlaylistAdd
-    23479, //Redeem
     23418, //Support
     23399, //ArrowCircleRight
     23397, //Loyalty
@@ -499,7 +513,6 @@ private fun getPopularity8(): List<Int> = listOf(
     22535, //ExpandCircleDown
     22523, //ViewHeadline
     22499, //KeyboardBackspace
-    22333, //MedicalServices
     22176, //CurrencyExchange
     22096, //Policy
     22090, //PhoneAndroid
@@ -513,6 +526,9 @@ private fun getPopularity8(): List<Int> = listOf(
     21266, //Sensors
     21158, //MeetingRoom
     21072, //KeyboardReturn
+)
+
+private fun getWeight9(): List<Int> = listOf(
     21045, //BorderColor
     20942, //GroupWork
     20927, //SentimentVeryDissatisfied
@@ -526,16 +542,11 @@ private fun getPopularity8(): List<Int> = listOf(
     20505, //House
     20496, //ChangeCircle
     20405, //DisabledByDefault
-)
-
-private fun getPopularity9(): List<Int> = listOf(
     20386, //ArrowLeft
     20373, //South
     20370, //LocalHospital
-    20323, //Celebration
     20267, //Tag
     20259, //Subject
-    20149, //LunchDining
     20113, //ImportContacts
     20074, //Loop
     19966, //Laptop
@@ -568,20 +579,20 @@ private fun getPopularity9(): List<Int> = listOf(
     18673, //Medication
     18660, //PieChart
     18619, //ImportExport
-    18603, //AutoFixHigh
+)
+
+private fun getWeight10(): List<Int> = listOf(
+    18602, //AutoFixHigh
     18523, //SelfImprovement
     18505, //DownloadForOffline
     18472, //Grading
-    18443, //QueryBuilder
-    18420, //PermMedia
+    18442, //QueryBuilder
+    18419, //PermMedia
     18413, //Copyright
     18393, //LiveHelp
     18367, //Pin
     18323, //FastForward
     18225, //ForwardToInbox
-)
-
-private fun getPopularity10(): List<Int> = listOf(
     18217, //PersonRemove
     18170, //Coronavirus
     18118, //LocalAtm
@@ -592,16 +603,15 @@ private fun getPopularity10(): List<Int> = listOf(
     17820, //HourglassBottom
     17773, //Web
     17730, //LocalActivity
-    17672, //Memory
+    17671, //Memory
     17640, //Forward
     17534, //North
     17517, //StarHalf
     17482, //PlaylistAddCheck
     17457, //PermContactCalendar
-    17404, //PersonPin
+    17403, //PersonPin
     17372, //VideoLibrary
-    17355, //DesignServices
-    17327, //DirectionsBus
+    17354, //DesignServices
     17318, //ZoomOut
     17308, //GppGood
     17304, //HourglassTop
@@ -622,6 +632,9 @@ private fun getPopularity10(): List<Int> = listOf(
     16762, //CircleNotifications
     16758, //RssFeed
     16746, //DeliveryDining
+)
+
+private fun getWeight11(): List<Int> = listOf(
     16646, //Whatshot
     16573, //ControlPoint
     16544, //PermPhoneMsg
@@ -632,9 +645,6 @@ private fun getPopularity10(): List<Int> = listOf(
     16366, //Style
     16360, //Wysiwyg
     16324, //CreateNewFolder
-)
-
-private fun getPopularity11(): List<Int> = listOf(
     16304, //CardMembership
     16204, //IndeterminateCheckBox
     16149, //BatteryChargingFull
@@ -649,11 +659,11 @@ private fun getPopularity11(): List<Int> = listOf(
     15920, //Adjust
     15859, //LibraryAdd
     15746, //Pageview
-    15692, //Domain
+    15691, //Domain
     15677, //LocalPolice
     15637, //Tv
     15569, //Inbox
-    15537, //Percent
+    15536, //Percent
     15521, //Recommend
     15450, //Straighten
     15439, //PauseCircle
@@ -675,6 +685,9 @@ private fun getPopularity11(): List<Int> = listOf(
     15076, //_3dRotation
     15076, //Tungsten
     15055, //ChecklistRtl
+)
+
+private fun getWeight12(): List<Int> = listOf(
     14988, //DirectionsCarFilled
     14912, //HomeRepairService
     14756, //TextFields
@@ -685,10 +698,7 @@ private fun getPopularity11(): List<Int> = listOf(
     14638, //ZoomOutMap
     14630, //TableRows
     14555, //Bed
-)
-
-private fun getPopularity12(): List<Int> = listOf(
-    14539, //Publish
+    14538, //Publish
     14528, //WifiOff
     14504, //Repeat
     14501, //Ballot
@@ -707,7 +717,7 @@ private fun getPopularity12(): List<Int> = listOf(
     14297, //GTranslate
     14270, //ArrowDropDownCircle
     14222, //Air
-    14165, //SettingsAccessibility
+    14164, //SettingsAccessibility
     14136, //Hub
     14132, //ArrowCircleLeft
     14132, //PersonOff
@@ -719,7 +729,7 @@ private fun getPopularity12(): List<Int> = listOf(
     14022, //ProductionQuantityLimits
     14015, //Expand
     13951, //PhotoLibrary
-    13897, //ReportGmailerrorred
+    13895, //ReportGmailerrorred
     13863, //NotInterested
     13795, //NoteAlt
     13755, //MiscellaneousServices
@@ -728,19 +738,18 @@ private fun getPopularity12(): List<Int> = listOf(
     13695, //LocalGroceryStore
     13667, //KeyboardDoubleArrowLeft
     13643, //InsertPhoto
+)
+
+private fun getWeight13(): List<Int> = listOf(
     13570, //Camera
     13570, //Draw
     13548, //InsertChartOutlined
     13480, //ViewColumn
     13418, //AspectRatio
     13314, //UnfoldLess
-    13290, //Checkroom
     13285, //Shuffle
     13273, //ModelTraining
     13202, //DonutLarge
-)
-
-private fun getPopularity13(): List<Int> = listOf(
     13191, //Male
     13024, //Segment
     13011, //Portrait
@@ -756,11 +765,11 @@ private fun getPopularity13(): List<Int> = listOf(
     12688, //Navigation
     12654, //Audiotrack
     12629, //AlarmOn
-    12625, //ReadMore
+    12624, //ReadMore
     12616, //CameraAlt
     12608, //LocalGasStation
     12579, //Train
-    12554, //DocumentScanner
+    12553, //DocumentScanner
     12529, //ScheduleSend
     12527, //CalendarViewMonth
     12440, //Dvr
@@ -769,8 +778,8 @@ private fun getPopularity13(): List<Int> = listOf(
     12331, //Maximize
     12250, //MoreTime
     12227, //SettingsEthernet
-    12171, //SquareFoot
     12169, //ModeComment
+    12169, //SquareFoot
     12131, //ThumbsUpDown
     12115, //CloudDone
     12083, //Markunread
@@ -778,36 +787,34 @@ private fun getPopularity13(): List<Int> = listOf(
     12040, //LocalParking
     12019, //PersonPinCircle
     12011, //Theaters
-    11999, //LocalFlorist
     11998, //Factory
     11977, //SortByAlpha
     11902, //ViewAgenda
     11874, //SubdirectoryArrowRight
-    11848, //ThumbDownOffAlt
+)
+
+private fun getWeight14(): List<Int> = listOf(
+    11847, //ThumbDownOffAlt
     11772, //MarkEmailUnread
-    11712, //ConnectWithoutContact
+    11711, //ConnectWithoutContact
     11710, //SentimentNeutral
-    11685, //Functions
+    11684, //Functions
     11673, //ThumbDownAlt
     11663, //AllInclusive
     11624, //KeyboardDoubleArrowDown
-)
-
-private fun getPopularity14(): List<Int> = listOf(
     11590, //CallEnd
     11566, //Grass
     11550, //Wc
     11512, //WavingHand
     11474, //RealEstateAgent
     11446, //AirportShuttle
-    11421, //BackHand
+    11420, //BackHand
     11403, //ImportantDevices
-    11389, //Hiking
     11355, //CloudQueue
     11325, //Money
     11316, //LocalPostOffice
     11306, //Podcasts
-    11285, //Architecture
+    11283, //Architecture
     11258, //Unpublished
     11244, //NotificationsOff
     11176, //TwoWheeler
@@ -823,13 +830,12 @@ private fun getPopularity14(): List<Int> = listOf(
     10941, //Mouse
     10937, //FastRewind
     10936, //ShoppingCartCheckout
-    10906, //SportsScore
+    10905, //SportsScore
     10874, //InvertColors
     10868, //Luggage
     10861, //NoAccounts
     10859, //Masks
     10814, //ChildCare
-    10791, //Coffee
     10785, //Addchart
     10784, //ModeEditOutline
     10766, //ColorLens
@@ -838,20 +844,19 @@ private fun getPopularity14(): List<Int> = listOf(
     10733, //MicNone
     10727, //HorizontalRule
     10718, //RotateRight
+)
+
+private fun getWeight15(): List<Int> = listOf(
     10667, //AccessTime
     10667, //AddBusiness
     10612, //Route
     10607, //Timelapse
     10606, //CropFree
     10589, //InsertInvitation
-)
-
-private fun getPopularity15(): List<Int> = listOf(
     10567, //CurrencyRupee
     10559, //ViewWeek
     10558, //LibraryMusic
     10536, //VideoCameraFront
-    10502, //ElectricalServices
     10472, //FrontHand
     10467, //Topic
     10433, //DeveloperBoard
@@ -885,21 +890,21 @@ private fun getPopularity15(): List<Int> = listOf(
     9746, //BookmarkAdded
     9745, //AltRoute
     9743, //Water
-    9719, //Router
+    9718, //Router
     9705, //Shop
     9693, //Dialpad
     9681, //Agriculture
     9670, //MoodBad
     9654, //MarkAsUnread
     9651, //Plagiarism
+)
+
+private fun getWeight16(): List<Int> = listOf(
     9644, //Beenhere
     9639, //PanoramaFishEye
     9638, //DownloadDone
     9624, //AssignmentReturn
-    9620, //Balance
-)
-
-private fun getPopularity16(): List<Int> = listOf(
+    9619, //Balance
     9612, //Emergency
     9612, //SettingsInputAntenna
     9596, //Pool
@@ -942,17 +947,16 @@ private fun getPopularity16(): List<Int> = listOf(
     8841, //InsertChart
     8837, //WebAsset
     8834, //SyncProblem
-    8827, //Liquor
     8817, //LibraryAddCheck
     8804, //HolidayVillage
     8799, //ViewCarousel
+)
+
+private fun getWeight17(): List<Int> = listOf(
     8793, //KeyboardDoubleArrowUp
     8765, //ViewQuilt
     8761, //FileOpen
     8748, //AllInbox
-)
-
-private fun getPopularity17(): List<Int> = listOf(
     8747, //Hearing
     8737, //SettingsRemote
     8716, //PhoneEnabled
@@ -996,16 +1000,16 @@ private fun getPopularity17(): List<Int> = listOf(
     8125, //SwapHorizontalCircle
     8118, //LockClock
     8106, //Compare
-    8100, //MarkChatUnread
+    8099, //MarkChatUnread
     8083, //Discount
     8082, //Sailing
+)
+
+private fun getWeight18(): List<Int> = listOf(
     8071, //MoneyOff
     8048, //FilterVintage
     8047, //CancelPresentation
     8040, //ReplyAll
-)
-
-private fun getPopularity18(): List<Int> = listOf(
     8029, //InsertComment
     8021, //RoomService
     8008, //FormatUnderlined
@@ -1031,13 +1035,12 @@ private fun getPopularity18(): List<Int> = listOf(
     7750, //NextPlan
     7711, //Radar
     7707, //Wallpaper
-    7700, //SportsBasketball
     7696, //Height
     7696, //LocalDining
     7693, //DeviceThermostat
     7678, //DriveFolderUpload
     7606, //CallMade
-    7595, //LaptopMac
+    7594, //LaptopMac
     7594, //MapsUgc
     7576, //RestoreFromTrash
     7572, //PregnantWoman
@@ -1053,12 +1056,12 @@ private fun getPopularity18(): List<Int> = listOf(
     7447, //LowPriority
     7442, //CenterFocusStrong
     7431, //TripOrigin
+)
+
+private fun getWeight19(): List<Int> = listOf(
     7416, //DataUsage
     7416, //VerticalAlignTop
     7415, //RoomPreferences
-)
-
-private fun getPopularity19(): List<Int> = listOf(
     7394, //NotificationAdd
     7382, //Cast
     7376, //Queue
@@ -1088,7 +1091,7 @@ private fun getPopularity19(): List<Int> = listOf(
     7182, //Hail
     7166, //ScreenShare
     7154, //VpnLock
-    7132, //CrueltyFree
+    7131, //CrueltyFree
     7124, //SensorDoor
     7107, //TheaterComedy
     7087, //WbIncandescent
@@ -1106,12 +1109,12 @@ private fun getPopularity19(): List<Int> = listOf(
     6896, //SettingsPower
     6894, //LocalPizza
     6871, //AddAlert
+)
+
+private fun getWeight20(): List<Int> = listOf(
     6828, //Square
     6815, //DeveloperMode
     6811, //BrokenImage
-)
-
-private fun getPopularity20(): List<Int> = listOf(
     6797, //FormatAlignCenter
     6770, //DensityMedium
     6770, //FreeBreakfast
@@ -1139,7 +1142,7 @@ private fun getPopularity20(): List<Int> = listOf(
     6553, //FontDownload
     6547, //TransferWithinAStation
     6543, //Colorize
-    6532, //ReduceCapacity
+    6531, //ReduceCapacity
     6527, //EmojiFoodBeverage
     6515, //CardTravel
     6511, //DevicesOther
@@ -1152,24 +1155,23 @@ private fun getPopularity20(): List<Int> = listOf(
     6448, //Weekend
     6446, //ChildFriendly
     6438, //Fax
-    6405, //AutoFixNormal
+    6404, //AutoFixNormal
     6400, //EnhancedEncryption
     6399, //FolderSpecial
     6396, //Bloodtype
     6392, //FormatPaint
     6391, //LegendToggle
     6379, //AreaChart
-    6378, //CropOriginal
-    6376, //BakeryDining
-    6364, //BatteryStd
 )
 
-private fun getPopularity21(): List<Int> = listOf(
+private fun getWeight21(): List<Int> = listOf(
+    6378, //CropOriginal
+    6364, //BatteryStd
     6355, //DesktopMac
     6351, //Replay10
     6345, //FilterCenterFocus
     6343, //EmojiTransportation
-    6343, //FindReplace
+    6342, //FindReplace
     6335, //HeartBroken
     6332, //Compress
     6288, //AssignmentReturned
@@ -1186,7 +1188,6 @@ private fun getPopularity21(): List<Int> = listOf(
     6195, //_123
     6194, //Wallet
     6156, //GeneratingTokens
-    6134, //Outlet
     6127, //SportsTennis
     6108, //Http
     6105, //WineBar
@@ -1206,7 +1207,7 @@ private fun getPopularity21(): List<Int> = listOf(
     5968, //FormatColorText
     5960, //Gesture
     5954, //Woman
-    5945, //BackupTable
+    5944, //BackupTable
     5937, //PersonalInjury
     5929, //Photo
     5924, //Elderly
@@ -1214,10 +1215,10 @@ private fun getPopularity21(): List<Int> = listOf(
     5916, //FormatAlignRight
     5901, //Unsubscribe
     5877, //FlashOff
-    5868, //RestorePage
 )
 
-private fun getPopularity22(): List<Int> = listOf(
+private fun getWeight22(): List<Int> = listOf(
+    5868, //RestorePage
     5850, //AlarmAdd
     5848, //AddModerator
     5832, //Foundation
@@ -1225,7 +1226,7 @@ private fun getPopularity22(): List<Int> = listOf(
     5819, //Scale
     5815, //CreditCardOff
     5814, //PanToolAlt
-    5812, //ScatterPlot
+    5811, //ScatterPlot
     5808, //Transgender
     5786, //NoiseControlOff
     5776, //KeyboardTab
@@ -1267,10 +1268,10 @@ private fun getPopularity22(): List<Int> = listOf(
     5425, //Splitscreen
     5418, //FlipCameraAndroid
     5417, //Icecream
-    5414, //CoPresent
 )
 
-private fun getPopularity23(): List<Int> = listOf(
+private fun getWeight23(): List<Int> = listOf(
+    5414, //CoPresent
     5408, //FlashlightOn
     5398, //DoDisturb
     5377, //Museum
@@ -1279,7 +1280,7 @@ private fun getPopularity23(): List<Int> = listOf(
     5356, //Flip
     5356, //NorthWest
     5347, //Monitor
-    5325, //ViewComfy
+    5324, //ViewComfy
     5308, //CancelScheduleSend
     5307, //Fireplace
     5289, //SwapVerticalCircle
@@ -1315,15 +1316,15 @@ private fun getPopularity23(): List<Int> = listOf(
     5062, //AddIcCall
     5061, //SetMeal
     5057, //CommentBank
-    5047, //Troubleshoot
+    5046, //Troubleshoot
     5038, //AccessTimeFilled
     5030, //AddRoad
     5029, //AirplanemodeActive
     5026, //RuleFolder
-    5017, //MobileFriendly
 )
 
-private fun getPopularity24(): List<Int> = listOf(
+private fun getWeight24(): List<Int> = listOf(
+    5017, //MobileFriendly
     5016, //Bedtime
     5005, //LineWeight
     5001, //Piano
@@ -1331,7 +1332,7 @@ private fun getPopularity24(): List<Int> = listOf(
     4974, //EvStation
     4937, //FlagCircle
     4931, //FolderZip
-    4930, //Usb
+    4929, //Usb
     4896, //FlipCameraIos
     4890, //HorizontalSplit
     4888, //Filter1
@@ -1340,11 +1341,11 @@ private fun getPopularity24(): List<Int> = listOf(
     4881, //GolfCourse
     4866, //Surfing
     4858, //MergeType
-    4851, //Sanitizer
+    4850, //Sanitizer
     4841, //PsychologyAlt
     4829, //Adb
     4816, //FeaturedPlayList
-    4815, //Groups2
+    4813, //Groups2
     4800, //SendToMobile
     4797, //Flatware
     4795, //FolderCopy
@@ -1373,17 +1374,16 @@ private fun getPopularity24(): List<Int> = listOf(
     4622, //Html
     4620, //Festival
     4583, //SportsBaseball
-    4574, //CodeOff
 )
 
-private fun getPopularity25(): List<Int> = listOf(
+private fun getWeight25(): List<Int> = listOf(
+    4574, //CodeOff
     4569, //BookmarkRemove
     4569, //Plumbing
     4564, //PersonalVideo
     4553, //LensBlur
     4536, //PlaylistAddCheckCircle
     4518, //Animation
-    4514, //Toys
     4508, //SettingsBluetooth
     4498, //Panorama
     4483, //CenterFocusWeak
@@ -1429,12 +1429,12 @@ private fun getPopularity25(): List<Int> = listOf(
     4091, //Diversity2
 )
 
-private fun getPopularity26(): List<Int> = listOf(
+private fun getWeight26(): List<Int> = listOf(
     4085, //GifBox
     4081, //RingVolume
     4079, //LocalConvenienceStore
     4076, //SpeakerNotesOff
-    4069, //Difference
+    4068, //Difference
     4063, //CurrencyYen
     4058, //LeakAdd
     4056, //Eject
@@ -1482,7 +1482,7 @@ private fun getPopularity26(): List<Int> = listOf(
     3736, //SensorWindow
 )
 
-private fun getPopularity27(): List<Int> = listOf(
+private fun getWeight27(): List<Int> = listOf(
     3734, //FormatIndentIncrease
     3723, //MoveUp
     3719, //TimerOff
@@ -1535,7 +1535,7 @@ private fun getPopularity27(): List<Int> = listOf(
     3492, //Airplay
 )
 
-private fun getPopularity28(): List<Int> = listOf(
+private fun getWeight28(): List<Int> = listOf(
     3492, //BrightnessHigh
     3492, //LightbulbCircle
     3491, //AppShortcut
@@ -1568,7 +1568,7 @@ private fun getPopularity28(): List<Int> = listOf(
     3335, //PersonRemoveAlt1
     3328, //AlignHorizontalLeft
     3326, //Countertops
-    3323, //Fitbit
+    3322, //Fitbit
     3321, //Living
     3321, //PlayLesson
     3320, //PhotoCameraFront
@@ -1588,7 +1588,7 @@ private fun getPopularity28(): List<Int> = listOf(
     3233, //Rectangle
 )
 
-private fun getPopularity29(): List<Int> = listOf(
+private fun getWeight29(): List<Int> = listOf(
     3232, //Storm
     3224, //CurrencyPound
     3222, //AppsOutage
@@ -1641,7 +1641,7 @@ private fun getPopularity29(): List<Int> = listOf(
     3001, //NetworkCell
 )
 
-private fun getPopularity30(): List<Int> = listOf(
+private fun getWeight30(): List<Int> = listOf(
     2999, //HideImage
     2986, //SettingsInputSvideo
     2978, //SwipeUp
@@ -1694,7 +1694,7 @@ private fun getPopularity30(): List<Int> = listOf(
     2746, //AudioFile
 )
 
-private fun getPopularity31(): List<Int> = listOf(
+private fun getWeight31(): List<Int> = listOf(
     2736, //ShuffleOn
     2727, //Shop2
     2725, //ElectricBike
@@ -1713,7 +1713,7 @@ private fun getPopularity31(): List<Int> = listOf(
     2644, //HdrStrong
     2643, //Egg
     2642, //SettingsSystemDaydream
-    2640, //Brightness3
+    2639, //Brightness3
     2638, //Tablet
     2632, //Forward30
     2631, //SafetyCheck
@@ -1740,14 +1740,14 @@ private fun getPopularity31(): List<Int> = listOf(
     2529, //RiceBowl
     2522, //Face3
     2518, //FlashAuto
-    2510, //Stadium
+    2509, //Stadium
     2507, //DriveFileMoveRtl
     2507, //SignalWifiBad
     2504, //ModeOfTravel
     2500, //BusAlert
 )
 
-private fun getPopularity32(): List<Int> = listOf(
+private fun getWeight32(): List<Int> = listOf(
     2495, //Tty
     2492, //PartyMode
     2489, //QueuePlayNext
@@ -1800,7 +1800,7 @@ private fun getPopularity32(): List<Int> = listOf(
     2290, //Bento
 )
 
-private fun getPopularity33(): List<Int> = listOf(
+private fun getWeight33(): List<Int> = listOf(
     2286, //TextRotationNone
     2280, //AccessAlarm
     2279, //ArtTrack
@@ -1853,7 +1853,7 @@ private fun getPopularity33(): List<Int> = listOf(
     2095, //Explicit
 )
 
-private fun getPopularity34(): List<Int> = listOf(
+private fun getWeight34(): List<Int> = listOf(
     2084, //AlignHorizontalRight
     2082, //KeyboardCapslock
     2081, //SdStorage
@@ -1863,7 +1863,7 @@ private fun getPopularity34(): List<Int> = listOf(
     2060, //PausePresentation
     2058, //Mosque
     2043, //PermCameraMic
-    2030, //Superscript
+    2029, //Superscript
     2021, //SportsRugby
     2020, //ViewCozy
     2013, //BurstMode
@@ -1906,7 +1906,7 @@ private fun getPopularity34(): List<Int> = listOf(
     1866, //WifiLock
 )
 
-private fun getPopularity35(): List<Int> = listOf(
+private fun getWeight35(): List<Int> = listOf(
     1863, //ScreenshotMonitor
     1862, //Sledding
     1846, //Deselect
@@ -1949,9 +1949,9 @@ private fun getPopularity35(): List<Int> = listOf(
     1683, //SwitchVideo
     1681, //SimCardAlert
     1673, //Php
-    1666, //ViewComfyAlt
     1665, //FolderOff
     1665, //TextRotateUp
+    1665, //ViewComfyAlt
     1656, //Escalator
     1654, //Filter7
     1651, //RailwayAlert
@@ -1959,7 +1959,7 @@ private fun getPopularity35(): List<Int> = listOf(
     1647, //FontDownloadOff
 )
 
-private fun getPopularity36(): List<Int> = listOf(
+private fun getWeight36(): List<Int> = listOf(
     1637, //Filter4
     1630, //Dry
     1630, //ScreenLockPortrait
@@ -1986,7 +1986,7 @@ private fun getPopularity36(): List<Int> = listOf(
     1565, //Stroller
     1554, //AddHomeWork
     1551, //ViewCompactAlt
-    1547, //PlayDisabled
+    1546, //PlayDisabled
     1540, //BorderStyle
     1540, //SystemSecurityUpdateWarning
     1539, //NetworkPing
@@ -2012,7 +2012,7 @@ private fun getPopularity36(): List<Int> = listOf(
     1464, //SmartScreen
 )
 
-private fun getPopularity37(): List<Int> = listOf(
+private fun getWeight37(): List<Int> = listOf(
     1460, //EggAlt
     1457, //OnDeviceTraining
     1456, //DoDisturbOff
@@ -2038,8 +2038,8 @@ private fun getPopularity37(): List<Int> = listOf(
     1396, //SpatialTracking
     1387, //NearMeDisabled
     1381, //StayPrimaryLandscape
-    1376, //LineAxis
     1376, //SignalCellularNodata
+    1375, //LineAxis
     1372, //Snowmobile
     1367, //SwipeLeftAlt
     1366, //_30fps
@@ -2065,7 +2065,7 @@ private fun getPopularity37(): List<Int> = listOf(
     1313, //MissedVideoCall
 )
 
-private fun getPopularity38(): List<Int> = listOf(
+private fun getWeight38(): List<Int> = listOf(
     1311, //InsertPageBreak
     1305, //MobileOff
     1304, //Filter8
@@ -2092,8 +2092,8 @@ private fun getPopularity38(): List<Int> = listOf(
     1210, //RawOn
     1204, //BlurOff
     1203, //Deblur
-    1203, //MotionPhotosOff
     1203, //WbShade
+    1202, //MotionPhotosOff
     1202, //Rsvp
     1201, //TempleBuddhist
     1192, //EmergencyShare
@@ -2108,8 +2108,8 @@ private fun getPopularity38(): List<Int> = listOf(
     1162, //PhoneBluetoothSpeaker
     1158, //HdrOn
     1151, //AirlineSeatFlatAngled
-    1150, //UsbOff
     1149, //_3gMobiledata
+    1149, //UsbOff
     1140, //ScubaDiving
     1139, //FiberPin
     1138, //PanoramaHorizontal
@@ -2118,7 +2118,7 @@ private fun getPopularity38(): List<Int> = listOf(
     1124, //ScreenLockRotation
 )
 
-private fun getPopularity39(): List<Int> = listOf(
+private fun getWeight39(): List<Int> = listOf(
     1122, //ImageAspectRatio
     1122, //NoCell
     1117, //DatasetLinked
@@ -2171,7 +2171,7 @@ private fun getPopularity39(): List<Int> = listOf(
     930, //BorderLeft
 )
 
-private fun getPopularity40(): List<Int> = listOf(
+private fun getWeight40(): List<Int> = listOf(
     929, //AirlineSeatLegroomReduced
     924, //WifiChannel
     923, //RoundaboutRight
@@ -2224,7 +2224,7 @@ private fun getPopularity40(): List<Int> = listOf(
     762, //VapingRooms
 )
 
-private fun getPopularity41(): List<Int> = listOf(
+private fun getWeight41(): List<Int> = listOf(
     754, //Mp
     745, //RollerShadesClosed
     744, //HPlusMobiledata
@@ -2277,7 +2277,7 @@ private fun getPopularity41(): List<Int> = listOf(
     587, //_16mp
 )
 
-private fun getPopularity42(): List<Int> = listOf(
+private fun getWeight42(): List<Int> = listOf(
     586, //_13mp
     586, //_15mp
     584, //_21mp

@@ -25,10 +25,13 @@ import hnau.common.kotlin.serialization.MutableStateFlowSerializer
 import hnau.common.kotlin.shrinkType
 import hnau.common.kotlin.toAccessor
 import hnau.pinfin.data.BudgetId
+import hnau.pinfin.model.IconModel
 import hnau.pinfin.model.budgetsstack.BudgetsStackModel
 import hnau.pinfin.model.budgetstack.BudgetStackModel
 import hnau.pinfin.model.utils.budget.repository.BudgetRepository
 import hnau.pinfin.model.utils.budget.storage.BudgetsStorage
+import hnau.pinfin.model.utils.icons.IconVariant
+import hnau.pinfin.model.utils.icons.icon
 import hnau.shuffler.annotations.Shuffle
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.StateFlow
@@ -57,11 +60,14 @@ class ManageModel(
             budgetRepository: BudgetRepository,
             budgetsListOpener: BudgetsListOpener,
         ): BudgetStackModel.Dependencies
+
+        fun icon(): IconModel.Dependencies
     }
 
     @Serializable
     data class Skeleton(
         var stateSkeleton: ManageStateModel.Skeleton? = null,
+        var icon: IconModel.Skeleton? = null,
     )
 
     private val selectedBudgetPreference: Preference<BudgetId?> = dependencies
@@ -155,6 +161,16 @@ class ManageModel(
                 )
             }
         }
+
+    val icon = IconModel(
+        scope = scope,
+        dependencies = dependencies.icon(),
+        skeleton = skeleton::icon
+            .toAccessor()
+            .getOrInit { IconModel.Skeleton() },
+        selected = null,
+        onSelect = {},
+    )
 
     override val goBackHandler: GoBackHandler = state
         .flatMapState(scope, GoBackHandlerProvider::goBackHandler)

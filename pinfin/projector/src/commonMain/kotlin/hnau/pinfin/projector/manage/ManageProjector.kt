@@ -9,6 +9,7 @@ import hnau.common.compose.uikit.state.TransitionSpec
 import hnau.common.kotlin.coroutines.mapWithScope
 import hnau.pinfin.model.manage.ManageModel
 import hnau.pinfin.model.manage.ManageStateModel
+import hnau.pinfin.projector.IconProjector
 import hnau.pinfin.projector.budgetsstack.BudgetsStackProjector
 import hnau.pinfin.projector.budgetstack.BudgetStackProjector
 import hnau.shuffler.annotations.Shuffle
@@ -27,6 +28,8 @@ class ManageProjector(
         fun budgetsStack(): BudgetsStackProjector.Dependencies
 
         fun budgetStack(): BudgetStackProjector.Dependencies
+
+        fun icon(): IconProjector.Dependencies
     }
 
     private val state: StateFlow<ManageElementProjector> = model
@@ -51,9 +54,16 @@ class ManageProjector(
             }
         }
 
+    private val icon = IconProjector(
+        scope = scope,
+        dependencies = dependencies.icon(),
+        model = model.icon,
+    )
+
     @Composable
     fun Content() {
-        state
+        icon.Content()
+        /*state
             .collectAsState()
             .value
             .StateContent(
@@ -63,6 +73,6 @@ class ManageProjector(
                 contentKey = ManageElementProjector::key,
             ) { elementProjector ->
                 elementProjector.Content()
-            }
+            }*/
     }
 }

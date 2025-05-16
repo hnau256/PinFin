@@ -57,7 +57,7 @@ internal fun Project.config(
                 }
             }
         }
-        extension.jvmToolchain {javaToolchainSpec ->
+        extension.jvmToolchain { javaToolchainSpec ->
             javaToolchainSpec
                 .languageVersion
                 .set(JavaLanguageVersion.of(javaVersionString.dropWhile { !it.isDigit() }))
@@ -69,15 +69,9 @@ internal fun Project.config(
                 }
             }
         }
-        val sourceSets = listOfNotNull(
-            "commonMain",
-            "jvmMain",
-            "androidMain".takeIf { useAndroid },
-        )
-        sourceSets.forEach { sourceSetName ->
-            val sourceSet = extension.sourceSets.getByName(sourceSetName)
-            sourceSet.languageSettings.enableLanguageFeature("ContextReceivers")
-            sourceSet.dependencies {
+        extension.sourceSets.getByName("commonMain").apply {
+            languageSettings.enableLanguageFeature("ContextReceivers")
+            dependencies {
                 implementation(versions.findLibrary("arrow-core").get().get())
                 implementation(versions.findLibrary("arrow-coroutines").get().get())
                 implementation(versions.findLibrary("kotlin-coroutines-core").get().get())
@@ -87,7 +81,8 @@ internal fun Project.config(
                 }
                 if (hasComposePlugin) {
                     val composeDependencies = ComposePlugin.Dependencies(project)
-                    implementation(composeDependencies.desktop.currentOs)
+                    implementation(composeDependencies.runtime)
+                    implementation(composeDependencies.foundation)
                     implementation(composeDependencies.material3)
                     implementation(composeDependencies.materialIconsExtended)
                     if (identitifer != CommonComposeProjectIdentifier) {
@@ -114,21 +109,21 @@ internal fun Project.config(
         }
     }
 
-/*    versions.findLibrary("kotest-framework-engine").get().get().let {
-        dependencies.add("commonTestImplementation", it)
-    }
-
-    versions.findLibrary("kotest-junit-runner").get().get().let {
-        val configurationName = when (useAndroid) {
-            true -> "androidUnitTestImplementation"
-            false -> "jvmTestImplementation"
+    /*    versions.findLibrary("kotest-framework-engine").get().get().let {
+            dependencies.add("commonTestImplementation", it)
         }
-        dependencies.add(configurationName, it)
-    }
 
-    tasks.withType(Test::class.java).configureEach { testTask ->
-        testTask.useJUnitPlatform()
-    }*/
+        versions.findLibrary("kotest-junit-runner").get().get().let {
+            val configurationName = when (useAndroid) {
+                true -> "androidUnitTestImplementation"
+                false -> "jvmTestImplementation"
+            }
+            dependencies.add(configurationName, it)
+        }
+
+        tasks.withType(Test::class.java).configureEach { testTask ->
+            testTask.useJUnitPlatform()
+        }*/
 
     if (useAndroid) {
         extensions.configure(BaseExtension::class.java) { extension ->

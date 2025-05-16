@@ -52,8 +52,41 @@ private val variantCategory: List<IconCategory> = buildList {
 }
 
 private fun getCategory0(): List<IconCategory> = listOf(
-    IconCategory.Action, //Search
     IconCategory.Action, //Home
+    IconCategory.Action, //ShoppingCart
+    IconCategory.Communication, //Call
+    IconCategory.Social, //School
+    IconCategory.Action, //AccountBalance
+    IconCategory.Action, //AccountBalanceWallet
+    IconCategory.Action, //Store
+    IconCategory.Action, //Savings
+    IconCategory.Places, //Storefront
+    IconCategory.Action, //Payment
+    IconCategory.Maps, //Restaurant
+    IconCategory.Maps, //DirectionsCar
+    IconCategory.Communication, //AlternateEmail
+    IconCategory.Social, //HealthAndSafety
+    IconCategory.Social, //SportsEsports
+    IconCategory.Maps, //Flight
+    IconCategory.Places, //FitnessCenter
+    IconCategory.Maps, //DirectionsRun
+    IconCategory.Places, //BusinessCenter
+    IconCategory.Action, //Redeem
+    IconCategory.Maps, //MedicalServices
+    IconCategory.Maps, //Celebration
+    IconCategory.Maps, //LunchDining
+    IconCategory.Maps, //DirectionsBus
+    IconCategory.Places, //Checkroom
+    IconCategory.Maps, //LocalFlorist
+    IconCategory.Social, //Hiking
+    IconCategory.Search, //Coffee
+    IconCategory.Maps, //ElectricalServices
+    IconCategory.Maps, //Liquor
+    IconCategory.Social, //SportsBasketball
+    IconCategory.Maps, //BakeryDining
+    IconCategory.Action, //Outlet
+    IconCategory.Hardware, //Toys
+    IconCategory.Action, //Search
     IconCategory.Action, //AccountCircle
     IconCategory.Action, //Settings
     IconCategory.Action, //Done
@@ -66,10 +99,12 @@ private fun getCategory0(): List<IconCategory> = listOf(
     IconCategory.Navigation, //ExpandMore
     IconCategory.Content, //Add
     IconCategory.Action, //Visibility
-    IconCategory.Action, //ShoppingCart
     IconCategory.Image, //Edit
     IconCategory.Action, //Favorite
     IconCategory.Communication, //Email
+)
+
+private fun getCategory1(): List<IconCategory> = listOf(
     IconCategory.Action, //Description
     IconCategory.Action, //Logout
     IconCategory.Navigation, //ArrowBack
@@ -80,7 +115,6 @@ private fun getCategory0(): List<IconCategory> = listOf(
     IconCategory.Communication, //LocationOn
     IconCategory.Action, //Schedule
     IconCategory.Social, //Notifications
-    IconCategory.Communication, //Call
     IconCategory.Action, //Language
     IconCategory.File, //FileDownload
     IconCategory.Navigation, //ArrowForwardIos
@@ -102,9 +136,6 @@ private fun getCategory0(): List<IconCategory> = listOf(
     IconCategory.Action, //Dashboard
     IconCategory.Toggle, //Star
     IconCategory.Action, //Fingerprint
-)
-
-private fun getCategory1(): List<IconCategory> = listOf(
     IconCategory.Action, //List
     IconCategory.Content, //ContentCopy
     IconCategory.Social, //People
@@ -124,6 +155,9 @@ private fun getCategory1(): List<IconCategory> = listOf(
     IconCategory.Action, //Help
     IconCategory.Communication, //Phone
     IconCategory.Action, //Paid
+)
+
+private fun getCategory2(): List<IconCategory> = listOf(
     IconCategory.Action, //TaskAlt
     IconCategory.Action, //QuestionAnswer
     IconCategory.Navigation, //ExpandLess
@@ -137,7 +171,6 @@ private fun getCategory1(): List<IconCategory> = listOf(
     IconCategory.Toggle, //CheckBoxOutlineBlank
     IconCategory.Navigation, //MoreHoriz
     IconCategory.Image, //Image
-    IconCategory.Social, //School
     IconCategory.Action, //ShoppingBag
     IconCategory.Navigation, //Refresh
     IconCategory.Notification, //SupportAgent
@@ -148,16 +181,12 @@ private fun getCategory1(): List<IconCategory> = listOf(
     IconCategory.Action, //History
     IconCategory.Action, //PermIdentity
     IconCategory.Action, //TrendingUp
-    IconCategory.Action, //AccountBalance
     IconCategory.Action, //DeleteOutline
     IconCategory.Editor, //AttachMoney
     IconCategory.Social, //PersonAdd
     IconCategory.Content, //Save
     IconCategory.Social, //Public
     IconCategory.Action, //VerifiedUser
-)
-
-private fun getCategory2(): List<IconCategory> = listOf(
     IconCategory.Toggle, //RadioButtonUnchecked
     IconCategory.Alert, //ErrorOutline
     IconCategory.Action, //FactCheck
@@ -179,13 +208,14 @@ private fun getCategory2(): List<IconCategory> = listOf(
     IconCategory.Navigation, //Payments
     IconCategory.Maps, //MenuBook
     IconCategory.File, //Folder
-    IconCategory.Action, //AccountBalanceWallet
+)
+
+private fun getCategory3(): List<IconCategory> = listOf(
     IconCategory.Action, //Autorenew
     IconCategory.Action, //Build
     IconCategory.Action, //ViewList
     IconCategory.Hardware, //KeyboardArrowDown
     IconCategory.Image, //Tune
-    IconCategory.Action, //Store
     IconCategory.Action, //Work
     IconCategory.Action, //Print
     IconCategory.Av, //Videocam
@@ -208,16 +238,12 @@ private fun getCategory2(): List<IconCategory> = listOf(
     IconCategory.Content, //Inventory2
     IconCategory.Image, //ReceiptLong
     IconCategory.Av, //VolumeUp
-)
-
-private fun getCategory3(): List<IconCategory> = listOf(
     IconCategory.Action, //Grade
     IconCategory.Action, //Update
     IconCategory.Maps, //LocalOffer
     IconCategory.Maps, //Badge
     IconCategory.Content, //Inventory
     IconCategory.Image, //Circle
-    IconCategory.Action, //Savings
     IconCategory.Action, //Room
     IconCategory.Editor, //EditNote
     IconCategory.Action, //Code
@@ -235,13 +261,15 @@ private fun getCategory3(): List<IconCategory> = listOf(
     IconCategory.Toggle, //StarBorder
     IconCategory.Device, //RestartAlt
     IconCategory.Av, //Pause
+)
+
+private fun getCategory4(): List<IconCategory> = listOf(
     IconCategory.Action, //DoneAll
     IconCategory.Content, //RemoveCircleOutline
     IconCategory.Action, //Pets
     IconCategory.Navigation, //ArrowBackIosNew
     IconCategory.Notification, //Wifi
     IconCategory.Communication, //ListAlt
-    IconCategory.Places, //Storefront
     IconCategory.Social, //Engineering
     IconCategory.Editor, //ModeEdit
     IconCategory.Toggle, //ToggleOn
@@ -261,9 +289,6 @@ private fun getCategory3(): List<IconCategory> = listOf(
     IconCategory.Action, //NoteAdd
     IconCategory.Image, //Timer
     IconCategory.Action, //Reorder
-)
-
-private fun getCategory4(): List<IconCategory> = listOf(
     IconCategory.Action, //PendingActions
     IconCategory.File, //UploadFile
     IconCategory.Navigation, //ArrowRight
@@ -274,9 +299,7 @@ private fun getCategory4(): List<IconCategory> = listOf(
     IconCategory.Places, //Apartment
     IconCategory.Action, //ShoppingBasket
     IconCategory.Notification, //Sync
-    IconCategory.Action, //Payment
     IconCategory.Social, //PeopleAlt
-    IconCategory.Maps, //Restaurant
     IconCategory.Av, //PlayCircleOutline
     IconCategory.Content, //Reply
     IconCategory.Device, //Task
@@ -291,13 +314,15 @@ private fun getCategory4(): List<IconCategory> = listOf(
     IconCategory.Action, //ZoomIn
     IconCategory.Social, //GroupAdd
     IconCategory.Image, //AutoAwesome
+)
+
+private fun getCategory5(): List<IconCategory> = listOf(
     IconCategory.Notification, //PriorityHigh
     IconCategory.Content, //PushPin
     IconCategory.Content, //RemoveCircle
     IconCategory.Action, //Assessment
     IconCategory.Action, //Leaderboard
     IconCategory.Device, //Summarize
-    IconCategory.Maps, //DirectionsCar
     IconCategory.Content, //Block
     IconCategory.Maps, //LocalFireDepartment
     IconCategory.Action, //ThumbUpOffAlt
@@ -309,14 +334,10 @@ private fun getCategory4(): List<IconCategory> = listOf(
     IconCategory.Content, //Calculate
     IconCategory.Editor, //PostAdd
     IconCategory.File, //CloudUpload
-    IconCategory.Communication, //AlternateEmail
     IconCategory.Editor, //BarChart
     IconCategory.Action, //DoneOutline
     IconCategory.Device, //Password
     IconCategory.Action, //Preview
-)
-
-private fun getCategory5(): List<IconCategory> = listOf(
     IconCategory.Action, //AssignmentInd
     IconCategory.Image, //Collections
     IconCategory.Action, //PublishedWithChanges
@@ -335,7 +356,6 @@ private fun getCategory5(): List<IconCategory> = listOf(
     IconCategory.Action, //ViewInAr
     IconCategory.Navigation, //Fullscreen
     IconCategory.Action, //TipsAndUpdates
-    IconCategory.Social, //HealthAndSafety
     IconCategory.Action, //Feedback
     IconCategory.Navigation, //ArrowDropUp
     IconCategory.Action, //Label
@@ -347,6 +367,9 @@ private fun getCategory5(): List<IconCategory> = listOf(
     IconCategory.Image, //Palette
     IconCategory.Hardware, //KeyboardArrowRight
     IconCategory.Action, //Timeline
+)
+
+private fun getCategory6(): List<IconCategory> = listOf(
     IconCategory.Action, //Stars
     IconCategory.Action, //AssignmentTurnedIn
     IconCategory.Action, //SyncAlt
@@ -367,9 +390,6 @@ private fun getCategory5(): List<IconCategory> = listOf(
     IconCategory.Communication, //ChatBubble
     IconCategory.File, //FolderOpen
     IconCategory.Navigation, //MapsHomeWork
-)
-
-private fun getCategory6(): List<IconCategory> = listOf(
     IconCategory.Av, //FiberManualRecord
     IconCategory.Content, //ContentPaste
     IconCategory.File, //Cloud
@@ -377,7 +397,6 @@ private fun getCategory6(): List<IconCategory> = listOf(
     IconCategory.File, //TextSnippet
     IconCategory.Image, //RemoveRedEye
     IconCategory.Maps, //MyLocation
-    IconCategory.Social, //SportsEsports
     IconCategory.File, //RequestQuote
     IconCategory.Communication, //Textsms
     IconCategory.Action, //Alarm
@@ -401,6 +420,9 @@ private fun getCategory6(): List<IconCategory> = listOf(
     IconCategory.Action, //EditCalendar
     IconCategory.Action, //QuestionMark
     IconCategory.File, //CloudDownload
+)
+
+private fun getCategory7(): List<IconCategory> = listOf(
     IconCategory.Content, //FileCopy
     IconCategory.Communication, //PersonSearch
     IconCategory.Communication, //ContactMail
@@ -413,16 +435,11 @@ private fun getCategory6(): List<IconCategory> = listOf(
     IconCategory.Hardware, //DesktopWindows
     IconCategory.Action, //Extension
     IconCategory.Social, //IosShare
-    IconCategory.Maps, //Flight
     IconCategory.Social, //PrecisionManufacturing
     IconCategory.Communication, //QrCode2
     IconCategory.Maps, //LocalMall
     IconCategory.Image, //MusicNote
-    IconCategory.Places, //FitnessCenter
     IconCategory.Content, //Backspace
-)
-
-private fun getCategory7(): List<IconCategory> = listOf(
     IconCategory.Action, //Android
     IconCategory.Hardware, //SmartDisplay
     IconCategory.Maps, //NearMe
@@ -446,7 +463,6 @@ private fun getCategory7(): List<IconCategory> = listOf(
     IconCategory.Social, //PersonAddAlt
     IconCategory.Social, //MilitaryTech
     IconCategory.Action, //TrendingFlat
-    IconCategory.Maps, //DirectionsRun
     IconCategory.Action, //Rule
     IconCategory.Av, //Movie
     IconCategory.Social, //EmojiObjects
@@ -457,6 +473,9 @@ private fun getCategory7(): List<IconCategory> = listOf(
     IconCategory.Communication, //Contacts
     IconCategory.Editor, //FormatQuote
     IconCategory.Communication, //Comment
+)
+
+private fun getCategory8(): List<IconCategory> = listOf(
     IconCategory.Action, //AdsClick
     IconCategory.Action, //SwapVert
     IconCategory.Maps, //RestaurantMenu
@@ -465,7 +484,6 @@ private fun getCategory7(): List<IconCategory> = listOf(
     IconCategory.Av, //SkipPrevious
     IconCategory.Content, //Archive
     IconCategory.Action, //SettingsApplications
-    IconCategory.Places, //BusinessCenter
     IconCategory.File, //Upload
     IconCategory.Action, //StickyNote2
     IconCategory.Action, //Source
@@ -473,14 +491,10 @@ private fun getCategory7(): List<IconCategory> = listOf(
     IconCategory.Device, //CreditScore
     IconCategory.Social, //Cake
     IconCategory.Editor, //QueryStats
-)
-
-private fun getCategory8(): List<IconCategory> = listOf(
     IconCategory.Action, //DashboardCustomize
     IconCategory.Av, //NewReleases
     IconCategory.Content, //SaveAlt
     IconCategory.Av, //PlaylistAdd
-    IconCategory.Action, //Redeem
     IconCategory.Action, //Support
     IconCategory.Action, //ArrowCircleRight
     IconCategory.Action, //Loyalty
@@ -499,7 +513,6 @@ private fun getCategory8(): List<IconCategory> = listOf(
     IconCategory.Navigation, //ExpandCircleDown
     IconCategory.Action, //ViewHeadline
     IconCategory.Hardware, //KeyboardBackspace
-    IconCategory.Maps, //MedicalServices
     IconCategory.Action, //CurrencyExchange
     IconCategory.Content, //Policy
     IconCategory.Hardware, //PhoneAndroid
@@ -513,6 +526,9 @@ private fun getCategory8(): List<IconCategory> = listOf(
     IconCategory.Action, //Sensors
     IconCategory.Places, //MeetingRoom
     IconCategory.Hardware, //KeyboardReturn
+)
+
+private fun getCategory9(): List<IconCategory> = listOf(
     IconCategory.Editor, //BorderColor
     IconCategory.Action, //GroupWork
     IconCategory.Social, //SentimentVeryDissatisfied
@@ -526,16 +542,11 @@ private fun getCategory8(): List<IconCategory> = listOf(
     IconCategory.Places, //House
     IconCategory.Content, //ChangeCircle
     IconCategory.Action, //DisabledByDefault
-)
-
-private fun getCategory9(): List<IconCategory> = listOf(
     IconCategory.Navigation, //ArrowLeft
     IconCategory.Navigation, //South
     IconCategory.Maps, //LocalHospital
-    IconCategory.Maps, //Celebration
     IconCategory.Content, //Tag
     IconCategory.Action, //Subject
-    IconCategory.Maps, //LunchDining
     IconCategory.Communication, //ImportContacts
     IconCategory.Av, //Loop
     IconCategory.Hardware, //Laptop
@@ -568,6 +579,9 @@ private fun getCategory9(): List<IconCategory> = listOf(
     IconCategory.Device, //Medication
     IconCategory.Editor, //PieChart
     IconCategory.Communication, //ImportExport
+)
+
+private fun getCategory10(): List<IconCategory> = listOf(
     IconCategory.Image, //AutoFixHigh
     IconCategory.Social, //SelfImprovement
     IconCategory.File, //DownloadForOffline
@@ -579,9 +593,6 @@ private fun getCategory9(): List<IconCategory> = listOf(
     IconCategory.Device, //Pin
     IconCategory.Av, //FastForward
     IconCategory.Communication, //ForwardToInbox
-)
-
-private fun getCategory10(): List<IconCategory> = listOf(
     IconCategory.Social, //PersonRemove
     IconCategory.Social, //Coronavirus
     IconCategory.Maps, //LocalAtm
@@ -601,7 +612,6 @@ private fun getCategory10(): List<IconCategory> = listOf(
     IconCategory.Maps, //PersonPin
     IconCategory.Av, //VideoLibrary
     IconCategory.Maps, //DesignServices
-    IconCategory.Maps, //DirectionsBus
     IconCategory.Action, //ZoomOut
     IconCategory.Device, //GppGood
     IconCategory.Communication, //HourglassTop
@@ -622,6 +632,9 @@ private fun getCategory10(): List<IconCategory> = listOf(
     IconCategory.Action, //CircleNotifications
     IconCategory.Communication, //RssFeed
     IconCategory.Maps, //DeliveryDining
+)
+
+private fun getCategory11(): List<IconCategory> = listOf(
     IconCategory.Social, //Whatshot
     IconCategory.Image, //ControlPoint
     IconCategory.Action, //PermPhoneMsg
@@ -632,9 +645,6 @@ private fun getCategory10(): List<IconCategory> = listOf(
     IconCategory.Image, //Style
     IconCategory.Action, //Wysiwyg
     IconCategory.File, //CreateNewFolder
-)
-
-private fun getCategory11(): List<IconCategory> = listOf(
     IconCategory.Action, //CardMembership
     IconCategory.Toggle, //IndeterminateCheckBox
     IconCategory.Device, //BatteryChargingFull
@@ -675,6 +685,9 @@ private fun getCategory11(): List<IconCategory> = listOf(
     IconCategory.Action, //_3dRotation
     IconCategory.Device, //Tungsten
     IconCategory.Editor, //ChecklistRtl
+)
+
+private fun getCategory12(): List<IconCategory> = listOf(
     IconCategory.Maps, //DirectionsCarFilled
     IconCategory.Maps, //HomeRepairService
     IconCategory.Editor, //TextFields
@@ -685,9 +698,6 @@ private fun getCategory11(): List<IconCategory> = listOf(
     IconCategory.Maps, //ZoomOutMap
     IconCategory.Editor, //TableRows
     IconCategory.Search, //Bed
-)
-
-private fun getCategory12(): List<IconCategory> = listOf(
     IconCategory.Editor, //Publish
     IconCategory.Notification, //WifiOff
     IconCategory.Av, //Repeat
@@ -728,19 +738,18 @@ private fun getCategory12(): List<IconCategory> = listOf(
     IconCategory.Maps, //LocalGroceryStore
     IconCategory.Hardware, //KeyboardDoubleArrowLeft
     IconCategory.Editor, //InsertPhoto
+)
+
+private fun getCategory13(): List<IconCategory> = listOf(
     IconCategory.Image, //Camera
     IconCategory.Editor, //Draw
     IconCategory.Editor, //InsertChartOutlined
     IconCategory.Action, //ViewColumn
     IconCategory.Action, //AspectRatio
     IconCategory.Navigation, //UnfoldLess
-    IconCategory.Places, //Checkroom
     IconCategory.Av, //Shuffle
     IconCategory.Action, //ModelTraining
     IconCategory.Action, //DonutLarge
-)
-
-private fun getCategory13(): List<IconCategory> = listOf(
     IconCategory.Social, //Male
     IconCategory.Action, //Segment
     IconCategory.Image, //Portrait
@@ -769,8 +778,8 @@ private fun getCategory13(): List<IconCategory> = listOf(
     IconCategory.Action, //Maximize
     IconCategory.Communication, //MoreTime
     IconCategory.Action, //SettingsEthernet
-    IconCategory.Content, //SquareFoot
     IconCategory.Editor, //ModeComment
+    IconCategory.Content, //SquareFoot
     IconCategory.Action, //ThumbsUpDown
     IconCategory.File, //CloudDone
     IconCategory.Content, //Markunread
@@ -778,11 +787,13 @@ private fun getCategory13(): List<IconCategory> = listOf(
     IconCategory.Maps, //LocalParking
     IconCategory.Maps, //PersonPinCircle
     IconCategory.Action, //Theaters
-    IconCategory.Maps, //LocalFlorist
     IconCategory.Maps, //Factory
     IconCategory.Av, //SortByAlpha
     IconCategory.Action, //ViewAgenda
     IconCategory.Navigation, //SubdirectoryArrowRight
+)
+
+private fun getCategory14(): List<IconCategory> = listOf(
     IconCategory.Action, //ThumbDownOffAlt
     IconCategory.Communication, //MarkEmailUnread
     IconCategory.Social, //ConnectWithoutContact
@@ -791,9 +802,6 @@ private fun getCategory13(): List<IconCategory> = listOf(
     IconCategory.Social, //ThumbDownAlt
     IconCategory.Places, //AllInclusive
     IconCategory.Hardware, //KeyboardDoubleArrowDown
-)
-
-private fun getCategory14(): List<IconCategory> = listOf(
     IconCategory.Communication, //CallEnd
     IconCategory.Places, //Grass
     IconCategory.Notification, //Wc
@@ -802,7 +810,6 @@ private fun getCategory14(): List<IconCategory> = listOf(
     IconCategory.Places, //AirportShuttle
     IconCategory.Social, //BackHand
     IconCategory.Action, //ImportantDevices
-    IconCategory.Social, //Hiking
     IconCategory.File, //CloudQueue
     IconCategory.Maps, //Money
     IconCategory.Maps, //LocalPostOffice
@@ -829,7 +836,6 @@ private fun getCategory14(): List<IconCategory> = listOf(
     IconCategory.Action, //NoAccounts
     IconCategory.Social, //Masks
     IconCategory.Places, //ChildCare
-    IconCategory.Search, //Coffee
     IconCategory.Action, //Addchart
     IconCategory.Editor, //ModeEditOutline
     IconCategory.Image, //ColorLens
@@ -838,20 +844,19 @@ private fun getCategory14(): List<IconCategory> = listOf(
     IconCategory.Av, //MicNone
     IconCategory.Editor, //HorizontalRule
     IconCategory.Image, //RotateRight
+)
+
+private fun getCategory15(): List<IconCategory> = listOf(
     IconCategory.Device, //AccessTime
     IconCategory.Maps, //AddBusiness
     IconCategory.Maps, //Route
     IconCategory.Image, //Timelapse
     IconCategory.Image, //CropFree
     IconCategory.Editor, //InsertInvitation
-)
-
-private fun getCategory15(): List<IconCategory> = listOf(
     IconCategory.Image, //CurrencyRupee
     IconCategory.Action, //ViewWeek
     IconCategory.Av, //LibraryMusic
     IconCategory.Image, //VideoCameraFront
-    IconCategory.Maps, //ElectricalServices
     IconCategory.Social, //FrontHand
     IconCategory.File, //Topic
     IconCategory.Hardware, //DeveloperBoard
@@ -892,14 +897,14 @@ private fun getCategory15(): List<IconCategory> = listOf(
     IconCategory.Social, //MoodBad
     IconCategory.Action, //MarkAsUnread
     IconCategory.Action, //Plagiarism
+)
+
+private fun getCategory16(): List<IconCategory> = listOf(
     IconCategory.Maps, //Beenhere
     IconCategory.Image, //PanoramaFishEye
     IconCategory.File, //DownloadDone
     IconCategory.Action, //AssignmentReturn
     IconCategory.Action, //Balance
-)
-
-private fun getCategory16(): List<IconCategory> = listOf(
     IconCategory.Maps, //Emergency
     IconCategory.Action, //SettingsInputAntenna
     IconCategory.Places, //Pool
@@ -942,17 +947,16 @@ private fun getCategory16(): List<IconCategory> = listOf(
     IconCategory.Editor, //InsertChart
     IconCategory.Av, //WebAsset
     IconCategory.Notification, //SyncProblem
-    IconCategory.Maps, //Liquor
     IconCategory.Av, //LibraryAddCheck
     IconCategory.Places, //HolidayVillage
     IconCategory.Action, //ViewCarousel
+)
+
+private fun getCategory17(): List<IconCategory> = listOf(
     IconCategory.Hardware, //KeyboardDoubleArrowUp
     IconCategory.Action, //ViewQuilt
     IconCategory.File, //FileOpen
     IconCategory.Action, //AllInbox
-)
-
-private fun getCategory17(): List<IconCategory> = listOf(
     IconCategory.Av, //Hearing
     IconCategory.Action, //SettingsRemote
     IconCategory.Communication, //PhoneEnabled
@@ -999,13 +1003,13 @@ private fun getCategory17(): List<IconCategory> = listOf(
     IconCategory.Communication, //MarkChatUnread
     IconCategory.Device, //Discount
     IconCategory.Maps, //Sailing
+)
+
+private fun getCategory18(): List<IconCategory> = listOf(
     IconCategory.Editor, //MoneyOff
     IconCategory.Image, //FilterVintage
     IconCategory.Communication, //CancelPresentation
     IconCategory.Content, //ReplyAll
-)
-
-private fun getCategory18(): List<IconCategory> = listOf(
     IconCategory.Editor, //InsertComment
     IconCategory.Places, //RoomService
     IconCategory.Editor, //FormatUnderlined
@@ -1031,7 +1035,6 @@ private fun getCategory18(): List<IconCategory> = listOf(
     IconCategory.Action, //NextPlan
     IconCategory.Device, //Radar
     IconCategory.Device, //Wallpaper
-    IconCategory.Social, //SportsBasketball
     IconCategory.Editor, //Height
     IconCategory.Maps, //LocalDining
     IconCategory.Device, //DeviceThermostat
@@ -1053,12 +1056,12 @@ private fun getCategory18(): List<IconCategory> = listOf(
     IconCategory.Content, //LowPriority
     IconCategory.Image, //CenterFocusStrong
     IconCategory.Maps, //TripOrigin
-    IconCategory.Device, //DataUsage
-    IconCategory.Editor, //VerticalAlignTop
-    IconCategory.Places, //RoomPreferences
 )
 
 private fun getCategory19(): List<IconCategory> = listOf(
+    IconCategory.Device, //DataUsage
+    IconCategory.Editor, //VerticalAlignTop
+    IconCategory.Places, //RoomPreferences
     IconCategory.Social, //NotificationAdd
     IconCategory.Hardware, //Cast
     IconCategory.Av, //Queue
@@ -1106,12 +1109,12 @@ private fun getCategory19(): List<IconCategory> = listOf(
     IconCategory.Action, //SettingsPower
     IconCategory.Maps, //LocalPizza
     IconCategory.Alert, //AddAlert
-    IconCategory.Editor, //Square
-    IconCategory.Device, //DeveloperMode
-    IconCategory.Image, //BrokenImage
 )
 
 private fun getCategory20(): List<IconCategory> = listOf(
+    IconCategory.Editor, //Square
+    IconCategory.Device, //DeveloperMode
+    IconCategory.Image, //BrokenImage
     IconCategory.Editor, //FormatAlignCenter
     IconCategory.Action, //DensityMedium
     IconCategory.Places, //FreeBreakfast
@@ -1159,12 +1162,11 @@ private fun getCategory20(): List<IconCategory> = listOf(
     IconCategory.Editor, //FormatPaint
     IconCategory.Navigation, //LegendToggle
     IconCategory.Editor, //AreaChart
-    IconCategory.Image, //CropOriginal
-    IconCategory.Maps, //BakeryDining
-    IconCategory.Device, //BatteryStd
 )
 
 private fun getCategory21(): List<IconCategory> = listOf(
+    IconCategory.Image, //CropOriginal
+    IconCategory.Device, //BatteryStd
     IconCategory.Hardware, //DesktopMac
     IconCategory.Av, //Replay10
     IconCategory.Image, //FilterCenterFocus
@@ -1186,7 +1188,6 @@ private fun getCategory21(): List<IconCategory> = listOf(
     IconCategory.Action, //_123
     IconCategory.Social, //Wallet
     IconCategory.Action, //GeneratingTokens
-    IconCategory.Action, //Outlet
     IconCategory.Social, //SportsTennis
     IconCategory.Action, //Http
     IconCategory.Maps, //WineBar
@@ -1214,10 +1215,10 @@ private fun getCategory21(): List<IconCategory> = listOf(
     IconCategory.Editor, //FormatAlignRight
     IconCategory.Communication, //Unsubscribe
     IconCategory.Image, //FlashOff
-    IconCategory.Action, //RestorePage
 )
 
 private fun getCategory22(): List<IconCategory> = listOf(
+    IconCategory.Action, //RestorePage
     IconCategory.Action, //AlarmAdd
     IconCategory.Social, //AddModerator
     IconCategory.Places, //Foundation
@@ -1267,10 +1268,10 @@ private fun getCategory22(): List<IconCategory> = listOf(
     IconCategory.Device, //Splitscreen
     IconCategory.Image, //FlipCameraAndroid
     IconCategory.Maps, //Icecream
-    IconCategory.Communication, //CoPresent
 )
 
 private fun getCategory23(): List<IconCategory> = listOf(
+    IconCategory.Communication, //CoPresent
     IconCategory.Device, //FlashlightOn
     IconCategory.Notification, //DoDisturb
     IconCategory.Maps, //Museum
@@ -1320,10 +1321,10 @@ private fun getCategory23(): List<IconCategory> = listOf(
     IconCategory.Maps, //AddRoad
     IconCategory.Device, //AirplanemodeActive
     IconCategory.File, //RuleFolder
-    IconCategory.Device, //MobileFriendly
 )
 
 private fun getCategory24(): List<IconCategory> = listOf(
+    IconCategory.Device, //MobileFriendly
     IconCategory.Image, //Bedtime
     IconCategory.Action, //LineWeight
     IconCategory.Social, //Piano
@@ -1373,17 +1374,16 @@ private fun getCategory24(): List<IconCategory> = listOf(
     IconCategory.Action, //Html
     IconCategory.Maps, //Festival
     IconCategory.Social, //SportsBaseball
-    IconCategory.Action, //CodeOff
 )
 
 private fun getCategory25(): List<IconCategory> = listOf(
+    IconCategory.Action, //CodeOff
     IconCategory.Action, //BookmarkRemove
     IconCategory.Maps, //Plumbing
     IconCategory.Notification, //PersonalVideo
     IconCategory.Device, //LensBlur
     IconCategory.Av, //PlaylistAddCheckCircle
     IconCategory.Image, //Animation
-    IconCategory.Hardware, //Toys
     IconCategory.Action, //SettingsBluetooth
     IconCategory.Image, //Panorama
     IconCategory.Image, //CenterFocusWeak
@@ -1949,9 +1949,9 @@ private fun getCategory35(): List<IconCategory> = listOf(
     IconCategory.Image, //SwitchVideo
     IconCategory.Notification, //SimCardAlert
     IconCategory.Action, //Php
-    IconCategory.Action, //ViewComfyAlt
     IconCategory.File, //FolderOff
     IconCategory.Action, //TextRotateUp
+    IconCategory.Action, //ViewComfyAlt
     IconCategory.Places, //Escalator
     IconCategory.Image, //Filter7
     IconCategory.Maps, //RailwayAlert
@@ -2038,8 +2038,8 @@ private fun getCategory37(): List<IconCategory> = listOf(
     IconCategory.Action, //SpatialTracking
     IconCategory.Maps, //NearMeDisabled
     IconCategory.Communication, //StayPrimaryLandscape
-    IconCategory.Editor, //LineAxis
     IconCategory.Device, //SignalCellularNodata
+    IconCategory.Editor, //LineAxis
     IconCategory.Maps, //Snowmobile
     IconCategory.Action, //SwipeLeftAlt
     IconCategory.Device, //_30fps
@@ -2092,8 +2092,8 @@ private fun getCategory38(): List<IconCategory> = listOf(
     IconCategory.Image, //RawOn
     IconCategory.Image, //BlurOff
     IconCategory.Image, //Deblur
-    IconCategory.Image, //MotionPhotosOff
     IconCategory.Image, //WbShade
+    IconCategory.Image, //MotionPhotosOff
     IconCategory.Device, //Rsvp
     IconCategory.Maps, //TempleBuddhist
     IconCategory.Maps, //EmergencyShare
@@ -2108,8 +2108,8 @@ private fun getCategory38(): List<IconCategory> = listOf(
     IconCategory.Notification, //PhoneBluetoothSpeaker
     IconCategory.Image, //HdrOn
     IconCategory.Notification, //AirlineSeatFlatAngled
-    IconCategory.Device, //UsbOff
     IconCategory.Device, //_3gMobiledata
+    IconCategory.Device, //UsbOff
     IconCategory.Social, //ScubaDiving
     IconCategory.Av, //FiberPin
     IconCategory.Image, //PanoramaHorizontal

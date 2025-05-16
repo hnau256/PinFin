@@ -22,17 +22,25 @@ operator fun PaddingValues.plus(
 }
 
 @Composable
-fun PaddingValues.copy(
-    start: Dp = Dp.Unspecified,
-    top: Dp = Dp.Unspecified,
-    end: Dp = Dp.Unspecified,
-    bottom: Dp = Dp.Unspecified,
+inline fun PaddingValues.map(
+    start: (Dp) -> Dp = {Dp.Unspecified},
+    top: (Dp) -> Dp = {Dp.Unspecified},
+    end: (Dp) -> Dp = {Dp.Unspecified},
+    bottom: (Dp) -> Dp = {Dp.Unspecified},
 ): PaddingValues {
     val layoutDirection = LocalLayoutDirection.current
     return PaddingValues(
-        start = start.takeOrElse { calculateStartPadding(layoutDirection) },
-        top = top.takeOrElse { calculateTopPadding() },
-        end = end.takeOrElse { calculateEndPadding(layoutDirection) },
-        bottom = bottom.takeOrElse { calculateBottomPadding() },
+        start = calculateStartPadding(layoutDirection).let { startValue ->
+            start(startValue).takeOrElse { startValue }
+        },
+        top = calculateTopPadding().let { topValue ->
+            top(topValue).takeOrElse { topValue }
+        },
+        end = calculateEndPadding(layoutDirection).let { endValue ->
+            end(endValue).takeOrElse { endValue }
+        },
+        bottom = calculateBottomPadding().let { bottomValue ->
+            bottom(bottomValue).takeOrElse { bottomValue }
+        },
     )
 }

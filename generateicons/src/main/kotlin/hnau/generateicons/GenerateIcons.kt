@@ -4,11 +4,9 @@ package hnau.generateicons
 
 import arrow.core.NonEmptyList
 import arrow.core.NonEmptySet
-import arrow.core.nonEmptySetOf
 import arrow.core.toNonEmptyListOrNull
 import arrow.core.toNonEmptySetOrNull
 import hnau.common.ktgen.Importable
-import hnau.common.ktgen.KtFile
 import hnau.common.ktgen.inject
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
@@ -41,10 +39,7 @@ fun main() {
         .decodeFromString(Icons.serializer(), iconsJson.dropWhile { it != '{' })
         .icons
         .filter { it.name !in iconNamesToExclude }
-        .sortedByDescending { it.popularity }
-
-    val categories = icons.map(Icon::category).toSet()
-    println(categories)
+        .sortedByDescending { it.weight }
 
     val modelProject = ":pinfin:model"
     val modelSubpackage = "utils.icons"
@@ -56,6 +51,12 @@ fun main() {
         subpackage = modelSubpackage,
         name = categoryClassName,
     ) {
+        val categories = icons
+            .groupBy(Icon::category)
+            .toList()
+            .sortedByDescending { it.second.sumOf(Icon::weight) }
+            .map(Pair<String, *>::first)
+
         +"enum class $categoryClassName {"
         indent {
             categories.forEach { category ->
@@ -142,7 +143,7 @@ fun main() {
                 +""
                 +"private fun get$uppercaseName$i(): List<$typeName> = listOf("
                 indent {
-                    page.forEach {(icon, value) ->
+                    page.forEach { (icon, value) ->
                         +("$value, //${icon.propertyName}")
                     }
                 }
@@ -167,13 +168,13 @@ fun main() {
     createVariantExtFile(
         propertyName = "title",
         typeName = "String",
-        extract = {"\"$prettyName\""},
+        extract = { "\"$prettyName\"" },
     )
 
     createVariantExtFile(
-        propertyName = "popularity",
+        propertyName = "weight",
         typeName = "Int",
-        extract = {popularity.toString()},
+        extract = { weight.toString() },
     )
 
     createVariantExtFile(
@@ -264,3 +265,43 @@ private val Icon.nonEmptyTags: NonEmptySet<String>
             .map(String::lowercase)
             .toNonEmptySetOrNull()!!
     }
+
+private val Icon.weight: Int
+    get() = popularity + (if (propertyName in bestIcons) 1000000 else 0)
+
+private val bestIcons: Set<String> = setOf(
+    "Home",
+    "Payment",
+    "AccountBalanceWallet",
+    "Store",
+    "Savings",
+    "AccountBalance",
+    "Checkroom",
+    "ShoppingCart",
+    "Redeem",
+    "Toys",
+    "LocalFlorist",
+    "Restaurant",
+    "Liquor",
+    "Storefront",
+    "LunchDining",
+    "Coffee",
+    "BakeryDining",
+    "BusinessCenter",
+    "DirectionsBus",
+    "DirectionsCar",
+    "Flight",
+    "DirectionsRun",
+    "Hiking",
+    "School",
+    "SportsEsports",
+    "Celebration",
+    "SportsBasketball",
+    "FitnessCenter",
+    "MedicalServices",
+    "HealthAndSafety",
+    "Call",
+    "AlternateEmail",
+    "ElectricalServices",
+    "Outlet",
+)

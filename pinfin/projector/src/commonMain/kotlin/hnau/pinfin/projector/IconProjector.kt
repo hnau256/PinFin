@@ -2,6 +2,7 @@ package hnau.pinfin.projector
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -28,6 +29,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.text.style.TextAlign
@@ -49,8 +51,8 @@ import hnau.common.compose.uikit.state.TransitionSpec
 import hnau.common.compose.uikit.utils.Dimens
 import hnau.common.compose.utils.Icon
 import hnau.common.compose.utils.NavigationIcon
-import hnau.common.compose.utils.copy
 import hnau.common.compose.utils.horizontalDisplayPadding
+import hnau.common.compose.utils.map
 import hnau.common.compose.utils.plus
 import hnau.common.compose.utils.verticalDisplayPadding
 import hnau.common.kotlin.Loading
@@ -94,29 +96,30 @@ class IconProjector(
             },
         ) { contentPadding ->
             Column(
-                verticalArrangement = Arrangement.spacedBy(Dimens.separation),
+                modifier = Modifier.fillMaxSize(),
             ) {
-                Icons(
+                Search(
                     modifier = Modifier
-                        .weight(1f)
                         .fillMaxWidth(),
-                    contentPadding = contentPadding.copy(
-                        bottom = 0.dp,
+                    contentPadding = contentPadding.map(
+                        bottom = { 0.dp },
+                        top = { it + Dimens.separation },
                     ),
                 )
                 Categories(
                     modifier = Modifier
                         .fillMaxWidth(),
-                    contentPadding = contentPadding.copy(
-                        top = 0.dp,
-                        bottom = 0.dp,
+                    contentPadding = contentPadding.map(
+                        top = { Dimens.smallSeparation },
+                        bottom = { 0.dp },
                     ),
                 )
-                Search(
+                Icons(
                     modifier = Modifier
+                        .weight(1f)
                         .fillMaxWidth(),
-                    contentPadding = contentPadding.copy(
-                        top = 0.dp,
+                    contentPadding = contentPadding.map(
+                        top = { Dimens.separation },
                     ),
                 )
             }
@@ -178,17 +181,17 @@ class IconProjector(
             columns = GridCells.Adaptive(
                 minSize = 72.dp,
             ),
-            reverseLayout = true,
             contentPadding = contentPadding + PaddingValues(
-                horizontal = Dimens.separation,
+                horizontal = Dimens.smallSeparation,
             ),
             verticalArrangement = Arrangement.spacedBy(
-                space = Dimens.separation,
-                alignment = Alignment.Bottom,
+                space = Dimens.smallSeparation,
+                alignment = Alignment.Top,
             ),
-            horizontalArrangement = Arrangement.spacedBy(Dimens.separation),
+            horizontalArrangement = Arrangement.spacedBy(Dimens.smallSeparation),
         ) {
             items(icons) { (variant, selected) ->
+                val shape = HnauShape()
                 Column(
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.spacedBy(Dimens.extraSmallSeparation),
@@ -197,7 +200,6 @@ class IconProjector(
                             selected.foldBoolean(
                                 ifFalse = { Modifier },
                                 ifTrue = {
-                                    val shape = HnauShape()
                                     Modifier
                                         .background(
                                             shape = shape,
@@ -211,9 +213,9 @@ class IconProjector(
                                 },
                             ),
                         )
-                        .padding(
-                            vertical = Dimens.smallSeparation
-                        ),
+                        .clip(shape)
+                        .clickable { model.onSelect(variant) }
+                        .padding(Dimens.smallSeparation),
                 ) {
                     val tint = selected.foldBoolean(
                         ifFalse = { LocalContentColor.current },
@@ -228,7 +230,6 @@ class IconProjector(
                         text = variant.title,
                         style = MaterialTheme.typography.labelSmall,
                         color = tint,
-                        maxLines = 1,
                     )
                 }
             }
@@ -284,6 +285,7 @@ class IconProjector(
         val focusRequester = remember { FocusRequester() }
         TextInput(
             value = model.query,
+            placeholder = { Text(stringResource(Res.string.search)) },
             modifier = modifier
                 .padding(contentPadding)
                 .padding(
