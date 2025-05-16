@@ -69,6 +69,14 @@ internal fun Project.config(
                 }
             }
         }
+        if (hasComposePlugin) {
+            extension.sourceSets.getByName("jvmMain").apply {
+                dependencies {
+                    val composeDependencies = ComposePlugin.Dependencies(project)
+                    implementation(composeDependencies.desktop.currentOs)
+                }
+            }
+        }
         extension.sourceSets.getByName("commonMain").apply {
             languageSettings.enableLanguageFeature("ContextReceivers")
             dependencies {

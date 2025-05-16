@@ -38,6 +38,7 @@
     <string name="port">Порт</string>
     <string name="sync_server">Сервер синхронизации</string>
     <string name="sync_server_is_active">Сервер синхронизации запущен</string>
+    <string name="addresses_to_connect">Адреса для подключения</string>
     <string name="stop">Остановить</string>
     <string name="stop_sync_server">Остановить сервер синхронизации</string>
     <string name="budgets_to_synchronization">Бюджеты для синхронизации</string>

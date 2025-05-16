@@ -7,6 +7,7 @@ import androidx.compose.material3.BasicAlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -24,6 +25,7 @@ import hnau.common.compose.uikit.utils.Dimens
 import hnau.common.compose.utils.NavigationIcon
 import hnau.pinfin.model.sync.server.SyncServerModel
 import hnau.pinfin.projector.Res
+import hnau.pinfin.projector.addresses_to_connect
 import hnau.pinfin.projector.no
 import hnau.pinfin.projector.stop
 import hnau.pinfin.projector.stop_sync_server
@@ -68,7 +70,14 @@ class SyncServerProjector(
                     ) {
                         CircularProgressIndicator()
                         Text(
-                            stringResource(Res.string.sync_server_is_active),
+                            text = stringResource(Res.string.sync_server_is_active),
+                        )
+                        Text(
+                            text = model.addresses.joinToString(
+                                separator = "\n",
+                                prefix = stringResource(Res.string.addresses_to_connect) + ":\n",
+                            ),
+                            style = MaterialTheme.typography.bodyMedium,
                         )
                     }
                 },
