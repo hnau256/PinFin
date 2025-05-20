@@ -52,1695 +52,1695 @@ private val variantWeight: List<Int> = buildList {
 }
 
 private fun getWeight0(): List<Int> = listOf(
-    1775945, //Home
-    1314679, //ShoppingCart
-    1188196, //Call
-    1098121, //School
-    1090075, //AccountBalance
-    1072556, //AccountBalanceWallet
-    1068860, //Store
-    1059609, //Savings
-    1052246, //Storefront
-    1045660, //Payment
-    1045274, //Restaurant
-    1042196, //DirectionsCar
-    1039183, //AlternateEmail
-    1035498, //HealthAndSafety
-    1032008, //SportsEsports
-    1028929, //Flight
-    1028197, //FitnessCenter
-    1026181, //DirectionsRun
-    1024245, //BusinessCenter
-    1023479, //Redeem
-    1022333, //MedicalServices
-    1020323, //Celebration
-    1020149, //LunchDining
-    1017326, //DirectionsBus
-    1013290, //Checkroom
-    1011999, //LocalFlorist
-    1011389, //Hiking
-    1010791, //Coffee
-    1010502, //ElectricalServices
-    1008827, //Liquor
-    1007700, //SportsBasketball
-    1006376, //BakeryDining
-    1006134, //Outlet
-    1004514, //Toys
-    846379, //Search
-    628516, //AccountCircle
-    595611, //Settings
-    520434, //Done
-    456971, //Info
-    424970, //Close
-    410343, //CheckCircle
-    380111, //Delete
-    370471, //Person
-    366869, //Menu
-    352797, //ExpandMore
-    345385, //Add
-    323697, //Visibility
-    308340, //Edit
-    277901, //Favorite
-    272894, //Email
+    1776309, //Home
+    1314801, //ShoppingCart
+    1188278, //Call
+    1098152, //School
+    1090101, //AccountBalance
+    1072574, //AccountBalanceWallet
+    1068879, //Store
+    1059619, //Savings
+    1052257, //Storefront
+    1045670, //Payment
+    1045296, //Restaurant
+    1042225, //DirectionsCar
+    1039198, //AlternateEmail
+    1035516, //HealthAndSafety
+    1032025, //SportsEsports
+    1028934, //Flight
+    1028227, //FitnessCenter
+    1026198, //DirectionsRun
+    1024255, //BusinessCenter
+    1023491, //Redeem
+    1022342, //MedicalServices
+    1020330, //Celebration
+    1020152, //LunchDining
+    1017334, //DirectionsBus
+    1013294, //Checkroom
+    1012010, //LocalFlorist
+    1011392, //Hiking
+    1010798, //Coffee
+    1010508, //ElectricalServices
+    1008830, //Liquor
+    1007701, //SportsBasketball
+    1006377, //BakeryDining
+    1006136, //Outlet
+    1004516, //Toys
+    846650, //Search
+    628807, //AccountCircle
+    595835, //Settings
+    520577, //Done
+    457114, //Info
+    425113, //Close
+    410498, //CheckCircle
+    380249, //Delete
+    370655, //Person
+    366994, //Menu
+    352911, //ExpandMore
+    345490, //Add
+    323833, //Visibility
+    308449, //Edit
+    277976, //Favorite
+    272994, //Email
 )
 
 private fun getWeight1(): List<Int> = listOf(
-    263033, //Description
-    255785, //Logout
-    245823, //ArrowBack
-    225559, //FavoriteBorder
-    221513, //ChevronRight
-    219866, //LocalShipping
-    219704, //Lock
-    206908, //LocationOn
-    205735, //Schedule
-    204644, //Notifications
-    185729, //Language
-    181368, //FileDownload
-    174651, //ArrowForwardIos
-    173538, //ArrowBackIos
-    173452, //Groups
-    172519, //Cancel
-    167667, //HelpOutline
-    161924, //ArrowDropDown
-    159205, //Face
-    158597, //Verified
-    157486, //ManageAccounts
-    154678, //PlayArrow
-    151971, //Place
-    148430, //MoreVert
-    147953, //AddCircleOutline
-    147287, //ThumbUp
-    144895, //FilterAlt
-    141108, //Event
-    140777, //Dashboard
-    140740, //Star
-    139535, //Fingerprint
-    138635, //List
-    137234, //ContentCopy
-    135337, //People
-    132716, //CheckCircleOutline
-    131768, //AddCircle
-    131322, //VisibilityOff
-    130528, //Login
-    128290, //Send
-    127900, //ArrowForward
-    127347, //ChevronLeft
-    126644, //Warning
-    126033, //CalendarToday
-    125355, //CheckBox
-    123717, //Share
-    122882, //HighlightOff
-    120349, //NavigateNext
-    116445, //Help
-    115791, //Phone
-    113932, //Paid
+    263126, //Description
+    255887, //Logout
+    245915, //ArrowBack
+    225627, //FavoriteBorder
+    221595, //ChevronRight
+    219918, //LocalShipping
+    219798, //Lock
+    206991, //LocationOn
+    205808, //Schedule
+    204705, //Notifications
+    185815, //Language
+    181429, //FileDownload
+    174698, //ArrowForwardIos
+    173574, //ArrowBackIos
+    173540, //Groups
+    172600, //Cancel
+    167725, //HelpOutline
+    161975, //ArrowDropDown
+    159248, //Face
+    158661, //Verified
+    157542, //ManageAccounts
+    154724, //PlayArrow
+    152041, //Place
+    148487, //MoreVert
+    147999, //AddCircleOutline
+    147355, //ThumbUp
+    144952, //FilterAlt
+    141163, //Event
+    140838, //Dashboard
+    140786, //Star
+    139578, //Fingerprint
+    138691, //List
+    137290, //ContentCopy
+    135400, //People
+    132775, //CheckCircleOutline
+    131828, //AddCircle
+    131366, //VisibilityOff
+    130565, //Login
+    128338, //Send
+    127959, //ArrowForward
+    127386, //ChevronLeft
+    126701, //Warning
+    126066, //CalendarToday
+    125395, //CheckBox
+    123759, //Share
+    122926, //HighlightOff
+    120395, //NavigateNext
+    116489, //Help
+    115853, //Phone
+    113975, //Paid
 )
 
 private fun getWeight2(): List<Int> = listOf(
-    112652, //TaskAlt
-    111080, //QuestionAnswer
-    109313, //ExpandLess
-    107881, //Error
-    107611, //Check
-    107003, //Clear
-    105931, //DateRange
-    105274, //Article
-    103013, //PhotoCamera
-    102690, //OpenInNew
-    101915, //CheckBoxOutlineBlank
-    101738, //MoreHoriz
-    99163, //Image
-    97712, //ShoppingBag
-    96945, //Refresh
-    96729, //SupportAgent
-    96293, //Lightbulb
-    96113, //PersonOutline
-    94299, //CreditCard
-    93795, //FileUpload
-    93193, //History
-    92679, //PermIdentity
-    90716, //TrendingUp
-    89889, //DeleteOutline
-    88921, //AttachMoney
-    88067, //PersonAdd
-    87115, //Save
-    87025, //Public
-    86002, //VerifiedUser
-    85310, //RadioButtonUnchecked
-    85163, //ErrorOutline
-    84676, //FactCheck
-    83610, //Assignment
-    83403, //Mail
-    83373, //ReportProblem
-    82177, //Link
-    79964, //EmojiEvents
-    79784, //StarRate
-    78237, //PlayCircleFilled
-    77733, //Remove
-    77135, //Download
-    76384, //Business
-    74479, //Apps
-    74378, //CalendarMonth
-    74206, //ArrowRightAlt
-    74063, //FilterList
-    73811, //Chat
-    73228, //Payments
-    72944, //MenuBook
-    72769, //Folder
+    112690, //TaskAlt
+    111109, //QuestionAnswer
+    109353, //ExpandLess
+    107927, //Error
+    107639, //Check
+    107036, //Clear
+    105960, //DateRange
+    105322, //Article
+    103049, //PhotoCamera
+    102742, //OpenInNew
+    101940, //CheckBoxOutlineBlank
+    101765, //MoreHoriz
+    99192, //Image
+    97748, //ShoppingBag
+    96993, //Refresh
+    96766, //SupportAgent
+    96324, //Lightbulb
+    96139, //PersonOutline
+    94315, //CreditCard
+    93821, //FileUpload
+    93230, //History
+    92723, //PermIdentity
+    90759, //TrendingUp
+    89918, //DeleteOutline
+    88952, //AttachMoney
+    88103, //PersonAdd
+    87143, //Save
+    87052, //Public
+    86047, //VerifiedUser
+    85333, //RadioButtonUnchecked
+    85200, //ErrorOutline
+    84715, //FactCheck
+    83658, //Assignment
+    83426, //Mail
+    83395, //ReportProblem
+    82206, //Link
+    79988, //EmojiEvents
+    79808, //StarRate
+    78254, //PlayCircleFilled
+    77760, //Remove
+    77156, //Download
+    76410, //Business
+    74500, //Apps
+    74455, //CalendarMonth
+    74225, //ArrowRightAlt
+    74083, //FilterList
+    73848, //Chat
+    73250, //Payments
+    72978, //MenuBook
+    72799, //Folder
 )
 
 private fun getWeight3(): List<Int> = listOf(
-    71525, //Autorenew
-    70778, //Build
-    70295, //ViewList
-    70092, //KeyboardArrowDown
-    68909, //Tune
-    68778, //Work
-    68753, //Print
-    68325, //Videocam
-    67953, //Analytics
-    67922, //DeleteForever
-    67477, //RadioButtonChecked
-    67233, //PhoneIphone
-    67098, //PlayCircle
-    66745, //MailOutline
-    65704, //ArrowUpward
-    65429, //Today
-    64929, //AdminPanelSettings
-    64838, //GridView
-    64053, //East
-    63655, //PictureAsPdf
-    62862, //Mic
-    62507, //LockOpen
-    62484, //Group
-    62308, //WatchLater
-    61741, //Inventory2
-    61594, //ReceiptLong
-    61467, //VolumeUp
-    61384, //Grade
-    60703, //Update
-    60545, //LocalOffer
-    60016, //Badge
-    59778, //Inventory
-    59737, //Circle
-    59192, //Room
-    59157, //EditNote
-    58976, //Code
-    58937, //Map
-    58460, //LightMode
-    57936, //AddShoppingCart
-    57648, //ContactSupport
-    57448, //Category
-    57140, //Insights
-    56646, //Receipt
-    56142, //PowerSettingsNew
-    55761, //Campaign
-    55333, //WarningAmber
-    55280, //FormatListBulleted
-    54634, //StarBorder
-    54593, //RestartAlt
-    54352, //Pause
+    71564, //Autorenew
+    70821, //Build
+    70323, //ViewList
+    70122, //KeyboardArrowDown
+    68933, //Tune
+    68810, //Work
+    68769, //Print
+    68351, //Videocam
+    67985, //Analytics
+    67952, //DeleteForever
+    67496, //RadioButtonChecked
+    67266, //PhoneIphone
+    67128, //PlayCircle
+    66789, //MailOutline
+    65730, //ArrowUpward
+    65462, //Today
+    64948, //AdminPanelSettings
+    64842, //GridView
+    64076, //East
+    63691, //PictureAsPdf
+    62892, //Mic
+    62544, //LockOpen
+    62497, //Group
+    62332, //WatchLater
+    61753, //Inventory2
+    61624, //ReceiptLong
+    61495, //VolumeUp
+    61395, //Grade
+    60723, //Update
+    60563, //LocalOffer
+    60030, //Badge
+    59800, //Inventory
+    59758, //Circle
+    59206, //Room
+    59177, //EditNote
+    58992, //Code
+    58959, //Map
+    58483, //LightMode
+    57962, //AddShoppingCart
+    57659, //ContactSupport
+    57467, //Category
+    57168, //Insights
+    56670, //Receipt
+    56161, //PowerSettingsNew
+    55794, //Campaign
+    55361, //WarningAmber
+    55295, //FormatListBulleted
+    54646, //StarBorder
+    54608, //RestartAlt
+    54371, //Pause
 )
 
 private fun getWeight4(): List<Int> = listOf(
-    54110, //DoneAll
-    53805, //RemoveCircleOutline
-    53189, //Pets
-    52878, //ArrowBackIosNew
-    52816, //Wifi
-    52331, //ListAlt
-    52207, //Engineering
-    51757, //ModeEdit
-    51356, //ToggleOn
-    51123, //NotificationsActive
-    51112, //Sort
-    51085, //Bolt
-    50966, //DarkMode
-    50747, //Construction
-    50243, //QrCodeScanner
-    49963, //ArrowDownward
-    49933, //Explore
-    49572, //AttachFile
-    49423, //Bookmark
-    49060, //MonetizationOn
-    48824, //VpnKey
-    48684, //AccountBox
-    48640, //NoteAdd
-    48311, //Timer
-    47694, //Reorder
-    47649, //PendingActions
-    47262, //UploadFile
-    47106, //ArrowRight
-    46887, //BookmarkBorder
-    46702, //AccountTree
-    46537, //Smartphone
-    46238, //Flag
-    45902, //Apartment
-    45900, //ShoppingBasket
-    45806, //Sync
-    45311, //PeopleAlt
-    44862, //PlayCircleOutline
-    44830, //Reply
-    44786, //Task
-    44241, //ManageSearch
-    44222, //Launch
-    43852, //AddBox
-    43847, //DragIndicator
-    43793, //TouchApp
-    43784, //SupervisorAccount
-    43743, //Pending
-    43631, //MenuOpen
-    43079, //ZoomIn
-    42928, //GroupAdd
-    42803, //AutoAwesome
+    54140, //DoneAll
+    53818, //RemoveCircleOutline
+    53214, //Pets
+    52901, //ArrowBackIosNew
+    52837, //Wifi
+    52355, //ListAlt
+    52241, //Engineering
+    51774, //ModeEdit
+    51370, //ToggleOn
+    51143, //NotificationsActive
+    51126, //Sort
+    51111, //Bolt
+    50979, //DarkMode
+    50769, //Construction
+    50267, //QrCodeScanner
+    49979, //ArrowDownward
+    49949, //Explore
+    49590, //AttachFile
+    49437, //Bookmark
+    49073, //MonetizationOn
+    48840, //VpnKey
+    48701, //AccountBox
+    48668, //NoteAdd
+    48326, //Timer
+    47711, //Reorder
+    47670, //PendingActions
+    47279, //UploadFile
+    47121, //ArrowRight
+    46900, //BookmarkBorder
+    46712, //AccountTree
+    46558, //Smartphone
+    46260, //Flag
+    45923, //Apartment
+    45923, //ShoppingBasket
+    45825, //Sync
+    45323, //PeopleAlt
+    44876, //PlayCircleOutline
+    44842, //Reply
+    44801, //Task
+    44258, //ManageSearch
+    44242, //Launch
+    43870, //AddBox
+    43860, //DragIndicator
+    43806, //SupervisorAccount
+    43804, //TouchApp
+    43767, //Pending
+    43638, //MenuOpen
+    43091, //ZoomIn
+    42939, //GroupAdd
+    42847, //AutoAwesome
 )
 
 private fun getWeight5(): List<Int> = listOf(
-    42802, //PriorityHigh
-    42800, //PushPin
-    42698, //RemoveCircle
-    42510, //Assessment
-    42355, //Leaderboard
-    42226, //Summarize
-    42133, //Block
-    42007, //LocalFireDepartment
-    41826, //ThumbUpOffAlt
-    41411, //ChatBubbleOutline
-    41411, //EventAvailable
-    40751, //Feed
-    40408, //OpenInFull
-    40298, //AutoStories
-    40187, //Calculate
-    40185, //PostAdd
-    39817, //CloudUpload
-    38881, //BarChart
-    38661, //DoneOutline
-    38645, //Password
-    38612, //Preview
-    38343, //AssignmentInd
-    38333, //Collections
-    38322, //PublishedWithChanges
-    38237, //Create
-    38168, //Psychology
-    38047, //ExitToApp
-    38008, //Checklist
-    37801, //VolunteerActivism
-    37641, //StarOutline
-    37396, //CardGiftcard
-    36930, //NavigateBefore
-    36686, //Undo
-    36675, //Sell
-    36465, //ThumbUpAlt
-    36327, //AddAPhoto
-    36207, //ViewInAr
-    36077, //Fullscreen
-    35834, //TipsAndUpdates
-    35173, //Feedback
-    35009, //ArrowDropUp
-    34926, //Label
-    34837, //TravelExplore
-    34836, //UnfoldMore
-    34773, //WaterDrop
-    34690, //SwapHoriz
-    34617, //Computer
-    34570, //Palette
-    34472, //KeyboardArrowRight
-    34229, //Timeline
+    42822, //PriorityHigh
+    42817, //PushPin
+    42709, //RemoveCircle
+    42537, //Assessment
+    42381, //Leaderboard
+    42236, //Summarize
+    42154, //Block
+    42030, //LocalFireDepartment
+    41849, //ThumbUpOffAlt
+    41423, //EventAvailable
+    41422, //ChatBubbleOutline
+    40766, //Feed
+    40423, //OpenInFull
+    40326, //AutoStories
+    40212, //Calculate
+    40201, //PostAdd
+    39825, //CloudUpload
+    38903, //BarChart
+    38674, //DoneOutline
+    38653, //Password
+    38620, //Preview
+    38370, //AssignmentInd
+    38341, //Collections
+    38333, //PublishedWithChanges
+    38244, //Create
+    38187, //Psychology
+    38069, //ExitToApp
+    38031, //Checklist
+    37816, //VolunteerActivism
+    37644, //StarOutline
+    37400, //CardGiftcard
+    36944, //NavigateBefore
+    36707, //Undo
+    36692, //Sell
+    36475, //ThumbUpAlt
+    36330, //AddAPhoto
+    36217, //ViewInAr
+    36090, //Fullscreen
+    35864, //TipsAndUpdates
+    35183, //Feedback
+    35022, //ArrowDropUp
+    34943, //Label
+    34856, //UnfoldMore
+    34851, //TravelExplore
+    34785, //WaterDrop
+    34714, //SwapHoriz
+    34646, //Computer
+    34585, //Palette
+    34482, //KeyboardArrowRight
+    34248, //Timeline
 )
 
 private fun getWeight6(): List<Int> = listOf(
-    34076, //Stars
-    33986, //AssignmentTurnedIn
-    33942, //SyncAlt
-    33882, //Dns
-    33783, //Replay
-    33754, //WorkOutline
-    33739, //DoubleArrow
-    33739, //SignalCellularAlt
-    33701, //NotificationsNone
-    33639, //FlightTakeoff
-    33572, //VolumeOff
-    33535, //SkipNext
-    33530, //HowToReg
-    33522, //LibraryBooks
-    33467, //Forum
-    33149, //EmojiEmotions
-    33122, //Devices
-    32912, //ChatBubble
-    32817, //FolderOpen
-    32729, //MapsHomeWork
-    32689, //FiberManualRecord
-    32657, //ContentPaste
-    32537, //Cloud
-    32426, //Security
-    32337, //TextSnippet
-    32316, //RemoveRedEye
-    32168, //MyLocation
-    31826, //RequestQuote
-    31637, //Textsms
-    31534, //Alarm
-    31392, //SettingsSuggest
-    31309, //SpaceDashboard
-    31186, //ToggleOff
-    31169, //Speed
-    31008, //WorkspacePremium
-    30985, //SentimentVerySatisfied
-    30908, //ContactPage
-    30858, //Cached
-    30834, //Report
-    30805, //BugReport
-    30737, //Book
-    30703, //Translate
-    30687, //Stop
-    30663, //Gavel
-    30530, //RocketLaunch
-    30469, //Quiz
-    30467, //PanTool
-    30462, //EditCalendar
-    30343, //QuestionMark
-    30335, //CloudDownload
+    34094, //Stars
+    34002, //AssignmentTurnedIn
+    33955, //SyncAlt
+    33895, //Dns
+    33792, //Replay
+    33761, //WorkOutline
+    33753, //DoubleArrow
+    33747, //SignalCellularAlt
+    33712, //NotificationsNone
+    33649, //FlightTakeoff
+    33578, //VolumeOff
+    33552, //SkipNext
+    33547, //HowToReg
+    33547, //LibraryBooks
+    33475, //Forum
+    33154, //EmojiEmotions
+    33137, //Devices
+    32919, //ChatBubble
+    32839, //FolderOpen
+    32736, //MapsHomeWork
+    32700, //FiberManualRecord
+    32673, //ContentPaste
+    32549, //Cloud
+    32447, //Security
+    32344, //TextSnippet
+    32324, //RemoveRedEye
+    32189, //MyLocation
+    31836, //RequestQuote
+    31644, //Textsms
+    31543, //Alarm
+    31409, //SettingsSuggest
+    31326, //SpaceDashboard
+    31197, //ToggleOff
+    31187, //Speed
+    31017, //WorkspacePremium
+    30996, //SentimentVerySatisfied
+    30918, //ContactPage
+    30865, //Cached
+    30843, //Report
+    30809, //BugReport
+    30755, //Book
+    30722, //Translate
+    30694, //Stop
+    30667, //Gavel
+    30543, //RocketLaunch
+    30476, //PanTool
+    30476, //Quiz
+    30471, //EditCalendar
+    30369, //QuestionMark
+    30349, //CloudDownload
 )
 
 private fun getWeight7(): List<Int> = listOf(
-    30288, //FileCopy
-    30250, //PersonSearch
-    29981, //ContactMail
-    29956, //SentimentSatisfiedAlt
-    29917, //SupervisedUserCircle
-    29701, //Minimize
-    29633, //QrCode
-    29485, //LocationCity
-    29273, //Widgets
-    29126, //DesktopWindows
-    29029, //Extension
-    28946, //IosShare
-    28676, //PrecisionManufacturing
-    28494, //QrCode2
-    28385, //LocalMall
-    28231, //MusicNote
-    27815, //Backspace
-    27770, //Android
-    27758, //SmartDisplay
-    27680, //NearMe
-    27630, //DragHandle
-    27513, //RecordVoiceOver
-    27510, //GetApp
-    27502, //Accessibility
-    27181, //AddTask
-    27076, //Shield
-    27056, //West
-    27000, //Message
-    26908, //HourglassEmpty
-    26896, //ShowChart
-    26891, //Storage
-    26807, //SentimentSatisfied
-    26785, //InsertDriveFile
-    26766, //Science
-    26762, //Handyman
-    26705, //DriveFileRenameOutline
-    26666, //HelpCenter
-    26631, //PersonAddAlt
-    26587, //MilitaryTech
-    26469, //TrendingFlat
-    25988, //Rule
-    25862, //Movie
-    25846, //EmojiObjects
-    25573, //AccessibilityNew
-    25526, //ThumbDown
-    25112, //ConfirmationNumber
-    25049, //EventNote
-    24970, //Contacts
-    24851, //FormatQuote
-    24772, //Comment
+    30301, //FileCopy
+    30261, //PersonSearch
+    29987, //ContactMail
+    29972, //SentimentSatisfiedAlt
+    29942, //SupervisedUserCircle
+    29716, //Minimize
+    29650, //QrCode
+    29496, //LocationCity
+    29278, //Widgets
+    29172, //DesktopWindows
+    29044, //Extension
+    28953, //IosShare
+    28681, //PrecisionManufacturing
+    28502, //QrCode2
+    28393, //LocalMall
+    28247, //MusicNote
+    27822, //Backspace
+    27779, //Android
+    27770, //SmartDisplay
+    27694, //NearMe
+    27637, //DragHandle
+    27522, //RecordVoiceOver
+    27517, //GetApp
+    27508, //Accessibility
+    27189, //AddTask
+    27081, //Shield
+    27066, //West
+    27008, //Message
+    26925, //HourglassEmpty
+    26917, //Storage
+    26903, //ShowChart
+    26810, //SentimentSatisfied
+    26794, //InsertDriveFile
+    26775, //Science
+    26773, //Handyman
+    26718, //DriveFileRenameOutline
+    26672, //HelpCenter
+    26640, //PersonAddAlt
+    26592, //MilitaryTech
+    26477, //TrendingFlat
+    25997, //Rule
+    25869, //Movie
+    25852, //EmojiObjects
+    25580, //AccessibilityNew
+    25534, //ThumbDown
+    25123, //ConfirmationNumber
+    25057, //EventNote
+    24979, //Contacts
+    24860, //FormatQuote
+    24779, //Comment
 )
 
 private fun getWeight8(): List<Int> = listOf(
-    24569, //AdsClick
-    24554, //SwapVert
-    24456, //RestaurantMenu
-    24443, //AddPhotoAlternate
-    24423, //HistoryEdu
-    24353, //SkipPrevious
-    24262, //Archive
-    24251, //SettingsApplications
-    24231, //Upload
-    24222, //StickyNote2
-    24213, //Source
-    24118, //FindInPage
-    24047, //CreditScore
-    24004, //Cake
-    23951, //QueryStats
-    23873, //DashboardCustomize
-    23838, //NewReleases
-    23806, //SaveAlt
-    23682, //PlaylistAdd
-    23418, //Support
-    23399, //ArrowCircleRight
-    23397, //Loyalty
-    23387, //Attachment
-    23366, //WbSunny
-    23307, //Announcement
-    23299, //Spa
-    23244, //Thermostat
-    23238, //CloseFullscreen
-    23157, //FlutterDash
-    23138, //Layers
-    22893, //Key
-    22737, //FormatListNumbered
-    22680, //Restore
-    22616, //Handshake
-    22535, //ExpandCircleDown
-    22523, //ViewHeadline
-    22499, //KeyboardBackspace
-    22176, //CurrencyExchange
-    22096, //Policy
-    22090, //PhoneAndroid
-    22047, //Dangerous
-    21951, //Sms
-    21922, //SentimentDissatisfied
-    21454, //DirectionsWalk
-    21388, //EuroSymbol
-    21294, //KeyboardArrowUp
-    21286, //TableChart
-    21266, //Sensors
-    21158, //MeetingRoom
-    21072, //KeyboardReturn
+    24579, //AdsClick
+    24565, //SwapVert
+    24460, //RestaurantMenu
+    24456, //AddPhotoAlternate
+    24437, //HistoryEdu
+    24365, //SkipPrevious
+    24278, //Archive
+    24260, //SettingsApplications
+    24238, //Upload
+    24232, //StickyNote2
+    24226, //Source
+    24124, //FindInPage
+    24054, //CreditScore
+    24010, //Cake
+    23976, //QueryStats
+    23878, //DashboardCustomize
+    23849, //NewReleases
+    23821, //SaveAlt
+    23686, //PlaylistAdd
+    23423, //Support
+    23412, //ArrowCircleRight
+    23407, //Loyalty
+    23391, //Attachment
+    23371, //WbSunny
+    23320, //Announcement
+    23306, //Spa
+    23255, //Thermostat
+    23244, //CloseFullscreen
+    23168, //FlutterDash
+    23146, //Layers
+    22907, //Key
+    22748, //FormatListNumbered
+    22691, //Restore
+    22649, //Handshake
+    22551, //ExpandCircleDown
+    22536, //ViewHeadline
+    22500, //KeyboardBackspace
+    22187, //CurrencyExchange
+    22108, //Policy
+    22100, //PhoneAndroid
+    22065, //Dangerous
+    21958, //Sms
+    21925, //SentimentDissatisfied
+    21476, //DirectionsWalk
+    21393, //EuroSymbol
+    21300, //KeyboardArrowUp
+    21290, //TableChart
+    21280, //Sensors
+    21169, //MeetingRoom
+    21073, //KeyboardReturn
 )
 
 private fun getWeight9(): List<Int> = listOf(
-    21045, //BorderColor
-    20942, //GroupWork
-    20927, //SentimentVeryDissatisfied
-    20884, //Brush
-    20876, //BatteryFull
-    20795, //GpsFixed
-    20793, //KeyboardDoubleArrowRight
-    20778, //TableView
-    20774, //CompareArrows
-    20510, //NotificationImportant
-    20505, //House
-    20496, //ChangeCircle
-    20405, //DisabledByDefault
-    20386, //ArrowLeft
-    20373, //South
-    20370, //LocalHospital
-    20267, //Tag
-    20259, //Subject
-    20113, //ImportContacts
-    20074, //Loop
-    19966, //Laptop
-    19849, //PrivacyTip
-    19763, //SmartToy
-    19681, //AppRegistration
-    19626, //Equalizer
-    19518, //PriceCheck
-    19477, //LocalLibrary
-    19436, //Euro
-    19433, //NightlightRound
-    19389, //CorporateFare
-    19282, //FlashOn
-    19170, //PinDrop
-    19084, //AcUnit
-    19040, //LiveTv
-    19013, //Bookmarks
-    19006, //Https
-    18997, //Toc
-    18989, //ArrowCircleUp
-    18970, //TrackChanges
-    18930, //ContactPhone
-    18873, //Input
-    18827, //Park
-    18807, //Newspaper
-    18792, //ViewModule
-    18700, //KeyboardArrowLeft
-    18677, //EmojiPeople
-    18673, //Api
-    18673, //Medication
-    18660, //PieChart
-    18619, //ImportExport
+    21054, //BorderColor
+    20947, //GroupWork
+    20934, //SentimentVeryDissatisfied
+    20888, //Brush
+    20880, //BatteryFull
+    20806, //KeyboardDoubleArrowRight
+    20801, //GpsFixed
+    20786, //TableView
+    20783, //CompareArrows
+    20521, //NotificationImportant
+    20512, //House
+    20500, //ChangeCircle
+    20412, //DisabledByDefault
+    20392, //ArrowLeft
+    20384, //South
+    20378, //LocalHospital
+    20275, //Tag
+    20268, //Subject
+    20118, //ImportContacts
+    20086, //Loop
+    19982, //Laptop
+    19851, //PrivacyTip
+    19772, //SmartToy
+    19691, //AppRegistration
+    19633, //Equalizer
+    19522, //PriceCheck
+    19482, //LocalLibrary
+    19441, //Euro
+    19438, //NightlightRound
+    19398, //CorporateFare
+    19293, //FlashOn
+    19180, //PinDrop
+    19095, //AcUnit
+    19053, //LiveTv
+    19021, //Bookmarks
+    19013, //Https
+    19006, //Toc
+    19000, //ArrowCircleUp
+    18974, //TrackChanges
+    18943, //ContactPhone
+    18877, //Input
+    18831, //Park
+    18822, //Newspaper
+    18798, //ViewModule
+    18704, //KeyboardArrowLeft
+    18681, //EmojiPeople
+    18680, //Api
+    18674, //Medication
+    18667, //PieChart
+    18627, //ImportExport
 )
 
 private fun getWeight10(): List<Int> = listOf(
-    18602, //AutoFixHigh
-    18523, //SelfImprovement
-    18505, //DownloadForOffline
-    18472, //Grading
-    18442, //QueryBuilder
-    18419, //PermMedia
-    18413, //Copyright
-    18393, //LiveHelp
-    18367, //Pin
-    18323, //FastForward
-    18225, //ForwardToInbox
-    18217, //PersonRemove
-    18170, //Coronavirus
-    18118, //LocalAtm
-    18108, //LooksOne
-    18077, //BuildCircle
-    17983, //NorthEast
-    17924, //Redo
-    17820, //HourglassBottom
-    17773, //Web
-    17730, //LocalActivity
-    17671, //Memory
-    17640, //Forward
-    17534, //North
-    17517, //StarHalf
-    17482, //PlaylistAddCheck
-    17457, //PermContactCalendar
-    17403, //PersonPin
-    17372, //VideoLibrary
-    17354, //DesignServices
-    17318, //ZoomOut
-    17308, //GppGood
-    17304, //HourglassTop
-    17247, //SettingsPhone
-    17235, //Headphones
-    17194, //Poll
-    17046, //Backup
-    16979, //FirstPage
-    16979, //OpenWith
-    16966, //Cottage
-    16960, //LocalCafe
-    16943, //ContentCut
-    16936, //OndemandVideo
-    16887, //PointOfSale
-    16868, //HomeWork
-    16852, //RateReview
-    16783, //Keyboard
-    16762, //CircleNotifications
-    16758, //RssFeed
-    16746, //DeliveryDining
+    18613, //AutoFixHigh
+    18537, //SelfImprovement
+    18514, //DownloadForOffline
+    18479, //Grading
+    18449, //QueryBuilder
+    18425, //PermMedia
+    18420, //Copyright
+    18395, //LiveHelp
+    18377, //Pin
+    18326, //FastForward
+    18227, //ForwardToInbox
+    18219, //PersonRemove
+    18174, //Coronavirus
+    18120, //LocalAtm
+    18118, //LooksOne
+    18084, //BuildCircle
+    17991, //NorthEast
+    17932, //Redo
+    17828, //HourglassBottom
+    17783, //Web
+    17735, //LocalActivity
+    17683, //Memory
+    17642, //Forward
+    17535, //North
+    17519, //StarHalf
+    17486, //PlaylistAddCheck
+    17461, //PermContactCalendar
+    17405, //PersonPin
+    17380, //VideoLibrary
+    17363, //DesignServices
+    17321, //ZoomOut
+    17312, //GppGood
+    17311, //HourglassTop
+    17253, //SettingsPhone
+    17243, //Headphones
+    17200, //Poll
+    17051, //Backup
+    16991, //OpenWith
+    16986, //FirstPage
+    16968, //Cottage
+    16965, //LocalCafe
+    16949, //ContentCut
+    16942, //OndemandVideo
+    16893, //PointOfSale
+    16874, //HomeWork
+    16856, //RateReview
+    16786, //Keyboard
+    16766, //CircleNotifications
+    16762, //RssFeed
+    16748, //DeliveryDining
 )
 
 private fun getWeight11(): List<Int> = listOf(
-    16646, //Whatshot
-    16573, //ControlPoint
-    16544, //PermPhoneMsg
-    16486, //HeadsetMic
-    16452, //Notes
-    16405, //SpeakerNotes
-    16381, //LabelImportant
-    16366, //Style
-    16360, //Wysiwyg
-    16324, //CreateNewFolder
-    16304, //CardMembership
-    16204, //IndeterminateCheckBox
-    16149, //BatteryChargingFull
-    16126, //OutlinedFlag
-    16123, //SportsSoccer
-    16083, //BookOnline
-    16073, //FullscreenExit
-    16069, //FilePresent
-    16052, //MarkEmailRead
-    16023, //ArrowCircleDown
-    15962, //PriceChange
-    15920, //Adjust
-    15859, //LibraryAdd
-    15746, //Pageview
-    15691, //Domain
-    15677, //LocalPolice
-    15637, //Tv
-    15569, //Inbox
-    15536, //Percent
+    16653, //Whatshot
+    16576, //ControlPoint
+    16553, //PermPhoneMsg
+    16497, //HeadsetMic
+    16460, //Notes
+    16409, //SpeakerNotes
+    16386, //LabelImportant
+    16373, //Style
+    16370, //Wysiwyg
+    16332, //CreateNewFolder
+    16312, //CardMembership
+    16213, //IndeterminateCheckBox
+    16153, //BatteryChargingFull
+    16129, //OutlinedFlag
+    16128, //SportsSoccer
+    16085, //BookOnline
+    16079, //FullscreenExit
+    16075, //FilePresent
+    16056, //MarkEmailRead
+    16032, //ArrowCircleDown
+    15965, //PriceChange
+    15922, //Adjust
+    15863, //LibraryAdd
+    15749, //Pageview
+    15696, //Domain
+    15679, //LocalPolice
+    15643, //Tv
+    15571, //Inbox
+    15554, //Percent
     15521, //Recommend
-    15450, //Straighten
-    15439, //PauseCircle
-    15419, //Chair
-    15346, //Reviews
-    15344, //DriveEta
-    15255, //FmdGood
-    15228, //Mood
-    15221, //DirectionsBike
-    15206, //MicOff
-    15202, //Fastfood
-    15198, //Upgrade
-    15182, //TrendingDown
-    15170, //ChangeHistory
-    15152, //LinkOff
-    15147, //StopCircle
-    15139, //IntegrationInstructions
-    15097, //PeopleOutline
-    15076, //_3dRotation
-    15076, //Tungsten
-    15055, //ChecklistRtl
+    15451, //Straighten
+    15446, //PauseCircle
+    15420, //Chair
+    15351, //DriveEta
+    15351, //Reviews
+    15257, //FmdGood
+    15230, //Mood
+    15226, //DirectionsBike
+    15210, //MicOff
+    15208, //Fastfood
+    15201, //Upgrade
+    15187, //TrendingDown
+    15176, //ChangeHistory
+    15158, //StopCircle
+    15156, //LinkOff
+    15141, //IntegrationInstructions
+    15102, //PeopleOutline
+    15081, //Tungsten
+    15079, //_3dRotation
+    15057, //ChecklistRtl
 )
 
 private fun getWeight12(): List<Int> = listOf(
-    14988, //DirectionsCarFilled
-    14912, //HomeRepairService
-    14756, //TextFields
-    14717, //FormatBold
-    14683, //Recycling
-    14657, //Subscriptions
-    14645, //CleaningServices
-    14638, //ZoomOutMap
+    14992, //DirectionsCarFilled
+    14914, //HomeRepairService
+    14759, //TextFields
+    14722, //FormatBold
+    14686, //Recycling
+    14663, //Subscriptions
+    14656, //CleaningServices
+    14644, //ZoomOutMap
     14630, //TableRows
-    14555, //Bed
-    14538, //Publish
+    14557, //Bed
+    14549, //Publish
     14528, //WifiOff
-    14504, //Repeat
-    14501, //Ballot
-    14490, //Female
-    14486, //VolumeMute
-    14477, //Accessible
-    14432, //Drafts
-    14418, //FamilyRestroom
-    14411, //Biotech
-    14391, //Class
-    14370, //VideoCall
-    14366, //Swipe
-    14365, //LastPage
-    14347, //Hotel
-    14327, //Title
-    14297, //GTranslate
-    14270, //ArrowDropDownCircle
-    14222, //Air
-    14164, //SettingsAccessibility
-    14136, //Hub
-    14132, //ArrowCircleLeft
-    14132, //PersonOff
-    14126, //InsertEmoticon
-    14073, //SettingsBackupRestore
-    14065, //OfflineBolt
-    14053, //AutoGraph
-    14028, //Downloading
-    14022, //ProductionQuantityLimits
-    14015, //Expand
-    13951, //PhotoLibrary
-    13895, //ReportGmailerrorred
-    13863, //NotInterested
-    13795, //NoteAlt
-    13755, //MiscellaneousServices
-    13752, //EventBusy
-    13729, //LocalPhone
-    13695, //LocalGroceryStore
-    13667, //KeyboardDoubleArrowLeft
-    13643, //InsertPhoto
+    14509, //Repeat
+    14504, //Ballot
+    14493, //Female
+    14489, //VolumeMute
+    14480, //Accessible
+    14434, //Drafts
+    14420, //FamilyRestroom
+    14417, //Biotech
+    14397, //Class
+    14376, //VideoCall
+    14372, //LastPage
+    14370, //Swipe
+    14357, //Hotel
+    14330, //Title
+    14298, //GTranslate
+    14274, //ArrowDropDownCircle
+    14234, //Air
+    14169, //SettingsAccessibility
+    14145, //Hub
+    14142, //ArrowCircleLeft
+    14137, //PersonOff
+    14129, //InsertEmoticon
+    14079, //OfflineBolt
+    14075, //SettingsBackupRestore
+    14062, //AutoGraph
+    14032, //Downloading
+    14024, //ProductionQuantityLimits
+    14021, //Expand
+    13958, //PhotoLibrary
+    13900, //ReportGmailerrorred
+    13865, //NotInterested
+    13800, //NoteAlt
+    13757, //EventBusy
+    13756, //MiscellaneousServices
+    13730, //LocalPhone
+    13696, //LocalGroceryStore
+    13682, //KeyboardDoubleArrowLeft
+    13644, //InsertPhoto
 )
 
 private fun getWeight13(): List<Int> = listOf(
-    13570, //Camera
-    13570, //Draw
-    13548, //InsertChartOutlined
-    13480, //ViewColumn
-    13418, //AspectRatio
-    13314, //UnfoldLess
-    13285, //Shuffle
-    13273, //ModelTraining
-    13202, //DonutLarge
-    13191, //Male
-    13024, //Segment
-    13011, //Portrait
-    12990, //DeleteSweep
-    12969, //OtherHouses
-    12908, //Bluetooth
-    12898, //MonitorHeart
-    12767, //FolderShared
-    12763, //Mode
-    12732, //Diamond
-    12712, //GraphicEq
-    12697, //PersonAddAlt1
-    12688, //Navigation
-    12654, //Audiotrack
-    12629, //AlarmOn
-    12624, //ReadMore
-    12616, //CameraAlt
-    12608, //LocalGasStation
-    12579, //Train
-    12553, //DocumentScanner
-    12529, //ScheduleSend
-    12527, //CalendarViewMonth
-    12440, //Dvr
-    12369, //DoNotDisturbOn
+    13577, //Camera
+    13576, //Draw
+    13552, //InsertChartOutlined
+    13488, //ViewColumn
+    13421, //AspectRatio
+    13319, //UnfoldLess
+    13294, //Shuffle
+    13277, //ModelTraining
+    13205, //DonutLarge
+    13192, //Male
+    13029, //Segment
+    13015, //Portrait
+    12994, //DeleteSweep
+    12972, //OtherHouses
+    12915, //Bluetooth
+    12906, //MonitorHeart
+    12775, //FolderShared
+    12764, //Mode
+    12746, //Diamond
+    12717, //GraphicEq
+    12698, //PersonAddAlt1
+    12696, //Navigation
+    12658, //Audiotrack
+    12634, //AlarmOn
+    12631, //ReadMore
+    12626, //CameraAlt
+    12612, //LocalGasStation
+    12582, //Train
+    12558, //DocumentScanner
+    12534, //ScheduleSend
+    12531, //CalendarViewMonth
+    12442, //Dvr
+    12372, //DoNotDisturbOn
     12351, //StackedBarChart
-    12331, //Maximize
-    12250, //MoreTime
-    12227, //SettingsEthernet
-    12169, //ModeComment
-    12169, //SquareFoot
-    12131, //ThumbsUpDown
-    12115, //CloudDone
-    12083, //Markunread
-    12071, //BookmarkAdd
-    12040, //LocalParking
-    12019, //PersonPinCircle
-    12011, //Theaters
-    11998, //Factory
-    11977, //SortByAlpha
-    11902, //ViewAgenda
-    11874, //SubdirectoryArrowRight
+    12335, //Maximize
+    12257, //MoreTime
+    12231, //SettingsEthernet
+    12176, //SquareFoot
+    12171, //ModeComment
+    12134, //ThumbsUpDown
+    12119, //CloudDone
+    12087, //Markunread
+    12077, //BookmarkAdd
+    12046, //LocalParking
+    12024, //PersonPinCircle
+    12021, //Theaters
+    12015, //Factory
+    11978, //SortByAlpha
+    11905, //ViewAgenda
+    11879, //SubdirectoryArrowRight
 )
 
 private fun getWeight14(): List<Int> = listOf(
-    11847, //ThumbDownOffAlt
-    11772, //MarkEmailUnread
-    11711, //ConnectWithoutContact
-    11710, //SentimentNeutral
-    11684, //Functions
-    11673, //ThumbDownAlt
-    11663, //AllInclusive
-    11624, //KeyboardDoubleArrowDown
-    11590, //CallEnd
-    11566, //Grass
-    11550, //Wc
-    11512, //WavingHand
-    11474, //RealEstateAgent
-    11446, //AirportShuttle
-    11420, //BackHand
-    11403, //ImportantDevices
-    11355, //CloudQueue
-    11325, //Money
+    11854, //ThumbDownOffAlt
+    11773, //MarkEmailUnread
+    11716, //ConnectWithoutContact
+    11713, //SentimentNeutral
+    11686, //Functions
+    11677, //ThumbDownAlt
+    11671, //AllInclusive
+    11630, //KeyboardDoubleArrowDown
+    11596, //CallEnd
+    11574, //Grass
+    11555, //Wc
+    11515, //WavingHand
+    11480, //RealEstateAgent
+    11450, //AirportShuttle
+    11428, //BackHand
+    11409, //ImportantDevices
+    11362, //CloudQueue
+    11330, //Money
     11316, //LocalPostOffice
-    11306, //Podcasts
-    11283, //Architecture
-    11258, //Unpublished
-    11244, //NotificationsOff
-    11176, //TwoWheeler
-    11175, //ClearAll
-    11170, //Directions
-    11166, //Workspaces
-    11116, //SystemUpdateAlt
-    11067, //Nightlight
-    11027, //InsertLink
-    10987, //Opacity
-    10987, //OpenInBrowser
-    10973, //Commute
-    10941, //Mouse
-    10937, //FastRewind
-    10936, //ShoppingCartCheckout
-    10905, //SportsScore
-    10874, //InvertColors
-    10868, //Luggage
-    10861, //NoAccounts
-    10859, //Masks
-    10814, //ChildCare
-    10785, //Addchart
-    10784, //ModeEditOutline
-    10766, //ColorLens
-    10753, //HistoryToggleOff
-    10738, //GridOn
-    10733, //MicNone
+    11311, //Podcasts
+    11289, //Architecture
+    11264, //Unpublished
+    11246, //NotificationsOff
+    11180, //ClearAll
+    11177, //TwoWheeler
+    11173, //Workspaces
+    11172, //Directions
+    11119, //SystemUpdateAlt
+    11075, //Nightlight
+    11031, //InsertLink
+    10998, //Opacity
+    10988, //OpenInBrowser
+    10978, //Commute
+    10947, //ShoppingCartCheckout
+    10944, //Mouse
+    10939, //FastRewind
+    10915, //SportsScore
+    10877, //InvertColors
+    10870, //Luggage
+    10864, //NoAccounts
+    10860, //Masks
+    10817, //ChildCare
+    10791, //Addchart
+    10790, //ModeEditOutline
+    10768, //ColorLens
+    10759, //HistoryToggleOff
+    10744, //GridOn
+    10735, //MicNone
     10727, //HorizontalRule
-    10718, //RotateRight
+    10720, //RotateRight
 )
 
 private fun getWeight15(): List<Int> = listOf(
-    10667, //AccessTime
-    10667, //AddBusiness
-    10612, //Route
-    10607, //Timelapse
-    10606, //CropFree
-    10589, //InsertInvitation
-    10567, //CurrencyRupee
-    10559, //ViewWeek
-    10558, //LibraryMusic
-    10536, //VideoCameraFront
-    10472, //FrontHand
-    10467, //Topic
-    10433, //DeveloperBoard
-    10423, //Shower
-    10406, //FormatAlignLeft
-    10385, //Vaccines
-    10384, //Traffic
-    10339, //Warehouse
-    10275, //KeyboardVoice
-    10251, //Tour
-    10203, //Yard
-    10197, //YoutubeSearchedFor
-    10177, //FormatItalic
-    10173, //DirectionsBoat
-    10099, //FormatColorFill
-    10098, //More
-    10025, //BeachAccess
-    9997, //HideSource
-    9941, //SearchOff
-    9939, //Start
-    9936, //AddLink
-    9892, //LocalBar
-    9873, //Slideshow
+    10672, //AccessTime
+    10669, //AddBusiness
+    10625, //Route
+    10612, //Timelapse
+    10609, //CropFree
+    10592, //InsertInvitation
+    10571, //CurrencyRupee
+    10566, //ViewWeek
+    10559, //LibraryMusic
+    10540, //VideoCameraFront
+    10476, //FrontHand
+    10471, //Topic
+    10436, //DeveloperBoard
+    10426, //Shower
+    10410, //FormatAlignLeft
+    10401, //Traffic
+    10386, //Vaccines
+    10349, //Warehouse
+    10276, //KeyboardVoice
+    10254, //Tour
+    10209, //Yard
+    10198, //YoutubeSearchedFor
+    10184, //FormatItalic
+    10177, //DirectionsBoat
+    10106, //FormatColorFill
+    10102, //More
+    10028, //BeachAccess
+    10000, //HideSource
+    9946, //Start
+    9944, //SearchOff
+    9937, //AddLink
+    9896, //LocalBar
+    9875, //Slideshow
     9868, //Landscape
-    9843, //FilterAltOff
-    9830, //NotStarted
-    9819, //VolumeDown
-    9817, //Approval
+    9845, //FilterAltOff
+    9835, //NotStarted
+    9823, //VolumeDown
+    9819, //Approval
     9792, //Power
-    9784, //StarPurple500
-    9746, //BookmarkAdded
-    9745, //AltRoute
-    9743, //Water
-    9718, //Router
-    9705, //Shop
-    9693, //Dialpad
-    9681, //Agriculture
-    9670, //MoodBad
-    9654, //MarkAsUnread
-    9651, //Plagiarism
+    9787, //StarPurple500
+    9750, //AltRoute
+    9747, //BookmarkAdded
+    9745, //Water
+    9727, //Router
+    9706, //Shop
+    9694, //Agriculture
+    9694, //Dialpad
+    9671, //MoodBad
+    9657, //MarkAsUnread
+    9656, //Plagiarism
 )
 
 private fun getWeight16(): List<Int> = listOf(
-    9644, //Beenhere
-    9639, //PanoramaFishEye
-    9638, //DownloadDone
-    9624, //AssignmentReturn
-    9619, //Balance
-    9612, //Emergency
-    9612, //SettingsInputAntenna
-    9596, //Pool
-    9577, //Stream
-    9573, //AddComment
-    9569, //CropSquare
-    9558, //VideocamOff
-    9544, //CopyAll
-    9542, //CollectionsBookmark
-    9539, //LooksTwo
-    9538, //DynamicFeed
-    9532, //FlightLand
+    9648, //Beenhere
+    9647, //PanoramaFishEye
+    9641, //DownloadDone
+    9630, //AssignmentReturn
+    9630, //Balance
+    9619, //SettingsInputAntenna
+    9618, //Emergency
+    9599, //Pool
+    9579, //Stream
+    9577, //AddComment
+    9576, //CropSquare
+    9562, //VideocamOff
+    9549, //CopyAll
+    9548, //LooksTwo
+    9544, //CollectionsBookmark
+    9540, //DynamicFeed
+    9536, //FlightLand
     9515, //TurnedIn
-    9500, //RecentActors
-    9454, //Compost
-    9448, //HotelClass
-    9425, //MoveToInbox
-    9421, //WhereToVote
+    9502, //RecentActors
+    9458, //Compost
+    9450, //HotelClass
+    9432, //MoveToInbox
+    9422, //WhereToVote
+    9418, //Lens
     9413, //CloudOff
-    9411, //Lens
-    9383, //VideogameAsset
-    9372, //PedalBike
-    9279, //EmojiNature
-    9253, //AssignmentLate
-    9219, //ShareLocation
-    9195, //SwitchAccount
-    9189, //_360
-    9185, //Diversity3
-    9173, //DoNotDisturb
-    9053, //DonutSmall
-    9038, //Kitchen
-    8999, //GppMaybe
-    8991, //Casino
-    8982, //Contactless
-    8971, //HighlightAlt
-    8950, //Rocket
-    8941, //SavedSearch
-    8903, //SettingsInputComponent
-    8890, //Waves
-    8841, //InsertChart
-    8837, //WebAsset
-    8834, //SyncProblem
-    8817, //LibraryAddCheck
-    8804, //HolidayVillage
-    8799, //ViewCarousel
+    9386, //VideogameAsset
+    9373, //PedalBike
+    9280, //EmojiNature
+    9256, //AssignmentLate
+    9222, //ShareLocation
+    9197, //Diversity3
+    9197, //SwitchAccount
+    9193, //_360
+    9174, //DoNotDisturb
+    9055, //DonutSmall
+    9041, //Kitchen
+    9000, //GppMaybe
+    8995, //Casino
+    8986, //Contactless
+    8976, //HighlightAlt
+    8957, //Rocket
+    8943, //SavedSearch
+    8906, //SettingsInputComponent
+    8893, //Waves
+    8844, //InsertChart
+    8844, //WebAsset
+    8835, //SyncProblem
+    8821, //LibraryAddCheck
+    8806, //HolidayVillage
+    8802, //ViewCarousel
 )
 
 private fun getWeight17(): List<Int> = listOf(
-    8793, //KeyboardDoubleArrowUp
-    8765, //ViewQuilt
-    8761, //FileOpen
-    8748, //AllInbox
-    8747, //Hearing
-    8737, //SettingsRemote
-    8716, //PhoneEnabled
+    8796, //KeyboardDoubleArrowUp
+    8771, //ViewQuilt
+    8768, //FileOpen
+    8753, //AllInbox
+    8750, //Hearing
+    8740, //SettingsRemote
+    8721, //PhoneEnabled
     8664, //QueueMusic
-    8657, //Anchor
-    8596, //HourglassFull
+    8659, //Anchor
+    8599, //HourglassFull
     8592, //NightsStay
-    8577, //LinearScale
-    8576, //EditOff
-    8574, //ContentPasteSearch
-    8538, //Mediation
-    8520, //FitScreen
-    8515, //Interests
-    8494, //DriveFileMove
-    8488, //TurnedInNot
-    8487, //Terminal
-    8486, //RemoveShoppingCart
-    8442, //Cable
-    8417, //Flaky
-    8410, //KingBed
-    8370, //Looks3
-    8366, //StackedLineChart
-    8327, //Unarchive
-    8314, //PauseCircleFilled
+    8584, //ContentPasteSearch
+    8578, //EditOff
+    8578, //LinearScale
+    8540, //Mediation
+    8529, //FitScreen
+    8518, //Interests
+    8499, //DriveFileMove
+    8494, //Terminal
+    8490, //TurnedInNot
+    8487, //RemoveShoppingCart
+    8447, //Cable
+    8419, //Flaky
+    8415, //KingBed
+    8377, //Looks3
+    8369, //StackedLineChart
+    8333, //Unarchive
+    8318, //PauseCircleFilled
     8311, //TimeToLeave
-    8305, //PauseCircleOutline
-    8302, //CatchingPokemon
-    8296, //LocationSearching
-    8270, //FiberNew
-    8262, //FormatSize
-    8262, //Subtitles
-    8258, //Toll
-    8247, //Moving
-    8225, //CastForEducation
-    8179, //Note
-    8161, //LockReset
-    8157, //DeviceHub
-    8151, //LocalAirport
-    8144, //ViewSidebar
-    8138, //Cameraswitch
-    8125, //SwapHorizontalCircle
-    8118, //LockClock
-    8106, //Compare
-    8099, //MarkChatUnread
-    8083, //Discount
+    8310, //PauseCircleOutline
+    8304, //CatchingPokemon
+    8301, //LocationSearching
+    8275, //FiberNew
+    8266, //FormatSize
+    8265, //Subtitles
+    8261, //Toll
+    8251, //Moving
+    8227, //CastForEducation
+    8180, //Note
+    8168, //LockReset
+    8164, //DeviceHub
+    8154, //LocalAirport
+    8148, //ViewSidebar
+    8142, //Cameraswitch
+    8130, //SwapHorizontalCircle
+    8120, //LockClock
+    8111, //Compare
+    8104, //MarkChatUnread
+    8086, //Discount
     8082, //Sailing
 )
 
 private fun getWeight18(): List<Int> = listOf(
-    8071, //MoneyOff
-    8048, //FilterVintage
-    8047, //CancelPresentation
-    8040, //ReplyAll
-    8029, //InsertComment
-    8021, //RoomService
-    8008, //FormatUnderlined
-    7978, //Roofing
-    7972, //VerticalAlignBottom
-    7962, //VerticalSplit
-    7942, //_3p
-    7928, //AddLocationAlt
-    7917, //AvTimer
-    7917, //BubbleChart
-    7906, //SettingsVoice
-    7877, //Shortcut
-    7876, //SelectAll
-    7870, //Album
-    7867, //OnlinePrediction
-    7845, //EventSeat
-    7844, //AirplaneTicket
-    7834, //DataExploration
-    7801, //Headset
-    7799, //FilterDrama
+    8076, //MoneyOff
+    8050, //CancelPresentation
+    8050, //FilterVintage
+    8041, //ReplyAll
+    8030, //InsertComment
+    8024, //RoomService
+    8013, //FormatUnderlined
+    7979, //Roofing
+    7976, //VerticalAlignBottom
+    7966, //VerticalSplit
+    7943, //_3p
+    7931, //AddLocationAlt
+    7923, //AvTimer
+    7920, //BubbleChart
+    7910, //SettingsVoice
+    7878, //SelectAll
+    7878, //Shortcut
+    7872, //Album
+    7870, //OnlinePrediction
+    7848, //AirplaneTicket
+    7848, //EventSeat
+    7841, //DataExploration
+    7805, //Headset
+    7801, //FilterDrama
     7764, //ImageSearch
-    7753, //Window
+    7754, //Window
     7750, //NextPlan
-    7711, //Radar
-    7707, //Wallpaper
-    7696, //Height
+    7715, //Radar
+    7708, //Wallpaper
+    7700, //Height
+    7697, //DeviceThermostat
     7696, //LocalDining
-    7693, //DeviceThermostat
-    7678, //DriveFolderUpload
-    7606, //CallMade
-    7594, //LaptopMac
-    7594, //MapsUgc
-    7576, //RestoreFromTrash
-    7572, //PregnantWoman
+    7681, //DriveFolderUpload
+    7609, //CallMade
+    7598, //LaptopMac
+    7595, //MapsUgc
+    7580, //RestoreFromTrash
+    7575, //PregnantWoman
     7567, //Healing
-    7543, //LocalTaxi
-    7537, //GppBad
-    7533, //Schema
-    7511, //FileDownloadDone
-    7484, //RotateLeft
-    7478, //PlaylistPlay
-    7453, //CameraEnhance
-    7447, //LocalLaundryService
-    7447, //LowPriority
-    7442, //CenterFocusStrong
-    7431, //TripOrigin
+    7546, //LocalTaxi
+    7540, //Schema
+    7539, //GppBad
+    7514, //FileDownloadDone
+    7485, //RotateLeft
+    7480, //PlaylistPlay
+    7456, //CameraEnhance
+    7452, //LowPriority
+    7449, //LocalLaundryService
+    7447, //CenterFocusStrong
+    7436, //TripOrigin
 )
 
 private fun getWeight19(): List<Int> = listOf(
-    7416, //DataUsage
-    7416, //VerticalAlignTop
-    7415, //RoomPreferences
+    7419, //DataUsage
+    7417, //RoomPreferences
+    7417, //VerticalAlignTop
     7394, //NotificationAdd
-    7382, //Cast
-    7376, //Queue
-    7373, //ViewStream
-    7362, //Token
-    7359, //CloudSync
-    7358, //DynamicForm
-    7348, //DirectionsBusFilled
-    7326, //RequestPage
-    7323, //DoDisturbOn
+    7383, //Cast
+    7377, //Queue
+    7375, //ViewStream
+    7370, //Token
+    7360, //CloudSync
+    7360, //DynamicForm
+    7350, //DirectionsBusFilled
+    7335, //RequestPage
+    7326, //DoDisturbOn
+    7321, //Tab
     7319, //RamenDining
-    7317, //Tab
-    7316, //MarkunreadMailbox
-    7310, //StarBorderPurple500
-    7299, //Assistant
-    7295, //AutoAwesomeMotion
-    7290, //CalendarViewWeek
-    7281, //BlurOn
-    7274, //MonitorWeight
+    7318, //MarkunreadMailbox
+    7311, //StarBorderPurple500
+    7306, //Assistant
+    7298, //AutoAwesomeMotion
+    7294, //CalendarViewWeek
+    7282, //BlurOn
+    7280, //MonitorWeight
     7273, //Games
-    7254, //Radio
-    7237, //Crop
-    7232, //LocalDrink
-    7229, //ReplayCircleFilled
-    7203, //SaveAs
-    7184, //LocalPrintshop
-    7182, //Hail
-    7166, //ScreenShare
-    7154, //VpnLock
-    7131, //CrueltyFree
-    7124, //SensorDoor
-    7107, //TheaterComedy
-    7087, //WbIncandescent
-    7061, //FaceRetouchingNatural
-    7060, //SignalWifi4Bar
-    7054, //SmartButton
-    7018, //RemoveDone
-    7013, //Forest
-    7012, //SportsBar
-    6992, //TextFormat
-    6991, //AccessibleForward
+    7256, //Radio
+    7238, //Crop
+    7235, //LocalDrink
+    7230, //ReplayCircleFilled
+    7206, //SaveAs
+    7187, //Hail
+    7185, //LocalPrintshop
+    7167, //ScreenShare
+    7158, //VpnLock
+    7135, //CrueltyFree
+    7126, //SensorDoor
+    7110, //TheaterComedy
+    7090, //WbIncandescent
+    7070, //FaceRetouchingNatural
+    7061, //SignalWifi4Bar
+    7059, //SmartButton
+    7020, //RemoveDone
+    7014, //Forest
+    7013, //SportsBar
+    6994, //TextFormat
+    6993, //AccessibleForward
     6981, //BrandingWatermark
-    6935, //CallSplit
-    6903, //Watch
-    6896, //SettingsPower
-    6894, //LocalPizza
+    6937, //CallSplit
+    6906, //Watch
+    6900, //SettingsPower
+    6895, //LocalPizza
     6871, //AddAlert
 )
 
 private fun getWeight20(): List<Int> = listOf(
-    6828, //Square
-    6815, //DeveloperMode
-    6811, //BrokenImage
-    6797, //FormatAlignCenter
-    6770, //DensityMedium
-    6770, //FreeBreakfast
-    6769, //Man
-    6756, //AutoDelete
+    6829, //Square
+    6817, //DeveloperMode
+    6812, //BrokenImage
+    6800, //FormatAlignCenter
+    6775, //DensityMedium
+    6773, //Man
+    6771, //FreeBreakfast
+    6757, //AutoDelete
     6742, //AddToDrive
-    6721, //SportsKabaddi
-    6719, //Flare
-    6684, //AddCard
-    6674, //Forward10
-    6659, //EscalatorWarning
-    6639, //WbCloudy
-    6637, //Try
-    6634, //Sports
-    6631, //TabletMac
-    6629, //Cases
-    6617, //Outbox
-    6609, //NotListedLocation
-    6587, //ElectricBolt
-    6581, //ModeNight
-    6581, //WorkHistory
-    6580, //FilterNone
-    6574, //Bathtub
-    6574, //RunningWithErrors
-    6553, //FontDownload
-    6547, //TransferWithinAStation
-    6543, //Colorize
-    6531, //ReduceCapacity
+    6724, //SportsKabaddi
+    6720, //Flare
+    6689, //AddCard
+    6676, //Forward10
+    6660, //EscalatorWarning
+    6643, //Try
+    6642, //WbCloudy
+    6637, //TabletMac
+    6635, //Cases
+    6635, //Sports
+    6620, //Outbox
+    6611, //NotListedLocation
+    6599, //ElectricBolt
+    6588, //WorkHistory
+    6584, //ModeNight
+    6582, //FilterNone
+    6577, //RunningWithErrors
+    6575, //Bathtub
+    6554, //FontDownload
+    6550, //TransferWithinAStation
+    6544, //Colorize
+    6532, //ReduceCapacity
     6527, //EmojiFoodBeverage
-    6515, //CardTravel
+    6518, //CardTravel
     6511, //DevicesOther
-    6504, //WifiTethering
-    6478, //Sick
-    6469, //AddLocation
+    6506, //WifiTethering
+    6480, //Sick
+    6471, //AddLocation
     6460, //OfflinePin
-    6454, //DinnerDining
-    6453, //EmojiSymbols
-    6448, //Weekend
-    6446, //ChildFriendly
-    6438, //Fax
-    6404, //AutoFixNormal
-    6400, //EnhancedEncryption
-    6399, //FolderSpecial
+    6456, //DinnerDining
+    6456, //Weekend
+    6454, //EmojiSymbols
+    6447, //ChildFriendly
+    6439, //Fax
+    6409, //AutoFixNormal
+    6403, //EnhancedEncryption
+    6401, //FolderSpecial
     6396, //Bloodtype
+    6393, //LegendToggle
     6392, //FormatPaint
-    6391, //LegendToggle
-    6379, //AreaChart
+    6384, //AreaChart
 )
 
 private fun getWeight21(): List<Int> = listOf(
-    6378, //CropOriginal
-    6364, //BatteryStd
-    6355, //DesktopMac
-    6351, //Replay10
-    6345, //FilterCenterFocus
+    6381, //CropOriginal
+    6365, //BatteryStd
+    6363, //DesktopMac
+    6354, //Replay10
+    6346, //FilterCenterFocus
+    6345, //FindReplace
     6343, //EmojiTransportation
-    6342, //FindReplace
-    6335, //HeartBroken
-    6332, //Compress
-    6288, //AssignmentReturned
-    6279, //Light
-    6266, //DoorFront
-    6265, //Diversity1
-    6244, //AssuredWorkload
+    6338, //Compress
+    6337, //HeartBroken
+    6291, //AssignmentReturned
+    6281, //Light
+    6270, //Diversity1
+    6267, //DoorFront
+    6258, //AssuredWorkload
     6236, //CalendarViewDay
-    6230, //Cookie
-    6222, //Brightness4
-    6214, //Rowing
-    6206, //HowToVote
-    6203, //ChromeReaderMode
-    6195, //_123
-    6194, //Wallet
-    6156, //GeneratingTokens
-    6127, //SportsTennis
-    6108, //Http
-    6105, //WineBar
-    6100, //NaturePeople
-    6094, //Terrain
-    6087, //FreeCancellation
-    6068, //Dehaze
-    6058, //Garage
-    6037, //NewLabel
-    6027, //AddReaction
-    6006, //MultipleStop
+    6233, //Cookie
+    6225, //Brightness4
+    6215, //Rowing
+    6208, //HowToVote
+    6206, //ChromeReaderMode
+    6198, //_123
+    6197, //Wallet
+    6161, //GeneratingTokens
+    6130, //SportsTennis
+    6110, //Http
+    6107, //WineBar
+    6101, //NaturePeople
+    6096, //Terrain
+    6090, //FreeCancellation
+    6073, //Dehaze
+    6061, //Garage
+    6041, //NewLabel
+    6030, //AddReaction
+    6008, //MultipleStop
+    6007, //Lan
     6006, //SouthEast
     6005, //Upcoming
-    5997, //Lan
-    5991, //AttachEmail
+    5992, //AttachEmail
     5985, //SettingsBrightness
-    5968, //FormatColorText
+    5970, //FormatColorText
     5960, //Gesture
     5954, //Woman
-    5944, //BackupTable
-    5937, //PersonalInjury
-    5929, //Photo
-    5924, //Elderly
+    5949, //BackupTable
+    5941, //PersonalInjury
+    5930, //Photo
+    5926, //Elderly
     5924, //Spellcheck
-    5916, //FormatAlignRight
+    5919, //FormatAlignRight
     5901, //Unsubscribe
-    5877, //FlashOff
+    5880, //FlashOff
 )
 
 private fun getWeight22(): List<Int> = listOf(
-    5868, //RestorePage
-    5850, //AlarmAdd
-    5848, //AddModerator
-    5832, //Foundation
-    5830, //EventRepeat
-    5819, //Scale
-    5815, //CreditCardOff
-    5814, //PanToolAlt
-    5811, //ScatterPlot
+    5871, //RestorePage
+    5851, //AddModerator
+    5851, //AlarmAdd
+    5835, //EventRepeat
+    5833, //Foundation
+    5826, //Scale
+    5818, //PanToolAlt
+    5817, //CreditCardOff
+    5813, //ScatterPlot
     5808, //Transgender
-    5786, //NoiseControlOff
-    5776, //KeyboardTab
+    5794, //NoiseControlOff
+    5778, //KeyboardTab
     5775, //WifiProtectedSetup
-    5767, //OutdoorGrill
-    5758, //AppSettingsAlt
-    5733, //DisplaySettings
-    5707, //PlayForWork
-    5676, //TagFaces
-    5665, //DisabledVisible
-    5660, //TakeoutDining
-    5650, //Deck
-    5647, //SignalCellular4Bar
+    5768, //OutdoorGrill
+    5759, //AppSettingsAlt
+    5734, //DisplaySettings
+    5710, //PlayForWork
+    5679, //TagFaces
+    5667, //DisabledVisible
+    5661, //TakeoutDining
+    5652, //Deck
+    5652, //SignalCellular4Bar
+    5621, //FormatListNumberedRtl
     5620, //SubdirectoryArrowLeft
-    5619, //FormatListNumberedRtl
     5614, //AutoAwesomeMosaic
-    5610, //AssistantDirection
-    5566, //ManageHistory
-    5558, //LaptopChromebook
+    5613, //AssistantDirection
+    5574, //ManageHistory
+    5565, //LaptopChromebook
     5554, //Brightness6
-    5546, //SettingsOverscan
-    5543, //StoreMallDirectory
-    5526, //DataObject
-    5525, //FollowTheSigns
-    5514, //Attribution
+    5547, //SettingsOverscan
+    5545, //StoreMallDirectory
+    5538, //DataObject
+    5527, //FollowTheSigns
+    5515, //Attribution
+    5502, //ViewTimeline
     5499, //Brightness1
-    5499, //ViewTimeline
-    5494, //Phonelink
-    5493, //FoodBank
+    5496, //Phonelink
+    5494, //FoodBank
     5488, //PlusOne
     5485, //Details
-    5480, //Brightness5
-    5473, //Grain
-    5463, //SocialDistance
+    5484, //Brightness5
+    5477, //Grain
+    5466, //SocialDistance
     5446, //ClosedCaption
-    5442, //FmdBad
-    5439, //Highlight
-    5435, //Outbound
-    5425, //Splitscreen
+    5444, //FmdBad
+    5441, //Highlight
+    5437, //Outbound
+    5427, //Splitscreen
+    5420, //CoPresent
     5418, //FlipCameraAndroid
-    5417, //Icecream
 )
 
 private fun getWeight23(): List<Int> = listOf(
-    5414, //CoPresent
-    5408, //FlashlightOn
-    5398, //DoDisturb
-    5377, //Museum
-    5376, //SwitchAccessShortcut
-    5367, //DomainVerification
-    5356, //Flip
-    5356, //NorthWest
-    5347, //Monitor
-    5324, //ViewComfy
-    5308, //CancelScheduleSend
-    5307, //Fireplace
-    5289, //SwapVerticalCircle
-    5288, //Gite
+    5417, //Icecream
+    5410, //FlashlightOn
+    5404, //DoDisturb
+    5379, //SwitchAccessShortcut
+    5378, //Museum
+    5370, //DomainVerification
+    5362, //Flip
+    5360, //Monitor
+    5357, //NorthWest
+    5327, //ViewComfy
+    5309, //CancelScheduleSend
+    5309, //Fireplace
+    5295, //Gite
+    5291, //SwapVerticalCircle
     5286, //Gif
-    5268, //Nightlife
-    5267, //FormatAlignJustify
+    5270, //FormatAlignJustify
+    5269, //Nightlife
     5260, //SmsFailed
-    5250, //LocalPharmacy
+    5251, //LocalPharmacy
     5245, //Villa
     5234, //PresentToAll
-    5232, //Webhook
-    5222, //NetworkWifi
-    5222, //SatelliteAlt
+    5234, //Webhook
+    5225, //SatelliteAlt
+    5223, //NetworkWifi
     5222, //WaterfallChart
+    5215, //SwitchLeft
     5214, //SimCardDownload
-    5214, //SwitchLeft
     5207, //VideoSettings
     5202, //SettingsInputComposite
-    5194, //Loupe
+    5195, //Loupe
     5193, //HighQuality
-    5181, //Pix
+    5182, //Pix
+    5177, //ImageNotSupported
+    5176, //Hardware
     5176, //Quickreply
-    5175, //Hardware
-    5175, //ImageNotSupported
-    5174, //NetworkCheck
-    5171, //MarkChatRead
-    5159, //PhoneCallback
-    5135, //NightShelter
-    5107, //ViewDay
-    5091, //DepartureBoard
-    5069, //CleanHands
-    5062, //AddIcCall
-    5061, //SetMeal
-    5057, //CommentBank
-    5046, //Troubleshoot
+    5175, //NetworkCheck
+    5174, //MarkChatRead
+    5164, //PhoneCallback
+    5137, //NightShelter
+    5108, //ViewDay
+    5093, //DepartureBoard
+    5070, //CleanHands
+    5064, //AddIcCall
+    5063, //SetMeal
+    5058, //CommentBank
+    5058, //Troubleshoot
     5038, //AccessTimeFilled
+    5033, //AirplanemodeActive
     5030, //AddRoad
-    5029, //AirplanemodeActive
-    5026, //RuleFolder
+    5029, //RuleFolder
 )
 
 private fun getWeight24(): List<Int> = listOf(
+    5025, //Bedtime
     5017, //MobileFriendly
-    5016, //Bedtime
     5005, //LineWeight
-    5001, //Piano
-    4988, //Dining
-    4974, //EvStation
-    4937, //FlagCircle
-    4931, //FolderZip
-    4929, //Usb
-    4896, //FlipCameraIos
-    4890, //HorizontalSplit
-    4888, //Filter1
+    5004, //Piano
+    4994, //Dining
+    4979, //EvStation
+    4938, //FlagCircle
+    4934, //FolderZip
+    4932, //Usb
+    4899, //FlipCameraIos
+    4893, //Filter1
+    4891, //HorizontalSplit
+    4887, //SportsMotorsports
     4886, //PhonelinkRing
-    4884, //SportsMotorsports
-    4881, //GolfCourse
+    4884, //GolfCourse
     4866, //Surfing
     4858, //MergeType
-    4850, //Sanitizer
-    4841, //PsychologyAlt
-    4829, //Adb
+    4851, //Sanitizer
+    4850, //PsychologyAlt
+    4832, //Adb
+    4818, //Groups2
     4816, //FeaturedPlayList
-    4813, //Groups2
-    4800, //SendToMobile
-    4797, //Flatware
-    4795, //FolderCopy
-    4795, //PhoneForwarded
+    4802, //Flatware
+    4801, //SendToMobile
+    4799, //FolderCopy
+    4796, //PhoneForwarded
     4764, //PowerOff
-    4758, //CallReceived
-    4749, //Output
-    4744, //PictureInPicture
-    4736, //Polymer
-    4725, //BatchPrediction
+    4759, //CallReceived
+    4753, //Output
+    4747, //PictureInPicture
+    4740, //Polymer
+    4728, //BatchPrediction
+    4716, //ElectricCar
     4709, //AddChart
-    4708, //ElectricCar
-    4699, //Speaker
+    4704, //Speaker
     4699, //SystemUpdate
-    4694, //BatteryAlert
-    4693, //Hive
-    4691, //StayCurrentPortrait
-    4681, //MedicalInformation
+    4696, //Hive
+    4695, //BatteryAlert
+    4694, //StayCurrentPortrait
+    4683, //MedicalInformation
     4675, //SportsHandball
-    4673, //SendAndArchive
+    4674, //SendAndArchive
     4654, //AddToPhotos
-    4650, //LocalSee
+    4652, //LocalSee
     4649, //MovieCreation
-    4641, //ContentPasteGo
-    4628, //Looks4
-    4622, //Html
-    4620, //Festival
-    4583, //SportsBaseball
+    4646, //ContentPasteGo
+    4634, //Looks4
+    4624, //Html
+    4621, //Festival
+    4585, //SportsBaseball
 )
 
 private fun getWeight25(): List<Int> = listOf(
     4574, //CodeOff
+    4571, //Plumbing
     4569, //BookmarkRemove
-    4569, //Plumbing
-    4564, //PersonalVideo
+    4566, //PersonalVideo
     4553, //LensBlur
-    4536, //PlaylistAddCheckCircle
+    4538, //PlaylistAddCheckCircle
     4518, //Animation
-    4508, //SettingsBluetooth
-    4498, //Panorama
-    4483, //CenterFocusWeak
+    4510, //SettingsBluetooth
+    4499, //Panorama
+    4484, //CenterFocusWeak
     4482, //Numbers
     4461, //ScreenSearchDesktop
-    4452, //MovieFilter
+    4455, //MovieFilter
     4450, //CoffeeMaker
-    4443, //EditNotifications
-    4442, //CarRental
+    4444, //CarRental
+    4444, //EditNotifications
     4433, //Gamepad
     4404, //NoPhotography
-    4397, //SouthWest
-    4389, //CloudCircle
-    4362, //LayersClear
-    4359, //FormatShapes
+    4399, //SouthWest
+    4391, //CloudCircle
+    4363, //LayersClear
+    4362, //FormatShapes
     4347, //SignalWifiStatusbar4Bar
-    4334, //SimCard
-    4319, //Stairs
-    4303, //Attractions
-    4300, //ScreenRotation
+    4336, //SimCard
+    4321, //Stairs
+    4306, //Attractions
+    4301, //ScreenRotation
     4299, //ControlCamera
     4296, //PhonelinkLock
-    4269, //ZoomInMap
-    4263, //PlaylistRemove
-    4251, //ShopTwo
-    4232, //Blender
-    4231, //TableRestaurant
-    4225, //FlipToFront
+    4271, //ZoomInMap
+    4264, //PlaylistRemove
+    4252, //ShopTwo
+    4234, //TableRestaurant
+    4233, //Blender
+    4227, //FlipToFront
     4223, //SignalWifiStatusbarConnectedNoInternet4
     4221, //SportsVolleyball
+    4207, //EditLocation
     4205, //CropDin
-    4205, //EditLocation
+    4201, //CellTower
     4200, //EnergySavingsLeaf
-    4197, //CellTower
-    4176, //PivotTableChart
+    4177, //PivotTableChart
     4167, //Microwave
-    4165, //PestControl
-    4157, //CurrencyBitcoin
-    4134, //Backpack
-    4128, //KeyboardAlt
-    4122, //PhoneDisabled
-    4109, //GpsNotFixed
-    4091, //Diversity2
+    4166, //PestControl
+    4162, //CurrencyBitcoin
+    4135, //Backpack
+    4129, //KeyboardAlt
+    4125, //PhoneDisabled
+    4112, //GpsNotFixed
+    4094, //Diversity2
 )
 
 private fun getWeight26(): List<Int> = listOf(
-    4085, //GifBox
-    4081, //RingVolume
-    4079, //LocalConvenienceStore
-    4076, //SpeakerNotesOff
-    4068, //Difference
-    4063, //CurrencyYen
-    4058, //LeakAdd
-    4056, //Eject
-    4038, //ControlPointDuplicate
-    4032, //Brightness7
-    4029, //Pages
-    4028, //Filter
-    4027, //SwitchRight
-    4027, //ViewCompact
-    4020, //RunCircle
+    4086, //GifBox
+    4082, //RingVolume
+    4081, //LocalConvenienceStore
+    4078, //SpeakerNotesOff
+    4070, //Difference
+    4066, //CurrencyYen
+    4060, //LeakAdd
+    4058, //Eject
+    4042, //ControlPointDuplicate
+    4036, //Brightness7
+    4031, //Filter
+    4031, //ViewCompact
+    4030, //Pages
+    4029, //SwitchRight
+    4021, //RunCircle
     4019, //VoiceChat
     4015, //SystemSecurityUpdateGood
-    4000, //FilterListOff
-    3990, //Church
-    3975, //IncompleteCircle
-    3957, //Nature
+    4003, //FilterListOff
+    3992, //Church
+    3977, //IncompleteCircle
+    3958, //Nature
     3953, //Vibration
-    3949, //DryCleaning
-    3940, //AirlineSeatReclineNormal
-    3922, //LocationOff
+    3950, //DryCleaning
+    3941, //AirlineSeatReclineNormal
+    3925, //LocationOff
     3905, //SnippetFolder
+    3903, //MoneyOffCsred
     3903, //SportsFootball
-    3902, //MoneyOffCsred
-    3899, //AlarmOff
-    3886, //PermDataSetting
+    3900, //AlarmOff
+    3887, //PermDataSetting
     3880, //EditRoad
     3880, //SwitchAccessShortcutAdd
     3879, //EditAttributes
     3856, //SettingsInputHdmi
-    3843, //PhonelinkSetup
-    3834, //Texture
-    3825, //EditLocationAlt
+    3845, //PhonelinkSetup
+    3838, //Texture
+    3826, //EditLocationAlt
+    3810, //SlowMotionVideo
     3808, //BedroomParent
-    3808, //SlowMotionVideo
-    3802, //AddToQueue
-    3801, //BluetoothConnected
+    3803, //AddToQueue
+    3803, //BluetoothConnected
     3801, //HourglassDisabled
     3783, //DoDisturbAlt
     3777, //NextWeek
     3776, //PermScanWifi
-    3754, //PieChartOutline
-    3753, //Battery5Bar
+    3755, //PieChartOutline
+    3754, //Battery5Bar
     3749, //ConnectedTv
-    3739, //BedroomBaby
-    3736, //SensorWindow
+    3740, //BedroomBaby
+    3737, //FormatIndentIncrease
 )
 
 private fun getWeight27(): List<Int> = listOf(
-    3734, //FormatIndentIncrease
-    3723, //MoveUp
+    3736, //SensorWindow
+    3727, //MoveUp
     3719, //TimerOff
     3718, //CameraIndoor
-    3714, //Nfc
+    3716, //Nfc
     3713, //SensorsOff
     3705, //Duo
-    3695, //AutoMode
-    3691, //Contrast
-    3687, //WorkOff
-    3686, //DownhillSkiing
+    3697, //AutoMode
+    3694, //Contrast
+    3690, //WorkOff
+    3687, //DownhillSkiing
     3683, //ShortText
-    3676, //GroupRemove
-    3673, //Elevator
+    3677, //Elevator
+    3677, //GroupRemove
     3673, //Kayaking
     3672, //RememberMe
     3650, //CarRepair
-    3648, //PhotoSizeSelectActual
-    3645, //Transform
-    3641, //SolarPower
-    3639, //Co2
-    3638, //JoinFull
-    3635, //VideoCameraBack
-    3630, //PictureInPictureAlt
+    3649, //PhotoSizeSelectActual
+    3647, //Transform
+    3644, //Co2
+    3643, //SolarPower
+    3639, //JoinFull
+    3636, //VideoCameraBack
+    3632, //PictureInPictureAlt
     3629, //AppBlocking
     3629, //Bathroom
-    3626, //PublicOff
+    3627, //PublicOff
     3626, //WrongLocation
-    3616, //SettingsCell
+    3617, //SettingsCell
     3607, //RepeatOne
-    3600, //ModeStandby
+    3601, //ModeStandby
     3587, //Moped
     3583, //Abc
     3570, //SingleBed
     3570, //Wash
-    3560, //Javascript
+    3562, //Javascript
     3556, //RemoveModerator
-    3553, //SwapCalls
-    3550, //DoorSliding
-    3546, //SmokingRooms
+    3554, //SwapCalls
+    3551, //DoorSliding
+    3549, //Pattern
+    3548, //SmokingRooms
     3545, //ChairAlt
-    3545, //Pattern
-    3540, //StayPrimaryPortrait
+    3541, //StayPrimaryPortrait
     3534, //LocalMovies
-    3524, //LineStyle
-    3511, //DoNotDisturbAlt
+    3525, //LineStyle
+    3514, //DoNotDisturbAlt
     3510, //PermDeviceInformation
-    3502, //Boy
-    3498, //Looks5
-    3492, //Airplay
+    3506, //Looks5
+    3503, //Boy
+    3496, //LightbulbCircle
 )
 
 private fun getWeight28(): List<Int> = listOf(
-    3492, //BrightnessHigh
-    3492, //LightbulbCircle
-    3491, //AppShortcut
-    3465, //FormatColorReset
+    3494, //Airplay
+    3493, //AppShortcut
+    3493, //BrightnessHigh
+    3466, //FormatColorReset
     3464, //DirectionsBoatFilled
+    3463, //TabletAndroid
     3462, //NotificationsPaused
-    3461, //TabletAndroid
     3460, //MotionPhotosOn
-    3457, //DomainAdd
+    3458, //DomainAdd
     3454, //Cabin
-    3451, //HouseSiding
+    3452, //HouseSiding
     3446, //Satellite
-    3442, //CameraOutdoor
-    3441, //StrikethroughS
-    3430, //Skateboarding
-    3416, //Signpost
+    3443, //CameraOutdoor
+    3442, //StrikethroughS
+    3431, //Skateboarding
+    3422, //Signpost
     3414, //HotTub
     3406, //SoupKitchen
     3402, //CallToAction
     3401, //UpdateDisabled
-    3398, //SubtitlesOff
-    3392, //CastConnected
+    3399, //SubtitlesOff
+    3394, //CastConnected
+    3384, //SwipeLeft
     3383, //Rotate90DegreesCcw
-    3383, //SwipeLeft
-    3378, //VerticalAlignCenter
-    3370, //BatterySaver
+    3379, //VerticalAlignCenter
+    3371, //BatterySaver
     3369, //DoorBack
     3364, //Voicemail
-    3360, //SyncDisabled
+    3361, //SyncDisabled
     3335, //PersonRemoveAlt1
     3328, //AlignHorizontalLeft
-    3326, //Countertops
-    3322, //Fitbit
-    3321, //Living
-    3321, //PlayLesson
-    3320, //PhotoCameraFront
+    3327, //Countertops
+    3326, //Fitbit
+    3324, //PlayLesson
+    3323, //PhotoCameraFront
+    3322, //Living
     3319, //Snooze
-    3316, //Hexagon
-    3307, //SafetyDivider
-    3302, //LaptopWindows
-    3301, //MicExternalOn
-    3283, //Tram
-    3263, //DataSaverOff
+    3318, //Hexagon
+    3309, //SafetyDivider
+    3304, //MicExternalOn
+    3303, //LaptopWindows
+    3284, //Tram
+    3265, //DataSaverOff
     3261, //PrivateConnectivity
+    3250, //ArrowOutward
     3250, //Hd
-    3248, //WbTwilight
-    3244, //TaxiAlert
-    3240, //ArrowOutward
+    3250, //WbTwilight
+    3245, //TaxiAlert
     3238, //VoiceOverOff
     3233, //Rectangle
 )
 
 private fun getWeight29(): List<Int> = listOf(
-    3232, //Storm
+    3233, //Storm
     3224, //CurrencyPound
     3222, //AppsOutage
+    3194, //Merge
     3193, //BreakfastDining
-    3190, //Merge
     3189, //BrowserUpdated
-    3184, //Gradient
+    3186, //Gradient
     3182, //FileDownloadOff
     3172, //Replay30
     3171, //DataSaverOn
-    3169, //DeviceUnknown
-    3169, //FireExtinguisher
+    3171, //FireExtinguisher
+    3170, //DeviceUnknown
+    3168, //CrisisAlert
     3167, //Doorbell
-    3165, //CrisisAlert
-    3162, //BrightnessMedium
-    3160, //BluetoothSearching
-    3160, //Thunderstorm
-    3150, //TapAndPlay
-    3146, //RepeatOn
+    3165, //Thunderstorm
+    3163, //BluetoothSearching
+    3163, //BrightnessMedium
+    3151, //TapAndPlay
+    3150, //RepeatOn
     3145, //WaterDamage
-    3140, //JoinInner
-    3128, //Carpenter
+    3141, //JoinInner
+    3129, //Carpenter
     3128, //Grid4x4
-    3122, //Straight
-    3121, //SsidChart
-    3115, //ContentPasteOff
-    3115, //SignalWifi0Bar
+    3123, //SsidChart
+    3123, //Straight
+    3118, //ContentPasteOff
+    3116, //SignalWifi0Bar
+    3115, //ChargingStation
+    3115, //MoveDown
     3114, //RvHookup
-    3111, //ChargingStation
-    3111, //MoveDown
-    3106, //BrightnessLow
+    3107, //BrightnessLow
+    3100, //InstallDesktop
     3099, //ClosedCaptionOff
-    3096, //InstallDesktop
-    3079, //BabyChangingStation
-    3074, //AssistantPhoto
-    3064, //SwipeRight
-    3057, //OfflineShare
-    3057, //Subway
+    3082, //BabyChangingStation
+    3075, //AssistantPhoto
+    3065, //SwipeRight
+    3063, //Subway
+    3058, //OfflineShare
+    3055, //GroupOff
     3054, //BluetoothDisabled
-    3054, //GroupOff
     3053, //TableBar
-    3050, //AdUnits
-    3041, //MobiledataOff
-    3034, //Screenshot
+    3051, //AdUnits
+    3042, //MobiledataOff
+    3037, //Screenshot
     3031, //BedroomChild
-    3021, //Battery4Bar
-    3018, //Atm
-    3015, //Soap
-    3013, //NoEncryption
-    3001, //NetworkCell
+    3023, //Battery4Bar
+    3020, //Atm
+    3016, //Soap
+    3014, //NoEncryption
+    3002, //NetworkCell
 )
 
 private fun getWeight30(): List<Int> = listOf(
-    2999, //HideImage
-    2986, //SettingsInputSvideo
+    3001, //HideImage
+    2990, //SettingsInputSvideo
     2978, //SwipeUp
+    2975, //Battery0Bar
+    2975, //Groups3
     2975, //SportsCricket
-    2972, //Groups3
-    2971, //Battery0Bar
-    2965, //SdCard
+    2967, //SdCard
     2961, //MultilineChart
-    2951, //SportsMartialArts
-    2943, //ExposurePlus1
+    2958, //SportsMartialArts
+    2944, //ExposurePlus1
     2931, //CallMerge
-    2928, //SportsMma
+    2930, //SportsMma
     2927, //FlipToBack
-    2925, //MusicOff
-    2923, //WifiCalling3
+    2926, //MusicOff
+    2924, //WifiCalling3
     2919, //Crop169
     2919, //HdrAuto
-    2918, //TransitEnterexit
+    2919, //TransitEnterexit
+    2915, //PhoneMissed
     2914, //ShieldMoon
-    2911, //PhoneMissed
     2865, //ViewArray
     2857, //BrunchDining
-    2853, //KeyboardHide
-    2853, //PhonelinkErase
+    2854, //KeyboardHide
+    2854, //PhonelinkErase
     2845, //Exposure
     2831, //ThermostatAuto
-    2828, //OpenInNewOff
-    2827, //MobileScreenShare
+    2829, //OpenInNewOff
+    2828, //MobileScreenShare
     2823, //Filter2
-    2819, //SecurityUpdateGood
+    2820, //SecurityUpdateGood
+    2814, //BatteryUnknown
     2814, //SmokeFree
-    2813, //BatteryUnknown
     2812, //FeaturedVideo
-    2810, //ShutterSpeed
-    2809, //Polyline
+    2811, //Polyline
+    2811, //ShutterSpeed
     2787, //PhotoAlbum
     2784, //DensitySmall
     2783, //Score
+    2779, //Hvac
     2779, //SportsGolf
-    2778, //Hvac
+    2773, //Girl
     2773, //NordicWalking
-    2772, //Girl
-    2767, //ConnectingAirports
+    2769, //ConnectingAirports
     2765, //Umbrella
-    2762, //FilterTiltShift
-    2758, //TextIncrease
-    2755, //AllOut
-    2755, //Scanner
+    2763, //FilterTiltShift
+    2761, //TextIncrease
+    2757, //AllOut
+    2756, //Scanner
     2752, //BorderAll
-    2746, //AudioFile
+    2747, //AudioFile
 )
 
 private fun getWeight31(): List<Int> = listOf(
     2736, //ShuffleOn
-    2727, //Shop2
+    2732, //WebStories
+    2728, //Shop2
     2725, //ElectricBike
-    2722, //WebStories
-    2707, //Face6
-    2700, //FolderDelete
+    2708, //Face6
+    2702, //FolderDelete
     2688, //Battery6Bar
-    2675, //SportsGymnastics
+    2678, //SportsGymnastics
     2673, //DirectionsTransit
     2665, //SignalWifiOff
+    2658, //Looks6
     2654, //LabelOff
-    2653, //Looks6
     2651, //AirlineSeatReclineExtra
-    2647, //DataThresholding
-    2646, //Looks
-    2644, //HdrStrong
-    2643, //Egg
+    2651, //DataThresholding
+    2648, //Egg
+    2648, //Looks
+    2645, //HdrStrong
     2642, //SettingsSystemDaydream
-    2639, //Brightness3
+    2641, //Brightness3
     2638, //Tablet
+    2633, //InterpreterMode
     2632, //Forward30
     2631, //SafetyCheck
-    2629, //InterpreterMode
-    2623, //LinkedCamera
+    2625, //LinkedCamera
     2616, //Vrpano
-    2609, //Paragliding
+    2610, //Paragliding
+    2608, //FormatIndentDecrease
     2608, //PlaylistAddCircle
-    2606, //FormatIndentDecrease
+    2600, //DoNotTouch
     2596, //_5g
-    2591, //DoNotTouch
-    2586, //LockPerson
-    2580, //Tapas
-    2572, //TabUnselected
-    2565, //CropPortrait
-    2563, //Commit
+    2590, //LockPerson
+    2583, //Tapas
+    2573, //TabUnselected
+    2567, //CropPortrait
+    2566, //Commit
     2562, //BlurCircular
-    2561, //ElectricScooter
+    2562, //ElectricScooter
     2560, //PersonAddDisabled
-    2555, //DomainDisabled
+    2559, //DomainDisabled
     2555, //MusicVideo
     2536, //RoundedCorner
     2534, //Battery3Bar
-    2529, //RiceBowl
-    2522, //Face3
-    2518, //FlashAuto
-    2509, //Stadium
+    2532, //RiceBowl
+    2526, //Face3
+    2522, //FlashAuto
+    2513, //Stadium
     2507, //DriveFileMoveRtl
     2507, //SignalWifiBad
     2504, //ModeOfTravel
@@ -1749,36 +1749,36 @@ private fun getWeight31(): List<Int> = listOf(
 
 private fun getWeight32(): List<Int> = listOf(
     2495, //Tty
+    2493, //Fence
     2492, //PartyMode
     2489, //QueuePlayNext
     2488, //PhotoFilter
-    2487, //Fence
-    2485, //AccessAlarms
+    2487, //AccessAlarms
+    2479, //ContactEmergency
     2478, //LocalCarWash
-    2474, //ContactEmergency
     2474, //FormatClear
-    2467, //LocalHotel
+    2470, //LocalHotel
     2466, //Replay5
-    2460, //SpaceBar
+    2461, //SpaceBar
     2453, //MotionPhotosAuto
     2449, //Snowboarding
     2441, //ViewKanban
-    2435, //Spoke
+    2439, //Spoke
+    2432, //VideoFile
     2429, //_6FtApart
-    2428, //VideoFile
     2427, //CallMissedOutgoing
     2427, //TextRotateVertical
-    2416, //Balcony
-    2411, //Iso
+    2418, //Balcony
+    2413, //Iso
     2406, //SpeakerPhone
-    2402, //InstallMobile
-    2393, //FormatLineSpacing
+    2404, //InstallMobile
+    2394, //FormatLineSpacing
     2392, //DesktopAccessDisabled
     2390, //Kitesurfing
     2389, //SignalWifiConnectedNoInternet4
-    2369, //Brightness2
+    2371, //Brightness2
+    2369, //Castle
     2368, //CandlestickChart
-    2367, //Castle
     2367, //Houseboat
     2366, //ExploreOff
     2365, //NoFood
@@ -1786,35 +1786,35 @@ private fun getWeight32(): List<Int> = listOf(
     2353, //Rotate90DegreesCw
     2350, //MarkUnreadChatAlt
     2350, //PhotoSizeSelectSmall
-    2348, //HorizontalDistribute
-    2347, //SpatialAudioOff
+    2350, //SpatialAudioOff
+    2349, //HorizontalDistribute
     2342, //CellWifi
-    2337, //ReportOff
-    2327, //Tonality
-    2319, //Css
-    2317, //FilterHdr
+    2338, //ReportOff
+    2328, //Tonality
+    2320, //Css
+    2319, //FilterHdr
     2312, //OilBarrel
     2310, //AlignVerticalBottom
-    2308, //SwipeDown
-    2297, //WindPower
+    2310, //SwipeDown
+    2306, //WindPower
     2290, //Bento
 )
 
 private fun getWeight33(): List<Int> = listOf(
     2286, //TextRotationNone
     2280, //AccessAlarm
-    2279, //ArtTrack
-    2276, //SensorOccupied
-    2261, //WheelchairPickup
-    2259, //CurrencyRuble
-    2257, //ExposureZero
-    2250, //Aod
-    2250, //Battery1Bar
-    2246, //ImagesearchRoller
-    2244, //CropRotate
+    2280, //ArtTrack
+    2278, //SensorOccupied
+    2262, //WheelchairPickup
+    2260, //CurrencyRuble
+    2258, //ExposureZero
+    2253, //Battery1Bar
+    2252, //Aod
+    2247, //ImagesearchRoller
+    2245, //CropRotate
     2242, //HearingDisabled
+    2240, //CarCrash
     2240, //StopScreenShare
-    2238, //CarCrash
     2236, //FlashlightOff
     2236, //PhotoSizeSelectLarge
     2229, //SignalCellular0Bar
@@ -1822,138 +1822,138 @@ private fun getWeight33(): List<Int> = listOf(
     2224, //Mms
     2223, //PrintDisabled
     2217, //AlignHorizontalCenter
-    2215, //Filter3
-    2206, //JoinLeft
+    2216, //Filter3
+    2207, //JoinLeft
     2204, //NotAccessible
     2198, //Iron
     2187, //SpeakerGroup
-    2183, //Snowshoeing
-    2180, //AddToHomeScreen
+    2184, //Snowshoeing
+    2181, //AddToHomeScreen
     2171, //SignalWifiStatusbarNull
     2170, //NoiseAware
-    2168, //SouthAmerica
-    2154, //SecurityUpdate
-    2153, //GpsOff
-    2150, //PinInvoke
+    2169, //SouthAmerica
+    2155, //SecurityUpdate
+    2154, //GpsOff
+    2154, //PunchClock
+    2152, //PinInvoke
     2148, //Pinch
-    2148, //PunchClock
+    2142, //ElectricMeter
     2140, //Streetview
-    2138, //ElectricMeter
-    2136, //HdrWeak
-    2135, //CallMissed
-    2131, //Earbuds
+    2137, //HdrWeak
+    2136, //CallMissed
+    2133, //Earbuds
     2130, //Bungalow
-    2122, //VerticalDistribute
+    2123, //VerticalDistribute
     2118, //CameraFront
     2117, //Crop54
     2117, //SportsHockey
     2112, //IceSkating
-    2109, //SwipeVertical
-    2096, //ElderlyWoman
+    2110, //SwipeVertical
+    2097, //ElderlyWoman
     2095, //Explicit
 )
 
 private fun getWeight34(): List<Int> = listOf(
     2084, //AlignHorizontalRight
     2082, //KeyboardCapslock
-    2081, //SdStorage
+    2082, //SdStorage
     2074, //ExtensionOff
-    2061, //HeatPump
-    2060, //FormatStrikethrough
-    2060, //PausePresentation
-    2058, //Mosque
+    2063, //FormatStrikethrough
+    2063, //HeatPump
+    2063, //PausePresentation
+    2060, //Mosque
     2043, //PermCameraMic
-    2029, //Superscript
+    2031, //Superscript
+    2023, //ViewCozy
     2021, //SportsRugby
-    2020, //ViewCozy
+    2014, //DataArray
     2013, //BurstMode
-    2012, //Grid3x3
-    2011, //DataArray
+    2013, //Grid3x3
     2009, //FilterFrames
-    1997, //ResetTv
-    1996, //Person2
+    2000, //ResetTv
+    1998, //Person2
     1995, //_4gMobiledata
     1990, //VideoLabel
     1985, //DirectionsSubway
     1971, //JoinRight
     1970, //_4k
-    1965, //TurnRight
+    1968, //TurnRight
+    1961, //Scoreboard
     1960, //HeadsetOff
-    1959, //Scoreboard
-    1955, //CommentsDisabled
+    1956, //CommentsDisabled
     1953, //FiberSmartRecord
-    1947, //CompassCalibration
+    1949, //Dataset
+    1948, //CompassCalibration
     1945, //Crib
-    1944, //Dataset
     1943, //BrightnessAuto
     1937, //Margin
     1936, //DialerSip
-    1935, //ElectricRickshaw
+    1936, //ElectricRickshaw
     1934, //PinEnd
-    1924, //LogoDev
-    1923, //Face2
-    1923, //SyncLock
-    1912, //CameraRoll
+    1926, //LogoDev
+    1925, //Face2
+    1924, //SyncLock
+    1913, //CameraRoll
     1908, //Chalet
-    1904, //SwipeRightAlt
-    1892, //InvertColorsOff
-    1890, //AirlineStops
+    1905, //SwipeRightAlt
+    1894, //InvertColorsOff
+    1891, //AirlineStops
     1890, //DiscFull
     1889, //SignalCellularConnectedNoInternet4Bar
     1881, //Battery2Bar
     1877, //NoEncryptionGmailerrorred
     1870, //Face4
-    1866, //WifiLock
+    1868, //WifiLock
 )
 
 private fun getWeight35(): List<Int> = listOf(
-    1863, //ScreenshotMonitor
+    1865, //ScreenshotMonitor
     1862, //Sledding
     1846, //Deselect
+    1840, //BlurLinear
     1839, //WifiCalling
-    1838, //BlurLinear
     1837, //DoNotDisturbOnTotalSilence
-    1832, //Pentagon
+    1834, //Pentagon
     1824, //FilterBAndW
     1802, //Rtt
     1800, //CropLandscape
     1794, //Crop32
+    1791, //GasMeter
     1791, //NearbyError
-    1789, //GasMeter
     1786, //BluetoothAudio
-    1781, //AirplanemodeInactive
+    1782, //AirplanemodeInactive
     1779, //Phishing
-    1766, //_1xMobiledata
-    1763, //PortableWifiOff
-    1761, //ForkRight
-    1756, //DoNotStep
+    1767, //_1xMobiledata
+    1764, //PortableWifiOff
+    1762, //ForkRight
+    1757, //DoNotStep
     1747, //SecurityUpdateWarning
     1744, //WrapText
     1736, //DirectionsRailway
     1736, //KeyboardCommandKey
-    1735, //SdCardAlert
+    1736, //SdCardAlert
     1733, //AlignVerticalTop
     1727, //SendTimeExtension
-    1723, //MailLock
-    1723, //RepeatOneOn
+    1726, //MailLock
+    1724, //RepeatOneOn
     1718, //NoCrash
-    1711, //NoMeals
+    1712, //NoMeals
     1711, //NoMeetingRoom
-    1703, //SwitchCamera
-    1696, //Subscript
+    1704, //SwitchCamera
+    1697, //Subscript
     1695, //BorderClear
     1693, //AlignVerticalCenter
     1693, //BrowseGallery
+    1693, //TextDecrease
     1692, //SignalCellularConnectedNoInternet0Bar
-    1692, //TextDecrease
     1683, //SwitchVideo
     1681, //SimCardAlert
     1673, //Php
-    1665, //FolderOff
+    1667, //FolderOff
+    1667, //ViewComfyAlt
     1665, //TextRotateUp
-    1665, //ViewComfyAlt
     1656, //Escalator
-    1654, //Filter7
+    1655, //Filter7
     1651, //RailwayAlert
     1650, //TextRotationAngledown
     1647, //FontDownloadOff
@@ -1961,50 +1961,50 @@ private fun getWeight35(): List<Int> = listOf(
 
 private fun getWeight36(): List<Int> = listOf(
     1637, //Filter4
+    1632, //SignLanguage
+    1631, //ScreenLockPortrait
     1630, //Dry
-    1630, //ScreenLockPortrait
-    1630, //SignLanguage
-    1627, //TextRotationAngleup
+    1628, //TextRotationAngleup
     1623, //DoNotDisturbOff
     1622, //Filter9Plus
     1621, //ElectricMoped
-    1619, //WifiPassword
-    1615, //SurroundSound
+    1621, //WifiPassword
+    1616, //SurroundSound
     1615, //TextRotationDown
     1611, //ExposurePlus2
     1603, //ClosedCaptionDisabled
     1603, //RemoveFromQueue
-    1597, //AirlineSeatIndividualSuite
-    1592, //AddHome
+    1598, //AirlineSeatIndividualSuite
+    1593, //AddHome
     1587, //HomeMax
     1586, //PhonePaused
     1585, //WbIridescent
-    1576, //TurnLeft
+    1577, //TurnLeft
+    1567, //LocalPlay
     1567, //UnfoldMoreDouble
     1566, //GridOff
-    1565, //LocalPlay
     1565, //Stroller
-    1554, //AddHomeWork
+    1555, //AddHomeWork
     1551, //ViewCompactAlt
-    1546, //PlayDisabled
+    1547, //PlayDisabled
     1540, //BorderStyle
     1540, //SystemSecurityUpdateWarning
     1539, //NetworkPing
     1529, //UTurnLeft
     1525, //SystemSecurityUpdate
+    1519, //WebAssetOff
     1519, //WifiTetheringOff
-    1518, //WebAssetOff
     1516, //MotionPhotosPaused
     1514, //PhotoCameraBack
-    1507, //Cyclone
+    1508, //Cyclone
     1496, //SwipeDownAlt
     1495, //MonochromePhotos
+    1494, //AutoFixOff
     1494, //StayCurrentLandscape
-    1493, //AutoFixOff
     1492, //Airlines
-    1488, //Dock
+    1489, //Dock
     1488, //HeadphonesBattery
-    1484, //Filter5
+    1485, //Filter5
     1483, //Sip
     1478, //EdgesensorHigh
     1472, //PestControlRodent
@@ -2014,93 +2014,93 @@ private fun getWeight36(): List<Int> = listOf(
 
 private fun getWeight37(): List<Int> = listOf(
     1460, //EggAlt
-    1457, //OnDeviceTraining
+    1458, //OnDeviceTraining
     1456, //DoDisturbOff
-    1443, //NoDrinks
+    1445, //NoDrinks
     1442, //Nat
-    1440, //ExposureNeg1
-    1439, //Lyrics
+    1441, //ExposureNeg1
+    1440, //Lyrics
     1437, //KeyOff
+    1428, //BikeScooter
     1427, //AirlineSeatFlat
-    1427, //BikeScooter
-    1422, //Padding
+    1423, //Padding
+    1420, //TireRepair
     1419, //PhoneLocked
-    1419, //TireRepair
     1415, //DensityLarge
     1414, //BrowserNotSupported
     1413, //NetworkLocked
-    1411, //FaceRetouchingOff
+    1412, //FaceRetouchingOff
     1406, //BorderOuter
     1404, //Face5
     1400, //Person4
-    1397, //Sd
-    1396, //NetworkWifi1Bar
-    1396, //SpatialTracking
+    1398, //Sd
+    1398, //SpatialTracking
+    1397, //NetworkWifi1Bar
     1387, //NearMeDisabled
     1381, //StayPrimaryLandscape
+    1377, //LineAxis
     1376, //SignalCellularNodata
-    1375, //LineAxis
     1372, //Snowmobile
     1367, //SwipeLeftAlt
     1366, //_30fps
-    1362, //PropaneTank
+    1364, //PropaneTank
+    1354, //Sos
     1353, //NoSim
-    1352, //Sos
     1349, //EarbudsBattery
-    1347, //SignalCellularOff
+    1348, //SignalCellularOff
     1347, //WifiFind
+    1346, //Person3
     1343, //_4gPlusMobiledata
     1343, //DirectionsTransitFilled
-    1343, //Person3
-    1337, //MinorCrash
+    1338, //MinorCrash
     1335, //SignalWifi4BarLock
+    1330, //AddAlarm
     1330, //LteMobiledata
-    1329, //AddAlarm
     1327, //NetworkWifi3Bar
     1325, //LeakRemove
     1325, //SpatialAudio
     1321, //LocationDisabled
-    1320, //PanoramaPhotosphere
+    1321, //PanoramaPhotosphere
     1317, //SignalCellularNull
-    1313, //MissedVideoCall
+    1315, //MissedVideoCall
 )
 
 private fun getWeight38(): List<Int> = listOf(
-    1311, //InsertPageBreak
-    1305, //MobileOff
+    1312, //InsertPageBreak
+    1306, //MobileOff
     1304, //Filter8
     1302, //PhonelinkOff
-    1301, //SwipeUpAlt
+    1302, //SwipeUpAlt
     1299, //Filter9
     1298, //BluetoothDrive
-    1294, //Flood
-    1292, //_10k
+    1296, //Flood
+    1293, //_10k
     1278, //NoLuggage
-    1258, //KebabDining
+    1262, //KebabDining
     1258, //NoTransfer
     1258, //Timer10
     1254, //MediaBluetoothOn
-    1252, //FlightClass
+    1253, //FlightClass
     1248, //HomeMini
     1247, //VideoStable
+    1229, //AdfScanner
+    1228, //Fort
     1226, //Filter6
-    1226, //Fort
-    1225, //AdfScanner
     1220, //ModeFanOff
     1218, //DirectionsSubwayFilled
-    1212, //FireTruck
+    1216, //FireTruck
     1210, //RawOn
+    1205, //TempleBuddhist
     1204, //BlurOff
-    1203, //Deblur
+    1204, //Deblur
+    1203, //MotionPhotosOff
+    1203, //Rsvp
     1203, //WbShade
-    1202, //MotionPhotosOff
-    1202, //Rsvp
-    1201, //TempleBuddhist
     1192, //EmergencyShare
     1187, //MotionPhotosPause
     1187, //VpnKeyOff
-    1185, //DirectionsRailwayFilled
-    1181, //TvOff
+    1186, //DirectionsRailwayFilled
+    1182, //TvOff
     1176, //Vignette
     1168, //EdgesensorLow
     1166, //DeveloperBoardOff
@@ -2108,62 +2108,62 @@ private fun getWeight38(): List<Int> = listOf(
     1162, //PhoneBluetoothSpeaker
     1158, //HdrOn
     1151, //AirlineSeatFlatAngled
+    1150, //UsbOff
     1149, //_3gMobiledata
-    1149, //UsbOff
     1140, //ScubaDiving
     1139, //FiberPin
     1138, //PanoramaHorizontal
     1135, //NetworkWifi2Bar
     1126, //DirtyLens
-    1124, //ScreenLockRotation
+    1125, //ScreenLockRotation
 )
 
 private fun getWeight39(): List<Int> = listOf(
+    1123, //NoCell
     1122, //ImageAspectRatio
-    1122, //NoCell
-    1117, //DatasetLinked
+    1120, //DatasetLinked
     1115, //_30fpsSelect
+    1113, //Tsunami
     1110, //_60fps
     1109, //ScreenLockLandscape
-    1109, //Tsunami
-    1103, //SevereCold
+    1105, //SevereCold
     1096, //UTurnRight
     1095, //PianoOff
+    1094, //SignalCellularAlt1Bar
     1093, //LtePlusMobiledata
-    1093, //SignalCellularAlt1Bar
     1084, //CameraRear
     1075, //Wifi2Bar
     1072, //SignalCellularAlt2Bar
     1068, //Timer10Select
     1067, //CurrencyYuan
     1066, //UnfoldLessDouble
-    1061, //CurrencyLira
+    1063, //CurrencyLira
     1058, //WifiTetheringError
     1052, //VideogameAssetOff
     1039, //Timer3
+    1037, //Repartition
     1036, //_60fpsSelect
-    1035, //Repartition
     1033, //DirectionsOff
     1028, //PanoramaWideAngleSelect
     1027, //AirlineSeatLegroomNormal
     1027, //TempleHindu
+    1024, //WidthFull
     1023, //_24mp
-    1023, //WidthFull
     1019, //FiberDvr
     1017, //SignalCellularNoSim
-    1015, //ForkLeft
-    1009, //ShapeLine
+    1016, //ForkLeft
+    1015, //ShapeLine
     1009, //Synagogue
     1001, //ExposureNeg2
+    998, //ScreenRotationAlt
     997, //RemoveRoad
-    997, //ScreenRotationAlt
     994, //RollerSkating
     974, //Tornado
     973, //AirlineSeatLegroomExtra
     972, //RollerShades
     966, //TurnSharpRight
-    963, //NoFlash
-    955, //BorderInner
+    964, //NoFlash
+    956, //BorderInner
     948, //_4kPlus
     941, //AutofpsSelect
     939, //Wifi1Bar
@@ -2177,19 +2177,19 @@ private fun getWeight40(): List<Int> = listOf(
     923, //RoundaboutRight
     917, //GMobiledata
     915, //_1k
+    915, //Transcribe
     913, //BorderBottom
-    913, //Transcribe
-    910, //FormatTextdirectionLToR
+    911, //FormatTextdirectionLToR
     903, //AssistWalker
     902, //TurnSlightRight
-    897, //Man2
-    890, //Landslide
+    900, //Man2
+    891, //Landslide
     890, //Woman2
-    888, //KeyboardControlKey
+    889, //KeyboardControlKey
     880, //BorderVertical
     878, //WidthWide
+    873, //NoBackpack
     873, //Timer3Select
-    872, //NoBackpack
     867, //TurnSlightLeft
     864, //PanoramaHorizontalSelect
     855, //_2k
@@ -2197,7 +2197,7 @@ private fun getWeight40(): List<Int> = listOf(
     853, //PanoramaPhotosphereSelect
     852, //PanoramaWideAngle
     849, //WbAuto
-    846, //Blind
+    847, //Blind
     845, //FormatTextdirectionRToL
     842, //HdrPlus
     840, //HMobiledata
@@ -2205,15 +2205,15 @@ private fun getWeight40(): List<Int> = listOf(
     829, //_1kPlus
     825, //BorderTop
     824, //MicExternalOff
-    815, //BorderRight
+    816, //BorderRight
+    810, //Propane
     809, //_18UpRating
-    808, //Propane
-    805, //BroadcastOnPersonal
+    807, //BroadcastOnPersonal
     805, //NoStroller
     804, //Blinds
     800, //MediaBluetoothOff
     795, //_8k
-    790, //Volcano
+    793, //Volcano
     789, //EMobiledata
     784, //CurrencyFranc
     777, //RMobiledata
@@ -2236,22 +2236,22 @@ private fun getWeight41(): List<Int> = listOf(
     719, //_8kPlus
     719, //WatchOff
     717, //_9kPlus
+    717, //Desk
     716, //FormatOverline
     716, //Hevc
-    715, //Desk
     711, //HdrOnSelect
-    708, //KeyboardOptionKey
+    710, //KeyboardOptionKey
+    707, //BlindsClosed
+    707, //Curtains
     706, //_3k
-    706, //BlindsClosed
-    702, //Curtains
     697, //BedtimeOff
     691, //RoundaboutLeft
     684, //_18mp
     678, //TurnSharpLeft
     677, //_10mp
+    676, //BroadcastOnHome
     676, //VerticalShades
     676, //VerticalShadesClosed
-    675, //BroadcastOnHome
     675, //HdrAutoSelect
     674, //CurtainsClosed
     673, //NestCamWiredStand
@@ -2261,15 +2261,15 @@ private fun getWeight41(): List<Int> = listOf(
     657, //_7k
     654, //NearbyOff
     648, //_9k
+    646, //DevicesFold
     645, //_3kPlus
-    644, //DevicesFold
+    644, //HdrOff
     643, //_2kPlus
-    643, //HdrOff
     641, //_6k
     640, //_7kPlus
     639, //_6kPlus
     637, //HdrOffSelect
-    619, //_11mp
+    620, //_11mp
     616, //_20mp
     602, //_3mp
     602, //VapeFree
@@ -2290,13 +2290,13 @@ private fun getWeight42(): List<Int> = listOf(
     558, //_8mp
     556, //_4mp
     556, //_9mp
+    553, //_7mp
     552, //_6mp
-    552, //_7mp
     552, //Fluorescent
     550, //Man4
     541, //RampLeft
     511, //RampRight
     475, //Man3
-    467, //FireHydrantAlt
+    468, //FireHydrantAlt
     325, //MacroOff
 )

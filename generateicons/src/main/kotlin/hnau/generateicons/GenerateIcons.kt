@@ -6,8 +6,8 @@ import arrow.core.NonEmptyList
 import arrow.core.NonEmptySet
 import arrow.core.toNonEmptyListOrNull
 import arrow.core.toNonEmptySetOrNull
-import hnau.common.ktgen.Importable
-import hnau.common.ktgen.inject
+import hnau.common.gen.kt.Importable
+import hnau.common.gen.kt.inject
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
 import java.io.InputStreamReader

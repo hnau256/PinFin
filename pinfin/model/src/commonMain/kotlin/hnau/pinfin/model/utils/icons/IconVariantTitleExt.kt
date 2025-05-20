@@ -307,8 +307,8 @@ private fun getTitle4(): List<String> = listOf(
     "Launch", //Launch
     "Add box", //AddBox
     "Drag indicator", //DragIndicator
-    "Touch app", //TouchApp
     "Supervisor account", //SupervisorAccount
+    "Touch app", //TouchApp
     "Pending", //Pending
     "Menu open", //MenuOpen
     "Zoom in", //ZoomIn
@@ -326,8 +326,8 @@ private fun getTitle5(): List<String> = listOf(
     "Block", //Block
     "Local fire department", //LocalFireDepartment
     "Thumb up off alt", //ThumbUpOffAlt
-    "Chat bubble outline", //ChatBubbleOutline
     "Event available", //EventAvailable
+    "Chat bubble outline", //ChatBubbleOutline
     "Feed", //Feed
     "Open in full", //OpenInFull
     "Auto stories", //AutoStories
@@ -359,8 +359,8 @@ private fun getTitle5(): List<String> = listOf(
     "Feedback", //Feedback
     "Arrow drop up", //ArrowDropUp
     "Label", //Label
-    "Travel explore", //TravelExplore
     "Unfold more", //UnfoldMore
+    "Travel explore", //TravelExplore
     "Water drop", //WaterDrop
     "Swap horiz", //SwapHoriz
     "Computer", //Computer
@@ -415,8 +415,8 @@ private fun getTitle6(): List<String> = listOf(
     "Stop", //Stop
     "Gavel", //Gavel
     "Rocket launch", //RocketLaunch
-    "Quiz", //Quiz
     "Pan tool", //PanTool
+    "Quiz", //Quiz
     "Edit calendar", //EditCalendar
     "Question mark", //QuestionMark
     "Cloud download", //CloudDownload
@@ -452,8 +452,8 @@ private fun getTitle7(): List<String> = listOf(
     "West", //West
     "Message", //Message
     "Hourglass empty", //HourglassEmpty
-    "Show chart", //ShowChart
     "Storage", //Storage
+    "Show chart", //ShowChart
     "Sentiment satisfied", //SentimentSatisfied
     "Insert drive file", //InsertDriveFile
     "Science", //Science
@@ -534,8 +534,8 @@ private fun getTitle9(): List<String> = listOf(
     "Sentiment very dissatisfied", //SentimentVeryDissatisfied
     "Brush", //Brush
     "Battery full", //BatteryFull
-    "Gps fixed", //GpsFixed
     "Keyboard double arrow right", //KeyboardDoubleArrowRight
+    "Gps fixed", //GpsFixed
     "Table view", //TableView
     "Compare arrows", //CompareArrows
     "Notification important", //NotificationImportant
@@ -619,8 +619,8 @@ private fun getTitle10(): List<String> = listOf(
     "Headphones", //Headphones
     "Poll", //Poll
     "Backup", //Backup
-    "First page", //FirstPage
     "Open with", //OpenWith
+    "First page", //FirstPage
     "Cottage", //Cottage
     "Local cafe", //LocalCafe
     "Content cut", //ContentCut
@@ -668,8 +668,8 @@ private fun getTitle11(): List<String> = listOf(
     "Straighten", //Straighten
     "Pause circle", //PauseCircle
     "Chair", //Chair
-    "Reviews", //Reviews
     "Drive eta", //DriveEta
+    "Reviews", //Reviews
     "Fmd good", //FmdGood
     "Mood", //Mood
     "Directions bike", //DirectionsBike
@@ -678,12 +678,12 @@ private fun getTitle11(): List<String> = listOf(
     "Upgrade", //Upgrade
     "Trending down", //TrendingDown
     "Change history", //ChangeHistory
-    "Link off", //LinkOff
     "Stop circle", //StopCircle
+    "Link off", //LinkOff
     "Integration instructions", //IntegrationInstructions
     "People outline", //PeopleOutline
-    "3d rotation", //_3dRotation
     "Tungsten", //Tungsten
+    "3d rotation", //_3dRotation
     "Checklist rtl", //ChecklistRtl
 )
 
@@ -710,8 +710,8 @@ private fun getTitle12(): List<String> = listOf(
     "Biotech", //Biotech
     "Class", //Class
     "Video call", //VideoCall
-    "Swipe", //Swipe
     "Last page", //LastPage
+    "Swipe", //Swipe
     "Hotel", //Hotel
     "Title", //Title
     "G translate", //GTranslate
@@ -722,8 +722,8 @@ private fun getTitle12(): List<String> = listOf(
     "Arrow circle left", //ArrowCircleLeft
     "Person off", //PersonOff
     "Insert emoticon", //InsertEmoticon
-    "Settings backup restore", //SettingsBackupRestore
     "Offline bolt", //OfflineBolt
+    "Settings backup restore", //SettingsBackupRestore
     "Auto graph", //AutoGraph
     "Downloading", //Downloading
     "Production quantity limits", //ProductionQuantityLimits
@@ -732,8 +732,8 @@ private fun getTitle12(): List<String> = listOf(
     "Report gmailerrorred", //ReportGmailerrorred
     "Not interested", //NotInterested
     "Note alt", //NoteAlt
-    "Miscellaneous services", //MiscellaneousServices
     "Event busy", //EventBusy
+    "Miscellaneous services", //MiscellaneousServices
     "Local phone", //LocalPhone
     "Local grocery store", //LocalGroceryStore
     "Keyboard double arrow left", //KeyboardDoubleArrowLeft
@@ -778,8 +778,8 @@ private fun getTitle13(): List<String> = listOf(
     "Maximize", //Maximize
     "More time", //MoreTime
     "Settings ethernet", //SettingsEthernet
-    "Mode comment", //ModeComment
     "Square foot", //SquareFoot
+    "Mode comment", //ModeComment
     "Thumbs up down", //ThumbsUpDown
     "Cloud done", //CloudDone
     "Markunread", //Markunread
@@ -817,19 +817,19 @@ private fun getTitle14(): List<String> = listOf(
     "Architecture", //Architecture
     "Unpublished", //Unpublished
     "Notifications off", //NotificationsOff
-    "Two wheeler", //TwoWheeler
     "Clear all", //ClearAll
-    "Directions", //Directions
+    "Two wheeler", //TwoWheeler
     "Workspaces", //Workspaces
+    "Directions", //Directions
     "System update alt", //SystemUpdateAlt
     "Nightlight", //Nightlight
     "Insert link", //InsertLink
     "Opacity", //Opacity
     "Open in browser", //OpenInBrowser
     "Commute", //Commute
+    "Shopping cart checkout", //ShoppingCartCheckout
     "Mouse", //Mouse
     "Fast rewind", //FastRewind
-    "Shopping cart checkout", //ShoppingCartCheckout
     "Sports score", //SportsScore
     "Invert colors", //InvertColors
     "Luggage", //Luggage
@@ -862,8 +862,8 @@ private fun getTitle15(): List<String> = listOf(
     "Developer board", //DeveloperBoard
     "Shower", //Shower
     "Format align left", //FormatAlignLeft
-    "Vaccines", //Vaccines
     "Traffic", //Traffic
+    "Vaccines", //Vaccines
     "Warehouse", //Warehouse
     "Keyboard voice", //KeyboardVoice
     "Tour", //Tour
@@ -875,8 +875,8 @@ private fun getTitle15(): List<String> = listOf(
     "More", //More
     "Beach access", //BeachAccess
     "Hide source", //HideSource
-    "Search off", //SearchOff
     "Start", //Start
+    "Search off", //SearchOff
     "Add link", //AddLink
     "Local bar", //LocalBar
     "Slideshow", //Slideshow
@@ -887,13 +887,13 @@ private fun getTitle15(): List<String> = listOf(
     "Approval", //Approval
     "Power", //Power
     "Star purple500", //StarPurple500
-    "Bookmark added", //BookmarkAdded
     "Alt route", //AltRoute
+    "Bookmark added", //BookmarkAdded
     "Water", //Water
     "Router", //Router
     "Shop", //Shop
-    "Dialpad", //Dialpad
     "Agriculture", //Agriculture
+    "Dialpad", //Dialpad
     "Mood bad", //MoodBad
     "Mark as unread", //MarkAsUnread
     "Plagiarism", //Plagiarism
@@ -905,16 +905,16 @@ private fun getTitle16(): List<String> = listOf(
     "Download done", //DownloadDone
     "Assignment return", //AssignmentReturn
     "Balance", //Balance
-    "Emergency", //Emergency
     "Settings input antenna", //SettingsInputAntenna
+    "Emergency", //Emergency
     "Pool", //Pool
     "Stream", //Stream
     "Add comment", //AddComment
     "Crop square", //CropSquare
     "Videocam off", //VideocamOff
     "Copy all", //CopyAll
-    "Collections bookmark", //CollectionsBookmark
     "Looks two", //LooksTwo
+    "Collections bookmark", //CollectionsBookmark
     "Dynamic feed", //DynamicFeed
     "Flight land", //FlightLand
     "Turned in", //TurnedIn
@@ -923,16 +923,16 @@ private fun getTitle16(): List<String> = listOf(
     "Hotel class", //HotelClass
     "Move to inbox", //MoveToInbox
     "Where to vote", //WhereToVote
-    "Cloud off", //CloudOff
     "Lens", //Lens
+    "Cloud off", //CloudOff
     "Videogame asset", //VideogameAsset
     "Pedal bike", //PedalBike
     "Emoji nature", //EmojiNature
     "Assignment late", //AssignmentLate
     "Share location", //ShareLocation
+    "Diversity 3", //Diversity3
     "Switch account", //SwitchAccount
     "360", //_360
-    "Diversity 3", //Diversity3
     "Do not disturb", //DoNotDisturb
     "Donut small", //DonutSmall
     "Kitchen", //Kitchen
@@ -964,15 +964,15 @@ private fun getTitle17(): List<String> = listOf(
     "Anchor", //Anchor
     "Hourglass full", //HourglassFull
     "Nights stay", //NightsStay
-    "Linear scale", //LinearScale
-    "Edit off", //EditOff
     "Content paste search", //ContentPasteSearch
+    "Edit off", //EditOff
+    "Linear scale", //LinearScale
     "Mediation", //Mediation
     "Fit screen", //FitScreen
     "Interests", //Interests
     "Drive file move", //DriveFileMove
-    "Turned in not", //TurnedInNot
     "Terminal", //Terminal
+    "Turned in not", //TurnedInNot
     "Remove shopping cart", //RemoveShoppingCart
     "Cable", //Cable
     "Flaky", //Flaky
@@ -1007,8 +1007,8 @@ private fun getTitle17(): List<String> = listOf(
 
 private fun getTitle18(): List<String> = listOf(
     "Money off", //MoneyOff
-    "Filter vintage", //FilterVintage
     "Cancel presentation", //CancelPresentation
+    "Filter vintage", //FilterVintage
     "Reply all", //ReplyAll
     "Insert comment", //InsertComment
     "Room service", //RoomService
@@ -1021,12 +1021,12 @@ private fun getTitle18(): List<String> = listOf(
     "Av timer", //AvTimer
     "Bubble chart", //BubbleChart
     "Settings voice", //SettingsVoice
-    "Shortcut", //Shortcut
     "Select all", //SelectAll
+    "Shortcut", //Shortcut
     "Album", //Album
     "Online prediction", //OnlinePrediction
-    "Event seat", //EventSeat
     "Airplane ticket", //AirplaneTicket
+    "Event seat", //EventSeat
     "Data exploration", //DataExploration
     "Headset", //Headset
     "Filter drama", //FilterDrama
@@ -1036,8 +1036,8 @@ private fun getTitle18(): List<String> = listOf(
     "Radar", //Radar
     "Wallpaper", //Wallpaper
     "Height", //Height
-    "Local dining", //LocalDining
     "Device thermostat", //DeviceThermostat
+    "Local dining", //LocalDining
     "Drive folder upload", //DriveFolderUpload
     "Call made", //CallMade
     "Laptop mac", //LaptopMac
@@ -1046,22 +1046,22 @@ private fun getTitle18(): List<String> = listOf(
     "Pregnant woman", //PregnantWoman
     "Healing", //Healing
     "Local taxi", //LocalTaxi
-    "Gpp bad", //GppBad
     "Schema", //Schema
+    "Gpp bad", //GppBad
     "File download done", //FileDownloadDone
     "Rotate left", //RotateLeft
     "Playlist play", //PlaylistPlay
     "Camera enhance", //CameraEnhance
-    "Local laundry service", //LocalLaundryService
     "Low priority", //LowPriority
+    "Local laundry service", //LocalLaundryService
     "Center focus strong", //CenterFocusStrong
     "Trip origin", //TripOrigin
 )
 
 private fun getTitle19(): List<String> = listOf(
     "Data usage", //DataUsage
-    "Vertical align top", //VerticalAlignTop
     "Room preferences", //RoomPreferences
+    "Vertical align top", //VerticalAlignTop
     "Notification add", //NotificationAdd
     "Cast", //Cast
     "Queue", //Queue
@@ -1072,8 +1072,8 @@ private fun getTitle19(): List<String> = listOf(
     "Directions bus filled", //DirectionsBusFilled
     "Request page", //RequestPage
     "Do disturb on", //DoDisturbOn
-    "Ramen dining", //RamenDining
     "Tab", //Tab
+    "Ramen dining", //RamenDining
     "Markunread mailbox", //MarkunreadMailbox
     "Star border purple500", //StarBorderPurple500
     "Assistant", //Assistant
@@ -1087,8 +1087,8 @@ private fun getTitle19(): List<String> = listOf(
     "Local drink", //LocalDrink
     "Replay circle filled", //ReplayCircleFilled
     "Save as", //SaveAs
-    "Local printshop", //LocalPrintshop
     "Hail", //Hail
+    "Local printshop", //LocalPrintshop
     "Screen share", //ScreenShare
     "Vpn lock", //VpnLock
     "Cruelty free", //CrueltyFree
@@ -1117,8 +1117,8 @@ private fun getTitle20(): List<String> = listOf(
     "Broken image", //BrokenImage
     "Format align center", //FormatAlignCenter
     "Density medium", //DensityMedium
-    "Free breakfast", //FreeBreakfast
     "Man", //Man
+    "Free breakfast", //FreeBreakfast
     "Auto delete", //AutoDelete
     "Add to drive", //AddToDrive
     "Sports kabaddi", //SportsKabaddi
@@ -1126,19 +1126,19 @@ private fun getTitle20(): List<String> = listOf(
     "Add card", //AddCard
     "Forward 10", //Forward10
     "Escalator warning", //EscalatorWarning
-    "Wb cloudy", //WbCloudy
     "Try", //Try
-    "Sports", //Sports
+    "Wb cloudy", //WbCloudy
     "Tablet mac", //TabletMac
     "Cases", //Cases
+    "Sports", //Sports
     "Outbox", //Outbox
     "Not listed location", //NotListedLocation
     "Electric bolt", //ElectricBolt
-    "Mode night", //ModeNight
     "Work history", //WorkHistory
+    "Mode night", //ModeNight
     "Filter none", //FilterNone
-    "Bathtub", //Bathtub
     "Running with errors", //RunningWithErrors
+    "Bathtub", //Bathtub
     "Font download", //FontDownload
     "Transfer within a station", //TransferWithinAStation
     "Colorize", //Colorize
@@ -1151,16 +1151,16 @@ private fun getTitle20(): List<String> = listOf(
     "Add location", //AddLocation
     "Offline pin", //OfflinePin
     "Dinner dining", //DinnerDining
-    "Emoji symbols", //EmojiSymbols
     "Weekend", //Weekend
+    "Emoji symbols", //EmojiSymbols
     "Child friendly", //ChildFriendly
     "Fax", //Fax
     "Auto fix normal", //AutoFixNormal
     "Enhanced encryption", //EnhancedEncryption
     "Folder special", //FolderSpecial
     "Bloodtype", //Bloodtype
-    "Format paint", //FormatPaint
     "Legend toggle", //LegendToggle
+    "Format paint", //FormatPaint
     "Area chart", //AreaChart
 )
 
@@ -1170,14 +1170,14 @@ private fun getTitle21(): List<String> = listOf(
     "Desktop mac", //DesktopMac
     "Replay 10", //Replay10
     "Filter center focus", //FilterCenterFocus
-    "Emoji transportation", //EmojiTransportation
     "Find replace", //FindReplace
-    "Heart broken", //HeartBroken
+    "Emoji transportation", //EmojiTransportation
     "Compress", //Compress
+    "Heart broken", //HeartBroken
     "Assignment returned", //AssignmentReturned
     "Light", //Light
-    "Door front", //DoorFront
     "Diversity 1", //Diversity1
+    "Door front", //DoorFront
     "Assured workload", //AssuredWorkload
     "Calendar view day", //CalendarViewDay
     "Cookie", //Cookie
@@ -1199,9 +1199,9 @@ private fun getTitle21(): List<String> = listOf(
     "New label", //NewLabel
     "Add reaction", //AddReaction
     "Multiple stop", //MultipleStop
+    "Lan", //Lan
     "South east", //SouthEast
     "Upcoming", //Upcoming
-    "Lan", //Lan
     "Attach email", //AttachEmail
     "Settings brightness", //SettingsBrightness
     "Format color text", //FormatColorText
@@ -1219,13 +1219,13 @@ private fun getTitle21(): List<String> = listOf(
 
 private fun getTitle22(): List<String> = listOf(
     "Restore page", //RestorePage
-    "Alarm add", //AlarmAdd
     "Add moderator", //AddModerator
-    "Foundation", //Foundation
+    "Alarm add", //AlarmAdd
     "Event repeat", //EventRepeat
+    "Foundation", //Foundation
     "Scale", //Scale
-    "Credit card off", //CreditCardOff
     "Pan tool alt", //PanToolAlt
+    "Credit card off", //CreditCardOff
     "Scatter plot", //ScatterPlot
     "Transgender", //Transgender
     "Noise control off", //NoiseControlOff
@@ -1240,8 +1240,8 @@ private fun getTitle22(): List<String> = listOf(
     "Takeout dining", //TakeoutDining
     "Deck", //Deck
     "Signal cellular 4 bar", //SignalCellular4Bar
-    "Subdirectory arrow left", //SubdirectoryArrowLeft
     "Format list numbered rtl", //FormatListNumberedRtl
+    "Subdirectory arrow left", //SubdirectoryArrowLeft
     "Auto awesome mosaic", //AutoAwesomeMosaic
     "Assistant direction", //AssistantDirection
     "Manage history", //ManageHistory
@@ -1252,8 +1252,8 @@ private fun getTitle22(): List<String> = listOf(
     "Data object", //DataObject
     "Follow the signs", //FollowTheSigns
     "Attribution", //Attribution
-    "Brightness 1", //Brightness1
     "View timeline", //ViewTimeline
+    "Brightness 1", //Brightness1
     "Phonelink", //Phonelink
     "Food bank", //FoodBank
     "Plus one", //PlusOne
@@ -1266,46 +1266,46 @@ private fun getTitle22(): List<String> = listOf(
     "Highlight", //Highlight
     "Outbound", //Outbound
     "Splitscreen", //Splitscreen
+    "Co present", //CoPresent
     "Flip camera android", //FlipCameraAndroid
-    "Icecream", //Icecream
 )
 
 private fun getTitle23(): List<String> = listOf(
-    "Co present", //CoPresent
+    "Icecream", //Icecream
     "Flashlight on", //FlashlightOn
     "Do disturb", //DoDisturb
-    "Museum", //Museum
     "Switch access shortcut", //SwitchAccessShortcut
+    "Museum", //Museum
     "Domain verification", //DomainVerification
     "Flip", //Flip
-    "North west", //NorthWest
     "Monitor", //Monitor
+    "North west", //NorthWest
     "View comfy", //ViewComfy
     "Cancel schedule send", //CancelScheduleSend
     "Fireplace", //Fireplace
-    "Swap vertical circle", //SwapVerticalCircle
     "Gite", //Gite
+    "Swap vertical circle", //SwapVerticalCircle
     "Gif", //Gif
-    "Nightlife", //Nightlife
     "Format align justify", //FormatAlignJustify
+    "Nightlife", //Nightlife
     "Sms failed", //SmsFailed
     "Local pharmacy", //LocalPharmacy
     "Villa", //Villa
     "Present to all", //PresentToAll
     "Webhook", //Webhook
-    "Network wifi", //NetworkWifi
     "Satellite alt", //SatelliteAlt
+    "Network wifi", //NetworkWifi
     "Waterfall chart", //WaterfallChart
-    "Sim card download", //SimCardDownload
     "Switch left", //SwitchLeft
+    "Sim card download", //SimCardDownload
     "Video settings", //VideoSettings
     "Settings input composite", //SettingsInputComposite
     "Loupe", //Loupe
     "High quality", //HighQuality
     "Pix", //Pix
-    "Quickreply", //Quickreply
-    "Hardware", //Hardware
     "Image not supported", //ImageNotSupported
+    "Hardware", //Hardware
+    "Quickreply", //Quickreply
     "Network check", //NetworkCheck
     "Mark chat read", //MarkChatRead
     "Phone callback", //PhoneCallback
@@ -1318,14 +1318,14 @@ private fun getTitle23(): List<String> = listOf(
     "Comment bank", //CommentBank
     "Troubleshoot", //Troubleshoot
     "Access time filled", //AccessTimeFilled
-    "Add road", //AddRoad
     "Airplanemode active", //AirplanemodeActive
+    "Add road", //AddRoad
     "Rule folder", //RuleFolder
 )
 
 private fun getTitle24(): List<String> = listOf(
-    "Mobile friendly", //MobileFriendly
     "Bedtime", //Bedtime
+    "Mobile friendly", //MobileFriendly
     "Line weight", //LineWeight
     "Piano", //Piano
     "Dining", //Dining
@@ -1334,20 +1334,20 @@ private fun getTitle24(): List<String> = listOf(
     "Folder zip", //FolderZip
     "Usb", //Usb
     "Flip camera ios", //FlipCameraIos
-    "Horizontal split", //HorizontalSplit
     "Filter 1", //Filter1
-    "Phonelink ring", //PhonelinkRing
+    "Horizontal split", //HorizontalSplit
     "Sports motorsports", //SportsMotorsports
+    "Phonelink ring", //PhonelinkRing
     "Golf course", //GolfCourse
     "Surfing", //Surfing
     "Merge type", //MergeType
     "Sanitizer", //Sanitizer
     "Psychology alt", //PsychologyAlt
     "Adb", //Adb
-    "Featured play list", //FeaturedPlayList
     "Groups 2", //Groups2
-    "Send to mobile", //SendToMobile
+    "Featured play list", //FeaturedPlayList
     "Flatware", //Flatware
+    "Send to mobile", //SendToMobile
     "Folder copy", //FolderCopy
     "Phone forwarded", //PhoneForwarded
     "Power off", //PowerOff
@@ -1356,12 +1356,12 @@ private fun getTitle24(): List<String> = listOf(
     "Picture in picture", //PictureInPicture
     "Polymer", //Polymer
     "Batch prediction", //BatchPrediction
-    "Add chart", //AddChart
     "Electric car", //ElectricCar
+    "Add chart", //AddChart
     "Speaker", //Speaker
     "System update", //SystemUpdate
-    "Battery alert", //BatteryAlert
     "Hive", //Hive
+    "Battery alert", //BatteryAlert
     "Stay current portrait", //StayCurrentPortrait
     "Medical information", //MedicalInformation
     "Sports handball", //SportsHandball
@@ -1378,8 +1378,8 @@ private fun getTitle24(): List<String> = listOf(
 
 private fun getTitle25(): List<String> = listOf(
     "Code off", //CodeOff
-    "Bookmark remove", //BookmarkRemove
     "Plumbing", //Plumbing
+    "Bookmark remove", //BookmarkRemove
     "Personal video", //PersonalVideo
     "Lens blur", //LensBlur
     "Playlist add check circle", //PlaylistAddCheckCircle
@@ -1391,8 +1391,8 @@ private fun getTitle25(): List<String> = listOf(
     "Screen search desktop", //ScreenSearchDesktop
     "Movie filter", //MovieFilter
     "Coffee maker", //CoffeeMaker
-    "Edit notifications", //EditNotifications
     "Car rental", //CarRental
+    "Edit notifications", //EditNotifications
     "Gamepad", //Gamepad
     "No photography", //NoPhotography
     "South west", //SouthWest
@@ -1409,15 +1409,15 @@ private fun getTitle25(): List<String> = listOf(
     "Zoom in map", //ZoomInMap
     "Playlist remove", //PlaylistRemove
     "Shop two", //ShopTwo
-    "Blender", //Blender
     "Table restaurant", //TableRestaurant
+    "Blender", //Blender
     "Flip to front", //FlipToFront
     "Signal wifi statusbar connected no internet 4", //SignalWifiStatusbarConnectedNoInternet4
     "Sports volleyball", //SportsVolleyball
-    "Crop din", //CropDin
     "Edit location", //EditLocation
-    "Energy savings leaf", //EnergySavingsLeaf
+    "Crop din", //CropDin
     "Cell tower", //CellTower
+    "Energy savings leaf", //EnergySavingsLeaf
     "Pivot table chart", //PivotTableChart
     "Microwave", //Microwave
     "Pest control", //PestControl
@@ -1440,10 +1440,10 @@ private fun getTitle26(): List<String> = listOf(
     "Eject", //Eject
     "Control point duplicate", //ControlPointDuplicate
     "Brightness 7", //Brightness7
-    "Pages", //Pages
     "Filter", //Filter
-    "Switch right", //SwitchRight
     "View compact", //ViewCompact
+    "Pages", //Pages
+    "Switch right", //SwitchRight
     "Run circle", //RunCircle
     "Voice chat", //VoiceChat
     "System security update good", //SystemSecurityUpdateGood
@@ -1456,8 +1456,8 @@ private fun getTitle26(): List<String> = listOf(
     "Airline seat recline normal", //AirlineSeatReclineNormal
     "Location off", //LocationOff
     "Snippet folder", //SnippetFolder
-    "Sports football", //SportsFootball
     "Money off csred", //MoneyOffCsred
+    "Sports football", //SportsFootball
     "Alarm off", //AlarmOff
     "Perm data setting", //PermDataSetting
     "Edit road", //EditRoad
@@ -1467,8 +1467,8 @@ private fun getTitle26(): List<String> = listOf(
     "Phonelink setup", //PhonelinkSetup
     "Texture", //Texture
     "Edit location alt", //EditLocationAlt
-    "Bedroom parent", //BedroomParent
     "Slow motion video", //SlowMotionVideo
+    "Bedroom parent", //BedroomParent
     "Add to queue", //AddToQueue
     "Bluetooth connected", //BluetoothConnected
     "Hourglass disabled", //HourglassDisabled
@@ -1479,11 +1479,11 @@ private fun getTitle26(): List<String> = listOf(
     "Battery 5 bar", //Battery5Bar
     "Connected tv", //ConnectedTv
     "Bedroom baby", //BedroomBaby
-    "Sensor window", //SensorWindow
+    "Format indent increase", //FormatIndentIncrease
 )
 
 private fun getTitle27(): List<String> = listOf(
-    "Format indent increase", //FormatIndentIncrease
+    "Sensor window", //SensorWindow
     "Move up", //MoveUp
     "Timer off", //TimerOff
     "Camera indoor", //CameraIndoor
@@ -1495,15 +1495,15 @@ private fun getTitle27(): List<String> = listOf(
     "Work off", //WorkOff
     "Downhill skiing", //DownhillSkiing
     "Short text", //ShortText
-    "Group remove", //GroupRemove
     "Elevator", //Elevator
+    "Group remove", //GroupRemove
     "Kayaking", //Kayaking
     "Remember me", //RememberMe
     "Car repair", //CarRepair
     "Photo size select actual", //PhotoSizeSelectActual
     "Transform", //Transform
-    "Solar power", //SolarPower
     "Co2", //Co2
+    "Solar power", //SolarPower
     "Join full", //JoinFull
     "Video camera back", //VideoCameraBack
     "Picture in picture alt", //PictureInPictureAlt
@@ -1522,27 +1522,27 @@ private fun getTitle27(): List<String> = listOf(
     "Remove moderator", //RemoveModerator
     "Swap calls", //SwapCalls
     "Door sliding", //DoorSliding
+    "Pattern", //Pattern
     "Smoking rooms", //SmokingRooms
     "Chair alt", //ChairAlt
-    "Pattern", //Pattern
     "Stay primary portrait", //StayPrimaryPortrait
     "Local movies", //LocalMovies
     "Line style", //LineStyle
     "Do not disturb alt", //DoNotDisturbAlt
     "Perm device information", //PermDeviceInformation
-    "Boy", //Boy
     "Looks 5", //Looks5
-    "Airplay", //Airplay
+    "Boy", //Boy
+    "Lightbulb circle", //LightbulbCircle
 )
 
 private fun getTitle28(): List<String> = listOf(
-    "Brightness high", //BrightnessHigh
-    "Lightbulb circle", //LightbulbCircle
+    "Airplay", //Airplay
     "App shortcut", //AppShortcut
+    "Brightness high", //BrightnessHigh
     "Format color reset", //FormatColorReset
     "Directions boat filled", //DirectionsBoatFilled
-    "Notifications paused", //NotificationsPaused
     "Tablet android", //TabletAndroid
+    "Notifications paused", //NotificationsPaused
     "Motion photos on", //MotionPhotosOn
     "Domain add", //DomainAdd
     "Cabin", //Cabin
@@ -1558,8 +1558,8 @@ private fun getTitle28(): List<String> = listOf(
     "Update disabled", //UpdateDisabled
     "Subtitles off", //SubtitlesOff
     "Cast connected", //CastConnected
-    "Rotate 90 degrees ccw", //Rotate90DegreesCcw
     "Swipe left", //SwipeLeft
+    "Rotate 90 degrees ccw", //Rotate90DegreesCcw
     "Vertical align center", //VerticalAlignCenter
     "Battery saver", //BatterySaver
     "Door back", //DoorBack
@@ -1569,21 +1569,21 @@ private fun getTitle28(): List<String> = listOf(
     "Align horizontal left", //AlignHorizontalLeft
     "Countertops", //Countertops
     "Fitbit", //Fitbit
-    "Living", //Living
     "Play lesson", //PlayLesson
     "Photo camera front", //PhotoCameraFront
+    "Living", //Living
     "Snooze", //Snooze
     "Hexagon", //Hexagon
     "Safety divider", //SafetyDivider
-    "Laptop windows", //LaptopWindows
     "Mic external on", //MicExternalOn
+    "Laptop windows", //LaptopWindows
     "Tram", //Tram
     "Data saver off", //DataSaverOff
     "Private connectivity", //PrivateConnectivity
+    "Arrow outward", //ArrowOutward
     "Hd", //Hd
     "Wb twilight", //WbTwilight
     "Taxi alert", //TaxiAlert
-    "Arrow outward", //ArrowOutward
     "Voice over off", //VoiceOverOff
     "Rectangle", //Rectangle
 )
@@ -1592,43 +1592,43 @@ private fun getTitle29(): List<String> = listOf(
     "Storm", //Storm
     "Currency pound", //CurrencyPound
     "Apps outage", //AppsOutage
-    "Breakfast dining", //BreakfastDining
     "Merge", //Merge
+    "Breakfast dining", //BreakfastDining
     "Browser updated", //BrowserUpdated
     "Gradient", //Gradient
     "File download off", //FileDownloadOff
     "Replay 30", //Replay30
     "Data saver on", //DataSaverOn
-    "Device unknown", //DeviceUnknown
     "Fire extinguisher", //FireExtinguisher
-    "Doorbell", //Doorbell
+    "Device unknown", //DeviceUnknown
     "Crisis alert", //CrisisAlert
-    "Brightness medium", //BrightnessMedium
-    "Bluetooth searching", //BluetoothSearching
+    "Doorbell", //Doorbell
     "Thunderstorm", //Thunderstorm
+    "Bluetooth searching", //BluetoothSearching
+    "Brightness medium", //BrightnessMedium
     "Tap and play", //TapAndPlay
     "Repeat on", //RepeatOn
     "Water damage", //WaterDamage
     "Join inner", //JoinInner
     "Carpenter", //Carpenter
     "Grid 4x4", //Grid4x4
-    "Straight", //Straight
     "Ssid chart", //SsidChart
+    "Straight", //Straight
     "Content paste off", //ContentPasteOff
     "Signal wifi 0 bar", //SignalWifi0Bar
-    "Rv hookup", //RvHookup
     "Charging station", //ChargingStation
     "Move down", //MoveDown
+    "Rv hookup", //RvHookup
     "Brightness low", //BrightnessLow
-    "Closed caption off", //ClosedCaptionOff
     "Install desktop", //InstallDesktop
+    "Closed caption off", //ClosedCaptionOff
     "Baby changing station", //BabyChangingStation
     "Assistant photo", //AssistantPhoto
     "Swipe right", //SwipeRight
-    "Offline share", //OfflineShare
     "Subway", //Subway
-    "Bluetooth disabled", //BluetoothDisabled
+    "Offline share", //OfflineShare
     "Group off", //GroupOff
+    "Bluetooth disabled", //BluetoothDisabled
     "Table bar", //TableBar
     "Ad units", //AdUnits
     "Mobiledata off", //MobiledataOff
@@ -1645,9 +1645,9 @@ private fun getTitle30(): List<String> = listOf(
     "Hide image", //HideImage
     "Settings input svideo", //SettingsInputSvideo
     "Swipe up", //SwipeUp
-    "Sports cricket", //SportsCricket
-    "Groups 3", //Groups3
     "Battery 0 bar", //Battery0Bar
+    "Groups 3", //Groups3
+    "Sports cricket", //SportsCricket
     "Sd card", //SdCard
     "Multiline chart", //MultilineChart
     "Sports martial arts", //SportsMartialArts
@@ -1660,8 +1660,8 @@ private fun getTitle30(): List<String> = listOf(
     "Crop 16 9", //Crop169
     "Hdr auto", //HdrAuto
     "Transit enterexit", //TransitEnterexit
-    "Shield moon", //ShieldMoon
     "Phone missed", //PhoneMissed
+    "Shield moon", //ShieldMoon
     "View array", //ViewArray
     "Brunch dining", //BrunchDining
     "Keyboard hide", //KeyboardHide
@@ -1672,18 +1672,18 @@ private fun getTitle30(): List<String> = listOf(
     "Mobile screen share", //MobileScreenShare
     "Filter 2", //Filter2
     "Security update good", //SecurityUpdateGood
-    "Smoke free", //SmokeFree
     "Battery unknown", //BatteryUnknown
+    "Smoke free", //SmokeFree
     "Featured video", //FeaturedVideo
-    "Shutter speed", //ShutterSpeed
     "Polyline", //Polyline
+    "Shutter speed", //ShutterSpeed
     "Photo album", //PhotoAlbum
     "Density small", //DensitySmall
     "Score", //Score
-    "Sports golf", //SportsGolf
     "Hvac", //Hvac
-    "Nordic walking", //NordicWalking
+    "Sports golf", //SportsGolf
     "Girl", //Girl
+    "Nordic walking", //NordicWalking
     "Connecting airports", //ConnectingAirports
     "Umbrella", //Umbrella
     "Filter tilt shift", //FilterTiltShift
@@ -1696,35 +1696,35 @@ private fun getTitle30(): List<String> = listOf(
 
 private fun getTitle31(): List<String> = listOf(
     "Shuffle on", //ShuffleOn
+    "Web stories", //WebStories
     "Shop 2", //Shop2
     "Electric bike", //ElectricBike
-    "Web stories", //WebStories
     "Face 6", //Face6
     "Folder delete", //FolderDelete
     "Battery 6 bar", //Battery6Bar
     "Sports gymnastics", //SportsGymnastics
     "Directions transit", //DirectionsTransit
     "Signal wifi off", //SignalWifiOff
-    "Label off", //LabelOff
     "Looks 6", //Looks6
+    "Label off", //LabelOff
     "Airline seat recline extra", //AirlineSeatReclineExtra
     "Data thresholding", //DataThresholding
+    "Egg", //Egg
     "Looks", //Looks
     "Hdr strong", //HdrStrong
-    "Egg", //Egg
     "Settings system daydream", //SettingsSystemDaydream
     "Brightness 3", //Brightness3
     "Tablet", //Tablet
+    "Interpreter mode", //InterpreterMode
     "Forward 30", //Forward30
     "Safety check", //SafetyCheck
-    "Interpreter mode", //InterpreterMode
     "Linked camera", //LinkedCamera
     "Vrpano", //Vrpano
     "Paragliding", //Paragliding
-    "Playlist add circle", //PlaylistAddCircle
     "Format indent decrease", //FormatIndentDecrease
-    "5g", //_5g
+    "Playlist add circle", //PlaylistAddCircle
     "Do not touch", //DoNotTouch
+    "5g", //_5g
     "Lock person", //LockPerson
     "Tapas", //Tapas
     "Tab unselected", //TabUnselected
@@ -1749,13 +1749,13 @@ private fun getTitle31(): List<String> = listOf(
 
 private fun getTitle32(): List<String> = listOf(
     "Tty", //Tty
+    "Fence", //Fence
     "Party mode", //PartyMode
     "Queue play next", //QueuePlayNext
     "Photo filter", //PhotoFilter
-    "Fence", //Fence
     "Access alarms", //AccessAlarms
-    "Local car wash", //LocalCarWash
     "Contact emergency", //ContactEmergency
+    "Local car wash", //LocalCarWash
     "Format clear", //FormatClear
     "Local hotel", //LocalHotel
     "Replay 5", //Replay5
@@ -1764,8 +1764,8 @@ private fun getTitle32(): List<String> = listOf(
     "Snowboarding", //Snowboarding
     "View kanban", //ViewKanban
     "Spoke", //Spoke
-    "6 ft apart", //_6FtApart
     "Video file", //VideoFile
+    "6 ft apart", //_6FtApart
     "Call missed outgoing", //CallMissedOutgoing
     "Text rotate vertical", //TextRotateVertical
     "Balcony", //Balcony
@@ -1777,8 +1777,8 @@ private fun getTitle32(): List<String> = listOf(
     "Kitesurfing", //Kitesurfing
     "Signal wifi connected no internet 4", //SignalWifiConnectedNoInternet4
     "Brightness 2", //Brightness2
-    "Candlestick chart", //CandlestickChart
     "Castle", //Castle
+    "Candlestick chart", //CandlestickChart
     "Houseboat", //Houseboat
     "Explore off", //ExploreOff
     "No food", //NoFood
@@ -1786,8 +1786,8 @@ private fun getTitle32(): List<String> = listOf(
     "Rotate 90 degrees cw", //Rotate90DegreesCw
     "Mark unread chat alt", //MarkUnreadChatAlt
     "Photo size select small", //PhotoSizeSelectSmall
-    "Horizontal distribute", //HorizontalDistribute
     "Spatial audio off", //SpatialAudioOff
+    "Horizontal distribute", //HorizontalDistribute
     "Cell wifi", //CellWifi
     "Report off", //ReportOff
     "Tonality", //Tonality
@@ -1808,13 +1808,13 @@ private fun getTitle33(): List<String> = listOf(
     "Wheelchair pickup", //WheelchairPickup
     "Currency ruble", //CurrencyRuble
     "Exposure zero", //ExposureZero
-    "Aod", //Aod
     "Battery 1 bar", //Battery1Bar
+    "Aod", //Aod
     "Imagesearch roller", //ImagesearchRoller
     "Crop rotate", //CropRotate
     "Hearing disabled", //HearingDisabled
-    "Stop screen share", //StopScreenShare
     "Car crash", //CarCrash
+    "Stop screen share", //StopScreenShare
     "Flashlight off", //FlashlightOff
     "Photo size select large", //PhotoSizeSelectLarge
     "Signal cellular 0 bar", //SignalCellular0Bar
@@ -1834,11 +1834,11 @@ private fun getTitle33(): List<String> = listOf(
     "South america", //SouthAmerica
     "Security update", //SecurityUpdate
     "Gps off", //GpsOff
+    "Punch clock", //PunchClock
     "Pin invoke", //PinInvoke
     "Pinch", //Pinch
-    "Punch clock", //PunchClock
-    "Streetview", //Streetview
     "Electric meter", //ElectricMeter
+    "Streetview", //Streetview
     "Hdr weak", //HdrWeak
     "Call missed", //CallMissed
     "Earbuds", //Earbuds
@@ -1858,17 +1858,17 @@ private fun getTitle34(): List<String> = listOf(
     "Keyboard capslock", //KeyboardCapslock
     "Sd storage", //SdStorage
     "Extension off", //ExtensionOff
-    "Heat pump", //HeatPump
     "Format strikethrough", //FormatStrikethrough
+    "Heat pump", //HeatPump
     "Pause presentation", //PausePresentation
     "Mosque", //Mosque
     "Perm camera mic", //PermCameraMic
     "Superscript", //Superscript
-    "Sports rugby", //SportsRugby
     "View cozy", //ViewCozy
+    "Sports rugby", //SportsRugby
+    "Data array", //DataArray
     "Burst mode", //BurstMode
     "Grid 3x3", //Grid3x3
-    "Data array", //DataArray
     "Filter frames", //FilterFrames
     "Reset tv", //ResetTv
     "Person 2", //Person2
@@ -1878,13 +1878,13 @@ private fun getTitle34(): List<String> = listOf(
     "Join right", //JoinRight
     "4k", //_4k
     "Turn right", //TurnRight
-    "Headset off", //HeadsetOff
     "Scoreboard", //Scoreboard
+    "Headset off", //HeadsetOff
     "Comments disabled", //CommentsDisabled
     "Fiber smart record", //FiberSmartRecord
+    "Dataset", //Dataset
     "Compass calibration", //CompassCalibration
     "Crib", //Crib
-    "Dataset", //Dataset
     "Brightness auto", //BrightnessAuto
     "Margin", //Margin
     "Dialer sip", //DialerSip
@@ -1910,16 +1910,16 @@ private fun getTitle35(): List<String> = listOf(
     "Screenshot monitor", //ScreenshotMonitor
     "Sledding", //Sledding
     "Deselect", //Deselect
-    "Wifi calling", //WifiCalling
     "Blur linear", //BlurLinear
+    "Wifi calling", //WifiCalling
     "Do not disturb on total silence", //DoNotDisturbOnTotalSilence
     "Pentagon", //Pentagon
     "Filter b and w", //FilterBAndW
     "Rtt", //Rtt
     "Crop landscape", //CropLandscape
     "Crop 3 2", //Crop32
-    "Nearby error", //NearbyError
     "Gas meter", //GasMeter
+    "Nearby error", //NearbyError
     "Bluetooth audio", //BluetoothAudio
     "Airplanemode inactive", //AirplanemodeInactive
     "Phishing", //Phishing
@@ -1944,14 +1944,14 @@ private fun getTitle35(): List<String> = listOf(
     "Border clear", //BorderClear
     "Align vertical center", //AlignVerticalCenter
     "Browse gallery", //BrowseGallery
-    "Signal cellular connected no internet 0 bar", //SignalCellularConnectedNoInternet0Bar
     "Text decrease", //TextDecrease
+    "Signal cellular connected no internet 0 bar", //SignalCellularConnectedNoInternet0Bar
     "Switch video", //SwitchVideo
     "Sim card alert", //SimCardAlert
     "Php", //Php
     "Folder off", //FolderOff
-    "Text rotate up", //TextRotateUp
     "View comfy alt", //ViewComfyAlt
+    "Text rotate up", //TextRotateUp
     "Escalator", //Escalator
     "Filter 7", //Filter7
     "Railway alert", //RailwayAlert
@@ -1961,9 +1961,9 @@ private fun getTitle35(): List<String> = listOf(
 
 private fun getTitle36(): List<String> = listOf(
     "Filter 4", //Filter4
-    "Dry", //Dry
-    "Screen lock portrait", //ScreenLockPortrait
     "Sign language", //SignLanguage
+    "Screen lock portrait", //ScreenLockPortrait
+    "Dry", //Dry
     "Text rotation angleup", //TextRotationAngleup
     "Do not disturb off", //DoNotDisturbOff
     "Filter 9 plus", //Filter9Plus
@@ -1980,9 +1980,9 @@ private fun getTitle36(): List<String> = listOf(
     "Phone paused", //PhonePaused
     "Wb iridescent", //WbIridescent
     "Turn left", //TurnLeft
+    "Local play", //LocalPlay
     "Unfold more double", //UnfoldMoreDouble
     "Grid off", //GridOff
-    "Local play", //LocalPlay
     "Stroller", //Stroller
     "Add home work", //AddHomeWork
     "View compact alt", //ViewCompactAlt
@@ -1992,15 +1992,15 @@ private fun getTitle36(): List<String> = listOf(
     "Network ping", //NetworkPing
     "U turn left", //UTurnLeft
     "System security update", //SystemSecurityUpdate
-    "Wifi tethering off", //WifiTetheringOff
     "Web asset off", //WebAssetOff
+    "Wifi tethering off", //WifiTetheringOff
     "Motion photos paused", //MotionPhotosPaused
     "Photo camera back", //PhotoCameraBack
     "Cyclone", //Cyclone
     "Swipe down alt", //SwipeDownAlt
     "Monochrome photos", //MonochromePhotos
-    "Stay current landscape", //StayCurrentLandscape
     "Auto fix off", //AutoFixOff
+    "Stay current landscape", //StayCurrentLandscape
     "Airlines", //Airlines
     "Dock", //Dock
     "Headphones battery", //HeadphonesBattery
@@ -2021,11 +2021,11 @@ private fun getTitle37(): List<String> = listOf(
     "Exposure neg 1", //ExposureNeg1
     "Lyrics", //Lyrics
     "Key off", //KeyOff
-    "Airline seat flat", //AirlineSeatFlat
     "Bike scooter", //BikeScooter
+    "Airline seat flat", //AirlineSeatFlat
     "Padding", //Padding
-    "Phone locked", //PhoneLocked
     "Tire repair", //TireRepair
+    "Phone locked", //PhoneLocked
     "Density large", //DensityLarge
     "Browser not supported", //BrowserNotSupported
     "Network locked", //NetworkLocked
@@ -2034,28 +2034,28 @@ private fun getTitle37(): List<String> = listOf(
     "Face 5", //Face5
     "Person 4", //Person4
     "Sd", //Sd
-    "Network wifi 1 bar", //NetworkWifi1Bar
     "Spatial tracking", //SpatialTracking
+    "Network wifi 1 bar", //NetworkWifi1Bar
     "Near me disabled", //NearMeDisabled
     "Stay primary landscape", //StayPrimaryLandscape
-    "Signal cellular nodata", //SignalCellularNodata
     "Line axis", //LineAxis
+    "Signal cellular nodata", //SignalCellularNodata
     "Snowmobile", //Snowmobile
     "Swipe left alt", //SwipeLeftAlt
     "30fps", //_30fps
     "Propane tank", //PropaneTank
-    "No sim", //NoSim
     "Sos", //Sos
+    "No sim", //NoSim
     "Earbuds battery", //EarbudsBattery
     "Signal cellular off", //SignalCellularOff
     "Wifi find", //WifiFind
+    "Person 3", //Person3
     "4g plus mobiledata", //_4gPlusMobiledata
     "Directions transit filled", //DirectionsTransitFilled
-    "Person 3", //Person3
     "Minor crash", //MinorCrash
     "Signal wifi 4 bar lock", //SignalWifi4BarLock
-    "Lte mobiledata", //LteMobiledata
     "Add alarm", //AddAlarm
+    "Lte mobiledata", //LteMobiledata
     "Network wifi 3 bar", //NetworkWifi3Bar
     "Leak remove", //LeakRemove
     "Spatial audio", //SpatialAudio
@@ -2083,19 +2083,19 @@ private fun getTitle38(): List<String> = listOf(
     "Flight class", //FlightClass
     "Home mini", //HomeMini
     "Video stable", //VideoStable
-    "Filter 6", //Filter6
-    "Fort", //Fort
     "Adf scanner", //AdfScanner
+    "Fort", //Fort
+    "Filter 6", //Filter6
     "Mode fan off", //ModeFanOff
     "Directions subway filled", //DirectionsSubwayFilled
     "Fire truck", //FireTruck
     "Raw on", //RawOn
+    "Temple buddhist", //TempleBuddhist
     "Blur off", //BlurOff
     "Deblur", //Deblur
-    "Wb shade", //WbShade
     "Motion photos off", //MotionPhotosOff
     "Rsvp", //Rsvp
-    "Temple buddhist", //TempleBuddhist
+    "Wb shade", //WbShade
     "Emergency share", //EmergencyShare
     "Motion photos pause", //MotionPhotosPause
     "Vpn key off", //VpnKeyOff
@@ -2108,8 +2108,8 @@ private fun getTitle38(): List<String> = listOf(
     "Phone bluetooth speaker", //PhoneBluetoothSpeaker
     "Hdr on", //HdrOn
     "Airline seat flat angled", //AirlineSeatFlatAngled
-    "3g mobiledata", //_3gMobiledata
     "Usb off", //UsbOff
+    "3g mobiledata", //_3gMobiledata
     "Scuba diving", //ScubaDiving
     "Fiber pin", //FiberPin
     "Panorama horizontal", //PanoramaHorizontal
@@ -2119,18 +2119,18 @@ private fun getTitle38(): List<String> = listOf(
 )
 
 private fun getTitle39(): List<String> = listOf(
-    "Image aspect ratio", //ImageAspectRatio
     "No cell", //NoCell
+    "Image aspect ratio", //ImageAspectRatio
     "Dataset linked", //DatasetLinked
     "30fps select", //_30fpsSelect
+    "Tsunami", //Tsunami
     "60fps", //_60fps
     "Screen lock landscape", //ScreenLockLandscape
-    "Tsunami", //Tsunami
     "Severe cold", //SevereCold
     "U turn right", //UTurnRight
     "Piano off", //PianoOff
-    "Lte plus mobiledata", //LtePlusMobiledata
     "Signal cellular alt 1 bar", //SignalCellularAlt1Bar
+    "Lte plus mobiledata", //LtePlusMobiledata
     "Camera rear", //CameraRear
     "Wifi 2 bar", //Wifi2Bar
     "Signal cellular alt 2 bar", //SignalCellularAlt2Bar
@@ -2141,22 +2141,22 @@ private fun getTitle39(): List<String> = listOf(
     "Wifi tethering error", //WifiTetheringError
     "Videogame asset off", //VideogameAssetOff
     "Timer 3", //Timer3
-    "60fps select", //_60fpsSelect
     "Repartition", //Repartition
+    "60fps select", //_60fpsSelect
     "Directions off", //DirectionsOff
     "Panorama wide angle select", //PanoramaWideAngleSelect
     "Airline seat legroom normal", //AirlineSeatLegroomNormal
     "Temple hindu", //TempleHindu
-    "24mp", //_24mp
     "Width full", //WidthFull
+    "24mp", //_24mp
     "Fiber dvr", //FiberDvr
     "Signal cellular no sim", //SignalCellularNoSim
     "Fork left", //ForkLeft
     "Shape line", //ShapeLine
     "Synagogue", //Synagogue
     "Exposure neg 2", //ExposureNeg2
-    "Remove road", //RemoveRoad
     "Screen rotation alt", //ScreenRotationAlt
+    "Remove road", //RemoveRoad
     "Roller skating", //RollerSkating
     "Tornado", //Tornado
     "Airline seat legroom extra", //AirlineSeatLegroomExtra
@@ -2177,8 +2177,8 @@ private fun getTitle40(): List<String> = listOf(
     "Roundabout right", //RoundaboutRight
     "G mobiledata", //GMobiledata
     "1k", //_1k
-    "Border bottom", //BorderBottom
     "Transcribe", //Transcribe
+    "Border bottom", //BorderBottom
     "Format textdirection l to r", //FormatTextdirectionLToR
     "Assist walker", //AssistWalker
     "Turn slight right", //TurnSlightRight
@@ -2188,8 +2188,8 @@ private fun getTitle40(): List<String> = listOf(
     "Keyboard control key", //KeyboardControlKey
     "Border vertical", //BorderVertical
     "Width wide", //WidthWide
-    "Timer 3 select", //Timer3Select
     "No backpack", //NoBackpack
+    "Timer 3 select", //Timer3Select
     "Turn slight left", //TurnSlightLeft
     "Panorama horizontal select", //PanoramaHorizontalSelect
     "2k", //_2k
@@ -2206,8 +2206,8 @@ private fun getTitle40(): List<String> = listOf(
     "Border top", //BorderTop
     "Mic external off", //MicExternalOff
     "Border right", //BorderRight
-    "18 up rating", //_18UpRating
     "Propane", //Propane
+    "18 up rating", //_18UpRating
     "Broadcast on personal", //BroadcastOnPersonal
     "No stroller", //NoStroller
     "Blinds", //Blinds
@@ -2236,22 +2236,22 @@ private fun getTitle41(): List<String> = listOf(
     "8k plus", //_8kPlus
     "Watch off", //WatchOff
     "9k plus", //_9kPlus
+    "Desk", //Desk
     "Format overline", //FormatOverline
     "Hevc", //Hevc
-    "Desk", //Desk
     "Hdr on select", //HdrOnSelect
     "Keyboard option key", //KeyboardOptionKey
-    "3k", //_3k
     "Blinds closed", //BlindsClosed
     "Curtains", //Curtains
+    "3k", //_3k
     "Bedtime off", //BedtimeOff
     "Roundabout left", //RoundaboutLeft
     "18mp", //_18mp
     "Turn sharp left", //TurnSharpLeft
     "10mp", //_10mp
+    "Broadcast on home", //BroadcastOnHome
     "Vertical shades", //VerticalShades
     "Vertical shades closed", //VerticalShadesClosed
-    "Broadcast on home", //BroadcastOnHome
     "Hdr auto select", //HdrAutoSelect
     "Curtains closed", //CurtainsClosed
     "Nest cam wired stand", //NestCamWiredStand
@@ -2261,10 +2261,10 @@ private fun getTitle41(): List<String> = listOf(
     "7k", //_7k
     "Nearby off", //NearbyOff
     "9k", //_9k
-    "3k plus", //_3kPlus
     "Devices fold", //DevicesFold
-    "2k plus", //_2kPlus
+    "3k plus", //_3kPlus
     "Hdr off", //HdrOff
+    "2k plus", //_2kPlus
     "6k", //_6k
     "7k plus", //_7kPlus
     "6k plus", //_6kPlus
@@ -2290,8 +2290,8 @@ private fun getTitle42(): List<String> = listOf(
     "8mp", //_8mp
     "4mp", //_4mp
     "9mp", //_9mp
-    "6mp", //_6mp
     "7mp", //_7mp
+    "6mp", //_6mp
     "Fluorescent", //Fluorescent
     "Man 4", //Man4
     "Ramp left", //RampLeft

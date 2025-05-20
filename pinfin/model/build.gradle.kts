@@ -7,7 +7,7 @@ plugins {
 kotlin {
     sourceSets {
         commonMain.dependencies {
-            implementation(project(":common:app"))
+            implementation(libs.hnau.app)
             implementation(project(":pinfin:data"))
             implementation(libs.kotlin.datetime)
             implementation(libs.ktor.network)

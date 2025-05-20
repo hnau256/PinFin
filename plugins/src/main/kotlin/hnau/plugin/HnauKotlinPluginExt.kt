@@ -12,8 +12,8 @@ import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
 
 internal enum class AndroidMode { Lib, App }
 
-private const val CommonKotlinProjectIdentifier = ":common:kotlin"
-private const val CommonComposeProjectIdentifier = ":common:compose"
+//private const val CommonKotlinProjectIdentifier = ":common:kotlin"
+//private const val CommonComposeProjectIdentifier = ":common:compose"
 
 internal fun Project.config(
     androidMode: AndroidMode?,
@@ -93,16 +93,12 @@ internal fun Project.config(
                     implementation(composeDependencies.foundation)
                     implementation(composeDependencies.material3)
                     implementation(composeDependencies.materialIconsExtended)
-                    if (identitifer != CommonComposeProjectIdentifier) {
-                        implementation(project(CommonComposeProjectIdentifier))
-                    }
+                    implementation(versions.findLibrary("hnau-compose").get().get())
                 }
                 if (hasKspPlugin) {
                     implementation(versions.findLibrary("shuffler-annotations").get().get())
                 }
-                if (identitifer != CommonKotlinProjectIdentifier) {
-                    implementation(project(CommonKotlinProjectIdentifier))
-                }
+                implementation(versions.findLibrary("hnau-kotlin").get().get())
             }
         }
     }

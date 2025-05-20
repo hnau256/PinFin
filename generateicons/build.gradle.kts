@@ -8,8 +8,8 @@ dependencies {
     implementation(libs.arrow.core)
     implementation(libs.kotlin.datetime)
     implementation(libs.kotlin.serialization.json)
-    implementation(project(":common:kotlin"))
-    implementation(project(":common:ktgen"))
+    implementation(libs.hnau.kotlin)
+    implementation(libs.hnau.gen.kt)
 }
 
 application {

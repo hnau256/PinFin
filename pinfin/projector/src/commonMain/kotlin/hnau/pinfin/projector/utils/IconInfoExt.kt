@@ -2375,8 +2375,8 @@ val IconVariant.image: ImageVector
             IconVariant.Launch -> Icons.Default.Launch
             IconVariant.AddBox -> Icons.Default.AddBox
             IconVariant.DragIndicator -> Icons.Default.DragIndicator
-            IconVariant.TouchApp -> Icons.Default.TouchApp
             IconVariant.SupervisorAccount -> Icons.Default.SupervisorAccount
+            IconVariant.TouchApp -> Icons.Default.TouchApp
             IconVariant.Pending -> Icons.Default.Pending
             IconVariant.MenuOpen -> Icons.Default.MenuOpen
             IconVariant.ZoomIn -> Icons.Default.ZoomIn
@@ -2391,8 +2391,8 @@ val IconVariant.image: ImageVector
             IconVariant.Block -> Icons.Default.Block
             IconVariant.LocalFireDepartment -> Icons.Default.LocalFireDepartment
             IconVariant.ThumbUpOffAlt -> Icons.Default.ThumbUpOffAlt
-            IconVariant.ChatBubbleOutline -> Icons.Default.ChatBubbleOutline
             IconVariant.EventAvailable -> Icons.Default.EventAvailable
+            IconVariant.ChatBubbleOutline -> Icons.Default.ChatBubbleOutline
             IconVariant.Feed -> Icons.Default.Feed
             IconVariant.OpenInFull -> Icons.Default.OpenInFull
             IconVariant.AutoStories -> Icons.Default.AutoStories
@@ -2424,8 +2424,8 @@ val IconVariant.image: ImageVector
             IconVariant.Feedback -> Icons.Default.Feedback
             IconVariant.ArrowDropUp -> Icons.Default.ArrowDropUp
             IconVariant.Label -> Icons.Default.Label
-            IconVariant.TravelExplore -> Icons.Default.TravelExplore
             IconVariant.UnfoldMore -> Icons.Default.UnfoldMore
+            IconVariant.TravelExplore -> Icons.Default.TravelExplore
             IconVariant.WaterDrop -> Icons.Default.WaterDrop
             IconVariant.SwapHoriz -> Icons.Default.SwapHoriz
             IconVariant.Computer -> Icons.Default.Computer
@@ -2477,8 +2477,8 @@ val IconVariant.image: ImageVector
             IconVariant.Stop -> Icons.Default.Stop
             IconVariant.Gavel -> Icons.Default.Gavel
             IconVariant.RocketLaunch -> Icons.Default.RocketLaunch
-            IconVariant.Quiz -> Icons.Default.Quiz
             IconVariant.PanTool -> Icons.Default.PanTool
+            IconVariant.Quiz -> Icons.Default.Quiz
             IconVariant.EditCalendar -> Icons.Default.EditCalendar
             IconVariant.QuestionMark -> Icons.Default.QuestionMark
             IconVariant.CloudDownload -> Icons.Default.CloudDownload
@@ -2511,8 +2511,8 @@ val IconVariant.image: ImageVector
             IconVariant.West -> Icons.Default.West
             IconVariant.Message -> Icons.Default.Message
             IconVariant.HourglassEmpty -> Icons.Default.HourglassEmpty
-            IconVariant.ShowChart -> Icons.Default.ShowChart
             IconVariant.Storage -> Icons.Default.Storage
+            IconVariant.ShowChart -> Icons.Default.ShowChart
             IconVariant.SentimentSatisfied -> Icons.Default.SentimentSatisfied
             IconVariant.InsertDriveFile -> Icons.Default.InsertDriveFile
             IconVariant.Science -> Icons.Default.Science
@@ -2587,8 +2587,8 @@ val IconVariant.image: ImageVector
             IconVariant.SentimentVeryDissatisfied -> Icons.Default.SentimentVeryDissatisfied
             IconVariant.Brush -> Icons.Default.Brush
             IconVariant.BatteryFull -> Icons.Default.BatteryFull
-            IconVariant.GpsFixed -> Icons.Default.GpsFixed
             IconVariant.KeyboardDoubleArrowRight -> Icons.Default.KeyboardDoubleArrowRight
+            IconVariant.GpsFixed -> Icons.Default.GpsFixed
             IconVariant.TableView -> Icons.Default.TableView
             IconVariant.CompareArrows -> Icons.Default.CompareArrows
             IconVariant.NotificationImportant -> Icons.Default.NotificationImportant
@@ -2669,8 +2669,8 @@ val IconVariant.image: ImageVector
             IconVariant.Headphones -> Icons.Default.Headphones
             IconVariant.Poll -> Icons.Default.Poll
             IconVariant.Backup -> Icons.Default.Backup
-            IconVariant.FirstPage -> Icons.Default.FirstPage
             IconVariant.OpenWith -> Icons.Default.OpenWith
+            IconVariant.FirstPage -> Icons.Default.FirstPage
             IconVariant.Cottage -> Icons.Default.Cottage
             IconVariant.LocalCafe -> Icons.Default.LocalCafe
             IconVariant.ContentCut -> Icons.Default.ContentCut
@@ -2715,8 +2715,8 @@ val IconVariant.image: ImageVector
             IconVariant.Straighten -> Icons.Default.Straighten
             IconVariant.PauseCircle -> Icons.Default.PauseCircle
             IconVariant.Chair -> Icons.Default.Chair
-            IconVariant.Reviews -> Icons.Default.Reviews
             IconVariant.DriveEta -> Icons.Default.DriveEta
+            IconVariant.Reviews -> Icons.Default.Reviews
             IconVariant.FmdGood -> Icons.Default.FmdGood
             IconVariant.Mood -> Icons.Default.Mood
             IconVariant.DirectionsBike -> Icons.Default.DirectionsBike
@@ -2725,12 +2725,12 @@ val IconVariant.image: ImageVector
             IconVariant.Upgrade -> Icons.Default.Upgrade
             IconVariant.TrendingDown -> Icons.Default.TrendingDown
             IconVariant.ChangeHistory -> Icons.Default.ChangeHistory
-            IconVariant.LinkOff -> Icons.Default.LinkOff
             IconVariant.StopCircle -> Icons.Default.StopCircle
+            IconVariant.LinkOff -> Icons.Default.LinkOff
             IconVariant.IntegrationInstructions -> Icons.Default.IntegrationInstructions
             IconVariant.PeopleOutline -> Icons.Default.PeopleOutline
-            IconVariant._3dRotation -> Icons.Default._3dRotation
             IconVariant.Tungsten -> Icons.Default.Tungsten
+            IconVariant._3dRotation -> Icons.Default._3dRotation
             IconVariant.ChecklistRtl -> Icons.Default.ChecklistRtl
             IconVariant.DirectionsCarFilled -> Icons.Default.DirectionsCarFilled
             IconVariant.HomeRepairService -> Icons.Default.HomeRepairService
@@ -2754,8 +2754,8 @@ val IconVariant.image: ImageVector
             IconVariant.Biotech -> Icons.Default.Biotech
             IconVariant.Class -> Icons.Default.Class
             IconVariant.VideoCall -> Icons.Default.VideoCall
-            IconVariant.Swipe -> Icons.Default.Swipe
             IconVariant.LastPage -> Icons.Default.LastPage
+            IconVariant.Swipe -> Icons.Default.Swipe
             IconVariant.Hotel -> Icons.Default.Hotel
             IconVariant.Title -> Icons.Default.Title
             IconVariant.GTranslate -> Icons.Default.GTranslate
@@ -2766,8 +2766,8 @@ val IconVariant.image: ImageVector
             IconVariant.ArrowCircleLeft -> Icons.Default.ArrowCircleLeft
             IconVariant.PersonOff -> Icons.Default.PersonOff
             IconVariant.InsertEmoticon -> Icons.Default.InsertEmoticon
-            IconVariant.SettingsBackupRestore -> Icons.Default.SettingsBackupRestore
             IconVariant.OfflineBolt -> Icons.Default.OfflineBolt
+            IconVariant.SettingsBackupRestore -> Icons.Default.SettingsBackupRestore
             IconVariant.AutoGraph -> Icons.Default.AutoGraph
             IconVariant.Downloading -> Icons.Default.Downloading
             IconVariant.ProductionQuantityLimits -> Icons.Default.ProductionQuantityLimits
@@ -2776,8 +2776,8 @@ val IconVariant.image: ImageVector
             IconVariant.ReportGmailerrorred -> Icons.Default.ReportGmailerrorred
             IconVariant.NotInterested -> Icons.Default.NotInterested
             IconVariant.NoteAlt -> Icons.Default.NoteAlt
-            IconVariant.MiscellaneousServices -> Icons.Default.MiscellaneousServices
             IconVariant.EventBusy -> Icons.Default.EventBusy
+            IconVariant.MiscellaneousServices -> Icons.Default.MiscellaneousServices
             IconVariant.LocalPhone -> Icons.Default.LocalPhone
             IconVariant.LocalGroceryStore -> Icons.Default.LocalGroceryStore
             IconVariant.KeyboardDoubleArrowLeft -> Icons.Default.KeyboardDoubleArrowLeft
@@ -2819,8 +2819,8 @@ val IconVariant.image: ImageVector
             IconVariant.Maximize -> Icons.Default.Maximize
             IconVariant.MoreTime -> Icons.Default.MoreTime
             IconVariant.SettingsEthernet -> Icons.Default.SettingsEthernet
-            IconVariant.ModeComment -> Icons.Default.ModeComment
             IconVariant.SquareFoot -> Icons.Default.SquareFoot
+            IconVariant.ModeComment -> Icons.Default.ModeComment
             IconVariant.ThumbsUpDown -> Icons.Default.ThumbsUpDown
             IconVariant.CloudDone -> Icons.Default.CloudDone
             IconVariant.Markunread -> Icons.Default.Markunread
@@ -2855,19 +2855,19 @@ val IconVariant.image: ImageVector
             IconVariant.Architecture -> Icons.Default.Architecture
             IconVariant.Unpublished -> Icons.Default.Unpublished
             IconVariant.NotificationsOff -> Icons.Default.NotificationsOff
-            IconVariant.TwoWheeler -> Icons.Default.TwoWheeler
             IconVariant.ClearAll -> Icons.Default.ClearAll
-            IconVariant.Directions -> Icons.Default.Directions
+            IconVariant.TwoWheeler -> Icons.Default.TwoWheeler
             IconVariant.Workspaces -> Icons.Default.Workspaces
+            IconVariant.Directions -> Icons.Default.Directions
             IconVariant.SystemUpdateAlt -> Icons.Default.SystemUpdateAlt
             IconVariant.Nightlight -> Icons.Default.Nightlight
             IconVariant.InsertLink -> Icons.Default.InsertLink
             IconVariant.Opacity -> Icons.Default.Opacity
             IconVariant.OpenInBrowser -> Icons.Default.OpenInBrowser
             IconVariant.Commute -> Icons.Default.Commute
+            IconVariant.ShoppingCartCheckout -> Icons.Default.ShoppingCartCheckout
             IconVariant.Mouse -> Icons.Default.Mouse
             IconVariant.FastRewind -> Icons.Default.FastRewind
-            IconVariant.ShoppingCartCheckout -> Icons.Default.ShoppingCartCheckout
             IconVariant.SportsScore -> Icons.Default.SportsScore
             IconVariant.InvertColors -> Icons.Default.InvertColors
             IconVariant.Luggage -> Icons.Default.Luggage
@@ -2897,8 +2897,8 @@ val IconVariant.image: ImageVector
             IconVariant.DeveloperBoard -> Icons.Default.DeveloperBoard
             IconVariant.Shower -> Icons.Default.Shower
             IconVariant.FormatAlignLeft -> Icons.Default.FormatAlignLeft
-            IconVariant.Vaccines -> Icons.Default.Vaccines
             IconVariant.Traffic -> Icons.Default.Traffic
+            IconVariant.Vaccines -> Icons.Default.Vaccines
             IconVariant.Warehouse -> Icons.Default.Warehouse
             IconVariant.KeyboardVoice -> Icons.Default.KeyboardVoice
             IconVariant.Tour -> Icons.Default.Tour
@@ -2910,8 +2910,8 @@ val IconVariant.image: ImageVector
             IconVariant.More -> Icons.Default.More
             IconVariant.BeachAccess -> Icons.Default.BeachAccess
             IconVariant.HideSource -> Icons.Default.HideSource
-            IconVariant.SearchOff -> Icons.Default.SearchOff
             IconVariant.Start -> Icons.Default.Start
+            IconVariant.SearchOff -> Icons.Default.SearchOff
             IconVariant.AddLink -> Icons.Default.AddLink
             IconVariant.LocalBar -> Icons.Default.LocalBar
             IconVariant.Slideshow -> Icons.Default.Slideshow
@@ -2922,13 +2922,13 @@ val IconVariant.image: ImageVector
             IconVariant.Approval -> Icons.Default.Approval
             IconVariant.Power -> Icons.Default.Power
             IconVariant.StarPurple500 -> Icons.Default.StarPurple500
-            IconVariant.BookmarkAdded -> Icons.Default.BookmarkAdded
             IconVariant.AltRoute -> Icons.Default.AltRoute
+            IconVariant.BookmarkAdded -> Icons.Default.BookmarkAdded
             IconVariant.Water -> Icons.Default.Water
             IconVariant.Router -> Icons.Default.Router
             IconVariant.Shop -> Icons.Default.Shop
-            IconVariant.Dialpad -> Icons.Default.Dialpad
             IconVariant.Agriculture -> Icons.Default.Agriculture
+            IconVariant.Dialpad -> Icons.Default.Dialpad
             IconVariant.MoodBad -> Icons.Default.MoodBad
             IconVariant.MarkAsUnread -> Icons.Default.MarkAsUnread
             IconVariant.Plagiarism -> Icons.Default.Plagiarism
@@ -2937,16 +2937,16 @@ val IconVariant.image: ImageVector
             IconVariant.DownloadDone -> Icons.Default.DownloadDone
             IconVariant.AssignmentReturn -> Icons.Default.AssignmentReturn
             IconVariant.Balance -> Icons.Default.Balance
-            IconVariant.Emergency -> Icons.Default.Emergency
             IconVariant.SettingsInputAntenna -> Icons.Default.SettingsInputAntenna
+            IconVariant.Emergency -> Icons.Default.Emergency
             IconVariant.Pool -> Icons.Default.Pool
             IconVariant.Stream -> Icons.Default.Stream
             IconVariant.AddComment -> Icons.Default.AddComment
             IconVariant.CropSquare -> Icons.Default.CropSquare
             IconVariant.VideocamOff -> Icons.Default.VideocamOff
             IconVariant.CopyAll -> Icons.Default.CopyAll
-            IconVariant.CollectionsBookmark -> Icons.Default.CollectionsBookmark
             IconVariant.LooksTwo -> Icons.Default.LooksTwo
+            IconVariant.CollectionsBookmark -> Icons.Default.CollectionsBookmark
             IconVariant.DynamicFeed -> Icons.Default.DynamicFeed
             IconVariant.FlightLand -> Icons.Default.FlightLand
             IconVariant.TurnedIn -> Icons.Default.TurnedIn
@@ -2955,16 +2955,16 @@ val IconVariant.image: ImageVector
             IconVariant.HotelClass -> Icons.Default.HotelClass
             IconVariant.MoveToInbox -> Icons.Default.MoveToInbox
             IconVariant.WhereToVote -> Icons.Default.WhereToVote
-            IconVariant.CloudOff -> Icons.Default.CloudOff
             IconVariant.Lens -> Icons.Default.Lens
+            IconVariant.CloudOff -> Icons.Default.CloudOff
             IconVariant.VideogameAsset -> Icons.Default.VideogameAsset
             IconVariant.PedalBike -> Icons.Default.PedalBike
             IconVariant.EmojiNature -> Icons.Default.EmojiNature
             IconVariant.AssignmentLate -> Icons.Default.AssignmentLate
             IconVariant.ShareLocation -> Icons.Default.ShareLocation
+            IconVariant.Diversity3 -> Icons.Default.Diversity3
             IconVariant.SwitchAccount -> Icons.Default.SwitchAccount
             IconVariant._360 -> Icons.Default._360
-            IconVariant.Diversity3 -> Icons.Default.Diversity3
             IconVariant.DoNotDisturb -> Icons.Default.DoNotDisturb
             IconVariant.DonutSmall -> Icons.Default.DonutSmall
             IconVariant.Kitchen -> Icons.Default.Kitchen
@@ -2993,15 +2993,15 @@ val IconVariant.image: ImageVector
             IconVariant.Anchor -> Icons.Default.Anchor
             IconVariant.HourglassFull -> Icons.Default.HourglassFull
             IconVariant.NightsStay -> Icons.Default.NightsStay
-            IconVariant.LinearScale -> Icons.Default.LinearScale
-            IconVariant.EditOff -> Icons.Default.EditOff
             IconVariant.ContentPasteSearch -> Icons.Default.ContentPasteSearch
+            IconVariant.EditOff -> Icons.Default.EditOff
+            IconVariant.LinearScale -> Icons.Default.LinearScale
             IconVariant.Mediation -> Icons.Default.Mediation
             IconVariant.FitScreen -> Icons.Default.FitScreen
             IconVariant.Interests -> Icons.Default.Interests
             IconVariant.DriveFileMove -> Icons.Default.DriveFileMove
-            IconVariant.TurnedInNot -> Icons.Default.TurnedInNot
             IconVariant.Terminal -> Icons.Default.Terminal
+            IconVariant.TurnedInNot -> Icons.Default.TurnedInNot
             IconVariant.RemoveShoppingCart -> Icons.Default.RemoveShoppingCart
             IconVariant.Cable -> Icons.Default.Cable
             IconVariant.Flaky -> Icons.Default.Flaky
@@ -3033,8 +3033,8 @@ val IconVariant.image: ImageVector
             IconVariant.Discount -> Icons.Default.Discount
             IconVariant.Sailing -> Icons.Default.Sailing
             IconVariant.MoneyOff -> Icons.Default.MoneyOff
-            IconVariant.FilterVintage -> Icons.Default.FilterVintage
             IconVariant.CancelPresentation -> Icons.Default.CancelPresentation
+            IconVariant.FilterVintage -> Icons.Default.FilterVintage
             IconVariant.ReplyAll -> Icons.Default.ReplyAll
             IconVariant.InsertComment -> Icons.Default.InsertComment
             IconVariant.RoomService -> Icons.Default.RoomService
@@ -3047,12 +3047,12 @@ val IconVariant.image: ImageVector
             IconVariant.AvTimer -> Icons.Default.AvTimer
             IconVariant.BubbleChart -> Icons.Default.BubbleChart
             IconVariant.SettingsVoice -> Icons.Default.SettingsVoice
-            IconVariant.Shortcut -> Icons.Default.Shortcut
             IconVariant.SelectAll -> Icons.Default.SelectAll
+            IconVariant.Shortcut -> Icons.Default.Shortcut
             IconVariant.Album -> Icons.Default.Album
             IconVariant.OnlinePrediction -> Icons.Default.OnlinePrediction
-            IconVariant.EventSeat -> Icons.Default.EventSeat
             IconVariant.AirplaneTicket -> Icons.Default.AirplaneTicket
+            IconVariant.EventSeat -> Icons.Default.EventSeat
             IconVariant.DataExploration -> Icons.Default.DataExploration
             IconVariant.Headset -> Icons.Default.Headset
             IconVariant.FilterDrama -> Icons.Default.FilterDrama
@@ -3062,8 +3062,8 @@ val IconVariant.image: ImageVector
             IconVariant.Radar -> Icons.Default.Radar
             IconVariant.Wallpaper -> Icons.Default.Wallpaper
             IconVariant.Height -> Icons.Default.Height
-            IconVariant.LocalDining -> Icons.Default.LocalDining
             IconVariant.DeviceThermostat -> Icons.Default.DeviceThermostat
+            IconVariant.LocalDining -> Icons.Default.LocalDining
             IconVariant.DriveFolderUpload -> Icons.Default.DriveFolderUpload
             IconVariant.CallMade -> Icons.Default.CallMade
             IconVariant.LaptopMac -> Icons.Default.LaptopMac
@@ -3072,19 +3072,19 @@ val IconVariant.image: ImageVector
             IconVariant.PregnantWoman -> Icons.Default.PregnantWoman
             IconVariant.Healing -> Icons.Default.Healing
             IconVariant.LocalTaxi -> Icons.Default.LocalTaxi
-            IconVariant.GppBad -> Icons.Default.GppBad
             IconVariant.Schema -> Icons.Default.Schema
+            IconVariant.GppBad -> Icons.Default.GppBad
             IconVariant.FileDownloadDone -> Icons.Default.FileDownloadDone
             IconVariant.RotateLeft -> Icons.Default.RotateLeft
             IconVariant.PlaylistPlay -> Icons.Default.PlaylistPlay
             IconVariant.CameraEnhance -> Icons.Default.CameraEnhance
-            IconVariant.LocalLaundryService -> Icons.Default.LocalLaundryService
             IconVariant.LowPriority -> Icons.Default.LowPriority
+            IconVariant.LocalLaundryService -> Icons.Default.LocalLaundryService
             IconVariant.CenterFocusStrong -> Icons.Default.CenterFocusStrong
             IconVariant.TripOrigin -> Icons.Default.TripOrigin
             IconVariant.DataUsage -> Icons.Default.DataUsage
-            IconVariant.VerticalAlignTop -> Icons.Default.VerticalAlignTop
             IconVariant.RoomPreferences -> Icons.Default.RoomPreferences
+            IconVariant.VerticalAlignTop -> Icons.Default.VerticalAlignTop
             IconVariant.NotificationAdd -> Icons.Default.NotificationAdd
             IconVariant.Cast -> Icons.Default.Cast
             IconVariant.Queue -> Icons.Default.Queue
@@ -3095,8 +3095,8 @@ val IconVariant.image: ImageVector
             IconVariant.DirectionsBusFilled -> Icons.Default.DirectionsBusFilled
             IconVariant.RequestPage -> Icons.Default.RequestPage
             IconVariant.DoDisturbOn -> Icons.Default.DoDisturbOn
-            IconVariant.RamenDining -> Icons.Default.RamenDining
             IconVariant.Tab -> Icons.Default.Tab
+            IconVariant.RamenDining -> Icons.Default.RamenDining
             IconVariant.MarkunreadMailbox -> Icons.Default.MarkunreadMailbox
             IconVariant.StarBorderPurple500 -> Icons.Default.StarBorderPurple500
             IconVariant.Assistant -> Icons.Default.Assistant
@@ -3110,8 +3110,8 @@ val IconVariant.image: ImageVector
             IconVariant.LocalDrink -> Icons.Default.LocalDrink
             IconVariant.ReplayCircleFilled -> Icons.Default.ReplayCircleFilled
             IconVariant.SaveAs -> Icons.Default.SaveAs
-            IconVariant.LocalPrintshop -> Icons.Default.LocalPrintshop
             IconVariant.Hail -> Icons.Default.Hail
+            IconVariant.LocalPrintshop -> Icons.Default.LocalPrintshop
             IconVariant.ScreenShare -> Icons.Default.ScreenShare
             IconVariant.VpnLock -> Icons.Default.VpnLock
             IconVariant.CrueltyFree -> Icons.Default.CrueltyFree
@@ -3137,8 +3137,8 @@ val IconVariant.image: ImageVector
             IconVariant.BrokenImage -> Icons.Default.BrokenImage
             IconVariant.FormatAlignCenter -> Icons.Default.FormatAlignCenter
             IconVariant.DensityMedium -> Icons.Default.DensityMedium
-            IconVariant.FreeBreakfast -> Icons.Default.FreeBreakfast
             IconVariant.Man -> Icons.Default.Man
+            IconVariant.FreeBreakfast -> Icons.Default.FreeBreakfast
             IconVariant.AutoDelete -> Icons.Default.AutoDelete
             IconVariant.AddToDrive -> Icons.Default.AddToDrive
             IconVariant.SportsKabaddi -> Icons.Default.SportsKabaddi
@@ -3146,19 +3146,19 @@ val IconVariant.image: ImageVector
             IconVariant.AddCard -> Icons.Default.AddCard
             IconVariant.Forward10 -> Icons.Default.Forward10
             IconVariant.EscalatorWarning -> Icons.Default.EscalatorWarning
-            IconVariant.WbCloudy -> Icons.Default.WbCloudy
             IconVariant.Try -> Icons.Default.Try
-            IconVariant.Sports -> Icons.Default.Sports
+            IconVariant.WbCloudy -> Icons.Default.WbCloudy
             IconVariant.TabletMac -> Icons.Default.TabletMac
             IconVariant.Cases -> Icons.Default.Cases
+            IconVariant.Sports -> Icons.Default.Sports
             IconVariant.Outbox -> Icons.Default.Outbox
             IconVariant.NotListedLocation -> Icons.Default.NotListedLocation
             IconVariant.ElectricBolt -> Icons.Default.ElectricBolt
-            IconVariant.ModeNight -> Icons.Default.ModeNight
             IconVariant.WorkHistory -> Icons.Default.WorkHistory
+            IconVariant.ModeNight -> Icons.Default.ModeNight
             IconVariant.FilterNone -> Icons.Default.FilterNone
-            IconVariant.Bathtub -> Icons.Default.Bathtub
             IconVariant.RunningWithErrors -> Icons.Default.RunningWithErrors
+            IconVariant.Bathtub -> Icons.Default.Bathtub
             IconVariant.FontDownload -> Icons.Default.FontDownload
             IconVariant.TransferWithinAStation -> Icons.Default.TransferWithinAStation
             IconVariant.Colorize -> Icons.Default.Colorize
@@ -3171,30 +3171,30 @@ val IconVariant.image: ImageVector
             IconVariant.AddLocation -> Icons.Default.AddLocation
             IconVariant.OfflinePin -> Icons.Default.OfflinePin
             IconVariant.DinnerDining -> Icons.Default.DinnerDining
-            IconVariant.EmojiSymbols -> Icons.Default.EmojiSymbols
             IconVariant.Weekend -> Icons.Default.Weekend
+            IconVariant.EmojiSymbols -> Icons.Default.EmojiSymbols
             IconVariant.ChildFriendly -> Icons.Default.ChildFriendly
             IconVariant.Fax -> Icons.Default.Fax
             IconVariant.AutoFixNormal -> Icons.Default.AutoFixNormal
             IconVariant.EnhancedEncryption -> Icons.Default.EnhancedEncryption
             IconVariant.FolderSpecial -> Icons.Default.FolderSpecial
             IconVariant.Bloodtype -> Icons.Default.Bloodtype
-            IconVariant.FormatPaint -> Icons.Default.FormatPaint
             IconVariant.LegendToggle -> Icons.Default.LegendToggle
+            IconVariant.FormatPaint -> Icons.Default.FormatPaint
             IconVariant.AreaChart -> Icons.Default.AreaChart
             IconVariant.CropOriginal -> Icons.Default.CropOriginal
             IconVariant.BatteryStd -> Icons.Default.BatteryStd
             IconVariant.DesktopMac -> Icons.Default.DesktopMac
             IconVariant.Replay10 -> Icons.Default.Replay10
             IconVariant.FilterCenterFocus -> Icons.Default.FilterCenterFocus
-            IconVariant.EmojiTransportation -> Icons.Default.EmojiTransportation
             IconVariant.FindReplace -> Icons.Default.FindReplace
-            IconVariant.HeartBroken -> Icons.Default.HeartBroken
+            IconVariant.EmojiTransportation -> Icons.Default.EmojiTransportation
             IconVariant.Compress -> Icons.Default.Compress
+            IconVariant.HeartBroken -> Icons.Default.HeartBroken
             IconVariant.AssignmentReturned -> Icons.Default.AssignmentReturned
             IconVariant.Light -> Icons.Default.Light
-            IconVariant.DoorFront -> Icons.Default.DoorFront
             IconVariant.Diversity1 -> Icons.Default.Diversity1
+            IconVariant.DoorFront -> Icons.Default.DoorFront
             IconVariant.AssuredWorkload -> Icons.Default.AssuredWorkload
             IconVariant.CalendarViewDay -> Icons.Default.CalendarViewDay
             IconVariant.Cookie -> Icons.Default.Cookie
@@ -3216,9 +3216,9 @@ val IconVariant.image: ImageVector
             IconVariant.NewLabel -> Icons.Default.NewLabel
             IconVariant.AddReaction -> Icons.Default.AddReaction
             IconVariant.MultipleStop -> Icons.Default.MultipleStop
+            IconVariant.Lan -> Icons.Default.Lan
             IconVariant.SouthEast -> Icons.Default.SouthEast
             IconVariant.Upcoming -> Icons.Default.Upcoming
-            IconVariant.Lan -> Icons.Default.Lan
             IconVariant.AttachEmail -> Icons.Default.AttachEmail
             IconVariant.SettingsBrightness -> Icons.Default.SettingsBrightness
             IconVariant.FormatColorText -> Icons.Default.FormatColorText
@@ -3233,13 +3233,13 @@ val IconVariant.image: ImageVector
             IconVariant.Unsubscribe -> Icons.Default.Unsubscribe
             IconVariant.FlashOff -> Icons.Default.FlashOff
             IconVariant.RestorePage -> Icons.Default.RestorePage
-            IconVariant.AlarmAdd -> Icons.Default.AlarmAdd
             IconVariant.AddModerator -> Icons.Default.AddModerator
-            IconVariant.Foundation -> Icons.Default.Foundation
+            IconVariant.AlarmAdd -> Icons.Default.AlarmAdd
             IconVariant.EventRepeat -> Icons.Default.EventRepeat
+            IconVariant.Foundation -> Icons.Default.Foundation
             IconVariant.Scale -> Icons.Default.Scale
-            IconVariant.CreditCardOff -> Icons.Default.CreditCardOff
             IconVariant.PanToolAlt -> Icons.Default.PanToolAlt
+            IconVariant.CreditCardOff -> Icons.Default.CreditCardOff
             IconVariant.ScatterPlot -> Icons.Default.ScatterPlot
             IconVariant.Transgender -> Icons.Default.Transgender
             IconVariant.NoiseControlOff -> Icons.Default.NoiseControlOff
@@ -3254,8 +3254,8 @@ val IconVariant.image: ImageVector
             IconVariant.TakeoutDining -> Icons.Default.TakeoutDining
             IconVariant.Deck -> Icons.Default.Deck
             IconVariant.SignalCellular4Bar -> Icons.Default.SignalCellular4Bar
-            IconVariant.SubdirectoryArrowLeft -> Icons.Default.SubdirectoryArrowLeft
             IconVariant.FormatListNumberedRtl -> Icons.Default.FormatListNumberedRtl
+            IconVariant.SubdirectoryArrowLeft -> Icons.Default.SubdirectoryArrowLeft
             IconVariant.AutoAwesomeMosaic -> Icons.Default.AutoAwesomeMosaic
             IconVariant.AssistantDirection -> Icons.Default.AssistantDirection
             IconVariant.ManageHistory -> Icons.Default.ManageHistory
@@ -3266,8 +3266,8 @@ val IconVariant.image: ImageVector
             IconVariant.DataObject -> Icons.Default.DataObject
             IconVariant.FollowTheSigns -> Icons.Default.FollowTheSigns
             IconVariant.Attribution -> Icons.Default.Attribution
-            IconVariant.Brightness1 -> Icons.Default.Brightness1
             IconVariant.ViewTimeline -> Icons.Default.ViewTimeline
+            IconVariant.Brightness1 -> Icons.Default.Brightness1
             IconVariant.Phonelink -> Icons.Default.Phonelink
             IconVariant.FoodBank -> Icons.Default.FoodBank
             IconVariant.PlusOne -> Icons.Default.PlusOne
@@ -3280,43 +3280,43 @@ val IconVariant.image: ImageVector
             IconVariant.Highlight -> Icons.Default.Highlight
             IconVariant.Outbound -> Icons.Default.Outbound
             IconVariant.Splitscreen -> Icons.Default.Splitscreen
+            IconVariant.CoPresent -> Icons.Default.CoPresent
             IconVariant.FlipCameraAndroid -> Icons.Default.FlipCameraAndroid
             IconVariant.Icecream -> Icons.Default.Icecream
-            IconVariant.CoPresent -> Icons.Default.CoPresent
             IconVariant.FlashlightOn -> Icons.Default.FlashlightOn
             IconVariant.DoDisturb -> Icons.Default.DoDisturb
-            IconVariant.Museum -> Icons.Default.Museum
             IconVariant.SwitchAccessShortcut -> Icons.Default.SwitchAccessShortcut
+            IconVariant.Museum -> Icons.Default.Museum
             IconVariant.DomainVerification -> Icons.Default.DomainVerification
             IconVariant.Flip -> Icons.Default.Flip
-            IconVariant.NorthWest -> Icons.Default.NorthWest
             IconVariant.Monitor -> Icons.Default.Monitor
+            IconVariant.NorthWest -> Icons.Default.NorthWest
             IconVariant.ViewComfy -> Icons.Default.ViewComfy
             IconVariant.CancelScheduleSend -> Icons.Default.CancelScheduleSend
             IconVariant.Fireplace -> Icons.Default.Fireplace
-            IconVariant.SwapVerticalCircle -> Icons.Default.SwapVerticalCircle
             IconVariant.Gite -> Icons.Default.Gite
+            IconVariant.SwapVerticalCircle -> Icons.Default.SwapVerticalCircle
             IconVariant.Gif -> Icons.Default.Gif
-            IconVariant.Nightlife -> Icons.Default.Nightlife
             IconVariant.FormatAlignJustify -> Icons.Default.FormatAlignJustify
+            IconVariant.Nightlife -> Icons.Default.Nightlife
             IconVariant.SmsFailed -> Icons.Default.SmsFailed
             IconVariant.LocalPharmacy -> Icons.Default.LocalPharmacy
             IconVariant.Villa -> Icons.Default.Villa
             IconVariant.PresentToAll -> Icons.Default.PresentToAll
             IconVariant.Webhook -> Icons.Default.Webhook
-            IconVariant.NetworkWifi -> Icons.Default.NetworkWifi
             IconVariant.SatelliteAlt -> Icons.Default.SatelliteAlt
+            IconVariant.NetworkWifi -> Icons.Default.NetworkWifi
             IconVariant.WaterfallChart -> Icons.Default.WaterfallChart
-            IconVariant.SimCardDownload -> Icons.Default.SimCardDownload
             IconVariant.SwitchLeft -> Icons.Default.SwitchLeft
+            IconVariant.SimCardDownload -> Icons.Default.SimCardDownload
             IconVariant.VideoSettings -> Icons.Default.VideoSettings
             IconVariant.SettingsInputComposite -> Icons.Default.SettingsInputComposite
             IconVariant.Loupe -> Icons.Default.Loupe
             IconVariant.HighQuality -> Icons.Default.HighQuality
             IconVariant.Pix -> Icons.Default.Pix
-            IconVariant.Quickreply -> Icons.Default.Quickreply
-            IconVariant.Hardware -> Icons.Default.Hardware
             IconVariant.ImageNotSupported -> Icons.Default.ImageNotSupported
+            IconVariant.Hardware -> Icons.Default.Hardware
+            IconVariant.Quickreply -> Icons.Default.Quickreply
             IconVariant.NetworkCheck -> Icons.Default.NetworkCheck
             IconVariant.MarkChatRead -> Icons.Default.MarkChatRead
             IconVariant.PhoneCallback -> Icons.Default.PhoneCallback
@@ -3329,11 +3329,11 @@ val IconVariant.image: ImageVector
             IconVariant.CommentBank -> Icons.Default.CommentBank
             IconVariant.Troubleshoot -> Icons.Default.Troubleshoot
             IconVariant.AccessTimeFilled -> Icons.Default.AccessTimeFilled
-            IconVariant.AddRoad -> Icons.Default.AddRoad
             IconVariant.AirplanemodeActive -> Icons.Default.AirplanemodeActive
+            IconVariant.AddRoad -> Icons.Default.AddRoad
             IconVariant.RuleFolder -> Icons.Default.RuleFolder
-            IconVariant.MobileFriendly -> Icons.Default.MobileFriendly
             IconVariant.Bedtime -> Icons.Default.Bedtime
+            IconVariant.MobileFriendly -> Icons.Default.MobileFriendly
             IconVariant.LineWeight -> Icons.Default.LineWeight
             IconVariant.Piano -> Icons.Default.Piano
             IconVariant.Dining -> Icons.Default.Dining
@@ -3342,20 +3342,20 @@ val IconVariant.image: ImageVector
             IconVariant.FolderZip -> Icons.Default.FolderZip
             IconVariant.Usb -> Icons.Default.Usb
             IconVariant.FlipCameraIos -> Icons.Default.FlipCameraIos
-            IconVariant.HorizontalSplit -> Icons.Default.HorizontalSplit
             IconVariant.Filter1 -> Icons.Default.Filter1
-            IconVariant.PhonelinkRing -> Icons.Default.PhonelinkRing
+            IconVariant.HorizontalSplit -> Icons.Default.HorizontalSplit
             IconVariant.SportsMotorsports -> Icons.Default.SportsMotorsports
+            IconVariant.PhonelinkRing -> Icons.Default.PhonelinkRing
             IconVariant.GolfCourse -> Icons.Default.GolfCourse
             IconVariant.Surfing -> Icons.Default.Surfing
             IconVariant.MergeType -> Icons.Default.MergeType
             IconVariant.Sanitizer -> Icons.Default.Sanitizer
             IconVariant.PsychologyAlt -> Icons.Default.PsychologyAlt
             IconVariant.Adb -> Icons.Default.Adb
-            IconVariant.FeaturedPlayList -> Icons.Default.FeaturedPlayList
             IconVariant.Groups2 -> Icons.Default.Groups2
-            IconVariant.SendToMobile -> Icons.Default.SendToMobile
+            IconVariant.FeaturedPlayList -> Icons.Default.FeaturedPlayList
             IconVariant.Flatware -> Icons.Default.Flatware
+            IconVariant.SendToMobile -> Icons.Default.SendToMobile
             IconVariant.FolderCopy -> Icons.Default.FolderCopy
             IconVariant.PhoneForwarded -> Icons.Default.PhoneForwarded
             IconVariant.PowerOff -> Icons.Default.PowerOff
@@ -3364,12 +3364,12 @@ val IconVariant.image: ImageVector
             IconVariant.PictureInPicture -> Icons.Default.PictureInPicture
             IconVariant.Polymer -> Icons.Default.Polymer
             IconVariant.BatchPrediction -> Icons.Default.BatchPrediction
-            IconVariant.AddChart -> Icons.Default.AddChart
             IconVariant.ElectricCar -> Icons.Default.ElectricCar
+            IconVariant.AddChart -> Icons.Default.AddChart
             IconVariant.Speaker -> Icons.Default.Speaker
             IconVariant.SystemUpdate -> Icons.Default.SystemUpdate
-            IconVariant.BatteryAlert -> Icons.Default.BatteryAlert
             IconVariant.Hive -> Icons.Default.Hive
+            IconVariant.BatteryAlert -> Icons.Default.BatteryAlert
             IconVariant.StayCurrentPortrait -> Icons.Default.StayCurrentPortrait
             IconVariant.MedicalInformation -> Icons.Default.MedicalInformation
             IconVariant.SportsHandball -> Icons.Default.SportsHandball
@@ -3383,8 +3383,8 @@ val IconVariant.image: ImageVector
             IconVariant.Festival -> Icons.Default.Festival
             IconVariant.SportsBaseball -> Icons.Default.SportsBaseball
             IconVariant.CodeOff -> Icons.Default.CodeOff
-            IconVariant.BookmarkRemove -> Icons.Default.BookmarkRemove
             IconVariant.Plumbing -> Icons.Default.Plumbing
+            IconVariant.BookmarkRemove -> Icons.Default.BookmarkRemove
             IconVariant.PersonalVideo -> Icons.Default.PersonalVideo
             IconVariant.LensBlur -> Icons.Default.LensBlur
             IconVariant.PlaylistAddCheckCircle -> Icons.Default.PlaylistAddCheckCircle
@@ -3396,8 +3396,8 @@ val IconVariant.image: ImageVector
             IconVariant.ScreenSearchDesktop -> Icons.Default.ScreenSearchDesktop
             IconVariant.MovieFilter -> Icons.Default.MovieFilter
             IconVariant.CoffeeMaker -> Icons.Default.CoffeeMaker
-            IconVariant.EditNotifications -> Icons.Default.EditNotifications
             IconVariant.CarRental -> Icons.Default.CarRental
+            IconVariant.EditNotifications -> Icons.Default.EditNotifications
             IconVariant.Gamepad -> Icons.Default.Gamepad
             IconVariant.NoPhotography -> Icons.Default.NoPhotography
             IconVariant.SouthWest -> Icons.Default.SouthWest
@@ -3414,15 +3414,15 @@ val IconVariant.image: ImageVector
             IconVariant.ZoomInMap -> Icons.Default.ZoomInMap
             IconVariant.PlaylistRemove -> Icons.Default.PlaylistRemove
             IconVariant.ShopTwo -> Icons.Default.ShopTwo
-            IconVariant.Blender -> Icons.Default.Blender
             IconVariant.TableRestaurant -> Icons.Default.TableRestaurant
+            IconVariant.Blender -> Icons.Default.Blender
             IconVariant.FlipToFront -> Icons.Default.FlipToFront
             IconVariant.SignalWifiStatusbarConnectedNoInternet4 -> Icons.Default.SignalWifiStatusbarConnectedNoInternet4
             IconVariant.SportsVolleyball -> Icons.Default.SportsVolleyball
-            IconVariant.CropDin -> Icons.Default.CropDin
             IconVariant.EditLocation -> Icons.Default.EditLocation
-            IconVariant.EnergySavingsLeaf -> Icons.Default.EnergySavingsLeaf
+            IconVariant.CropDin -> Icons.Default.CropDin
             IconVariant.CellTower -> Icons.Default.CellTower
+            IconVariant.EnergySavingsLeaf -> Icons.Default.EnergySavingsLeaf
             IconVariant.PivotTableChart -> Icons.Default.PivotTableChart
             IconVariant.Microwave -> Icons.Default.Microwave
             IconVariant.PestControl -> Icons.Default.PestControl
@@ -3442,10 +3442,10 @@ val IconVariant.image: ImageVector
             IconVariant.Eject -> Icons.Default.Eject
             IconVariant.ControlPointDuplicate -> Icons.Default.ControlPointDuplicate
             IconVariant.Brightness7 -> Icons.Default.Brightness7
-            IconVariant.Pages -> Icons.Default.Pages
             IconVariant.Filter -> Icons.Default.Filter
-            IconVariant.SwitchRight -> Icons.Default.SwitchRight
             IconVariant.ViewCompact -> Icons.Default.ViewCompact
+            IconVariant.Pages -> Icons.Default.Pages
+            IconVariant.SwitchRight -> Icons.Default.SwitchRight
             IconVariant.RunCircle -> Icons.Default.RunCircle
             IconVariant.VoiceChat -> Icons.Default.VoiceChat
             IconVariant.SystemSecurityUpdateGood -> Icons.Default.SystemSecurityUpdateGood
@@ -3458,8 +3458,8 @@ val IconVariant.image: ImageVector
             IconVariant.AirlineSeatReclineNormal -> Icons.Default.AirlineSeatReclineNormal
             IconVariant.LocationOff -> Icons.Default.LocationOff
             IconVariant.SnippetFolder -> Icons.Default.SnippetFolder
-            IconVariant.SportsFootball -> Icons.Default.SportsFootball
             IconVariant.MoneyOffCsred -> Icons.Default.MoneyOffCsred
+            IconVariant.SportsFootball -> Icons.Default.SportsFootball
             IconVariant.AlarmOff -> Icons.Default.AlarmOff
             IconVariant.PermDataSetting -> Icons.Default.PermDataSetting
             IconVariant.EditRoad -> Icons.Default.EditRoad
@@ -3469,8 +3469,8 @@ val IconVariant.image: ImageVector
             IconVariant.PhonelinkSetup -> Icons.Default.PhonelinkSetup
             IconVariant.Texture -> Icons.Default.Texture
             IconVariant.EditLocationAlt -> Icons.Default.EditLocationAlt
-            IconVariant.BedroomParent -> Icons.Default.BedroomParent
             IconVariant.SlowMotionVideo -> Icons.Default.SlowMotionVideo
+            IconVariant.BedroomParent -> Icons.Default.BedroomParent
             IconVariant.AddToQueue -> Icons.Default.AddToQueue
             IconVariant.BluetoothConnected -> Icons.Default.BluetoothConnected
             IconVariant.HourglassDisabled -> Icons.Default.HourglassDisabled
@@ -3481,8 +3481,8 @@ val IconVariant.image: ImageVector
             IconVariant.Battery5Bar -> Icons.Default.Battery5Bar
             IconVariant.ConnectedTv -> Icons.Default.ConnectedTv
             IconVariant.BedroomBaby -> Icons.Default.BedroomBaby
-            IconVariant.SensorWindow -> Icons.Default.SensorWindow
             IconVariant.FormatIndentIncrease -> Icons.Default.FormatIndentIncrease
+            IconVariant.SensorWindow -> Icons.Default.SensorWindow
             IconVariant.MoveUp -> Icons.Default.MoveUp
             IconVariant.TimerOff -> Icons.Default.TimerOff
             IconVariant.CameraIndoor -> Icons.Default.CameraIndoor
@@ -3494,15 +3494,15 @@ val IconVariant.image: ImageVector
             IconVariant.WorkOff -> Icons.Default.WorkOff
             IconVariant.DownhillSkiing -> Icons.Default.DownhillSkiing
             IconVariant.ShortText -> Icons.Default.ShortText
-            IconVariant.GroupRemove -> Icons.Default.GroupRemove
             IconVariant.Elevator -> Icons.Default.Elevator
+            IconVariant.GroupRemove -> Icons.Default.GroupRemove
             IconVariant.Kayaking -> Icons.Default.Kayaking
             IconVariant.RememberMe -> Icons.Default.RememberMe
             IconVariant.CarRepair -> Icons.Default.CarRepair
             IconVariant.PhotoSizeSelectActual -> Icons.Default.PhotoSizeSelectActual
             IconVariant.Transform -> Icons.Default.Transform
-            IconVariant.SolarPower -> Icons.Default.SolarPower
             IconVariant.Co2 -> Icons.Default.Co2
+            IconVariant.SolarPower -> Icons.Default.SolarPower
             IconVariant.JoinFull -> Icons.Default.JoinFull
             IconVariant.VideoCameraBack -> Icons.Default.VideoCameraBack
             IconVariant.PictureInPictureAlt -> Icons.Default.PictureInPictureAlt
@@ -3521,24 +3521,24 @@ val IconVariant.image: ImageVector
             IconVariant.RemoveModerator -> Icons.Default.RemoveModerator
             IconVariant.SwapCalls -> Icons.Default.SwapCalls
             IconVariant.DoorSliding -> Icons.Default.DoorSliding
+            IconVariant.Pattern -> Icons.Default.Pattern
             IconVariant.SmokingRooms -> Icons.Default.SmokingRooms
             IconVariant.ChairAlt -> Icons.Default.ChairAlt
-            IconVariant.Pattern -> Icons.Default.Pattern
             IconVariant.StayPrimaryPortrait -> Icons.Default.StayPrimaryPortrait
             IconVariant.LocalMovies -> Icons.Default.LocalMovies
             IconVariant.LineStyle -> Icons.Default.LineStyle
             IconVariant.DoNotDisturbAlt -> Icons.Default.DoNotDisturbAlt
             IconVariant.PermDeviceInformation -> Icons.Default.PermDeviceInformation
-            IconVariant.Boy -> Icons.Default.Boy
             IconVariant.Looks5 -> Icons.Default.Looks5
-            IconVariant.Airplay -> Icons.Default.Airplay
-            IconVariant.BrightnessHigh -> Icons.Default.BrightnessHigh
+            IconVariant.Boy -> Icons.Default.Boy
             IconVariant.LightbulbCircle -> Icons.Default.LightbulbCircle
+            IconVariant.Airplay -> Icons.Default.Airplay
             IconVariant.AppShortcut -> Icons.Default.AppShortcut
+            IconVariant.BrightnessHigh -> Icons.Default.BrightnessHigh
             IconVariant.FormatColorReset -> Icons.Default.FormatColorReset
             IconVariant.DirectionsBoatFilled -> Icons.Default.DirectionsBoatFilled
-            IconVariant.NotificationsPaused -> Icons.Default.NotificationsPaused
             IconVariant.TabletAndroid -> Icons.Default.TabletAndroid
+            IconVariant.NotificationsPaused -> Icons.Default.NotificationsPaused
             IconVariant.MotionPhotosOn -> Icons.Default.MotionPhotosOn
             IconVariant.DomainAdd -> Icons.Default.DomainAdd
             IconVariant.Cabin -> Icons.Default.Cabin
@@ -3554,8 +3554,8 @@ val IconVariant.image: ImageVector
             IconVariant.UpdateDisabled -> Icons.Default.UpdateDisabled
             IconVariant.SubtitlesOff -> Icons.Default.SubtitlesOff
             IconVariant.CastConnected -> Icons.Default.CastConnected
-            IconVariant.Rotate90DegreesCcw -> Icons.Default.Rotate90DegreesCcw
             IconVariant.SwipeLeft -> Icons.Default.SwipeLeft
+            IconVariant.Rotate90DegreesCcw -> Icons.Default.Rotate90DegreesCcw
             IconVariant.VerticalAlignCenter -> Icons.Default.VerticalAlignCenter
             IconVariant.BatterySaver -> Icons.Default.BatterySaver
             IconVariant.DoorBack -> Icons.Default.DoorBack
@@ -3565,63 +3565,63 @@ val IconVariant.image: ImageVector
             IconVariant.AlignHorizontalLeft -> Icons.Default.AlignHorizontalLeft
             IconVariant.Countertops -> Icons.Default.Countertops
             IconVariant.Fitbit -> Icons.Default.Fitbit
-            IconVariant.Living -> Icons.Default.Living
             IconVariant.PlayLesson -> Icons.Default.PlayLesson
             IconVariant.PhotoCameraFront -> Icons.Default.PhotoCameraFront
+            IconVariant.Living -> Icons.Default.Living
             IconVariant.Snooze -> Icons.Default.Snooze
             IconVariant.Hexagon -> Icons.Default.Hexagon
             IconVariant.SafetyDivider -> Icons.Default.SafetyDivider
-            IconVariant.LaptopWindows -> Icons.Default.LaptopWindows
             IconVariant.MicExternalOn -> Icons.Default.MicExternalOn
+            IconVariant.LaptopWindows -> Icons.Default.LaptopWindows
             IconVariant.Tram -> Icons.Default.Tram
             IconVariant.DataSaverOff -> Icons.Default.DataSaverOff
             IconVariant.PrivateConnectivity -> Icons.Default.PrivateConnectivity
+            IconVariant.ArrowOutward -> Icons.Default.ArrowOutward
             IconVariant.Hd -> Icons.Default.Hd
             IconVariant.WbTwilight -> Icons.Default.WbTwilight
             IconVariant.TaxiAlert -> Icons.Default.TaxiAlert
-            IconVariant.ArrowOutward -> Icons.Default.ArrowOutward
             IconVariant.VoiceOverOff -> Icons.Default.VoiceOverOff
             IconVariant.Rectangle -> Icons.Default.Rectangle
             IconVariant.Storm -> Icons.Default.Storm
             IconVariant.CurrencyPound -> Icons.Default.CurrencyPound
             IconVariant.AppsOutage -> Icons.Default.AppsOutage
-            IconVariant.BreakfastDining -> Icons.Default.BreakfastDining
             IconVariant.Merge -> Icons.Default.Merge
+            IconVariant.BreakfastDining -> Icons.Default.BreakfastDining
             IconVariant.BrowserUpdated -> Icons.Default.BrowserUpdated
             IconVariant.Gradient -> Icons.Default.Gradient
             IconVariant.FileDownloadOff -> Icons.Default.FileDownloadOff
             IconVariant.Replay30 -> Icons.Default.Replay30
             IconVariant.DataSaverOn -> Icons.Default.DataSaverOn
-            IconVariant.DeviceUnknown -> Icons.Default.DeviceUnknown
             IconVariant.FireExtinguisher -> Icons.Default.FireExtinguisher
-            IconVariant.Doorbell -> Icons.Default.Doorbell
+            IconVariant.DeviceUnknown -> Icons.Default.DeviceUnknown
             IconVariant.CrisisAlert -> Icons.Default.CrisisAlert
-            IconVariant.BrightnessMedium -> Icons.Default.BrightnessMedium
-            IconVariant.BluetoothSearching -> Icons.Default.BluetoothSearching
+            IconVariant.Doorbell -> Icons.Default.Doorbell
             IconVariant.Thunderstorm -> Icons.Default.Thunderstorm
+            IconVariant.BluetoothSearching -> Icons.Default.BluetoothSearching
+            IconVariant.BrightnessMedium -> Icons.Default.BrightnessMedium
             IconVariant.TapAndPlay -> Icons.Default.TapAndPlay
             IconVariant.RepeatOn -> Icons.Default.RepeatOn
             IconVariant.WaterDamage -> Icons.Default.WaterDamage
             IconVariant.JoinInner -> Icons.Default.JoinInner
             IconVariant.Carpenter -> Icons.Default.Carpenter
             IconVariant.Grid4x4 -> Icons.Default.Grid4x4
-            IconVariant.Straight -> Icons.Default.Straight
             IconVariant.SsidChart -> Icons.Default.SsidChart
+            IconVariant.Straight -> Icons.Default.Straight
             IconVariant.ContentPasteOff -> Icons.Default.ContentPasteOff
             IconVariant.SignalWifi0Bar -> Icons.Default.SignalWifi0Bar
-            IconVariant.RvHookup -> Icons.Default.RvHookup
             IconVariant.ChargingStation -> Icons.Default.ChargingStation
             IconVariant.MoveDown -> Icons.Default.MoveDown
+            IconVariant.RvHookup -> Icons.Default.RvHookup
             IconVariant.BrightnessLow -> Icons.Default.BrightnessLow
-            IconVariant.ClosedCaptionOff -> Icons.Default.ClosedCaptionOff
             IconVariant.InstallDesktop -> Icons.Default.InstallDesktop
+            IconVariant.ClosedCaptionOff -> Icons.Default.ClosedCaptionOff
             IconVariant.BabyChangingStation -> Icons.Default.BabyChangingStation
             IconVariant.AssistantPhoto -> Icons.Default.AssistantPhoto
             IconVariant.SwipeRight -> Icons.Default.SwipeRight
-            IconVariant.OfflineShare -> Icons.Default.OfflineShare
             IconVariant.Subway -> Icons.Default.Subway
-            IconVariant.BluetoothDisabled -> Icons.Default.BluetoothDisabled
+            IconVariant.OfflineShare -> Icons.Default.OfflineShare
             IconVariant.GroupOff -> Icons.Default.GroupOff
+            IconVariant.BluetoothDisabled -> Icons.Default.BluetoothDisabled
             IconVariant.TableBar -> Icons.Default.TableBar
             IconVariant.AdUnits -> Icons.Default.AdUnits
             IconVariant.MobiledataOff -> Icons.Default.MobiledataOff
@@ -3635,9 +3635,9 @@ val IconVariant.image: ImageVector
             IconVariant.HideImage -> Icons.Default.HideImage
             IconVariant.SettingsInputSvideo -> Icons.Default.SettingsInputSvideo
             IconVariant.SwipeUp -> Icons.Default.SwipeUp
-            IconVariant.SportsCricket -> Icons.Default.SportsCricket
-            IconVariant.Groups3 -> Icons.Default.Groups3
             IconVariant.Battery0Bar -> Icons.Default.Battery0Bar
+            IconVariant.Groups3 -> Icons.Default.Groups3
+            IconVariant.SportsCricket -> Icons.Default.SportsCricket
             IconVariant.SdCard -> Icons.Default.SdCard
             IconVariant.MultilineChart -> Icons.Default.MultilineChart
             IconVariant.SportsMartialArts -> Icons.Default.SportsMartialArts
@@ -3650,8 +3650,8 @@ val IconVariant.image: ImageVector
             IconVariant.Crop169 -> Icons.Default.Crop169
             IconVariant.HdrAuto -> Icons.Default.HdrAuto
             IconVariant.TransitEnterexit -> Icons.Default.TransitEnterexit
-            IconVariant.ShieldMoon -> Icons.Default.ShieldMoon
             IconVariant.PhoneMissed -> Icons.Default.PhoneMissed
+            IconVariant.ShieldMoon -> Icons.Default.ShieldMoon
             IconVariant.ViewArray -> Icons.Default.ViewArray
             IconVariant.BrunchDining -> Icons.Default.BrunchDining
             IconVariant.KeyboardHide -> Icons.Default.KeyboardHide
@@ -3662,18 +3662,18 @@ val IconVariant.image: ImageVector
             IconVariant.MobileScreenShare -> Icons.Default.MobileScreenShare
             IconVariant.Filter2 -> Icons.Default.Filter2
             IconVariant.SecurityUpdateGood -> Icons.Default.SecurityUpdateGood
-            IconVariant.SmokeFree -> Icons.Default.SmokeFree
             IconVariant.BatteryUnknown -> Icons.Default.BatteryUnknown
+            IconVariant.SmokeFree -> Icons.Default.SmokeFree
             IconVariant.FeaturedVideo -> Icons.Default.FeaturedVideo
-            IconVariant.ShutterSpeed -> Icons.Default.ShutterSpeed
             IconVariant.Polyline -> Icons.Default.Polyline
+            IconVariant.ShutterSpeed -> Icons.Default.ShutterSpeed
             IconVariant.PhotoAlbum -> Icons.Default.PhotoAlbum
             IconVariant.DensitySmall -> Icons.Default.DensitySmall
             IconVariant.Score -> Icons.Default.Score
-            IconVariant.SportsGolf -> Icons.Default.SportsGolf
             IconVariant.Hvac -> Icons.Default.Hvac
-            IconVariant.NordicWalking -> Icons.Default.NordicWalking
+            IconVariant.SportsGolf -> Icons.Default.SportsGolf
             IconVariant.Girl -> Icons.Default.Girl
+            IconVariant.NordicWalking -> Icons.Default.NordicWalking
             IconVariant.ConnectingAirports -> Icons.Default.ConnectingAirports
             IconVariant.Umbrella -> Icons.Default.Umbrella
             IconVariant.FilterTiltShift -> Icons.Default.FilterTiltShift
@@ -3683,35 +3683,35 @@ val IconVariant.image: ImageVector
             IconVariant.BorderAll -> Icons.Default.BorderAll
             IconVariant.AudioFile -> Icons.Default.AudioFile
             IconVariant.ShuffleOn -> Icons.Default.ShuffleOn
+            IconVariant.WebStories -> Icons.Default.WebStories
             IconVariant.Shop2 -> Icons.Default.Shop2
             IconVariant.ElectricBike -> Icons.Default.ElectricBike
-            IconVariant.WebStories -> Icons.Default.WebStories
             IconVariant.Face6 -> Icons.Default.Face6
             IconVariant.FolderDelete -> Icons.Default.FolderDelete
             IconVariant.Battery6Bar -> Icons.Default.Battery6Bar
             IconVariant.SportsGymnastics -> Icons.Default.SportsGymnastics
             IconVariant.DirectionsTransit -> Icons.Default.DirectionsTransit
             IconVariant.SignalWifiOff -> Icons.Default.SignalWifiOff
-            IconVariant.LabelOff -> Icons.Default.LabelOff
             IconVariant.Looks6 -> Icons.Default.Looks6
+            IconVariant.LabelOff -> Icons.Default.LabelOff
             IconVariant.AirlineSeatReclineExtra -> Icons.Default.AirlineSeatReclineExtra
             IconVariant.DataThresholding -> Icons.Default.DataThresholding
+            IconVariant.Egg -> Icons.Default.Egg
             IconVariant.Looks -> Icons.Default.Looks
             IconVariant.HdrStrong -> Icons.Default.HdrStrong
-            IconVariant.Egg -> Icons.Default.Egg
             IconVariant.SettingsSystemDaydream -> Icons.Default.SettingsSystemDaydream
             IconVariant.Brightness3 -> Icons.Default.Brightness3
             IconVariant.Tablet -> Icons.Default.Tablet
+            IconVariant.InterpreterMode -> Icons.Default.InterpreterMode
             IconVariant.Forward30 -> Icons.Default.Forward30
             IconVariant.SafetyCheck -> Icons.Default.SafetyCheck
-            IconVariant.InterpreterMode -> Icons.Default.InterpreterMode
             IconVariant.LinkedCamera -> Icons.Default.LinkedCamera
             IconVariant.Vrpano -> Icons.Default.Vrpano
             IconVariant.Paragliding -> Icons.Default.Paragliding
-            IconVariant.PlaylistAddCircle -> Icons.Default.PlaylistAddCircle
             IconVariant.FormatIndentDecrease -> Icons.Default.FormatIndentDecrease
-            IconVariant._5g -> Icons.Default._5g
+            IconVariant.PlaylistAddCircle -> Icons.Default.PlaylistAddCircle
             IconVariant.DoNotTouch -> Icons.Default.DoNotTouch
+            IconVariant._5g -> Icons.Default._5g
             IconVariant.LockPerson -> Icons.Default.LockPerson
             IconVariant.Tapas -> Icons.Default.Tapas
             IconVariant.TabUnselected -> Icons.Default.TabUnselected
@@ -3733,13 +3733,13 @@ val IconVariant.image: ImageVector
             IconVariant.ModeOfTravel -> Icons.Default.ModeOfTravel
             IconVariant.BusAlert -> Icons.Default.BusAlert
             IconVariant.Tty -> Icons.Default.Tty
+            IconVariant.Fence -> Icons.Default.Fence
             IconVariant.PartyMode -> Icons.Default.PartyMode
             IconVariant.QueuePlayNext -> Icons.Default.QueuePlayNext
             IconVariant.PhotoFilter -> Icons.Default.PhotoFilter
-            IconVariant.Fence -> Icons.Default.Fence
             IconVariant.AccessAlarms -> Icons.Default.AccessAlarms
-            IconVariant.LocalCarWash -> Icons.Default.LocalCarWash
             IconVariant.ContactEmergency -> Icons.Default.ContactEmergency
+            IconVariant.LocalCarWash -> Icons.Default.LocalCarWash
             IconVariant.FormatClear -> Icons.Default.FormatClear
             IconVariant.LocalHotel -> Icons.Default.LocalHotel
             IconVariant.Replay5 -> Icons.Default.Replay5
@@ -3748,8 +3748,8 @@ val IconVariant.image: ImageVector
             IconVariant.Snowboarding -> Icons.Default.Snowboarding
             IconVariant.ViewKanban -> Icons.Default.ViewKanban
             IconVariant.Spoke -> Icons.Default.Spoke
-            IconVariant._6FtApart -> Icons.Default._6FtApart
             IconVariant.VideoFile -> Icons.Default.VideoFile
+            IconVariant._6FtApart -> Icons.Default._6FtApart
             IconVariant.CallMissedOutgoing -> Icons.Default.CallMissedOutgoing
             IconVariant.TextRotateVertical -> Icons.Default.TextRotateVertical
             IconVariant.Balcony -> Icons.Default.Balcony
@@ -3761,8 +3761,8 @@ val IconVariant.image: ImageVector
             IconVariant.Kitesurfing -> Icons.Default.Kitesurfing
             IconVariant.SignalWifiConnectedNoInternet4 -> Icons.Default.SignalWifiConnectedNoInternet4
             IconVariant.Brightness2 -> Icons.Default.Brightness2
-            IconVariant.CandlestickChart -> Icons.Default.CandlestickChart
             IconVariant.Castle -> Icons.Default.Castle
+            IconVariant.CandlestickChart -> Icons.Default.CandlestickChart
             IconVariant.Houseboat -> Icons.Default.Houseboat
             IconVariant.ExploreOff -> Icons.Default.ExploreOff
             IconVariant.NoFood -> Icons.Default.NoFood
@@ -3770,8 +3770,8 @@ val IconVariant.image: ImageVector
             IconVariant.Rotate90DegreesCw -> Icons.Default.Rotate90DegreesCw
             IconVariant.MarkUnreadChatAlt -> Icons.Default.MarkUnreadChatAlt
             IconVariant.PhotoSizeSelectSmall -> Icons.Default.PhotoSizeSelectSmall
-            IconVariant.HorizontalDistribute -> Icons.Default.HorizontalDistribute
             IconVariant.SpatialAudioOff -> Icons.Default.SpatialAudioOff
+            IconVariant.HorizontalDistribute -> Icons.Default.HorizontalDistribute
             IconVariant.CellWifi -> Icons.Default.CellWifi
             IconVariant.ReportOff -> Icons.Default.ReportOff
             IconVariant.Tonality -> Icons.Default.Tonality
@@ -3789,13 +3789,13 @@ val IconVariant.image: ImageVector
             IconVariant.WheelchairPickup -> Icons.Default.WheelchairPickup
             IconVariant.CurrencyRuble -> Icons.Default.CurrencyRuble
             IconVariant.ExposureZero -> Icons.Default.ExposureZero
-            IconVariant.Aod -> Icons.Default.Aod
             IconVariant.Battery1Bar -> Icons.Default.Battery1Bar
+            IconVariant.Aod -> Icons.Default.Aod
             IconVariant.ImagesearchRoller -> Icons.Default.ImagesearchRoller
             IconVariant.CropRotate -> Icons.Default.CropRotate
             IconVariant.HearingDisabled -> Icons.Default.HearingDisabled
-            IconVariant.StopScreenShare -> Icons.Default.StopScreenShare
             IconVariant.CarCrash -> Icons.Default.CarCrash
+            IconVariant.StopScreenShare -> Icons.Default.StopScreenShare
             IconVariant.FlashlightOff -> Icons.Default.FlashlightOff
             IconVariant.PhotoSizeSelectLarge -> Icons.Default.PhotoSizeSelectLarge
             IconVariant.SignalCellular0Bar -> Icons.Default.SignalCellular0Bar
@@ -3815,11 +3815,11 @@ val IconVariant.image: ImageVector
             IconVariant.SouthAmerica -> Icons.Default.SouthAmerica
             IconVariant.SecurityUpdate -> Icons.Default.SecurityUpdate
             IconVariant.GpsOff -> Icons.Default.GpsOff
+            IconVariant.PunchClock -> Icons.Default.PunchClock
             IconVariant.PinInvoke -> Icons.Default.PinInvoke
             IconVariant.Pinch -> Icons.Default.Pinch
-            IconVariant.PunchClock -> Icons.Default.PunchClock
-            IconVariant.Streetview -> Icons.Default.Streetview
             IconVariant.ElectricMeter -> Icons.Default.ElectricMeter
+            IconVariant.Streetview -> Icons.Default.Streetview
             IconVariant.HdrWeak -> Icons.Default.HdrWeak
             IconVariant.CallMissed -> Icons.Default.CallMissed
             IconVariant.Earbuds -> Icons.Default.Earbuds
@@ -3836,17 +3836,17 @@ val IconVariant.image: ImageVector
             IconVariant.KeyboardCapslock -> Icons.Default.KeyboardCapslock
             IconVariant.SdStorage -> Icons.Default.SdStorage
             IconVariant.ExtensionOff -> Icons.Default.ExtensionOff
-            IconVariant.HeatPump -> Icons.Default.HeatPump
             IconVariant.FormatStrikethrough -> Icons.Default.FormatStrikethrough
+            IconVariant.HeatPump -> Icons.Default.HeatPump
             IconVariant.PausePresentation -> Icons.Default.PausePresentation
             IconVariant.Mosque -> Icons.Default.Mosque
             IconVariant.PermCameraMic -> Icons.Default.PermCameraMic
             IconVariant.Superscript -> Icons.Default.Superscript
-            IconVariant.SportsRugby -> Icons.Default.SportsRugby
             IconVariant.ViewCozy -> Icons.Default.ViewCozy
+            IconVariant.SportsRugby -> Icons.Default.SportsRugby
+            IconVariant.DataArray -> Icons.Default.DataArray
             IconVariant.BurstMode -> Icons.Default.BurstMode
             IconVariant.Grid3x3 -> Icons.Default.Grid3x3
-            IconVariant.DataArray -> Icons.Default.DataArray
             IconVariant.FilterFrames -> Icons.Default.FilterFrames
             IconVariant.ResetTv -> Icons.Default.ResetTv
             IconVariant.Person2 -> Icons.Default.Person2
@@ -3856,13 +3856,13 @@ val IconVariant.image: ImageVector
             IconVariant.JoinRight -> Icons.Default.JoinRight
             IconVariant._4k -> Icons.Default._4k
             IconVariant.TurnRight -> Icons.Default.TurnRight
-            IconVariant.HeadsetOff -> Icons.Default.HeadsetOff
             IconVariant.Scoreboard -> Icons.Default.Scoreboard
+            IconVariant.HeadsetOff -> Icons.Default.HeadsetOff
             IconVariant.CommentsDisabled -> Icons.Default.CommentsDisabled
             IconVariant.FiberSmartRecord -> Icons.Default.FiberSmartRecord
+            IconVariant.Dataset -> Icons.Default.Dataset
             IconVariant.CompassCalibration -> Icons.Default.CompassCalibration
             IconVariant.Crib -> Icons.Default.Crib
-            IconVariant.Dataset -> Icons.Default.Dataset
             IconVariant.BrightnessAuto -> Icons.Default.BrightnessAuto
             IconVariant.Margin -> Icons.Default.Margin
             IconVariant.DialerSip -> Icons.Default.DialerSip
@@ -3885,16 +3885,16 @@ val IconVariant.image: ImageVector
             IconVariant.ScreenshotMonitor -> Icons.Default.ScreenshotMonitor
             IconVariant.Sledding -> Icons.Default.Sledding
             IconVariant.Deselect -> Icons.Default.Deselect
-            IconVariant.WifiCalling -> Icons.Default.WifiCalling
             IconVariant.BlurLinear -> Icons.Default.BlurLinear
+            IconVariant.WifiCalling -> Icons.Default.WifiCalling
             IconVariant.DoNotDisturbOnTotalSilence -> Icons.Default.DoNotDisturbOnTotalSilence
             IconVariant.Pentagon -> Icons.Default.Pentagon
             IconVariant.FilterBAndW -> Icons.Default.FilterBAndW
             IconVariant.Rtt -> Icons.Default.Rtt
             IconVariant.CropLandscape -> Icons.Default.CropLandscape
             IconVariant.Crop32 -> Icons.Default.Crop32
-            IconVariant.NearbyError -> Icons.Default.NearbyError
             IconVariant.GasMeter -> Icons.Default.GasMeter
+            IconVariant.NearbyError -> Icons.Default.NearbyError
             IconVariant.BluetoothAudio -> Icons.Default.BluetoothAudio
             IconVariant.AirplanemodeInactive -> Icons.Default.AirplanemodeInactive
             IconVariant.Phishing -> Icons.Default.Phishing
@@ -3919,23 +3919,23 @@ val IconVariant.image: ImageVector
             IconVariant.BorderClear -> Icons.Default.BorderClear
             IconVariant.AlignVerticalCenter -> Icons.Default.AlignVerticalCenter
             IconVariant.BrowseGallery -> Icons.Default.BrowseGallery
-            IconVariant.SignalCellularConnectedNoInternet0Bar -> Icons.Default.SignalCellularConnectedNoInternet0Bar
             IconVariant.TextDecrease -> Icons.Default.TextDecrease
+            IconVariant.SignalCellularConnectedNoInternet0Bar -> Icons.Default.SignalCellularConnectedNoInternet0Bar
             IconVariant.SwitchVideo -> Icons.Default.SwitchVideo
             IconVariant.SimCardAlert -> Icons.Default.SimCardAlert
             IconVariant.Php -> Icons.Default.Php
             IconVariant.FolderOff -> Icons.Default.FolderOff
-            IconVariant.TextRotateUp -> Icons.Default.TextRotateUp
             IconVariant.ViewComfyAlt -> Icons.Default.ViewComfyAlt
+            IconVariant.TextRotateUp -> Icons.Default.TextRotateUp
             IconVariant.Escalator -> Icons.Default.Escalator
             IconVariant.Filter7 -> Icons.Default.Filter7
             IconVariant.RailwayAlert -> Icons.Default.RailwayAlert
             IconVariant.TextRotationAngledown -> Icons.Default.TextRotationAngledown
             IconVariant.FontDownloadOff -> Icons.Default.FontDownloadOff
             IconVariant.Filter4 -> Icons.Default.Filter4
-            IconVariant.Dry -> Icons.Default.Dry
-            IconVariant.ScreenLockPortrait -> Icons.Default.ScreenLockPortrait
             IconVariant.SignLanguage -> Icons.Default.SignLanguage
+            IconVariant.ScreenLockPortrait -> Icons.Default.ScreenLockPortrait
+            IconVariant.Dry -> Icons.Default.Dry
             IconVariant.TextRotationAngleup -> Icons.Default.TextRotationAngleup
             IconVariant.DoNotDisturbOff -> Icons.Default.DoNotDisturbOff
             IconVariant.Filter9Plus -> Icons.Default.Filter9Plus
@@ -3952,9 +3952,9 @@ val IconVariant.image: ImageVector
             IconVariant.PhonePaused -> Icons.Default.PhonePaused
             IconVariant.WbIridescent -> Icons.Default.WbIridescent
             IconVariant.TurnLeft -> Icons.Default.TurnLeft
+            IconVariant.LocalPlay -> Icons.Default.LocalPlay
             IconVariant.UnfoldMoreDouble -> Icons.Default.UnfoldMoreDouble
             IconVariant.GridOff -> Icons.Default.GridOff
-            IconVariant.LocalPlay -> Icons.Default.LocalPlay
             IconVariant.Stroller -> Icons.Default.Stroller
             IconVariant.AddHomeWork -> Icons.Default.AddHomeWork
             IconVariant.ViewCompactAlt -> Icons.Default.ViewCompactAlt
@@ -3964,15 +3964,15 @@ val IconVariant.image: ImageVector
             IconVariant.NetworkPing -> Icons.Default.NetworkPing
             IconVariant.UTurnLeft -> Icons.Default.UTurnLeft
             IconVariant.SystemSecurityUpdate -> Icons.Default.SystemSecurityUpdate
-            IconVariant.WifiTetheringOff -> Icons.Default.WifiTetheringOff
             IconVariant.WebAssetOff -> Icons.Default.WebAssetOff
+            IconVariant.WifiTetheringOff -> Icons.Default.WifiTetheringOff
             IconVariant.MotionPhotosPaused -> Icons.Default.MotionPhotosPaused
             IconVariant.PhotoCameraBack -> Icons.Default.PhotoCameraBack
             IconVariant.Cyclone -> Icons.Default.Cyclone
             IconVariant.SwipeDownAlt -> Icons.Default.SwipeDownAlt
             IconVariant.MonochromePhotos -> Icons.Default.MonochromePhotos
-            IconVariant.StayCurrentLandscape -> Icons.Default.StayCurrentLandscape
             IconVariant.AutoFixOff -> Icons.Default.AutoFixOff
+            IconVariant.StayCurrentLandscape -> Icons.Default.StayCurrentLandscape
             IconVariant.Airlines -> Icons.Default.Airlines
             IconVariant.Dock -> Icons.Default.Dock
             IconVariant.HeadphonesBattery -> Icons.Default.HeadphonesBattery
@@ -3990,11 +3990,11 @@ val IconVariant.image: ImageVector
             IconVariant.ExposureNeg1 -> Icons.Default.ExposureNeg1
             IconVariant.Lyrics -> Icons.Default.Lyrics
             IconVariant.KeyOff -> Icons.Default.KeyOff
-            IconVariant.AirlineSeatFlat -> Icons.Default.AirlineSeatFlat
             IconVariant.BikeScooter -> Icons.Default.BikeScooter
+            IconVariant.AirlineSeatFlat -> Icons.Default.AirlineSeatFlat
             IconVariant.Padding -> Icons.Default.Padding
-            IconVariant.PhoneLocked -> Icons.Default.PhoneLocked
             IconVariant.TireRepair -> Icons.Default.TireRepair
+            IconVariant.PhoneLocked -> Icons.Default.PhoneLocked
             IconVariant.DensityLarge -> Icons.Default.DensityLarge
             IconVariant.BrowserNotSupported -> Icons.Default.BrowserNotSupported
             IconVariant.NetworkLocked -> Icons.Default.NetworkLocked
@@ -4003,28 +4003,28 @@ val IconVariant.image: ImageVector
             IconVariant.Face5 -> Icons.Default.Face5
             IconVariant.Person4 -> Icons.Default.Person4
             IconVariant.Sd -> Icons.Default.Sd
-            IconVariant.NetworkWifi1Bar -> Icons.Default.NetworkWifi1Bar
             IconVariant.SpatialTracking -> Icons.Default.SpatialTracking
+            IconVariant.NetworkWifi1Bar -> Icons.Default.NetworkWifi1Bar
             IconVariant.NearMeDisabled -> Icons.Default.NearMeDisabled
             IconVariant.StayPrimaryLandscape -> Icons.Default.StayPrimaryLandscape
-            IconVariant.SignalCellularNodata -> Icons.Default.SignalCellularNodata
             IconVariant.LineAxis -> Icons.Default.LineAxis
+            IconVariant.SignalCellularNodata -> Icons.Default.SignalCellularNodata
             IconVariant.Snowmobile -> Icons.Default.Snowmobile
             IconVariant.SwipeLeftAlt -> Icons.Default.SwipeLeftAlt
             IconVariant._30fps -> Icons.Default._30fps
             IconVariant.PropaneTank -> Icons.Default.PropaneTank
-            IconVariant.NoSim -> Icons.Default.NoSim
             IconVariant.Sos -> Icons.Default.Sos
+            IconVariant.NoSim -> Icons.Default.NoSim
             IconVariant.EarbudsBattery -> Icons.Default.EarbudsBattery
             IconVariant.SignalCellularOff -> Icons.Default.SignalCellularOff
             IconVariant.WifiFind -> Icons.Default.WifiFind
+            IconVariant.Person3 -> Icons.Default.Person3
             IconVariant._4gPlusMobiledata -> Icons.Default._4gPlusMobiledata
             IconVariant.DirectionsTransitFilled -> Icons.Default.DirectionsTransitFilled
-            IconVariant.Person3 -> Icons.Default.Person3
             IconVariant.MinorCrash -> Icons.Default.MinorCrash
             IconVariant.SignalWifi4BarLock -> Icons.Default.SignalWifi4BarLock
-            IconVariant.LteMobiledata -> Icons.Default.LteMobiledata
             IconVariant.AddAlarm -> Icons.Default.AddAlarm
+            IconVariant.LteMobiledata -> Icons.Default.LteMobiledata
             IconVariant.NetworkWifi3Bar -> Icons.Default.NetworkWifi3Bar
             IconVariant.LeakRemove -> Icons.Default.LeakRemove
             IconVariant.SpatialAudio -> Icons.Default.SpatialAudio
@@ -4049,19 +4049,19 @@ val IconVariant.image: ImageVector
             IconVariant.FlightClass -> Icons.Default.FlightClass
             IconVariant.HomeMini -> Icons.Default.HomeMini
             IconVariant.VideoStable -> Icons.Default.VideoStable
-            IconVariant.Filter6 -> Icons.Default.Filter6
-            IconVariant.Fort -> Icons.Default.Fort
             IconVariant.AdfScanner -> Icons.Default.AdfScanner
+            IconVariant.Fort -> Icons.Default.Fort
+            IconVariant.Filter6 -> Icons.Default.Filter6
             IconVariant.ModeFanOff -> Icons.Default.ModeFanOff
             IconVariant.DirectionsSubwayFilled -> Icons.Default.DirectionsSubwayFilled
             IconVariant.FireTruck -> Icons.Default.FireTruck
             IconVariant.RawOn -> Icons.Default.RawOn
+            IconVariant.TempleBuddhist -> Icons.Default.TempleBuddhist
             IconVariant.BlurOff -> Icons.Default.BlurOff
             IconVariant.Deblur -> Icons.Default.Deblur
-            IconVariant.WbShade -> Icons.Default.WbShade
             IconVariant.MotionPhotosOff -> Icons.Default.MotionPhotosOff
             IconVariant.Rsvp -> Icons.Default.Rsvp
-            IconVariant.TempleBuddhist -> Icons.Default.TempleBuddhist
+            IconVariant.WbShade -> Icons.Default.WbShade
             IconVariant.EmergencyShare -> Icons.Default.EmergencyShare
             IconVariant.MotionPhotosPause -> Icons.Default.MotionPhotosPause
             IconVariant.VpnKeyOff -> Icons.Default.VpnKeyOff
@@ -4074,26 +4074,26 @@ val IconVariant.image: ImageVector
             IconVariant.PhoneBluetoothSpeaker -> Icons.Default.PhoneBluetoothSpeaker
             IconVariant.HdrOn -> Icons.Default.HdrOn
             IconVariant.AirlineSeatFlatAngled -> Icons.Default.AirlineSeatFlatAngled
-            IconVariant._3gMobiledata -> Icons.Default._3gMobiledata
             IconVariant.UsbOff -> Icons.Default.UsbOff
+            IconVariant._3gMobiledata -> Icons.Default._3gMobiledata
             IconVariant.ScubaDiving -> Icons.Default.ScubaDiving
             IconVariant.FiberPin -> Icons.Default.FiberPin
             IconVariant.PanoramaHorizontal -> Icons.Default.PanoramaHorizontal
             IconVariant.NetworkWifi2Bar -> Icons.Default.NetworkWifi2Bar
             IconVariant.DirtyLens -> Icons.Default.DirtyLens
             IconVariant.ScreenLockRotation -> Icons.Default.ScreenLockRotation
-            IconVariant.ImageAspectRatio -> Icons.Default.ImageAspectRatio
             IconVariant.NoCell -> Icons.Default.NoCell
+            IconVariant.ImageAspectRatio -> Icons.Default.ImageAspectRatio
             IconVariant.DatasetLinked -> Icons.Default.DatasetLinked
             IconVariant._30fpsSelect -> Icons.Default._30fpsSelect
+            IconVariant.Tsunami -> Icons.Default.Tsunami
             IconVariant._60fps -> Icons.Default._60fps
             IconVariant.ScreenLockLandscape -> Icons.Default.ScreenLockLandscape
-            IconVariant.Tsunami -> Icons.Default.Tsunami
             IconVariant.SevereCold -> Icons.Default.SevereCold
             IconVariant.UTurnRight -> Icons.Default.UTurnRight
             IconVariant.PianoOff -> Icons.Default.PianoOff
-            IconVariant.LtePlusMobiledata -> Icons.Default.LtePlusMobiledata
             IconVariant.SignalCellularAlt1Bar -> Icons.Default.SignalCellularAlt1Bar
+            IconVariant.LtePlusMobiledata -> Icons.Default.LtePlusMobiledata
             IconVariant.CameraRear -> Icons.Default.CameraRear
             IconVariant.Wifi2Bar -> Icons.Default.Wifi2Bar
             IconVariant.SignalCellularAlt2Bar -> Icons.Default.SignalCellularAlt2Bar
@@ -4104,22 +4104,22 @@ val IconVariant.image: ImageVector
             IconVariant.WifiTetheringError -> Icons.Default.WifiTetheringError
             IconVariant.VideogameAssetOff -> Icons.Default.VideogameAssetOff
             IconVariant.Timer3 -> Icons.Default.Timer3
-            IconVariant._60fpsSelect -> Icons.Default._60fpsSelect
             IconVariant.Repartition -> Icons.Default.Repartition
+            IconVariant._60fpsSelect -> Icons.Default._60fpsSelect
             IconVariant.DirectionsOff -> Icons.Default.DirectionsOff
             IconVariant.PanoramaWideAngleSelect -> Icons.Default.PanoramaWideAngleSelect
             IconVariant.AirlineSeatLegroomNormal -> Icons.Default.AirlineSeatLegroomNormal
             IconVariant.TempleHindu -> Icons.Default.TempleHindu
-            IconVariant._24mp -> Icons.Default._24mp
             IconVariant.WidthFull -> Icons.Default.WidthFull
+            IconVariant._24mp -> Icons.Default._24mp
             IconVariant.FiberDvr -> Icons.Default.FiberDvr
             IconVariant.SignalCellularNoSim -> Icons.Default.SignalCellularNoSim
             IconVariant.ForkLeft -> Icons.Default.ForkLeft
             IconVariant.ShapeLine -> Icons.Default.ShapeLine
             IconVariant.Synagogue -> Icons.Default.Synagogue
             IconVariant.ExposureNeg2 -> Icons.Default.ExposureNeg2
-            IconVariant.RemoveRoad -> Icons.Default.RemoveRoad
             IconVariant.ScreenRotationAlt -> Icons.Default.ScreenRotationAlt
+            IconVariant.RemoveRoad -> Icons.Default.RemoveRoad
             IconVariant.RollerSkating -> Icons.Default.RollerSkating
             IconVariant.Tornado -> Icons.Default.Tornado
             IconVariant.AirlineSeatLegroomExtra -> Icons.Default.AirlineSeatLegroomExtra
@@ -4137,8 +4137,8 @@ val IconVariant.image: ImageVector
             IconVariant.RoundaboutRight -> Icons.Default.RoundaboutRight
             IconVariant.GMobiledata -> Icons.Default.GMobiledata
             IconVariant._1k -> Icons.Default._1k
-            IconVariant.BorderBottom -> Icons.Default.BorderBottom
             IconVariant.Transcribe -> Icons.Default.Transcribe
+            IconVariant.BorderBottom -> Icons.Default.BorderBottom
             IconVariant.FormatTextdirectionLToR -> Icons.Default.FormatTextdirectionLToR
             IconVariant.AssistWalker -> Icons.Default.AssistWalker
             IconVariant.TurnSlightRight -> Icons.Default.TurnSlightRight
@@ -4148,8 +4148,8 @@ val IconVariant.image: ImageVector
             IconVariant.KeyboardControlKey -> Icons.Default.KeyboardControlKey
             IconVariant.BorderVertical -> Icons.Default.BorderVertical
             IconVariant.WidthWide -> Icons.Default.WidthWide
-            IconVariant.Timer3Select -> Icons.Default.Timer3Select
             IconVariant.NoBackpack -> Icons.Default.NoBackpack
+            IconVariant.Timer3Select -> Icons.Default.Timer3Select
             IconVariant.TurnSlightLeft -> Icons.Default.TurnSlightLeft
             IconVariant.PanoramaHorizontalSelect -> Icons.Default.PanoramaHorizontalSelect
             IconVariant._2k -> Icons.Default._2k
@@ -4166,8 +4166,8 @@ val IconVariant.image: ImageVector
             IconVariant.BorderTop -> Icons.Default.BorderTop
             IconVariant.MicExternalOff -> Icons.Default.MicExternalOff
             IconVariant.BorderRight -> Icons.Default.BorderRight
-            IconVariant._18UpRating -> Icons.Default._18UpRating
             IconVariant.Propane -> Icons.Default.Propane
+            IconVariant._18UpRating -> Icons.Default._18UpRating
             IconVariant.BroadcastOnPersonal -> Icons.Default.BroadcastOnPersonal
             IconVariant.NoStroller -> Icons.Default.NoStroller
             IconVariant.Blinds -> Icons.Default.Blinds
@@ -4193,22 +4193,22 @@ val IconVariant.image: ImageVector
             IconVariant._8kPlus -> Icons.Default._8kPlus
             IconVariant.WatchOff -> Icons.Default.WatchOff
             IconVariant._9kPlus -> Icons.Default._9kPlus
+            IconVariant.Desk -> Icons.Default.Desk
             IconVariant.FormatOverline -> Icons.Default.FormatOverline
             IconVariant.Hevc -> Icons.Default.Hevc
-            IconVariant.Desk -> Icons.Default.Desk
             IconVariant.HdrOnSelect -> Icons.Default.HdrOnSelect
             IconVariant.KeyboardOptionKey -> Icons.Default.KeyboardOptionKey
-            IconVariant._3k -> Icons.Default._3k
             IconVariant.BlindsClosed -> Icons.Default.BlindsClosed
             IconVariant.Curtains -> Icons.Default.Curtains
+            IconVariant._3k -> Icons.Default._3k
             IconVariant.BedtimeOff -> Icons.Default.BedtimeOff
             IconVariant.RoundaboutLeft -> Icons.Default.RoundaboutLeft
             IconVariant._18mp -> Icons.Default._18mp
             IconVariant.TurnSharpLeft -> Icons.Default.TurnSharpLeft
             IconVariant._10mp -> Icons.Default._10mp
+            IconVariant.BroadcastOnHome -> Icons.Default.BroadcastOnHome
             IconVariant.VerticalShades -> Icons.Default.VerticalShades
             IconVariant.VerticalShadesClosed -> Icons.Default.VerticalShadesClosed
-            IconVariant.BroadcastOnHome -> Icons.Default.BroadcastOnHome
             IconVariant.HdrAutoSelect -> Icons.Default.HdrAutoSelect
             IconVariant.CurtainsClosed -> Icons.Default.CurtainsClosed
             IconVariant.NestCamWiredStand -> Icons.Default.NestCamWiredStand
@@ -4218,10 +4218,10 @@ val IconVariant.image: ImageVector
             IconVariant._7k -> Icons.Default._7k
             IconVariant.NearbyOff -> Icons.Default.NearbyOff
             IconVariant._9k -> Icons.Default._9k
-            IconVariant._3kPlus -> Icons.Default._3kPlus
             IconVariant.DevicesFold -> Icons.Default.DevicesFold
-            IconVariant._2kPlus -> Icons.Default._2kPlus
+            IconVariant._3kPlus -> Icons.Default._3kPlus
             IconVariant.HdrOff -> Icons.Default.HdrOff
+            IconVariant._2kPlus -> Icons.Default._2kPlus
             IconVariant._6k -> Icons.Default._6k
             IconVariant._7kPlus -> Icons.Default._7kPlus
             IconVariant._6kPlus -> Icons.Default._6kPlus
@@ -4244,8 +4244,8 @@ val IconVariant.image: ImageVector
             IconVariant._8mp -> Icons.Default._8mp
             IconVariant._4mp -> Icons.Default._4mp
             IconVariant._9mp -> Icons.Default._9mp
-            IconVariant._6mp -> Icons.Default._6mp
             IconVariant._7mp -> Icons.Default._7mp
+            IconVariant._6mp -> Icons.Default._6mp
             IconVariant.Fluorescent -> Icons.Default.Fluorescent
             IconVariant.Man4 -> Icons.Default.Man4
             IconVariant.RampLeft -> Icons.Default.RampLeft

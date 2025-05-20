@@ -9,7 +9,7 @@ dependencies {
     implementation(libs.kotlin.datetime)
     implementation(libs.kotlin.serialization.json)
     implementation(libs.ooxml)
-    implementation(project(":common:kotlin"))
+    implementation(libs.hnau.kotlin)
     implementation(project(":pinfin:data"))
 }
 

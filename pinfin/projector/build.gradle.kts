@@ -12,8 +12,8 @@ compose.resources {
 kotlin {
     sourceSets {
         commonMain.dependencies {
-            implementation(project(":common:compose"))
-            implementation(project(":common:app"))
+            implementation(libs.hnau.compose)
+            implementation(libs.hnau.app)
             implementation(project(":pinfin:model"))
             implementation(project(":pinfin:data"))
             implementation(compose.components.resources)

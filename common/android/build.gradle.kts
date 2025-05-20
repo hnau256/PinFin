@@ -6,8 +6,8 @@ plugins {
 kotlin {
     sourceSets {
         androidMain.dependencies {
-            implementation(project(":common:app"))
-            implementation(project(":common:compose"))
+            implementation(libs.hnau.app)
+            implementation(libs.hnau.compose)
             implementation(libs.android.datastore)
         }
     }

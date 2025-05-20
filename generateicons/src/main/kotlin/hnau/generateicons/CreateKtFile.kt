@@ -2,8 +2,8 @@ package hnau.generateicons
 
 import arrow.core.NonEmptyList
 import arrow.core.nonEmptyListOf
-import hnau.common.ktgen.KtFile
-import hnau.common.ktgen.generateKt
+import hnau.common.gen.kt.KtFile
+import hnau.common.gen.kt.generateKt
 import java.io.File
 
 internal inline fun createKtFile(
