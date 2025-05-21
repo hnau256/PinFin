@@ -4,7 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import arrow.core.Either
-import hnau.common.app.goback.GlobalGoBackHandlerImpl
+import hnau.common.model.goback.GlobalGoBackHandlerImpl
 import hnau.common.color.material.MaterialHue
 import hnau.common.compose.uikit.HnauTheme
 import hnau.common.compose.utils.ThemeBrightness

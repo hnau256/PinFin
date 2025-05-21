@@ -5,11 +5,11 @@
 package hnau.pinfin.model.transaction.type.utils
 
 import arrow.core.toOption
-import hnau.common.app.EditingString
-import hnau.common.app.goback.GoBackHandler
-import hnau.common.app.goback.GoBackHandlerProvider
-import hnau.common.app.goback.NeverGoBackHandler
-import hnau.common.app.toEditingString
+import hnau.common.model.EditingString
+import hnau.common.model.goback.GoBackHandler
+import hnau.common.model.goback.GoBackHandlerProvider
+import hnau.common.model.goback.NeverGoBackHandler
+import hnau.common.model.toEditingString
 import hnau.common.kotlin.coroutines.combineStateWith
 import hnau.common.kotlin.coroutines.mapState
 import hnau.common.kotlin.coroutines.toMutableStateFlowAsInitial

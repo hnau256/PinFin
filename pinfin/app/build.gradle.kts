@@ -7,7 +7,7 @@ plugins {
 kotlin {
     sourceSets {
         commonMain.dependencies {
-            implementation(libs.hnau.app)
+            implementation(libs.hnau.model)
             implementation(project(":pinfin:model"))
             implementation(libs.kotlin.serialization.json)
         }

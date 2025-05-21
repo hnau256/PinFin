@@ -4,8 +4,8 @@
 
 package hnau.pinfin.model.utils
 
-import hnau.common.app.goback.GoBackHandler
-import hnau.common.app.goback.GoBackHandlerProvider
+import hnau.common.model.goback.GoBackHandler
+import hnau.common.model.goback.GoBackHandlerProvider
 import hnau.common.kotlin.serialization.MutableStateFlowSerializer
 import hnau.shuffler.annotations.Shuffle
 import kotlinx.coroutines.CoroutineScope

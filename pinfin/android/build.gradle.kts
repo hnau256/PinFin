@@ -65,7 +65,7 @@ kotlin {
             implementation(libs.android.appcompat)
             implementation(libs.android.datastore)
             implementation(libs.slf4j.simple)
-            implementation(libs.hnau.app)
+            implementation(libs.hnau.model)
             implementation(libs.hnau.android)
             implementation(libs.hnau.compose)
             implementation(project(":pinfin:app"))

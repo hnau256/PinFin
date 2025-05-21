@@ -5,9 +5,9 @@
 package hnau.pinfin.model.sync.client.list
 
 import arrow.core.Ior
-import hnau.common.app.goback.GoBackHandler
-import hnau.common.app.goback.GoBackHandlerProvider
-import hnau.common.app.goback.NeverGoBackHandler
+import hnau.common.model.goback.GoBackHandler
+import hnau.common.model.goback.GoBackHandlerProvider
+import hnau.common.model.goback.NeverGoBackHandler
 import hnau.common.kotlin.coroutines.toMutableStateFlowAsInitial
 import hnau.common.kotlin.serialization.MutableStateFlowSerializer
 import hnau.pinfin.data.BudgetId

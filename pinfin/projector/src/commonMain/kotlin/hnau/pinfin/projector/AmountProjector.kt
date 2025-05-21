@@ -6,8 +6,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
-import hnau.common.app.EditingString
-import hnau.common.app.toEditingString
+import hnau.common.model.EditingString
+import hnau.common.model.toEditingString
 import hnau.common.compose.uikit.TextInput
 import hnau.common.compose.uikit.table.TableScope
 import hnau.common.compose.uikit.table.cellShape

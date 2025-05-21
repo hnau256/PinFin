@@ -1,7 +1,7 @@
 package hnau.pinfin.model
 
-import hnau.common.app.goback.GoBackHandler
-import hnau.common.app.goback.GoBackHandlerProvider
+import hnau.common.model.goback.GoBackHandler
+import hnau.common.model.goback.GoBackHandlerProvider
 import hnau.common.kotlin.getOrInit
 import hnau.common.kotlin.toAccessor
 import hnau.pinfin.model.loadbudgets.LoadBudgetsModel

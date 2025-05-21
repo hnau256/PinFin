@@ -9,9 +9,9 @@ import arrow.core.NonEmptyList
 import arrow.core.nonEmptyListOf
 import arrow.core.serialization.NonEmptyListSerializer
 import arrow.core.toNonEmptyListOrNull
-import hnau.common.app.goback.GoBackHandler
-import hnau.common.app.goback.GoBackHandlerProvider
-import hnau.common.app.goback.NeverGoBackHandler
+import hnau.common.model.goback.GoBackHandler
+import hnau.common.model.goback.GoBackHandlerProvider
+import hnau.common.model.goback.NeverGoBackHandler
 import hnau.common.kotlin.coroutines.combineStateWith
 import hnau.common.kotlin.coroutines.createChild
 import hnau.common.kotlin.coroutines.flatMapState

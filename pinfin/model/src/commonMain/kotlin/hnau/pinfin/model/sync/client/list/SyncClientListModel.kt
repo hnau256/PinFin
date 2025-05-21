@@ -3,9 +3,9 @@ package hnau.pinfin.model.sync.client.list
 import arrow.core.Ior
 import arrow.core.NonEmptyList
 import arrow.core.toNonEmptyListOrNull
-import hnau.common.app.goback.GoBackHandler
-import hnau.common.app.goback.GoBackHandlerProvider
-import hnau.common.app.goback.NeverGoBackHandler
+import hnau.common.model.goback.GoBackHandler
+import hnau.common.model.goback.GoBackHandlerProvider
+import hnau.common.model.goback.NeverGoBackHandler
 import hnau.common.kotlin.Loadable
 import hnau.common.kotlin.LoadableStateFlow
 import hnau.common.kotlin.coroutines.combineState

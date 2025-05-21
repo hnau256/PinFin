@@ -13,7 +13,7 @@ kotlin {
     sourceSets {
         commonMain.dependencies {
             implementation(libs.hnau.compose)
-            implementation(libs.hnau.app)
+            implementation(libs.hnau.model)
             implementation(project(":pinfin:model"))
             implementation(project(":pinfin:data"))
             implementation(compose.components.resources)

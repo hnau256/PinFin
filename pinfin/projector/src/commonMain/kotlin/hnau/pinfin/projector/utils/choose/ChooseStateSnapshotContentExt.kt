@@ -15,7 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
-import hnau.common.app.EditingString
+import hnau.common.model.EditingString
 import hnau.common.compose.uikit.HnauButton
 import hnau.common.compose.uikit.TextInput
 import hnau.common.compose.uikit.row.ChipsFlowRow

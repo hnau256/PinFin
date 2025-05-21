@@ -1,6 +1,6 @@
 package hnau.pinfin.app
 
-import hnau.common.app.goback.GoBackHandler
+import hnau.common.model.goback.GoBackHandler
 import hnau.common.kotlin.mapper.toMapper
 import hnau.pinfin.model.RootModel
 import hnau.shuffler.annotations.Shuffle

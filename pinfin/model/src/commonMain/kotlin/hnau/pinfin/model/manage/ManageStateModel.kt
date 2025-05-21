@@ -1,6 +1,6 @@
 package hnau.pinfin.model.manage
 
-import hnau.common.app.goback.GoBackHandlerProvider
+import hnau.common.model.goback.GoBackHandlerProvider
 import hnau.pinfin.model.budgetsstack.BudgetsStackModel
 import hnau.pinfin.model.budgetstack.BudgetStackModel
 import kotlinx.serialization.SerialName

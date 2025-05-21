@@ -35,8 +35,8 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import arrow.core.NonEmptyList
-import hnau.common.app.goback.GlobalGoBackHandler
-import hnau.common.app.goback.GoBackHandler
+import hnau.common.model.goback.GlobalGoBackHandler
+import hnau.common.model.goback.GoBackHandler
 import hnau.common.compose.uikit.ContainerStyle
 import hnau.common.compose.uikit.ErrorPanel
 import hnau.common.compose.uikit.HnauButton

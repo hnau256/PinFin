@@ -5,11 +5,11 @@
 package hnau.pinfin.model.manage
 
 import arrow.core.identity
-import hnau.common.app.goback.GoBackHandler
-import hnau.common.app.goback.GoBackHandlerProvider
-import hnau.common.app.preferences.Preference
-import hnau.common.app.preferences.Preferences
-import hnau.common.app.preferences.map
+import hnau.common.model.goback.GoBackHandler
+import hnau.common.model.goback.GoBackHandlerProvider
+import hnau.common.model.preferences.Preference
+import hnau.common.model.preferences.Preferences
+import hnau.common.model.preferences.map
 import hnau.common.kotlin.castOrNull
 import hnau.common.kotlin.coroutines.flatMapState
 import hnau.common.kotlin.coroutines.mapState

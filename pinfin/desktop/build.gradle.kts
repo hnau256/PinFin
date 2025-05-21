@@ -10,7 +10,7 @@ kotlin {
             implementation(libs.slf4j.simple)
             implementation(compose.runtime)
             implementation(libs.hnau.compose)
-            implementation(libs.hnau.app)
+            implementation(libs.hnau.model)
             implementation(project(":pinfin:app"))
             implementation(project(":pinfin:compose"))
             implementation(project(":pinfin:projector"))

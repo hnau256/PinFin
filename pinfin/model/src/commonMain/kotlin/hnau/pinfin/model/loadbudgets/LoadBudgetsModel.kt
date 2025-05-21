@@ -1,8 +1,8 @@
 package hnau.pinfin.model.loadbudgets
 
-import hnau.common.app.goback.GoBackHandlerProvider
-import hnau.common.app.goback.NeverGoBackHandler
-import hnau.common.app.preferences.Preferences
+import hnau.common.model.goback.GoBackHandlerProvider
+import hnau.common.model.goback.NeverGoBackHandler
+import hnau.common.model.preferences.Preferences
 import hnau.common.kotlin.Loadable
 import hnau.common.kotlin.LoadableStateFlow
 import hnau.common.kotlin.coroutines.flatMapState

@@ -1,6 +1,6 @@
 package hnau.pinfin.compose
 
-import hnau.common.app.goback.GlobalGoBackHandler
+import hnau.common.model.goback.GlobalGoBackHandler
 import hnau.common.compose.utils.DynamicColorsGenerator
 import hnau.pinfin.projector.RootProjector
 import hnau.shuffler.annotations.Shuffle

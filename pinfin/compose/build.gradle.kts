@@ -7,7 +7,7 @@ plugins {
 kotlin {
     sourceSets {
         commonMain.dependencies {
-            implementation(libs.hnau.app)
+            implementation(libs.hnau.model)
             implementation(libs.hnau.color)
             implementation(libs.hnau.compose)
             implementation(project(":pinfin:app"))

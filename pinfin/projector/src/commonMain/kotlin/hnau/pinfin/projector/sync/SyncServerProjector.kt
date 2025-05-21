@@ -17,8 +17,8 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import hnau.common.app.goback.GlobalGoBackHandler
-import hnau.common.app.goback.GoBackHandler
+import hnau.common.model.goback.GlobalGoBackHandler
+import hnau.common.model.goback.GoBackHandler
 import hnau.common.compose.uikit.AlertDialogContent
 import hnau.common.compose.uikit.ErrorPanel
 import hnau.common.compose.uikit.utils.Dimens

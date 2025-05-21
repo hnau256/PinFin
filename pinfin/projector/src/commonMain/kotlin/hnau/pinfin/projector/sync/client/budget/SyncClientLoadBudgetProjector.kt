@@ -11,8 +11,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import hnau.common.app.goback.GlobalGoBackHandler
-import hnau.common.app.goback.GoBackHandler
+import hnau.common.model.goback.GlobalGoBackHandler
+import hnau.common.model.goback.GoBackHandler
 import hnau.common.compose.uikit.AlertDialogContent
 import hnau.common.compose.uikit.state.LoadableContent
 import hnau.common.compose.uikit.state.TransitionSpec

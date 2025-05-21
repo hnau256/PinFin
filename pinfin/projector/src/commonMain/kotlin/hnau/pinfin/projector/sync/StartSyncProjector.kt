@@ -19,8 +19,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
-import hnau.common.app.goback.GlobalGoBackHandler
-import hnau.common.app.goback.GoBackHandler
+import hnau.common.model.goback.GlobalGoBackHandler
+import hnau.common.model.goback.GoBackHandler
 import hnau.common.compose.uikit.HnauButton
 import hnau.common.compose.uikit.TextInput
 import hnau.common.compose.uikit.progressindicator.InProgress
