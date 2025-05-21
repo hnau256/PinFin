@@ -16,8 +16,8 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import arrow.core.toNonEmptyListOrNull
-import hnau.common.compose.uikit.utils.Dimens
-import hnau.common.compose.utils.toLazyListState
+import hnau.common.projector.uikit.utils.Dimens
+import hnau.common.projector.utils.toLazyListState
 import hnau.pinfin.model.budget.AnalyticsModel
 import hnau.pinfin.model.utils.budget.state.AccountInfo
 import hnau.pinfin.projector.Res

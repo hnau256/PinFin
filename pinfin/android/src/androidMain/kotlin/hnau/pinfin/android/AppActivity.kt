@@ -8,7 +8,6 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.lifecycle.lifecycleScope
-import hnau.common.android.AndroidDynamicColorsGenerator
 import hnau.pinfin.compose.AppContentDependencies
 import hnau.pinfin.compose.Content
 import hnau.pinfin.compose.impl
@@ -39,9 +38,7 @@ class AppActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         initOnBackPressedDispatcherCallback()
-        val dependencies = AppContentDependencies.impl(
-            dynamicColorsGenerator = AndroidDynamicColorsGenerator.createIfSupported(),
-        )
+        val dependencies = AppContentDependencies.impl()
         setContent {
             viewModel.app.Content(
                 dependencies = dependencies,

@@ -8,10 +8,10 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.key
 import androidx.compose.ui.util.fastForEach
 import arrow.core.NonEmptyList
-import hnau.common.compose.uikit.ContainerStyle
-import hnau.common.compose.uikit.HnauButton
-import hnau.common.compose.uikit.TripleRow
-import hnau.common.compose.utils.Icon
+import hnau.common.projector.uikit.ContainerStyle
+import hnau.common.projector.uikit.HnauButton
+import hnau.common.projector.uikit.TripleRow
+import hnau.common.projector.utils.Icon
 import hnau.common.kotlin.coroutines.mapNonEmptyListReusable
 import hnau.pinfin.model.transaction.type.entry.EntryModel
 import hnau.pinfin.model.transaction.type.entry.record.RecordId

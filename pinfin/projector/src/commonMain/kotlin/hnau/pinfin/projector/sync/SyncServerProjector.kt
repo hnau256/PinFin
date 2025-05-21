@@ -19,10 +19,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import hnau.common.model.goback.GlobalGoBackHandler
 import hnau.common.model.goback.GoBackHandler
-import hnau.common.compose.uikit.AlertDialogContent
-import hnau.common.compose.uikit.ErrorPanel
-import hnau.common.compose.uikit.utils.Dimens
-import hnau.common.compose.utils.NavigationIcon
+import hnau.common.projector.uikit.AlertDialogContent
+import hnau.common.projector.uikit.ErrorPanel
+import hnau.common.projector.uikit.utils.Dimens
+import hnau.common.projector.utils.NavigationIcon
 import hnau.pinfin.model.sync.server.SyncServerModel
 import hnau.pinfin.projector.Res
 import hnau.pinfin.projector.addresses_to_connect

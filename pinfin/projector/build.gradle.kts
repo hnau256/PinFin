@@ -12,7 +12,7 @@ compose.resources {
 kotlin {
     sourceSets {
         commonMain.dependencies {
-            implementation(libs.hnau.compose)
+            implementation(libs.hnau.projector)
             implementation(libs.hnau.model)
             implementation(project(":pinfin:model"))
             implementation(project(":pinfin:data"))

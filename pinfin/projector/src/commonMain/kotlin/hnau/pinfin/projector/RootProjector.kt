@@ -4,9 +4,9 @@ import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
-import hnau.common.compose.uikit.bubble.BubblesShower
-import hnau.common.compose.uikit.bubble.Content
-import hnau.common.compose.uikit.bubble.SharedBubblesHolder
+import hnau.common.projector.uikit.bubble.BubblesShower
+import hnau.common.projector.uikit.bubble.Content
+import hnau.common.projector.uikit.bubble.SharedBubblesHolder
 import hnau.pinfin.model.RootModel
 import hnau.pinfin.projector.utils.formatter.AmountFormatter
 import hnau.pinfin.projector.utils.formatter.datetime.DateTimeFormatter

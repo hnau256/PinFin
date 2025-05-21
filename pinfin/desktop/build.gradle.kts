@@ -9,7 +9,7 @@ kotlin {
         commonMain.dependencies {
             implementation(libs.slf4j.simple)
             implementation(compose.runtime)
-            implementation(libs.hnau.compose)
+            implementation(libs.hnau.projector)
             implementation(libs.hnau.model)
             implementation(project(":pinfin:app"))
             implementation(project(":pinfin:compose"))

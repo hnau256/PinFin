@@ -7,15 +7,15 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
-import hnau.common.compose.uikit.ContainerStyle
-import hnau.common.compose.uikit.HnauButton
-import hnau.common.compose.uikit.table.CellBox
-import hnau.common.compose.uikit.table.Subtable
-import hnau.common.compose.uikit.table.Table
-import hnau.common.compose.uikit.table.TableOrientation
-import hnau.common.compose.uikit.table.TableScope
-import hnau.common.compose.uikit.table.cellShape
-import hnau.common.compose.uikit.utils.Dimens
+import hnau.common.projector.uikit.ContainerStyle
+import hnau.common.projector.uikit.HnauButton
+import hnau.common.projector.uikit.table.CellBox
+import hnau.common.projector.uikit.table.Subtable
+import hnau.common.projector.uikit.table.Table
+import hnau.common.projector.uikit.table.TableOrientation
+import hnau.common.projector.uikit.table.TableScope
+import hnau.common.projector.uikit.table.cellShape
+import hnau.common.projector.uikit.utils.Dimens
 
 @Composable
 fun Dialog(

@@ -10,7 +10,7 @@ import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
 import androidx.compose.ui.window.rememberWindowState
 import hnau.common.model.preferences.impl.FileBasedPreferences
-import hnau.common.compose.utils.ThemeBrightness
+import hnau.common.projector.utils.ThemeBrightness
 import hnau.pinfin.app.PinFinApp
 import hnau.pinfin.app.SavedState
 import hnau.pinfin.app.impl

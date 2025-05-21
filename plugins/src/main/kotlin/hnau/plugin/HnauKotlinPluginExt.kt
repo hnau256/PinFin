@@ -93,7 +93,7 @@ internal fun Project.config(
                     implementation(composeDependencies.foundation)
                     implementation(composeDependencies.material3)
                     implementation(composeDependencies.materialIconsExtended)
-                    implementation(versions.findLibrary("hnau-compose").get().get())
+                    implementation(versions.findLibrary("hnau-projector").get().get())
                 }
                 if (hasKspPlugin) {
                     implementation(versions.findLibrary("shuffler-annotations").get().get())

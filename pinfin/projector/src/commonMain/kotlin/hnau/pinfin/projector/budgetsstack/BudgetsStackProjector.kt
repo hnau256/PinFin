@@ -1,8 +1,8 @@
 package hnau.pinfin.projector.budgetsstack
 
 import androidx.compose.runtime.Composable
-import hnau.common.compose.projector.stack.Content
-import hnau.common.compose.projector.stack.StackProjectorTail
+import hnau.common.projector.stack.Content
+import hnau.common.projector.stack.StackProjectorTail
 import hnau.pinfin.model.budgetsstack.BudgetsStackElementModel
 import hnau.pinfin.model.budgetsstack.BudgetsStackModel
 import hnau.pinfin.projector.budgetslist.BudgetsListProjector

@@ -4,8 +4,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
-import hnau.common.compose.uikit.state.LoadableContent
-import hnau.common.compose.uikit.state.TransitionSpec
+import hnau.common.projector.uikit.state.LoadableContent
+import hnau.common.projector.uikit.state.TransitionSpec
 import hnau.common.kotlin.Loadable
 import hnau.common.kotlin.coroutines.mapWithScope
 import hnau.common.kotlin.map

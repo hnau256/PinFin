@@ -6,11 +6,11 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Shape
-import hnau.common.compose.uikit.ContainerStyle
-import hnau.common.compose.uikit.HnauButton
-import hnau.common.compose.uikit.TripleRow
-import hnau.common.compose.uikit.shape.HnauShape
-import hnau.common.compose.utils.Icon
+import hnau.common.projector.uikit.ContainerStyle
+import hnau.common.projector.uikit.HnauButton
+import hnau.common.projector.uikit.TripleRow
+import hnau.common.projector.uikit.shape.HnauShape
+import hnau.common.projector.utils.Icon
 import hnau.pinfin.model.utils.budget.state.CategoryInfo
 import hnau.pinfin.projector.Res
 import hnau.pinfin.projector.category

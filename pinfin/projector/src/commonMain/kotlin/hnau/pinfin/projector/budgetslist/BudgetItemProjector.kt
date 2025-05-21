@@ -13,11 +13,11 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import hnau.common.compose.uikit.progressindicator.InProgress
-import hnau.common.compose.uikit.table.Table
-import hnau.common.compose.uikit.table.TableOrientation
-import hnau.common.compose.uikit.table.cellShape
-import hnau.common.compose.uikit.utils.Dimens
+import hnau.common.projector.uikit.progressindicator.InProgress
+import hnau.common.projector.uikit.table.Table
+import hnau.common.projector.uikit.table.TableOrientation
+import hnau.common.projector.uikit.table.cellShape
+import hnau.common.projector.uikit.utils.Dimens
 import hnau.pinfin.model.budgetslist.item.BudgetItemModel
 import hnau.pinfin.projector.utils.BidgetInfoContent
 import hnau.shuffler.annotations.Shuffle

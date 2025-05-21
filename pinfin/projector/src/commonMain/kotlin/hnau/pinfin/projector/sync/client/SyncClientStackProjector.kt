@@ -1,8 +1,8 @@
 package hnau.pinfin.projector.sync.client
 
 import androidx.compose.runtime.Composable
-import hnau.common.compose.projector.stack.Content
-import hnau.common.compose.projector.stack.StackProjectorTail
+import hnau.common.projector.stack.Content
+import hnau.common.projector.stack.StackProjectorTail
 import hnau.pinfin.model.sync.client.SyncClientStackElementModel
 import hnau.pinfin.model.sync.client.SyncClientStackModel
 import hnau.pinfin.projector.sync.client.budget.SyncClientLoadBudgetProjector
