@@ -4,6 +4,17 @@
 
 package hnau.pinfin.model.sync.start
 
+import hnau.common.kotlin.coroutines.InProgressRegistry
+import hnau.common.kotlin.coroutines.combineState
+import hnau.common.kotlin.coroutines.filterSet
+import hnau.common.kotlin.coroutines.mapState
+import hnau.common.kotlin.coroutines.toMutableStateFlowAsInitial
+import hnau.common.kotlin.mapper.Mapper
+import hnau.common.kotlin.mapper.nullable
+import hnau.common.kotlin.mapper.plus
+import hnau.common.kotlin.mapper.stringToInt
+import hnau.common.kotlin.mapper.takeIf
+import hnau.common.kotlin.serialization.MutableStateFlowSerializer
 import hnau.common.model.EditingString
 import hnau.common.model.goback.GoBackHandler
 import hnau.common.model.goback.GoBackHandlerProvider
@@ -11,16 +22,8 @@ import hnau.common.model.goback.NeverGoBackHandler
 import hnau.common.model.preferences.Preference
 import hnau.common.model.preferences.Preferences
 import hnau.common.model.preferences.map
+import hnau.common.model.preferences.withDefault
 import hnau.common.model.toEditingString
-import hnau.common.kotlin.coroutines.InProgressRegistry
-import hnau.common.kotlin.coroutines.combineState
-import hnau.common.kotlin.coroutines.filterSet
-import hnau.common.kotlin.coroutines.mapState
-import hnau.common.kotlin.coroutines.toMutableStateFlowAsInitial
-import hnau.common.kotlin.mapper.Mapper
-import hnau.common.kotlin.mapper.plus
-import hnau.common.kotlin.mapper.stringToInt
-import hnau.common.kotlin.serialization.MutableStateFlowSerializer
 import hnau.pinfin.model.sync.SyncModeOpener
 import hnau.pinfin.model.sync.utils.ServerAddress
 import hnau.pinfin.model.sync.utils.ServerPort
@@ -52,11 +55,13 @@ class StartSyncModel(
             scope = scope,
             mapper = Mapper(::ServerAddress, ServerAddress::address),
         )
+        .withDefault(
+            scope = scope,
+        ) { ServerAddress("") }
 
-    val serverAddressPlaceholder: ServerAddress? = serverAddressPreference
+    val serverAddressPlaceholder: ServerAddress = serverAddressPreference
         .value
         .value
-        .getOrNull()
 
     private val portPreference: Preference<ServerPort> = dependencies
         .preferences["sync_port"]
@@ -64,12 +69,13 @@ class StartSyncModel(
             scope = scope,
             mapper = Mapper.stringToInt + Mapper(::ServerPort, ServerPort::port),
         )
+        .withDefault(
+            scope = scope,
+        ) { ServerPort.default }
 
     val portPlaceholder: ServerPort = portPreference
         .value
         .value
-        .getOrNull()
-        ?: ServerPort.default
 
     private val inProgressRegistry = InProgressRegistry()
 

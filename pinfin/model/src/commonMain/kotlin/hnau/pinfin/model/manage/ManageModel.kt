@@ -24,6 +24,7 @@ import hnau.common.kotlin.mapper.takeIf
 import hnau.common.kotlin.serialization.MutableStateFlowSerializer
 import hnau.common.kotlin.shrinkType
 import hnau.common.kotlin.toAccessor
+import hnau.common.model.preferences.withDefault
 import hnau.pinfin.data.BudgetId
 import hnau.pinfin.model.IconModel
 import hnau.pinfin.model.budgetsstack.BudgetsStackModel
@@ -79,6 +80,9 @@ class ManageModel(
                 restore = { "" }
             ) + BudgetId.stringMapper.nullable,
         )
+        .withDefault(
+            scope = scope,
+        ) { null }
 
     private data class DeferredBudgetRepositoryWrapper(
         val id: BudgetId,
@@ -109,8 +113,8 @@ class ManageModel(
         .value
         .scopedInState(scope)
         .flatMapState(scope) { (selectedScope, selectedOrNone) ->
-            val selected = selectedOrNone.getOrNull()
-            when (selected) {
+            val selected = selectedOrNone
+            when (selectedOrNone) {
                 null -> null.toMutableStateFlowAsInitial()
                 else -> budgetRepositories.mapState(
                     scope = selectedScope,

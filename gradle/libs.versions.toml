@@ -66,7 +66,7 @@ shuffler-processor = { module = "hnau.shuffler:processor", version.ref = "shuffl
 #hnau
 hnau-kotlin = { module = "com.github.hnau256:common-kotlin", version = "1.0.0" }
 hnau-gen-kt = { module = "com.github.hnau256:common-gen-kt", version = "1.0.0" }
-hnau-model = { module = "com.github.hnau256:common-model", version = "1.0.2" }
+hnau-model = { module = "com.github.hnau256:common-model", version = "1.0.3" }
 hnau-projector = { module = "com.github.hnau256:common-projector", version = "1.0.7" }
 #other
 ooxml = { module = "org.apache.poi:poi-ooxml", version.ref = "ooxml" }
