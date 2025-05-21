@@ -70,5 +70,6 @@ hnau-kotlin = { module = "com.github.hnau256:common-kotlin", version = "1.0.0" }
 hnau-gen-kt = { module = "com.github.hnau256:common-gen-kt", version = "1.0.0" }
 hnau-app = { module = "com.github.hnau256:common-app", version = "1.0.0" }
 hnau-color = { module = "com.github.hnau256:common-color", version = "1.0.2" }
-hnau-compose = { module = "com.github.hnau256:common-compose", version = "1.0.0" }
+hnau-compose = { module = "com.github.hnau256:common-compose", version = "1.0.2" }
+hnau-android = { module = "com.github.hnau256:common-android", version = "1.0.0" }
 
