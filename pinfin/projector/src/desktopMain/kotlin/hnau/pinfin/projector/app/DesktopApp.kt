@@ -18,14 +18,14 @@ import kotlinx.coroutines.runBlocking
 
 @OptIn(InternalComposeApi::class)
 fun main() = runBlocking {
-    /*val app = DesktopApp(
+    val app = DesktopApp(
         scope = this,
         seed = createPinFinAppSeed(),
     )
     val projector = createAppProjector(
         scope = this,
         model = app,
-    )*/
+    )
     application {
         val scale = 2f
         Window(
@@ -40,9 +40,7 @@ fun main() = runBlocking {
             CompositionLocalProvider(
                 LocalDensity provides Density(scale),
             ) {
-
-                Text("QWERTY")
-                //projector.Content()
+                projector.Content()
             }
         }
     }
