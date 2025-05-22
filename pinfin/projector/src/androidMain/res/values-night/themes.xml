@@ -1,8 +1,0 @@
-<resources>
-
-    <style name="Theme.pinfin.NightBase" parent="Theme.pinfin.Base">
-        <item name="android:windowBackground">@color/background_night</item>
-    </style>
-
-    <style name="Theme.pinfin" parent="Theme.pinfin.NightBase" />
-</resources>

@@ -1,0 +1,32 @@
+package hnau.pinfin.app
+
+import hnau.common.model.app.AppModel
+import hnau.common.model.goback.GlobalGoBackHandler
+import hnau.common.projector.app.AppProjector
+import hnau.pinfin.model.RootModel
+import hnau.pinfin.projector.RootProjector
+import kotlinx.coroutines.CoroutineScope
+
+fun createAppProjector(
+    scope: CoroutineScope,
+    model: AppModel<RootModel, RootModel.Skeleton>,
+): AppProjector<RootModel, RootModel.Skeleton, RootProjector> = AppProjector(
+    scope = scope,
+    model = model,
+    createProjector = { scope, model, globalGoBackHandler ->
+        RootProjector(
+            scope = scope,
+            model = model,
+            dependencies = createRootProjectorDependencies(
+                globalGoBackHandler = globalGoBackHandler,
+            ),
+        )
+    },
+    content = { rootProjector ->
+        rootProjector.Content()
+    }
+)
+
+expect fun createRootProjectorDependencies(
+    globalGoBackHandler: GlobalGoBackHandler,
+): RootProjector.Dependencies
