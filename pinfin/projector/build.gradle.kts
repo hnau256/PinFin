@@ -84,3 +84,9 @@ kotlin {
         }
     }
 }
+
+compose.desktop {
+    application {
+        mainClass = "hnau.pinfin.projector.app.DesktopAppKt"
+    }
+}

@@ -9,15 +9,13 @@ import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.lifecycle.lifecycleScope
 import hnau.common.model.app.AppViewModel
-import hnau.common.projector.app.AppProjector
 import hnau.pinfin.model.RootModel
 import hnau.pinfin.model.createPinFinAppSeed
-import hnau.pinfin.projector.RootProjector
+import hnau.pinfin.projector.createAppProjector
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
-import hnau.pinfin.projector.createRootProjectorDependencies
 
 class AppActivity : ComponentActivity() {
 
@@ -36,21 +34,9 @@ class AppActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         initOnBackPressedDispatcherCallback()
-        val projector = AppProjector(
+        val projector = createAppProjector(
             scope = lifecycleScope,
             model = viewModel.appModel,
-            createProjector = {scope, model, globalGoBackHandler ->
-                RootProjector(
-                    scope = scope,
-                    model = model,
-                    dependencies = createRootProjectorDependencies(
-                        globalGoBackHandler = globalGoBackHandler,
-                    ),
-                )
-            },
-            content = {
-                it.Content()
-            }
         )
         setContent {
             projector.Content()

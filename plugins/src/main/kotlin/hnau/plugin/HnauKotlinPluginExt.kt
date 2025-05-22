@@ -62,7 +62,7 @@ internal fun Project.config(
                 .languageVersion
                 .set(JavaLanguageVersion.of(javaVersionString.dropWhile { !it.isDigit() }))
         }
-        extension.jvm {
+        extension.jvm("desktop") {
             compilations.configureEach { jvmCompilation ->
                 jvmCompilation.kotlinOptions {
                     jvmTarget = javaVersion.toString()
@@ -70,7 +70,7 @@ internal fun Project.config(
             }
         }
         if (hasComposePlugin) {
-            extension.sourceSets.getByName("jvmMain").apply {
+            extension.sourceSets.getByName("desktopMain").apply {
                 dependencies {
                     val composeDependencies = ComposePlugin.Dependencies(project)
                     implementation(composeDependencies.desktop.currentOs)
@@ -106,7 +106,7 @@ internal fun Project.config(
     if (hasKspPlugin) {
         val kspProcessor = versions.findLibrary("shuffler-processor").get().get()
         dependencies.add("kspCommonMainMetadata", kspProcessor)
-        dependencies.add("kspJvm", kspProcessor)
+        dependencies.add("kspDesktop", kspProcessor)
         //dependencies.add("kspJvmTest", kspProcessor)
         if (useAndroid) {
             dependencies.add("kspAndroid", kspProcessor)
