@@ -8,8 +8,8 @@ kotlin {
     sourceSets {
         commonMain.dependencies {
             implementation(libs.hnau.model)
+            implementation(libs.hnau.projector)
             implementation(project(":pinfin:model"))
-            implementation(libs.kotlin.serialization.json)
         }
     }
 }

@@ -21,6 +21,8 @@ class RootModel(
     interface Dependencies {
 
         fun loadBudgets(): LoadBudgetsModel.Dependencies
+
+        companion object
     }
 
     @Serializable
