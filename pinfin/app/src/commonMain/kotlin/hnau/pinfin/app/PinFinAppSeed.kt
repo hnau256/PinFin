@@ -16,7 +16,7 @@ fun createPinFinAppSeed(): AppSeed<RootModel, RootModel.Skeleton> = AppSeed(
     createModel = { scope, appContext, skeleton ->
         RootModel(
             scope = scope,
-            dependencies = createRootModelDependencies(
+            dependencies = RootModel.Dependencies.impl(
                 preferencesFactory = FileBasedPreferences.Factory(
                     preferencesFile = File(appContext.filesDir, "preferences.txt"),
                 ),

@@ -1,7 +1,7 @@
 plugins {
     alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.ksp)
-    id("hnau.kotlin.multiplatform")
+    id("hnau.android.lib")
 }
 
 kotlin {
@@ -16,5 +16,11 @@ kotlin {
                 implementation(libs.kotlin.serialization.cbor)
             }
         }
+        androidMain
+        desktopMain
     }
+}
+
+dependencies {
+    add("kspCommonMainMetadata", libs.pipe.processor)
 }

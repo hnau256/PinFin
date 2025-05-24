@@ -2,7 +2,7 @@ plugins {
     alias(libs.plugins.compose.desktop)
     alias(libs.plugins.composeMultiplatform)
     alias(libs.plugins.ksp)
-    id("hnau.kotlin.multiplatform")
+    id("hnau.android.lib")
 }
 
 compose.resources {

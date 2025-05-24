@@ -1,6 +1,6 @@
 plugins {
     alias(libs.plugins.kotlin.serialization)
-    id("hnau.kotlin.multiplatform")
+    id("hnau.android.lib")
 }
 
 kotlin {
