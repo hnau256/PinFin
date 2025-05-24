@@ -2,7 +2,7 @@ package hnau.pinfin.projector.utils
 
 import androidx.compose.runtime.Composable
 import hnau.pinfin.model.utils.TemplateModel
-import hnau.shuffler.annotations.Shuffle
+import hnau.pipe.annotations.Pipe
 import kotlinx.coroutines.CoroutineScope
 
 class TemplateProjector(
@@ -11,7 +11,7 @@ class TemplateProjector(
     dependencies: Dependencies,
 ) {
 
-    @Shuffle
+    @Pipe
     interface Dependencies {
 
     }

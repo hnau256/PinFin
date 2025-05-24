@@ -11,7 +11,7 @@ import hnau.pinfin.model.RootModel
 import hnau.pinfin.projector.utils.formatter.AmountFormatter
 import hnau.pinfin.projector.utils.formatter.datetime.DateTimeFormatter
 import hnau.pinfin.projector.utils.formatter.datetime.JavaDateTimeFormatter
-import hnau.shuffler.annotations.Shuffle
+import hnau.pipe.annotations.Pipe
 import kotlinx.coroutines.CoroutineScope
 
 class RootProjector(
@@ -20,7 +20,7 @@ class RootProjector(
     model: RootModel,
 ) {
 
-    @Shuffle
+    @Pipe
     interface Dependencies {
 
         fun loadBudgets(

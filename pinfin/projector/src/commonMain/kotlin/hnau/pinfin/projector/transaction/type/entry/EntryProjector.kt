@@ -7,7 +7,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import hnau.common.projector.uikit.utils.Dimens
 import hnau.pinfin.model.transaction.type.entry.EntryModel
-import hnau.shuffler.annotations.Shuffle
+import hnau.pipe.annotations.Pipe
 import kotlinx.coroutines.CoroutineScope
 
 class EntryProjector(
@@ -16,7 +16,7 @@ class EntryProjector(
     private val dependencies: Dependencies,
 ) {
 
-    @Shuffle
+    @Pipe
     interface Dependencies {
 
         fun header(): EntryProjectorHeaderDelegate.Dependencies

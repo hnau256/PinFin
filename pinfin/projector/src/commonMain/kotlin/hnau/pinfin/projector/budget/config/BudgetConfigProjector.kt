@@ -47,7 +47,7 @@ import hnau.pinfin.projector.no
 import hnau.pinfin.projector.remove_budget
 import hnau.pinfin.projector.to_budgets_list
 import hnau.pinfin.projector.yes
-import hnau.shuffler.annotations.Shuffle
+import hnau.pipe.annotations.Pipe
 import kotlinx.coroutines.CoroutineScope
 import org.jetbrains.compose.resources.StringResource
 import org.jetbrains.compose.resources.stringResource
@@ -58,7 +58,7 @@ class BudgetConfigProjector(
     dependencies: Dependencies,
 ) {
 
-    @Shuffle
+    @Pipe
     interface Dependencies
 
     @Composable

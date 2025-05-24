@@ -16,7 +16,7 @@ import hnau.common.kotlin.serialization.MutableStateFlowSerializer
 import hnau.pinfin.model.budget.BudgetModel
 import hnau.pinfin.model.transaction.TransactionModel
 import hnau.pinfin.model.utils.budget.repository.BudgetRepository
-import hnau.shuffler.annotations.Shuffle
+import hnau.pipe.annotations.Pipe
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -35,10 +35,10 @@ class BudgetStackModel(
             MutableStateFlow(NonEmptyStack(BudgetStackElementModel.Skeleton.Budget())),
     )
 
-    @Shuffle
+    @Pipe
     interface Dependencies {
 
-        @Shuffle
+        @Pipe
         interface WithOpeners {
 
             fun budget(): BudgetModel.Dependencies

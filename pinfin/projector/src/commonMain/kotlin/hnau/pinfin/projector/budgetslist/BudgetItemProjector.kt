@@ -20,7 +20,7 @@ import hnau.common.projector.uikit.table.cellShape
 import hnau.common.projector.uikit.utils.Dimens
 import hnau.pinfin.model.budgetslist.item.BudgetItemModel
 import hnau.pinfin.projector.utils.BidgetInfoContent
-import hnau.shuffler.annotations.Shuffle
+import hnau.pipe.annotations.Pipe
 import kotlinx.coroutines.CoroutineScope
 
 class BudgetItemProjector(
@@ -29,7 +29,7 @@ class BudgetItemProjector(
     dependencies: Dependencies,
 ) {
 
-    @Shuffle
+    @Pipe
     interface Dependencies
 
     @Composable

@@ -19,7 +19,7 @@ import hnau.common.projector.uikit.table.TableOrientation
 import hnau.common.projector.utils.Icon
 import hnau.pinfin.model.sync.client.list.SyncClientListItemModel
 import hnau.pinfin.projector.utils.BidgetInfoContent
-import hnau.shuffler.annotations.Shuffle
+import hnau.pipe.annotations.Pipe
 import kotlinx.coroutines.CoroutineScope
 
 class SyncClientListItemProjector(
@@ -28,7 +28,7 @@ class SyncClientListItemProjector(
     dependencies: Dependencies,
 ) {
 
-    @Shuffle
+    @Pipe
     interface Dependencies
 
     @Composable

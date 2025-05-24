@@ -21,7 +21,7 @@ import hnau.pinfin.model.utils.budget.repository.BudgetRepository
 import hnau.pinfin.model.utils.budget.state.BudgetInfo
 import hnau.pinfin.model.utils.budget.storage.BudgetsStorage
 import hnau.pinfin.model.utils.budget.upchain.UpchainHash
-import hnau.shuffler.annotations.Shuffle
+import hnau.pipe.annotations.Pipe
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -35,7 +35,7 @@ class SyncClientListModel(
     skeleton: Skeleton,
 ) : GoBackHandlerProvider {
 
-    @Shuffle
+    @Pipe
     interface Dependencies {
 
         val tcpSyncClient: TcpSyncClient

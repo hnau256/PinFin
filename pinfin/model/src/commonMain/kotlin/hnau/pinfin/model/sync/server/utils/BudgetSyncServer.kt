@@ -9,7 +9,7 @@ import hnau.pinfin.model.utils.budget.upchain.UpchainHash
 import hnau.pinfin.model.utils.budget.upchain.Update
 import hnau.pinfin.model.utils.budget.upchain.plus
 import hnau.pinfin.model.utils.budget.upchain.utils.UpchainSyncConstants
-import hnau.shuffler.annotations.Shuffle
+import hnau.pipe.annotations.Pipe
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 
@@ -17,7 +17,7 @@ class BudgetSyncServer(
     private val dependencies: Dependencies,
 ) {
 
-    @Shuffle
+    @Pipe
     interface Dependencies {
 
         val budgetRepository: BudgetRepository

@@ -23,7 +23,7 @@ import hnau.pinfin.model.transaction.TransactionModel
 import hnau.pinfin.projector.Res
 import hnau.pinfin.projector.cancel
 import hnau.pinfin.projector.save
-import hnau.shuffler.annotations.Shuffle
+import hnau.pipe.annotations.Pipe
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.datetime.Instant
 import kotlinx.datetime.TimeZone
@@ -39,7 +39,7 @@ class TransactionProjectorMainInfoDateDelegate(
     private val dependencies: Dependencies,
 ) {
 
-    @Shuffle
+    @Pipe
     interface Dependencies
 
     @OptIn(ExperimentalMaterial3Api::class)

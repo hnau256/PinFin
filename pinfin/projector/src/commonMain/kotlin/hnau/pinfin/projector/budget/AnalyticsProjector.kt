@@ -25,7 +25,7 @@ import hnau.pinfin.projector.accounts
 import hnau.pinfin.projector.utils.formatter.AmountFormatter
 import hnau.pinfin.projector.utils.SignedAmountContent
 import hnau.pinfin.projector.utils.account.AccountContent
-import hnau.shuffler.annotations.Shuffle
+import hnau.pipe.annotations.Pipe
 import kotlinx.coroutines.CoroutineScope
 import org.jetbrains.compose.resources.stringResource
 
@@ -35,7 +35,7 @@ class AnalyticsProjector(
     private val dependencies: Dependencies,
 ) {
 
-    @Shuffle
+    @Pipe
     interface Dependencies {
 
         val amountFormatter: AmountFormatter

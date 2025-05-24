@@ -23,7 +23,7 @@ import hnau.pinfin.model.utils.budget.repository.DemoBudget
 import hnau.pinfin.model.utils.budget.storage.BudgetsStorage
 import hnau.pinfin.model.utils.budget.storage.addUpdates
 import hnau.pinfin.model.utils.budget.storage.createNewBudgetIfNotExistsAndGet
-import hnau.shuffler.annotations.Shuffle
+import hnau.pipe.annotations.Pipe
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.cancel
@@ -39,7 +39,7 @@ class BudgetsListModel(
     private val skeleton: Skeleton,
 ) : GoBackHandlerProvider {
 
-    @Shuffle
+    @Pipe
     interface Dependencies {
 
         val syncOpener: SyncOpener

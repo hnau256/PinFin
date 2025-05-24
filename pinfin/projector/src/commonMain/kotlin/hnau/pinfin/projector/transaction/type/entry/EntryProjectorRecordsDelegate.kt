@@ -18,7 +18,7 @@ import hnau.pinfin.model.transaction.type.entry.record.RecordId
 import hnau.pinfin.projector.Res
 import hnau.pinfin.projector.add_record
 import hnau.pinfin.projector.transaction.type.entry.record.RecordProjector
-import hnau.shuffler.annotations.Shuffle
+import hnau.pipe.annotations.Pipe
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.StateFlow
 import org.jetbrains.compose.resources.stringResource
@@ -29,7 +29,7 @@ class EntryProjectorRecordsDelegate(
     dependencies: Dependencies,
 ) {
 
-    @Shuffle
+    @Pipe
     interface Dependencies {
 
         fun record(): RecordProjector.Dependencies

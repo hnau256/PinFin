@@ -96,7 +96,7 @@ internal fun Project.config(
                     implementation(versions.findLibrary("hnau-projector").get().get())
                 }
                 if (hasKspPlugin) {
-                    implementation(versions.findLibrary("shuffler-annotations").get().get())
+                    implementation(versions.findLibrary("pipe-annotations").get().get())
                 }
                 implementation(versions.findLibrary("hnau-kotlin").get().get())
             }
@@ -104,7 +104,7 @@ internal fun Project.config(
     }
 
     if (hasKspPlugin) {
-        val kspProcessor = versions.findLibrary("shuffler-processor").get().get()
+        val kspProcessor = versions.findLibrary("pipe-processor").get().get()
         dependencies.add("kspCommonMainMetadata", kspProcessor)
         dependencies.add("kspDesktop", kspProcessor)
         //dependencies.add("kspJvmTest", kspProcessor)

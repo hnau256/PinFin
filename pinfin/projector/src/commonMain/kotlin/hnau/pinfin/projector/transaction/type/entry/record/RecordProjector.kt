@@ -7,7 +7,7 @@ import hnau.common.projector.uikit.state.TransitionSpec
 import hnau.common.kotlin.coroutines.mapWithScope
 import hnau.pinfin.model.transaction.type.entry.record.RecordModel
 import hnau.pinfin.projector.transaction.type.utils.ChooseCategoryProjector
-import hnau.shuffler.annotations.Shuffle
+import hnau.pipe.annotations.Pipe
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.StateFlow
 
@@ -17,7 +17,7 @@ class RecordProjector(
     private val dependencies: Dependencies,
 ) {
 
-    @Shuffle
+    @Pipe
     interface Dependencies {
 
         fun mainDelegate(): RecordProjectorMainDelegate.Dependencies

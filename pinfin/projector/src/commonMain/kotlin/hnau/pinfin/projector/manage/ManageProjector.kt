@@ -12,7 +12,7 @@ import hnau.pinfin.model.manage.ManageStateModel
 import hnau.pinfin.projector.IconProjector
 import hnau.pinfin.projector.budgetsstack.BudgetsStackProjector
 import hnau.pinfin.projector.budgetstack.BudgetStackProjector
-import hnau.shuffler.annotations.Shuffle
+import hnau.pipe.annotations.Pipe
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.StateFlow
 
@@ -22,7 +22,7 @@ class ManageProjector(
     dependencies: Dependencies,
 ) {
 
-    @Shuffle
+    @Pipe
     interface Dependencies {
 
         fun budgetsStack(): BudgetsStackProjector.Dependencies

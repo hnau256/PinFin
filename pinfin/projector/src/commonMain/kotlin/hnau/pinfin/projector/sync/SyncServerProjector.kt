@@ -32,7 +32,7 @@ import hnau.pinfin.projector.stop_sync_server
 import hnau.pinfin.projector.sync_server
 import hnau.pinfin.projector.sync_server_is_active
 import hnau.pinfin.projector.yes
-import hnau.shuffler.annotations.Shuffle
+import hnau.pipe.annotations.Pipe
 import kotlinx.coroutines.CoroutineScope
 import org.jetbrains.compose.resources.stringResource
 
@@ -42,7 +42,7 @@ class SyncServerProjector(
     dependencies: Dependencies,
 ) {
 
-    @Shuffle
+    @Pipe
     interface Dependencies {
 
         val globalGoBackHandler: GlobalGoBackHandler

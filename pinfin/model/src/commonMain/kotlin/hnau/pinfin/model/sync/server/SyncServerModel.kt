@@ -11,7 +11,7 @@ import hnau.common.kotlin.serialization.MutableStateFlowSerializer
 import hnau.pinfin.model.sync.server.utils.ServerSyncApi
 import hnau.pinfin.model.sync.server.utils.tcpSyncServer
 import hnau.pinfin.model.sync.utils.ServerPort
-import hnau.shuffler.annotations.Shuffle
+import hnau.pipe.annotations.Pipe
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -30,7 +30,7 @@ class SyncServerModel(
     private val goBack: () -> Unit,
 ) : GoBackHandlerProvider {
 
-    @Shuffle
+    @Pipe
     interface Dependencies {
 
         fun serverSyncApi(): ServerSyncApi.Dependencies

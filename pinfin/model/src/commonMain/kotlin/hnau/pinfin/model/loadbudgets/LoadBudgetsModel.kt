@@ -13,7 +13,7 @@ import hnau.common.kotlin.map
 import hnau.common.kotlin.toAccessor
 import hnau.pinfin.model.manage.ManageModel
 import hnau.pinfin.model.utils.budget.storage.BudgetsStorage
-import hnau.shuffler.annotations.Shuffle
+import hnau.pipe.annotations.Pipe
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
@@ -26,7 +26,7 @@ class LoadBudgetsModel(
     skeleton: Skeleton,
 ) : GoBackHandlerProvider {
 
-    @Shuffle
+    @Pipe
     interface Dependencies {
 
         val preferencesFactory: Preferences.Factory

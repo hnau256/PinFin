@@ -27,7 +27,7 @@ import hnau.common.model.toEditingString
 import hnau.pinfin.model.sync.SyncModeOpener
 import hnau.pinfin.model.sync.utils.ServerAddress
 import hnau.pinfin.model.sync.utils.ServerPort
-import hnau.shuffler.annotations.Shuffle
+import hnau.pipe.annotations.Pipe
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -41,7 +41,7 @@ class StartSyncModel(
     private val skeleton: Skeleton,
 ) : GoBackHandlerProvider {
 
-    @Shuffle
+    @Pipe
     interface Dependencies {
 
         val preferences: Preferences

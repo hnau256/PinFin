@@ -19,7 +19,7 @@ import hnau.pinfin.model.utils.budget.repository.BudgetRepository
 import hnau.pinfin.model.utils.budget.state.AccountInfo
 import hnau.pinfin.model.utils.budget.state.SignedAmount
 import hnau.pinfin.model.utils.choose.ChooseState
-import hnau.shuffler.annotations.Shuffle
+import hnau.pipe.annotations.Pipe
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -51,7 +51,7 @@ class ChooseAccountModel(
         }
     }
 
-    @Shuffle
+    @Pipe
     interface Dependencies {
 
         val repository: BudgetRepository

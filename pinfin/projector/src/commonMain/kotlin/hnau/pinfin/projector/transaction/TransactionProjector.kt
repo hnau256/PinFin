@@ -39,7 +39,7 @@ import hnau.pinfin.projector.transaction
 import hnau.pinfin.projector.transaction.type.TransactionTypeProjector
 import hnau.pinfin.projector.transaction.type.entry.EntryProjector
 import hnau.pinfin.projector.transaction.type.transfer.TransferProjector
-import hnau.shuffler.annotations.Shuffle
+import hnau.pipe.annotations.Pipe
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.StateFlow
 import org.jetbrains.compose.resources.stringResource
@@ -50,7 +50,7 @@ class TransactionProjector(
     private val dependencies: Dependencies,
 ) {
 
-    @Shuffle
+    @Pipe
     interface Dependencies {
 
         fun entry(): EntryProjector.Dependencies

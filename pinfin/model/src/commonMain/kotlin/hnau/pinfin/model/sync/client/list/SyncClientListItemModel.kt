@@ -15,7 +15,7 @@ import hnau.pinfin.model.sync.client.BudgetSyncOpener
 import hnau.pinfin.model.utils.budget.repository.BudgetRepository
 import hnau.pinfin.model.utils.budget.state.BudgetInfo
 import hnau.pinfin.model.utils.toBudgetInfoStateFlow
-import hnau.shuffler.annotations.Shuffle
+import hnau.pipe.annotations.Pipe
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.serialization.UseSerializers
@@ -27,7 +27,7 @@ class SyncClientListItemModel(
     localOrServer: Ior<BudgetRepository, SyncClientListModel.ServerBudget>,
 ) : GoBackHandlerProvider {
 
-    @Shuffle
+    @Pipe
     interface Dependencies {
 
         val budgetOpener: BudgetSyncOpener

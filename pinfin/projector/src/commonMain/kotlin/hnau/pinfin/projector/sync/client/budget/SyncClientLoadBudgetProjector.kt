@@ -26,7 +26,7 @@ import hnau.pinfin.projector.budget_sync
 import hnau.pinfin.projector.no
 import hnau.pinfin.projector.stop_sync
 import hnau.pinfin.projector.yes
-import hnau.shuffler.annotations.Shuffle
+import hnau.pipe.annotations.Pipe
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.StateFlow
 import org.jetbrains.compose.resources.stringResource
@@ -37,7 +37,7 @@ class SyncClientLoadBudgetProjector(
     dependencies: Dependencies,
 ) {
 
-    @Shuffle
+    @Pipe
     interface Dependencies {
 
         fun budget(): SyncClientBudgetProjector.Dependencies

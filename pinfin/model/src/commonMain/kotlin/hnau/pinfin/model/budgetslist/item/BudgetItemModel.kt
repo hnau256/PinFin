@@ -7,7 +7,7 @@ import hnau.pinfin.model.manage.BudgetOpener
 import hnau.pinfin.model.utils.budget.repository.BudgetRepository
 import hnau.pinfin.model.utils.budget.state.BudgetInfo
 import hnau.pinfin.model.utils.budget.state.BudgetState
-import hnau.shuffler.annotations.Shuffle
+import hnau.pipe.annotations.Pipe
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -19,7 +19,7 @@ class BudgetItemModel(
     private val skeleton: Skeleton,
 ) {
 
-    @Shuffle
+    @Pipe
     interface Dependencies {
 
         val id: BudgetId

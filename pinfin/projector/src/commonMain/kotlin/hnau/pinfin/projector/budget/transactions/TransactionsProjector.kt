@@ -34,7 +34,7 @@ import hnau.pinfin.projector.add_transaction
 import hnau.pinfin.projector.no_transactions
 import hnau.pinfin.projector.utils.formatter.AmountFormatter
 import hnau.pinfin.projector.utils.formatter.datetime.DateTimeFormatter
-import hnau.shuffler.annotations.Shuffle
+import hnau.pipe.annotations.Pipe
 import kotlinx.coroutines.CoroutineScope
 import org.jetbrains.compose.resources.stringResource
 
@@ -44,7 +44,7 @@ class TransactionsProjector(
     private val dependencies: Dependencies,
 ) {
 
-    @Shuffle
+    @Pipe
     interface Dependencies {
 
         //TODO remove

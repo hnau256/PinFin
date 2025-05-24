@@ -17,7 +17,7 @@ import hnau.pinfin.data.TransactionType
 import hnau.pinfin.model.budgetstack.BudgetStackOpener
 import hnau.pinfin.model.utils.budget.repository.BudgetRepository
 import hnau.pinfin.model.utils.budget.state.TransactionInfo
-import hnau.shuffler.annotations.Shuffle
+import hnau.pipe.annotations.Pipe
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -39,7 +39,7 @@ class TransactionsModel(
     val scrollState: MutableStateFlow<ListScrollState>
         get() = skeleton.scrollState
 
-    @Shuffle
+    @Pipe
     interface Dependencies {
 
         val budgetRepository: BudgetRepository

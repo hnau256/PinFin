@@ -65,7 +65,7 @@ import hnau.pinfin.model.utils.icons.IconCategory
 import hnau.pinfin.model.utils.icons.IconVariant
 import hnau.pinfin.model.utils.icons.title
 import hnau.pinfin.projector.utils.image
-import hnau.shuffler.annotations.Shuffle
+import hnau.pipe.annotations.Pipe
 import kotlinx.coroutines.CoroutineScope
 import org.jetbrains.compose.resources.stringResource
 
@@ -75,7 +75,7 @@ class IconProjector(
     dependencies: Dependencies,
 ) {
 
-    @Shuffle
+    @Pipe
     interface Dependencies {
 
         val globalGoBackHandler: GlobalGoBackHandler

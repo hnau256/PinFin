@@ -27,7 +27,7 @@ import hnau.pinfin.model.transaction.type.entry.EntryModel
 import hnau.pinfin.model.transaction.type.transfer.TransferModel
 import hnau.pinfin.model.utils.budget.repository.BudgetRepository
 import hnau.pinfin.model.utils.budget.state.TransactionInfo
-import hnau.shuffler.annotations.Shuffle
+import hnau.pipe.annotations.Pipe
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -160,7 +160,7 @@ class TransactionModel(
 
 
 
-    @Shuffle
+    @Pipe
     interface Dependencies {
 
         val budgetRepository: BudgetRepository

@@ -18,7 +18,7 @@ import hnau.common.kotlin.serialization.MutableStateFlowSerializer
 import hnau.pinfin.model.sync.client.SyncClientStackModel
 import hnau.pinfin.model.sync.server.SyncServerModel
 import hnau.pinfin.model.sync.start.StartSyncModel
-import hnau.shuffler.annotations.Shuffle
+import hnau.pipe.annotations.Pipe
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -31,7 +31,7 @@ class SyncStackModel(
     private val skeleton: Skeleton,
 ) : GoBackHandlerProvider {
 
-    @Shuffle
+    @Pipe
     interface Dependencies {
 
         fun start(

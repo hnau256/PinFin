@@ -2,7 +2,7 @@ package hnau.pinfin.model.sync.server.utils
 
 import hnau.pinfin.model.sync.utils.SyncApi
 import hnau.pinfin.model.sync.utils.SyncHandle
-import hnau.shuffler.annotations.Shuffle
+import hnau.pipe.annotations.Pipe
 import kotlinx.coroutines.CoroutineScope
 
 class ServerSyncApi(
@@ -10,7 +10,7 @@ class ServerSyncApi(
     dependencies: Dependencies,
 ) : SyncApi {
 
-    @Shuffle
+    @Pipe
     interface Dependencies {
 
         fun budgetsSyncServer(): BudgetsSyncServer.Dependencies

@@ -18,7 +18,7 @@ import hnau.pinfin.projector.transaction.type.utils.ChooseAccountProjector
 import hnau.pinfin.projector.utils.formatter.AmountFormatter
 import hnau.pinfin.projector.utils.SignedAmountContent
 import hnau.pinfin.projector.utils.account.AccountButton
-import hnau.shuffler.annotations.Shuffle
+import hnau.pipe.annotations.Pipe
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.StateFlow
 
@@ -28,7 +28,7 @@ class EntryProjectorHeaderDelegate(
     private val dependencies: Dependencies,
 ) {
 
-    @Shuffle
+    @Pipe
     interface Dependencies {
 
         fun chooseAccount(): ChooseAccountProjector.Dependencies

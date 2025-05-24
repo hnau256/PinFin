@@ -747,7 +747,7 @@ private fun getCategory13(): List<IconCategory> = listOf(
     IconCategory.Action, //ViewColumn
     IconCategory.Action, //AspectRatio
     IconCategory.Navigation, //UnfoldLess
-    IconCategory.Av, //Shuffle
+    IconCategory.Av, //Pipe
     IconCategory.Action, //ModelTraining
     IconCategory.Action, //DonutLarge
     IconCategory.Social, //Male
@@ -1695,7 +1695,7 @@ private fun getCategory30(): List<IconCategory> = listOf(
 )
 
 private fun getCategory31(): List<IconCategory> = listOf(
-    IconCategory.Av, //ShuffleOn
+    IconCategory.Av, //PipeOn
     IconCategory.Content, //WebStories
     IconCategory.Action, //Shop2
     IconCategory.Maps, //ElectricBike

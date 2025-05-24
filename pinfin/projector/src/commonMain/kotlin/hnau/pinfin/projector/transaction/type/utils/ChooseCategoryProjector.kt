@@ -9,7 +9,7 @@ import hnau.pinfin.projector.there_are_no_categories
 import hnau.pinfin.projector.utils.category.CategoryButton
 import hnau.pinfin.projector.utils.choose.ChooseMessages
 import hnau.pinfin.projector.utils.choose.Content
-import hnau.shuffler.annotations.Shuffle
+import hnau.pipe.annotations.Pipe
 import kotlinx.coroutines.CoroutineScope
 import org.jetbrains.compose.resources.stringResource
 
@@ -19,7 +19,7 @@ class ChooseCategoryProjector(
     private val dependencies: Dependencies,
 ) {
 
-    @Shuffle
+    @Pipe
     interface Dependencies
 
     @Composable

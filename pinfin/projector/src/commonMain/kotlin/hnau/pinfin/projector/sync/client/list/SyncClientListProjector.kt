@@ -34,7 +34,7 @@ import hnau.pinfin.projector.budgets_to_synchronization
 import hnau.pinfin.projector.error_while_loading_budgets_list_from_server
 import hnau.pinfin.projector.there_is_no_budgets_for_synchronization
 import hnau.pinfin.projector.try_again
-import hnau.shuffler.annotations.Shuffle
+import hnau.pipe.annotations.Pipe
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.StateFlow
 import org.jetbrains.compose.resources.stringResource
@@ -45,7 +45,7 @@ class SyncClientListProjector(
     dependencies: Dependencies,
 ) {
 
-    @Shuffle
+    @Pipe
     interface Dependencies {
 
         val globalGoBackHandler: GlobalGoBackHandler

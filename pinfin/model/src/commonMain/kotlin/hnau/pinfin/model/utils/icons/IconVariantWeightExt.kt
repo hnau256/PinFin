@@ -747,7 +747,7 @@ private fun getWeight13(): List<Int> = listOf(
     13488, //ViewColumn
     13421, //AspectRatio
     13319, //UnfoldLess
-    13294, //Shuffle
+    13294, //Pipe
     13277, //ModelTraining
     13205, //DonutLarge
     13192, //Male
@@ -1695,7 +1695,7 @@ private fun getWeight30(): List<Int> = listOf(
 )
 
 private fun getWeight31(): List<Int> = listOf(
-    2736, //ShuffleOn
+    2736, //PipeOn
     2732, //WebStories
     2728, //Shop2
     2725, //ElectricBike

@@ -46,7 +46,7 @@ import hnau.pinfin.projector.budgets_sync
 import hnau.pinfin.projector.create_demo_budget
 import hnau.pinfin.projector.create_new_budget
 import hnau.pinfin.projector.no_budgets
-import hnau.shuffler.annotations.Shuffle
+import hnau.pipe.annotations.Pipe
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.StateFlow
 import org.jetbrains.compose.resources.stringResource
@@ -57,7 +57,7 @@ class BudgetsListProjector(
     private val dependencies: Dependencies,
 ) {
 
-    @Shuffle
+    @Pipe
     interface Dependencies {
 
         fun item(): BudgetItemProjector.Dependencies

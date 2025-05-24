@@ -15,7 +15,7 @@ import hnau.common.model.stack.tailGoBackHandler
 import hnau.common.kotlin.serialization.MutableStateFlowSerializer
 import hnau.pinfin.model.budgetslist.BudgetsListModel
 import hnau.pinfin.model.sync.SyncStackModel
-import hnau.shuffler.annotations.Shuffle
+import hnau.pipe.annotations.Pipe
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -34,7 +34,7 @@ class BudgetsStackModel(
             MutableStateFlow(NonEmptyStack(BudgetsStackElementModel.Skeleton.List())),
     )
 
-    @Shuffle
+    @Pipe
     interface Dependencies {
 
         fun list(

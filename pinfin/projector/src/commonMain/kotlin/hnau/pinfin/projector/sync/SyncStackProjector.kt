@@ -6,7 +6,7 @@ import hnau.common.projector.stack.StackProjectorTail
 import hnau.pinfin.model.sync.SyncStackElementModel
 import hnau.pinfin.model.sync.SyncStackModel
 import hnau.pinfin.projector.sync.client.SyncClientStackProjector
-import hnau.shuffler.annotations.Shuffle
+import hnau.pipe.annotations.Pipe
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.StateFlow
 
@@ -16,7 +16,7 @@ class SyncStackProjector(
     dependencies: Dependencies,
 ) {
 
-    @Shuffle
+    @Pipe
     interface Dependencies {
 
         fun start(): StartSyncProjector.Dependencies

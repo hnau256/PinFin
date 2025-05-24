@@ -747,7 +747,7 @@ private fun getTitle13(): List<String> = listOf(
     "View column", //ViewColumn
     "Aspect ratio", //AspectRatio
     "Unfold less", //UnfoldLess
-    "Shuffle", //Shuffle
+    "Pipe", //Pipe
     "Model training", //ModelTraining
     "Donut large", //DonutLarge
     "Male", //Male
@@ -1695,7 +1695,7 @@ private fun getTitle30(): List<String> = listOf(
 )
 
 private fun getTitle31(): List<String> = listOf(
-    "Shuffle on", //ShuffleOn
+    "Pipe on", //PipeOn
     "Web stories", //WebStories
     "Shop 2", //Shop2
     "Electric bike", //ElectricBike

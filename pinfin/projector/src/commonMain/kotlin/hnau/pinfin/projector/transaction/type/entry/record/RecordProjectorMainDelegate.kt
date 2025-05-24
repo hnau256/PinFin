@@ -18,7 +18,7 @@ import hnau.pinfin.projector.AmountProjector
 import hnau.pinfin.projector.Res
 import hnau.pinfin.projector.comment
 import hnau.pinfin.projector.utils.category.CategoryButton
-import hnau.shuffler.annotations.Shuffle
+import hnau.pipe.annotations.Pipe
 import kotlinx.coroutines.CoroutineScope
 import org.jetbrains.compose.resources.stringResource
 
@@ -28,7 +28,7 @@ class RecordProjectorMainDelegate(
     private val model: RecordModel,
 ) {
 
-    @Shuffle
+    @Pipe
     interface Dependencies {
 
         fun amount(): AmountProjector.Dependencies

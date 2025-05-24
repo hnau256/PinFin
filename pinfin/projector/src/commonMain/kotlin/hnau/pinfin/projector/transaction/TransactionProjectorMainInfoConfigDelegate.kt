@@ -25,7 +25,7 @@ import hnau.pinfin.projector.Res
 import hnau.pinfin.projector.comment
 import hnau.pinfin.projector.utils.formatter.datetime.DateTimeFormatter
 import hnau.pinfin.projector.utils.title
-import hnau.shuffler.annotations.Shuffle
+import hnau.pipe.annotations.Pipe
 import kotlinx.coroutines.CoroutineScope
 import org.jetbrains.compose.resources.stringResource
 
@@ -36,7 +36,7 @@ class TransactionProjectorMainInfoConfigDelegate(
     private val dependencies: Dependencies,
 ) {
 
-    @Shuffle
+    @Pipe
     interface Dependencies {
 
         val dateTimeFormatter: DateTimeFormatter

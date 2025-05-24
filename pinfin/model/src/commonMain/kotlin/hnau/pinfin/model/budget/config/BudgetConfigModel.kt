@@ -14,7 +14,7 @@ import hnau.common.kotlin.foldNullable
 import hnau.pinfin.data.BudgetConfig
 import hnau.pinfin.model.manage.BudgetsListOpener
 import hnau.pinfin.model.utils.budget.repository.BudgetRepository
-import hnau.shuffler.annotations.Shuffle
+import hnau.pipe.annotations.Pipe
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -27,7 +27,7 @@ class BudgetConfigModel(
     private val skeleton: Skeleton,
 ) : GoBackHandlerProvider {
 
-    @Shuffle
+    @Pipe
     interface Dependencies {
 
         val budgetsListOpener: BudgetsListOpener

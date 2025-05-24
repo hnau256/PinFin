@@ -11,7 +11,7 @@ import hnau.common.kotlin.coroutines.mapWithScope
 import hnau.common.kotlin.map
 import hnau.pinfin.model.loadbudgets.LoadBudgetsModel
 import hnau.pinfin.projector.manage.ManageProjector
-import hnau.shuffler.annotations.Shuffle
+import hnau.pipe.annotations.Pipe
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.StateFlow
 
@@ -21,7 +21,7 @@ class LoadBudgetsProjector(
     dependencies: Dependencies,
 ) {
 
-    @Shuffle
+    @Pipe
     interface Dependencies {
 
         fun manage(): ManageProjector.Dependencies

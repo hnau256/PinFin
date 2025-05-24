@@ -27,7 +27,7 @@ import hnau.pinfin.model.utils.icons.category
 import hnau.pinfin.model.utils.icons.icon
 import hnau.pinfin.model.utils.icons.tags
 import hnau.pinfin.model.utils.icons.weight
-import hnau.shuffler.annotations.Shuffle
+import hnau.pipe.annotations.Pipe
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -48,7 +48,7 @@ class IconModel(
     val onSelect: (IconVariant) -> Unit,
 ) : GoBackHandlerProvider {
 
-    @Shuffle
+    @Pipe
     interface Dependencies
 
     @Serializable

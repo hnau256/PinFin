@@ -20,7 +20,7 @@ import hnau.pinfin.data.BudgetId
 import hnau.pinfin.model.sync.client.budget.utils.syncWithRemote
 import hnau.pinfin.model.sync.client.utils.TcpSyncClient
 import hnau.pinfin.model.utils.budget.repository.BudgetRepository
-import hnau.shuffler.annotations.Shuffle
+import hnau.pipe.annotations.Pipe
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -37,7 +37,7 @@ class SyncClientBudgetModel(
     goBack: () -> Unit,
 ) : GoBackHandlerProvider {
 
-    @Shuffle
+    @Pipe
     interface Dependencies {
 
         val id: BudgetId
