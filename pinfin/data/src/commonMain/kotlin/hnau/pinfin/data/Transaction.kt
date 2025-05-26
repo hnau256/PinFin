@@ -4,13 +4,16 @@ import arrow.core.NonEmptyList
 import arrow.core.serialization.NonEmptyListSerializer
 import hnau.common.kotlin.mapper.Mapper
 import hnau.common.kotlin.mapper.plus
-import hnau.common.kotlin.mapper.stringToUUID
-import hnau.common.kotlin.serialization.UUIDSerializer
+import hnau.common.kotlin.mapper.stringToUuid
+import hnau.common.kotlin.serialization.UuidSerializer
 import kotlinx.datetime.Instant
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import java.util.UUID
+import kotlin.uuid.Uuid
+import kotlin.jvm.JvmInline
+import kotlin.uuid.ExperimentalUuidApi
 
+@OptIn(ExperimentalUuidApi::class)
 @Serializable
 data class Transaction(
     @SerialName("timestamp")
@@ -26,22 +29,22 @@ data class Transaction(
     @Serializable
     @JvmInline
     value class Id(
-        @Serializable(UUIDSerializer::class)
-        val id: UUID,
+        @Serializable(UuidSerializer::class)
+        val id: Uuid,
     ) {
 
         companion object {
 
             fun new(): Id =
-                Id(UUID.randomUUID())
+                Id(Uuid.random())
 
-            val uuidMapper: Mapper<UUID, Id> = Mapper(
+            val UuidMapper: Mapper<Uuid, Id> = Mapper(
                 direct = ::Id,
                 reverse = Id::id,
             )
 
             val stringMapper: Mapper<String, Id> =
-                Mapper.stringToUUID + uuidMapper
+                Mapper.stringToUuid + UuidMapper
         }
     }
 

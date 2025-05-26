@@ -2,16 +2,19 @@ package hnau.pinfin.data
 
 import hnau.common.kotlin.mapper.Mapper
 import hnau.common.kotlin.mapper.plus
-import hnau.common.kotlin.mapper.stringToUUID
-import hnau.common.kotlin.serialization.UUIDSerializer
+import hnau.common.kotlin.mapper.stringToUuid
+import hnau.common.kotlin.serialization.UuidSerializer
 import kotlinx.serialization.Serializable
-import java.util.UUID
+import kotlin.jvm.JvmInline
+import kotlin.uuid.ExperimentalUuidApi
+import kotlin.uuid.Uuid
 
+@OptIn(ExperimentalUuidApi::class)
 @Serializable
 @JvmInline
 value class BudgetId(
-    @Serializable(UUIDSerializer::class)
-    val id: UUID,
+    @Serializable(UuidSerializer::class)
+    val id: Uuid,
 ) : Comparable<BudgetId> {
 
     override fun compareTo(
@@ -23,14 +26,14 @@ value class BudgetId(
     companion object {
 
         fun new(): BudgetId =
-            BudgetId(UUID.randomUUID())
+            BudgetId(Uuid.random())
 
-        val uuidMapper: Mapper<UUID, BudgetId> = Mapper(
+        val UuidMapper: Mapper<Uuid, BudgetId> = Mapper(
             direct = ::BudgetId,
             reverse = BudgetId::id,
         )
 
         val stringMapper: Mapper<String, BudgetId> =
-            Mapper.Companion.stringToUUID + uuidMapper
+            Mapper.Companion.stringToUuid + UuidMapper
     }
 }

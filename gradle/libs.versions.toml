@@ -13,7 +13,7 @@ googleServices = "4.4.2"
 arrow = "1.2.4"
 kotlinSerialization = "1.8.1"
 kotlinCoroutines = "1.10.1"
-pipe = "1.0.3"
+pipe = "1.0.4"
 ksp = "2.1.20-1.0.31"
 compose-activity = "1.10.1"
 kotlin-date-time = "0.6.2"
@@ -61,10 +61,10 @@ arrow-serialization = { module = "io.arrow-kt:arrow-core-serialization", version
 slf4j-kotlin = { module = "io.github.oshai:kotlin-logging-jvm", version = "5.1.0" }
 slf4j-simple = { module = "org.slf4j:slf4j-simple", version = "2.0.7" }
 #pipe
-pipe-annotations = { module = "com.github.hnau256.common-gen-pipe:annotations", version.ref = "pipe" }
-pipe-processor = { module = "com.github.hnau256.common-gen-pipe:processor", version.ref = "pipe" }
+pipe-annotations = { module = "com.github.hnau256:annotations", version.ref = "pipe" }
+pipe-processor = { module = "com.github.hnau256:processor", version.ref = "pipe" }
 #hnau
-hnau-kotlin = { module = "com.github.hnau256:common-kotlin", version = "1.0.0" }
+hnau-kotlin = { module = "com.github.hnau256:common-kotlin", version = "1.0.2" }
 hnau-gen-kt = { module = "com.github.hnau256:common-gen-kt", version = "1.0.0" }
 hnau-model = { module = "com.github.hnau256.common-model:common-model", version = "1.0.10" }
 hnau-projector = { module = "com.github.hnau256.common-projector:common-projector", version = "1.0.14" }

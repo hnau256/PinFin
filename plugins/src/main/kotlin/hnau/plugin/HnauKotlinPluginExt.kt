@@ -9,6 +9,7 @@ import org.gradle.api.internal.project.DefaultProject
 import org.gradle.jvm.toolchain.JavaLanguageVersion
 import org.jetbrains.compose.ComposePlugin
 import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 internal enum class AndroidMode { Lib, App }
 
@@ -148,6 +149,10 @@ internal fun Project.config(
             }
             extension.namespace = "hnau." + path.drop(1).replace(':', '.')
         }
+    }
+
+    tasks.withType(KotlinCompile::class.java).all {
+        it.kotlinOptions.freeCompilerArgs += "-opt-in=kotlin.ExperimentalUuidApi"
     }
 }
 

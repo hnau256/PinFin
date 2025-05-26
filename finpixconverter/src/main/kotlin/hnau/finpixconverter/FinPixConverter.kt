@@ -21,7 +21,8 @@ import java.io.FileInputStream
 import java.io.FileOutputStream
 import java.math.BigDecimal
 import java.nio.charset.Charset
-import java.util.UUID
+import kotlin.uuid.Uuid
+import kotlin.jvm.JvmInline
 
 enum class FinPixAccount(
     val key: String,
@@ -429,7 +430,7 @@ fun main() {
     val out = File(dataDir, "out")
     out.deleteRecursively()
     out.mkdirs()
-    FileOutputStream(File(out, UUID.randomUUID().toString())).use { output ->
+    FileOutputStream(File(out, Uuid.randomUuid().toString())).use { output ->
         pinFinTransactions.forEach { transaction ->
             val update = UpdateType.Transaction(
                 id = Transaction.Id.new(),
