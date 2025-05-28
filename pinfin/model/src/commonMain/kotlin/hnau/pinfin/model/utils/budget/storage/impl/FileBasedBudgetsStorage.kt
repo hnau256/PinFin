@@ -1,8 +1,10 @@
 package hnau.pinfin.model.utils.budget.storage.impl
 
 import hnau.common.kotlin.coroutines.toMutableStateFlowAsInitial
+import hnau.common.kotlin.ifNull
 import hnau.common.model.file.File
 import hnau.common.model.file.delete
+import hnau.common.model.file.exists
 import hnau.common.model.file.list
 import hnau.common.model.file.plus
 import hnau.pinfin.data.BudgetId
@@ -48,7 +50,9 @@ fun BudgetsStorage.Factory.Companion.files(
 
     storages = withContext(Dispatchers.IO) {
         budgetsDir
-            .list()
+            .takeIf(File::exists)
+            ?.list()
+            .ifNull { emptyList() }
             .map { budgetFile ->
                 val id: BudgetId = BudgetId.stringMapper.direct(budgetFile.path.name)
                 val budgetRepository = scope.async { createBudgetRepository(id) }

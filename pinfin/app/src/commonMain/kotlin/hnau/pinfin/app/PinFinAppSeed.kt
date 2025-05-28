@@ -20,10 +20,10 @@ fun createPinFinAppSeed(): AppSeed<RootModel, RootModel.Skeleton> = AppSeed(
             scope = scope,
             dependencies = RootModel.Dependencies.impl(
                 preferencesFactory = FileBasedPreferences.Factory(
-                    preferencesFile = appContext.filesDir.plus("preferences.txt"),
+                    preferencesFile = appContext.filesDir + "preferences.txt",
                 ),
                 budgetsStorageFactory = BudgetsStorage.Factory.files(
-                    budgetsDir = appContext.filesDir.plus("budgets"),
+                    budgetsDir = appContext.filesDir + "budgets",
                 )
             ),
             skeleton = skeleton,
