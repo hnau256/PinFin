@@ -5,21 +5,15 @@ import org.gradle.api.JavaVersion
 import org.gradle.api.Project
 import org.gradle.api.artifacts.VersionCatalog
 import org.gradle.api.artifacts.VersionCatalogsExtension
-import org.gradle.api.internal.project.DefaultProject
 import org.gradle.jvm.toolchain.JavaLanguageVersion
 import org.jetbrains.compose.ComposePlugin
 import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 internal enum class AndroidMode { Lib, App }
 
-//private const val CommonKotlinProjectIdentifier = ":common:kotlin"
-//private const val CommonComposeProjectIdentifier = ":common:compose"
-
 internal fun Project.config(
-    androidMode: AndroidMode?,
+    androidMode: AndroidMode,
 ) {
-    val useAndroid = androidMode != null
 
     val versions: VersionCatalog = extensions
         .getByType(VersionCatalogsExtension::class.java)
@@ -32,10 +26,10 @@ internal fun Project.config(
         JavaVersion.valueOf(javaVersionString)
 
     plugins.apply("org.jetbrains.kotlin.multiplatform")
+
     when (androidMode) {
         AndroidMode.Lib -> plugins.apply("com.android.library")
         AndroidMode.App -> plugins.apply("com.android.application")
-        null -> {}
     }
 
     val hasSerializationPlugin =
@@ -49,15 +43,14 @@ internal fun Project.config(
 
     extensions.configure(KotlinMultiplatformExtension::class.java) { extension ->
 
-        if (useAndroid) {
-            extension.androidTarget {
-                compilations.configureEach { jvmCompilation ->
-                    jvmCompilation.kotlinOptions {
-                        jvmTarget = javaVersion.toString()
-                    }
+        extension.androidTarget {
+            compilations.configureEach { jvmCompilation ->
+                jvmCompilation.kotlinOptions {
+                    jvmTarget = javaVersion.toString()
                 }
             }
         }
+
         extension.jvmToolchain { javaToolchainSpec ->
             javaToolchainSpec
                 .languageVersion
@@ -81,83 +74,54 @@ internal fun Project.config(
         extension.sourceSets.getByName("commonMain").apply {
             languageSettings.enableLanguageFeature("ContextReceivers")
             dependencies {
+
                 implementation(versions.findLibrary("arrow-core").get().get())
                 implementation(versions.findLibrary("arrow-coroutines").get().get())
                 implementation(versions.findLibrary("kotlin-coroutines-core").get().get())
+                implementation(versions.findLibrary("hnau-kotlin").get().get())
+
                 if (hasSerializationPlugin) {
                     implementation(versions.findLibrary("arrow-serialization").get().get())
                     implementation(versions.findLibrary("kotlin-serialization-core").get().get())
                 }
+
                 if (hasComposePlugin) {
                     val composeDependencies = ComposePlugin.Dependencies(project)
                     implementation(composeDependencies.runtime)
                     implementation(composeDependencies.foundation)
                     implementation(composeDependencies.material3)
                     implementation(composeDependencies.materialIconsExtended)
-                    implementation(versions.findLibrary("hnau-projector").get().get())
                 }
-                if (hasKspPlugin) {
-                    implementation(versions.findLibrary("pipe-annotations").get().get())
-                }
-                implementation(versions.findLibrary("hnau-kotlin").get().get())
             }
         }
     }
 
     if (hasKspPlugin) {
-        val kspProcessor = versions.findLibrary("pipe-processor").get().get()
-        dependencies.add("kspCommonMainMetadata", kspProcessor)
-        //dependencies.add("kspDesktop", kspProcessor)
-        //dependencies.add("kspJvmTest", kspProcessor)
-        if (useAndroid) {
-            //dependencies.add("kspAndroid", kspProcessor)
-        }
+        dependencies.add(
+            "kspCommonMainMetadata",
+            versions.findLibrary("pipe-processor").get().get()
+        )
     }
 
-    /*    versions.findLibrary("kotest-framework-engine").get().get().let {
-            dependencies.add("commonTestImplementation", it)
+    extensions.configure(BaseExtension::class.java) { extension ->
+
+        val compileSdk = versions.requireVersion("androidCompileSdk").toInt()
+        val minSdk = versions.requireVersion("androidMinSdk").toInt()
+        extension.compileSdkVersion(compileSdk)
+        extension.buildToolsVersion(versions.requireVersion("androidBuildTools"))
+
+        extension.defaultConfig { config ->
+            config.minSdk = minSdk
+            config.targetSdk = compileSdk
         }
 
-        versions.findLibrary("kotest-junit-runner").get().get().let {
-            val configurationName = when (useAndroid) {
-                true -> "androidUnitTestImplementation"
-                false -> "jvmTestImplementation"
-            }
-            dependencies.add(configurationName, it)
+        extension.compileOptions { options ->
+            options.targetCompatibility = javaVersion
+            options.sourceCompatibility = javaVersion
         }
-
-        tasks.withType(Test::class.java).configureEach { testTask ->
-            testTask.useJUnitPlatform()
-        }*/
-
-    if (useAndroid) {
-        extensions.configure(BaseExtension::class.java) { extension ->
-
-            val compileSdk = versions.requireVersion("androidCompileSdk").toInt()
-            val minSdk = versions.requireVersion("androidMinSdk").toInt()
-            extension.compileSdkVersion(compileSdk)
-            extension.buildToolsVersion(versions.requireVersion("androidBuildTools"))
-
-            extension.defaultConfig { config ->
-                config.minSdk = minSdk
-                config.targetSdk = compileSdk
-            }
-
-            extension.compileOptions { options ->
-                options.targetCompatibility = javaVersion
-                options.sourceCompatibility = javaVersion
-            }
-            extension.namespace = "hnau." + path.drop(1).replace(':', '.')
-        }
-    }
-
-    tasks.withType(KotlinCompile::class.java).all {
-        it.kotlinOptions.freeCompilerArgs += "-opt-in=kotlin.ExperimentalUuidApi"
+        extension.namespace = "hnau." + path.drop(1).replace(':', '.')
     }
 }
-
-private val Project.identitifer: String
-    get() = (project as DefaultProject).identityPath.toString()
 
 
 private fun VersionCatalog.requireVersion(

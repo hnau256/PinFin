@@ -16,6 +16,7 @@ kotlin {
                 implementation(libs.ktor.network)
                 implementation(libs.kotlin.serialization.json)
                 implementation(libs.kotlin.serialization.cbor)
+                implementation(libs.pipe.annotations)
             }
         }
         androidMain
