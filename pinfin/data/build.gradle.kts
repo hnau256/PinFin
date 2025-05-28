@@ -4,7 +4,6 @@ plugins {
 }
 
 kotlin {
-    linuxX64()
     sourceSets {
         commonMain.dependencies {
             implementation(libs.kotlin.datetime)

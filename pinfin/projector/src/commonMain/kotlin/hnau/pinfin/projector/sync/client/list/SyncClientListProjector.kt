@@ -38,6 +38,7 @@ import hnau.pipe.annotations.Pipe
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.StateFlow
 import org.jetbrains.compose.resources.stringResource
+import kotlin.uuid.ExperimentalUuidApi
 
 class SyncClientListProjector(
     scope: CoroutineScope,
@@ -149,6 +150,7 @@ class SyncClientListProjector(
         )
     }
 
+    @OptIn(ExperimentalUuidApi::class)
     @Composable
     private fun Budgets(
         contentPadding: PaddingValues,

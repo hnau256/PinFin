@@ -37,6 +37,7 @@ import hnau.pinfin.projector.utils.formatter.datetime.DateTimeFormatter
 import hnau.pipe.annotations.Pipe
 import kotlinx.coroutines.CoroutineScope
 import org.jetbrains.compose.resources.stringResource
+import kotlin.uuid.ExperimentalUuidApi
 
 class TransactionsProjector(
     private val scope: CoroutineScope,
@@ -48,7 +49,7 @@ class TransactionsProjector(
     interface Dependencies {
 
         //TODO remove
-        val bubblesShower: BubblesShower
+        //val bubblesShower: BubblesShower
 
         val dateTimeFormatter: DateTimeFormatter
 
@@ -74,6 +75,7 @@ class TransactionsProjector(
         )
     }
 
+    @OptIn(ExperimentalUuidApi::class)
     @Composable
     private fun Transactions(
         contentPadding: PaddingValues,

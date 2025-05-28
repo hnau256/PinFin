@@ -24,20 +24,22 @@ class RootProjector(
     interface Dependencies {
 
         fun loadBudgets(
-            bubblesShower: BubblesShower,
+            //bubblesShower: BubblesShower,
             dateTimeFormatter: DateTimeFormatter,
             amountFormatter: AmountFormatter,
         ): LoadBudgetsProjector.Dependencies
+
+        companion object
     }
 
-    private val bubblesHolder = SharedBubblesHolder(
+    /*private val bubblesHolder = SharedBubblesHolder(
         scope = scope,
-    )
+    )*/
 
     private val loadBudgets = LoadBudgetsProjector(
         scope = scope,
         dependencies = dependencies.loadBudgets(
-            bubblesShower = bubblesHolder,
+            //bubblesShower = bubblesHolder,
             dateTimeFormatter = JavaDateTimeFormatter(), //TODO
             amountFormatter = AmountFormatter.test,
         ),
@@ -51,7 +53,7 @@ class RootProjector(
             //LocalDensity provides Density(LocalDensity.current.density * 1.1f),
         ) {
             loadBudgets.Content()
-            bubblesHolder.Content()
+            //bubblesHolder.Content()
         }
     }
 }

@@ -1,6 +1,10 @@
 package hnau.pinfin.model.utils.budget.storage.impl
 
 import hnau.common.kotlin.coroutines.toMutableStateFlowAsInitial
+import hnau.common.model.file.File
+import hnau.common.model.file.delete
+import hnau.common.model.file.list
+import hnau.common.model.file.plus
 import hnau.pinfin.data.BudgetId
 import hnau.pinfin.model.utils.budget.repository.BudgetRepository
 import hnau.pinfin.model.utils.budget.storage.BudgetsStorage
@@ -12,7 +16,6 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
-import java.io.File
 
 fun BudgetsStorage.Factory.Companion.files(
     budgetsDir: File,
@@ -25,7 +28,7 @@ fun BudgetsStorage.Factory.Companion.files(
     val createBudgetRepository: suspend (
         id: BudgetId,
     ) -> BudgetRepository = { id ->
-        val file = File(budgetsDir, id.let(BudgetId.stringMapper.reverse))
+        val file = budgetsDir + id.let(BudgetId.stringMapper.reverse)
         val upchainStorage = FileBasedUpchainStorage.create(
             scope = scope,
             budgetFile = file,
@@ -46,9 +49,8 @@ fun BudgetsStorage.Factory.Companion.files(
     storages = withContext(Dispatchers.IO) {
         budgetsDir
             .list()
-            .orEmpty()
-            .map { budgetName ->
-                val id: BudgetId = BudgetId.stringMapper.direct(budgetName)
+            .map { budgetFile ->
+                val id: BudgetId = BudgetId.stringMapper.direct(budgetFile.path.name)
                 val budgetRepository = scope.async { createBudgetRepository(id) }
                 id to budgetRepository
             }

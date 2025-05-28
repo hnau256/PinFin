@@ -3,6 +3,7 @@ package hnau.pinfin.model.utils.budget.state
 import hnau.pinfin.data.BudgetConfig
 import hnau.pinfin.data.BudgetId
 import kotlinx.serialization.Serializable
+import kotlin.uuid.ExperimentalUuidApi
 
 @Serializable
 data class BudgetInfo(
@@ -17,6 +18,7 @@ data class BudgetInfo(
 
     companion object {
 
+        @OptIn(ExperimentalUuidApi::class)
         fun create(
             id: BudgetId,
             config: BudgetConfig,

@@ -107,10 +107,10 @@ internal fun Project.config(
     if (hasKspPlugin) {
         val kspProcessor = versions.findLibrary("pipe-processor").get().get()
         dependencies.add("kspCommonMainMetadata", kspProcessor)
-        dependencies.add("kspDesktop", kspProcessor)
+        //dependencies.add("kspDesktop", kspProcessor)
         //dependencies.add("kspJvmTest", kspProcessor)
         if (useAndroid) {
-            dependencies.add("kspAndroid", kspProcessor)
+            //dependencies.add("kspAndroid", kspProcessor)
         }
     }
 

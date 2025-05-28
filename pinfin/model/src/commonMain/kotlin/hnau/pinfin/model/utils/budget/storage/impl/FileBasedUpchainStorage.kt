@@ -1,6 +1,12 @@
 package hnau.pinfin.model.utils.budget.storage.impl
 
 import hnau.common.kotlin.coroutines.toMutableStateFlowAsInitial
+import hnau.common.model.file.File
+import hnau.common.model.file.exists
+import hnau.common.model.file.mkDirs
+import hnau.common.model.file.parent
+import hnau.common.model.file.sink
+import hnau.common.model.file.source
 import hnau.pinfin.model.utils.budget.storage.UpchainStorage
 import hnau.pinfin.model.utils.budget.upchain.Upchain
 import hnau.pinfin.model.utils.budget.upchain.Update
@@ -13,8 +19,8 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
-import java.io.File
-import java.io.FileOutputStream
+import kotlinx.io.buffered
+import kotlinx.io.readLine
 import java.nio.charset.Charset
 
 class FileBasedUpchainStorage(
@@ -62,17 +68,19 @@ class FileBasedUpchainStorage(
         replace: Boolean,
     ) {
         withContext(Dispatchers.IO) {
-            budgetFile.parentFile.mkdirs()
-            val append = !replace
-            FileOutputStream(budgetFile, append).use { output ->
-                updates.forEach { update ->
-                    val line: ByteArray = update
-                        .value
-                        .toByteArray(charset)
-                    output.write(line)
-                    output.write(linesSeparator)
+            budgetFile.parent!!.mkDirs()
+            budgetFile
+                .sink(append = !replace)
+                .buffered()
+                .use { sink ->
+                    updates.forEach { update ->
+                        val line: ByteArray = update
+                            .value
+                            .toByteArray(charset)
+                        sink.write(line)
+                        sink.write(linesSeparator)
+                    }
                 }
-            }
         }
     }
 
@@ -85,10 +93,10 @@ class FileBasedUpchainStorage(
             val updatesFromFile: List<Update> = withContext(Dispatchers.IO) {
                 budgetFile
                     .takeIf(File::exists)
-                    ?.useLines(
-                        charset = charset,
-                    ) { lines ->
-                        lines
+                    ?.source()
+                    ?.buffered()
+                    ?.use { source ->
+                        generateSequence(source::readLine)
                             .map(::Update)
                             .toList()
                     }

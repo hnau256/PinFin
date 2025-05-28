@@ -38,6 +38,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.UseSerializers
+import kotlin.uuid.ExperimentalUuidApi
 
 class ManageModel(
     scope: CoroutineScope,
@@ -84,6 +85,7 @@ class ManageModel(
             scope = scope,
         ) { null }
 
+    @OptIn(ExperimentalUuidApi::class)
     private data class DeferredBudgetRepositoryWrapper(
         val id: BudgetId,
         val budgetRepository: BudgetRepository,

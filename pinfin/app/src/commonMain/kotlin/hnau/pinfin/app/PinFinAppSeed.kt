@@ -2,12 +2,14 @@ package hnau.pinfin.app
 
 import hnau.common.model.app.AppSeed
 import hnau.common.model.color.material.MaterialHue
+import hnau.common.model.file.File
+import hnau.common.model.file.plus
 import hnau.common.model.preferences.Preferences
 import hnau.common.model.preferences.impl.FileBasedPreferences
 import hnau.pinfin.model.RootModel
+import hnau.pinfin.model.impl
 import hnau.pinfin.model.utils.budget.storage.BudgetsStorage
 import hnau.pinfin.model.utils.budget.storage.impl.files
-import java.io.File
 
 fun createPinFinAppSeed(): AppSeed<RootModel, RootModel.Skeleton> = AppSeed(
     fallbackHue = MaterialHue.LightGreen,
@@ -18,10 +20,10 @@ fun createPinFinAppSeed(): AppSeed<RootModel, RootModel.Skeleton> = AppSeed(
             scope = scope,
             dependencies = RootModel.Dependencies.impl(
                 preferencesFactory = FileBasedPreferences.Factory(
-                    preferencesFile = File(appContext.filesDir, "preferences.txt"),
+                    preferencesFile = appContext.filesDir.plus("preferences.txt"),
                 ),
                 budgetsStorageFactory = BudgetsStorage.Factory.files(
-                    budgetsDir = File(appContext.filesDir, "budgets"),
+                    budgetsDir = appContext.filesDir.plus("budgets"),
                 )
             ),
             skeleton = skeleton,
@@ -29,8 +31,3 @@ fun createPinFinAppSeed(): AppSeed<RootModel, RootModel.Skeleton> = AppSeed(
     },
     extractGoBackHandler = RootModel::goBackHandler,
 )
-
-expect fun createRootModelDependencies(
-    preferencesFactory: Preferences.Factory,
-    budgetsStorageFactory: BudgetsStorage.Factory,
-): RootModel.Dependencies

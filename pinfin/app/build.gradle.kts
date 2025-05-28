@@ -68,15 +68,18 @@ compose.resources {
 
 kotlin {
     sourceSets {
-        commonMain.dependencies {
-            implementation(libs.hnau.projector)
-            implementation(libs.hnau.model)
-            implementation(project(":pinfin:model"))
-            implementation(project(":pinfin:data"))
-            implementation(project(":pinfin:projector"))
-            implementation(compose.components.resources)
-            implementation(libs.kotlin.datetime)
-            implementation(libs.kotlin.serialization.core)
+        commonMain {
+            kotlin.srcDir("build/generated/ksp/metadata/commonMain/kotlin")
+            dependencies {
+                implementation(libs.hnau.projector)
+                implementation(libs.hnau.model)
+                implementation(project(":pinfin:model"))
+                implementation(project(":pinfin:data"))
+                implementation(project(":pinfin:projector"))
+                implementation(compose.components.resources)
+                implementation(libs.kotlin.datetime)
+                implementation(libs.kotlin.serialization.core)
+            }
         }
 
         androidMain {
@@ -84,6 +87,10 @@ kotlin {
                 implementation(libs.android.activity.compose)
                 implementation(libs.android.appcompat)
             }
+        }
+
+        desktopMain {
+            kotlin.srcDir("build/generated/ksp/metadata/commonMain/kotlin")
         }
     }
 }
