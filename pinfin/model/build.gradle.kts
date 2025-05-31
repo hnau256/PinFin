@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+
 plugins {
     alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.ksp)
@@ -26,4 +28,10 @@ kotlin {
 
 dependencies {
     add("kspCommonMainMetadata", libs.pipe.processor)
+}
+
+tasks.withType<KotlinCompile>().configureEach {
+    if (name != "kspCommonMainKotlinMetadata") {
+        dependsOn("kspCommonMainKotlinMetadata")
+    }
 }

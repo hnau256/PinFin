@@ -24,10 +24,6 @@ kotlin {
 }
 
 gradlePlugin {
-    plugins.create("Kotlin multiplatform library") {
-        id = "hnau.kotlin.multiplatform"
-        implementationClass = "hnau.plugin.HnauKotlinMultiplatformLibPlugin"
-    }
     plugins.create("Android application") {
         id = "hnau.android.app"
         implementationClass = "hnau.plugin.HnauAndroidAppPlugin"

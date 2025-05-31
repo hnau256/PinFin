@@ -3,16 +3,16 @@ package hnau.pinfin.data
 import hnau.common.kotlin.mapper.Mapper
 import hnau.common.kotlin.mapper.plus
 import hnau.common.kotlin.mapper.stringToUuid
+import hnau.common.kotlin.serialization.MappingKSerializer
 import hnau.common.kotlin.serialization.UuidSerializer
 import kotlinx.serialization.Serializable
-import kotlin.jvm.JvmInline
+import kotlinx.serialization.builtins.serializer
 import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid
 
 @OptIn(ExperimentalUuidApi::class)
-@Serializable
-@JvmInline
-value class BudgetId(
+@Serializable(BudgetId.Serializer::class)
+data class BudgetId(
     @Serializable(UuidSerializer::class)
     val id: Uuid,
 ) : Comparable<BudgetId> {
@@ -21,6 +21,11 @@ value class BudgetId(
         other: BudgetId,
     ): Int = id.compareTo(
         other = other.id,
+    )
+
+    data object Serializer : MappingKSerializer<String, BudgetId>(
+        base = String.serializer(),
+        mapper = stringMapper,
     )
 
     companion object {
