@@ -29,9 +29,9 @@ import hnau.common.projector.utils.Icon
 import hnau.common.projector.utils.plus
 import hnau.common.projector.utils.toLazyListState
 import hnau.pinfin.model.budget.TransactionsModel
-import hnau.pinfin.projector.Res
-import hnau.pinfin.projector.add_transaction
-import hnau.pinfin.projector.no_transactions
+import hnau.pinfin.projector.resources.Res
+import hnau.pinfin.projector.resources.add_transaction
+import hnau.pinfin.projector.resources.no_transactions
 import hnau.pinfin.projector.utils.formatter.AmountFormatter
 import hnau.pinfin.projector.utils.formatter.datetime.DateTimeFormatter
 import hnau.pipe.annotations.Pipe

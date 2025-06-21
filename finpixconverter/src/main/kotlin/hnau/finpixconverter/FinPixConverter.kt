@@ -2,13 +2,14 @@ package hnau.finpixconverter
 
 import arrow.core.toNonEmptyListOrNull
 import hnau.common.kotlin.ifNull
-import hnau.pinfin.repository.dto.AccountId
-import hnau.pinfin.repository.dto.Amount
-import hnau.pinfin.repository.dto.CategoryDirection
-import hnau.pinfin.repository.dto.CategoryId
-import hnau.pinfin.repository.dto.Comment
-import hnau.pinfin.repository.dto.Transaction
-import hnau.pinfin.repository.dto.UpdateType
+import hnau.pinfin.data.AccountId
+import hnau.pinfin.data.Amount
+import hnau.pinfin.data.CategoryDirection
+import hnau.pinfin.data.CategoryId
+import hnau.pinfin.data.Comment
+import hnau.pinfin.data.Record
+import hnau.pinfin.data.Transaction
+import hnau.pinfin.data.UpdateType
 import kotlinx.datetime.Instant
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toInstant
@@ -21,8 +22,8 @@ import java.io.FileInputStream
 import java.io.FileOutputStream
 import java.math.BigDecimal
 import java.nio.charset.Charset
+import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid
-import kotlin.jvm.JvmInline
 
 enum class FinPixAccount(
     val key: String,
@@ -297,6 +298,7 @@ private fun readTransactions(): List<FinPixTransaction> = File(dataDir, "in/tran
         }
     }
 
+@OptIn(ExperimentalUuidApi::class)
 fun main() {
     val transactions = readTransactions().filter {
         when (val type = it.type) {
@@ -430,7 +432,7 @@ fun main() {
     val out = File(dataDir, "out")
     out.deleteRecursively()
     out.mkdirs()
-    FileOutputStream(File(out, Uuid.randomUuid().toString())).use { output ->
+    FileOutputStream(File(out, Uuid.random().toString())).use { output ->
         pinFinTransactions.forEach { transaction ->
             val update = UpdateType.Transaction(
                 id = Transaction.Id.new(),

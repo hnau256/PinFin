@@ -3,11 +3,11 @@ package hnau.pinfin.projector.transaction.type.entry.record
 import androidx.compose.runtime.Composable
 import hnau.common.projector.uikit.ContainerStyle
 import hnau.pinfin.model.transaction.type.entry.record.RecordModel
-import hnau.pinfin.projector.Res
-import hnau.pinfin.projector.no
-import hnau.pinfin.projector.remove_record
+import hnau.pinfin.projector.resources.Res
+import hnau.pinfin.projector.resources.no
+import hnau.pinfin.projector.resources.remove_record
 import hnau.pinfin.projector.utils.Dialog
-import hnau.pinfin.projector.yes
+import hnau.pinfin.projector.resources.yes
 import org.jetbrains.compose.resources.stringResource
 
 class RecordProjectorRemoveDelegate(

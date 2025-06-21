@@ -12,11 +12,11 @@ import hnau.common.projector.uikit.ErrorPanel
 import hnau.common.projector.uikit.state.LoadableContent
 import hnau.common.projector.uikit.state.TransitionSpec
 import hnau.pinfin.model.sync.client.budget.SyncClientBudgetModel
-import hnau.pinfin.projector.Res
-import hnau.pinfin.projector.back
-import hnau.pinfin.projector.butget_was_synchronized
-import hnau.pinfin.projector.error_while_budget_synchronization
-import hnau.pinfin.projector.try_again
+import hnau.pinfin.projector.resources.Res
+import hnau.pinfin.projector.resources.back
+import hnau.pinfin.projector.resources.butget_was_synchronized
+import hnau.pinfin.projector.resources.error_while_budget_synchronization
+import hnau.pinfin.projector.resources.try_again
 import hnau.pipe.annotations.Pipe
 import kotlinx.coroutines.CoroutineScope
 import org.jetbrains.compose.resources.stringResource

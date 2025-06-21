@@ -64,6 +64,10 @@ import hnau.pinfin.model.IconModel
 import hnau.pinfin.model.utils.icons.IconCategory
 import hnau.pinfin.model.utils.icons.IconVariant
 import hnau.pinfin.model.utils.icons.title
+import hnau.pinfin.projector.resources.Res
+import hnau.pinfin.projector.resources.no_icons_found
+import hnau.pinfin.projector.resources.search
+import hnau.pinfin.projector.resources.select_icon
 import hnau.pinfin.projector.utils.image
 import hnau.pipe.annotations.Pipe
 import kotlinx.coroutines.CoroutineScope

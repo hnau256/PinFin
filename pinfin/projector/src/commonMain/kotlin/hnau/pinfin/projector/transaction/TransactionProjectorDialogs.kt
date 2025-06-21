@@ -9,14 +9,14 @@ import androidx.compose.runtime.collectAsState
 import hnau.common.projector.uikit.AlertDialogContent
 import hnau.common.kotlin.foldNullable
 import hnau.pinfin.model.transaction.TransactionModel
-import hnau.pinfin.projector.Res
-import hnau.pinfin.projector.close
-import hnau.pinfin.projector.no
-import hnau.pinfin.projector.not_save
-import hnau.pinfin.projector.remove_transaction
-import hnau.pinfin.projector.save
-import hnau.pinfin.projector.save_changes
-import hnau.pinfin.projector.yes
+import hnau.pinfin.projector.resources.Res
+import hnau.pinfin.projector.resources.close
+import hnau.pinfin.projector.resources.no
+import hnau.pinfin.projector.resources.not_save
+import hnau.pinfin.projector.resources.remove_transaction
+import hnau.pinfin.projector.resources.save
+import hnau.pinfin.projector.resources.save_changes
+import hnau.pinfin.projector.resources.yes
 import org.jetbrains.compose.resources.stringResource
 
 @Composable

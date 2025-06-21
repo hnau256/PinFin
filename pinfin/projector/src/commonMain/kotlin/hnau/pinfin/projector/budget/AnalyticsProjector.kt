@@ -20,8 +20,8 @@ import hnau.common.projector.uikit.utils.Dimens
 import hnau.common.projector.utils.toLazyListState
 import hnau.pinfin.model.budget.AnalyticsModel
 import hnau.pinfin.model.utils.budget.state.AccountInfo
-import hnau.pinfin.projector.Res
-import hnau.pinfin.projector.accounts
+import hnau.pinfin.projector.resources.Res
+import hnau.pinfin.projector.resources.accounts
 import hnau.pinfin.projector.utils.formatter.AmountFormatter
 import hnau.pinfin.projector.utils.SignedAmountContent
 import hnau.pinfin.projector.utils.account.AccountContent

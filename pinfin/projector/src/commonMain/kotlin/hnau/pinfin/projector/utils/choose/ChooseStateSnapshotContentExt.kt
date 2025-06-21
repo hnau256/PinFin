@@ -28,8 +28,8 @@ import hnau.common.projector.uikit.table.cellShape
 import hnau.common.projector.uikit.utils.Dimens
 import hnau.common.projector.utils.Icon
 import hnau.pinfin.model.utils.choose.ChooseStateSnapshot
-import hnau.pinfin.projector.Res
-import hnau.pinfin.projector.search_create
+import hnau.pinfin.projector.resources.Res
+import hnau.pinfin.projector.resources.search_create
 import kotlinx.coroutines.flow.MutableStateFlow
 import org.jetbrains.compose.resources.stringResource
 

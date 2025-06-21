@@ -21,8 +21,8 @@ import hnau.common.projector.uikit.table.cellShape
 import hnau.common.projector.utils.Icon
 import hnau.pinfin.data.TransactionType
 import hnau.pinfin.model.transaction.TransactionModel
-import hnau.pinfin.projector.Res
-import hnau.pinfin.projector.comment
+import hnau.pinfin.projector.resources.Res
+import hnau.pinfin.projector.resources.comment
 import hnau.pinfin.projector.utils.formatter.datetime.DateTimeFormatter
 import hnau.pinfin.projector.utils.title
 import hnau.pipe.annotations.Pipe

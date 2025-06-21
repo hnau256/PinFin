@@ -9,7 +9,7 @@ plugins {
 }
 
 compose.resources {
-    packageOfResClass = "hnau.pinfin.projector"
+    packageOfResClass = "hnau.pinfin.projector.resources"
 }
 
 kotlin {

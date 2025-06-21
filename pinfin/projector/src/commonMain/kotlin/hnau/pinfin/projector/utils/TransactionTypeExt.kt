@@ -2,9 +2,9 @@ package hnau.pinfin.projector.utils
 
 import androidx.compose.runtime.Composable
 import hnau.pinfin.data.TransactionType
-import hnau.pinfin.projector.Res
-import hnau.pinfin.projector.entry
-import hnau.pinfin.projector.transfer
+import hnau.pinfin.projector.resources.Res
+import hnau.pinfin.projector.resources.entry
+import hnau.pinfin.projector.resources.transfer
 import org.jetbrains.compose.resources.stringResource
 
 val TransactionType.title: String

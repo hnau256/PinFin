@@ -15,8 +15,8 @@ import hnau.common.projector.uikit.table.cellShape
 import hnau.common.projector.utils.Icon
 import hnau.pinfin.model.transaction.type.entry.record.RecordModel
 import hnau.pinfin.projector.AmountProjector
-import hnau.pinfin.projector.Res
-import hnau.pinfin.projector.comment
+import hnau.pinfin.projector.resources.Res
+import hnau.pinfin.projector.resources.comment
 import hnau.pinfin.projector.utils.category.CategoryButton
 import hnau.pipe.annotations.Pipe
 import kotlinx.coroutines.CoroutineScope

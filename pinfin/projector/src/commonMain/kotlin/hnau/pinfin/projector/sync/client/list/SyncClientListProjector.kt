@@ -29,11 +29,11 @@ import hnau.common.kotlin.coroutines.mapReusable
 import hnau.common.kotlin.map
 import hnau.pinfin.data.BudgetId
 import hnau.pinfin.model.sync.client.list.SyncClientListModel
-import hnau.pinfin.projector.Res
-import hnau.pinfin.projector.budgets_to_synchronization
-import hnau.pinfin.projector.error_while_loading_budgets_list_from_server
-import hnau.pinfin.projector.there_is_no_budgets_for_synchronization
-import hnau.pinfin.projector.try_again
+import hnau.pinfin.projector.resources.Res
+import hnau.pinfin.projector.resources.budgets_to_synchronization
+import hnau.pinfin.projector.resources.error_while_loading_budgets_list_from_server
+import hnau.pinfin.projector.resources.there_is_no_budgets_for_synchronization
+import hnau.pinfin.projector.resources.try_again
 import hnau.pipe.annotations.Pipe
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.StateFlow

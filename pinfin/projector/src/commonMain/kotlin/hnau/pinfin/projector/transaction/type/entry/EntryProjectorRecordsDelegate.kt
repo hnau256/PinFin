@@ -15,8 +15,8 @@ import hnau.common.projector.utils.Icon
 import hnau.common.kotlin.coroutines.mapNonEmptyListReusable
 import hnau.pinfin.model.transaction.type.entry.EntryModel
 import hnau.pinfin.model.transaction.type.entry.record.RecordId
-import hnau.pinfin.projector.Res
-import hnau.pinfin.projector.add_record
+import hnau.pinfin.projector.resources.Res
+import hnau.pinfin.projector.resources.add_record
 import hnau.pinfin.projector.transaction.type.entry.record.RecordProjector
 import hnau.pipe.annotations.Pipe
 import kotlinx.coroutines.CoroutineScope

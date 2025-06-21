@@ -3,6 +3,7 @@
     *;
 }
 
+-keep class hnau.pinfin.projector.Res** { *; }
 -keep class org.jetbrains.compose.resources.** { *; }
 -keep interface org.jetbrains.compose.resources.** { *; }
 -keep class androidx.compose.runtime.internal.** { *; }

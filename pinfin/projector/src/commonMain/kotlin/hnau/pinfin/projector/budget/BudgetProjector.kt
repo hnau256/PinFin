@@ -22,12 +22,12 @@ import hnau.common.kotlin.coroutines.mapState
 import hnau.pinfin.model.budget.BudgetModel
 import hnau.pinfin.model.budget.BudgetPageModel
 import hnau.pinfin.model.budget.BudgetTab
-import hnau.pinfin.projector.Res
-import hnau.pinfin.projector.analytics
+import hnau.pinfin.projector.resources.Res
+import hnau.pinfin.projector.resources.analytics
 import hnau.pinfin.projector.budget.config.BudgetConfigProjector
 import hnau.pinfin.projector.budget.transactions.TransactionsProjector
-import hnau.pinfin.projector.config
-import hnau.pinfin.projector.transactions
+import hnau.pinfin.projector.resources.config
+import hnau.pinfin.projector.resources.transactions
 import hnau.pipe.annotations.Pipe
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.StateFlow

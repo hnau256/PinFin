@@ -12,8 +12,8 @@ import hnau.common.projector.uikit.TripleRow
 import hnau.common.projector.uikit.shape.HnauShape
 import hnau.common.projector.utils.Icon
 import hnau.pinfin.model.utils.budget.state.AccountInfo
-import hnau.pinfin.projector.Res
-import hnau.pinfin.projector.account
+import hnau.pinfin.projector.resources.Res
+import hnau.pinfin.projector.resources.account
 import org.jetbrains.compose.resources.stringResource
 
 @Composable

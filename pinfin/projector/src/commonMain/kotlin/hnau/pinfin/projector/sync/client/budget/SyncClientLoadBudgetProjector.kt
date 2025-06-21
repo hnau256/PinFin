@@ -21,11 +21,11 @@ import hnau.common.kotlin.Loadable
 import hnau.common.kotlin.coroutines.mapWithScope
 import hnau.common.kotlin.map
 import hnau.pinfin.model.sync.client.budget.SyncClientLoadBudgetModel
-import hnau.pinfin.projector.Res
-import hnau.pinfin.projector.budget_sync
-import hnau.pinfin.projector.no
-import hnau.pinfin.projector.stop_sync
-import hnau.pinfin.projector.yes
+import hnau.pinfin.projector.resources.Res
+import hnau.pinfin.projector.resources.budget_sync
+import hnau.pinfin.projector.resources.no
+import hnau.pinfin.projector.resources.stop_sync
+import hnau.pinfin.projector.resources.yes
 import hnau.pipe.annotations.Pipe
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.StateFlow

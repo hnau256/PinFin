@@ -33,9 +33,9 @@ import hnau.common.projector.utils.horizontalDisplayPadding
 import hnau.common.kotlin.coroutines.mapWithScope
 import hnau.pinfin.model.transaction.TransactionModel
 import hnau.pinfin.model.transaction.type.TransactionTypeModel
-import hnau.pinfin.projector.Res
-import hnau.pinfin.projector.new_transaction
-import hnau.pinfin.projector.transaction
+import hnau.pinfin.projector.resources.Res
+import hnau.pinfin.projector.resources.new_transaction
+import hnau.pinfin.projector.resources.transaction
 import hnau.pinfin.projector.transaction.type.TransactionTypeProjector
 import hnau.pinfin.projector.transaction.type.entry.EntryProjector
 import hnau.pinfin.projector.transaction.type.transfer.TransferProjector

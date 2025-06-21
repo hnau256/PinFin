@@ -20,9 +20,9 @@ import hnau.common.projector.uikit.table.TableOrientation
 import hnau.common.projector.uikit.table.cellShape
 import hnau.common.projector.utils.Icon
 import hnau.pinfin.model.transaction.TransactionModel
-import hnau.pinfin.projector.Res
-import hnau.pinfin.projector.cancel
-import hnau.pinfin.projector.save
+import hnau.pinfin.projector.resources.Res
+import hnau.pinfin.projector.resources.cancel
+import hnau.pinfin.projector.resources.save
 import hnau.pipe.annotations.Pipe
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.datetime.LocalTime
