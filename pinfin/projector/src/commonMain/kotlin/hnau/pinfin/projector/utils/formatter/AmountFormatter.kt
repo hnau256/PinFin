@@ -1,5 +1,6 @@
 package hnau.pinfin.projector.utils.formatter
 
+import hnau.common.kotlin.ifNull
 import hnau.pinfin.data.Amount
 
 interface AmountFormatter {
@@ -52,9 +53,21 @@ interface AmountFormatter {
                 input: String,
             ): Amount? = input
                 .filterNot(Char::isWhitespace)
-                .toFloatOrNull()
-                ?.times(factor)
-                ?.toLong()
+                .split(".")
+                .let {parts ->
+                    val count = parts
+                        .firstOrNull()
+                        .ifNull { "0" }
+                        .toLongOrNull()
+                        ?: return@let null
+                    val cents = parts
+                        .getOrNull(1)
+                        .ifNull { "00" }
+                        .padEnd(2, '0')
+                        .toIntOrNull()
+                        ?: return@let null
+                    count * factor + cents
+                }
                 ?.takeIf { it >= 0 }
                 ?.toUInt()
                 ?.let(::Amount)
