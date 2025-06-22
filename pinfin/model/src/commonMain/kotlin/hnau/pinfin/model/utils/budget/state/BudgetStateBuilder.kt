@@ -1,6 +1,7 @@
 package hnau.pinfin.model.utils.budget.state
 
 import hnau.common.kotlin.castOrNull
+import hnau.pinfin.data.AccountConfig
 import hnau.pinfin.data.AccountId
 import hnau.pinfin.data.BudgetConfig
 import hnau.pinfin.data.BudgetId
@@ -19,7 +20,8 @@ import kotlinx.coroutines.withContext
 data class BudgetStateBuilder(
     private val hash: UpchainHash?,
     private val config: BudgetConfig,
-    private val transactions: Map<Transaction.Id, Transaction> = mutableMapOf(),
+    private val transactions: Map<Transaction.Id, Transaction> = mapOf(),
+    private val accountsConfigs: Map<AccountId, AccountConfig> = mapOf(),
 ) {
 
     override fun equals(
@@ -35,6 +37,7 @@ data class BudgetStateBuilder(
     ): BudgetStateBuilder {
         val updateType = UpdateType.updateTypeMapper.direct(update)
         val transactions = transactions.toMutableMap()
+        val accountsConfigs = this@BudgetStateBuilder.accountsConfigs.toMutableMap()
         var info = config
         when (updateType) {
             is UpdateType.RemoveTransaction ->
@@ -45,6 +48,9 @@ data class BudgetStateBuilder(
 
             is UpdateType.Config ->
                 info += updateType.config
+
+            is UpdateType.AccountConfig -> accountsConfigs[updateType.id] =
+                accountsConfigs.getOrElse(updateType.id) { AccountConfig.empty } + updateType.config
         }
         return BudgetStateBuilder(
             hash = hash + update,
@@ -94,6 +100,7 @@ data class BudgetStateBuilder(
                     AccountInfo(
                         id = id,
                         amount = SignedAmount.Companion.zero,
+                        config = accountsConfigs[id],
                     )
                 }
                 .let { currentInfo ->

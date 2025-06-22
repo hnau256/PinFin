@@ -5,15 +5,15 @@
 package hnau.pinfin.model.transaction.type.utils
 
 import arrow.core.toOption
+import hnau.common.kotlin.coroutines.combineStateWith
+import hnau.common.kotlin.coroutines.mapState
+import hnau.common.kotlin.coroutines.toMutableStateFlowAsInitial
+import hnau.common.kotlin.serialization.MutableStateFlowSerializer
 import hnau.common.model.EditingString
 import hnau.common.model.goback.GoBackHandler
 import hnau.common.model.goback.GoBackHandlerProvider
 import hnau.common.model.goback.NeverGoBackHandler
 import hnau.common.model.toEditingString
-import hnau.common.kotlin.coroutines.combineStateWith
-import hnau.common.kotlin.coroutines.mapState
-import hnau.common.kotlin.coroutines.toMutableStateFlowAsInitial
-import hnau.common.kotlin.serialization.MutableStateFlowSerializer
 import hnau.pinfin.data.AccountId
 import hnau.pinfin.model.utils.budget.repository.BudgetRepository
 import hnau.pinfin.model.utils.budget.state.AccountInfo
@@ -60,7 +60,9 @@ class ChooseAccountModel(
     private val accounts: StateFlow<List<AccountInfo>> = dependencies
         .repository
         .accounts
-        .list
+        .getList(
+            includeInvisible = false,
+        )
         .combineStateWith(
             scope = scope,
             other = localUsedAccounts,
@@ -85,6 +87,7 @@ class ChooseAccountModel(
                 AccountInfo(
                     id = AccountId(query),
                     amount = SignedAmount.zero,
+                    config = null,
                 )
             )
         },

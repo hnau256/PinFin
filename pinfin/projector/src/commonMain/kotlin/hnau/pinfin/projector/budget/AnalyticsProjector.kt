@@ -54,6 +54,7 @@ class AnalyticsProjector(
         ) {
             state
                 .accounts
+                .filter(AccountInfo::visible)
                 .toNonEmptyListOrNull()
                 ?.let { accounts ->
                     stickyHeader(

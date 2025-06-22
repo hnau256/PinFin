@@ -15,6 +15,7 @@ import kotlinx.coroutines.flow.runningFold
 import kotlinx.coroutines.flow.stateIn
 
 class BudgetRepository(
+    scope: CoroutineScope,
     val state: StateFlow<BudgetState>,
     val upchainStorage: UpchainStorage,
     val remove: suspend () -> Unit,
@@ -31,6 +32,7 @@ class BudgetRepository(
     )
 
     val accounts: BudgetRepositoryAccountsDelegate = BudgetRepositoryAccountsDelegate(
+        scope = scope,
         state = state,
         addUpdate = ::applyUpdate,
     )
@@ -83,6 +85,7 @@ class BudgetRepository(
                 }
                 .stateIn(scope)
             return BudgetRepository(
+                scope = scope,
                 state = state,
                 upchainStorage = upchainStorage,
                 remove = remove,

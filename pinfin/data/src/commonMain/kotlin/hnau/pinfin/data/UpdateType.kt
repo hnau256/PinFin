@@ -3,6 +3,7 @@ package hnau.pinfin.data
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import hnau.pinfin.data.Transaction as TransactionDTO
+import hnau.pinfin.data.AccountConfig as AccountConfigDTO
 
 @Serializable
 sealed interface UpdateType {
@@ -28,5 +29,12 @@ sealed interface UpdateType {
     @SerialName("config")
     data class Config(
         val config: BudgetConfig,
+    ) : UpdateType
+
+    @Serializable
+    @SerialName("account_config")
+    data class AccountConfig(
+        val id: AccountId,
+        val config: AccountConfigDTO,
     ) : UpdateType
 }
