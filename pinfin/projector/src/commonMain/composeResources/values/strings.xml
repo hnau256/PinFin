@@ -65,4 +65,7 @@
     <string name="select_icon">Выберите иконку</string>
     <string name="search">Поиск</string>
     <string name="no_icons_found">Иконки по этим критериям не найдены</string>
+    <string name="account_settings">Настройки счёта</string>
+    <string name="hide_if_amount_is_zero">Скрывать при нулевом балансе</string>
+    <string name="name">Название</string>
 </resources>

@@ -13,6 +13,7 @@ import hnau.common.model.stack.stackGoBackHandler
 import hnau.common.model.stack.tailGoBackHandler
 import hnau.common.model.stack.tryDropLast
 import hnau.common.kotlin.serialization.MutableStateFlowSerializer
+import hnau.pinfin.model.AccountModel
 import hnau.pinfin.model.budget.BudgetModel
 import hnau.pinfin.model.transaction.TransactionModel
 import hnau.pinfin.model.utils.budget.repository.BudgetRepository
@@ -37,6 +38,8 @@ class BudgetStackModel(
 
     @Pipe
     interface Dependencies {
+
+        fun account(): AccountModel.Dependencies
 
         @Pipe
         interface WithOpeners {
@@ -90,6 +93,15 @@ class BudgetStackModel(
                 scope = modelScope,
                 skeleton = skeleton.skeleton,
                 dependencies = dependenciesWithOpeners.transaction(),
+                onReady = { this@BudgetStackModel.skeleton.stack.tryDropLast() },
+            )
+        )
+
+        is BudgetStackElementModel.Skeleton.Account -> BudgetStackElementModel.Account(
+            AccountModel(
+                scope = modelScope,
+                skeleton = skeleton.skeleton,
+                dependencies = dependencies.account(),
                 onReady = { this@BudgetStackModel.skeleton.stack.tryDropLast() },
             )
         )

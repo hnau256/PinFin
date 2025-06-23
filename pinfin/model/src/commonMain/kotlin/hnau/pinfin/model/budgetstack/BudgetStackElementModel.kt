@@ -1,6 +1,7 @@
 package hnau.pinfin.model.budgetstack
 
 import hnau.common.model.goback.GoBackHandlerProvider
+import hnau.pinfin.model.AccountModel
 import hnau.pinfin.model.budget.BudgetModel
 import hnau.pinfin.model.transaction.TransactionModel
 import kotlinx.serialization.SerialName
@@ -26,6 +27,14 @@ sealed interface BudgetStackElementModel : GoBackHandlerProvider {
             get() = 1
     }
 
+    data class Account(
+        val model: AccountModel,
+    ) : BudgetStackElementModel, GoBackHandlerProvider by model {
+
+        override val key: Int
+            get() = 2
+    }
+
     @Serializable
     sealed interface Skeleton {
 
@@ -49,6 +58,16 @@ sealed interface BudgetStackElementModel : GoBackHandlerProvider {
 
             override val key: Int
                 get() = 1
+        }
+
+        @Serializable
+        @SerialName("account")
+        data class Account(
+            val skeleton: AccountModel.Skeleton,
+        ) : Skeleton {
+
+            override val key: Int
+                get() = 2
         }
     }
 }

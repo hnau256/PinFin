@@ -32,6 +32,7 @@ class AccountModel(
     private val scope: CoroutineScope,
     dependencies: Dependencies,
     private val skeleton: Skeleton,
+    private val onReady: () -> Unit,
 ) : GoBackHandlerProvider {
 
     @Pipe
@@ -64,31 +65,33 @@ class AccountModel(
     val title: MutableStateFlow<EditingString>
         get() = skeleton.title
 
+    private val nonEmptyTitle: StateFlow<String?> = title.mapState(scope) { title ->
+        title.text.takeIf(String::isNotEmpty)
+    }
+
+    val titleIsCorrect: StateFlow<Boolean> =
+        nonEmptyTitle.mapState(scope) { it != null }
+
     val hideIfAmountIsZero: MutableStateFlow<Boolean>
         get() = skeleton.hideIfAmountIsZero
 
     private val config: StateFlow<AccountConfig?>
-        get() = title
+        get() = nonEmptyTitle
             .scopedInState(scope)
-            .flatMapState(scope) { (titleScope, titleOrEmpty) ->
-                titleOrEmpty
-                    .text
-                    .takeIf(String::isNotEmpty)
-                    .foldNullable(
-                        ifNull = {
-                            null.toMutableStateFlowAsInitial()
-                        },
-                        ifNotNull = { title ->
-                            hideIfAmountIsZero.mapState(titleScope) { hideIfAmountIsZero ->
-                                AccountConfig(
-                                    title = title
-                                        .takeIf { it != skeleton.initialTitle },
-                                    hideIfAmountIsZero = hideIfAmountIsZero
-                                        .takeIf { it != skeleton.initialHideIfAmountIsZero },
-                                )
-                            }
+            .flatMapState(scope) { (titleScope, titleOrNull) ->
+                titleOrNull.foldNullable(
+                    ifNull = { null.toMutableStateFlowAsInitial() },
+                    ifNotNull = { title ->
+                        hideIfAmountIsZero.mapState(titleScope) { hideIfAmountIsZero ->
+                            AccountConfig(
+                                title = title
+                                    .takeIf { it != skeleton.initialTitle },
+                                hideIfAmountIsZero = hideIfAmountIsZero
+                                    .takeIf { it != skeleton.initialHideIfAmountIsZero },
+                            )
                         }
-                    )
+                    }
+                )
             }
 
     val save: StateFlow<StateFlow<(() -> Unit)?>?> = config
@@ -102,6 +105,7 @@ class AccountModel(
                             id = skeleton.id,
                             config = config,
                         )
+                    onReady()
                 }
             }
         }

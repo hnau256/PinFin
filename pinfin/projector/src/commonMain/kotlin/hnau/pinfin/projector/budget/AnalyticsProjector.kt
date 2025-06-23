@@ -2,6 +2,7 @@ package hnau.pinfin.projector.budget
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -13,18 +14,16 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import arrow.core.toNonEmptyListOrNull
 import hnau.common.projector.uikit.utils.Dimens
 import hnau.common.projector.utils.toLazyListState
 import hnau.pinfin.model.budget.AnalyticsModel
 import hnau.pinfin.model.utils.budget.state.AccountInfo
 import hnau.pinfin.projector.resources.Res
 import hnau.pinfin.projector.resources.accounts
-import hnau.pinfin.projector.utils.formatter.AmountFormatter
 import hnau.pinfin.projector.utils.SignedAmountContent
 import hnau.pinfin.projector.utils.account.AccountContent
+import hnau.pinfin.projector.utils.formatter.AmountFormatter
 import hnau.pipe.annotations.Pipe
 import kotlinx.coroutines.CoroutineScope
 import org.jetbrains.compose.resources.stringResource
@@ -46,32 +45,31 @@ class AnalyticsProjector(
     fun Content(
         contentPadding: PaddingValues,
     ) {
-        val state by model.budgetState.collectAsState()
+        val accountsOrNull = model
+            .accounts
+            .collectAsState()
+            .value
         LazyColumn(
             modifier = Modifier.fillMaxSize(),
             state = model.scrollState.toLazyListState(),
             contentPadding = contentPadding,
         ) {
-            state
-                .accounts
-                .filter(AccountInfo::visible)
-                .toNonEmptyListOrNull()
-                ?.let { accounts ->
-                    stickyHeader(
-                        key = "accounts",
-                    ) {
-                        Title(
-                            text = stringResource(Res.string.accounts)
-                        )
-                    }
-                    items(
-                        accounts,
-                    ) { info ->
-                        Account(
-                            info = info,
-                        )
-                    }
+            accountsOrNull?.let { accounts ->
+                stickyHeader(
+                    key = "accounts",
+                ) {
+                    Title(
+                        text = stringResource(Res.string.accounts)
+                    )
                 }
+                items(
+                    items = accounts,
+                ) { info ->
+                    Account(
+                        info = info,
+                    )
+                }
+            }
         }
     }
 
@@ -92,7 +90,8 @@ class AnalyticsProjector(
                 )
             },
             modifier = Modifier
-                .fillMaxWidth(),
+                .fillMaxWidth()
+                .clickable { model.onAccountClick(info) },
         )
     }
 
