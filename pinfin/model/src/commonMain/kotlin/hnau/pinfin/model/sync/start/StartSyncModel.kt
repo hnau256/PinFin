@@ -10,10 +10,8 @@ import hnau.common.kotlin.coroutines.filterSet
 import hnau.common.kotlin.coroutines.mapState
 import hnau.common.kotlin.coroutines.toMutableStateFlowAsInitial
 import hnau.common.kotlin.mapper.Mapper
-import hnau.common.kotlin.mapper.nullable
 import hnau.common.kotlin.mapper.plus
 import hnau.common.kotlin.mapper.stringToInt
-import hnau.common.kotlin.mapper.takeIf
 import hnau.common.kotlin.serialization.MutableStateFlowSerializer
 import hnau.common.model.EditingString
 import hnau.common.model.goback.GoBackHandler

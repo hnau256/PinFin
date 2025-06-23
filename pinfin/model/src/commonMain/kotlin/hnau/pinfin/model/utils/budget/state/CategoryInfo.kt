@@ -1,6 +1,5 @@
 package hnau.pinfin.model.utils.budget.state
 
-import hnau.common.kotlin.castOrNull
 import hnau.common.kotlin.ifNull
 import hnau.pinfin.data.CategoryId
 import kotlinx.serialization.Serializable
@@ -23,13 +22,4 @@ data class CategoryInfo(
                 other = other.title,
             )
         }
-
-
-    override fun equals(
-        other: Any?,
-    ): Boolean = other
-        .castOrNull<CategoryInfo>()
-        ?.id == id
-
-    override fun hashCode(): Int = id.hashCode()
 }

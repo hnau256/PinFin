@@ -1,9 +1,8 @@
 package hnau.pinfin.model.transaction.type.entry.record
 
 import kotlinx.serialization.Serializable
-import kotlin.uuid.Uuid
-import kotlin.jvm.JvmInline
 import kotlin.uuid.ExperimentalUuidApi
+import kotlin.uuid.Uuid
 
 @Serializable
 @JvmInline

@@ -4,10 +4,6 @@
 
 package hnau.pinfin.model.transaction
 
-import hnau.common.model.EditingString
-import hnau.common.model.goback.GoBackHandler
-import hnau.common.model.goback.GoBackHandlerProvider
-import hnau.common.model.toEditingString
 import hnau.common.kotlin.coroutines.InProgressRegistry
 import hnau.common.kotlin.coroutines.actionOrNullIfExecuting
 import hnau.common.kotlin.coroutines.combineState
@@ -19,6 +15,10 @@ import hnau.common.kotlin.coroutines.scopedInState
 import hnau.common.kotlin.coroutines.toMutableStateFlowAsInitial
 import hnau.common.kotlin.foldNullable
 import hnau.common.kotlin.serialization.MutableStateFlowSerializer
+import hnau.common.model.EditingString
+import hnau.common.model.goback.GoBackHandler
+import hnau.common.model.goback.GoBackHandlerProvider
+import hnau.common.model.toEditingString
 import hnau.pinfin.data.Comment
 import hnau.pinfin.data.Transaction
 import hnau.pinfin.data.TransactionType

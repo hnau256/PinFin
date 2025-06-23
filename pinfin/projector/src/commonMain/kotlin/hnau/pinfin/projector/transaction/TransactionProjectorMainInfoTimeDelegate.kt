@@ -1,6 +1,5 @@
 package hnau.pinfin.projector.transaction
 
-import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.Done
@@ -11,7 +10,6 @@ import androidx.compose.material3.rememberTimePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.unit.dp
 import hnau.common.projector.uikit.HnauButton
 import hnau.common.projector.uikit.TripleRow
 import hnau.common.projector.uikit.table.Subtable

@@ -6,10 +6,6 @@ package hnau.pinfin.model
 
 import arrow.core.NonEmptyList
 import arrow.core.toNonEmptyListOrNull
-import hnau.common.model.EditingString
-import hnau.common.model.goback.GoBackHandler
-import hnau.common.model.goback.GoBackHandlerProvider
-import hnau.common.model.toEditingString
 import hnau.common.kotlin.Loadable
 import hnau.common.kotlin.Loading
 import hnau.common.kotlin.Ready
@@ -20,11 +16,13 @@ import hnau.common.kotlin.coroutines.toMutableStateFlowAsInitial
 import hnau.common.kotlin.foldBoolean
 import hnau.common.kotlin.foldNullable
 import hnau.common.kotlin.serialization.MutableStateFlowSerializer
-import hnau.pinfin.data.Icon
+import hnau.common.model.EditingString
+import hnau.common.model.goback.GoBackHandler
+import hnau.common.model.goback.GoBackHandlerProvider
+import hnau.common.model.toEditingString
 import hnau.pinfin.model.utils.icons.IconCategory
 import hnau.pinfin.model.utils.icons.IconVariant
 import hnau.pinfin.model.utils.icons.category
-import hnau.pinfin.model.utils.icons.icon
 import hnau.pinfin.model.utils.icons.tags
 import hnau.pinfin.model.utils.icons.weight
 import hnau.pipe.annotations.Pipe

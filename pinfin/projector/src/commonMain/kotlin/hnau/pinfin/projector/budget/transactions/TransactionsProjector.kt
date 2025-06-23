@@ -21,7 +21,6 @@ import androidx.compose.ui.unit.dp
 import hnau.common.model.goback.GlobalGoBackHandler
 import hnau.common.model.goback.GoBackHandler
 import hnau.common.projector.uikit.ErrorPanel
-import hnau.common.projector.uikit.bubble.BubblesShower
 import hnau.common.projector.uikit.state.NullableStateContent
 import hnau.common.projector.uikit.state.TransitionSpec
 import hnau.common.projector.uikit.utils.Dimens

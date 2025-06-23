@@ -5,11 +5,6 @@
 package hnau.pinfin.model.manage
 
 import arrow.core.identity
-import hnau.common.model.goback.GoBackHandler
-import hnau.common.model.goback.GoBackHandlerProvider
-import hnau.common.model.preferences.Preference
-import hnau.common.model.preferences.Preferences
-import hnau.common.model.preferences.map
 import hnau.common.kotlin.castOrNull
 import hnau.common.kotlin.coroutines.flatMapState
 import hnau.common.kotlin.coroutines.mapState
@@ -24,6 +19,11 @@ import hnau.common.kotlin.mapper.takeIf
 import hnau.common.kotlin.serialization.MutableStateFlowSerializer
 import hnau.common.kotlin.shrinkType
 import hnau.common.kotlin.toAccessor
+import hnau.common.model.goback.GoBackHandler
+import hnau.common.model.goback.GoBackHandlerProvider
+import hnau.common.model.preferences.Preference
+import hnau.common.model.preferences.Preferences
+import hnau.common.model.preferences.map
 import hnau.common.model.preferences.withDefault
 import hnau.pinfin.data.BudgetId
 import hnau.pinfin.model.IconModel
@@ -31,8 +31,6 @@ import hnau.pinfin.model.budgetsstack.BudgetsStackModel
 import hnau.pinfin.model.budgetstack.BudgetStackModel
 import hnau.pinfin.model.utils.budget.repository.BudgetRepository
 import hnau.pinfin.model.utils.budget.storage.BudgetsStorage
-import hnau.pinfin.model.utils.icons.IconVariant
-import hnau.pinfin.model.utils.icons.icon
 import hnau.pipe.annotations.Pipe
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.StateFlow

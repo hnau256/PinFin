@@ -4,6 +4,7 @@
 
 package hnau.pinfin.model.sync.client
 
+import hnau.common.kotlin.serialization.MutableStateFlowSerializer
 import hnau.common.model.goback.GoBackHandler
 import hnau.common.model.goback.GoBackHandlerProvider
 import hnau.common.model.goback.fallback
@@ -13,7 +14,6 @@ import hnau.common.model.stack.push
 import hnau.common.model.stack.stackGoBackHandler
 import hnau.common.model.stack.tailGoBackHandler
 import hnau.common.model.stack.tryDropLast
-import hnau.common.kotlin.serialization.MutableStateFlowSerializer
 import hnau.pinfin.model.sync.client.budget.SyncClientLoadBudgetModel
 import hnau.pinfin.model.sync.client.list.SyncClientListModel
 import hnau.pinfin.model.sync.client.utils.TcpSyncClient

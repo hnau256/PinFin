@@ -25,6 +25,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import arrow.core.NonEmptyList
+import hnau.common.kotlin.coroutines.mapReusable
 import hnau.common.model.goback.GlobalGoBackHandler
 import hnau.common.model.goback.GoBackHandler
 import hnau.common.projector.uikit.ErrorPanel
@@ -37,7 +38,6 @@ import hnau.common.projector.utils.NavigationIcon
 import hnau.common.projector.utils.horizontalDisplayPadding
 import hnau.common.projector.utils.plus
 import hnau.common.projector.utils.verticalDisplayPadding
-import hnau.common.kotlin.coroutines.mapReusable
 import hnau.pinfin.model.budgetslist.BudgetsListModel
 import hnau.pinfin.projector.resources.Res
 import hnau.pinfin.projector.resources.add

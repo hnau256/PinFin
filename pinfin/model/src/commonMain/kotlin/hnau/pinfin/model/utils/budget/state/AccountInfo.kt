@@ -1,6 +1,5 @@
 package hnau.pinfin.model.utils.budget.state
 
-import hnau.common.kotlin.castOrNull
 import hnau.pinfin.data.AccountConfig
 import hnau.pinfin.data.AccountId
 import kotlinx.serialization.Serializable
@@ -14,10 +13,10 @@ data class AccountInfo(
 ) : Comparable<AccountInfo> {
 
     constructor(
-         id: AccountId,
-         amount: SignedAmount,
+        id: AccountId,
+        amount: SignedAmount,
         config: AccountConfig?,
-    ): this(
+    ) : this(
         id = id,
         amount = amount,
         title = config?.title ?: id.id,
@@ -32,12 +31,4 @@ data class AccountInfo(
     ): Int = title.compareTo(
         other = other.title,
     )
-
-    override fun equals(
-        other: Any?,
-    ): Boolean = other
-        .castOrNull<AccountInfo>()
-        ?.id == id
-
-    override fun hashCode(): Int = id.hashCode()
 }

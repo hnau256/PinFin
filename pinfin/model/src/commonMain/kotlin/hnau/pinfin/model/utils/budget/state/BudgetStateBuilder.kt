@@ -20,8 +20,8 @@ import kotlinx.coroutines.withContext
 data class BudgetStateBuilder(
     private val hash: UpchainHash?,
     private val config: BudgetConfig,
-    private val transactions: Map<Transaction.Id, Transaction> = mapOf(),
-    private val accountsConfigs: Map<AccountId, AccountConfig> = mapOf(),
+    private val transactions: Map<Transaction.Id, Transaction>,
+    private val accountsConfigs: Map<AccountId, AccountConfig>,
 ) {
 
     override fun equals(
@@ -55,6 +55,7 @@ data class BudgetStateBuilder(
         return BudgetStateBuilder(
             hash = hash + update,
             transactions = transactions,
+            accountsConfigs = accountsConfigs,
             config = info,
         )
     }
@@ -168,6 +169,7 @@ data class BudgetStateBuilder(
         val empty = BudgetStateBuilder(
             hash = null,
             config = BudgetConfig.empty,
+            accountsConfigs = emptyMap(),
             transactions = emptyMap(),
         )
     }

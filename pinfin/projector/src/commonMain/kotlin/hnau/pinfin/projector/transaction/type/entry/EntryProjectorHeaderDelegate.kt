@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
+import hnau.common.kotlin.coroutines.mapWithScope
 import hnau.common.projector.uikit.state.NullableStateContent
 import hnau.common.projector.uikit.state.TransitionSpec
 import hnau.common.projector.uikit.table.CellBox
@@ -12,12 +13,11 @@ import hnau.common.projector.uikit.table.Table
 import hnau.common.projector.uikit.table.TableOrientation
 import hnau.common.projector.uikit.table.cellShape
 import hnau.common.projector.uikit.utils.Dimens
-import hnau.common.kotlin.coroutines.mapWithScope
 import hnau.pinfin.model.transaction.type.entry.EntryModel
 import hnau.pinfin.projector.transaction.type.utils.ChooseAccountProjector
-import hnau.pinfin.projector.utils.formatter.AmountFormatter
 import hnau.pinfin.projector.utils.SignedAmountContent
 import hnau.pinfin.projector.utils.account.AccountButton
+import hnau.pinfin.projector.utils.formatter.AmountFormatter
 import hnau.pipe.annotations.Pipe
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.StateFlow

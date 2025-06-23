@@ -5,8 +5,8 @@ import arrow.core.None
 import arrow.core.Option
 import arrow.core.Some
 import arrow.core.toNonEmptyListOrNull
-import hnau.common.model.EditingString
 import hnau.common.kotlin.foldNullable
+import hnau.common.model.EditingString
 
 data class ChooseStateSnapshot<out T>(
     val visibleVariants: VisibleVariants<T>,

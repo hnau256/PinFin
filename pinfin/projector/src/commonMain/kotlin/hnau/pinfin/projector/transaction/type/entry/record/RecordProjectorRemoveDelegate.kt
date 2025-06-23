@@ -6,8 +6,8 @@ import hnau.pinfin.model.transaction.type.entry.record.RecordModel
 import hnau.pinfin.projector.resources.Res
 import hnau.pinfin.projector.resources.no
 import hnau.pinfin.projector.resources.remove_record
-import hnau.pinfin.projector.utils.Dialog
 import hnau.pinfin.projector.resources.yes
+import hnau.pinfin.projector.utils.Dialog
 import org.jetbrains.compose.resources.stringResource
 
 class RecordProjectorRemoveDelegate(

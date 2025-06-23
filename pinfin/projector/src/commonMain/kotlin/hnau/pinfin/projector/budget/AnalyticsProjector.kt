@@ -64,6 +64,7 @@ class AnalyticsProjector(
                 }
                 items(
                     items = accounts,
+                    key = { "account_" + it.id.id },
                 ) { info ->
                     Account(
                         info = info,

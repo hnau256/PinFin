@@ -4,6 +4,7 @@
 
 package hnau.pinfin.model.budgetsstack
 
+import hnau.common.kotlin.serialization.MutableStateFlowSerializer
 import hnau.common.model.goback.GoBackHandler
 import hnau.common.model.goback.GoBackHandlerProvider
 import hnau.common.model.goback.fallback
@@ -12,7 +13,6 @@ import hnau.common.model.stack.StackModelElements
 import hnau.common.model.stack.push
 import hnau.common.model.stack.stackGoBackHandler
 import hnau.common.model.stack.tailGoBackHandler
-import hnau.common.kotlin.serialization.MutableStateFlowSerializer
 import hnau.pinfin.model.budgetslist.BudgetsListModel
 import hnau.pinfin.model.sync.SyncStackModel
 import hnau.pipe.annotations.Pipe

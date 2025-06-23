@@ -4,10 +4,10 @@
 
 package hnau.pinfin.model.sync.server
 
-import hnau.common.model.goback.GoBackHandler
-import hnau.common.model.goback.GoBackHandlerProvider
 import hnau.common.kotlin.coroutines.toMutableStateFlowAsInitial
 import hnau.common.kotlin.serialization.MutableStateFlowSerializer
+import hnau.common.model.goback.GoBackHandler
+import hnau.common.model.goback.GoBackHandlerProvider
 import hnau.pinfin.model.sync.server.utils.ServerSyncApi
 import hnau.pinfin.model.sync.server.utils.tcpSyncServer
 import hnau.pinfin.model.sync.utils.ServerPort
@@ -21,7 +21,6 @@ import kotlinx.serialization.Serializable
 import kotlinx.serialization.UseSerializers
 import java.net.InetAddress
 import java.net.NetworkInterface
-import kotlin.streams.asSequence
 
 class SyncServerModel(
     scope: CoroutineScope,
