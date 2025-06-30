@@ -40,7 +40,7 @@ interface AmountFormatter {
                     val cents = (it % factor)
                         .takeIf { it > 0 }
                         ?.toString()
-                        ?.padEnd(2, '0')
+                        ?.padStart(2, '0')
                     listOfNotNull(
                         count,
                         cents
@@ -54,7 +54,8 @@ interface AmountFormatter {
             ): Amount? = input
                 .filterNot(Char::isWhitespace)
                 .split(".")
-                .let {parts ->
+                .takeIf { it.size in 1..2 }
+                ?.let { parts ->
                     val count = parts
                         .firstOrNull()
                         .ifNull { "0" }
@@ -63,8 +64,9 @@ interface AmountFormatter {
                     val cents = parts
                         .getOrNull(1)
                         .ifNull { "00" }
-                        .padEnd(2, '0')
-                        .toIntOrNull()
+                        .takeIf { it.length in 1..2 }
+                        ?.padEnd(2, '0')
+                        ?.toIntOrNull()
                         ?: return@let null
                     count * factor + cents
                 }
