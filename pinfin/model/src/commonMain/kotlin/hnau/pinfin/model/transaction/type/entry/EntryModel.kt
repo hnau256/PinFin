@@ -119,44 +119,12 @@ class EntryModel(
                     }
             }
 
-        val createItem = { id: RecordId, skeleton: RecordModel.Skeleton ->
-            val scope = scope.createChild()
-            RecordItem(
-                id = id,
-                model = RecordModel(
-                    scope = scope,
-                    dependencies = dependencies.record(),
-                    skeleton = skeleton,
-                    remove = this@EntryModel
-                        .skeleton
-                        .records
-                        .mapState(
-                            scope = scope,
-                        ) { allRecords ->
-                            val newRecordsOrNull = allRecords
-                                .filter { it.first != id }
-                                .toNonEmptyListOrNull()
-                            newRecordsOrNull?.let { newRecords ->
-                                {
-                                    this@EntryModel
-                                        .skeleton
-                                        .records
-                                        .value = newRecords
-                                }
-                            }
-                        },
-                    localUsedCategories = localUsedCategories,
-                ),
-                scope = scope,
-            )
-        }
-
         skeleton
             .records
             .mapNonEmptyListReusable(
                 scope = scope,
                 extractKey = Pair<RecordId, *>::first,
-                transform = {itemScope, (id, skeleton) ->
+                transform = { itemScope, (id, skeleton) ->
                     RecordItem(
                         id = id,
                         model = RecordModel(
@@ -167,7 +135,7 @@ class EntryModel(
                                 .skeleton
                                 .records
                                 .mapState(
-                                    scope = scope,
+                                    scope = itemScope,
                                 ) { allRecords ->
                                     val newRecordsOrNull = allRecords
                                         .filter { it.first != id }
@@ -182,6 +150,18 @@ class EntryModel(
                                     }
                                 },
                             localUsedCategories = localUsedCategories,
+                            createNextIfLast = this@EntryModel
+                                .skeleton
+                                .records
+                                .mapState(
+                                    scope = itemScope,
+                                ) {records ->
+                                    val isLast = records.last().first == id
+                                    if (!isLast) {
+                                        return@mapState null
+                                    }
+                                    ::addNewRecord
+                                }
                         ),
                         scope = scope,
                     )

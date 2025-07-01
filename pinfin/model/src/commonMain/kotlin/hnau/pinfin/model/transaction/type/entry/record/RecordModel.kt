@@ -35,6 +35,7 @@ class RecordModel(
     private val dependencies: Dependencies,
     private val remove: StateFlow<(() -> Unit)?>,
     localUsedCategories: StateFlow<Set<CategoryInfo>>,
+    val createNextIfLast: StateFlow<(() -> Unit)?>,
 ) : GoBackHandlerProvider {
 
     @Serializable

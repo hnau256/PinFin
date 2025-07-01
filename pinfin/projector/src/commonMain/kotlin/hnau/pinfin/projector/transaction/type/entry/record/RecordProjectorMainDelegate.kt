@@ -1,11 +1,13 @@
 package hnau.pinfin.projector.transaction.type.entry.record
 
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.input.ImeAction
 import hnau.common.kotlin.coroutines.mapState
 import hnau.common.projector.uikit.HnauButton
 import hnau.common.projector.uikit.TextInput
@@ -24,6 +26,8 @@ import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.stringResource
 
 class RecordProjectorMainDelegate(
@@ -56,6 +60,9 @@ class RecordProjectorMainDelegate(
                                 value = model.comment,
                                 shape = shape,
                                 placeholder = { Text(stringResource(Res.string.comment)) },
+                                keyboardOptions = KeyboardOptions(
+                                    imeAction = ImeAction.Next,
+                                ),
                             )
                         },
                         removeOrNull?.let { remove ->
@@ -82,6 +89,18 @@ class RecordProjectorMainDelegate(
                 },
                 amount.Content(
                     weight = 1f,
+                    imeAction = ImeAction.Next,
+                    onImeAction = model.createNextIfLast.mapState(scope) { createNextIfLastOrNull ->
+                        createNextIfLastOrNull?.let { createNextIfLast ->
+                            {
+                                createNextIfLast()
+                                scope.launch {
+                                    delay(100)
+                                    defaultKeyboardAction(ImeAction.Next)
+                                }
+                            }
+                        }
+                    },
                 )
             )
         )

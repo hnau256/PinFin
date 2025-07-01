@@ -3,6 +3,7 @@ package hnau.pinfin.projector.transaction
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -31,6 +32,7 @@ import hnau.common.projector.uikit.utils.Dimens
 import hnau.common.projector.utils.Icon
 import hnau.common.projector.utils.NavigationIcon
 import hnau.common.projector.utils.horizontalDisplayPadding
+import hnau.common.projector.utils.verticalDisplayPadding
 import hnau.pinfin.model.transaction.TransactionModel
 import hnau.pinfin.model.transaction.type.TransactionTypeModel
 import hnau.pinfin.projector.resources.Res
@@ -129,8 +131,8 @@ class TransactionProjector(
                     .verticalScroll(rememberScrollState())
                     .padding(contentPadding)
                     .horizontalDisplayPadding()
-                    .padding(vertical = Dimens.separation)
-                    .padding(bottom = 96.dp)
+                    .verticalDisplayPadding()
+                    .imePadding()
             ) {
                 mainContent
                     .collectAsState()
