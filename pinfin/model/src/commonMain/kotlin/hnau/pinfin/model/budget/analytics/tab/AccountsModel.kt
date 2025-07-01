@@ -2,7 +2,7 @@
     MutableStateFlowSerializer::class,
 )
 
-package hnau.pinfin.model.budget
+package hnau.pinfin.model.budget.analytics.tab
 
 import arrow.core.NonEmptyList
 import arrow.core.toNonEmptyListOrNull
@@ -23,7 +23,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.UseSerializers
 
-class AnalyticsModel(
+class AccountsModel(
     scope: CoroutineScope,
     private val dependencies: Dependencies,
     private val skeleton: Skeleton,
@@ -40,7 +40,7 @@ class AnalyticsModel(
     @Serializable
     data class Skeleton(
         val scrollState: MutableStateFlow<ListScrollState> =
-            ListScrollState.initial.toMutableStateFlowAsInitial(),
+            ListScrollState.Companion.initial.toMutableStateFlowAsInitial(),
     )
 
     val scrollState: MutableStateFlow<ListScrollState>

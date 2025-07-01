@@ -1,4 +1,4 @@
-package hnau.pinfin.projector.budget
+package hnau.pinfin.projector.budget.analytics
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
@@ -17,7 +17,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import hnau.common.projector.uikit.utils.Dimens
 import hnau.common.projector.utils.toLazyListState
-import hnau.pinfin.model.budget.AnalyticsModel
+import hnau.pinfin.model.budget.analytics.tab.AccountsModel
 import hnau.pinfin.model.utils.budget.state.AccountInfo
 import hnau.pinfin.projector.resources.Res
 import hnau.pinfin.projector.resources.accounts
@@ -28,9 +28,9 @@ import hnau.pipe.annotations.Pipe
 import kotlinx.coroutines.CoroutineScope
 import org.jetbrains.compose.resources.stringResource
 
-class AnalyticsProjector(
+class AccountsProjector(
     scope: CoroutineScope,
-    private val model: AnalyticsModel,
+    private val model: AccountsModel,
     private val dependencies: Dependencies,
 ) {
 
@@ -50,7 +50,7 @@ class AnalyticsProjector(
             .collectAsState()
             .value
         LazyColumn(
-            modifier = Modifier.fillMaxSize(),
+            modifier = Modifier.Companion.fillMaxSize(),
             state = model.scrollState.toLazyListState(),
             contentPadding = contentPadding,
         ) {
@@ -90,7 +90,7 @@ class AnalyticsProjector(
                     amountFormatter = dependencies.amountFormatter,
                 )
             },
-            modifier = Modifier
+            modifier = Modifier.Companion
                 .fillMaxWidth()
                 .clickable { model.onAccountClick(info) },
         )
@@ -104,7 +104,7 @@ class AnalyticsProjector(
             text = text,
             color = MaterialTheme.colorScheme.onBackground,
             style = MaterialTheme.typography.titleLarge,
-            modifier = Modifier
+            modifier = Modifier.Companion
                 .background(MaterialTheme.colorScheme.background)
                 .fillMaxWidth()
                 .padding(

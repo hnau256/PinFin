@@ -10,6 +10,7 @@ import hnau.common.kotlin.ifNull
 import hnau.common.kotlin.serialization.MutableStateFlowSerializer
 import hnau.common.model.goback.GoBackHandler
 import hnau.common.model.goback.GoBackHandlerProvider
+import hnau.pinfin.model.budget.analytics.AnalyticsModel
 import hnau.pinfin.model.budget.config.BudgetConfigModel
 import hnau.pipe.annotations.Pipe
 import kotlinx.coroutines.CoroutineScope

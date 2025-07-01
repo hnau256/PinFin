@@ -22,6 +22,7 @@ import hnau.common.projector.utils.getTransitionSpecForHorizontalSlide
 import hnau.pinfin.model.budget.BudgetModel
 import hnau.pinfin.model.budget.BudgetPageModel
 import hnau.pinfin.model.budget.BudgetTab
+import hnau.pinfin.projector.budget.analytics.AnalyticsProjector
 import hnau.pinfin.projector.budget.config.BudgetConfigProjector
 import hnau.pinfin.projector.budget.transactions.TransactionsProjector
 import hnau.pinfin.projector.resources.Res
