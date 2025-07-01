@@ -19,9 +19,9 @@ import androidx.compose.ui.util.fastForEach
 import arrow.core.Either
 import arrow.core.nonEmptySetOf
 import arrow.core.toNonEmptyListOrNull
+import hnau.common.projector.uikit.table.Cell
 import hnau.common.projector.uikit.table.Table
 import hnau.common.projector.uikit.table.TableOrientation
-import hnau.common.projector.uikit.table.cellShape
 import hnau.common.projector.uikit.utils.Dimens
 import hnau.common.projector.utils.Icon
 import hnau.common.projector.utils.horizontalDisplayPadding
@@ -35,6 +35,7 @@ import hnau.pinfin.projector.utils.SignedAmountContent
 import hnau.pinfin.projector.utils.account.AccountContent
 import hnau.pinfin.projector.utils.category.CategoryContent
 import hnau.pinfin.projector.utils.color
+import kotlinx.collections.immutable.persistentListOf
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 
@@ -48,27 +49,30 @@ fun TransactionInfo.Content(
         modifier = Modifier
             .fillMaxWidth()
             .horizontalDisplayPadding(),
-    ) {
-        Cell {
-            CellContent(
-                dependencies = dependencies,
-                onClick = onClick,
-                cellShape = cellShape,
+        cells = remember(dependencies, onClick) {
+            persistentListOf(
+                Cell {
+                    CellContent(
+                        dependencies = dependencies,
+                        onClick = onClick,
+                        shape = shape,
+                    )
+                }
             )
         }
-    }
+    )
 }
 
 @Composable
 fun TransactionInfo.CellContent(
-    cellShape: Shape,
+    shape: Shape,
     dependencies: TransactionsProjector.Dependencies,
     onClick: () -> Unit,
 ) {
     val signedAmountOrAmount = signedAmountOrAmount
     Row(
         modifier = Modifier
-            .clip(cellShape)
+            .clip(shape)
             .background(MaterialTheme.colorScheme.surfaceContainer)
             .clickable(onClick = onClick)
             .padding(
@@ -140,7 +144,7 @@ private fun TransactionInfo.CommentContent() {
             is TransactionInfo.Type.Transfer -> null
             is TransactionInfo.Type.Entry -> type
                 .records
-                .mapNotNull {record ->
+                .mapNotNull { record ->
                     record.comment.text.takeIf(String::isNotEmpty)
                 }
                 .toNonEmptyListOrNull()
@@ -214,7 +218,7 @@ private fun EntryContent(
             icon = ArrowIcon[arrowDirection],
         )
         AccountContent(
-            info =  entry.account,
+            info = entry.account,
         )
     }
 }

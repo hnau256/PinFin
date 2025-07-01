@@ -22,6 +22,7 @@ kotlin {
                 implementation(project(":pinfin:data"))
                 implementation(compose.components.resources)
                 implementation(libs.kotlin.datetime)
+                implementation(libs.kotlin.immutable)
                 implementation(libs.pipe.annotations)
             }
         }

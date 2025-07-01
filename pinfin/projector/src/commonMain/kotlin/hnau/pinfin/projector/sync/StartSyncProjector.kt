@@ -24,13 +24,12 @@ import hnau.common.model.goback.GoBackHandler
 import hnau.common.projector.uikit.HnauButton
 import hnau.common.projector.uikit.TextInput
 import hnau.common.projector.uikit.progressindicator.InProgress
+import hnau.common.projector.uikit.table.Cell
 import hnau.common.projector.uikit.table.CellBox
 import hnau.common.projector.uikit.table.CellScope
 import hnau.common.projector.uikit.table.Subtable
 import hnau.common.projector.uikit.table.Table
 import hnau.common.projector.uikit.table.TableOrientation
-import hnau.common.projector.uikit.table.TableScope
-import hnau.common.projector.uikit.table.cellShape
 import hnau.common.projector.uikit.utils.Dimens
 import hnau.common.projector.utils.NavigationIcon
 import hnau.common.projector.utils.horizontalDisplayPadding
@@ -44,6 +43,9 @@ import hnau.pinfin.projector.resources.open_client
 import hnau.pinfin.projector.resources.port
 import hnau.pinfin.projector.resources.start_server
 import hnau.pipe.annotations.Pipe
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.PersistentList
+import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.StateFlow
 import org.jetbrains.compose.resources.stringResource
@@ -99,110 +101,109 @@ class StartSyncProjector(
         }
     }
 
+    private val serverCells: PersistentList<Cell> = persistentListOf(
+        PortInput(
+            onDone = { model.startServer.value?.invoke() },
+        ),
+        Button(
+            onClick = model.startServer,
+            title = { stringResource(Res.string.start_server) },
+        )
+    )
+
     @Composable
     private fun Server() {
         Table(
             orientation = TableOrientation.Vertical,
             modifier = Modifier.fillMaxWidth(),
-        ) {
-            PortInput(
-                onDone = { model.startServer.value?.invoke() },
-            )
-            Button(
-                onClick = model.startServer,
-                title = stringResource(Res.string.start_server),
-            )
-        }
+            cells = serverCells,
+        )
     }
+
+    private val clientCells: ImmutableList<Cell> = persistentListOf(
+        Input(
+            title = { stringResource(Res.string.address) },
+        ) {
+            TextInput(
+                value = model.serverAddressInput,
+                isError = !model.serverAddressIsCorrect.collectAsState().value,
+                keyboardOptions = KeyboardOptions(
+                    imeAction = ImeAction.Next,
+                    keyboardType = KeyboardType.Uri,
+                ),
+                shape = shape,
+                placeholder = {
+                    model.serverAddressPlaceholder?.address?.toString()?.let { placeholder ->
+                        Text(placeholder)
+                    }
+                },
+            )
+        },
+        PortInput(
+            onDone = { model.openClient.value?.invoke() },
+        ),
+        Button(
+            onClick = model.openClient,
+            title = { stringResource(Res.string.open_client) },
+        )
+    )
 
     @Composable
     private fun Client() {
         Table(
             orientation = TableOrientation.Vertical,
             modifier = Modifier.fillMaxWidth(),
-        ) {
-            Input(
-                title = stringResource(Res.string.address),
-            ) {
-                TextInput(
-                    value = model.serverAddressInput,
-                    isError = !model.serverAddressIsCorrect.collectAsState().value,
-                    keyboardOptions = KeyboardOptions(
-                        imeAction = ImeAction.Next,
-                        keyboardType = KeyboardType.Uri,
-                    ),
-                    shape = cellShape,
-                    placeholder = {
-                        model.serverAddressPlaceholder?.address?.toString()?.let { placeholder ->
-                            Text(placeholder)
-                        }
-                    },
-                )
-            }
-            PortInput(
-                onDone = { model.openClient.value?.invoke() },
-            )
-            Button(
-                onClick = model.openClient,
-                title = stringResource(Res.string.open_client),
-            )
-        }
+            cells = clientCells,
+        )
     }
 
-    @Composable
-    private fun TableScope.Button(
-        title: String,
+    private fun Button(
+        title: @Composable () -> String,
         onClick: StateFlow<(() -> Unit)?>,
-    ) {
-        Cell {
-            HnauButton(
-                shape = cellShape,
-                content = { Text(title) },
-                onClick = onClick.collectAsState().value,
-            )
-        }
+    ): Cell = Cell {
+        HnauButton(
+            shape = shape,
+            content = { Text(title()) },
+            onClick = onClick.collectAsState().value,
+        )
     }
 
-    @Composable
-    private fun TableScope.Input(
-        title: String,
+    private fun Input(
+        title: @Composable () -> String,
         input: @Composable CellScope.() -> Unit,
-    ) {
-        Subtable {
+    ): Cell = Subtable(
+        cells = persistentListOf(
             CellBox(
                 modifier = Modifier.width(96.dp),
             ) {
                 Text(
-                    text = title,
+                    text = title(),
                     modifier = Modifier.padding(
                         horizontal = Dimens.smallSeparation,
                     )
                 )
-            }
+            },
             Cell(
                 content = input,
             )
-        }
-    }
+        )
+    )
 
-    @Composable
-    private fun TableScope.PortInput(
+    private fun PortInput(
         onDone: () -> Unit,
+    ): Cell = Input(
+        title = { stringResource(Res.string.port) },
     ) {
-        Input(
-            title = stringResource(Res.string.port),
-        ) {
-            TextInput(
-                value = model.portInput,
-                isError = !model.portIsCorrect.collectAsState().value,
-                keyboardOptions = KeyboardOptions(
-                    imeAction = ImeAction.Done,
-                    keyboardType = KeyboardType.Number,
-                ),
-                keyboardActions = KeyboardActions { onDone() },
-                shape = cellShape,
-                placeholder = { Text(model.portPlaceholder.port.toString()) },
-            )
-        }
+        TextInput(
+            value = model.portInput,
+            isError = !model.portIsCorrect.collectAsState().value,
+            keyboardOptions = KeyboardOptions(
+                imeAction = ImeAction.Done,
+                keyboardType = KeyboardType.Number,
+            ),
+            keyboardActions = KeyboardActions { onDone() },
+            shape = shape,
+            placeholder = { Text(model.portPlaceholder.port.toString()) },
+        )
     }
 }

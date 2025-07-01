@@ -9,15 +9,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.util.fastForEach
 import hnau.common.projector.uikit.ContainerStyle
 import hnau.common.projector.uikit.HnauButton
 import hnau.common.projector.uikit.TextInput
 import hnau.common.projector.uikit.TripleRow
+import hnau.common.projector.uikit.table.Cell
 import hnau.common.projector.uikit.table.Subtable
 import hnau.common.projector.uikit.table.Table
 import hnau.common.projector.uikit.table.TableOrientation
-import hnau.common.projector.uikit.table.cellShape
 import hnau.common.projector.utils.Icon
 import hnau.pinfin.data.TransactionType
 import hnau.pinfin.model.transaction.TransactionModel
@@ -26,6 +25,9 @@ import hnau.pinfin.projector.resources.comment
 import hnau.pinfin.projector.utils.formatter.datetime.DateTimeFormatter
 import hnau.pinfin.projector.utils.title
 import hnau.pipe.annotations.Pipe
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.CoroutineScope
 import org.jetbrains.compose.resources.stringResource
 
@@ -42,16 +44,13 @@ class TransactionProjectorMainInfoConfigDelegate(
         val dateTimeFormatter: DateTimeFormatter
     }
 
-    @Composable
-    fun Content() {
-        Table(
-            orientation = TableOrientation.Vertical,
-        ) {
-            Subtable {
+    private val cells: ImmutableList<Cell> = persistentListOf(
+        Subtable(
+            cells = persistentListOf(
                 Cell {
                     HnauButton(
                         modifier = Modifier.weight(1f),
-                        shape = cellShape,
+                        shape = shape,
                         onClick = model.chooseDate,
                         content = {
                             TripleRow(
@@ -68,11 +67,11 @@ class TransactionProjectorMainInfoConfigDelegate(
                             )
                         }
                     )
-                }
+                },
                 Cell {
                     HnauButton(
                         modifier = Modifier.weight(1f),
-                        shape = cellShape,
+                        shape = shape,
                         onClick = model.chooseTime,
                         content = {
                             TripleRow(
@@ -90,52 +89,60 @@ class TransactionProjectorMainInfoConfigDelegate(
                         }
                     )
                 }
-            }
-            Cell {
-                TextInput(
-                    placeholder = { Text(stringResource(Res.string.comment)) },
-                    value = model.comment,
-                    shape = cellShape,
-                )
-            }
-            Subtable {
-                val selectedType by model.typeVariant.collectAsState()
-                TransactionType
-                    .entries
-                    .fastForEach { type ->
-                        Cell {
-                            HnauButton(
-                                shape = cellShape,
-                                onClick = { model.chooseType(type) },
-                                style = when (type) {
-                                    selectedType -> ContainerStyle.Primary
-                                    else -> ContainerStyle.Neutral
-                                },
-                                modifier = Modifier
-                                    .weight(1f),
-                                content = {
-                                    TripleRow(
-                                        leading = when (type) {
-                                            selectedType -> {
-                                                {
-                                                    Icon(Icons.Filled.Done)
-                                                }
+            ),
+        ),
+        Cell {
+            TextInput(
+                placeholder = { Text(stringResource(Res.string.comment)) },
+                value = model.comment,
+                shape = shape,
+            )
+        },
+        Subtable(
+            cells = TransactionType
+                .entries
+                .map { type ->
+                    Cell {
+                        val selectedType by model.typeVariant.collectAsState()
+                        HnauButton(
+                            modifier = Modifier.weight(1f),
+                            shape = shape,
+                            onClick = { model.chooseType(type) },
+                            style = when (type) {
+                                selectedType -> ContainerStyle.Primary
+                                else -> ContainerStyle.Neutral
+                            },
+                            content = {
+                                TripleRow(
+                                    leading = when (type) {
+                                        selectedType -> {
+                                            {
+                                                Icon(Icons.Filled.Done)
                                             }
-
-                                            else -> null
-                                        },
-                                        content = {
-                                            Text(
-                                                text = type.title,
-                                            )
                                         }
-                                    )
-                                }
-                            )
-                        }
+
+                                        else -> null
+                                    },
+                                    content = {
+                                        Text(
+                                            text = type.title,
+                                        )
+                                    }
+                                )
+                            }
+                        )
                     }
-            }
-        }
+                }
+                .toImmutableList()
+        )
+    )
+
+    @Composable
+    fun Content() {
+        Table(
+            orientation = TableOrientation.Vertical,
+            cells = cells,
+        )
     }
 
 }

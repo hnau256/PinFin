@@ -42,12 +42,13 @@ kotlin-serialization-core = { module = "org.jetbrains.kotlinx:kotlinx-serializat
 kotlin-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinSerialization" }
 kotlin-serialization-cbor = { module = "org.jetbrains.kotlinx:kotlinx-serialization-cbor", version.ref = "kotlinSerialization" }
 kotlin-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinCoroutines" }
-kotlin-io  = { module = "org.jetbrains.kotlinx:kotlinx-io-core", version = "0.7.0" }
+kotlin-io = { module = "org.jetbrains.kotlinx:kotlinx-io-core", version = "0.7.0" }
 #kotest-framework-multiplatform-plugin = { module = "io.kotest:kotest-framework-multiplatform-plugin-gradle", version.ref = "kotest" }
 #kotest-assertions = { module = "io.kotest:kotest-assertions-core", version.ref = "kotest" }
 #kotest-junit-runner = { module = "io.kotest:kotest-runner-junit5-jvm", version.ref = "kotest" }
 #kotest-framework-engine = { module = "io.kotest:kotest-framework-engine", version.ref = "kotest" }
 kotlin-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlin-date-time" }
+kotlin-immutable = { module = "org.jetbrains.kotlinx:kotlinx-collections-immutable", version = "0.4.0" }
 #android
 android-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "compose-activity" }
 android-datastore = { module = "androidx.datastore:datastore", version = "1.1.4" }
@@ -65,10 +66,10 @@ slf4j-simple = { module = "org.slf4j:slf4j-simple", version = "2.0.7" }
 pipe-annotations = { module = "com.github.hnau256.common-gen-pipe:annotations", version.ref = "pipe" }
 pipe-processor = { module = "com.github.hnau256.common-gen-pipe:processor", version.ref = "pipe" }
 #hnau
-hnau-kotlin = { module = "com.github.hnau256.common-kotlin:common-kotlin", version = "1.0.2" }
+hnau-kotlin = { module = "com.github.hnau256.common-kotlin:common-kotlin", version = "1.0.5" }
 hnau-gen-kt = { module = "com.github.hnau256:common-gen-kt", version = "1.0.0" }
-hnau-model = { module = "com.github.hnau256.common-model:common-model", version = "1.0.13" }
-hnau-projector = { module = "com.github.hnau256.common-projector:common-projector", version = "1.0.16" }
+hnau-model = { module = "com.github.hnau256.common-model:common-model", version = "1.0.14" }
+hnau-projector = { module = "com.github.hnau256.common-projector:common-projector", version = "1.0.19" }
 #other
 ooxml = { module = "org.apache.poi:poi-ooxml", version.ref = "ooxml" }
 ktor-network = { module = "io.ktor:ktor-network", version.ref = "ktor" }

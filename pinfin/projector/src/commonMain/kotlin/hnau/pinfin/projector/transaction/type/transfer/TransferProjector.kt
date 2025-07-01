@@ -7,12 +7,11 @@ import androidx.compose.ui.Modifier
 import hnau.common.kotlin.coroutines.mapWithScope
 import hnau.common.projector.uikit.state.StateContent
 import hnau.common.projector.uikit.state.TransitionSpec
+import hnau.common.projector.uikit.table.Cell
 import hnau.common.projector.uikit.table.CellBox
 import hnau.common.projector.uikit.table.Subtable
 import hnau.common.projector.uikit.table.Table
 import hnau.common.projector.uikit.table.TableOrientation
-import hnau.common.projector.uikit.table.TableScope
-import hnau.common.projector.uikit.table.cellShape
 import hnau.common.projector.uikit.utils.Dimens
 import hnau.common.projector.utils.Icon
 import hnau.pinfin.model.transaction.type.transfer.TransferModel
@@ -23,6 +22,8 @@ import hnau.pinfin.projector.utils.ArrowDirection
 import hnau.pinfin.projector.utils.ArrowIcon
 import hnau.pinfin.projector.utils.account.AccountButton
 import hnau.pipe.annotations.Pipe
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.StateFlow
 
@@ -77,46 +78,47 @@ class TransferProjector(
             }
     }
 
-    @Composable
-    private fun TableScope.AccountCell(
+    private fun AccountCell(
         side: TransferSide,
-    ) {
-        Cell {
-            val (account, onClick) = model.accounts[side]
-            AccountButton(
-                modifier = Modifier.weight(1f),
-                info = account.collectAsState().value,
-                onClick = onClick,
-                shape = cellShape,
-            )
-        }
+    ): Cell = Cell {
+        val (account, onClick) = model.accounts[side]
+        AccountButton(
+            modifier = Modifier.weight(1f),
+            info = account.collectAsState().value,
+            onClick = onClick,
+            shape = shape,
+        )
+    }
+
+    private val defaultCells: ImmutableList<Cell> by lazy {
+        persistentListOf(
+            Subtable(
+                cells = persistentListOf(
+                    AccountCell(
+                        side = TransferSide.From,
+                    ),
+                    CellBox {
+                        Icon(
+                            modifier = Modifier.padding(
+                                horizontal = Dimens.separation,
+                            ),
+                            icon = ArrowIcon[ArrowDirection.StartToEnd],
+                        )
+                    },
+                    AccountCell(
+                        side = TransferSide.To,
+                    )
+                )
+            ),
+            amount.Content(),
+        )
     }
 
     @Composable
     private fun DefaultContent() {
         Table(
             orientation = TableOrientation.Vertical,
-        ) {
-            Subtable {
-                AccountCell(
-                    side = TransferSide.From,
-                )
-
-                CellBox {
-                    Icon(
-                        modifier = Modifier.padding(
-                            horizontal = Dimens.separation,
-                        ),
-                        icon = ArrowIcon[ArrowDirection.StartToEnd],
-                    )
-                }
-                AccountCell(
-                    side = TransferSide.To,
-                )
-            }
-            amount.Content(
-                scope = this,
-            )
-        }
+            cells = defaultCells,
+        )
     }
 }

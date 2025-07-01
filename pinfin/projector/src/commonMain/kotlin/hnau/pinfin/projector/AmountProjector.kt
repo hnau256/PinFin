@@ -2,7 +2,6 @@ package hnau.pinfin.projector
 
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
@@ -12,8 +11,7 @@ import hnau.common.kotlin.mapper.Mapper
 import hnau.common.model.EditingString
 import hnau.common.model.toEditingString
 import hnau.common.projector.uikit.TextInput
-import hnau.common.projector.uikit.table.TableScope
-import hnau.common.projector.uikit.table.cellShape
+import hnau.common.projector.uikit.table.Cell
 import hnau.pinfin.model.AmountModel
 import hnau.pinfin.projector.resources.Res
 import hnau.pinfin.projector.resources.amount
@@ -60,24 +58,20 @@ class AmountProjector(
             )
         )
 
-    @Composable
     fun Content(
-        scope: TableScope,
-        modifier: Modifier = Modifier.Companion,
-    ) {
-        with(scope) {
-            Cell {
-                TextInput(
-                    modifier = modifier,
-                    shape = cellShape,
-                    value = input,
-                    keyboardOptions = KeyboardOptions(
-                        keyboardType = KeyboardType.Companion.Decimal,
-                    ),
-                    placeholder = { Text(stringResource(Res.string.amount)) },
-                    isError = model.error.collectAsState().value,
-                )
-            }
-        }
+        weight: Float? = null,
+    ): Cell = Cell {
+        TextInput(
+            modifier = weight
+                ?.let { weight -> Modifier.weight(weight) }
+                ?: Modifier,
+            shape = shape,
+            value = input,
+            keyboardOptions = KeyboardOptions(
+                keyboardType = KeyboardType.Companion.Decimal,
+            ),
+            placeholder = { Text(stringResource(Res.string.amount)) },
+            isError = model.error.collectAsState().value,
+        )
     }
 }

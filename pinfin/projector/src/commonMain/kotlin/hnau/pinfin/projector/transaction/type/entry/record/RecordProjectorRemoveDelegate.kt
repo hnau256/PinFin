@@ -8,28 +8,33 @@ import hnau.pinfin.projector.resources.no
 import hnau.pinfin.projector.resources.remove_record
 import hnau.pinfin.projector.resources.yes
 import hnau.pinfin.projector.utils.Dialog
+import hnau.pinfin.projector.utils.DialogButton
+import kotlinx.collections.immutable.persistentListOf
 import org.jetbrains.compose.resources.stringResource
 
 class RecordProjectorRemoveDelegate(
-    private val remove: () -> Unit,
+    remove: () -> Unit,
     private val model: RecordModel,
 ) {
+
+    private val buttons = persistentListOf(
+        DialogButton(
+            text = { stringResource(Res.string.no) },
+            onClick = model::closeOverlap,
+            style = ContainerStyle.Neutral,
+        ),
+        DialogButton(
+            text = { stringResource(Res.string.yes) },
+            onClick = remove,
+            style = ContainerStyle.Error,
+        )
+    )
 
     @Composable
     fun Content() {
         Dialog(
             title = stringResource(Res.string.remove_record),
-        ) {
-            Button(
-                text = stringResource(Res.string.no),
-                onClick = model::closeOverlap,
-                style = ContainerStyle.Neutral,
-            )
-            Button(
-                text = stringResource(Res.string.yes),
-                onClick = remove,
-                style = ContainerStyle.Error,
-            )
-        }
+            buttons = buttons,
+        )
     }
 }

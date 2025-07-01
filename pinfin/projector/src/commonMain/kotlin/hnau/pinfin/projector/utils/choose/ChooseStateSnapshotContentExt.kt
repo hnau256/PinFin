@@ -19,17 +19,18 @@ import hnau.common.model.EditingString
 import hnau.common.projector.uikit.HnauButton
 import hnau.common.projector.uikit.TextInput
 import hnau.common.projector.uikit.row.ChipsFlowRow
+import hnau.common.projector.uikit.table.Cell
 import hnau.common.projector.uikit.table.CellBox
 import hnau.common.projector.uikit.table.Subtable
 import hnau.common.projector.uikit.table.Table
 import hnau.common.projector.uikit.table.TableOrientation
-import hnau.common.projector.uikit.table.TableScope
-import hnau.common.projector.uikit.table.cellShape
 import hnau.common.projector.uikit.utils.Dimens
 import hnau.common.projector.utils.Icon
 import hnau.pinfin.model.utils.choose.ChooseStateSnapshot
 import hnau.pinfin.projector.resources.Res
 import hnau.pinfin.projector.resources.search_create
+import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.MutableStateFlow
 import org.jetbrains.compose.resources.stringResource
 
@@ -43,73 +44,75 @@ fun <T> ChooseStateSnapshot<T>.Content(
 ) {
     Table(
         orientation = TableOrientation.Vertical,
-    ) {
-        Subtable {
-            Cell {
-                HnauButton(
-                    content = { Icon(Icons.Filled.ArrowBack) },
-                    shape = cellShape,
-                    onClick = onReady,
-                )
-            }
-            Cell {
-                val focusRequester = remember { FocusRequester() }
-                TextInput(
-                    modifier = Modifier.Companion
-                        .weight(1f)
-                        .focusRequester(focusRequester),
-                    value = query,
-                    shape = cellShape,
-                    placeholder = { Text(stringResource(Res.string.search_create)) },
-                )
-                val requestFocus = when (visibleVariants) {
-                    ChooseStateSnapshot.VisibleVariants.Empty,
-                    ChooseStateSnapshot.VisibleVariants.InputToCreateNewMessage,
-                        -> true
+        cells = listOfNotNull(
+            Subtable(
+                cells = persistentListOf(
+                    Cell {
+                        HnauButton(
+                            content = { Icon(Icons.Filled.ArrowBack) },
+                            shape = shape,
+                            onClick = onReady,
+                        )
+                    },
+                    Cell {
+                        val focusRequester = remember { FocusRequester() }
+                        TextInput(
+                            modifier = Modifier
+                                .focusRequester(focusRequester)
+                                .weight(1f),
+                            value = query,
+                            shape = shape,
+                            placeholder = { Text(stringResource(Res.string.search_create)) },
+                        )
+                        val requestFocus = when (visibleVariants) {
+                            ChooseStateSnapshot.VisibleVariants.Empty,
+                            ChooseStateSnapshot.VisibleVariants.InputToCreateNewMessage,
+                                -> true
 
-                    is ChooseStateSnapshot.VisibleVariants.List,
-                    ChooseStateSnapshot.VisibleVariants.NotFound,
-                        -> false
-                }
-                LaunchedEffect(focusRequester, requestFocus) {
-                    if (requestFocus) {
-                        focusRequester.requestFocus()
+                            is ChooseStateSnapshot.VisibleVariants.List,
+                            ChooseStateSnapshot.VisibleVariants.NotFound,
+                                -> false
+                        }
+                        LaunchedEffect(focusRequester, requestFocus) {
+                            if (requestFocus) {
+                                focusRequester.requestFocus()
+                            }
+                        }
+                    }
+                )
+            ),
+            when (val visibleVariants = visibleVariants) {
+                ChooseStateSnapshot.VisibleVariants.InputToCreateNewMessage -> MessageCell(
+                    message = messages.noVariants,
+                    color = MaterialTheme.colorScheme.onSurface,
+                )
+
+                ChooseStateSnapshot.VisibleVariants.Empty -> null
+
+                ChooseStateSnapshot.VisibleVariants.NotFound -> MessageCell(
+                    message = messages.notFound,
+                    color = MaterialTheme.colorScheme.error,
+                )
+
+                is ChooseStateSnapshot.VisibleVariants.List -> CellBox(
+                    contentAlignment = Alignment.TopStart,
+                ) {
+                    ChipsFlowRow(
+                        all = visibleVariants.list,
+                        modifier = Modifier.padding(Dimens.smallSeparation),
+                    ) { (item, selected) ->
+                        itemContent(
+                            item,
+                            selected,
+                            {
+                                updateSelected(item)
+                                onReady()
+                            },
+                        )
                     }
                 }
-            }
-        }
-        when (val visibleVariants = visibleVariants) {
-            ChooseStateSnapshot.VisibleVariants.InputToCreateNewMessage -> MessageCell(
-                message = messages.noVariants,
-                color = MaterialTheme.colorScheme.onSurface,
-            )
-
-            ChooseStateSnapshot.VisibleVariants.Empty -> Unit
-
-            ChooseStateSnapshot.VisibleVariants.NotFound -> MessageCell(
-                message = messages.notFound,
-                color = MaterialTheme.colorScheme.error,
-            )
-
-            is ChooseStateSnapshot.VisibleVariants.List -> CellBox(
-                contentAlignment = Alignment.TopStart,
-            ) {
-                ChipsFlowRow(
-                    all = visibleVariants.list,
-                    modifier = Modifier.padding(Dimens.smallSeparation),
-                ) { (item, selected) ->
-                    itemContent(
-                        item,
-                        selected,
-                        {
-                            updateSelected(item)
-                            onReady()
-                        },
-                    )
-                }
-            }
-        }
-        possibleVariantsToAdd?.let { possibleVariantsToAddNotEmpty ->
+            },
+            possibleVariantsToAdd?.let { possibleVariantsToAddNotEmpty ->
                 CellBox(
                     contentAlignment = Alignment.TopStart,
                 ) {
@@ -140,25 +143,23 @@ fun <T> ChooseStateSnapshot<T>.Content(
                     }
                 }
             }
-    }
+        ).toImmutableList(),
+    )
 }
 
-@Composable
-private fun TableScope.MessageCell(
+private fun MessageCell(
     message: String,
     color: Color,
+): Cell = CellBox(
+    contentAlignment = Alignment.CenterStart,
 ) {
-    CellBox(
-        contentAlignment = Alignment.CenterStart,
-    ) {
-        Text(
-            text = message,
-            modifier = Modifier.padding(
-                Dimens.separation,
-                Dimens.smallSeparation,
-            ),
-            style = MaterialTheme.typography.titleMedium,
-            color = color,
-        )
-    }
+    Text(
+        text = message,
+        modifier = Modifier.padding(
+            Dimens.separation,
+            Dimens.smallSeparation,
+        ),
+        style = MaterialTheme.typography.titleMedium,
+        color = color,
+    )
 }
