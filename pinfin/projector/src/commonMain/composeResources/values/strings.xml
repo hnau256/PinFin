@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">PinFin</string>
-    <string name="comment">Заметка</string>
+    <string name="comment">Название</string>
     <string name="entry">Транзакция</string>
     <string name="transaction">Транзакция</string>
     <string name="transactions">Транзакции</string>
