@@ -25,4 +25,11 @@ data class AnalyticsTabValues<T>(
         AnalyticsTab.Accounts -> accounts
         AnalyticsTab.Categories -> categories
     }
+
+    inline fun <O> map(
+        transform: (T) -> O,
+    ): AnalyticsTabValues<O> = AnalyticsTabValues(
+        accounts = transform(accounts),
+        categories = transform(categories),
+    )
 }

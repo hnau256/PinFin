@@ -43,32 +43,20 @@ class AnalyticsModel(
         val categories: CategoriesModel.Skeleton = CategoriesModel.Skeleton(),
     )
 
-    private val tabs: AnalyticsTabValues<AnalyticsTabModel> = AnalyticsTabValues(
-        accounts = AnalyticsTabModel.Accounts(
-            model = AccountsModel(
-                scope = scope,
-                dependencies = dependencies.accounts(),
-                skeleton = skeleton.accounts
-            )
-        ),
-        categories = AnalyticsTabModel.Categories(
-            model = CategoriesModel(
-                scope = scope,
-                dependencies = dependencies.categories(),
-                skeleton = skeleton.categories
-            )
-        ),
+    val accounts: AccountsModel = AccountsModel(
+        scope = scope,
+        dependencies = dependencies.accounts(),
+        skeleton = skeleton.accounts
     )
 
-    fun selectTab(
-        tab: AnalyticsTab,
-    ) {
-        skeleton.selectedTab.value = tab
-    }
+    val categories: CategoriesModel = CategoriesModel(
+        scope = scope,
+        dependencies = dependencies.categories(),
+        skeleton = skeleton.categories
+    )
 
-    val tab: StateFlow<AnalyticsTabModel> = skeleton
-        .selectedTab
-        .mapState(scope) { selectedTab -> tabs[selectedTab] }
+    val selectedTab: MutableStateFlow<AnalyticsTab>
+        get() = skeleton.selectedTab
 
     override val goBackHandler: GoBackHandler
         get() = NeverGoBackHandler
