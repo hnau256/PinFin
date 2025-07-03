@@ -37,14 +37,15 @@ class AnalyticsProjector(
         fun categories(): CategoriesProjector.Dependencies
     }
 
-    private val tabs = AnalyticsTabValues(
+    private val tabs: AnalyticsTabValues<AnalyticsTabProjector> = AnalyticsTabValues(
         accounts = AnalyticsTabProjector.Accounts(
             AccountsProjector(
                 scope = scope,
                 model = model.accounts,
                 dependencies = dependencies.accounts(),
             )
-        ), categories = AnalyticsTabProjector.Categories(
+        ),
+        categories = AnalyticsTabProjector.Categories(
             CategoriesProjector(
                 scope = scope,
                 model = model.categories,
