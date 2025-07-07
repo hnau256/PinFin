@@ -8,13 +8,22 @@ import kotlin.jvm.JvmInline
 @JvmInline
 value class Amount(
     val value: UInt,
-) {
+): Comparable<Amount> {
 
     inline fun map(
         transform: (UInt) -> UInt,
     ): Amount = Amount(
         value = transform(value),
     )
+
+    operator fun plus(
+        other: Amount,
+    ): Amount = Amount(
+        value = value + other.value,
+    )
+
+    override fun compareTo(other: Amount): Int =
+        value.compareTo(other.value)
 
     companion object {
 
