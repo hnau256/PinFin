@@ -2,7 +2,7 @@ package hnau.pinfin.model.utils.budget.state
 
 import arrow.core.Either
 import hnau.pinfin.data.Amount
-import hnau.pinfin.data.CategoryDirection
+import hnau.pinfin.data.AmountDirection
 import hnau.pinfin.data.Record
 import hnau.pinfin.data.Transaction
 import kotlinx.serialization.Serializable
@@ -16,15 +16,15 @@ value class SignedAmount(
 
     constructor(
         amount: Amount,
-        positive: Boolean,
+        direction: AmountDirection,
     ) : this(
         value = amount
             .value
             .toLong()
             .let { raw ->
-                when (positive) {
-                    true -> raw
-                    false -> -raw
+                when (direction) {
+                    AmountDirection.Credit -> raw
+                    AmountDirection.Debit -> -raw
                 }
             }
     )
@@ -32,8 +32,11 @@ value class SignedAmount(
     val amount: Amount
         get() = value.absoluteValue.toUInt().let(::Amount)
 
-    val positive: Boolean
-        get() = value >= 0
+    val direction: AmountDirection
+        get() = when (value >= 0) {
+            true -> AmountDirection.Credit
+            false -> AmountDirection.Debit
+        }
 
     operator fun plus(
         other: SignedAmount,
@@ -52,19 +55,13 @@ value class SignedAmount(
 val TransactionInfo.Type.Entry.Record.signedAmount: SignedAmount
     get() = SignedAmount(
         amount = amount,
-        positive = when (category.id.direction) {
-            CategoryDirection.Credit -> true
-            CategoryDirection.Debit -> false
-        }
+        direction = category.id.direction
     )
 
 val Record.signedAmount: SignedAmount
     get() = SignedAmount(
         amount = amount,
-        positive = when (category.direction) {
-            CategoryDirection.Credit -> true
-            CategoryDirection.Debit -> false
-        }
+        direction = category.direction,
     )
 
 val Transaction.Type.Entry.signedAmount: SignedAmount

@@ -4,7 +4,7 @@ import arrow.core.toNonEmptyListOrNull
 import hnau.common.kotlin.ifNull
 import hnau.pinfin.data.AccountId
 import hnau.pinfin.data.Amount
-import hnau.pinfin.data.CategoryDirection
+import hnau.pinfin.data.AmountDirection
 import hnau.pinfin.data.CategoryId
 import hnau.pinfin.data.Comment
 import hnau.pinfin.data.Record
@@ -157,7 +157,7 @@ enum class Category(
     ;
 
     fun toCategoryId(
-        direction: CategoryDirection,
+        direction: AmountDirection,
     ): CategoryId = CategoryId(
         id = CategoryId.directionPrefixes[direction] + key,
     )
@@ -360,7 +360,7 @@ fun main() {
                             checkAccount(type.to)
                             Record(
                                 comment = type.comment.let(::Comment),
-                                category = type.category.toCategoryId(CategoryDirection.Credit),
+                                category = type.category.toCategoryId(AmountDirection.Credit),
                                 amount = type.amount.amount,
                             )
                         }
@@ -369,7 +369,7 @@ fun main() {
                             checkAccount(type.from)
                             Record(
                                 comment = type.comment.let(::Comment),
-                                category = type.category.toCategoryId(CategoryDirection.Debit),
+                                category = type.category.toCategoryId(AmountDirection.Debit),
                                 amount = type.amount.amount,
                             )
                         }

@@ -14,7 +14,7 @@ import hnau.common.model.goback.GoBackHandler
 import hnau.common.model.goback.GoBackHandlerProvider
 import hnau.common.model.goback.NeverGoBackHandler
 import hnau.common.model.toEditingString
-import hnau.pinfin.data.CategoryDirection
+import hnau.pinfin.data.AmountDirection
 import hnau.pinfin.data.CategoryId
 import hnau.pinfin.model.utils.budget.repository.BudgetRepository
 import hnau.pinfin.model.utils.budget.state.CategoryInfo
@@ -81,7 +81,7 @@ class ChooseCategoryModel(
             )
         },
         createPossibleNewVariantsByQuery = { query ->
-            CategoryDirection
+            AmountDirection
                 .entries
                 .map { direction ->
                     CategoryInfo(

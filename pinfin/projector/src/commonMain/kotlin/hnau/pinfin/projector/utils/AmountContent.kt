@@ -6,13 +6,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import hnau.pinfin.data.Amount
+import hnau.pinfin.data.AmountDirection
 import hnau.pinfin.model.utils.budget.state.SignedAmount
 import hnau.pinfin.projector.utils.formatter.AmountFormatter
 
 
 @Composable
 fun AmountContent(
-    sign: Boolean?,
+    direction: AmountDirection?,
     value: Amount,
     amountFormatter: AmountFormatter,
     modifier: Modifier = Modifier,
@@ -20,15 +21,15 @@ fun AmountContent(
     Text(
         modifier = modifier,
         style = MaterialTheme.typography.titleLarge,
-        color = when (sign) {
-            true -> MaterialTheme.colorScheme.primary
-            false -> MaterialTheme.colorScheme.error
+        color = when (direction) {
+            AmountDirection.Credit -> MaterialTheme.colorScheme.primary
+            AmountDirection.Debit -> MaterialTheme.colorScheme.error
             null -> MaterialTheme.colorScheme.onSurface
         },
-        text = remember(sign, value) {
-            val prefix = when (sign) {
-                true -> "+"
-                false -> "-"
+        text = remember(direction, value) {
+            val prefix =when (direction) {
+                AmountDirection.Credit -> "+"
+                AmountDirection.Debit -> "-"
                 null -> ""
             }
             prefix + amountFormatter.format(value)
@@ -45,7 +46,7 @@ fun SignedAmountContent(
     AmountContent(
         amountFormatter = amountFormatter,
         modifier = modifier,
-        sign = amount.positive,
+        direction = amount.direction,
         value = amount.amount,
     )
 }
@@ -59,7 +60,7 @@ fun AmountContent(
     AmountContent(
         amountFormatter = amountFormatter,
         modifier = modifier,
-        sign = null,
+        direction = null,
         value = amount,
     )
 }

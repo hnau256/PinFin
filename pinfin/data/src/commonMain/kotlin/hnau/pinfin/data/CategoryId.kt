@@ -11,7 +11,7 @@ value class CategoryId(
 ): Comparable<CategoryId> {
 
     constructor(
-        direction: CategoryDirection,
+        direction: AmountDirection,
         title: String,
     ): this(
         id = directionPrefixes[direction] + title,
@@ -20,7 +20,7 @@ value class CategoryId(
     override fun compareTo(other: CategoryId): Int =
         id.compareTo(other.id)
 
-    val direction: CategoryDirection
+    val direction: AmountDirection
         get() = id
             .firstOrNull()
             ?.let(directionByPrefix::get)
@@ -36,7 +36,7 @@ value class CategoryId(
             debit = '-',
         )
 
-        private val directionByPrefix: Map<Char, CategoryDirection> = CategoryDirection
+        private val directionByPrefix: Map<Char, AmountDirection> = AmountDirection
             .entries
             .associateBy(directionPrefixes::get)
 

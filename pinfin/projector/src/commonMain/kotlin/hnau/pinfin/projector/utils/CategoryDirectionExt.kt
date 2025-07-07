@@ -4,16 +4,16 @@ import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
-import hnau.pinfin.data.CategoryDirection
+import hnau.pinfin.data.AmountDirection
 
-fun CategoryDirection.getColor(
+fun AmountDirection.getColor(
     colors: ColorScheme,
 ): Color = when (this) {
-    CategoryDirection.Credit -> colors.primary
-    CategoryDirection.Debit -> colors.error
+    AmountDirection.Credit -> colors.primary
+    AmountDirection.Debit -> colors.error
 }
 
-val CategoryDirection.color: Color
+val AmountDirection.color: Color
     @Composable
     get() = getColor(
         colors = MaterialTheme.colorScheme,

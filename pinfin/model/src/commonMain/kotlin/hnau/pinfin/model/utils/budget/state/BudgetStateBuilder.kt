@@ -3,6 +3,7 @@ package hnau.pinfin.model.utils.budget.state
 import hnau.common.kotlin.castOrNull
 import hnau.pinfin.data.AccountConfig
 import hnau.pinfin.data.AccountId
+import hnau.pinfin.data.AmountDirection
 import hnau.pinfin.data.BudgetConfig
 import hnau.pinfin.data.BudgetId
 import hnau.pinfin.data.CategoryId
@@ -130,14 +131,14 @@ data class BudgetStateBuilder(
                         id = type.from,
                         amountOffset = SignedAmount(
                             amount = type.amount,
-                            positive = false,
+                            direction = AmountDirection.Debit,
                         )
                     )
                     useAccount(
                         id = type.to,
                         amountOffset = SignedAmount(
                             amount = type.amount,
-                            positive = true,
+                            direction = AmountDirection.Credit,
                         )
                     )
                 }

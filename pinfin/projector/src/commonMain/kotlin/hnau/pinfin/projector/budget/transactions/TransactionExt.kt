@@ -25,7 +25,7 @@ import hnau.common.projector.uikit.table.TableOrientation
 import hnau.common.projector.uikit.utils.Dimens
 import hnau.common.projector.utils.Icon
 import hnau.common.projector.utils.horizontalDisplayPadding
-import hnau.pinfin.data.CategoryDirection
+import hnau.pinfin.data.AmountDirection
 import hnau.pinfin.model.utils.budget.state.TransactionInfo
 import hnau.pinfin.model.utils.budget.state.signedAmountOrAmount
 import hnau.pinfin.projector.utils.AmountContent
@@ -207,8 +207,8 @@ private fun EntryContent(
                 ?.head
         }
         val arrowDirection = when (allDirectionOrNull) {
-            CategoryDirection.Credit -> ArrowDirection.StartToEnd
-            CategoryDirection.Debit -> ArrowDirection.EndToStart
+            AmountDirection.Credit -> ArrowDirection.StartToEnd
+            AmountDirection.Debit -> ArrowDirection.EndToStart
             null -> ArrowDirection.Both
         }
         Icon(

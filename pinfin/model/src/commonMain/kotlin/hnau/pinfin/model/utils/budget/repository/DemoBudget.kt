@@ -7,7 +7,7 @@ import hnau.pinfin.data.AccountId
 import hnau.pinfin.data.Amount
 import hnau.pinfin.data.BudgetConfig
 import hnau.pinfin.data.BudgetId
-import hnau.pinfin.data.CategoryDirection
+import hnau.pinfin.data.AmountDirection
 import hnau.pinfin.data.CategoryId
 import hnau.pinfin.data.Comment
 import hnau.pinfin.data.Record
@@ -40,52 +40,52 @@ object DemoBudget {
     private val accountIdCash = AccountId("Наличка")
 
     private val categoryIdHome: CategoryId = CategoryId(
-        direction = CategoryDirection.Debit,
+        direction = AmountDirection.Debit,
         title = "Дом",
     )
 
     private val categoryIdServices: CategoryId = CategoryId(
-        direction = CategoryDirection.Debit,
+        direction = AmountDirection.Debit,
         title = "ЖКХ",
     )
 
     private val categoryIdTransport: CategoryId = CategoryId(
-        direction = CategoryDirection.Debit,
+        direction = AmountDirection.Debit,
         title = "Транспорт",
     )
 
     private val categoryIdClothes: CategoryId = CategoryId(
-        direction = CategoryDirection.Debit,
+        direction = AmountDirection.Debit,
         title = "Одежда",
     )
 
     private val categoryIdHealth: CategoryId = CategoryId(
-        direction = CategoryDirection.Debit,
+        direction = AmountDirection.Debit,
         title = "Здоровье",
     )
 
     private val categoryIdFood: CategoryId = CategoryId(
-        direction = CategoryDirection.Debit,
+        direction = AmountDirection.Debit,
         title = "Еда",
     )
 
     private val categoryIdDelicious: CategoryId = CategoryId(
-        direction = CategoryDirection.Debit,
+        direction = AmountDirection.Debit,
         title = "Вкусности",
     )
 
     private val categoryIdFun: CategoryId = CategoryId(
-        direction = CategoryDirection.Debit,
+        direction = AmountDirection.Debit,
         title = "Развлечения",
     )
 
     private val categoryIdGifts: CategoryId = CategoryId(
-        direction = CategoryDirection.Debit,
+        direction = AmountDirection.Debit,
         title = "Подарки",
     )
 
     private val categoryIdSalary: CategoryId = CategoryId(
-        direction = CategoryDirection.Credit,
+        direction = AmountDirection.Credit,
         title = "Зарплата",
     )
 

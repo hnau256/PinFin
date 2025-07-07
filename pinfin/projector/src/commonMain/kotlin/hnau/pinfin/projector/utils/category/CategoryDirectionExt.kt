@@ -4,10 +4,10 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AddCircle
 import androidx.compose.material.icons.filled.DoNotDisturbOn
 import androidx.compose.ui.graphics.vector.ImageVector
-import hnau.pinfin.data.CategoryDirection
+import hnau.pinfin.data.AmountDirection
 
-val CategoryDirection.icon: ImageVector
+val AmountDirection.icon: ImageVector
     get() = when (this) {
-        CategoryDirection.Credit -> Icons.Filled.AddCircle
-        CategoryDirection.Debit -> Icons.Filled.DoNotDisturbOn
+        AmountDirection.Credit -> Icons.Filled.AddCircle
+        AmountDirection.Debit -> Icons.Filled.DoNotDisturbOn
     }
