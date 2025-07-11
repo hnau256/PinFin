@@ -16,6 +16,7 @@ import hnau.common.kotlin.coroutines.mapState
 import hnau.common.kotlin.coroutines.mapWithScope
 import hnau.common.kotlin.coroutines.scopedInState
 import hnau.common.kotlin.coroutines.toMutableStateFlowAsInitial
+import hnau.common.kotlin.foldNullable
 import hnau.common.kotlin.serialization.MutableStateFlowSerializer
 import hnau.common.model.goback.GoBackHandler
 import hnau.common.model.goback.GoBackHandlerProvider
@@ -24,6 +25,7 @@ import hnau.pinfin.data.Transaction
 import hnau.pinfin.model.transaction.type.entry.record.RecordId
 import hnau.pinfin.model.transaction.type.entry.record.RecordModel
 import hnau.pinfin.model.transaction.type.utils.ChooseAccountModel
+import hnau.pinfin.model.utils.budget.repository.BudgetRepository
 import hnau.pinfin.model.utils.budget.state.AccountInfo
 import hnau.pinfin.model.utils.budget.state.CategoryInfo
 import hnau.pinfin.model.utils.budget.state.SignedAmount
@@ -32,7 +34,10 @@ import hnau.pinfin.model.utils.budget.state.signedAmount
 import hnau.pipe.annotations.Pipe
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.UseSerializers
@@ -45,7 +50,7 @@ class EntryModel(
 
     @Serializable
     data class Skeleton(
-        val account: MutableStateFlow<AccountInfo?>,
+        val manualAccount: MutableStateFlow<AccountInfo?>,
         val records: MutableStateFlow<NonEmptyList<Pair<RecordId, RecordModel.Skeleton>>>,
         val chooseAccount: MutableStateFlow<ChooseAccountModel.Skeleton?> = null.toMutableStateFlowAsInitial(),
     ) {
@@ -53,7 +58,7 @@ class EntryModel(
         constructor(
             type: TransactionInfo.Type.Entry,
         ) : this(
-            account = type.account.toMutableStateFlowAsInitial(),
+            manualAccount = type.account.toMutableStateFlowAsInitial(),
             records = type
                 .records
                 .map { record ->
@@ -70,7 +75,7 @@ class EntryModel(
 
             val empty: Skeleton
                 get() = Skeleton(
-                    account = null.toMutableStateFlowAsInitial(),
+                    manualAccount = null.toMutableStateFlowAsInitial(),
                     records = nonEmptyListOf(
                         RecordId.Companion.new() to RecordModel.Skeleton.empty,
                     ).toMutableStateFlowAsInitial(),
@@ -80,6 +85,8 @@ class EntryModel(
 
     @Pipe
     interface Dependencies {
+
+        val budgetRepository: BudgetRepository
 
         fun record(): RecordModel.Dependencies
 
@@ -154,7 +161,7 @@ class EntryModel(
                                 .records
                                 .mapState(
                                     scope = itemScope,
-                                ) {records ->
+                                ) { records ->
                                     val isLast = records.last().first == id
                                     if (!isLast) {
                                         return@mapState null
@@ -189,13 +196,41 @@ class EntryModel(
                 }
         }
 
-    private val localUsedAccounts: StateFlow<Set<AccountInfo>> = skeleton
-        .account
-        .mapState(
-            scope = scope,
-        ) { accountOrNull ->
-            setOfNotNull(accountOrNull)
+    private val lastTransactionAccount: StateFlow<AccountInfo?> = dependencies
+        .budgetRepository
+        .state
+        .map { state ->
+            state
+                .transactions
+                .maxByOrNull { it.timestamp }
+                ?.let { transaction ->
+                    when (val type = transaction.type) {
+                        is TransactionInfo.Type.Entry -> type.account
+                        is TransactionInfo.Type.Transfer -> type.to
+                    }
+                }
         }
+        .stateIn(
+            scope = scope,
+            started = SharingStarted.Eagerly,
+            initialValue = null,
+        )
+
+
+    val account: StateFlow<AccountInfo?> = skeleton
+        .manualAccount
+        .flatMapState(scope) { manualAccountOrNull ->
+            manualAccountOrNull.foldNullable<AccountInfo, StateFlow<AccountInfo?>>(
+                ifNotNull = AccountInfo::toMutableStateFlowAsInitial,
+                ifNull = { lastTransactionAccount }
+            )
+        }
+
+    private val localUsedAccounts: StateFlow<Set<AccountInfo>> = account.mapState(
+        scope = scope,
+    ) { accountOrNull ->
+        setOfNotNull(accountOrNull)
+    }
 
     val chooseAccount: StateFlow<ChooseAccountModel?> = skeleton
         .chooseAccount
@@ -208,15 +243,12 @@ class EntryModel(
                     skeleton = chooseAccountSkeleton,
                     dependencies = dependencies.chooseAccount(),
                     localUsedAccounts = localUsedAccounts,
-                    selected = skeleton.account,
-                    updateSelected = { skeleton.account.value = it },
+                    selected = account,
+                    updateSelected = { skeleton.manualAccount.value = it },
                     onReady = { skeleton.chooseAccount.value = null },
                 )
             }
         }
-
-    val account: StateFlow<AccountInfo?>
-        get() = skeleton.account
 
     fun chooseAccount() {
         skeleton.chooseAccount.value = ChooseAccountModel.Skeleton.empty
@@ -260,7 +292,7 @@ class EntryModel(
         }
         .combineStateWith(
             scope = scope,
-            other = skeleton.account,
+            other = account,
         ) { recordsOrNull, accountOrNull ->
             recordsOrNull?.let { records ->
                 accountOrNull?.let { account ->
