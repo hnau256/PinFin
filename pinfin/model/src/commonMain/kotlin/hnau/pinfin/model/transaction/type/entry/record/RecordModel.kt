@@ -5,18 +5,16 @@
 package hnau.pinfin.model.transaction.type.entry.record
 
 import arrow.core.NonEmptyList
-import arrow.core.serialization.NonEmptyListSerializer
-import arrow.core.toNonEmptyListOrNone
 import arrow.core.toNonEmptyListOrNull
-import hnau.common.kotlin.Loadable
-import hnau.common.kotlin.Loading
-import hnau.common.kotlin.Ready
 import hnau.common.kotlin.coroutines.combineStateWith
 import hnau.common.kotlin.coroutines.flatMapState
 import hnau.common.kotlin.coroutines.mapState
+import hnau.common.kotlin.coroutines.mapStateLite
 import hnau.common.kotlin.coroutines.scopedInState
 import hnau.common.kotlin.coroutines.toMutableStateFlowAsInitial
 import hnau.common.kotlin.foldBoolean
+import hnau.common.kotlin.foldNullable
+import hnau.common.kotlin.it
 import hnau.common.kotlin.serialization.MutableStateFlowSerializer
 import hnau.common.model.EditingString
 import hnau.common.model.goback.GoBackHandler
@@ -56,7 +54,7 @@ class RecordModel(
 
     @Serializable
     data class Skeleton(
-        val category: MutableStateFlow<CategoryInfo?>,
+        val manualCategory: MutableStateFlow<CategoryInfo?>,
         val amount: AmountModel.Skeleton,
         val comment: MutableStateFlow<EditingString>,
         val overlapDialog: MutableStateFlow<OverlapDialog?> = null.toMutableStateFlowAsInitial(),
@@ -65,7 +63,7 @@ class RecordModel(
         constructor(
             record: TransactionInfo.Type.Entry.Record,
         ) : this(
-            category = record.category.toMutableStateFlowAsInitial(),
+            manualCategory = record.category.toMutableStateFlowAsInitial(),
             amount = AmountModel.Skeleton(
                 amount = record.amount,
             ),
@@ -94,7 +92,7 @@ class RecordModel(
 
             val empty: Skeleton
                 get() = Skeleton(
-                    category = null.toMutableStateFlowAsInitial(),
+                    manualCategory = null.toMutableStateFlowAsInitial(),
                     amount = AmountModel.Skeleton.empty,
                     comment = "".toEditingString().toMutableStateFlowAsInitial(),
                 )
@@ -110,9 +108,6 @@ class RecordModel(
 
         fun chooseCategory(): ChooseCategoryModel.Dependencies
     }
-
-    val category: StateFlow<CategoryInfo?>
-        get() = skeleton.category
 
     fun openCategoryChooser() {
         skeleton.overlapDialog.value = Skeleton.OverlapDialog.ChooseCategory(
@@ -166,8 +161,8 @@ class RecordModel(
                         scope = stateScope,
                         dependencies = dependencies.chooseCategory(),
                         skeleton = dialogOrNull.chooseCategorySkeleton,
-                        selected = skeleton.category,
-                        updateSelected = { skeleton.category.value = it },
+                        selected = skeleton.manualCategory,
+                        updateSelected = { skeleton.manualCategory.value = it },
                         onReady = ::closeOverlap,
                         localUsedCategories = localUsedCategories,
                     )
@@ -188,83 +183,153 @@ class RecordModel(
     val comment: MutableStateFlow<EditingString>
         get() = skeleton.comment
 
-    private data class CommentSuggest(
+    private data class CommentInfo(
         val comment: Comment,
-        val normalized: String,
         val timestamp: Instant,
-        val equalsFromBeginning: Boolean,
+        val category: CategoryInfo,
     )
 
-    val commentSuggests: StateFlow<NonEmptyList<Comment>?> = dependencies
-        .budgetRepository
-        .state
-        .combine(
-            flow = comment,
-        ) { state, commentEditingString ->
-            withContext(Dispatchers.Default) {
-                val queryRaw = commentEditingString
-                    .text
-                    .trim()
-                val query = queryRaw
-                    .lowercase()
-                    .takeIf { it.isNotEmpty() }
-                    ?: return@withContext null
-                state
-                    .transactions
-                    .flatMap { transaction ->
-                        when (val type = transaction.type) {
-                            is TransactionInfo.Type.Entry -> type
-                                .records
-                                .map { record ->
-                                    record.comment to transaction.timestamp
-                                }
+    private data class CommentSuggest(
+        val info: CommentInfo,
+        val normalized: String,
+        val suitableType: SuitableType,
+    ) {
 
-                            is TransactionInfo.Type.Transfer -> emptyList()
-                        }
-                    }
-                    .mapNotNull { (comment, timestamp) ->
-                        val trimmed = comment
-                            .text
-                            .trim()
-                        if (trimmed == queryRaw) {
-                            return@mapNotNull null
-                        }
-                        val normalized = trimmed.lowercase()
-                        val equalsIndex = normalized
-                            .indexOf(
-                                string = query,
-                                ignoreCase = true,
-                            )
-                            .takeIf { it >= 0 }
-                            ?: return@mapNotNull null
-                        CommentSuggest(
-                            comment = comment,
-                            timestamp = timestamp,
-                            equalsFromBeginning = equalsIndex == 0,
-                            normalized = normalized,
-                        )
-                    }
-                    .sortedByDescending { suggest ->
-                        val equalsFromBeginningWeight = suggest.equalsFromBeginning.foldBoolean(
-                            ifTrue = { 1000.days },
-                            ifFalse = { 0.days }
-                        )
-                        suggest.timestamp.epochSeconds + equalsFromBeginningWeight.inWholeSeconds
-                    }
-                    .distinctBy(CommentSuggest::normalized)
-                    .take(16)
-                    .map(CommentSuggest::comment)
-                    .toNonEmptyListOrNull()
-            }
+        enum class SuitableType {
+            Absolute,
+            IgnoreCase,
+            FromBeginning,
+            Other,
+            ;
         }
-        .stateIn(
-            scope = scope,
-            started = SharingStarted.Eagerly,
-            initialValue = null,
-        )
+    }
 
-    val record: StateFlow<Record?> = skeleton
-        .category
+    private val commentSuggestsWithCalculatedCategory: StateFlow<Pair<NonEmptyList<Comment>?, CategoryInfo?>> =
+        dependencies
+            .budgetRepository
+            .state
+            .combine(
+                flow = comment,
+            ) { state, commentEditingString ->
+                withContext(Dispatchers.Default) {
+                    val queryRaw = commentEditingString
+                        .text
+                        .trim()
+                    val query = queryRaw
+                        .lowercase()
+                        .takeIf { it.isNotEmpty() }
+                        ?: return@withContext null to null
+
+                    val allSuggests = state
+                        .transactions
+                        .flatMap { transaction ->
+                            when (val type = transaction.type) {
+                                is TransactionInfo.Type.Entry -> type
+                                    .records
+                                    .map { record ->
+                                        CommentInfo(
+                                            comment = record.comment,
+                                            timestamp = transaction.timestamp,
+                                            category = record.category,
+                                        )
+                                    }
+
+                                is TransactionInfo.Type.Transfer -> emptyList()
+                            }
+                        }
+                        .mapNotNull { info ->
+                            val trimmed = info
+                                .comment
+                                .text
+                                .trim()
+                            val normalized = trimmed.lowercase()
+                            val equalsIndex = normalized
+                                .indexOf(
+                                    string = query,
+                                    ignoreCase = true,
+                                )
+                                .takeIf { it >= 0 }
+                                ?: return@mapNotNull null
+                            CommentSuggest(
+                                info = info,
+                                normalized = normalized,
+                                suitableType = when {
+                                    trimmed == queryRaw ->
+                                        CommentSuggest.SuitableType.Absolute
+
+                                    normalized == queryRaw ->
+                                        CommentSuggest.SuitableType.IgnoreCase
+
+                                    equalsIndex == 0 ->
+                                        CommentSuggest.SuitableType.FromBeginning
+
+                                    else ->
+                                        CommentSuggest.SuitableType.Other
+                                },
+                            )
+                        }
+                        .sortedByDescending { suggest ->
+                            val equalsFromBeginning = when (suggest.suitableType) {
+                                CommentSuggest.SuitableType.Absolute,
+                                CommentSuggest.SuitableType.IgnoreCase,
+                                CommentSuggest.SuitableType.FromBeginning,
+                                    -> true
+
+                                CommentSuggest.SuitableType.Other -> false
+                            }
+                            val equalsFromBeginningWeight = equalsFromBeginning.foldBoolean(
+                                ifTrue = { 1000.days },
+                                ifFalse = { 0.days }
+                            )
+                            suggest.info.timestamp.epochSeconds + equalsFromBeginningWeight.inWholeSeconds
+                        }
+                        .asSequence()
+                        .distinctBy(CommentSuggest::normalized)
+
+                    val suggests = allSuggests
+                        .filter { it.suitableType != CommentSuggest.SuitableType.Absolute }
+                        .take(16)
+                        .map { it.info.comment }
+                        .toList()
+                        .toNonEmptyListOrNull()
+
+                    val category: CategoryInfo? = allSuggests
+                        .firstOrNull { suggest ->
+                            when (suggest.suitableType) {
+                                CommentSuggest.SuitableType.Absolute,
+                                CommentSuggest.SuitableType.IgnoreCase,
+                                    -> true
+
+                                CommentSuggest.SuitableType.FromBeginning,
+                                CommentSuggest.SuitableType.Other,
+                                    -> false
+                            }
+                        }
+                        ?.info
+                        ?.category
+
+                    suggests to category
+                }
+            }
+            .stateIn(
+                scope = scope,
+                started = SharingStarted.Eagerly,
+                initialValue = null to null,
+            )
+
+    val commentSuggests: StateFlow<NonEmptyList<Comment>?> =
+        commentSuggestsWithCalculatedCategory.mapStateLite(Pair<NonEmptyList<Comment>?, *>::first)
+
+    val category: StateFlow<CategoryInfo?> = skeleton.manualCategory.flatMapState(
+        scope = scope,
+    ) { manualOrNull ->
+        manualOrNull.foldNullable(
+            ifNotNull = { it.toMutableStateFlowAsInitial() },
+            ifNull = { commentSuggestsWithCalculatedCategory.mapStateLite(Pair<*, CategoryInfo?>::second) }
+        )
+    }
+
+    val record: StateFlow<Record?> = category
         .combineStateWith(
             scope = scope,
             other = amount.amount,

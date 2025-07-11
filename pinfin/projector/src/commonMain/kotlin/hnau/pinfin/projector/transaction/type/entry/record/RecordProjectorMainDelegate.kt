@@ -20,15 +20,19 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import arrow.core.identity
 import arrow.core.toOption
 import hnau.common.kotlin.coroutines.Stickable
+import hnau.common.kotlin.coroutines.flatMapState
 import hnau.common.kotlin.coroutines.mapState
 import hnau.common.kotlin.coroutines.predeterminated
 import hnau.common.kotlin.coroutines.stateFlow
 import hnau.common.kotlin.coroutines.stick
+import hnau.common.kotlin.coroutines.toMutableStateFlowAsInitial
+import hnau.common.kotlin.foldBoolean
 import hnau.common.kotlin.foldNullable
 import hnau.common.model.toEditingString
 import hnau.common.projector.uikit.HnauButton
@@ -54,6 +58,7 @@ import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.stringResource
@@ -76,6 +81,9 @@ class RecordProjectorMainDelegate(
         dependencies = dependencies.amount(),
     )
 
+    private val commentIsFocused: MutableStateFlow<Boolean> =
+        MutableStateFlow(false)
+
     private val cells: StateFlow<ImmutableList<Cell>> = run {
         val header: Cell = Subtable(
             cells = model
@@ -84,7 +92,11 @@ class RecordProjectorMainDelegate(
                     listOfNotNull(
                         Cell {
                             TextInput(
-                                modifier = Modifier.weight(1f),
+                                modifier = Modifier
+                                    .weight(1f)
+                                    .onFocusChanged { state ->
+                                        commentIsFocused.value = state.isFocused
+                                    },
                                 value = model.comment,
                                 shape = shape,
                                 placeholder = { Text(stringResource(Res.string.comment)) },
@@ -132,8 +144,13 @@ class RecordProjectorMainDelegate(
                 )
             )
         )
-        model
-            .commentSuggests
+        commentIsFocused
+            .flatMapState(scope) { commentIsFocused ->
+                commentIsFocused.foldBoolean(
+                    ifTrue = { model.commentSuggests },
+                    ifFalse = { null.toMutableStateFlowAsInitial() },
+                )
+            }
             .stick(scope) { stickScope, suggestsOrNull ->
                 suggestsOrNull.foldNullable(
                     ifNull = {

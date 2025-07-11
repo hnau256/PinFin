@@ -10,7 +10,6 @@ import arrow.core.nonEmptyListOf
 import arrow.core.serialization.NonEmptyListSerializer
 import arrow.core.toNonEmptyListOrNull
 import hnau.common.kotlin.coroutines.combineStateWith
-import hnau.common.kotlin.coroutines.createChild
 import hnau.common.kotlin.coroutines.flatMapState
 import hnau.common.kotlin.coroutines.mapNonEmptyListReusable
 import hnau.common.kotlin.coroutines.mapState
@@ -110,7 +109,7 @@ class EntryModel(
                         accState
                             .combineStateWith(
                                 scope = recordsScope,
-                                other = record.second.category,
+                                other = record.second.manualCategory,
                             ) { acc, categoryOrNull ->
                                 categoryOrNull
                                     ?.let { category -> acc + category }
