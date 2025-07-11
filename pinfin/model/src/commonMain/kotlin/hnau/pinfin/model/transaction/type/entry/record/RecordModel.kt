@@ -4,11 +4,19 @@
 
 package hnau.pinfin.model.transaction.type.entry.record
 
+import arrow.core.NonEmptyList
+import arrow.core.serialization.NonEmptyListSerializer
+import arrow.core.toNonEmptyListOrNone
+import arrow.core.toNonEmptyListOrNull
+import hnau.common.kotlin.Loadable
+import hnau.common.kotlin.Loading
+import hnau.common.kotlin.Ready
 import hnau.common.kotlin.coroutines.combineStateWith
 import hnau.common.kotlin.coroutines.flatMapState
 import hnau.common.kotlin.coroutines.mapState
 import hnau.common.kotlin.coroutines.scopedInState
 import hnau.common.kotlin.coroutines.toMutableStateFlowAsInitial
+import hnau.common.kotlin.foldBoolean
 import hnau.common.kotlin.serialization.MutableStateFlowSerializer
 import hnau.common.model.EditingString
 import hnau.common.model.goback.GoBackHandler
@@ -19,15 +27,23 @@ import hnau.pinfin.data.Comment
 import hnau.pinfin.data.Record
 import hnau.pinfin.model.AmountModel
 import hnau.pinfin.model.transaction.type.utils.ChooseCategoryModel
+import hnau.pinfin.model.utils.budget.repository.BudgetRepository
 import hnau.pinfin.model.utils.budget.state.CategoryInfo
 import hnau.pinfin.model.utils.budget.state.TransactionInfo
 import hnau.pipe.annotations.Pipe
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.withContext
+import kotlinx.datetime.Instant
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.UseSerializers
+import kotlin.time.Duration.Companion.days
 
 class RecordModel(
     private val scope: CoroutineScope,
@@ -87,6 +103,8 @@ class RecordModel(
 
     @Pipe
     interface Dependencies {
+
+        val budgetRepository: BudgetRepository
 
         fun amount(): AmountModel.Dependencies
 
@@ -169,6 +187,81 @@ class RecordModel(
 
     val comment: MutableStateFlow<EditingString>
         get() = skeleton.comment
+
+    private data class CommentSuggest(
+        val comment: Comment,
+        val normalized: String,
+        val timestamp: Instant,
+        val equalsFromBeginning: Boolean,
+    )
+
+    val commentSuggests: StateFlow<NonEmptyList<Comment>?> = dependencies
+        .budgetRepository
+        .state
+        .combine(
+            flow = comment,
+        ) { state, commentEditingString ->
+            withContext(Dispatchers.Default) {
+                val queryRaw = commentEditingString
+                    .text
+                    .trim()
+                val query = queryRaw
+                    .lowercase()
+                    .takeIf { it.isNotEmpty() }
+                    ?: return@withContext null
+                state
+                    .transactions
+                    .flatMap { transaction ->
+                        when (val type = transaction.type) {
+                            is TransactionInfo.Type.Entry -> type
+                                .records
+                                .map { record ->
+                                    record.comment to transaction.timestamp
+                                }
+
+                            is TransactionInfo.Type.Transfer -> emptyList()
+                        }
+                    }
+                    .mapNotNull { (comment, timestamp) ->
+                        val trimmed = comment
+                            .text
+                            .trim()
+                        if (trimmed == queryRaw) {
+                            return@mapNotNull null
+                        }
+                        val normalized = trimmed.lowercase()
+                        val equalsIndex = normalized
+                            .indexOf(
+                                string = query,
+                                ignoreCase = true,
+                            )
+                            .takeIf { it >= 0 }
+                            ?: return@mapNotNull null
+                        CommentSuggest(
+                            comment = comment,
+                            timestamp = timestamp,
+                            equalsFromBeginning = equalsIndex == 0,
+                            normalized = normalized,
+                        )
+                    }
+                    .sortedByDescending { suggest ->
+                        val equalsFromBeginningWeight = suggest.equalsFromBeginning.foldBoolean(
+                            ifTrue = { 1000.days },
+                            ifFalse = { 0.days }
+                        )
+                        suggest.timestamp.epochSeconds + equalsFromBeginningWeight.inWholeSeconds
+                    }
+                    .distinctBy(CommentSuggest::normalized)
+                    .take(16)
+                    .map(CommentSuggest::comment)
+                    .toNonEmptyListOrNull()
+            }
+        }
+        .stateIn(
+            scope = scope,
+            started = SharingStarted.Eagerly,
+            initialValue = null,
+        )
 
     val record: StateFlow<Record?> = skeleton
         .category
