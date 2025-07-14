@@ -110,7 +110,7 @@ class TransferProjector(
                     )
                 )
             ),
-            amount.Content(),
+            amount.createCell(),
         )
     }
 

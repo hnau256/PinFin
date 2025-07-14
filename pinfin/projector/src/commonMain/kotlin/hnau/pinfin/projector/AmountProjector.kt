@@ -4,8 +4,11 @@ import androidx.compose.foundation.text.KeyboardActionScope
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
@@ -17,6 +20,7 @@ import hnau.common.model.EditingString
 import hnau.common.model.toEditingString
 import hnau.common.projector.uikit.TextInput
 import hnau.common.projector.uikit.table.Cell
+import hnau.common.projector.utils.collectAsTextFieldValueMutableState
 import hnau.pinfin.model.AmountModel
 import hnau.pinfin.projector.resources.Res
 import hnau.pinfin.projector.resources.amount
@@ -64,7 +68,31 @@ class AmountProjector(
             )
         )
 
+    @Composable
     fun Content(
+        modifier: Modifier = Modifier,
+        imeAction: ImeAction = ImeAction.Unspecified,
+        onImeAction: StateFlow<(KeyboardActionScope.() -> Unit)?> = null.toMutableStateFlowAsInitial(),
+    ) {
+        val currentOnImeAction by onImeAction.collectAsState()
+        var value by input.collectAsTextFieldValueMutableState()
+        TextField(
+            modifier = modifier,
+            value = value,
+            onValueChange = { value = it },
+            keyboardOptions = KeyboardOptions(
+                keyboardType = KeyboardType.Companion.Decimal,
+                imeAction = imeAction,
+            ),
+            keyboardActions = currentOnImeAction
+                ?.let { action -> KeyboardActions { action() } }
+                ?: KeyboardActions(),
+            label = { Text(stringResource(Res.string.amount)) },
+            isError = model.error.collectAsState().value,
+        )
+    }
+
+    fun createCell(
         weight: Float? = null,
         imeAction: ImeAction = ImeAction.Unspecified,
         onImeAction: StateFlow<(KeyboardActionScope.() -> Unit)?> = null.toMutableStateFlowAsInitial(),

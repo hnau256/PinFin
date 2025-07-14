@@ -5,12 +5,18 @@
 package hnau.pinfin.model.transaction.type.entry.record
 
 import arrow.core.NonEmptyList
+import arrow.core.identity
 import arrow.core.toNonEmptyListOrNull
+import arrow.core.toOption
+import hnau.common.kotlin.coroutines.Stickable
 import hnau.common.kotlin.coroutines.combineStateWith
 import hnau.common.kotlin.coroutines.flatMapState
 import hnau.common.kotlin.coroutines.mapState
 import hnau.common.kotlin.coroutines.mapStateLite
+import hnau.common.kotlin.coroutines.predeterminated
 import hnau.common.kotlin.coroutines.scopedInState
+import hnau.common.kotlin.coroutines.stateFlow
+import hnau.common.kotlin.coroutines.stick
 import hnau.common.kotlin.coroutines.toMutableStateFlowAsInitial
 import hnau.common.kotlin.foldBoolean
 import hnau.common.kotlin.foldNullable
@@ -316,8 +322,21 @@ class RecordModel(
                 initialValue = null to null,
             )
 
-    val commentSuggests: StateFlow<NonEmptyList<Comment>?> =
-        commentSuggestsWithCalculatedCategory.mapStateLite(Pair<NonEmptyList<Comment>?, *>::first)
+    val commentSuggests: StateFlow<StateFlow<NonEmptyList<Comment>>?> =
+        commentSuggestsWithCalculatedCategory
+            .mapStateLite(Pair<NonEmptyList<Comment>?, *>::first)
+            .stick(scope) { stickScope, suggestsOrNull ->
+                suggestsOrNull.foldNullable(
+                    ifNull = { Stickable.predeterminated(null) },
+                    ifNotNull = { suggests ->
+                        Stickable.stateFlow(
+                            initial = suggests,
+                            tryUseNext = NonEmptyList<Comment>?::toOption,
+                            createResult = ::identity,
+                        )
+                    }
+                )
+            }
 
     val category: StateFlow<CategoryInfo?> = skeleton.manualCategory.flatMapState(
         scope = scope,
