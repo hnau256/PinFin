@@ -1,6 +1,6 @@
 package hnau.pinfin.model.sync
 
-import hnau.common.model.goback.GoBackHandlerProvider
+import hnau.common.app.model.goback.GoBackHandlerProvider
 import hnau.pinfin.model.sync.client.SyncClientStackModel
 import hnau.pinfin.model.sync.server.SyncServerModel
 import hnau.pinfin.model.sync.start.StartSyncModel

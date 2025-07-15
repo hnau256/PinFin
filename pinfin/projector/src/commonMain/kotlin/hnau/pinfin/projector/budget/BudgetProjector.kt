@@ -16,9 +16,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.util.fastForEach
 import hnau.common.kotlin.coroutines.mapState
-import hnau.common.projector.uikit.state.StateContent
-import hnau.common.projector.utils.Icon
-import hnau.common.projector.utils.getTransitionSpecForHorizontalSlide
+import hnau.common.app.projector.uikit.state.StateContent
+import hnau.common.app.projector.utils.Icon
+import hnau.common.app.projector.utils.getTransitionSpecForHorizontalSlide
 import hnau.pinfin.model.budget.BudgetModel
 import hnau.pinfin.model.budget.BudgetPageModel
 import hnau.pinfin.model.budget.BudgetTab

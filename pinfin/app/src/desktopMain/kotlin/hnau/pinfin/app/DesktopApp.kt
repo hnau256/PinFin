@@ -8,8 +8,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
 import androidx.compose.ui.window.rememberWindowState
-import hnau.common.model.ThemeBrightness
-import hnau.common.model.app.DesktopApp
+import hnau.common.app.model.ThemeBrightness
+import hnau.common.app.model.app.DesktopApp
 import kotlinx.coroutines.runBlocking
 
 @OptIn(InternalComposeApi::class)

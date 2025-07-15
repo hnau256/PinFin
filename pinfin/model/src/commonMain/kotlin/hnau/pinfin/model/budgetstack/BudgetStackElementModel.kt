@@ -1,6 +1,6 @@
 package hnau.pinfin.model.budgetstack
 
-import hnau.common.model.goback.GoBackHandlerProvider
+import hnau.common.app.model.goback.GoBackHandlerProvider
 import hnau.pinfin.model.AccountModel
 import hnau.pinfin.model.budget.BudgetModel
 import hnau.pinfin.model.transaction.TransactionModel

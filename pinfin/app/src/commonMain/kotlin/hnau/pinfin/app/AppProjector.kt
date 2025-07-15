@@ -1,7 +1,7 @@
 package hnau.pinfin.app
 
-import hnau.common.model.app.AppModel
-import hnau.common.projector.app.AppProjector
+import hnau.common.app.model.app.AppModel
+import hnau.common.app.projector.app.AppProjector
 import hnau.pinfin.model.RootModel
 import hnau.pinfin.projector.RootProjector
 import hnau.pinfin.projector.impl

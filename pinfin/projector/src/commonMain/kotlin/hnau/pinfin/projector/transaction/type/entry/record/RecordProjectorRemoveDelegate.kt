@@ -1,7 +1,7 @@
 package hnau.pinfin.projector.transaction.type.entry.record
 
 import androidx.compose.runtime.Composable
-import hnau.common.projector.uikit.ContainerStyle
+import hnau.common.app.projector.uikit.ContainerStyle
 import hnau.pinfin.model.transaction.type.entry.record.RecordModel
 import hnau.pinfin.projector.resources.Res
 import hnau.pinfin.projector.resources.no

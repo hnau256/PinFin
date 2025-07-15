@@ -13,9 +13,9 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.util.fastForEach
-import hnau.common.projector.utils.Overcompose
-import hnau.common.projector.utils.copy
-import hnau.common.projector.utils.rememberPagerState
+import hnau.common.app.projector.utils.Overcompose
+import hnau.common.app.projector.utils.copy
+import hnau.common.app.projector.utils.rememberPagerState
 import hnau.pinfin.model.budget.analytics.AnalyticsModel
 import hnau.pinfin.model.budget.analytics.tab.AnalyticsTab
 import hnau.pinfin.model.budget.analytics.tab.AnalyticsTabValues

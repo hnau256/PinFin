@@ -9,9 +9,9 @@ import hnau.common.kotlin.coroutines.combineStateWith
 import hnau.common.kotlin.coroutines.mapWithScope
 import hnau.common.kotlin.coroutines.toMutableStateFlowAsInitial
 import hnau.common.kotlin.serialization.MutableStateFlowSerializer
-import hnau.common.model.goback.GoBackHandler
-import hnau.common.model.goback.GoBackHandlerProvider
-import hnau.common.model.goback.NeverGoBackHandler
+import hnau.common.app.model.goback.GoBackHandler
+import hnau.common.app.model.goback.GoBackHandlerProvider
+import hnau.common.app.model.goback.NeverGoBackHandler
 import hnau.pinfin.data.Transaction
 import hnau.pinfin.model.AmountModel
 import hnau.pinfin.model.transaction.type.utils.ChooseAccountModel

@@ -6,10 +6,11 @@ import hnau.common.kotlin.mapper.Mapper
 import hnau.common.kotlin.mapper.plus
 import hnau.common.kotlin.mapper.stringToUuid
 import hnau.common.kotlin.serialization.UuidSerializer
-import kotlinx.datetime.Instant
+import hnau.pinfin.data.utils.InstantSerializer
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlin.jvm.JvmInline
+import kotlin.time.Instant
 import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid
 
@@ -17,6 +18,7 @@ import kotlin.uuid.Uuid
 @Serializable
 data class Transaction(
     @SerialName("timestamp")
+    @Serializable(InstantSerializer::class)
     val timestamp: Instant,
 
     @SerialName("comment")

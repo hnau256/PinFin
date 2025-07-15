@@ -5,7 +5,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import hnau.common.projector.uikit.utils.Dimens
+import hnau.common.app.projector.uikit.utils.Dimens
 import hnau.pinfin.model.transaction.type.entry.EntryModel
 import hnau.pipe.annotations.Pipe
 import kotlinx.coroutines.CoroutineScope

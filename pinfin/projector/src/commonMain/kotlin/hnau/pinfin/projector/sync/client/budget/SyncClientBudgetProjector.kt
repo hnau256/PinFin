@@ -8,9 +8,9 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
-import hnau.common.projector.uikit.ErrorPanel
-import hnau.common.projector.uikit.state.LoadableContent
-import hnau.common.projector.uikit.state.TransitionSpec
+import hnau.common.app.projector.uikit.ErrorPanel
+import hnau.common.app.projector.uikit.state.LoadableContent
+import hnau.common.app.projector.uikit.state.TransitionSpec
 import hnau.pinfin.model.sync.client.budget.SyncClientBudgetModel
 import hnau.pinfin.projector.resources.Res
 import hnau.pinfin.projector.resources.back

@@ -16,11 +16,11 @@ import hnau.common.kotlin.coroutines.mapMutableState
 import hnau.common.kotlin.coroutines.toMutableStateFlowAsInitial
 import hnau.common.kotlin.ifNull
 import hnau.common.kotlin.mapper.Mapper
-import hnau.common.model.EditingString
-import hnau.common.model.toEditingString
-import hnau.common.projector.uikit.TextInput
-import hnau.common.projector.uikit.table.Cell
-import hnau.common.projector.utils.collectAsTextFieldValueMutableState
+import hnau.common.app.model.EditingString
+import hnau.common.app.model.toEditingString
+import hnau.common.app.projector.uikit.TextInput
+import hnau.common.app.projector.uikit.table.Cell
+import hnau.common.app.projector.utils.collectAsMutableState
 import hnau.pinfin.model.AmountModel
 import hnau.pinfin.projector.resources.Res
 import hnau.pinfin.projector.resources.amount
@@ -75,8 +75,8 @@ class AmountProjector(
         onImeAction: StateFlow<(KeyboardActionScope.() -> Unit)?> = null.toMutableStateFlowAsInitial(),
     ) {
         val currentOnImeAction by onImeAction.collectAsState()
-        var value by input.collectAsTextFieldValueMutableState()
-        TextField(
+        var value by input.collectAsMutableState()
+        /*TextField(
             modifier = modifier,
             value = value,
             onValueChange = { value = it },
@@ -89,7 +89,7 @@ class AmountProjector(
                 ?: KeyboardActions(),
             label = { Text(stringResource(Res.string.amount)) },
             isError = model.error.collectAsState().value,
-        )
+        )*/
     }
 
     fun createCell(

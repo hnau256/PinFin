@@ -1,6 +1,6 @@
 package hnau.pinfin.model.sync.client
 
-import hnau.common.model.goback.GoBackHandlerProvider
+import hnau.common.app.model.goback.GoBackHandlerProvider
 import hnau.pinfin.model.sync.client.budget.SyncClientLoadBudgetModel
 import hnau.pinfin.model.sync.client.list.SyncClientListModel
 import kotlinx.serialization.SerialName

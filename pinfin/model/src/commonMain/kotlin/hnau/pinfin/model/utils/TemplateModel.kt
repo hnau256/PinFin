@@ -5,8 +5,8 @@
 package hnau.pinfin.model.utils
 
 import hnau.common.kotlin.serialization.MutableStateFlowSerializer
-import hnau.common.model.goback.GoBackHandler
-import hnau.common.model.goback.GoBackHandlerProvider
+import hnau.common.app.model.goback.GoBackHandler
+import hnau.common.app.model.goback.GoBackHandlerProvider
 import hnau.pipe.annotations.Pipe
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.serialization.Serializable

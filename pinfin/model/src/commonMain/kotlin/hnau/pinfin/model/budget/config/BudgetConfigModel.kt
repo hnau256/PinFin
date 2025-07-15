@@ -12,10 +12,10 @@ import hnau.common.kotlin.coroutines.scopedInState
 import hnau.common.kotlin.coroutines.toMutableStateFlowAsInitial
 import hnau.common.kotlin.foldNullable
 import hnau.common.kotlin.serialization.MutableStateFlowSerializer
-import hnau.common.model.EditingString
-import hnau.common.model.goback.GoBackHandler
-import hnau.common.model.goback.GoBackHandlerProvider
-import hnau.common.model.toEditingString
+import hnau.common.app.model.EditingString
+import hnau.common.app.model.goback.GoBackHandler
+import hnau.common.app.model.goback.GoBackHandlerProvider
+import hnau.common.app.model.toEditingString
 import hnau.pinfin.data.BudgetConfig
 import hnau.pinfin.model.manage.BudgetsListOpener
 import hnau.pinfin.model.utils.budget.repository.BudgetRepository

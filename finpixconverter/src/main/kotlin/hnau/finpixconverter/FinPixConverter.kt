@@ -10,7 +10,7 @@ import hnau.pinfin.data.Comment
 import hnau.pinfin.data.Record
 import hnau.pinfin.data.Transaction
 import hnau.pinfin.data.UpdateType
-import kotlinx.datetime.Instant
+import kotlin.time.Instant
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toInstant
 import kotlinx.datetime.toKotlinLocalDateTime

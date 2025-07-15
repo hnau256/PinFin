@@ -7,6 +7,7 @@ import org.gradle.api.artifacts.VersionCatalog
 import org.gradle.api.artifacts.VersionCatalogsExtension
 import org.gradle.jvm.toolchain.JavaLanguageVersion
 import org.jetbrains.compose.ComposePlugin
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
 
 internal enum class AndroidMode { Lib, App }
@@ -21,6 +22,12 @@ internal fun Project.config(
 
     val javaVersionString = versions
         .requireVersion("java")
+
+    val javaVersionNumberString: String =
+        javaVersionString.dropWhile { !it.isDigit() }
+
+    val javaTarget: JvmTarget =
+        JvmTarget.fromTarget(javaVersionNumberString)
 
     val javaVersion: JavaVersion =
         JavaVersion.valueOf(javaVersionString)
@@ -44,23 +51,19 @@ internal fun Project.config(
     extensions.configure(KotlinMultiplatformExtension::class.java) { extension ->
 
         extension.androidTarget {
-            compilations.configureEach { jvmCompilation ->
-                jvmCompilation.kotlinOptions {
-                    jvmTarget = javaVersion.toString()
-                }
+            compilerOptions {
+                jvmTarget.set(javaTarget)
             }
         }
 
         extension.jvmToolchain { javaToolchainSpec ->
             javaToolchainSpec
                 .languageVersion
-                .set(JavaLanguageVersion.of(javaVersionString.dropWhile { !it.isDigit() }))
+                .set(JavaLanguageVersion.of(javaVersionNumberString))
         }
         extension.jvm("desktop") {
-            compilations.configureEach { jvmCompilation ->
-                jvmCompilation.kotlinOptions {
-                    jvmTarget = javaVersion.toString()
-                }
+            compilerOptions {
+                jvmTarget.set(javaTarget)
             }
         }
         if (hasComposePlugin) {

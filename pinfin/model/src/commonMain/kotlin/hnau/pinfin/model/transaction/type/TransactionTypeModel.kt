@@ -1,6 +1,6 @@
 package hnau.pinfin.model.transaction.type
 
-import hnau.common.model.goback.GoBackHandlerProvider
+import hnau.common.app.model.goback.GoBackHandlerProvider
 import hnau.pinfin.data.Transaction
 import hnau.pinfin.data.TransactionType
 import hnau.pinfin.model.transaction.type.entry.EntryModel

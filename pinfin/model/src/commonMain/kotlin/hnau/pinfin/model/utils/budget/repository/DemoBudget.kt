@@ -15,9 +15,9 @@ import hnau.pinfin.data.Transaction
 import hnau.pinfin.data.UpdateType
 import hnau.pinfin.model.utils.budget.state.updateTypeMapper
 import hnau.pinfin.model.utils.budget.upchain.Update
-import kotlinx.datetime.Clock
+import kotlin.time.Clock
 import kotlinx.datetime.DateTimeUnit
-import kotlinx.datetime.Instant
+import kotlin.time.Instant
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.atTime

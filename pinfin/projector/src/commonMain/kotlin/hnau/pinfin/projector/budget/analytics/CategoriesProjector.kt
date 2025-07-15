@@ -20,10 +20,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.unit.LayoutDirection
-import hnau.common.projector.uikit.state.LoadableContent
-import hnau.common.projector.uikit.state.TransitionSpec
-import hnau.common.projector.uikit.utils.Dimens
-import hnau.common.projector.utils.horizontalDisplayPadding
+import hnau.common.app.projector.uikit.state.LoadableContent
+import hnau.common.app.projector.uikit.state.TransitionSpec
+import hnau.common.app.projector.uikit.utils.Dimens
+import hnau.common.app.projector.utils.horizontalDisplayPadding
 import hnau.pinfin.data.AmountDirection
 import hnau.pinfin.model.budget.analytics.tab.CategoriesModel
 import hnau.pinfin.projector.utils.AmountContent

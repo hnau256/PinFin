@@ -26,13 +26,13 @@ import arrow.core.NonEmptyList
 import hnau.common.kotlin.coroutines.flatMapState
 import hnau.common.kotlin.coroutines.toMutableStateFlowAsInitial
 import hnau.common.kotlin.foldBoolean
-import hnau.common.model.toEditingString
-import hnau.common.projector.uikit.shape.HnauShape
-import hnau.common.projector.uikit.state.NullableStateContent
-import hnau.common.projector.uikit.state.TransitionSpec
-import hnau.common.projector.uikit.utils.Dimens
-import hnau.common.projector.utils.Icon
-import hnau.common.projector.utils.collectAsTextFieldValueMutableState
+import hnau.common.app.model.toEditingString
+import hnau.common.app.projector.uikit.shape.HnauShape
+import hnau.common.app.projector.uikit.state.NullableStateContent
+import hnau.common.app.projector.uikit.state.TransitionSpec
+import hnau.common.app.projector.uikit.utils.Dimens
+import hnau.common.app.projector.utils.Icon
+import hnau.common.app.projector.utils.collectAsMutableState
 import hnau.pinfin.data.Comment
 import hnau.pinfin.model.transaction.type.entry.record.RecordModel
 import hnau.pinfin.projector.AmountProjector
@@ -83,8 +83,8 @@ class RecordProjectorMainDelegate(
                 modifier = Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
-                var comment by model.comment.collectAsTextFieldValueMutableState()
-                TextField(
+                var comment by model.comment.collectAsMutableState()
+                /*TextField(
                     value = comment,
                     onValueChange = { comment = it },
                     modifier = Modifier
@@ -94,7 +94,7 @@ class RecordProjectorMainDelegate(
                             commentIsFocused.value = state.isFocused
                         },
                     label = { Text(stringResource(Res.string.comment)) },
-                )
+                )*/
                 model
                     .openRemoveOverlap
                     .collectAsState()

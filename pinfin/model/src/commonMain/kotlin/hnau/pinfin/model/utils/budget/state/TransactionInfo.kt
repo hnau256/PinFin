@@ -4,7 +4,7 @@ import arrow.core.NonEmptyList
 import hnau.pinfin.data.Amount
 import hnau.pinfin.data.Comment
 import hnau.pinfin.data.Transaction
-import kotlinx.datetime.Instant
+import kotlin.time.Instant
 
 data class TransactionInfo(
     val id: Transaction.Id,

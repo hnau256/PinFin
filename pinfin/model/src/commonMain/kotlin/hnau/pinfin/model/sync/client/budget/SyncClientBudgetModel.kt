@@ -13,9 +13,9 @@ import hnau.common.kotlin.coroutines.scopedInState
 import hnau.common.kotlin.coroutines.toMutableStateFlowAsInitial
 import hnau.common.kotlin.map
 import hnau.common.kotlin.serialization.MutableStateFlowSerializer
-import hnau.common.model.goback.GoBackHandler
-import hnau.common.model.goback.GoBackHandlerProvider
-import hnau.common.model.goback.NeverGoBackHandler
+import hnau.common.app.model.goback.GoBackHandler
+import hnau.common.app.model.goback.GoBackHandlerProvider
+import hnau.common.app.model.goback.NeverGoBackHandler
 import hnau.pinfin.data.BudgetId
 import hnau.pinfin.model.sync.client.budget.utils.syncWithRemote
 import hnau.pinfin.model.sync.client.utils.TcpSyncClient

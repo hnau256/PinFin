@@ -6,8 +6,8 @@ package hnau.pinfin.model.sync.server
 
 import hnau.common.kotlin.coroutines.toMutableStateFlowAsInitial
 import hnau.common.kotlin.serialization.MutableStateFlowSerializer
-import hnau.common.model.goback.GoBackHandler
-import hnau.common.model.goback.GoBackHandlerProvider
+import hnau.common.app.model.goback.GoBackHandler
+import hnau.common.app.model.goback.GoBackHandlerProvider
 import hnau.pinfin.model.sync.server.utils.ServerSyncApi
 import hnau.pinfin.model.sync.server.utils.tcpSyncServer
 import hnau.pinfin.model.sync.utils.ServerPort

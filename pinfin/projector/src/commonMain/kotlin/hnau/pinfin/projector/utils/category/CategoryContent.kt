@@ -5,8 +5,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier
-import hnau.common.projector.uikit.TripleRow
-import hnau.common.projector.utils.Icon
+import hnau.common.app.projector.uikit.TripleRow
+import hnau.common.app.projector.utils.Icon
 import hnau.pinfin.model.utils.budget.state.CategoryInfo
 import hnau.pinfin.projector.utils.color
 
