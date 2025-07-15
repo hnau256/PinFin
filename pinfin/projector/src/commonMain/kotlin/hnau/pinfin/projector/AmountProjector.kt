@@ -8,19 +8,18 @@ import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
-import hnau.common.kotlin.coroutines.mapMutableState
-import hnau.common.kotlin.coroutines.toMutableStateFlowAsInitial
-import hnau.common.kotlin.ifNull
-import hnau.common.kotlin.mapper.Mapper
 import hnau.common.app.model.EditingString
 import hnau.common.app.model.toEditingString
 import hnau.common.app.projector.uikit.TextInput
 import hnau.common.app.projector.uikit.table.Cell
-import hnau.common.app.projector.utils.collectAsMutableState
+import hnau.common.app.projector.utils.collectAsTextFieldValueMutableAccessor
+import hnau.common.kotlin.coroutines.mapMutableState
+import hnau.common.kotlin.coroutines.toMutableStateFlowAsInitial
+import hnau.common.kotlin.ifNull
+import hnau.common.kotlin.mapper.Mapper
 import hnau.pinfin.model.AmountModel
 import hnau.pinfin.projector.resources.Res
 import hnau.pinfin.projector.resources.amount
@@ -75,8 +74,8 @@ class AmountProjector(
         onImeAction: StateFlow<(KeyboardActionScope.() -> Unit)?> = null.toMutableStateFlowAsInitial(),
     ) {
         val currentOnImeAction by onImeAction.collectAsState()
-        var value by input.collectAsMutableState()
-        /*TextField(
+        var value by input.collectAsTextFieldValueMutableAccessor()
+        TextField(
             modifier = modifier,
             value = value,
             onValueChange = { value = it },
@@ -89,7 +88,7 @@ class AmountProjector(
                 ?: KeyboardActions(),
             label = { Text(stringResource(Res.string.amount)) },
             isError = model.error.collectAsState().value,
-        )*/
+        )
     }
 
     fun createCell(

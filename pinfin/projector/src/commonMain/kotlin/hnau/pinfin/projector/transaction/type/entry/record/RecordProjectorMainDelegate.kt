@@ -1,7 +1,6 @@
 package hnau.pinfin.projector.transaction.type.entry.record
 
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -18,21 +17,20 @@ import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.onFocusChanged
 import arrow.core.NonEmptyList
-import hnau.common.kotlin.coroutines.flatMapState
-import hnau.common.kotlin.coroutines.toMutableStateFlowAsInitial
-import hnau.common.kotlin.foldBoolean
 import hnau.common.app.model.toEditingString
 import hnau.common.app.projector.uikit.shape.HnauShape
 import hnau.common.app.projector.uikit.state.NullableStateContent
 import hnau.common.app.projector.uikit.state.TransitionSpec
 import hnau.common.app.projector.uikit.utils.Dimens
 import hnau.common.app.projector.utils.Icon
-import hnau.common.app.projector.utils.collectAsMutableState
+import hnau.common.app.projector.utils.collectAsTextFieldValueMutableAccessor
+import hnau.common.kotlin.coroutines.flatMapState
+import hnau.common.kotlin.coroutines.toMutableStateFlowAsInitial
+import hnau.common.kotlin.foldBoolean
 import hnau.pinfin.data.Comment
 import hnau.pinfin.model.transaction.type.entry.record.RecordModel
 import hnau.pinfin.projector.AmountProjector
@@ -83,8 +81,8 @@ class RecordProjectorMainDelegate(
                 modifier = Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
-                var comment by model.comment.collectAsMutableState()
-                /*TextField(
+                var comment by model.comment.collectAsTextFieldValueMutableAccessor()
+                TextField(
                     value = comment,
                     onValueChange = { comment = it },
                     modifier = Modifier
@@ -94,7 +92,7 @@ class RecordProjectorMainDelegate(
                             commentIsFocused.value = state.isFocused
                         },
                     label = { Text(stringResource(Res.string.comment)) },
-                )*/
+                )
                 model
                     .openRemoveOverlap
                     .collectAsState()
