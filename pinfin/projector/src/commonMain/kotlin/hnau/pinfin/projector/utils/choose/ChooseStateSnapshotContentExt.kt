@@ -2,6 +2,8 @@ package hnau.pinfin.projector.utils.choose
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
@@ -19,18 +21,16 @@ import hnau.common.app.model.EditingString
 import hnau.common.app.projector.uikit.HnauButton
 import hnau.common.app.projector.uikit.TextInput
 import hnau.common.app.projector.uikit.row.ChipsFlowRow
-import hnau.common.app.projector.uikit.table.Cell
 import hnau.common.app.projector.uikit.table.CellBox
 import hnau.common.app.projector.uikit.table.Subtable
 import hnau.common.app.projector.uikit.table.Table
 import hnau.common.app.projector.uikit.table.TableOrientation
+import hnau.common.app.projector.uikit.table.TableScope
 import hnau.common.app.projector.uikit.utils.Dimens
 import hnau.common.app.projector.utils.Icon
 import hnau.pinfin.model.utils.choose.ChooseStateSnapshot
 import hnau.pinfin.projector.resources.Res
 import hnau.pinfin.projector.resources.search_create
-import kotlinx.collections.immutable.persistentListOf
-import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.MutableStateFlow
 import org.jetbrains.compose.resources.stringResource
 
@@ -44,122 +44,156 @@ fun <T> ChooseStateSnapshot<T>.Content(
 ) {
     Table(
         orientation = TableOrientation.Vertical,
-        cells = listOfNotNull(
-            Subtable(
-                cells = persistentListOf(
-                    Cell {
-                        HnauButton(
-                            content = { Icon(Icons.Filled.ArrowBack) },
-                            shape = shape,
-                            onClick = onReady,
-                        )
-                    },
-                    Cell {
-                        val focusRequester = remember { FocusRequester() }
-                        TextInput(
-                            modifier = Modifier
-                                .focusRequester(focusRequester)
-                                .weight(1f),
-                            value = query,
-                            shape = shape,
-                            placeholder = { Text(stringResource(Res.string.search_create)) },
-                        )
-                        val requestFocus = when (visibleVariants) {
-                            ChooseStateSnapshot.VisibleVariants.Empty,
-                            ChooseStateSnapshot.VisibleVariants.InputToCreateNewMessage,
-                                -> true
-
-                            is ChooseStateSnapshot.VisibleVariants.List,
-                            ChooseStateSnapshot.VisibleVariants.NotFound,
-                                -> false
-                        }
-                        LaunchedEffect(focusRequester, requestFocus) {
-                            if (requestFocus) {
-                                focusRequester.requestFocus()
-                            }
-                        }
-                    }
-                )
-            ),
-            when (val visibleVariants = visibleVariants) {
-                ChooseStateSnapshot.VisibleVariants.InputToCreateNewMessage -> MessageCell(
-                    message = messages.noVariants,
-                    color = MaterialTheme.colorScheme.onSurface,
-                )
-
-                ChooseStateSnapshot.VisibleVariants.Empty -> null
-
-                ChooseStateSnapshot.VisibleVariants.NotFound -> MessageCell(
-                    message = messages.notFound,
-                    color = MaterialTheme.colorScheme.error,
-                )
-
-                is ChooseStateSnapshot.VisibleVariants.List -> CellBox(
-                    contentAlignment = Alignment.TopStart,
-                ) {
-                    ChipsFlowRow(
-                        all = visibleVariants.list,
-                        modifier = Modifier.padding(Dimens.smallSeparation),
-                    ) { (item, selected) ->
-                        itemContent(
-                            item,
-                            selected,
-                            {
-                                updateSelected(item)
-                                onReady()
-                            },
-                        )
-                    }
-                }
-            },
-            possibleVariantsToAdd?.let { possibleVariantsToAddNotEmpty ->
-                CellBox(
-                    contentAlignment = Alignment.TopStart,
-                ) {
-                    Column(
-                        verticalArrangement = Arrangement.spacedBy(Dimens.smallSeparation),
-                        modifier = Modifier.padding(
-                            horizontal = Dimens.separation,
-                            vertical = Dimens.smallSeparation,
-                        ),
+        modifier = Modifier.fillMaxWidth(),
+    ) {
+        val variantsToAdd: (@Composable TableScope.() -> Unit)? = possibleVariantsToAdd
+            ?.let { possibleVariantsToAddNotEmpty ->
+                {
+                    CellBox(
+                        contentAlignment = Alignment.TopStart,
+                        isLast = true,
                     ) {
-                        Text(
-                            text = messages.createNew,
-                            color = MaterialTheme.colorScheme.onSurface,
-                            style = MaterialTheme.typography.bodyMedium,
-                        )
-                        ChipsFlowRow(
-                            all = possibleVariantsToAddNotEmpty,
-                        ) { item ->
-                            itemContent(
-                                item,
-                                false,
-                                {
-                                    updateSelected(item)
-                                    onReady()
-                                },
+                        Column(
+                            verticalArrangement = Arrangement.spacedBy(Dimens.smallSeparation),
+                            modifier = Modifier.padding(
+                                horizontal = Dimens.separation,
+                                vertical = Dimens.smallSeparation,
+                            ),
+                        ) {
+                            Text(
+                                text = messages.createNew,
+                                color = MaterialTheme.colorScheme.onSurface,
+                                style = MaterialTheme.typography.bodyMedium,
                             )
+                            ChipsFlowRow(
+                                all = possibleVariantsToAddNotEmpty,
+                            ) { item ->
+                                itemContent(
+                                    item,
+                                    false,
+                                    {
+                                        updateSelected(item)
+                                        onReady()
+                                    },
+                                )
+                            }
                         }
                     }
                 }
             }
-        ).toImmutableList(),
-    )
+        val suggestsAreLast = variantsToAdd == null
+        val suggests: (@Composable TableScope.() -> Unit)? =
+            when (val visibleVariants = visibleVariants) {
+                ChooseStateSnapshot.VisibleVariants.InputToCreateNewMessage -> {
+                    {
+                        MessageCell(
+                            isLast = suggestsAreLast,
+                            message = messages.noVariants,
+                            color = MaterialTheme.colorScheme.onSurface,
+                        )
+                    }
+                }
+
+                ChooseStateSnapshot.VisibleVariants.Empty -> null
+
+                ChooseStateSnapshot.VisibleVariants.NotFound -> {
+                    {
+                        MessageCell(
+                            isLast = suggestsAreLast,
+                            message = messages.notFound,
+                            color = MaterialTheme.colorScheme.error,
+                        )
+                    }
+                }
+
+                is ChooseStateSnapshot.VisibleVariants.List -> {
+                    {
+                        CellBox(
+                            isLast = suggestsAreLast,
+                            contentAlignment = Alignment.TopStart,
+                        ) {
+                            ChipsFlowRow(
+                                all = visibleVariants.list,
+                                modifier = Modifier.padding(Dimens.smallSeparation),
+                            ) { (item, selected) ->
+                                itemContent(
+                                    item,
+                                    selected,
+                                    {
+                                        updateSelected(item)
+                                        onReady()
+                                    },
+                                )
+                            }
+                        }
+                    }
+                }
+            }
+        Subtable(
+            isLast = suggests == null && variantsToAdd == null,
+        ) {
+            Cell(
+                isLast = false,
+            ) { modifier ->
+                HnauButton(
+                    content = { Icon(Icons.Filled.ArrowBack) },
+                    shape = shape,
+                    onClick = onReady,
+                    modifier = modifier,
+                )
+            }
+            Cell(
+                isLast = true,
+            ) { modifier ->
+                val focusRequester = remember { FocusRequester() }
+                TextInput(
+                    modifier = modifier
+                        .focusRequester(focusRequester)
+                        .weight(1f)
+                        .fillMaxHeight(),
+                    value = query,
+                    shape = shape,
+                    placeholder = { Text(stringResource(Res.string.search_create)) },
+                )
+                val requestFocus = when (visibleVariants) {
+                    ChooseStateSnapshot.VisibleVariants.Empty,
+                    ChooseStateSnapshot.VisibleVariants.InputToCreateNewMessage,
+                        -> true
+
+                    is ChooseStateSnapshot.VisibleVariants.List,
+                    ChooseStateSnapshot.VisibleVariants.NotFound,
+                        -> false
+                }
+                LaunchedEffect(focusRequester, requestFocus) {
+                    if (requestFocus) {
+                        focusRequester.requestFocus()
+                    }
+                }
+            }
+        }
+        suggests?.invoke(this)
+        variantsToAdd?.invoke(this)
+    }
 }
 
-private fun MessageCell(
+@Composable
+private fun TableScope.MessageCell(
+    isLast: Boolean,
     message: String,
     color: Color,
-): Cell = CellBox(
-    contentAlignment = Alignment.CenterStart,
 ) {
-    Text(
-        text = message,
-        modifier = Modifier.padding(
-            Dimens.separation,
-            Dimens.smallSeparation,
-        ),
-        style = MaterialTheme.typography.titleMedium,
-        color = color,
-    )
+    CellBox(
+        isLast = isLast,
+        contentAlignment = Alignment.CenterStart,
+    ) {
+        Text(
+            text = message,
+            modifier = Modifier.padding(
+                Dimens.separation,
+                Dimens.smallSeparation,
+            ),
+            style = MaterialTheme.typography.titleMedium,
+            color = color,
+        )
+    }
 }

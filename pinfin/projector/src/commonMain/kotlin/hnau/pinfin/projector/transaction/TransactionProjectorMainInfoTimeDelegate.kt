@@ -1,5 +1,7 @@
 package hnau.pinfin.projector.transaction
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.Done
@@ -14,9 +16,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import hnau.common.app.projector.uikit.HnauButton
 import hnau.common.app.projector.uikit.TripleRow
-import hnau.common.app.projector.uikit.table.Cell
 import hnau.common.app.projector.uikit.table.Subtable
 import hnau.common.app.projector.uikit.table.Table
+import hnau.common.app.projector.uikit.table.TableDefaults
 import hnau.common.app.projector.uikit.table.TableOrientation
 import hnau.common.app.projector.utils.Icon
 import hnau.pinfin.model.transaction.TransactionModel
@@ -41,21 +43,37 @@ class TransactionProjectorMainInfoTimeDelegate(
     @Pipe
     interface Dependencies
 
-    private fun createCells(
-        state: TimePickerState,
-    ): ImmutableList<Cell> = persistentListOf(
-        Cell {
-            TimePicker(
-                state = state,
-                modifier = Modifier
-                    .clip(shape),
-            )
-        },
-        Subtable(
-            cells = persistentListOf(
-                Cell {
+    @Composable
+    fun Content() {
+
+        val state = rememberTimePickerState(
+            initialHour = model.initialTime.hour,
+            initialMinute = model.initialTime.minute,
+        )
+
+        Table(
+            orientation = TableOrientation.Vertical,
+            modifier = Modifier.fillMaxWidth(),
+        ) {
+            Cell(
+                isLast = false,
+            ) { modifier ->
+                TimePicker(
+                    state = state,
+                    modifier = modifier.background(
+                        shape = shape,
+                        color = TableDefaults.cellColor,
+                    ),
+                )
+            }
+            Subtable(
+                isLast = true,
+            ) {
+                Cell(
+                    isLast = false,
+                ) { modifier ->
                     HnauButton(
-                        modifier = Modifier.weight(1f),
+                        modifier = modifier.weight(1f),
                         shape = shape,
                         onClick = model.cancel,
                         content = {
@@ -69,10 +87,12 @@ class TransactionProjectorMainInfoTimeDelegate(
                             )
                         }
                     )
-                },
-                Cell {
+                }
+                Cell(
+                    isLast = true,
+                ) { modifier ->
                     HnauButton(
-                        modifier = Modifier.weight(1f),
+                        modifier = modifier.weight(1f),
                         shape = shape,
                         onClick = {
                             model.save(
@@ -95,21 +115,8 @@ class TransactionProjectorMainInfoTimeDelegate(
                             )
                         }
                     )
-                })
-        )
-    )
-
-    @Composable
-    fun Content() {
-
-        val state = rememberTimePickerState(
-            initialHour = model.initialTime.hour,
-            initialMinute = model.initialTime.minute,
-        )
-
-        Table(
-            orientation = TableOrientation.Vertical,
-            cells = remember(state) { createCells(state) },
-        )
+                }
+            }
+        }
     }
 }

@@ -4,18 +4,17 @@ import androidx.compose.foundation.text.KeyboardActionScope
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import hnau.common.app.model.EditingString
 import hnau.common.app.model.toEditingString
 import hnau.common.app.projector.uikit.TextInput
-import hnau.common.app.projector.uikit.table.Cell
-import hnau.common.app.projector.utils.collectAsTextFieldValueMutableAccessor
 import hnau.common.kotlin.coroutines.mapMutableState
 import hnau.common.kotlin.coroutines.toMutableStateFlowAsInitial
 import hnau.common.kotlin.ifNull
@@ -70,15 +69,14 @@ class AmountProjector(
     @Composable
     fun Content(
         modifier: Modifier = Modifier,
+        shape: Shape = TextFieldDefaults.shape,
         imeAction: ImeAction = ImeAction.Unspecified,
         onImeAction: StateFlow<(KeyboardActionScope.() -> Unit)?> = null.toMutableStateFlowAsInitial(),
     ) {
         val currentOnImeAction by onImeAction.collectAsState()
-        var value by input.collectAsTextFieldValueMutableAccessor()
-        TextField(
+        TextInput(
             modifier = modifier,
-            value = value,
-            onValueChange = { value = it },
+            value = input,
             keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.Companion.Decimal,
                 imeAction = imeAction,
@@ -88,30 +86,7 @@ class AmountProjector(
                 ?: KeyboardActions(),
             label = { Text(stringResource(Res.string.amount)) },
             isError = model.error.collectAsState().value,
-        )
-    }
-
-    fun createCell(
-        weight: Float? = null,
-        imeAction: ImeAction = ImeAction.Unspecified,
-        onImeAction: StateFlow<(KeyboardActionScope.() -> Unit)?> = null.toMutableStateFlowAsInitial(),
-    ): Cell = Cell {
-        val currentOnImeAction by onImeAction.collectAsState()
-        TextInput(
-            modifier = weight
-                ?.let { weight -> Modifier.weight(weight) }
-                ?: Modifier,
             shape = shape,
-            value = input,
-            keyboardOptions = KeyboardOptions(
-                keyboardType = KeyboardType.Companion.Decimal,
-                imeAction = imeAction,
-            ),
-            keyboardActions = currentOnImeAction
-                ?.let { action -> KeyboardActions { action() } }
-                ?: KeyboardActions(),
-            placeholder = { Text(stringResource(Res.string.amount)) },
-            isError = model.error.collectAsState().value,
         )
     }
 }

@@ -14,7 +14,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import hnau.common.app.projector.uikit.progressindicator.InProgress
-import hnau.common.app.projector.uikit.table.Cell
 import hnau.common.app.projector.uikit.table.Table
 import hnau.common.app.projector.uikit.table.TableOrientation
 import hnau.common.app.projector.uikit.utils.Dimens
@@ -34,27 +33,6 @@ class BudgetItemProjector(
     @Pipe
     interface Dependencies
 
-    private val cells: ImmutableList<Cell> = persistentListOf(
-        Cell {
-            Row(
-                modifier = Modifier
-                    .clip(shape)
-                    .background(MaterialTheme.colorScheme.surfaceContainer)
-                    .clickable(onClick = model::open)
-                    .padding(
-                        horizontal = Dimens.separation,
-                        vertical = Dimens.smallSeparation,
-                    ),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(Dimens.smallSeparation),
-            ) {
-                BidgetInfoContent(
-                    info = model.info.collectAsState().value,
-                )
-            }
-        }
-    )
-
     @Composable
     fun Content() {
         Box(
@@ -64,8 +42,28 @@ class BudgetItemProjector(
             Table(
                 orientation = TableOrientation.Horizontal,
                 modifier = Modifier.fillMaxWidth(),
-                cells = cells,
-            )
+            ) {
+                Cell(
+                    isLast = true,
+                ) {
+                    Row(
+                        modifier = Modifier
+                            .clip(shape)
+                            .background(MaterialTheme.colorScheme.surfaceContainer)
+                            .clickable(onClick = model::open)
+                            .padding(
+                                horizontal = Dimens.separation,
+                                vertical = Dimens.smallSeparation,
+                            ),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(Dimens.smallSeparation),
+                    ) {
+                        BidgetInfoContent(
+                            info = model.info.collectAsState().value,
+                        )
+                    }
+                }
+            }
             InProgress(
                 inProgress = model.inProgress,
                 fillMaxSize = false,

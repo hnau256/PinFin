@@ -262,7 +262,7 @@ class RecordModel(
                                     trimmed == queryRaw ->
                                         CommentSuggest.SuitableType.Absolute
 
-                                    normalized == queryRaw ->
+                                    normalized == query ->
                                         CommentSuggest.SuitableType.IgnoreCase
 
                                     equalsIndex == 0 ->

@@ -19,7 +19,6 @@ import androidx.compose.ui.util.fastForEach
 import arrow.core.Either
 import arrow.core.nonEmptySetOf
 import arrow.core.toNonEmptyListOrNull
-import hnau.common.app.projector.uikit.table.Cell
 import hnau.common.app.projector.uikit.table.Table
 import hnau.common.app.projector.uikit.table.TableOrientation
 import hnau.common.app.projector.uikit.utils.Dimens
@@ -35,7 +34,6 @@ import hnau.pinfin.projector.utils.SignedAmountContent
 import hnau.pinfin.projector.utils.account.AccountContent
 import hnau.pinfin.projector.utils.category.CategoryContent
 import hnau.pinfin.projector.utils.color
-import kotlinx.collections.immutable.persistentListOf
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 
@@ -49,18 +47,17 @@ fun TransactionInfo.Content(
         modifier = Modifier
             .fillMaxWidth()
             .horizontalDisplayPadding(),
-        cells = remember(dependencies, onClick) {
-            persistentListOf(
-                Cell {
-                    CellContent(
-                        dependencies = dependencies,
-                        onClick = onClick,
-                        shape = shape,
-                    )
-                }
+    ) {
+        Cell(
+            isLast = true,
+        ) {
+            CellContent(
+                dependencies = dependencies,
+                onClick = onClick,
+                shape = shape,
             )
         }
-    )
+    }
 }
 
 @Composable

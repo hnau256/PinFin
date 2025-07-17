@@ -1,5 +1,6 @@
 package hnau.pinfin.projector.transaction.type.transfer
 
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -7,11 +8,11 @@ import androidx.compose.ui.Modifier
 import hnau.common.kotlin.coroutines.mapWithScope
 import hnau.common.app.projector.uikit.state.StateContent
 import hnau.common.app.projector.uikit.state.TransitionSpec
-import hnau.common.app.projector.uikit.table.Cell
 import hnau.common.app.projector.uikit.table.CellBox
 import hnau.common.app.projector.uikit.table.Subtable
 import hnau.common.app.projector.uikit.table.Table
 import hnau.common.app.projector.uikit.table.TableOrientation
+import hnau.common.app.projector.uikit.table.TableScope
 import hnau.common.app.projector.uikit.utils.Dimens
 import hnau.common.app.projector.utils.Icon
 import hnau.pinfin.model.transaction.type.transfer.TransferModel
@@ -78,47 +79,59 @@ class TransferProjector(
             }
     }
 
-    private fun AccountCell(
+    @Composable
+    private fun TableScope.AccountCell(
+        isLast: Boolean,
         side: TransferSide,
-    ): Cell = Cell {
-        val (account, onClick) = model.accounts[side]
-        AccountButton(
-            modifier = Modifier.weight(1f),
-            info = account.collectAsState().value,
-            onClick = onClick,
-            shape = shape,
-        )
-    }
-
-    private val defaultCells: ImmutableList<Cell> by lazy {
-        persistentListOf(
-            Subtable(
-                cells = persistentListOf(
-                    AccountCell(
-                        side = TransferSide.From,
-                    ),
-                    CellBox {
-                        Icon(
-                            modifier = Modifier.padding(
-                                horizontal = Dimens.separation,
-                            ),
-                            icon = ArrowIcon[ArrowDirection.StartToEnd],
-                        )
-                    },
-                    AccountCell(
-                        side = TransferSide.To,
-                    )
-                )
-            ),
-            amount.createCell(),
-        )
+    ) {
+        Cell(
+            isLast = isLast,
+        ) { modifier ->
+            val (account, onClick) = model.accounts[side]
+            AccountButton(
+                modifier = modifier.weight(1f),
+                info = account.collectAsState().value,
+                onClick = onClick,
+                shape = shape,
+            )
+        }
     }
 
     @Composable
     private fun DefaultContent() {
         Table(
             orientation = TableOrientation.Vertical,
-            cells = defaultCells,
-        )
+            modifier = Modifier.fillMaxWidth(),
+        ) {
+            Subtable(
+                isLast = false,
+            ) {
+                AccountCell(
+                    isLast = false,
+                    side = TransferSide.From,
+                )
+                CellBox(
+                    isLast = false,
+                ) {
+                    Icon(
+                        modifier = Modifier.padding(
+                            horizontal = Dimens.separation,
+                        ),
+                        icon = ArrowIcon[ArrowDirection.StartToEnd],
+                    )
+                }
+                AccountCell(
+                    isLast = true,
+                    side = TransferSide.To,
+                )
+            }
+            Cell(
+                isLast = true,
+            ) { modifier ->
+                amount.Content(
+                    modifier = modifier,
+                )
+            }
+        }
     }
 }

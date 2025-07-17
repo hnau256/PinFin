@@ -1,5 +1,6 @@
 package hnau.pinfin.projector.transaction
 
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Clear
@@ -16,7 +17,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import hnau.common.app.projector.uikit.HnauButton
 import hnau.common.app.projector.uikit.TripleRow
-import hnau.common.app.projector.uikit.table.Cell
 import hnau.common.app.projector.uikit.table.Subtable
 import hnau.common.app.projector.uikit.table.Table
 import hnau.common.app.projector.uikit.table.TableOrientation
@@ -47,22 +47,39 @@ class TransactionProjectorMainInfoDateDelegate(
     @Pipe
     interface Dependencies
 
-    private fun createCells(
-        state: DatePickerState,
-    ): ImmutableList<Cell> = persistentListOf(
-        Cell {
-            DatePicker(
-                state = state,
-                modifier = Modifier
-                    .clip(shape)
-                    .size(480.dp),
-            )
-        },
-        Subtable(
-            cells = persistentListOf(
-                Cell {
+    @Composable
+    fun Content() {
+
+        val state = rememberDatePickerState(
+            initialSelectedDateMillis = model
+                .initialDate
+                .atStartOfDayIn(TimeZone.currentSystemDefault())
+                .plus(0.5.days)
+                .toEpochMilliseconds()
+        )
+
+        Table(
+            orientation = TableOrientation.Vertical,
+            modifier = Modifier.fillMaxWidth(),
+        ) {
+            Cell(
+                isLast = false,
+            ) {
+                DatePicker(
+                    state = state,
+                    modifier = Modifier
+                        .clip(shape)
+                        .size(480.dp),
+                )
+            }
+            Subtable(
+                isLast = true,
+            ) {
+                Cell(
+                    isLast = false,
+                ) { modifier ->
                     HnauButton(
-                        modifier = Modifier.weight(1f),
+                        modifier = modifier.weight(1f),
                         shape = shape,
                         onClick = model.cancel,
                         content = {
@@ -76,10 +93,12 @@ class TransactionProjectorMainInfoDateDelegate(
                             )
                         }
                     )
-                },
-                Cell {
+                }
+                Cell(
+                    isLast = true,
+                ) { modifier ->
                     HnauButton(
-                        modifier = Modifier.weight(1f),
+                        modifier = modifier.weight(1f),
                         shape = shape,
                         onClick = {
                             model.save(
@@ -103,25 +122,8 @@ class TransactionProjectorMainInfoDateDelegate(
                         }
                     )
                 }
-            )
-        )
-    )
-
-    @Composable
-    fun Content() {
-
-        val state = rememberDatePickerState(
-            initialSelectedDateMillis = model
-                .initialDate
-                .atStartOfDayIn(TimeZone.currentSystemDefault())
-                .plus(0.5.days)
-                .toEpochMilliseconds()
-        )
-
-        Table(
-            orientation = TableOrientation.Vertical,
-            cells = remember(state) { createCells(state) },
-        )
+            }
+        }
     }
 
 }

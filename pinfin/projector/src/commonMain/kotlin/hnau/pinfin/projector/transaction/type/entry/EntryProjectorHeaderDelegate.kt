@@ -8,7 +8,6 @@ import androidx.compose.ui.Modifier
 import hnau.common.kotlin.coroutines.mapWithScope
 import hnau.common.app.projector.uikit.state.NullableStateContent
 import hnau.common.app.projector.uikit.state.TransitionSpec
-import hnau.common.app.projector.uikit.table.Cell
 import hnau.common.app.projector.uikit.table.CellBox
 import hnau.common.app.projector.uikit.table.Table
 import hnau.common.app.projector.uikit.table.TableOrientation
@@ -52,34 +51,6 @@ class EntryProjectorHeaderDelegate(
             }
         }
 
-    private val emptyCells: ImmutableList<Cell> by lazy {
-        persistentListOf(
-            Cell {
-                AccountButton(
-                    modifier = Modifier.weight(1f),
-                    info = model.account.collectAsState().value,
-                    onClick = model::chooseAccount,
-                    shape = shape,
-                )
-            },
-            CellBox {
-
-                val amount = model
-                    .amount
-                    .collectAsState()
-                    .value
-
-                SignedAmountContent(
-                    amount = amount,
-                    modifier = Modifier.padding(
-                        horizontal = Dimens.separation,
-                    ),
-                    amountFormatter = dependencies.amountFormatter,
-                )
-            }
-        )
-    }
-
     @Composable
     fun Content() {
         chooseAccount
@@ -93,8 +64,35 @@ class EntryProjectorHeaderDelegate(
                     Table(
                         orientation = TableOrientation.Horizontal,
                         modifier = Modifier.fillMaxWidth(),
-                        cells = emptyCells,
-                    )
+                    ) {
+                        Cell(
+                            isLast = false,
+                        ) {modifier ->
+                            AccountButton(
+                                modifier = modifier.weight(1f),
+                                info = model.account.collectAsState().value,
+                                onClick = model::chooseAccount,
+                                shape = shape,
+                            )
+                        }
+                        CellBox(
+                            isLast = true,
+                        ) {
+
+                            val amount = model
+                                .amount
+                                .collectAsState()
+                                .value
+
+                            SignedAmountContent(
+                                amount = amount,
+                                modifier = Modifier.padding(
+                                    horizontal = Dimens.separation,
+                                ),
+                                amountFormatter = dependencies.amountFormatter,
+                            )
+                        }
+                    }
                 }
             )
     }
