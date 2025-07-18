@@ -4,7 +4,10 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -15,8 +18,11 @@ import androidx.compose.foundation.text.KeyboardActionScope
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Clear
+import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.Remove
 import androidx.compose.material3.AssistChip
 import androidx.compose.material3.FilterChip
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SuggestionChip
 import androidx.compose.material3.Text
@@ -118,18 +124,38 @@ class RecordProjectorMainDelegate(
                             color = TableDefaults.cellColor,
                         ),
                 ) {
-                    TextInput(
+                    Row(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .onFocusChanged { focusState ->
-                                commentIsFocused.value = focusState.isFocused
-                            },
-                        value = model.comment,
-                        placeholder = { Text(stringResource(Res.string.comment)) },
-                        keyboardOptions = KeyboardOptions(
-                            imeAction = ImeAction.Next,
-                        ),
-                    )
+                            .height(IntrinsicSize.Max),
+                    ) {
+                        TextInput(
+                            modifier = Modifier
+                                .weight(1f)
+                                .onFocusChanged { focusState ->
+                                    commentIsFocused.value = focusState.isFocused
+                                },
+                            value = model.comment,
+                            placeholder = { Text(stringResource(Res.string.comment)) },
+                            keyboardOptions = KeyboardOptions(
+                                imeAction = ImeAction.Next,
+                            ),
+                        )
+                        model
+                            .openRemoveOverlap
+                            .collectAsState()
+                            .value
+                            .NullableStateContent(
+                                modifier = Modifier.fillMaxHeight(),
+                                transitionSpec = TransitionSpec.horizontal(),
+                            ) { remove ->
+                                IconButton(
+                                    onClick = remove,
+                                ) {
+                                    Icon(Icons.Filled.Delete)
+                                }
+                            }
+                    }
                     suggests
                         .collectAsState()
                         .value
