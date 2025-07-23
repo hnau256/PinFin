@@ -81,6 +81,7 @@ class AmountProjector(
                 keyboardType = KeyboardType.Companion.Decimal,
                 imeAction = imeAction,
             ),
+            maxLines = 1,
             keyboardActions = currentOnImeAction
                 ?.let { action -> KeyboardActions { action() } }
                 ?: KeyboardActions(),

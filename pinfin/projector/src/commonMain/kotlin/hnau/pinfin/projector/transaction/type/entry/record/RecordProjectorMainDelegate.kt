@@ -17,14 +17,9 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.text.KeyboardActionScope
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.Delete
-import androidx.compose.material.icons.filled.Remove
-import androidx.compose.material3.AssistChip
-import androidx.compose.material3.FilterChip
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.SuggestionChip
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -34,19 +29,17 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.unit.dp
 import hnau.common.app.model.toEditingString
-import hnau.common.app.projector.uikit.HnauButton
 import hnau.common.app.projector.uikit.TextInput
 import hnau.common.app.projector.uikit.shape.HnauShape
 import hnau.common.app.projector.uikit.state.NullableStateContent
 import hnau.common.app.projector.uikit.state.TransitionSpec
-import hnau.common.app.projector.uikit.table.CellBox
 import hnau.common.app.projector.uikit.table.Subtable
 import hnau.common.app.projector.uikit.table.Table
 import hnau.common.app.projector.uikit.table.TableDefaults
 import hnau.common.app.projector.uikit.table.TableOrientation
-import hnau.common.app.projector.uikit.table.TableScope
 import hnau.common.app.projector.uikit.utils.Dimens
 import hnau.common.app.projector.utils.Icon
 import hnau.common.kotlin.coroutines.flatMapState
@@ -113,12 +106,12 @@ class RecordProjectorMainDelegate(
             orientation = TableOrientation.Vertical,
             modifier = Modifier.fillMaxWidth(),
         ) {
-
             Cell(
                 isLast = false,
             ) { modifier ->
                 Column(
                     modifier = modifier
+                        .width(0.dp)
                         .background(
                             shape = shape,
                             color = TableDefaults.cellColor,
@@ -130,6 +123,7 @@ class RecordProjectorMainDelegate(
                             .height(IntrinsicSize.Max),
                     ) {
                         TextInput(
+                            maxLines = 1,
                             modifier = Modifier
                                 .weight(1f)
                                 .onFocusChanged { focusState ->
@@ -139,6 +133,7 @@ class RecordProjectorMainDelegate(
                             placeholder = { Text(stringResource(Res.string.comment)) },
                             keyboardOptions = KeyboardOptions(
                                 imeAction = ImeAction.Next,
+                                capitalization = KeyboardCapitalization.Sentences,
                             ),
                         )
                         model
@@ -167,10 +162,11 @@ class RecordProjectorMainDelegate(
                             val suggests by suggestsFlow.collectAsState()
                             LazyRow(
                                 modifier = Modifier
-                                    .width(128.dp)
+                                    .fillMaxWidth()
                                     .height(48.dp),
                                 contentPadding = PaddingValues(horizontal = Dimens.smallSeparation),
                                 verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.spacedBy(Dimens.extraSmallSeparation),
                             ) {
                                 items(
                                     items = suggests,
@@ -182,14 +178,17 @@ class RecordProjectorMainDelegate(
                                         color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.75f),
                                         style = MaterialTheme.typography.labelLarge,
                                         modifier = Modifier
-                                            .clip(HnauShape())
+                                            .background(
+                                                shape = HnauShape(),
+                                                color = MaterialTheme.colorScheme.secondaryContainer,
+                                            )
                                             .clickable {
                                                 model.comment.value =
                                                     comment.text.toEditingString()
                                             }
                                             .padding(
-                                                vertical = Dimens.smallSeparation,
-                                                horizontal = Dimens.separation,
+                                                vertical = Dimens.extraSmallSeparation,
+                                                horizontal = Dimens.smallSeparation,
                                             )
                                     )
                                 }

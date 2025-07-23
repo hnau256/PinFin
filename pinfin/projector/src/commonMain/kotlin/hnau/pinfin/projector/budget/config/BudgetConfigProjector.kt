@@ -136,6 +136,7 @@ class BudgetConfigProjector(
             headlineContent = {
                 val focusRequester = remember { FocusRequester() }
                 TextInput(
+                    maxLines = 1,
                     modifier = Modifier.fillMaxWidth().focusRequester(focusRequester),
                     value = edit.input,
                     keyboardActions = KeyboardActions { edit.save.value?.invoke() },

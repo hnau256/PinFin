@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.MaterialTheme
@@ -17,6 +18,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardCapitalization
 import hnau.common.app.model.EditingString
 import hnau.common.app.projector.uikit.HnauButton
 import hnau.common.app.projector.uikit.TextInput
@@ -153,7 +156,11 @@ fun <T> ChooseStateSnapshot<T>.Content(
                         .fillMaxHeight(),
                     value = query,
                     shape = shape,
+                    maxLines = 1,
                     placeholder = { Text(stringResource(Res.string.search_create)) },
+                    keyboardOptions = KeyboardOptions(
+                        capitalization = KeyboardCapitalization.Sentences,
+                    )
                 )
                 val requestFocus = when (visibleVariants) {
                     ChooseStateSnapshot.VisibleVariants.Empty,

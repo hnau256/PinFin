@@ -129,6 +129,7 @@ class StartSyncProjector(
                     isLast = true,
                 ) {
                     TextInput(
+                        maxLines = 1,
                         value = model.serverAddressInput,
                         isError = !model.serverAddressIsCorrect.collectAsState().value,
                         keyboardOptions = KeyboardOptions(
@@ -212,6 +213,7 @@ class StartSyncProjector(
                 isLast = true,
             ) { modifier ->
                 TextInput(
+                    maxLines = 1,
                     modifier = modifier.weight(1f),
                     value = model.portInput,
                     isError = !model.portIsCorrect.collectAsState().value,

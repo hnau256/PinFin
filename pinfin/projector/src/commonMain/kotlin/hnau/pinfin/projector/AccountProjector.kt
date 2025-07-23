@@ -80,6 +80,7 @@ class AccountProjector(
             ) {
                 val focusRequester = remember { FocusRequester() }
                 TextInput(
+                    maxLines = 1,
                     modifier = Modifier
                         .fillMaxWidth()
                         .horizontalDisplayPadding()
