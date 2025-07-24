@@ -4,9 +4,9 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
-import hnau.common.kotlin.coroutines.mapWithScope
 import hnau.common.app.projector.uikit.state.StateContent
 import hnau.common.app.projector.uikit.state.TransitionSpec
+import hnau.common.kotlin.coroutines.mapWithScope
 import hnau.pinfin.model.manage.ManageModel
 import hnau.pinfin.model.manage.ManageStateModel
 import hnau.pinfin.projector.IconProjector

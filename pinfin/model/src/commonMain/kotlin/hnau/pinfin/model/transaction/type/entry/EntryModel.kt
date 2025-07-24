@@ -9,6 +9,9 @@ import arrow.core.NonEmptyList
 import arrow.core.nonEmptyListOf
 import arrow.core.serialization.NonEmptyListSerializer
 import arrow.core.toNonEmptyListOrNull
+import hnau.common.app.model.goback.GoBackHandler
+import hnau.common.app.model.goback.GoBackHandlerProvider
+import hnau.common.app.model.goback.NeverGoBackHandler
 import hnau.common.kotlin.coroutines.combineStateWith
 import hnau.common.kotlin.coroutines.flatMapState
 import hnau.common.kotlin.coroutines.mapNonEmptyListReusable
@@ -18,9 +21,6 @@ import hnau.common.kotlin.coroutines.scopedInState
 import hnau.common.kotlin.coroutines.toMutableStateFlowAsInitial
 import hnau.common.kotlin.foldNullable
 import hnau.common.kotlin.serialization.MutableStateFlowSerializer
-import hnau.common.app.model.goback.GoBackHandler
-import hnau.common.app.model.goback.GoBackHandlerProvider
-import hnau.common.app.model.goback.NeverGoBackHandler
 import hnau.pinfin.data.Amount
 import hnau.pinfin.data.Transaction
 import hnau.pinfin.model.transaction.type.entry.record.RecordId

@@ -8,12 +8,9 @@ import androidx.compose.material.icons.filled.Done
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
 import androidx.compose.material3.TimePicker
-import androidx.compose.material3.TimePickerState
 import androidx.compose.material3.rememberTimePickerState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import hnau.common.app.projector.uikit.HnauButton
 import hnau.common.app.projector.uikit.TripleRow
 import hnau.common.app.projector.uikit.table.Subtable
@@ -26,8 +23,6 @@ import hnau.pinfin.projector.resources.Res
 import hnau.pinfin.projector.resources.cancel
 import hnau.pinfin.projector.resources.save
 import hnau.pipe.annotations.Pipe
-import kotlinx.collections.immutable.ImmutableList
-import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.datetime.LocalTime
 import org.jetbrains.compose.resources.stringResource

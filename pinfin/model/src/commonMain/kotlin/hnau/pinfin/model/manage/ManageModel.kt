@@ -5,6 +5,12 @@
 package hnau.pinfin.model.manage
 
 import arrow.core.identity
+import hnau.common.app.model.goback.GoBackHandler
+import hnau.common.app.model.goback.GoBackHandlerProvider
+import hnau.common.app.model.preferences.Preference
+import hnau.common.app.model.preferences.Preferences
+import hnau.common.app.model.preferences.map
+import hnau.common.app.model.preferences.withDefault
 import hnau.common.kotlin.castOrNull
 import hnau.common.kotlin.coroutines.flatMapState
 import hnau.common.kotlin.coroutines.mapState
@@ -19,12 +25,6 @@ import hnau.common.kotlin.mapper.takeIf
 import hnau.common.kotlin.serialization.MutableStateFlowSerializer
 import hnau.common.kotlin.shrinkType
 import hnau.common.kotlin.toAccessor
-import hnau.common.app.model.goback.GoBackHandler
-import hnau.common.app.model.goback.GoBackHandlerProvider
-import hnau.common.app.model.preferences.Preference
-import hnau.common.app.model.preferences.Preferences
-import hnau.common.app.model.preferences.map
-import hnau.common.app.model.preferences.withDefault
 import hnau.pinfin.data.BudgetId
 import hnau.pinfin.model.IconModel
 import hnau.pinfin.model.budgetsstack.BudgetsStackModel

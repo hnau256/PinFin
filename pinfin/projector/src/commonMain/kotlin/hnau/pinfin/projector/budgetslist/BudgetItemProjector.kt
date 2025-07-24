@@ -20,8 +20,6 @@ import hnau.common.app.projector.uikit.utils.Dimens
 import hnau.pinfin.model.budgetslist.item.BudgetItemModel
 import hnau.pinfin.projector.utils.BidgetInfoContent
 import hnau.pipe.annotations.Pipe
-import kotlinx.collections.immutable.ImmutableList
-import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.CoroutineScope
 
 class BudgetItemProjector(

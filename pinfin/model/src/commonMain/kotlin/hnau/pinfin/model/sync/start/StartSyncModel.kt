@@ -4,15 +4,6 @@
 
 package hnau.pinfin.model.sync.start
 
-import hnau.common.kotlin.coroutines.InProgressRegistry
-import hnau.common.kotlin.coroutines.combineState
-import hnau.common.kotlin.coroutines.filterSet
-import hnau.common.kotlin.coroutines.mapState
-import hnau.common.kotlin.coroutines.toMutableStateFlowAsInitial
-import hnau.common.kotlin.mapper.Mapper
-import hnau.common.kotlin.mapper.plus
-import hnau.common.kotlin.mapper.stringToInt
-import hnau.common.kotlin.serialization.MutableStateFlowSerializer
 import hnau.common.app.model.EditingString
 import hnau.common.app.model.goback.GoBackHandler
 import hnau.common.app.model.goback.GoBackHandlerProvider
@@ -22,6 +13,15 @@ import hnau.common.app.model.preferences.Preferences
 import hnau.common.app.model.preferences.map
 import hnau.common.app.model.preferences.withDefault
 import hnau.common.app.model.toEditingString
+import hnau.common.kotlin.coroutines.InProgressRegistry
+import hnau.common.kotlin.coroutines.combineState
+import hnau.common.kotlin.coroutines.filterSet
+import hnau.common.kotlin.coroutines.mapState
+import hnau.common.kotlin.coroutines.toMutableStateFlowAsInitial
+import hnau.common.kotlin.mapper.Mapper
+import hnau.common.kotlin.mapper.plus
+import hnau.common.kotlin.mapper.stringToInt
+import hnau.common.kotlin.serialization.MutableStateFlowSerializer
 import hnau.pinfin.model.sync.SyncModeOpener
 import hnau.pinfin.model.sync.utils.ServerAddress
 import hnau.pinfin.model.sync.utils.ServerPort

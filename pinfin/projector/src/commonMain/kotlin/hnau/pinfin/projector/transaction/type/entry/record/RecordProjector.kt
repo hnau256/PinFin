@@ -2,9 +2,9 @@ package hnau.pinfin.projector.transaction.type.entry.record
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
-import hnau.common.kotlin.coroutines.mapWithScope
 import hnau.common.app.projector.uikit.state.StateContent
 import hnau.common.app.projector.uikit.state.TransitionSpec
+import hnau.common.kotlin.coroutines.mapWithScope
 import hnau.pinfin.model.transaction.type.entry.record.RecordModel
 import hnau.pinfin.projector.transaction.type.utils.ChooseCategoryProjector
 import hnau.pipe.annotations.Pipe

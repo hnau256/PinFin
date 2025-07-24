@@ -1,6 +1,5 @@
 package hnau.pinfin.model.utils.budget.state
 
-import hnau.common.kotlin.ifNull
 import hnau.pinfin.data.CategoryId
 import kotlinx.serialization.Serializable
 

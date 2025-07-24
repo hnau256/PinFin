@@ -37,11 +37,6 @@ import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import arrow.core.NonEmptyList
-import hnau.common.kotlin.Loading
-import hnau.common.kotlin.Ready
-import hnau.common.kotlin.foldBoolean
-import hnau.common.kotlin.foldNullable
-import hnau.common.kotlin.ifTrue
 import hnau.common.app.model.goback.GlobalGoBackHandler
 import hnau.common.app.model.goback.GoBackHandler
 import hnau.common.app.projector.uikit.ContainerStyle
@@ -62,6 +57,11 @@ import hnau.common.app.projector.utils.horizontalDisplayPadding
 import hnau.common.app.projector.utils.map
 import hnau.common.app.projector.utils.plus
 import hnau.common.app.projector.utils.verticalDisplayPadding
+import hnau.common.kotlin.Loading
+import hnau.common.kotlin.Ready
+import hnau.common.kotlin.foldBoolean
+import hnau.common.kotlin.foldNullable
+import hnau.common.kotlin.ifTrue
 import hnau.pinfin.model.IconModel
 import hnau.pinfin.model.utils.icons.IconCategory
 import hnau.pinfin.model.utils.icons.IconVariant

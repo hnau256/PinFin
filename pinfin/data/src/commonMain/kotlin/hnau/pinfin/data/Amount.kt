@@ -1,7 +1,5 @@
 package hnau.pinfin.data
 
-import arrow.core.Either
-import arrow.core.serialization.ArrowModule
 import hnau.common.kotlin.mapper.Mapper
 import hnau.common.kotlin.mapper.plus
 import hnau.common.kotlin.mapper.stringToInt

@@ -20,8 +20,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
-import hnau.common.kotlin.coroutines.mapWithScope
 import hnau.common.app.model.goback.GlobalGoBackHandler
 import hnau.common.app.model.goback.GoBackHandler
 import hnau.common.app.projector.uikit.Separator
@@ -32,6 +30,7 @@ import hnau.common.app.projector.utils.Icon
 import hnau.common.app.projector.utils.NavigationIcon
 import hnau.common.app.projector.utils.horizontalDisplayPadding
 import hnau.common.app.projector.utils.verticalDisplayPadding
+import hnau.common.kotlin.coroutines.mapWithScope
 import hnau.pinfin.model.transaction.TransactionModel
 import hnau.pinfin.model.transaction.type.TransactionTypeModel
 import hnau.pinfin.projector.resources.Res

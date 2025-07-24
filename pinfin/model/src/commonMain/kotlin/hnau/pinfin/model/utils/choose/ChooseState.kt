@@ -1,8 +1,8 @@
 package hnau.pinfin.model.utils.choose
 
 import arrow.core.Option
-import hnau.common.kotlin.coroutines.combineStateWith
 import hnau.common.app.model.EditingString
+import hnau.common.kotlin.coroutines.combineStateWith
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow

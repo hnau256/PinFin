@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
-import hnau.common.kotlin.coroutines.mapWithScope
 import hnau.common.app.projector.uikit.state.StateContent
 import hnau.common.app.projector.uikit.state.TransitionSpec
 import hnau.common.app.projector.uikit.table.CellBox
@@ -15,6 +14,7 @@ import hnau.common.app.projector.uikit.table.TableOrientation
 import hnau.common.app.projector.uikit.table.TableScope
 import hnau.common.app.projector.uikit.utils.Dimens
 import hnau.common.app.projector.utils.Icon
+import hnau.common.kotlin.coroutines.mapWithScope
 import hnau.pinfin.model.transaction.type.transfer.TransferModel
 import hnau.pinfin.model.transaction.type.transfer.TransferSide
 import hnau.pinfin.projector.AmountProjector
@@ -23,8 +23,6 @@ import hnau.pinfin.projector.utils.ArrowDirection
 import hnau.pinfin.projector.utils.ArrowIcon
 import hnau.pinfin.projector.utils.account.AccountButton
 import hnau.pipe.annotations.Pipe
-import kotlinx.collections.immutable.ImmutableList
-import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.StateFlow
 

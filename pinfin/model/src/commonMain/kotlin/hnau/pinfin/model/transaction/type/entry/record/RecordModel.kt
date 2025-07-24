@@ -8,6 +8,11 @@ import arrow.core.NonEmptyList
 import arrow.core.identity
 import arrow.core.toNonEmptyListOrNull
 import arrow.core.toOption
+import hnau.common.app.model.EditingString
+import hnau.common.app.model.goback.GoBackHandler
+import hnau.common.app.model.goback.GoBackHandlerProvider
+import hnau.common.app.model.goback.NeverGoBackHandler
+import hnau.common.app.model.toEditingString
 import hnau.common.kotlin.coroutines.Stickable
 import hnau.common.kotlin.coroutines.combineStateWith
 import hnau.common.kotlin.coroutines.flatMapState
@@ -21,11 +26,6 @@ import hnau.common.kotlin.coroutines.toMutableStateFlowAsInitial
 import hnau.common.kotlin.foldBoolean
 import hnau.common.kotlin.foldNullable
 import hnau.common.kotlin.serialization.MutableStateFlowSerializer
-import hnau.common.app.model.EditingString
-import hnau.common.app.model.goback.GoBackHandler
-import hnau.common.app.model.goback.GoBackHandlerProvider
-import hnau.common.app.model.goback.NeverGoBackHandler
-import hnau.common.app.model.toEditingString
 import hnau.pinfin.data.Comment
 import hnau.pinfin.data.Record
 import hnau.pinfin.model.AmountModel
@@ -42,11 +42,11 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.withContext
-import kotlin.time.Instant
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.UseSerializers
 import kotlin.time.Duration.Companion.days
+import kotlin.time.Instant
 
 class RecordModel(
     private val scope: CoroutineScope,

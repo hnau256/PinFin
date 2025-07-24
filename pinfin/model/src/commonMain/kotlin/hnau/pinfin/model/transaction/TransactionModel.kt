@@ -4,6 +4,10 @@
 
 package hnau.pinfin.model.transaction
 
+import hnau.common.app.model.EditingString
+import hnau.common.app.model.goback.GoBackHandler
+import hnau.common.app.model.goback.GoBackHandlerProvider
+import hnau.common.app.model.toEditingString
 import hnau.common.kotlin.coroutines.InProgressRegistry
 import hnau.common.kotlin.coroutines.actionOrNullIfExecuting
 import hnau.common.kotlin.coroutines.combineState
@@ -15,10 +19,6 @@ import hnau.common.kotlin.coroutines.scopedInState
 import hnau.common.kotlin.coroutines.toMutableStateFlowAsInitial
 import hnau.common.kotlin.foldNullable
 import hnau.common.kotlin.serialization.MutableStateFlowSerializer
-import hnau.common.app.model.EditingString
-import hnau.common.app.model.goback.GoBackHandler
-import hnau.common.app.model.goback.GoBackHandlerProvider
-import hnau.common.app.model.toEditingString
 import hnau.pinfin.data.Comment
 import hnau.pinfin.data.Transaction
 import hnau.pinfin.data.TransactionType
@@ -32,7 +32,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
-import kotlin.time.Clock
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.LocalTime
@@ -41,6 +40,7 @@ import kotlinx.datetime.toInstant
 import kotlinx.datetime.toLocalDateTime
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.UseSerializers
+import kotlin.time.Clock
 
 class TransactionModel(
     private val scope: CoroutineScope,

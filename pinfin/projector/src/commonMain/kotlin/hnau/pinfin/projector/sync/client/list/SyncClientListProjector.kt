@@ -15,9 +15,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import arrow.core.NonEmptyList
-import hnau.common.kotlin.Loadable
-import hnau.common.kotlin.coroutines.mapReusable
-import hnau.common.kotlin.map
 import hnau.common.app.model.goback.GlobalGoBackHandler
 import hnau.common.app.model.goback.GoBackHandler
 import hnau.common.app.projector.uikit.ErrorPanel
@@ -27,6 +24,9 @@ import hnau.common.app.projector.uikit.utils.Dimens
 import hnau.common.app.projector.utils.NavigationIcon
 import hnau.common.app.projector.utils.horizontalDisplayPadding
 import hnau.common.app.projector.utils.verticalDisplayPadding
+import hnau.common.kotlin.Loadable
+import hnau.common.kotlin.coroutines.mapReusable
+import hnau.common.kotlin.map
 import hnau.pinfin.data.BudgetId
 import hnau.pinfin.model.sync.client.list.SyncClientListModel
 import hnau.pinfin.projector.resources.Res

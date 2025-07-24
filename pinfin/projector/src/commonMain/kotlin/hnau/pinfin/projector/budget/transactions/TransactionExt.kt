@@ -16,7 +16,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.util.fastForEach
-import arrow.core.Either
 import arrow.core.nonEmptySetOf
 import arrow.core.toNonEmptyListOrNull
 import hnau.common.app.projector.uikit.table.Table
@@ -24,16 +23,13 @@ import hnau.common.app.projector.uikit.table.TableOrientation
 import hnau.common.app.projector.uikit.utils.Dimens
 import hnau.common.app.projector.utils.Icon
 import hnau.common.app.projector.utils.horizontalDisplayPadding
-import hnau.pinfin.data.AmountDirection
 import hnau.pinfin.model.utils.amount
 import hnau.pinfin.model.utils.budget.state.TransactionInfo
 import hnau.pinfin.projector.utils.AmountContent
 import hnau.pinfin.projector.utils.ArrowDirection
 import hnau.pinfin.projector.utils.ArrowIcon
-import hnau.pinfin.projector.utils.AmountContent
 import hnau.pinfin.projector.utils.account.AccountContent
 import hnau.pinfin.projector.utils.category.CategoryContent
-import hnau.pinfin.projector.utils.color
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 
