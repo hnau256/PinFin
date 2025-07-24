@@ -6,6 +6,7 @@
 package hnau.pinfin.model.transaction.type.entry
 
 import arrow.core.NonEmptyList
+import arrow.core.identity
 import arrow.core.nonEmptyListOf
 import arrow.core.serialization.NonEmptyListSerializer
 import arrow.core.toNonEmptyListOrNull
@@ -201,13 +202,17 @@ class EntryModel(
         .map { state ->
             state
                 .transactions
-                .maxByOrNull { it.timestamp }
-                ?.let { transaction ->
+                .sortedByDescending { it.timestamp }
+                .take(16)
+                .map { transaction ->
                     when (val type = transaction.type) {
                         is TransactionInfo.Type.Entry -> type.account
                         is TransactionInfo.Type.Transfer -> type.to
                     }
                 }
+                .groupBy(::identity)
+                .maxByOrNull { it.value.size }
+                ?.key
         }
         .stateIn(
             scope = scope,

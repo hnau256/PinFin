@@ -17,7 +17,10 @@ import hnau.common.kotlin.coroutines.mapState
 import hnau.common.kotlin.coroutines.mapWithScope
 import hnau.common.kotlin.coroutines.scopedInState
 import hnau.common.kotlin.coroutines.toMutableStateFlowAsInitial
+import hnau.common.kotlin.foldBoolean
 import hnau.common.kotlin.foldNullable
+import hnau.common.kotlin.ifNull
+import hnau.common.kotlin.it
 import hnau.common.kotlin.serialization.MutableStateFlowSerializer
 import hnau.pinfin.data.Comment
 import hnau.pinfin.data.Transaction
@@ -29,9 +32,17 @@ import hnau.pinfin.model.utils.budget.repository.BudgetRepository
 import hnau.pinfin.model.utils.budget.state.TransactionInfo
 import hnau.pipe.annotations.Pipe
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.flatMap
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.mapLatest
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.LocalTime
@@ -41,6 +52,8 @@ import kotlinx.datetime.toLocalDateTime
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.UseSerializers
 import kotlin.time.Clock
+import kotlin.time.Duration.Companion.days
+import kotlin.time.Instant
 
 class TransactionModel(
     private val scope: CoroutineScope,
@@ -137,6 +150,7 @@ class TransactionModel(
 
         data class Config(
             val comment: MutableStateFlow<EditingString>,
+            val commentSuggests: StateFlow<List<Comment>>,
             val date: StateFlow<LocalDate>,
             val time: StateFlow<LocalTime>,
             val chooseDate: () -> Unit,
@@ -157,7 +171,6 @@ class TransactionModel(
             val cancel: () -> Unit,
         ) : MainContent
     }
-
 
 
     @Pipe
@@ -194,6 +207,77 @@ class TransactionModel(
             }
         }
 
+    private data class CommentSuggest(
+        val equalsFromFirstLetter: Boolean,
+        val comment: Comment,
+        val timestamp: Instant,
+    )
+
+    private fun getCommentSuggests(
+        scope: CoroutineScope,
+    ): StateFlow<List<Comment>> = skeleton
+        .comment
+        .flatMapLatest { commentEditingString ->
+            withContext(Dispatchers.Default) {
+                val commentRaw = commentEditingString.text.trim()
+                commentRaw
+                    .takeIf(String::isNotEmpty)
+                    ?.lowercase()
+                    .foldNullable(
+                        ifNull = { flowOf(emptyList()) },
+                        ifNotNull = { comment ->
+                            dependencies
+                                .budgetRepository
+                                .state
+                                .mapLatest { state ->
+                                    withContext(Dispatchers.Default) {
+                                        state
+                                            .transactions
+                                            .mapNotNull { transaction ->
+                                                transaction
+                                                    .comment
+                                                    .text
+                                                    .trim()
+                                                    .takeIf { it != commentRaw }
+                                                    .ifNull { return@mapNotNull null }
+                                                    .let { transactionComment ->
+                                                        val equalsFromIndex = transactionComment
+                                                            .lowercase()
+                                                            .indexOf(comment)
+                                                        CommentSuggest(
+                                                            equalsFromFirstLetter = when {
+                                                                equalsFromIndex < 0 -> return@mapNotNull null
+                                                                equalsFromIndex > 0 -> false
+                                                                else -> true
+                                                            },
+                                                            timestamp = transaction.timestamp,
+                                                            comment = Comment(transactionComment),
+                                                        )
+                                                    }
+                                            }
+                                            .sortedByDescending { suggest ->
+                                                val equalsFromBeginningWeight = suggest
+                                                    .equalsFromFirstLetter
+                                                    .foldBoolean(
+                                                        ifTrue = { 1000.days },
+                                                        ifFalse = { 0.days }
+                                                    )
+                                                suggest.timestamp.epochSeconds + equalsFromBeginningWeight.inWholeSeconds
+                                            }
+                                            .map(CommentSuggest::comment)
+                                            .distinctBy(Comment::text)
+                                    }
+                                }
+                        }
+                    )
+            }
+        }
+        .stateIn(
+            scope = scope,
+            started = SharingStarted.Eagerly,
+            initialValue = emptyList(),
+        )
+
     val mainContent: StateFlow<MainContent> = run {
         val switch: (Skeleton.MainContent) -> Unit = { skeleton.mainContent.value = it }
         val switchToConfig = { switch(Skeleton.MainContent.Config) }
@@ -204,6 +288,7 @@ class TransactionModel(
 
                     Skeleton.MainContent.Config -> MainContent.Config(
                         comment = skeleton.comment,
+                        commentSuggests = getCommentSuggests(scope),
                         date = skeleton.date,
                         time = skeleton.time,
                         chooseDate = { switch(Skeleton.MainContent.Date) },

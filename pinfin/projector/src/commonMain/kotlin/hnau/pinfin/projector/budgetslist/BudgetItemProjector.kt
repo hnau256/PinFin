@@ -38,14 +38,14 @@ class BudgetItemProjector(
             modifier = Modifier.fillMaxWidth(),
         ) {
             Table(
-                orientation = TableOrientation.Horizontal,
+                orientation = TableOrientation.Vertical,
                 modifier = Modifier.fillMaxWidth(),
             ) {
                 Cell(
                     isLast = true,
-                ) {
+                ) { modifier ->
                     Row(
-                        modifier = Modifier
+                        modifier = modifier
                             .clip(shape)
                             .background(MaterialTheme.colorScheme.surfaceContainer)
                             .clickable(onClick = model::open)

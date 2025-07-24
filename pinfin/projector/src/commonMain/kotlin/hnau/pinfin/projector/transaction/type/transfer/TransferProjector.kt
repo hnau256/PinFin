@@ -128,6 +128,7 @@ class TransferProjector(
             ) { modifier ->
                 amount.Content(
                     modifier = modifier,
+                    shape = shape,
                 )
             }
         }

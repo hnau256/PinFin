@@ -134,7 +134,9 @@ class BudgetsListProjector(
                             modifier = Modifier.fillMaxSize(),
                             verticalArrangement = Arrangement.spacedBy(Dimens.smallSeparation),
                         ) {
-                            items(items) { item ->
+                            items(
+                                items = items,
+                            ) { item ->
                                 item.Content()
                             }
                         }

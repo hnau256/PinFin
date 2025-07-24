@@ -50,6 +50,7 @@ import hnau.pinfin.model.transaction.type.entry.record.RecordModel
 import hnau.pinfin.projector.AmountProjector
 import hnau.pinfin.projector.resources.Res
 import hnau.pinfin.projector.resources.comment
+import hnau.pinfin.projector.utils.SuggestsListProjector
 import hnau.pinfin.projector.utils.category.CategoryButton
 import hnau.pipe.annotations.Pipe
 import kotlinx.coroutines.CoroutineScope
@@ -79,12 +80,14 @@ class RecordProjectorMainDelegate(
 
     private val commentIsFocused: MutableStateFlow<Boolean> = MutableStateFlow(false)
 
-    private val suggests = commentIsFocused.flatMapState(scope) { focused ->
-        focused.foldBoolean(
-            ifTrue = { model.commentSuggests },
-            ifFalse = { null.toMutableStateFlowAsInitial() },
-        )
-    }
+    private val suggestsList: SuggestsListProjector = SuggestsListProjector(
+        scope = scope,
+        inputIsFocused = commentIsFocused,
+        suggests = model.commentSuggests,
+        onSelect = { selectedComment ->
+            model.comment.value = selectedComment.text.toEditingString()
+        },
+    )
 
     private val amountImeAction: StateFlow<(KeyboardActionScope.() -> Unit)?> =
         model.createNextIfLast.mapState(scope) { createNextIfLastOrNull ->
@@ -150,49 +153,9 @@ class RecordProjectorMainDelegate(
                                 }
                             }
                     }
-                    suggests
-                        .collectAsState()
-                        .value
-                        .NullableStateContent(
-                            modifier = Modifier.fillMaxWidth(),
-                            transitionSpec = TransitionSpec.vertical(),
-                            label = "CommentSuggests"
-                        ) { suggestsFlow ->
-                            val suggests by suggestsFlow.collectAsState()
-                            LazyRow(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .height(48.dp),
-                                contentPadding = PaddingValues(horizontal = Dimens.smallSeparation),
-                                verticalAlignment = Alignment.CenterVertically,
-                                horizontalArrangement = Arrangement.spacedBy(Dimens.extraSmallSeparation),
-                            ) {
-                                items(
-                                    items = suggests,
-                                    key = Comment::text,
-                                ) { comment ->
-                                    Text(
-                                        text = comment.text,
-                                        maxLines = 1,
-                                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.75f),
-                                        style = MaterialTheme.typography.labelLarge,
-                                        modifier = Modifier
-                                            .background(
-                                                shape = HnauShape(),
-                                                color = MaterialTheme.colorScheme.secondaryContainer,
-                                            )
-                                            .clickable {
-                                                model.comment.value =
-                                                    comment.text.toEditingString()
-                                            }
-                                            .padding(
-                                                vertical = Dimens.extraSmallSeparation,
-                                                horizontal = Dimens.smallSeparation,
-                                            )
-                                    )
-                                }
-                            }
-                        }
+                    suggestsList.Content(
+                        modifier = Modifier.fillMaxWidth(),
+                    )
                 }
             }
             Subtable(

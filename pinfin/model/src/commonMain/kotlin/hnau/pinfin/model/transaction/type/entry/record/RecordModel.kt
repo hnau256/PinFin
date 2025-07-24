@@ -209,7 +209,7 @@ class RecordModel(
         }
     }
 
-    private val commentSuggestsWithCalculatedCategory: StateFlow<Pair<NonEmptyList<Comment>?, CategoryInfo?>> =
+    private val commentSuggestsWithCalculatedCategory: StateFlow<Pair<List<Comment>, CategoryInfo?>> =
         dependencies
             .budgetRepository
             .state
@@ -223,7 +223,7 @@ class RecordModel(
                     val query = queryRaw
                         .lowercase()
                         .takeIf { it.isNotEmpty() }
-                        ?: return@withContext null to null
+                        ?: return@withContext emptyList<Comment>() to null
 
                     val allSuggests = state
                         .transactions
@@ -231,12 +231,25 @@ class RecordModel(
                             when (val type = transaction.type) {
                                 is TransactionInfo.Type.Entry -> type
                                     .records
-                                    .map { record ->
-                                        CommentInfo(
-                                            comment = record.comment,
-                                            timestamp = transaction.timestamp,
-                                            category = record.category,
-                                        )
+                                    .toList()
+                                    .flatMap { record ->
+                                        record
+                                            .comment
+                                            .text
+                                            .split(',')
+                                            .map { comment ->
+                                                comment
+                                                    .trim()
+                                                    .replaceFirstChar(Char::uppercaseChar)
+                                            }
+                                            .filter(String::isNotEmpty)
+                                            .map { comment ->
+                                                CommentInfo(
+                                                    comment = Comment(comment),
+                                                    timestamp = transaction.timestamp,
+                                                    category = record.category,
+                                                )
+                                            }
                                     }
 
                                 is TransactionInfo.Type.Transfer -> emptyList()
@@ -296,7 +309,6 @@ class RecordModel(
                         .take(16)
                         .map { it.info.comment }
                         .toList()
-                        .toNonEmptyListOrNull()
 
                     val category: CategoryInfo? = allSuggests
                         .firstOrNull { suggest ->
@@ -319,24 +331,11 @@ class RecordModel(
             .stateIn(
                 scope = scope,
                 started = SharingStarted.Eagerly,
-                initialValue = null to null,
+                initialValue = emptyList<Comment>() to null,
             )
 
-    val commentSuggests: StateFlow<StateFlow<NonEmptyList<Comment>>?> =
-        commentSuggestsWithCalculatedCategory
-            .mapStateLite(Pair<NonEmptyList<Comment>?, *>::first)
-            .stick(scope) { stickScope, suggestsOrNull ->
-                suggestsOrNull.foldNullable(
-                    ifNull = { Stickable.predeterminated(null) },
-                    ifNotNull = { suggests ->
-                        Stickable.stateFlow(
-                            initial = suggests,
-                            tryUseNext = NonEmptyList<Comment>?::toOption,
-                            createResult = ::identity,
-                        )
-                    }
-                )
-            }
+    val commentSuggests: StateFlow<List<Comment>> = commentSuggestsWithCalculatedCategory
+        .mapStateLite(Pair<List<Comment>, *>::first)
 
     val category: StateFlow<CategoryInfo?> = skeleton.manualCategory.flatMapState(
         scope = scope,
