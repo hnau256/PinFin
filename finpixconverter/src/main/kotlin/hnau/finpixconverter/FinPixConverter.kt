@@ -184,7 +184,7 @@ value class FinPixAmount(
 
     val amount: Amount
         get() = Amount(
-            value = cents.toUInt(),
+            value = cents.toInt(),
         )
 
     operator fun unaryMinus() = FinPixAmount(-cents)

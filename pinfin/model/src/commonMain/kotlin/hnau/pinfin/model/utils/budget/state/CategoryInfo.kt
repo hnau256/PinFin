@@ -7,19 +7,13 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class CategoryInfo(
     val id: CategoryId,
-    val title: String = id.titleBasedOnId,
+    val title: String = id.id,
 ) : Comparable<CategoryInfo> {
 
 
     override fun compareTo(
         other: CategoryInfo,
-    ): Int = id
-        .direction
-        .compareTo(other.id.direction)
-        .takeIf { it != 0 }
-        .ifNull {
-            title.compareTo(
-                other = other.title,
-            )
-        }
+    ): Int = title.compareTo(
+        other = other.title,
+    )
 }

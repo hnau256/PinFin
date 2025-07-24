@@ -3,13 +3,14 @@ package hnau.pinfin.model.utils.budget.state
 import hnau.common.kotlin.castOrNull
 import hnau.pinfin.data.AccountConfig
 import hnau.pinfin.data.AccountId
-import hnau.pinfin.data.AmountDirection
+import hnau.pinfin.data.Amount
 import hnau.pinfin.data.BudgetConfig
 import hnau.pinfin.data.BudgetId
 import hnau.pinfin.data.CategoryId
 import hnau.pinfin.data.Record
 import hnau.pinfin.data.Transaction
 import hnau.pinfin.data.UpdateType
+import hnau.pinfin.model.utils.amount
 import hnau.pinfin.model.utils.budget.upchain.Upchain
 import hnau.pinfin.model.utils.budget.upchain.UpchainHash
 import hnau.pinfin.model.utils.budget.upchain.Update
@@ -95,13 +96,13 @@ data class BudgetStateBuilder(
 
         fun useAccount(
             id: AccountId,
-            amountOffset: SignedAmount,
+            amountOffset: Amount,
         ) {
             accounts[id] = accounts
                 .getOrElse(id) {
                     AccountInfo(
                         id = id,
-                        amount = SignedAmount.Companion.zero,
+                        amount = Amount.Companion.zero,
                         config = accountsConfigs[id],
                     )
                 }
@@ -117,7 +118,7 @@ data class BudgetStateBuilder(
                 is Transaction.Type.Entry -> {
                     useAccount(
                         id = type.account,
-                        amountOffset = type.signedAmount,
+                        amountOffset = type.amount,
                     )
                     type.records.forEach { record ->
                         useCategory(
@@ -129,17 +130,11 @@ data class BudgetStateBuilder(
                 is Transaction.Type.Transfer -> {
                     useAccount(
                         id = type.from,
-                        amountOffset = SignedAmount(
-                            amount = type.amount,
-                            direction = AmountDirection.Debit,
-                        )
+                        amountOffset = -type.amount
                     )
                     useAccount(
                         id = type.to,
-                        amountOffset = SignedAmount(
-                            amount = type.amount,
-                            direction = AmountDirection.Credit,
-                        )
+                        amountOffset = type.amount
                     )
                 }
             }

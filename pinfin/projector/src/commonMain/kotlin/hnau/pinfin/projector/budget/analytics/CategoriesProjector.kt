@@ -27,11 +27,11 @@ import hnau.common.app.projector.utils.horizontalDisplayPadding
 import hnau.pinfin.data.AmountDirection
 import hnau.pinfin.model.budget.analytics.tab.CategoriesModel
 import hnau.pinfin.projector.utils.AmountContent
-import hnau.pinfin.projector.utils.SignedAmountContent
 import hnau.pinfin.projector.utils.category.CategoryContent
 import hnau.pinfin.projector.utils.formatter.AmountFormatter
 import hnau.pipe.annotations.Pipe
 import kotlinx.coroutines.CoroutineScope
+import kotlin.math.absoluteValue
 
 class CategoriesProjector(
     scope: CoroutineScope,
@@ -88,50 +88,25 @@ class CategoriesProjector(
                     horizontalArrangement = Arrangement.spacedBy(Dimens.smallSeparation),
                 ) {
                     AmountContent(
-                        direction = null,
                         amountFormatter = dependencies.amountFormatter,
-                        value = state.directions.credit.sum,
-                    )
-                    Text(
-                        text = "-",
-                        style = MaterialTheme.typography.titleLarge,
-                        color = MaterialTheme.colorScheme.onSurface,
-                    )
-                    AmountContent(
-                        direction = null,
-                        amountFormatter = dependencies.amountFormatter,
-                        value = state.directions.debit.sum,
-                    )
-                    Text(
-                        text = "=",
-                        style = MaterialTheme.typography.titleLarge,
-                        color = MaterialTheme.colorScheme.onSurface,
-                    )
-                    SignedAmountContent(
-                        amount = state.sum,
-                        amountFormatter = dependencies.amountFormatter,
+                        value = state.sum,
                     )
                 }
             }
-            AmountDirection
-                .entries
-                .forEach { direction ->
-                    items(
-                        items = state.directions[direction].items,
-                        key = { "${direction.name} + category_" + it.info.id.id },
-                    ) { item ->
-                        Category(
-                            item = item,
-                        )
-                    }
-                }
-
+            items(
+                items = state.items,
+                key = { "category_" + it.info.id.id },
+            ) { item ->
+                Category(
+                    item = item,
+                )
+            }
         }
     }
 
     @Composable
     private fun Category(
-        item: CategoriesModel.State.Direction.Item,
+        item: CategoriesModel.State.Item,
     ) {
         Column(
             verticalArrangement = Arrangement.spacedBy(Dimens.extraSmallSeparation),
@@ -149,22 +124,11 @@ class CategoriesProjector(
                     info = item.info,
                 )
                 Spacer(Modifier.weight(1f))
-                SignedAmountContent(
+                AmountContent(
                     amountFormatter = dependencies.amountFormatter,
-                    amount = item.amount,
+                    value = item.amount,
                 )
             }
-            val currentLayoutDirection = LocalLayoutDirection.current
-            val layoutDirection = when (item.info.id.direction) {
-                AmountDirection.Credit -> currentLayoutDirection
-                AmountDirection.Debit -> when (currentLayoutDirection) {
-                    LayoutDirection.Ltr -> LayoutDirection.Rtl
-                    LayoutDirection.Rtl -> LayoutDirection.Ltr
-                }
-            }
-            CompositionLocalProvider(
-                LocalLayoutDirection provides layoutDirection,
-            ) {
                 LinearProgressIndicator(
                     progress = { item.fraction },
                     modifier = Modifier.fillMaxWidth(),
@@ -174,7 +138,6 @@ class CategoriesProjector(
                     },
                     trackColor = MaterialTheme.colorScheme.surfaceContainer,
                 )
-            }
         }
     }
 }

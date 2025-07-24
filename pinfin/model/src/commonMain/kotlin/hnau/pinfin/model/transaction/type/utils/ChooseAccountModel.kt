@@ -15,9 +15,9 @@ import hnau.common.app.model.goback.GoBackHandlerProvider
 import hnau.common.app.model.goback.NeverGoBackHandler
 import hnau.common.app.model.toEditingString
 import hnau.pinfin.data.AccountId
+import hnau.pinfin.data.Amount
 import hnau.pinfin.model.utils.budget.repository.BudgetRepository
 import hnau.pinfin.model.utils.budget.state.AccountInfo
-import hnau.pinfin.model.utils.budget.state.SignedAmount
 import hnau.pinfin.model.utils.choose.ChooseState
 import hnau.pipe.annotations.Pipe
 import kotlinx.coroutines.CoroutineScope
@@ -86,7 +86,7 @@ class ChooseAccountModel(
             listOf(
                 AccountInfo(
                     id = AccountId(query),
-                    amount = SignedAmount.zero,
+                    amount = Amount.zero,
                     config = null,
                 )
             )

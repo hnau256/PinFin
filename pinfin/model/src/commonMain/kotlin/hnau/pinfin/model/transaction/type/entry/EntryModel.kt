@@ -21,6 +21,7 @@ import hnau.common.kotlin.serialization.MutableStateFlowSerializer
 import hnau.common.app.model.goback.GoBackHandler
 import hnau.common.app.model.goback.GoBackHandlerProvider
 import hnau.common.app.model.goback.NeverGoBackHandler
+import hnau.pinfin.data.Amount
 import hnau.pinfin.data.Transaction
 import hnau.pinfin.model.transaction.type.entry.record.RecordId
 import hnau.pinfin.model.transaction.type.entry.record.RecordModel
@@ -28,9 +29,7 @@ import hnau.pinfin.model.transaction.type.utils.ChooseAccountModel
 import hnau.pinfin.model.utils.budget.repository.BudgetRepository
 import hnau.pinfin.model.utils.budget.state.AccountInfo
 import hnau.pinfin.model.utils.budget.state.CategoryInfo
-import hnau.pinfin.model.utils.budget.state.SignedAmount
 import hnau.pinfin.model.utils.budget.state.TransactionInfo
-import hnau.pinfin.model.utils.budget.state.signedAmount
 import hnau.pipe.annotations.Pipe
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -175,7 +174,7 @@ class EntryModel(
             )
     }
 
-    val amount: StateFlow<SignedAmount> = records
+    val amount: StateFlow<Amount> = records
         .scopedInState(
             parentScope = scope,
         )
@@ -183,15 +182,15 @@ class EntryModel(
             scope = scope,
         ) { (recordsScope, records) ->
             records
-                .fold<_, StateFlow<SignedAmount>>(
-                    initial = SignedAmount.zero.toMutableStateFlowAsInitial(),
+                .fold<_, StateFlow<Amount>>(
+                    initial = Amount.zero.toMutableStateFlowAsInitial(),
                 ) { accState, (_, recordModel) ->
                     accState
                         .combineStateWith(
                             scope = recordsScope,
                             other = recordModel.record,
                         ) { acc, recordOrNull ->
-                            acc + (recordOrNull?.signedAmount ?: SignedAmount.zero)
+                            acc + (recordOrNull?.amount ?: Amount.zero)
                         }
                 }
         }

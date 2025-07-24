@@ -40,53 +40,43 @@ object DemoBudget {
     private val accountIdCash = AccountId("Наличка")
 
     private val categoryIdHome: CategoryId = CategoryId(
-        direction = AmountDirection.Debit,
-        title = "Дом",
+        id = "Дом",
     )
 
     private val categoryIdServices: CategoryId = CategoryId(
-        direction = AmountDirection.Debit,
-        title = "ЖКХ",
+        id = "ЖКХ",
     )
 
     private val categoryIdTransport: CategoryId = CategoryId(
-        direction = AmountDirection.Debit,
-        title = "Транспорт",
+        id = "Транспорт",
     )
 
     private val categoryIdClothes: CategoryId = CategoryId(
-        direction = AmountDirection.Debit,
-        title = "Одежда",
+        id = "Одежда",
     )
 
     private val categoryIdHealth: CategoryId = CategoryId(
-        direction = AmountDirection.Debit,
-        title = "Здоровье",
+        id = "Здоровье",
     )
 
     private val categoryIdFood: CategoryId = CategoryId(
-        direction = AmountDirection.Debit,
-        title = "Еда",
+        id = "Еда",
     )
 
     private val categoryIdDelicious: CategoryId = CategoryId(
-        direction = AmountDirection.Debit,
-        title = "Вкусности",
+        id = "Вкусности",
     )
 
     private val categoryIdFun: CategoryId = CategoryId(
-        direction = AmountDirection.Debit,
-        title = "Развлечения",
+        id = "Развлечения",
     )
 
     private val categoryIdGifts: CategoryId = CategoryId(
-        direction = AmountDirection.Debit,
-        title = "Подарки",
+        id = "Подарки",
     )
 
     private val categoryIdSalary: CategoryId = CategoryId(
-        direction = AmountDirection.Credit,
-        title = "Зарплата",
+        id = "Зарплата",
     )
 
     val updates: List<Update>
@@ -379,7 +369,7 @@ object DemoBudget {
                         amount = nextNormalDistributionRandom(
                             item.minAmount,
                             item.maxAmount
-                        ).roundToInt().toUInt().let(::Amount),
+                        ).roundToInt().toInt().let(::Amount),
                         comment = Comment(item.title),
                     )
                 }
@@ -448,7 +438,7 @@ object DemoBudget {
                                 Record(
                                     category = categoryIdSalary,
                                     comment = Comment(""),
-                                    amount = (salary * percentage).toUInt().let(::Amount),
+                                    amount = (salary * percentage).toInt().let(::Amount),
                                 )
                             ),
                         ),

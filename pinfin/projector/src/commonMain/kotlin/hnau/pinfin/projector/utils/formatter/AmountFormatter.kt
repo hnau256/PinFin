@@ -2,6 +2,7 @@ package hnau.pinfin.projector.utils.formatter
 
 import hnau.common.kotlin.ifNull
 import hnau.pinfin.data.Amount
+import kotlin.math.absoluteValue
 
 interface AmountFormatter {
 
@@ -38,13 +39,10 @@ interface AmountFormatter {
                         )
                         .reversed()
                     val cents = (it % factor)
-                        .takeIf { it > 0 }
-                        ?.toString()
-                        ?.padStart(2, '0')
-                    listOfNotNull(
-                        count,
-                        cents
-                    ).joinToString(
+                        .absoluteValue
+                        .toString()
+                        .padStart(2, '0')
+                    listOf(count, cents).joinToString(
                         separator = "."
                     )
                 }
@@ -53,6 +51,7 @@ interface AmountFormatter {
                 input: String,
             ): Amount? = input
                 .filterNot(Char::isWhitespace)
+                .removePrefix("-")
                 .split(".")
                 .takeIf { it.size in 1..2 }
                 ?.let { parts ->
@@ -71,7 +70,13 @@ interface AmountFormatter {
                     count * factor + cents
                 }
                 ?.takeIf { it >= 0 }
-                ?.toUInt()
+                ?.toInt()
+                ?.let { absoluteCents ->
+                    when (input.startsWith('-')) {
+                        true -> -absoluteCents
+                        false -> absoluteCents
+                    }
+                }
                 ?.let(::Amount)
         }
     }

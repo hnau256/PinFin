@@ -2,19 +2,20 @@ package hnau.pinfin.model.utils.budget.state
 
 import hnau.pinfin.data.AccountConfig
 import hnau.pinfin.data.AccountId
+import hnau.pinfin.data.Amount
 import kotlinx.serialization.Serializable
 
 @Serializable
 data class AccountInfo(
     val id: AccountId,
-    val amount: SignedAmount,
+    val amount: Amount,
     val title: String,
     val hideIfAmountIsZero: Boolean,
 ) : Comparable<AccountInfo> {
 
     constructor(
         id: AccountId,
-        amount: SignedAmount,
+        amount: Amount,
         config: AccountConfig?,
     ) : this(
         id = id,
@@ -24,7 +25,7 @@ data class AccountInfo(
     )
 
     val visible: Boolean
-        get() = !hideIfAmountIsZero || amount.amount.value > 0u
+        get() = !hideIfAmountIsZero || amount.value > 0
 
     override fun compareTo(
         other: AccountInfo,

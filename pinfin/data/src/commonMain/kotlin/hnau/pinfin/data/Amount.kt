@@ -1,19 +1,34 @@
 package hnau.pinfin.data
 
+import arrow.core.Either
+import arrow.core.serialization.ArrowModule
 import hnau.common.kotlin.mapper.Mapper
+import hnau.common.kotlin.mapper.plus
+import hnau.common.kotlin.mapper.stringToInt
+import hnau.common.kotlin.serialization.MappingKSerializer
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.builtins.serializer
 import kotlin.jvm.JvmInline
 
-@Serializable
 @JvmInline
+@Serializable(Amount.Serializer::class)
 value class Amount(
-    val value: UInt,
-): Comparable<Amount> {
+    val value: Int,
+) {
 
-    inline fun map(
-        transform: (UInt) -> UInt,
-    ): Amount = Amount(
-        value = transform(value),
+    object Serializer : MappingKSerializer<String, Amount>(
+        base = String.serializer(),
+        mapper = Mapper.stringToInt + Mapper(::Amount, Amount::value)
+    )
+
+    val direction: AmountDirection
+        get() = when {
+            value >= 0 -> AmountDirection.Credit
+            else -> AmountDirection.Debit
+        }
+
+    operator fun unaryMinus(): Amount = Amount(
+        value = -value,
     )
 
     operator fun plus(
@@ -22,16 +37,10 @@ value class Amount(
         value = value + other.value,
     )
 
-    override fun compareTo(other: Amount): Int =
-        value.compareTo(other.value)
-
     companion object {
 
-        val zero: Amount = Amount(0u)
-
-        val uintMapper: Mapper<UInt, Amount> = Mapper(
-            direct = ::Amount,
-            reverse = Amount::value,
+        val zero: Amount = Amount(
+            value = 0,
         )
     }
 }

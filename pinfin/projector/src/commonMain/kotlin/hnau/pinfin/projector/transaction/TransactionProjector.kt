@@ -28,7 +28,6 @@ import hnau.common.app.projector.uikit.Separator
 import hnau.common.app.projector.uikit.progressindicator.InProgress
 import hnau.common.app.projector.uikit.state.StateContent
 import hnau.common.app.projector.uikit.state.TransitionSpec
-import hnau.common.app.projector.uikit.utils.Dimens
 import hnau.common.app.projector.utils.Icon
 import hnau.common.app.projector.utils.NavigationIcon
 import hnau.common.app.projector.utils.horizontalDisplayPadding

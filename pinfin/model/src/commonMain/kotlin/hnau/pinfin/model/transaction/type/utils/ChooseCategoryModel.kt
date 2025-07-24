@@ -81,16 +81,13 @@ class ChooseCategoryModel(
             )
         },
         createPossibleNewVariantsByQuery = { query ->
-            AmountDirection
-                .entries
-                .map { direction ->
-                    CategoryInfo(
-                        id = CategoryId(
-                            direction = direction,
-                            title = query,
-                        )
+            listOf(
+                CategoryInfo(
+                    id = CategoryId(
+                        id = query,
                     )
-                }
+                )
+            )
         },
         onReady = onReady,
     )

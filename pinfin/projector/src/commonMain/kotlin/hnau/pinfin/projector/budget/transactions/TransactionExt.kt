@@ -25,12 +25,12 @@ import hnau.common.app.projector.uikit.utils.Dimens
 import hnau.common.app.projector.utils.Icon
 import hnau.common.app.projector.utils.horizontalDisplayPadding
 import hnau.pinfin.data.AmountDirection
+import hnau.pinfin.model.utils.amount
 import hnau.pinfin.model.utils.budget.state.TransactionInfo
-import hnau.pinfin.model.utils.budget.state.signedAmountOrAmount
 import hnau.pinfin.projector.utils.AmountContent
 import hnau.pinfin.projector.utils.ArrowDirection
 import hnau.pinfin.projector.utils.ArrowIcon
-import hnau.pinfin.projector.utils.SignedAmountContent
+import hnau.pinfin.projector.utils.AmountContent
 import hnau.pinfin.projector.utils.account.AccountContent
 import hnau.pinfin.projector.utils.category.CategoryContent
 import hnau.pinfin.projector.utils.color
@@ -66,7 +66,6 @@ fun TransactionInfo.CellContent(
     dependencies: TransactionsProjector.Dependencies,
     onClick: () -> Unit,
 ) {
-    val signedAmountOrAmount = signedAmountOrAmount
     Row(
         modifier = Modifier
             .clip(shape)
@@ -79,6 +78,7 @@ fun TransactionInfo.CellContent(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(Dimens.smallSeparation),
     ) {
+        val amount = amount
         Column(
             modifier = Modifier.weight(1f),
             verticalArrangement = Arrangement.spacedBy(Dimens.smallSeparation),
@@ -99,17 +99,10 @@ fun TransactionInfo.CellContent(
             CommentContent()
         }
 
-        when (signedAmountOrAmount) {
-            is Either.Left -> SignedAmountContent(
-                amount = signedAmountOrAmount.value,
-                amountFormatter = dependencies.amountFormatter,
-            )
-
-            is Either.Right -> AmountContent(
-                amount = signedAmountOrAmount.value,
-                amountFormatter = dependencies.amountFormatter,
-            )
-        }
+        AmountContent(
+            value = amount,
+            amountFormatter = dependencies.amountFormatter,
+        )
     }
 }
 
@@ -191,28 +184,9 @@ private fun EntryContent(
                 )
             }
         }
-        val allDirectionOrNull = remember(categories) {
-            val directions = categories
-                .tail
-                .fold(
-                    initial = nonEmptySetOf(categories.head.id.direction)
-                ) { acc, category ->
-                    acc + category.id.direction
-                }
-            directions
-                .takeIf { it.size == 1 }
-                ?.head
-        }
-        val arrowDirection = when (allDirectionOrNull) {
-            AmountDirection.Credit -> ArrowDirection.StartToEnd
-            AmountDirection.Debit -> ArrowDirection.EndToStart
-            null -> ArrowDirection.Both
-        }
         Icon(
-            tint = allDirectionOrNull
-                ?.color
-                ?: MaterialTheme.colorScheme.onSurface,
-            icon = ArrowIcon[arrowDirection],
+            tint = MaterialTheme.colorScheme.onSurface,
+            icon = ArrowIcon[ArrowDirection.Both],
         )
         AccountContent(
             info = entry.account,

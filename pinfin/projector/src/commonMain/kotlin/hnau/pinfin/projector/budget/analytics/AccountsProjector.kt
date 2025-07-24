@@ -21,7 +21,7 @@ import hnau.pinfin.model.budget.analytics.tab.AccountsModel
 import hnau.pinfin.model.utils.budget.state.AccountInfo
 import hnau.pinfin.projector.resources.Res
 import hnau.pinfin.projector.resources.accounts
-import hnau.pinfin.projector.utils.SignedAmountContent
+import hnau.pinfin.projector.utils.AmountContent
 import hnau.pinfin.projector.utils.account.AccountContent
 import hnau.pinfin.projector.utils.formatter.AmountFormatter
 import hnau.pipe.annotations.Pipe
@@ -85,8 +85,8 @@ class AccountsProjector(
                 )
             },
             trailingContent = {
-                SignedAmountContent(
-                    amount = info.amount,
+                AmountContent(
+                    value = info.amount,
                     amountFormatter = dependencies.amountFormatter,
                 )
             },
