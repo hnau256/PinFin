@@ -124,15 +124,16 @@ class CategoriesProjector(
                     value = item.amount,
                 )
             }
-                LinearProgressIndicator(
-                    progress = { item.fraction },
-                    modifier = Modifier.fillMaxWidth(),
-                    color = when (item.amount.direction) {
-                        AmountDirection.Credit -> MaterialTheme.colorScheme.primary
-                        AmountDirection.Debit -> MaterialTheme.colorScheme.error
-                    },
-                    trackColor = MaterialTheme.colorScheme.surfaceContainer,
-                )
+            val (direction) = item.amount.splitToDirectionAndRaw()
+            LinearProgressIndicator(
+                progress = { item.fraction },
+                modifier = Modifier.fillMaxWidth(),
+                color = when (direction) {
+                    AmountDirection.Credit -> MaterialTheme.colorScheme.primary
+                    AmountDirection.Debit -> MaterialTheme.colorScheme.error
+                },
+                trackColor = MaterialTheme.colorScheme.surfaceContainer,
+            )
         }
     }
 }

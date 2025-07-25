@@ -6,6 +6,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import hnau.pinfin.data.Amount
+import hnau.pinfin.data.AmountDirection
 import hnau.pinfin.projector.utils.formatter.AmountFormatter
 
 
@@ -15,17 +16,18 @@ fun AmountContent(
     amountFormatter: AmountFormatter,
     modifier: Modifier = Modifier,
 ) {
+    val (direction, _) = value.splitToDirectionAndRaw()
     Text(
         modifier = modifier,
         style = MaterialTheme.typography.titleLarge,
-        color = when {
-            value.value >= 0 -> MaterialTheme.colorScheme.primary
-            else -> MaterialTheme.colorScheme.error
+        color = when (direction) {
+            AmountDirection.Credit -> MaterialTheme.colorScheme.primary
+            AmountDirection.Debit -> MaterialTheme.colorScheme.error
         },
         text = remember(value) {
-            val prefix =when {
-                value.value >= 0 -> "+"
-                else -> ""
+            val prefix = when (direction) {
+                AmountDirection.Credit -> "+"
+                AmountDirection.Debit -> ""
             }
             prefix + amountFormatter.format(value)
         }

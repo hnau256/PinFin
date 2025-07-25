@@ -19,11 +19,10 @@ value class Amount(
         mapper = Mapper.stringToInt + Mapper(::Amount, Amount::value)
     )
 
-    val direction: AmountDirection
-        get() = when {
-            value >= 0 -> AmountDirection.Credit
-            else -> AmountDirection.Debit
-        }
+    fun splitToDirectionAndRaw(): Pair<AmountDirection, Amount> = when {
+        value >= 0 -> AmountDirection.Credit to this
+        else -> AmountDirection.Debit to -this
+    }
 
     operator fun unaryMinus(): Amount = Amount(
         value = -value,

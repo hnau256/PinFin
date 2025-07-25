@@ -25,7 +25,7 @@ data class AccountInfo(
     )
 
     val visible: Boolean
-        get() = !hideIfAmountIsZero || amount.value > 0
+        get() = !hideIfAmountIsZero || amount.value != 0
 
     override fun compareTo(
         other: AccountInfo,
