@@ -17,6 +17,7 @@ import hnau.common.kotlin.coroutines.toMutableStateFlowAsInitial
 import hnau.common.kotlin.foldNullable
 import hnau.common.kotlin.serialization.MutableStateFlowSerializer
 import hnau.pinfin.data.BudgetConfig
+import hnau.pinfin.model.budgetstack.BudgetStackOpener
 import hnau.pinfin.model.manage.BudgetsListOpener
 import hnau.pinfin.model.utils.budget.repository.BudgetRepository
 import hnau.pipe.annotations.Pipe
@@ -39,6 +40,8 @@ class BudgetConfigModel(
         val budgetsListOpener: BudgetsListOpener
 
         val repository: BudgetRepository
+
+        val budgetStackOpener: BudgetStackOpener
     }
 
     @Serializable
@@ -48,6 +51,12 @@ class BudgetConfigModel(
         val removeDialogVisible: MutableStateFlow<Boolean> =
             false.toMutableStateFlowAsInitial(),
     )
+
+    fun openCategories() {
+        dependencies
+            .budgetStackOpener
+            .openCategories()
+    }
 
     val removeDialogVisible: MutableStateFlow<Boolean>
         get() = skeleton.removeDialogVisible

@@ -69,4 +69,5 @@
     <string name="account_settings">Настройки счёта</string>
     <string name="hide_if_amount_is_zero">Скрывать при нулевом балансе</string>
     <string name="name">Название</string>
+    <string name="category_settings">Настройки категории</string>
 </resources>

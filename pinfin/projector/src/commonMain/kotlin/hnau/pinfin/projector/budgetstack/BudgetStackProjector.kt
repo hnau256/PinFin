@@ -6,6 +6,8 @@ import hnau.common.app.projector.stack.StackProjectorTail
 import hnau.pinfin.model.budgetstack.BudgetStackElementModel
 import hnau.pinfin.model.budgetstack.BudgetStackModel
 import hnau.pinfin.projector.AccountProjector
+import hnau.pinfin.projector.CategoriesProjector
+import hnau.pinfin.projector.CategoryProjector
 import hnau.pinfin.projector.budget.BudgetProjector
 import hnau.pinfin.projector.transaction.TransactionProjector
 import hnau.pipe.annotations.Pipe
@@ -26,6 +28,10 @@ class BudgetStackProjector(
         fun transaction(): TransactionProjector.Dependencies
 
         fun account(): AccountProjector.Dependencies
+
+        fun categories(): CategoriesProjector.Dependencies
+
+        fun category(): CategoryProjector.Dependencies
     }
 
     private val tail: StateFlow<StackProjectorTail<Int, BudgetStackElementProjector>> =
@@ -56,6 +62,22 @@ class BudgetStackProjector(
                             scope = scope,
                             model = model.model,
                             dependencies = dependencies.account(),
+                        )
+                    )
+
+                    is BudgetStackElementModel.Categories -> BudgetStackElementProjector.Categories(
+                        CategoriesProjector(
+                            scope = scope,
+                            model = model.model,
+                            dependencies = dependencies.categories(),
+                        )
+                    )
+
+                    is BudgetStackElementModel.Category -> BudgetStackElementProjector.Category(
+                        CategoryProjector(
+                            scope = scope,
+                            model = model.model,
+                            dependencies = dependencies.category(),
                         )
                     )
                 }

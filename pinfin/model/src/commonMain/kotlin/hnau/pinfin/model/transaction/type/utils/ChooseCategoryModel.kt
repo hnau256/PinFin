@@ -84,7 +84,8 @@ class ChooseCategoryModel(
                 CategoryInfo(
                     id = CategoryId(
                         id = query,
-                    )
+                    ),
+                    config = null,
                 )
             )
         },

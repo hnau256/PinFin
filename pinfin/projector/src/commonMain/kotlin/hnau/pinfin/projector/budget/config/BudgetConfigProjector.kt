@@ -11,10 +11,12 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.MenuOpen
 import androidx.compose.material.icons.filled.Badge
+import androidx.compose.material.icons.filled.ChevronRight
 import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Done
 import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material.icons.filled.Interests
 import androidx.compose.material3.BasicAlertDialog
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -43,6 +45,7 @@ import hnau.common.kotlin.ifFalse
 import hnau.pinfin.model.budget.config.BudgetConfigModel
 import hnau.pinfin.projector.resources.Res
 import hnau.pinfin.projector.resources.budget_name
+import hnau.pinfin.projector.resources.categories
 import hnau.pinfin.projector.resources.no
 import hnau.pinfin.projector.resources.remove_budget
 import hnau.pinfin.projector.resources.to_budgets_list
@@ -79,6 +82,11 @@ class BudgetConfigProjector(
                 titleRes = Res.string.remove_budget,
                 onClick = model::removeClick,
                 icon = Icons.Filled.Delete,
+            )
+            button(
+                titleRes = Res.string.categories,
+                onClick = model::openCategories,
+                icon = Icons.Filled.Interests,
             )
         }
         RemoveDialog()
@@ -219,6 +227,7 @@ class BudgetConfigProjector(
                 leadingContent = { Icon(icon = icon) },
                 modifier = Modifier.Companion.clickable(onClick = onClick),
                 headlineContent = { Text(stringResource(titleRes)) },
+                trailingContent = { Icon(Icons.Filled.ChevronRight) }
             )
         }
     }

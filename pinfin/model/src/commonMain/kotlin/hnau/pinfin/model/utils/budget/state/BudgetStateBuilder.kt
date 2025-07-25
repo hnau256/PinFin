@@ -6,6 +6,7 @@ import hnau.pinfin.data.AccountId
 import hnau.pinfin.data.Amount
 import hnau.pinfin.data.BudgetConfig
 import hnau.pinfin.data.BudgetId
+import hnau.pinfin.data.CategoryConfig
 import hnau.pinfin.data.CategoryId
 import hnau.pinfin.data.Record
 import hnau.pinfin.data.Transaction
@@ -24,6 +25,7 @@ data class BudgetStateBuilder(
     private val config: BudgetConfig,
     private val transactions: Map<Transaction.Id, Transaction>,
     private val accountsConfigs: Map<AccountId, AccountConfig>,
+    private val categoriesConfigs: Map<CategoryId, CategoryConfig>,
 ) {
 
     override fun equals(
@@ -40,6 +42,7 @@ data class BudgetStateBuilder(
         val updateType = UpdateType.updateTypeMapper.direct(update)
         val transactions = transactions.toMutableMap()
         val accountsConfigs = this@BudgetStateBuilder.accountsConfigs.toMutableMap()
+        val categoriesConfigs = this@BudgetStateBuilder.categoriesConfigs.toMutableMap()
         var info = config
         when (updateType) {
             is UpdateType.RemoveTransaction ->
@@ -53,11 +56,15 @@ data class BudgetStateBuilder(
 
             is UpdateType.AccountConfig -> accountsConfigs[updateType.id] =
                 accountsConfigs.getOrElse(updateType.id) { AccountConfig.empty } + updateType.config
+
+            is UpdateType.CategoryConfig -> categoriesConfigs[updateType.id] =
+                categoriesConfigs.getOrElse(updateType.id) { CategoryConfig.empty } + updateType.config
         }
         return BudgetStateBuilder(
             hash = hash + update,
             transactions = transactions,
             accountsConfigs = accountsConfigs,
+            categoriesConfigs = categoriesConfigs,
             config = info,
         )
     }
@@ -91,6 +98,7 @@ data class BudgetStateBuilder(
         ) {
             categories[id] = CategoryInfo(
                 id = id,
+                config = categoriesConfigs[id],
             )
         }
 
@@ -167,6 +175,7 @@ data class BudgetStateBuilder(
             config = BudgetConfig.empty,
             accountsConfigs = emptyMap(),
             transactions = emptyMap(),
+            categoriesConfigs = emptyMap(),
         )
     }
 }
