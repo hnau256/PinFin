@@ -24,6 +24,19 @@ value class Amount(
         else -> AmountDirection.Debit to -this
     }
 
+    fun withDirection(
+        direction: AmountDirection,
+    ): Amount = when (direction) {
+        AmountDirection.Credit ->this
+        AmountDirection.Debit -> {
+            val (currentDirection, raw) = splitToDirectionAndRaw()
+            when (currentDirection) {
+                AmountDirection.Debit -> raw
+                AmountDirection.Credit -> -this
+            }
+        }
+    }
+
     operator fun unaryMinus(): Amount = Amount(
         value = -value,
     )

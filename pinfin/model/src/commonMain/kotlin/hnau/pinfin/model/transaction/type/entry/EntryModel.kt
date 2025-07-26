@@ -63,7 +63,7 @@ class EntryModel(
                 .records
                 .map { record ->
                     val id = RecordId.Companion.new()
-                    val skeleton = RecordModel.Skeleton(
+                    val skeleton = RecordModel.Skeleton.create(
                         record = record,
                     )
                     id to skeleton

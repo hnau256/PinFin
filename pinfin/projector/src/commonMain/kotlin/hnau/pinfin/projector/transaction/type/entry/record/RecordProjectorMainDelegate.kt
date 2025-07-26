@@ -1,27 +1,34 @@
 package hnau.pinfin.projector.transaction.type.entry.record
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.text.KeyboardActionScope
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowCircleDown
+import androidx.compose.material.icons.filled.ArrowCircleUp
+import androidx.compose.material.icons.filled.ArrowDropDown
+import androidx.compose.material.icons.filled.ArrowDropUp
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.SingleChoiceSegmentedButtonRow
+import androidx.compose.material3.Switch
+import androidx.compose.material3.SwitchColors
+import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -31,21 +38,22 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.unit.dp
 import hnau.common.app.model.toEditingString
+import hnau.common.app.projector.uikit.HnauButton
 import hnau.common.app.projector.uikit.TextInput
-import hnau.common.app.projector.uikit.shape.HnauShape
 import hnau.common.app.projector.uikit.state.NullableStateContent
+import hnau.common.app.projector.uikit.state.StateContent
 import hnau.common.app.projector.uikit.state.TransitionSpec
+import hnau.common.app.projector.uikit.table.CellBox
 import hnau.common.app.projector.uikit.table.Subtable
 import hnau.common.app.projector.uikit.table.Table
 import hnau.common.app.projector.uikit.table.TableDefaults
 import hnau.common.app.projector.uikit.table.TableOrientation
 import hnau.common.app.projector.uikit.utils.Dimens
 import hnau.common.app.projector.utils.Icon
-import hnau.common.kotlin.coroutines.flatMapState
 import hnau.common.kotlin.coroutines.mapState
-import hnau.common.kotlin.coroutines.toMutableStateFlowAsInitial
-import hnau.common.kotlin.foldBoolean
-import hnau.pinfin.data.Comment
+import hnau.common.kotlin.mapper.Mapper
+import hnau.common.kotlin.mapper.toEnum
+import hnau.pinfin.data.AmountDirection
 import hnau.pinfin.model.transaction.type.entry.record.RecordModel
 import hnau.pinfin.projector.AmountProjector
 import hnau.pinfin.projector.resources.Res
@@ -172,6 +180,53 @@ class RecordProjectorMainDelegate(
                     )
                 }
                 Cell(
+                    isLast = false,
+                ) { modifier ->
+                    HnauButton(
+                        modifier = modifier,
+                        shape = shape,
+                        onClick = { model.switchDirection() },
+                    ) {
+                        Box(
+                            contentAlignment = Alignment.Center,
+                        ) {
+                            Column(
+                                horizontalAlignment = Alignment.CenterHorizontally,
+                                verticalArrangement = Arrangement.spacedBy(Dimens.separation),
+                            ) {
+                                val color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.25f)
+                                CompositionLocalProvider(
+                                    LocalContentColor provides color
+                                ) {
+                                    Icon(Icons.Default.ArrowDropUp)
+                                    Icon(Icons.Default.ArrowDropDown)
+                                }
+                            }
+                            model
+                                .direction
+                                .collectAsState()
+                                .value
+                                .StateContent(
+                                    label = "AmountDirection",
+                                    transitionSpec = TransitionSpec.vertical(),
+                                    contentKey = { it },
+                                ) { direction ->
+                                    Text(
+                                        text = when (direction) {
+                                            AmountDirection.Credit -> "+"
+                                            AmountDirection.Debit -> "-"
+                                        },
+                                        color = when (direction) {
+                                            AmountDirection.Credit -> MaterialTheme.colorScheme.primary
+                                            AmountDirection.Debit -> MaterialTheme.colorScheme.error
+                                        },
+                                        style = MaterialTheme.typography.titleLarge,
+                                    )
+                                }
+                        }
+                    }
+                }
+                Cell(
                     isLast = true,
                 ) { modifier ->
                     amount.Content(
@@ -183,5 +238,18 @@ class RecordProjectorMainDelegate(
                 }
             }
         }
+    }
+
+    companion object {
+
+        private val booleanDirectionMapper: Mapper<Boolean, AmountDirection> =
+            Mapper.toEnum<Boolean, AmountDirection>(
+                extractValue = {
+                    when (this) {
+                        AmountDirection.Credit -> true
+                        AmountDirection.Debit -> false
+                    }
+                }
+            )
     }
 }

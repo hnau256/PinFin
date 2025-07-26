@@ -4,28 +4,21 @@
 
 package hnau.pinfin.model.transaction.type.entry.record
 
-import arrow.core.NonEmptyList
-import arrow.core.identity
-import arrow.core.toNonEmptyListOrNull
-import arrow.core.toOption
 import hnau.common.app.model.EditingString
 import hnau.common.app.model.goback.GoBackHandler
 import hnau.common.app.model.goback.GoBackHandlerProvider
 import hnau.common.app.model.goback.NeverGoBackHandler
 import hnau.common.app.model.toEditingString
-import hnau.common.kotlin.coroutines.Stickable
 import hnau.common.kotlin.coroutines.combineStateWith
 import hnau.common.kotlin.coroutines.flatMapState
 import hnau.common.kotlin.coroutines.mapState
 import hnau.common.kotlin.coroutines.mapStateLite
-import hnau.common.kotlin.coroutines.predeterminated
 import hnau.common.kotlin.coroutines.scopedInState
-import hnau.common.kotlin.coroutines.stateFlow
-import hnau.common.kotlin.coroutines.stick
 import hnau.common.kotlin.coroutines.toMutableStateFlowAsInitial
 import hnau.common.kotlin.foldBoolean
 import hnau.common.kotlin.foldNullable
 import hnau.common.kotlin.serialization.MutableStateFlowSerializer
+import hnau.pinfin.data.AmountDirection
 import hnau.pinfin.data.Comment
 import hnau.pinfin.data.Record
 import hnau.pinfin.model.AmountModel
@@ -40,7 +33,9 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -60,24 +55,11 @@ class RecordModel(
     @Serializable
     data class Skeleton(
         val manualCategory: MutableStateFlow<CategoryInfo?>,
+        val manualDirection: MutableStateFlow<AmountDirection?>,
         val amount: AmountModel.Skeleton,
         val comment: MutableStateFlow<EditingString>,
         val overlapDialog: MutableStateFlow<OverlapDialog?> = null.toMutableStateFlowAsInitial(),
     ) {
-
-        constructor(
-            record: TransactionInfo.Type.Entry.Record,
-        ) : this(
-            manualCategory = record.category.toMutableStateFlowAsInitial(),
-            amount = AmountModel.Skeleton(
-                amount = record.amount,
-            ),
-            comment = record
-                .comment
-                .text
-                .toEditingString()
-                .toMutableStateFlowAsInitial(),
-        )
 
         @Serializable
         sealed interface OverlapDialog {
@@ -95,10 +77,29 @@ class RecordModel(
 
         companion object {
 
+            fun create(
+                record: TransactionInfo.Type.Entry.Record,
+            ): Skeleton {
+                val (direction, amount) = record.amount.splitToDirectionAndRaw()
+                return Skeleton(
+                    manualCategory = record.category.toMutableStateFlowAsInitial(),
+                    amount = AmountModel.Skeleton(
+                        amount = amount,
+                    ),
+                    manualDirection = direction.toMutableStateFlowAsInitial(),
+                    comment = record
+                        .comment
+                        .text
+                        .toEditingString()
+                        .toMutableStateFlowAsInitial(),
+                )
+            }
+
             val empty: Skeleton
                 get() = Skeleton(
                     manualCategory = null.toMutableStateFlowAsInitial(),
                     amount = AmountModel.Skeleton.empty,
+                    manualDirection = null.toMutableStateFlowAsInitial(),
                     comment = "".toEditingString().toMutableStateFlowAsInitial(),
                 )
         }
@@ -192,6 +193,7 @@ class RecordModel(
         val comment: Comment,
         val timestamp: Instant,
         val category: CategoryInfo,
+        val direction: AmountDirection,
     )
 
     private data class CommentSuggest(
@@ -209,7 +211,7 @@ class RecordModel(
         }
     }
 
-    private val commentSuggestsWithCalculatedCategory: StateFlow<Pair<List<Comment>, CategoryInfo?>> =
+    private val commentSuggestsWithCalculatedCategory: StateFlow<Pair<List<Comment>, Pair<CategoryInfo, AmountDirection>?>> =
         dependencies
             .budgetRepository
             .state
@@ -244,10 +246,12 @@ class RecordModel(
                                             }
                                             .filter(String::isNotEmpty)
                                             .map { comment ->
+                                                val (direction) = record.amount.splitToDirectionAndRaw()
                                                 CommentInfo(
                                                     comment = Comment(comment),
                                                     timestamp = transaction.timestamp,
                                                     category = record.category,
+                                                    direction = direction,
                                                 )
                                             }
                                     }
@@ -310,7 +314,7 @@ class RecordModel(
                         .map { it.info.comment }
                         .toList()
 
-                    val category: CategoryInfo? = allSuggests
+                    val category = allSuggests
                         .firstOrNull { suggest ->
                             when (suggest.suitableType) {
                                 CommentSuggest.SuitableType.Absolute,
@@ -323,7 +327,7 @@ class RecordModel(
                             }
                         }
                         ?.info
-                        ?.category
+                        ?.let { info -> info.category to info.direction }
 
                     suggests to category
                 }
@@ -337,19 +341,100 @@ class RecordModel(
     val commentSuggests: StateFlow<List<Comment>> = commentSuggestsWithCalculatedCategory
         .mapStateLite(Pair<List<Comment>, *>::first)
 
-    val category: StateFlow<CategoryInfo?> = skeleton.manualCategory.flatMapState(
-        scope = scope,
-    ) { manualOrNull ->
-        manualOrNull.foldNullable(
-            ifNotNull = { it.toMutableStateFlowAsInitial() },
-            ifNull = { commentSuggestsWithCalculatedCategory.mapStateLite(Pair<*, CategoryInfo?>::second) }
-        )
+    val category: StateFlow<CategoryInfo?> = skeleton
+        .manualCategory
+        .flatMapState(
+            scope = scope,
+        ) { manualOrNull ->
+            manualOrNull.foldNullable(
+                ifNotNull = { it.toMutableStateFlowAsInitial() },
+                ifNull = { commentSuggestsWithCalculatedCategory.mapStateLite { it.second?.first } }
+            )
+        }
+
+    fun switchDirection() {
+        skeleton.manualDirection.value = when (direction.value) {
+            AmountDirection.Credit -> AmountDirection.Debit
+            AmountDirection.Debit -> AmountDirection.Credit
+        }
     }
+
+    val direction: StateFlow<AmountDirection> = skeleton
+        .manualDirection
+        .flatMapState(
+            scope = scope,
+        ) { manualOrNull ->
+            manualOrNull.foldNullable(
+                ifNotNull = { it.toMutableStateFlowAsInitial() },
+                ifNull = {
+                    commentSuggestsWithCalculatedCategory
+                        .mapStateLite { it.second?.second }
+                }
+            )
+        }
+        .scopedInState(scope)
+        .flatMapState(scope) { (selectedScope, selectedOrNull) ->
+            selectedOrNull.foldNullable(
+                ifNotNull = { it.toMutableStateFlowAsInitial() },
+                ifNull = {
+                    category
+                        .scopedInState(selectedScope)
+                        .flatMapState(selectedScope) { (categoryScope, categoryOrNull) ->
+                            categoryOrNull.foldNullable(
+                                ifNull = { AmountDirection.default.toMutableStateFlowAsInitial() },
+                                ifNotNull = { category ->
+                                    dependencies
+                                        .budgetRepository
+                                        .state
+                                        .map { state ->
+                                            withContext(Dispatchers.Default) {
+                                                state
+                                                    .transactions
+                                                    .sortedByDescending { it.timestamp }
+                                                    .flatMap { transaction ->
+                                                        when (val type = transaction.type) {
+                                                            is TransactionInfo.Type.Transfer -> emptyList()
+                                                            is TransactionInfo.Type.Entry -> type
+                                                                .records
+                                                                .filter { it.category.id == category.id }
+                                                                .map { it.amount.splitToDirectionAndRaw().first }
+                                                        }
+                                                    }
+                                                    .take(16)
+                                                    .groupBy { it }
+                                                    .maxByOrNull { it.value.size }
+                                                    ?.key
+                                                    ?: AmountDirection.default
+                                            }
+                                        }
+                                        .stateIn(
+                                            scope = categoryScope,
+                                            started = SharingStarted.Eagerly,
+                                            initialValue = AmountDirection.default,
+                                        )
+                                }
+                            )
+                        }
+                }
+            )
+        }
 
     val record: StateFlow<Record?> = category
         .combineStateWith(
             scope = scope,
-            other = amount.amount,
+            other = amount
+                .amount
+                .scopedInState(scope)
+                .flatMapState(scope) { (amountScope, amountOrNull) ->
+                    amountOrNull.foldNullable(
+                        ifNull = { null.toMutableStateFlowAsInitial() },
+                        ifNotNull = { amount ->
+                            direction.mapState(amountScope) { direction ->
+                                amount.withDirection(direction)
+                            }
+                        }
+                    )
+                },
         ) { categoryOrNull, amountOrNull ->
             categoryOrNull?.let { category ->
                 amountOrNull?.let { amount ->
