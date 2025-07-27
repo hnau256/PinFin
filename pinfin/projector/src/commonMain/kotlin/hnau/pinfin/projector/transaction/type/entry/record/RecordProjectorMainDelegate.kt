@@ -188,9 +188,9 @@ class RecordProjectorMainDelegate(
                         modifier = modifier,
                         shape = shape,
                         style = when (direction) {
-                            AmountDirection.Credit -> ContainerStyle.Primary
-                            AmountDirection.Debit -> ContainerStyle.Error
-                        },
+                            AmountDirection.Credit -> ContainerStyle.primary
+                            AmountDirection.Debit -> ContainerStyle.error
+                        }.rememberContainerStyle(),
                         onClick = { model.switchDirection() },
                     ) {
                         Box(

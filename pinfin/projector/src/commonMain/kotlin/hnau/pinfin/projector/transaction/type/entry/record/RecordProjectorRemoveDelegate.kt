@@ -21,12 +21,12 @@ class RecordProjectorRemoveDelegate(
         DialogButton(
             text = { stringResource(Res.string.no) },
             onClick = model::closeOverlap,
-            style = ContainerStyle.Neutral,
+            style = ContainerStyle.neutral,
         ),
         DialogButton(
             text = { stringResource(Res.string.yes) },
             onClick = remove,
-            style = ContainerStyle.Error,
+            style = ContainerStyle.error,
         )
     )
 

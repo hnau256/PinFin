@@ -263,10 +263,12 @@ class IconProjector(
                 val selected = category == selectedCategory
                 HnauButton(
                     onClick = { model.onCategoryClick(category) },
-                    style = selected.foldBoolean(
-                        ifTrue = { ContainerStyle.Primary },
-                        ifFalse = { ContainerStyle.Neutral }
-                    ),
+                    style = selected
+                        .foldBoolean(
+                            ifTrue = { ContainerStyle.primary },
+                            ifFalse = { ContainerStyle.neutral }
+                        )
+                        .rememberContainerStyle(),
                     shape = HnauShape.inRow.create(
                         index = i,
                         totalCount = categoriesCount,

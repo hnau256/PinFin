@@ -182,9 +182,9 @@ class TransactionProjectorMainInfoConfigDelegate(
                                 shape = shape,
                                 onClick = { model.chooseType(type) },
                                 style = when (type) {
-                                    selectedType -> ContainerStyle.Primary
-                                    else -> ContainerStyle.Neutral
-                                },
+                                    selectedType -> ContainerStyle.primary
+                                    else -> ContainerStyle.neutral
+                                }.rememberContainerStyle(),
                                 content = {
                                     TripleRow(
                                         leading = when (type) {

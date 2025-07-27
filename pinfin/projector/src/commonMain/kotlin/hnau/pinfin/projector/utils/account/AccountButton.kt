@@ -41,11 +41,11 @@ fun AccountButton(
             }
         },
         style = when (selected) {
-            true -> ContainerStyle.Primary
+            true -> ContainerStyle.primary
             false -> when (info) {
-                null -> ContainerStyle.Error
-                else -> ContainerStyle.Neutral
+                null -> ContainerStyle.error
+                else -> ContainerStyle.neutral
             }
-        }
+        }.rememberContainerStyle()
     )
 }
