@@ -38,6 +38,7 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.unit.dp
 import hnau.common.app.model.toEditingString
+import hnau.common.app.projector.uikit.ContainerStyle
 import hnau.common.app.projector.uikit.HnauButton
 import hnau.common.app.projector.uikit.TextInput
 import hnau.common.app.projector.uikit.state.NullableStateContent
@@ -182,9 +183,14 @@ class RecordProjectorMainDelegate(
                 Cell(
                     isLast = false,
                 ) { modifier ->
+                    val direction by model.direction.collectAsState()
                     HnauButton(
                         modifier = modifier,
                         shape = shape,
+                        style = when (direction) {
+                            AmountDirection.Credit -> ContainerStyle.Primary
+                            AmountDirection.Debit -> ContainerStyle.Error
+                        },
                         onClick = { model.switchDirection() },
                     ) {
                         Box(
@@ -192,7 +198,6 @@ class RecordProjectorMainDelegate(
                         ) {
                             Column(
                                 horizontalAlignment = Alignment.CenterHorizontally,
-                                verticalArrangement = Arrangement.spacedBy(Dimens.separation),
                             ) {
                                 val color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.25f)
                                 CompositionLocalProvider(
@@ -202,27 +207,13 @@ class RecordProjectorMainDelegate(
                                     Icon(Icons.Default.ArrowDropDown)
                                 }
                             }
-                            model
-                                .direction
-                                .collectAsState()
-                                .value
-                                .StateContent(
-                                    label = "AmountDirection",
-                                    transitionSpec = TransitionSpec.vertical(),
-                                    contentKey = { it },
-                                ) { direction ->
-                                    Text(
-                                        text = when (direction) {
-                                            AmountDirection.Credit -> "+"
-                                            AmountDirection.Debit -> "-"
-                                        },
-                                        color = when (direction) {
-                                            AmountDirection.Credit -> MaterialTheme.colorScheme.primary
-                                            AmountDirection.Debit -> MaterialTheme.colorScheme.error
-                                        },
-                                        style = MaterialTheme.typography.titleLarge,
-                                    )
-                                }
+                            Text(
+                                text = when (direction) {
+                                    AmountDirection.Credit -> "+"
+                                    AmountDirection.Debit -> "-"
+                                },
+                                style = MaterialTheme.typography.titleLarge,
+                            )
                         }
                     }
                 }
