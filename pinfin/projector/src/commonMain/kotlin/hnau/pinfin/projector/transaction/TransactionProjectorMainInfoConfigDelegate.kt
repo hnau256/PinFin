@@ -184,7 +184,7 @@ class TransactionProjectorMainInfoConfigDelegate(
                                 style = when (type) {
                                     selectedType -> ContainerStyle.primary
                                     else -> ContainerStyle.neutral
-                                }.rememberContainerStyle(),
+                                },
                                 content = {
                                     TripleRow(
                                         leading = when (type) {

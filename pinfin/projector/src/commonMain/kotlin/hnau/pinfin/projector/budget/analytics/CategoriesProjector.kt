@@ -24,6 +24,7 @@ import hnau.pinfin.data.AmountDirection
 import hnau.pinfin.model.budget.analytics.tab.CategoriesModel
 import hnau.pinfin.projector.utils.AmountContent
 import hnau.pinfin.projector.utils.category.CategoryContent
+import hnau.pinfin.projector.utils.containerStyle
 import hnau.pinfin.projector.utils.formatter.AmountFormatter
 import hnau.pipe.annotations.Pipe
 import kotlinx.coroutines.CoroutineScope
@@ -128,10 +129,7 @@ class CategoriesProjector(
             LinearProgressIndicator(
                 progress = { item.fraction },
                 modifier = Modifier.fillMaxWidth(),
-                color = when (direction) {
-                    AmountDirection.Credit -> MaterialTheme.colorScheme.primary
-                    AmountDirection.Debit -> MaterialTheme.colorScheme.error
-                },
+                color = direction.containerStyle.rememberColors().single,
                 trackColor = MaterialTheme.colorScheme.surfaceContainer,
             )
         }

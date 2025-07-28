@@ -61,6 +61,7 @@ import hnau.pinfin.projector.resources.Res
 import hnau.pinfin.projector.resources.comment
 import hnau.pinfin.projector.utils.SuggestsListProjector
 import hnau.pinfin.projector.utils.category.CategoryButton
+import hnau.pinfin.projector.utils.containerStyle
 import hnau.pipe.annotations.Pipe
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
@@ -187,10 +188,7 @@ class RecordProjectorMainDelegate(
                     HnauButton(
                         modifier = modifier,
                         shape = shape,
-                        style = when (direction) {
-                            AmountDirection.Credit -> ContainerStyle.primary
-                            AmountDirection.Debit -> ContainerStyle.error
-                        }.rememberContainerStyle(),
+                        style = direction.containerStyle,
                         onClick = { model.switchDirection() },
                     ) {
                         Box(

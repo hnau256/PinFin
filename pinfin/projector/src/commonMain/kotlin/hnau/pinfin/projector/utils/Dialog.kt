@@ -18,7 +18,7 @@ import kotlinx.collections.immutable.ImmutableList
 
 data class DialogButton(
     val text: @Composable () -> String,
-    val style: ContainerStyle.Factory,
+    val style: ContainerStyle,
     val onClick: () -> Unit,
 )
 
@@ -53,9 +53,9 @@ fun Dialog(
                         HnauButton(
                             modifier = modifier.weight(1f),
                             shape = shape,
-                            style = button.style.rememberContainerStyle(),
+                            style = button.style,
                             onClick = button.onClick,
-                            content = { Text(button.text()) }
+                            content = { Text(button.text()) },
                         )
                     }
                 }

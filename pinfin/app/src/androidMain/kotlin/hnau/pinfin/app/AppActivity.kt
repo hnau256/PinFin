@@ -21,7 +21,6 @@ class AppActivity : ComponentActivity() {
         AppViewModel.Companion.factory(
             context = applicationContext,
             seed = createPinFinAppSeed(),
-            defaultTryUseSystemHue = false,
         )
     }
 

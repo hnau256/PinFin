@@ -46,6 +46,6 @@ fun AccountButton(
                 null -> ContainerStyle.error
                 else -> ContainerStyle.neutral
             }
-        }.rememberContainerStyle()
+        }
     )
 }

@@ -76,7 +76,7 @@ class EntryProjectorRecordsDelegate(
                 )
             },
             onClick = model::addNewRecord,
-            style = ContainerStyle.tertiary.rememberContainerStyle(),
+            style = ContainerStyle.tertiary,
         )
     }
 

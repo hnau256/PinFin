@@ -267,8 +267,7 @@ class IconProjector(
                         .foldBoolean(
                             ifTrue = { ContainerStyle.primary },
                             ifFalse = { ContainerStyle.neutral }
-                        )
-                        .rememberContainerStyle(),
+                        ),
                     shape = HnauShape.inRow.create(
                         index = i,
                         totalCount = categoriesCount,

@@ -46,6 +46,6 @@ fun CategoryButton(
                 null -> ContainerStyle.error
                 else -> ContainerStyle.neutral
             }
-        }.rememberContainerStyle()
+        }
     )
 }
