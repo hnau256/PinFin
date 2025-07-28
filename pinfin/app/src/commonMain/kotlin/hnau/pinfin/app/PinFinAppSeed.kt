@@ -1,10 +1,10 @@
 package hnau.pinfin.app
 
-import hnau.common.app.model.ThemeBrightness
 import hnau.common.app.model.app.AppSeed
-import hnau.common.app.model.color.material.MaterialHue
 import hnau.common.app.model.file.plus
 import hnau.common.app.model.preferences.impl.FileBasedPreferences
+import hnau.common.app.model.theme.Hue
+import hnau.common.app.model.theme.ThemeBrightness
 import hnau.pinfin.model.RootModel
 import hnau.pinfin.model.impl
 import hnau.pinfin.model.utils.budget.storage.BudgetsStorage
@@ -13,7 +13,7 @@ import hnau.pinfin.model.utils.budget.storage.impl.files
 fun createPinFinAppSeed(
     defaultBrightness: ThemeBrightness? = null,
 ): AppSeed<RootModel, RootModel.Skeleton> = AppSeed(
-    fallbackHue = MaterialHue.Blue,
+    fallbackHue = Hue(0.6f),
     defaultBrightness = defaultBrightness,
     skeletonSerializer = RootModel.Skeleton.serializer(),
     createDefaultSkeleton = { RootModel.Skeleton() },

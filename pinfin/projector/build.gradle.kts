@@ -23,6 +23,7 @@ kotlin {
             dependencies {
                 implementation(libs.hnau.projector)
                 implementation(libs.hnau.model)
+                implementation(libs.hnau.dynamiccolor)
                 implementation(project(":pinfin:model"))
                 implementation(project(":pinfin:data"))
                 implementation(compose.components.resources)

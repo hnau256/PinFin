@@ -20,7 +20,7 @@ fun AmountContent(
     Text(
         modifier = modifier,
         style = MaterialTheme.typography.titleLarge,
-        color = direction.containerStyle.rememberColors().single,
+        color = direction.containerStyle.rememberColors().container,
         text = remember(value) {
             val prefix = when (direction) {
                 AmountDirection.Credit -> "+"

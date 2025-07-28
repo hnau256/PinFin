@@ -129,7 +129,7 @@ class CategoriesProjector(
             LinearProgressIndicator(
                 progress = { item.fraction },
                 modifier = Modifier.fillMaxWidth(),
-                color = direction.containerStyle.rememberColors().single,
+                color = direction.containerStyle.rememberColors().container,
                 trackColor = MaterialTheme.colorScheme.surfaceContainer,
             )
         }

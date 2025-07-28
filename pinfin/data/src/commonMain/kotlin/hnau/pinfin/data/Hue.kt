@@ -1,26 +1,20 @@
 package hnau.pinfin.data
 
 import kotlinx.serialization.Serializable
+import kotlin.jvm.JvmInline
 
 @Serializable
-enum class Hue {
-    Red,
-    Pink,
-    Purple,
-    DeepPurple,
-    Indigo,
-    Blue,
-    LightBlue,
-    Cyan,
-    Teal,
-    Green,
-    LightGreen,
-    Lime,
-    Yellow,
-    Amber,
-    Orange,
-    DeepOrange,
-    Brown,
-    Grey,
-    BlueGrey,
+@JvmInline
+value class Hue(
+    val value: Float,
+) {
+
+    companion object {
+
+        fun calcDefault(
+            hash: Int,
+        ): Hue = Hue(
+            value = (hash % 10) / 9f,
+        )
+    }
 }

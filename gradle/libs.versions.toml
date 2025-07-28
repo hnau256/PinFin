@@ -14,7 +14,7 @@ arrow = "2.1.2"
 kotlinSerialization = "1.9.0"
 kotlinCoroutines = "1.10.2"
 pipe = "1.1.1"
-app = "1.5.0"
+app = "1.6.0"
 ksp = "2.2.0-2.0.2"
 compose-activity = "1.10.1"
 kotlin-date-time = "0.7.1"
@@ -69,6 +69,7 @@ pipe-processor = { module = "com.github.hnau256.common-gen-pipe:processor", vers
 #hnau
 hnau-kotlin = { module = "com.github.hnau256.common-kotlin:common-kotlin", version = "1.1.0" }
 hnau-gen-kt = { module = "com.github.hnau256:common-gen-kt", version = "1.1.0" }
+hnau-dynamiccolor = { module = "com.github.hnau256:common-dynamiccolor", version = "1.1.1" }
 hnau-model = { module = "com.github.hnau256.common-app:model", version.ref = "app" }
 hnau-projector = { module = "com.github.hnau256.common-app:projector", version.ref = "app" }
 #other
