@@ -70,4 +70,6 @@
     <string name="hide_if_amount_is_zero">Скрывать при нулевом балансе</string>
     <string name="name">Название</string>
     <string name="category_settings">Настройки категории</string>
+    <string name="hue">Цвет</string>
+    <string name="icon">Иконка</string>
 </resources>

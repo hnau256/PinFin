@@ -7,8 +7,9 @@ import hnau.pinfin.model.budgetstack.BudgetStackElementModel
 import hnau.pinfin.model.budgetstack.BudgetStackModel
 import hnau.pinfin.projector.AccountProjector
 import hnau.pinfin.projector.CategoriesProjector
-import hnau.pinfin.projector.CategoryProjector
+import hnau.pinfin.projector.categorystack.CategoryProjector
 import hnau.pinfin.projector.budget.BudgetProjector
+import hnau.pinfin.projector.categorystack.CategoryStackProjector
 import hnau.pinfin.projector.transaction.TransactionProjector
 import hnau.pipe.annotations.Pipe
 import kotlinx.coroutines.CoroutineScope
@@ -31,7 +32,7 @@ class BudgetStackProjector(
 
         fun categories(): CategoriesProjector.Dependencies
 
-        fun category(): CategoryProjector.Dependencies
+        fun category(): CategoryStackProjector.Dependencies
     }
 
     private val tail: StateFlow<StackProjectorTail<Int, BudgetStackElementProjector>> =
@@ -74,7 +75,7 @@ class BudgetStackProjector(
                     )
 
                     is BudgetStackElementModel.Category -> BudgetStackElementProjector.Category(
-                        CategoryProjector(
+                        CategoryStackProjector(
                             scope = scope,
                             model = model.model,
                             dependencies = dependencies.category(),

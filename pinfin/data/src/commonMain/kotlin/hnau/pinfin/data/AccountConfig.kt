@@ -7,6 +7,7 @@ data class AccountConfig(
     val title: String? = null,
     val hue: Hue? = null,
     val hideIfAmountIsZero: Boolean? = null,
+    val icon: Icon? = null,
 ) {
 
     operator fun plus(
@@ -14,6 +15,7 @@ data class AccountConfig(
     ): AccountConfig = AccountConfig(
         title = other.title ?: title,
         hideIfAmountIsZero = other.hideIfAmountIsZero ?: hideIfAmountIsZero,
+        icon = other.icon ?: icon,
     )
 
     companion object {

@@ -1,8 +1,4 @@
-@file:UseSerializers(
-    MutableStateFlowSerializer::class,
-)
-
-package hnau.pinfin.model
+package hnau.pinfin.model.categorystack
 
 import hnau.common.app.model.EditingString
 import hnau.common.app.model.goback.GoBackHandler
@@ -10,28 +6,31 @@ import hnau.common.app.model.goback.GoBackHandlerProvider
 import hnau.common.app.model.goback.NeverGoBackHandler
 import hnau.common.app.model.toEditingString
 import hnau.common.kotlin.coroutines.actionOrNullIfExecuting
+import hnau.common.kotlin.coroutines.combineStateWith
 import hnau.common.kotlin.coroutines.mapState
 import hnau.common.kotlin.coroutines.mapWithScope
-import hnau.common.kotlin.coroutines.scopedInState
 import hnau.common.kotlin.coroutines.toMutableStateFlowAsInitial
-import hnau.common.kotlin.serialization.MutableStateFlowSerializer
 import hnau.pinfin.data.CategoryConfig
-import hnau.pinfin.data.CategoryId
+import hnau.pinfin.data.Hue
 import hnau.pinfin.model.utils.budget.repository.BudgetRepository
 import hnau.pinfin.model.utils.budget.state.CategoryInfo
+import hnau.pinfin.model.utils.icons.IconVariant
+import hnau.pinfin.model.utils.icons.icon
 import hnau.pipe.annotations.Pipe
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.UseSerializers
 
 class CategoryModel(
     scope: CoroutineScope,
+    private val info: CategoryInfo,
+    val icon: StateFlow<IconVariant?>,
     private val dependencies: Dependencies,
     private val skeleton: Skeleton,
     onReady: () -> Unit,
-): GoBackHandlerProvider {
+    val chooseIcon: () -> Unit,
+) : GoBackHandlerProvider {
 
     @Pipe
     interface Dependencies {
@@ -41,20 +40,23 @@ class CategoryModel(
 
     @Serializable
     data class Skeleton(
-        val id: CategoryId,
         val title: MutableStateFlow<EditingString>,
+        val hue: MutableStateFlow<Hue>,
     ) {
 
         constructor(
-            category: CategoryInfo,
-        ): this(
-            id = category.id,
-            title = category.title.toEditingString().toMutableStateFlowAsInitial(),
+            info: CategoryInfo,
+        ) : this(
+            title = info.title.toEditingString().toMutableStateFlowAsInitial(),
+            hue = info.hue.toMutableStateFlowAsInitial(),
         )
     }
 
     val title: MutableStateFlow<EditingString>
         get() = skeleton.title
+
+    val hue: MutableStateFlow<Hue>
+        get() = skeleton.hue
 
     private val nonEmptyTitle: StateFlow<String?> = title.mapState(scope) { title ->
         title
@@ -64,17 +66,29 @@ class CategoryModel(
     }
 
     val titleIsCorrect: StateFlow<Boolean> =
-        nonEmptyTitle.mapState(scope) { it != null}
+        nonEmptyTitle.mapState(scope) { it != null }
 
     private val config: StateFlow<CategoryConfig?> = nonEmptyTitle
-            .scopedInState(scope)
-            .mapState(scope) { (titleScope, titleOrNull) ->
-                titleOrNull?.let {title ->
-                    CategoryConfig(
-                        title = title,
-                    )
-                }
+        .combineStateWith(
+            scope = scope,
+            other = hue,
+        ) { titleOrNull, hue ->
+            titleOrNull?.let { title ->
+                title to hue
             }
+        }
+        .combineStateWith(
+            scope = scope,
+            other = icon,
+        ) { titleWithHueOrNull, icon ->
+            titleWithHueOrNull?.let { (title, hue) ->
+                CategoryConfig(
+                    title = title.takeIf { it != info.title },
+                    hue = hue.takeIf { it != info.hue },
+                    icon = icon.takeIf { it != info.icon }?.icon,
+                )
+            }
+        }
 
     val save: StateFlow<StateFlow<(() -> Unit)?>?> = config
         .mapWithScope(scope) { configScope, configOrNull ->
@@ -84,7 +98,7 @@ class CategoryModel(
                         .budgetRepository
                         .categories
                         .addConfig(
-                            id = skeleton.id,
+                            id = info.id,
                             config = config,
                         )
                     onReady()

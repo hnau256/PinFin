@@ -18,7 +18,6 @@ import hnau.common.kotlin.coroutines.toMutableStateFlowAsInitial
 import hnau.common.kotlin.foldNullable
 import hnau.common.kotlin.serialization.MutableStateFlowSerializer
 import hnau.pinfin.data.AccountConfig
-import hnau.pinfin.data.AccountId
 import hnau.pinfin.model.utils.budget.repository.BudgetRepository
 import hnau.pinfin.model.utils.budget.state.AccountInfo
 import hnau.pipe.annotations.Pipe
@@ -29,7 +28,7 @@ import kotlinx.serialization.Serializable
 import kotlinx.serialization.UseSerializers
 
 class AccountModel(
-    private val scope: CoroutineScope,
+    scope: CoroutineScope,
     dependencies: Dependencies,
     private val skeleton: Skeleton,
     private val onReady: () -> Unit,
@@ -43,24 +42,15 @@ class AccountModel(
 
     @Serializable
     data class Skeleton(
-        val id: AccountId,
-        val initialTitle: String,
-        val initialHideIfAmountIsZero: Boolean,
-        val title: MutableStateFlow<EditingString> = initialTitle
+        val info: AccountInfo,
+        val title: MutableStateFlow<EditingString> = info
+            .title
             .toEditingString()
             .toMutableStateFlowAsInitial(),
-        val hideIfAmountIsZero: MutableStateFlow<Boolean> = initialHideIfAmountIsZero
+        val hideIfAmountIsZero: MutableStateFlow<Boolean> = info
+            .hideIfAmountIsZero
             .toMutableStateFlowAsInitial(),
-    ) {
-
-        constructor(
-            info: AccountInfo,
-        ) : this(
-            id = info.id,
-            initialTitle = info.title,
-            initialHideIfAmountIsZero = info.hideIfAmountIsZero,
-        )
-    }
+    )
 
     val title: MutableStateFlow<EditingString>
         get() = skeleton.title
@@ -84,9 +74,9 @@ class AccountModel(
                         hideIfAmountIsZero.mapState(titleScope) { hideIfAmountIsZero ->
                             AccountConfig(
                                 title = title
-                                    .takeIf { it != skeleton.initialTitle },
+                                    .takeIf { it != skeleton.info.title },
                                 hideIfAmountIsZero = hideIfAmountIsZero
-                                    .takeIf { it != skeleton.initialHideIfAmountIsZero },
+                                    .takeIf { it != skeleton.info.hideIfAmountIsZero },
                             )
                         }
                     }
@@ -101,7 +91,7 @@ class AccountModel(
                         .budgetRepository
                         .accounts
                         .addConfig(
-                            id = skeleton.id,
+                            id = skeleton.info.id,
                             config = config,
                         )
                     onReady()
