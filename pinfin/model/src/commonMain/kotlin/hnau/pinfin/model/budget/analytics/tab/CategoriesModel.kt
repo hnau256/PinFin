@@ -80,7 +80,14 @@ class CategoriesModel(
                                     ?: 0f,
                             )
                         }
-                        .sortedByDescending { it.amount.value.absoluteValue },
+                        .sortedBy { item ->
+                            item.amount.value.let { value ->
+                                when {
+                                    value > 0 -> value
+                                    else -> value - Int.MIN_VALUE
+                                }
+                            }
+                        },
                     sum = items
                         .fold(
                             initial = Amount.zero,

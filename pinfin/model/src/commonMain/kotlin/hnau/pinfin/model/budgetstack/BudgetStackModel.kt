@@ -15,7 +15,6 @@ import hnau.common.app.model.stack.tryDropLast
 import hnau.common.kotlin.serialization.MutableStateFlowSerializer
 import hnau.pinfin.model.CategoriesModel
 import hnau.pinfin.model.accountstack.AccountStackModel
-import hnau.pinfin.model.categorystack.CategoryModel
 import hnau.pinfin.model.budget.BudgetModel
 import hnau.pinfin.model.categorystack.CategoryStackModel
 import hnau.pinfin.model.transaction.TransactionModel

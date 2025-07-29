@@ -1,7 +1,6 @@
 package hnau.pinfin.model.categorystack
 
 import hnau.common.app.model.goback.GoBackHandlerProvider
-import hnau.pinfin.model.categorystack.CategoryModel
 import hnau.pinfin.model.IconModel
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable

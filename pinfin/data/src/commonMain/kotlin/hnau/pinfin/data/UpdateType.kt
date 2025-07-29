@@ -3,8 +3,8 @@ package hnau.pinfin.data
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import hnau.pinfin.data.AccountConfig as AccountConfigDTO
-import hnau.pinfin.data.Transaction as TransactionDTO
 import hnau.pinfin.data.CategoryConfig as CategoryConfigDTO
+import hnau.pinfin.data.Transaction as TransactionDTO
 
 @Serializable
 sealed interface UpdateType {

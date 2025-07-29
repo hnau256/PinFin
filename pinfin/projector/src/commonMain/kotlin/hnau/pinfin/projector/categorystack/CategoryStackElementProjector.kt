@@ -1,11 +1,7 @@
 package hnau.pinfin.projector.categorystack
 
 import androidx.compose.runtime.Composable
-import hnau.pinfin.projector.CategoriesProjector
 import hnau.pinfin.projector.IconProjector
-import hnau.pinfin.projector.categorystack.CategoryProjector
-import hnau.pinfin.projector.budget.BudgetProjector
-import hnau.pinfin.projector.transaction.TransactionProjector
 
 sealed interface CategoryStackElementProjector {
 

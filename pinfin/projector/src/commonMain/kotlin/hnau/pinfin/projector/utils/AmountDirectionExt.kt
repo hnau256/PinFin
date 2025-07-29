@@ -12,7 +12,7 @@ import hnau.pinfin.data.AmountDirection
 val AmountDirection.hue: Hue
     get() = when (this) {
         AmountDirection.Credit -> Hue(0.375f)
-        AmountDirection.Debit -> Hue(0.175f)
+        AmountDirection.Debit -> Hue(0.075f)
     }
 
 @Composable

@@ -1,7 +1,6 @@
 package hnau.pinfin.projector.transaction.type.entry.record
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
@@ -12,22 +11,16 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.KeyboardActionScope
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowDropDown
-import androidx.compose.material.icons.filled.ArrowDropUp
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.Button
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.onFocusChanged
-import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.unit.dp
@@ -41,16 +34,13 @@ import hnau.common.app.projector.uikit.table.TableDefaults
 import hnau.common.app.projector.uikit.table.TableOrientation
 import hnau.common.app.projector.utils.Icon
 import hnau.common.kotlin.coroutines.mapState
-import hnau.common.kotlin.foldNullable
 import hnau.common.kotlin.mapper.Mapper
 import hnau.common.kotlin.mapper.toEnum
 import hnau.pinfin.data.AmountDirection
 import hnau.pinfin.model.transaction.type.entry.record.RecordModel
 import hnau.pinfin.projector.AmountProjector
 import hnau.pinfin.projector.resources.Res
-import hnau.pinfin.projector.resources.category
 import hnau.pinfin.projector.resources.comment
-import hnau.pinfin.projector.utils.NotSelectedButton
 import hnau.pinfin.projector.utils.SuggestsListProjector
 import hnau.pinfin.projector.utils.SwitchHueToAmountDirection
 import hnau.pinfin.projector.utils.category.CategoryButton
