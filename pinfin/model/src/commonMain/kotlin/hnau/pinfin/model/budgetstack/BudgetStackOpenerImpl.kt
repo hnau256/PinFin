@@ -3,8 +3,8 @@ package hnau.pinfin.model.budgetstack
 import hnau.common.app.model.stack.NonEmptyStack
 import hnau.common.app.model.stack.push
 import hnau.pinfin.data.TransactionType
-import hnau.pinfin.model.AccountModel
 import hnau.pinfin.model.CategoriesModel
+import hnau.pinfin.model.accountstack.AccountStackModel
 import hnau.pinfin.model.categorystack.CategoryStackModel
 import hnau.pinfin.model.transaction.TransactionModel
 import hnau.pinfin.model.utils.budget.state.AccountInfo
@@ -51,7 +51,7 @@ class BudgetStackOpenerImpl(
     ) {
         open(
             BudgetStackElementModel.Skeleton.Account(
-                skeleton = AccountModel.Skeleton(
+                skeleton = AccountStackModel.Skeleton(
                     info = info,
                 )
             )

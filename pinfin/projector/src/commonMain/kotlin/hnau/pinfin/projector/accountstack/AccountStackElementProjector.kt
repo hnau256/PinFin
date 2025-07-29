@@ -1,13 +1,9 @@
-package hnau.pinfin.projector.categorystack
+package hnau.pinfin.projector.accountstack
 
 import androidx.compose.runtime.Composable
-import hnau.pinfin.projector.CategoriesProjector
 import hnau.pinfin.projector.IconProjector
-import hnau.pinfin.projector.categorystack.CategoryProjector
-import hnau.pinfin.projector.budget.BudgetProjector
-import hnau.pinfin.projector.transaction.TransactionProjector
 
-sealed interface CategoryStackElementProjector {
+sealed interface AccountStackElementProjector {
 
     @Composable
     fun Content()
@@ -15,8 +11,8 @@ sealed interface CategoryStackElementProjector {
     val key: Int
 
     data class Info(
-        private val projector: CategoryProjector,
-    ) : CategoryStackElementProjector {
+        private val projector: AccountProjector,
+    ) : AccountStackElementProjector {
 
         @Composable
         override fun Content() {
@@ -29,7 +25,7 @@ sealed interface CategoryStackElementProjector {
 
     data class Icon(
         private val projector: IconProjector,
-    ) : CategoryStackElementProjector {
+    ) : AccountStackElementProjector {
 
         @Composable
         override fun Content() {

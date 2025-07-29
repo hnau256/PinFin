@@ -5,8 +5,8 @@ import hnau.common.app.projector.stack.Content
 import hnau.common.app.projector.stack.StackProjectorTail
 import hnau.pinfin.model.budgetstack.BudgetStackElementModel
 import hnau.pinfin.model.budgetstack.BudgetStackModel
-import hnau.pinfin.projector.AccountProjector
 import hnau.pinfin.projector.CategoriesProjector
+import hnau.pinfin.projector.accountstack.AccountStackProjector
 import hnau.pinfin.projector.categorystack.CategoryProjector
 import hnau.pinfin.projector.budget.BudgetProjector
 import hnau.pinfin.projector.categorystack.CategoryStackProjector
@@ -28,7 +28,7 @@ class BudgetStackProjector(
 
         fun transaction(): TransactionProjector.Dependencies
 
-        fun account(): AccountProjector.Dependencies
+        fun account(): AccountStackProjector.Dependencies
 
         fun categories(): CategoriesProjector.Dependencies
 
@@ -59,7 +59,7 @@ class BudgetStackProjector(
                     )
 
                     is BudgetStackElementModel.Account -> BudgetStackElementProjector.Account(
-                        AccountProjector(
+                        AccountStackProjector(
                             scope = scope,
                             model = model.model,
                             dependencies = dependencies.account(),

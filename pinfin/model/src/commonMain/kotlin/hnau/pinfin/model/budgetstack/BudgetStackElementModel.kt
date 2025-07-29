@@ -1,8 +1,8 @@
 package hnau.pinfin.model.budgetstack
 
 import hnau.common.app.model.goback.GoBackHandlerProvider
-import hnau.pinfin.model.AccountModel
 import hnau.pinfin.model.CategoriesModel
+import hnau.pinfin.model.accountstack.AccountStackModel
 import hnau.pinfin.model.categorystack.CategoryModel
 import hnau.pinfin.model.budget.BudgetModel
 import hnau.pinfin.model.categorystack.CategoryStackModel
@@ -31,7 +31,7 @@ sealed interface BudgetStackElementModel : GoBackHandlerProvider {
     }
 
     data class Account(
-        val model: AccountModel,
+        val model: AccountStackModel,
     ) : BudgetStackElementModel, GoBackHandlerProvider by model {
 
         override val key: Int
@@ -82,7 +82,7 @@ sealed interface BudgetStackElementModel : GoBackHandlerProvider {
         @Serializable
         @SerialName("account")
         data class Account(
-            val skeleton: AccountModel.Skeleton,
+            val skeleton: AccountStackModel.Skeleton,
         ) : Skeleton {
 
             override val key: Int

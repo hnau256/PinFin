@@ -1,8 +1,8 @@
 package hnau.pinfin.projector.budgetstack
 
 import androidx.compose.runtime.Composable
-import hnau.pinfin.projector.AccountProjector
 import hnau.pinfin.projector.CategoriesProjector
+import hnau.pinfin.projector.accountstack.AccountStackProjector
 import hnau.pinfin.projector.categorystack.CategoryProjector
 import hnau.pinfin.projector.budget.BudgetProjector
 import hnau.pinfin.projector.categorystack.CategoryStackProjector
@@ -42,7 +42,7 @@ sealed interface BudgetStackElementProjector {
     }
 
     data class Account(
-        private val projector: AccountProjector,
+        private val projector: AccountStackProjector,
     ) : BudgetStackElementProjector {
 
         @Composable
