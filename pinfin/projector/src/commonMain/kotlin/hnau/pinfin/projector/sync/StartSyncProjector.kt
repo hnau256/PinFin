@@ -15,13 +15,13 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import hnau.common.app.model.goback.GlobalGoBackHandler
 import hnau.common.app.model.goback.GoBackHandler
-import hnau.common.app.projector.uikit.HnauButton
 import hnau.common.app.projector.uikit.TextInput
 import hnau.common.app.projector.uikit.progressindicator.InProgress
 import hnau.common.app.projector.uikit.table.CellBox
@@ -45,6 +45,7 @@ import hnau.pipe.annotations.Pipe
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.StateFlow
 import org.jetbrains.compose.resources.stringResource
+import androidx.compose.material3.Button as MaterialButton
 
 class StartSyncProjector(
     scope: CoroutineScope,
@@ -167,11 +168,13 @@ class StartSyncProjector(
         Cell(
             isLast = isLast,
         ) { modifier ->
-            HnauButton(
+            val onClick by onClick.collectAsState()
+            MaterialButton(
                 modifier = modifier,
                 shape = shape,
                 content = { Text(title()) },
-                onClick = onClick.collectAsState().value,
+                onClick = { onClick?.invoke() },
+                enabled = onClick != null,
             )
         }
     }

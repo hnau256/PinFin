@@ -20,11 +20,10 @@ import hnau.common.app.projector.uikit.state.LoadableContent
 import hnau.common.app.projector.uikit.state.TransitionSpec
 import hnau.common.app.projector.uikit.utils.Dimens
 import hnau.common.app.projector.utils.horizontalDisplayPadding
-import hnau.pinfin.data.AmountDirection
 import hnau.pinfin.model.budget.analytics.tab.CategoriesModel
 import hnau.pinfin.projector.utils.AmountContent
+import hnau.pinfin.projector.utils.SwitchHueToCategoryInfo
 import hnau.pinfin.projector.utils.category.CategoryContent
-import hnau.pinfin.projector.utils.containerStyle
 import hnau.pinfin.projector.utils.formatter.AmountFormatter
 import hnau.pipe.annotations.Pipe
 import kotlinx.coroutines.CoroutineScope
@@ -104,34 +103,36 @@ class CategoriesProjector(
     private fun Category(
         item: CategoriesModel.State.Item,
     ) {
-        Column(
-            verticalArrangement = Arrangement.spacedBy(Dimens.extraSmallSeparation),
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(
-                    vertical = Dimens.separation,
-                ),
+        SwitchHueToCategoryInfo(
+            info = item.info,
         ) {
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(Dimens.smallSeparation),
+            Column(
+                verticalArrangement = Arrangement.spacedBy(Dimens.extraSmallSeparation),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(
+                        vertical = Dimens.separation,
+                    ),
             ) {
-                CategoryContent(
-                    info = item.info,
-                )
-                Spacer(Modifier.weight(1f))
-                AmountContent(
-                    amountFormatter = dependencies.amountFormatter,
-                    value = item.amount,
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(Dimens.smallSeparation),
+                ) {
+                    CategoryContent(
+                        info = item.info,
+                    )
+                    Spacer(Modifier.weight(1f))
+                    AmountContent(
+                        amountFormatter = dependencies.amountFormatter,
+                        value = item.amount,
+                    )
+                }
+                LinearProgressIndicator(
+                    progress = { item.fraction },
+                    modifier = Modifier.fillMaxWidth(),
+                    trackColor = MaterialTheme.colorScheme.surfaceContainer,
                 )
             }
-            val (direction) = item.amount.splitToDirectionAndRaw()
-            LinearProgressIndicator(
-                progress = { item.fraction },
-                modifier = Modifier.fillMaxWidth(),
-                color = direction.containerStyle.rememberColors().container,
-                trackColor = MaterialTheme.colorScheme.surfaceContainer,
-            )
         }
     }
 }

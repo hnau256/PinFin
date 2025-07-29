@@ -7,13 +7,13 @@ import androidx.compose.material.icons.filled.CloudDone
 import androidx.compose.material.icons.filled.CloudDownload
 import androidx.compose.material.icons.filled.CloudUpload
 import androidx.compose.material.icons.filled.Sync
+import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import hnau.common.app.projector.uikit.HnauButton
 import hnau.common.app.projector.uikit.table.CellBox
 import hnau.common.app.projector.uikit.table.Table
 import hnau.common.app.projector.uikit.table.TableOrientation
@@ -68,7 +68,7 @@ class SyncClientListItemProjector(
                         is SyncClientListItemModel.State.Syncable -> Cell(
                             isLast = true,
                         ) { modifier ->
-                            HnauButton(
+                            Button(
                                 modifier = modifier.width(buttonWidth),
                                 onClick = state.sync,
                             ) {

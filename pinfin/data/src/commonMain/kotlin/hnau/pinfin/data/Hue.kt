@@ -14,7 +14,7 @@ value class Hue(
         fun calcDefault(
             hash: Int,
         ): Hue = Hue(
-            value = (hash % 10) / 9f,
+            value = (hash % 360) / 359f,
         )
     }
 }

@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -20,7 +21,6 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import hnau.common.app.model.EditingString
-import hnau.common.app.projector.uikit.HnauButton
 import hnau.common.app.projector.uikit.TextInput
 import hnau.common.app.projector.uikit.row.ChipsFlowRow
 import hnau.common.app.projector.uikit.table.CellBox
@@ -137,7 +137,7 @@ fun <T> ChooseStateSnapshot<T>.Content(
             Cell(
                 isLast = false,
             ) { modifier ->
-                HnauButton(
+                Button(
                     content = { Icon(Icons.Filled.ArrowBack) },
                     shape = shape,
                     onClick = onReady,

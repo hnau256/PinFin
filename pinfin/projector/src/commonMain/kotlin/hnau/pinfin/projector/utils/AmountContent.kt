@@ -17,16 +17,20 @@ fun AmountContent(
     modifier: Modifier = Modifier,
 ) {
     val (direction, _) = value.splitToDirectionAndRaw()
-    Text(
-        modifier = modifier,
-        style = MaterialTheme.typography.titleLarge,
-        color = direction.containerStyle.rememberColors().container,
-        text = remember(value) {
-            val prefix = when (direction) {
-                AmountDirection.Credit -> "+"
-                AmountDirection.Debit -> ""
+    SwitchHueToAmountDirection(
+        amountDirection = direction,
+    ) {
+        Text(
+            modifier = modifier,
+            style = MaterialTheme.typography.titleLarge,
+            color = MaterialTheme.colorScheme.primary,
+            text = remember(value) {
+                val prefix = when (direction) {
+                    AmountDirection.Credit -> "+"
+                    AmountDirection.Debit -> ""
+                }
+                prefix + amountFormatter.format(value)
             }
-            prefix + amountFormatter.format(value)
-        }
-    )
+        )
+    }
 }

@@ -7,25 +7,17 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
-import hnau.common.app.projector.uikit.ContainerStyle
-import hnau.common.app.projector.uikit.HnauButton
 import hnau.common.app.projector.uikit.table.CellBox
 import hnau.common.app.projector.uikit.table.Subtable
 import hnau.common.app.projector.uikit.table.Table
 import hnau.common.app.projector.uikit.table.TableOrientation
+import hnau.common.app.projector.uikit.table.TableScope
 import hnau.common.app.projector.uikit.utils.Dimens
-import kotlinx.collections.immutable.ImmutableList
-
-data class DialogButton(
-    val text: @Composable () -> String,
-    val style: ContainerStyle,
-    val onClick: () -> Unit,
-)
 
 @Composable
 fun Dialog(
     title: String,
-    buttons: ImmutableList<DialogButton>,
+    buttons: @Composable TableScope.() -> Unit,
 ) {
     Table(
         orientation = TableOrientation.Vertical,
@@ -45,20 +37,7 @@ fun Dialog(
         Subtable(
             isLast = true,
         ) {
-            buttons
-                .forEachIndexed { i, button ->
-                    Cell(
-                        isLast = i == buttons.lastIndex,
-                    ) { modifier ->
-                        HnauButton(
-                            modifier = modifier.weight(1f),
-                            shape = shape,
-                            style = button.style,
-                            onClick = button.onClick,
-                            content = { Text(button.text()) },
-                        )
-                    }
-                }
+            buttons()
         }
     }
 }

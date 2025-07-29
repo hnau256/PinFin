@@ -2,25 +2,22 @@ package hnau.pinfin.projector.utils
 
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
-import hnau.common.app.model.theme.Hue
 import hnau.common.app.projector.utils.theme.DynamicSchemeConfig
 import hnau.common.app.projector.utils.theme.rememberColorScheme
-import hnau.pinfin.data.AmountDirection
+import hnau.pinfin.model.utils.budget.state.CategoryInfo
+import hnau.common.app.model.theme.Hue as ModelHue
 
-val AmountDirection.hue: Hue
-    get() = when (this) {
-        AmountDirection.Credit -> Hue(0.375f)
-        AmountDirection.Debit -> Hue(0.175f)
-    }
+val CategoryInfo.modelHue: ModelHue
+    get() = ModelHue(hue.value)
 
 @Composable
-fun SwitchHueToAmountDirection(
-    amountDirection: AmountDirection,
+fun SwitchHueToCategoryInfo(
+    info: CategoryInfo,
     content: @Composable () -> Unit,
 ) {
     MaterialTheme(
         colorScheme = rememberColorScheme(
-            hue = amountDirection.hue,
+            hue = info.modelHue,
             config = DynamicSchemeConfig.forHue,
         ).copyContainerToBase(),
         content = content,

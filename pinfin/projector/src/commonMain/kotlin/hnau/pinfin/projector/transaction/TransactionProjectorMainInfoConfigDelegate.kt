@@ -2,19 +2,16 @@ package hnau.pinfin.projector.transaction
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.IntrinsicSize
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CalendarMonth
-import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Done
 import androidx.compose.material.icons.filled.Schedule
-import androidx.compose.material3.IconButton
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -29,13 +26,7 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.unit.dp
 import hnau.common.app.model.toEditingString
-import hnau.common.app.projector.uikit.ContainerStyle
-import hnau.common.app.projector.uikit.HnauButton
 import hnau.common.app.projector.uikit.TextInput
-import hnau.common.app.projector.uikit.TripleRow
-import hnau.common.app.projector.uikit.state.NullableStateContent
-import hnau.common.app.projector.uikit.state.TransitionSpec
-import hnau.common.app.projector.uikit.table.CellBox
 import hnau.common.app.projector.uikit.table.Subtable
 import hnau.common.app.projector.uikit.table.Table
 import hnau.common.app.projector.uikit.table.TableDefaults
@@ -46,6 +37,7 @@ import hnau.pinfin.model.transaction.TransactionModel
 import hnau.pinfin.projector.resources.Res
 import hnau.pinfin.projector.resources.comment
 import hnau.pinfin.projector.utils.SuggestsListProjector
+import hnau.pinfin.projector.utils.colors
 import hnau.pinfin.projector.utils.formatter.datetime.DateTimeFormatter
 import hnau.pinfin.projector.utils.title
 import hnau.pipe.annotations.Pipe
@@ -90,22 +82,18 @@ class TransactionProjectorMainInfoConfigDelegate(
                 Cell(
                     isLast = false,
                 ) { modifier ->
-                    HnauButton(
+                    Button(
                         modifier = modifier.weight(1f),
                         shape = shape,
                         onClick = model.chooseDate,
                         content = {
-                            TripleRow(
-                                leading = { Icon(Icons.Filled.CalendarMonth) },
-                                content = {
-                                    Text(
-                                        text = model
-                                            .date
-                                            .collectAsState()
-                                            .value
-                                            .let(dependencies.dateTimeFormatter::formatDate),
-                                    )
-                                }
+                            Icon(Icons.Filled.CalendarMonth)
+                            Text(
+                                text = model
+                                    .date
+                                    .collectAsState()
+                                    .value
+                                    .let(dependencies.dateTimeFormatter::formatDate),
                             )
                         }
                     )
@@ -113,22 +101,18 @@ class TransactionProjectorMainInfoConfigDelegate(
                 Cell(
                     isLast = true,
                 ) { modifier ->
-                    HnauButton(
+                    Button(
                         modifier = modifier.weight(1f),
                         shape = shape,
                         onClick = model.chooseTime,
                         content = {
-                            TripleRow(
-                                leading = { Icon(Icons.Filled.Schedule) },
-                                content = {
-                                    Text(
-                                        text = model
-                                            .time
-                                            .collectAsState()
-                                            .value
-                                            .let(dependencies.dateTimeFormatter::formatTime),
-                                    )
-                                }
+                            Icon(Icons.Filled.Schedule)
+                            Text(
+                                text = model
+                                    .time
+                                    .collectAsState()
+                                    .value
+                                    .let(dependencies.dateTimeFormatter::formatTime),
                             )
                         }
                     )
@@ -177,30 +161,22 @@ class TransactionProjectorMainInfoConfigDelegate(
                             isLast = i == TransactionType.entries.lastIndex,
                         ) { modifier ->
                             val selectedType by model.typeVariant.collectAsState()
-                            HnauButton(
+                            Button(
                                 modifier = modifier.weight(1f),
                                 shape = shape,
                                 onClick = { model.chooseType(type) },
-                                style = when (type) {
-                                    selectedType -> ContainerStyle.primary
-                                    else -> ContainerStyle.neutral
-                                },
+                                colors = ButtonDefaults.colors(
+                                    container = when (type) {
+                                        selectedType -> MaterialTheme.colorScheme.primary
+                                        else -> MaterialTheme.colorScheme.surfaceBright
+                                    },
+                                ),
                                 content = {
-                                    TripleRow(
-                                        leading = when (type) {
-                                            selectedType -> {
-                                                {
-                                                    Icon(Icons.Filled.Done)
-                                                }
-                                            }
-
-                                            else -> null
-                                        },
-                                        content = {
-                                            Text(
-                                                text = type.title,
-                                            )
-                                        }
+                                    if (type == selectedType) {
+                                        Icon(Icons.Filled.Done)
+                                    }
+                                    Text(
+                                        text = type.title,
                                     )
                                 }
                             )

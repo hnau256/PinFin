@@ -5,6 +5,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class AccountConfig(
     val title: String? = null,
+    val hue: Hue? = null,
     val hideIfAmountIsZero: Boolean? = null,
 ) {
 

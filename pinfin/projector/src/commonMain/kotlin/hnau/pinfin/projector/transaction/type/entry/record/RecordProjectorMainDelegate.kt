@@ -1,7 +1,6 @@
 package hnau.pinfin.projector.transaction.type.entry.record
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
@@ -9,23 +8,17 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.KeyboardActionScope
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowCircleDown
-import androidx.compose.material.icons.filled.ArrowCircleUp
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.ArrowDropUp
 import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material3.Button
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.SingleChoiceSegmentedButtonRow
-import androidx.compose.material3.Switch
-import androidx.compose.material3.SwitchColors
-import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
@@ -34,34 +27,33 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.onFocusChanged
+import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.unit.dp
 import hnau.common.app.model.toEditingString
-import hnau.common.app.projector.uikit.ContainerStyle
-import hnau.common.app.projector.uikit.HnauButton
 import hnau.common.app.projector.uikit.TextInput
 import hnau.common.app.projector.uikit.state.NullableStateContent
-import hnau.common.app.projector.uikit.state.StateContent
 import hnau.common.app.projector.uikit.state.TransitionSpec
-import hnau.common.app.projector.uikit.table.CellBox
 import hnau.common.app.projector.uikit.table.Subtable
 import hnau.common.app.projector.uikit.table.Table
 import hnau.common.app.projector.uikit.table.TableDefaults
 import hnau.common.app.projector.uikit.table.TableOrientation
-import hnau.common.app.projector.uikit.utils.Dimens
 import hnau.common.app.projector.utils.Icon
 import hnau.common.kotlin.coroutines.mapState
+import hnau.common.kotlin.foldNullable
 import hnau.common.kotlin.mapper.Mapper
 import hnau.common.kotlin.mapper.toEnum
 import hnau.pinfin.data.AmountDirection
 import hnau.pinfin.model.transaction.type.entry.record.RecordModel
 import hnau.pinfin.projector.AmountProjector
 import hnau.pinfin.projector.resources.Res
+import hnau.pinfin.projector.resources.category
 import hnau.pinfin.projector.resources.comment
+import hnau.pinfin.projector.utils.NotSelectedButton
 import hnau.pinfin.projector.utils.SuggestsListProjector
+import hnau.pinfin.projector.utils.SwitchHueToAmountDirection
 import hnau.pinfin.projector.utils.category.CategoryButton
-import hnau.pinfin.projector.utils.containerStyle
 import hnau.pipe.annotations.Pipe
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
@@ -177,7 +169,10 @@ class RecordProjectorMainDelegate(
                     CategoryButton(
                         modifier = modifier.weight(1f),
                         shape = shape,
-                        info = model.category.collectAsState().value,
+                        info = model
+                            .category
+                            .collectAsState()
+                            .value,
                         onClick = model::openCategoryChooser,
                     )
                 }
@@ -185,26 +180,14 @@ class RecordProjectorMainDelegate(
                     isLast = false,
                 ) { modifier ->
                     val direction by model.direction.collectAsState()
-                    HnauButton(
-                        modifier = modifier,
-                        shape = shape,
-                        style = direction.containerStyle,
-                        onClick = { model.switchDirection() },
+                    SwitchHueToAmountDirection(
+                        amountDirection = direction,
                     ) {
-                        Box(
-                            contentAlignment = Alignment.Center,
+                        Button(
+                            modifier = modifier,
+                            shape = shape,
+                            onClick = { model.switchDirection() },
                         ) {
-                            Column(
-                                horizontalAlignment = Alignment.CenterHorizontally,
-                            ) {
-                                val color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.25f)
-                                CompositionLocalProvider(
-                                    LocalContentColor provides color
-                                ) {
-                                    Icon(Icons.Default.ArrowDropUp)
-                                    Icon(Icons.Default.ArrowDropDown)
-                                }
-                            }
                             Text(
                                 text = when (direction) {
                                     AmountDirection.Credit -> "+"

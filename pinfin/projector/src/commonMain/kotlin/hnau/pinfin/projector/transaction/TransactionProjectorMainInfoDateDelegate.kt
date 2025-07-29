@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.Done
+import androidx.compose.material3.Button
 import androidx.compose.material3.DatePicker
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
@@ -13,8 +14,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
-import hnau.common.app.projector.uikit.HnauButton
-import hnau.common.app.projector.uikit.TripleRow
 import hnau.common.app.projector.uikit.table.Subtable
 import hnau.common.app.projector.uikit.table.Table
 import hnau.common.app.projector.uikit.table.TableOrientation
@@ -74,18 +73,14 @@ class TransactionProjectorMainInfoDateDelegate(
                 Cell(
                     isLast = false,
                 ) { modifier ->
-                    HnauButton(
+                    Button(
                         modifier = modifier.weight(1f),
                         shape = shape,
                         onClick = model.cancel,
                         content = {
-                            TripleRow(
-                                leading = { Icon(Icons.Filled.Clear) },
-                                content = {
-                                    Text(
-                                        text = stringResource(Res.string.cancel)
-                                    )
-                                }
+                            Icon(Icons.Filled.Clear)
+                            Text(
+                                text = stringResource(Res.string.cancel)
                             )
                         }
                     )
@@ -93,7 +88,7 @@ class TransactionProjectorMainInfoDateDelegate(
                 Cell(
                     isLast = true,
                 ) { modifier ->
-                    HnauButton(
+                    Button(
                         modifier = modifier.weight(1f),
                         shape = shape,
                         onClick = {
@@ -107,13 +102,9 @@ class TransactionProjectorMainInfoDateDelegate(
                             )
                         },
                         content = {
-                            TripleRow(
-                                leading = { Icon(Icons.Filled.Done) },
-                                content = {
-                                    Text(
-                                        text = stringResource(Res.string.save)
-                                    )
-                                }
+                            Icon(Icons.Filled.Done)
+                            Text(
+                                text = stringResource(Res.string.save)
                             )
                         }
                     )

@@ -17,6 +17,8 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Done
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
@@ -39,11 +41,8 @@ import androidx.compose.ui.unit.dp
 import arrow.core.NonEmptyList
 import hnau.common.app.model.goback.GlobalGoBackHandler
 import hnau.common.app.model.goback.GoBackHandler
-import hnau.common.app.projector.uikit.ContainerStyle
 import hnau.common.app.projector.uikit.ErrorPanel
-import hnau.common.app.projector.uikit.HnauButton
 import hnau.common.app.projector.uikit.TextInput
-import hnau.common.app.projector.uikit.TripleRow
 import hnau.common.app.projector.uikit.progressindicator.ProgressIndicatorInBox
 import hnau.common.app.projector.uikit.shape.HnauShape
 import hnau.common.app.projector.uikit.shape.create
@@ -61,7 +60,6 @@ import hnau.common.kotlin.Loading
 import hnau.common.kotlin.Ready
 import hnau.common.kotlin.foldBoolean
 import hnau.common.kotlin.foldNullable
-import hnau.common.kotlin.ifTrue
 import hnau.pinfin.model.IconModel
 import hnau.pinfin.model.utils.icons.IconCategory
 import hnau.pinfin.model.utils.icons.IconVariant
@@ -70,6 +68,7 @@ import hnau.pinfin.projector.resources.Res
 import hnau.pinfin.projector.resources.no_icons_found
 import hnau.pinfin.projector.resources.search
 import hnau.pinfin.projector.resources.select_icon
+import hnau.pinfin.projector.utils.colors
 import hnau.pinfin.projector.utils.image
 import hnau.pipe.annotations.Pipe
 import kotlinx.coroutines.CoroutineScope
@@ -261,24 +260,21 @@ class IconProjector(
             ) { i ->
                 val category = categories[i]
                 val selected = category == selectedCategory
-                HnauButton(
+                Button(
                     onClick = { model.onCategoryClick(category) },
-                    style = selected
-                        .foldBoolean(
-                            ifTrue = { ContainerStyle.primary },
-                            ifFalse = { ContainerStyle.neutral }
-                        ),
+                    colors = ButtonDefaults.colors(
+                        container = selected.foldBoolean(
+                            ifTrue = { MaterialTheme.colorScheme.primary },
+                            ifFalse = { MaterialTheme.colorScheme.surfaceBright },
+                        )
+                    ),
                     shape = HnauShape.inRow.create(
                         index = i,
                         totalCount = categoriesCount,
                     ),
                 ) {
-                    TripleRow(
-                        leading = selected.ifTrue {
-                            { Icon(Icons.Default.Done) }
-                        },
-                        content = { Text(category.name) }
-                    )
+                    Icon(Icons.Default.Done)
+                    Text(category.name)
                 }
             }
         }
