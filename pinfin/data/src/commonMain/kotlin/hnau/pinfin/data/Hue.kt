@@ -2,6 +2,7 @@ package hnau.pinfin.data
 
 import kotlinx.serialization.Serializable
 import kotlin.jvm.JvmInline
+import kotlin.math.absoluteValue
 
 @Serializable
 @JvmInline
@@ -14,7 +15,7 @@ value class Hue(
         fun calcDefault(
             hash: Int,
         ): Hue = Hue(
-            degrees = hash % 360,
+            degrees = (hash % 360).absoluteValue,
         )
     }
 }

@@ -1,18 +1,25 @@
 package hnau.pinfin.projector.budget.analytics
 
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.SecondaryTabRow
+import androidx.compose.material3.SegmentedButton
+import androidx.compose.material3.SegmentedButtonDefaults
+import androidx.compose.material3.SingleChoiceSegmentedButtonRow
 import androidx.compose.material3.Tab
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.util.fastForEach
+import androidx.compose.ui.util.fastForEachIndexed
+import hnau.common.app.projector.uikit.utils.Dimens
 import hnau.common.app.projector.utils.Overcompose
 import hnau.common.app.projector.utils.copy
 import hnau.common.app.projector.utils.rememberPagerState
@@ -62,22 +69,28 @@ class AnalyticsProjector(
         Overcompose(
             modifier = Modifier.fillMaxSize(),
             top = {
-                SecondaryTabRow(
-                    selectedTabIndex = selectedTab.ordinal,
+                Box(
+                    modifier = Modifier
+                        .padding(top = contentPadding.calculateTopPadding())
+                        .padding(vertical = Dimens.smallSeparation),
+                    contentAlignment = Alignment.Center,
                 ) {
-                    AnalyticsTab.entries.fastForEach { tab ->
-                        Tab(
-                            selected = tab == selectedTab,
-                            onClick = { model.selectedTab.value = tab },
-                            text = {
-                                Text(
-                                    modifier = Modifier.padding(
-                                        top = contentPadding.calculateTopPadding(),
-                                    ),
-                                    text = tab.title,
+                    SingleChoiceSegmentedButtonRow {
+                        AnalyticsTab.entries.fastForEachIndexed { i, tab ->
+                            SegmentedButton(
+                                selected = tab == selectedTab,
+                                onClick = { model.selectedTab.value = tab },
+                                label = {
+                                    Text(
+                                        text = tab.title,
+                                    )
+                                },
+                                shape = SegmentedButtonDefaults.itemShape(
+                                    index = i,
+                                    count = AnalyticsTab.entries.size,
                                 )
-                            },
-                        )
+                            )
+                        }
                     }
                 }
             },
