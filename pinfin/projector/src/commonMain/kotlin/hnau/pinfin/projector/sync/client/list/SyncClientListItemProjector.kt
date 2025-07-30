@@ -70,6 +70,7 @@ class SyncClientListItemProjector(
                         ) { modifier ->
                             Button(
                                 modifier = modifier.width(buttonWidth),
+                                shape = shape,
                                 onClick = state.sync,
                             ) {
                                 Icon(

@@ -6,7 +6,7 @@ import hnau.pinfin.projector.resources.Res
 import hnau.pinfin.projector.resources.accounts_not_found
 import hnau.pinfin.projector.resources.create_new_account
 import hnau.pinfin.projector.resources.there_are_no_accounts
-import hnau.pinfin.projector.utils.account.AccountButton
+import hnau.pinfin.projector.utils.AccountButton
 import hnau.pinfin.projector.utils.choose.ChooseMessages
 import hnau.pinfin.projector.utils.choose.Content
 import hnau.pipe.annotations.Pipe

@@ -15,7 +15,7 @@ import hnau.common.kotlin.coroutines.mapWithScope
 import hnau.pinfin.model.transaction.type.entry.EntryModel
 import hnau.pinfin.projector.transaction.type.utils.ChooseAccountProjector
 import hnau.pinfin.projector.utils.AmountContent
-import hnau.pinfin.projector.utils.account.AccountButton
+import hnau.pinfin.projector.utils.AccountButton
 import hnau.pinfin.projector.utils.formatter.AmountFormatter
 import hnau.pipe.annotations.Pipe
 import kotlinx.coroutines.CoroutineScope

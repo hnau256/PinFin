@@ -14,6 +14,7 @@ data class AccountConfig(
         other: AccountConfig,
     ): AccountConfig = AccountConfig(
         title = other.title ?: title,
+        hue = other.hue ?: hue,
         hideIfAmountIsZero = other.hideIfAmountIsZero ?: hideIfAmountIsZero,
         icon = other.icon ?: icon,
     )

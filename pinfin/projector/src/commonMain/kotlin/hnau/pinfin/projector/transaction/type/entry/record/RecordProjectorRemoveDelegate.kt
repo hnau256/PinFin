@@ -29,7 +29,7 @@ class RecordProjectorRemoveDelegate(
             ) {modifier ->
                 Button(
                     shape = shape,
-                    modifier = modifier,
+                    modifier = modifier.weight(1f),
                     onClick = model::closeOverlap,
                 ) {
                     Text(
@@ -42,7 +42,7 @@ class RecordProjectorRemoveDelegate(
             ) {modifier ->
                 Button(
                     shape = shape,
-                    modifier = modifier,
+                    modifier = modifier.weight(1f),
                     onClick = remove,
                     colors = ButtonDefaults.colors(
                         container = MaterialTheme.colorScheme.surfaceBright,

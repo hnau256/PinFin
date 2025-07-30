@@ -27,7 +27,7 @@ import hnau.pinfin.model.CategoriesModel
 import hnau.pinfin.projector.resources.Res
 import hnau.pinfin.projector.resources.categories
 import hnau.pinfin.projector.resources.there_are_no_categories
-import hnau.pinfin.projector.utils.category.CategoryContent
+import hnau.pinfin.projector.utils.CategoryContent
 import hnau.pipe.annotations.Pipe
 import kotlinx.coroutines.CoroutineScope
 import org.jetbrains.compose.resources.stringResource

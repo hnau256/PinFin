@@ -25,7 +25,7 @@ import hnau.common.app.projector.utils.horizontalDisplayPadding
 import hnau.pinfin.model.budget.analytics.tab.CategoriesModel
 import hnau.pinfin.projector.utils.AmountContent
 import hnau.pinfin.projector.utils.SwitchHueToCategoryInfo
-import hnau.pinfin.projector.utils.category.CategoryContent
+import hnau.pinfin.projector.utils.CategoryContent
 import hnau.pinfin.projector.utils.formatter.AmountFormatter
 import hnau.pipe.annotations.Pipe
 import kotlinx.coroutines.CoroutineScope
@@ -109,7 +109,7 @@ class CategoriesProjector(
             info = item.info,
         ) {
             Column(
-                verticalArrangement = Arrangement.spacedBy(Dimens.extraSmallSeparation),
+                verticalArrangement = Arrangement.spacedBy(Dimens.smallSeparation),
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(
@@ -133,7 +133,7 @@ class CategoriesProjector(
                     progress = { item.fraction },
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(12.dp),
+                        .height(8.dp),
                     trackColor = MaterialTheme.colorScheme.surfaceContainer,
                 )
             }

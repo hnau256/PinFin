@@ -28,8 +28,8 @@ import hnau.pinfin.model.utils.budget.state.TransactionInfo
 import hnau.pinfin.projector.utils.AmountContent
 import hnau.pinfin.projector.utils.ArrowDirection
 import hnau.pinfin.projector.utils.ArrowIcon
-import hnau.pinfin.projector.utils.account.AccountContent
-import hnau.pinfin.projector.utils.category.CategoryContent
+import hnau.pinfin.projector.utils.AccountContent
+import hnau.pinfin.projector.utils.CategoryContent
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 

@@ -3,6 +3,7 @@ package hnau.pinfin.projector.transaction.type.entry.record
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -16,11 +17,13 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.onFocusChanged
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.unit.dp
@@ -43,7 +46,8 @@ import hnau.pinfin.projector.resources.Res
 import hnau.pinfin.projector.resources.comment
 import hnau.pinfin.projector.utils.SuggestsListProjector
 import hnau.pinfin.projector.utils.SwitchHueToAmountDirection
-import hnau.pinfin.projector.utils.category.CategoryButton
+import hnau.pinfin.projector.utils.CategoryButton
+import hnau.pinfin.projector.utils.icon
 import hnau.pipe.annotations.Pipe
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
@@ -129,6 +133,16 @@ class RecordProjectorMainDelegate(
                                 imeAction = ImeAction.Next,
                                 capitalization = KeyboardCapitalization.Sentences,
                             ),
+                            colors = TextFieldDefaults.colors(
+                                focusedIndicatorColor = Color.Transparent,
+                                errorIndicatorColor = Color.Transparent,
+                                disabledIndicatorColor = Color.Transparent,
+                                unfocusedIndicatorColor = Color.Transparent,
+                                unfocusedContainerColor = Color.Transparent,
+                                focusedContainerColor = Color.Transparent,
+                                errorContainerColor = Color.Transparent,
+                                disabledContainerColor = Color.Transparent,
+                            )
                         )
                         model
                             .openRemoveOverlap
@@ -177,13 +191,10 @@ class RecordProjectorMainDelegate(
                             modifier = modifier,
                             shape = shape,
                             onClick = { model.switchDirection() },
+                            contentPadding = PaddingValues(0.dp),
                         ) {
-                            Text(
-                                text = when (direction) {
-                                    AmountDirection.Credit -> "+"
-                                    AmountDirection.Debit -> "-"
-                                },
-                                style = MaterialTheme.typography.titleLarge,
+                            Icon(
+                                icon = direction.icon,
                             )
                         }
                     }

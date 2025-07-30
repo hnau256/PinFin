@@ -6,7 +6,7 @@ import kotlin.jvm.JvmInline
 @Serializable
 @JvmInline
 value class Hue(
-    val value: Float,
+    val degrees: Int,
 ) {
 
     companion object {
@@ -14,7 +14,7 @@ value class Hue(
         fun calcDefault(
             hash: Int,
         ): Hue = Hue(
-            value = (hash % 360) / 359f,
+            degrees = hash % 360,
         )
     }
 }

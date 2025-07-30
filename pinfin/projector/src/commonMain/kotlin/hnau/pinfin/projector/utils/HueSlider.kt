@@ -22,10 +22,12 @@ import hct.Hct
 import hnau.common.app.model.theme.ThemeBrightness
 import hnau.common.app.model.theme.ThemeBrightnessValues
 import hnau.common.app.projector.utils.collectAsMutableAccessor
-import hnau.common.app.projector.utils.system
 import hnau.common.app.projector.utils.theme.DynamicSchemeConfig
+import hnau.common.app.projector.utils.theme.themeBrightness
 import hnau.pinfin.data.Hue
+import hnau.pinfin.model.utils.model
 import kotlinx.coroutines.flow.MutableStateFlow
+import hnau.common.app.model.theme.Hue as ModelHue
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -34,12 +36,13 @@ fun HueSlider(
     modifier: Modifier = Modifier,
 ) {
     var current by value.collectAsMutableAccessor()
-    val brightness = ThemeBrightness.system
+    val brightness = MaterialTheme.themeBrightness
     Slider(
-        value = current.value,
+        value = current.degrees.toFloat(),
         onValueChange = { newValue ->
-            current = newValue.let(::Hue)
+            current = newValue.toInt().let(::Hue)
         },
+        valueRange = 0f..359f,
         modifier = modifier,
         colors = SliderDefaults.colors(
             activeTrackColor = Color.Transparent,
@@ -61,7 +64,7 @@ fun HueSlider(
                         .background(
                             color = calcColor(
                                 brightness = brightness,
-                                fraction = current.value.toDouble(),
+                                hue = current.model,
                             ),
                             shape = CircleShape,
                         )
@@ -93,28 +96,38 @@ fun HueSlider(
 }
 
 
-private val dynamicColorsConfig = DynamicSchemeConfig()
+private val dynamicColorsConfig = DynamicSchemeConfig(
+    tone = ThemeBrightnessValues(
+        light = 40.0,
+        dark = 60.0,
+    ),
+    chroma = 100.0,
+)
 
 private fun calcColor(
     brightness: ThemeBrightness,
-    fraction: Double,
+    hue: ModelHue,
 ): Color {
-    val tone = dynamicColorsConfig.tone[brightness]
-    val chroma = 100.0
     return Hct
-        .from(fraction * 360, chroma, tone)
+        .from(
+            /* hue = */ hue.degrees,
+            /* chroma = */ dynamicColorsConfig.chroma,
+            /* tone = */ dynamicColorsConfig.tone[brightness],
+        )
         .toInt()
         .let(::Color)
 }
 
 private val rainbowBrushes: ThemeBrightnessValues<Brush> = run {
-    val pointsCount = 64
+    val pointsCount = 360
     ThemeBrightnessValues { brightness ->
         Brush.horizontalGradient(
             colors = (0 until pointsCount).map { i ->
                 calcColor(
                     brightness = brightness,
-                    fraction = i.toDouble() / (pointsCount - 1).toDouble(),
+                    hue = ModelHue(
+                        degrees = 360.0 * i.toDouble() / (pointsCount - 1).toDouble(),
+                    ),
                 )
             }
         )

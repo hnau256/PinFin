@@ -128,8 +128,9 @@ class StartSyncProjector(
             ) {
                 Cell(
                     isLast = true,
-                ) {
+                ) {modifier ->
                     TextInput(
+                        modifier = modifier,
                         maxLines = 1,
                         value = model.serverAddressInput,
                         isError = !model.serverAddressIsCorrect.collectAsState().value,

@@ -30,8 +30,8 @@ fun main() = runBlocking {
             onCloseRequest = { exitApplication() },
             title = "PinFin",
             state = rememberWindowState(
-                width = 480.dp * scale,
-                height = 640.dp * scale,
+                width = 320.dp * scale,
+                height = 400.dp * scale,
             ),
             //icon = rememberVectorPainter(pinfinIcon.s256),
         ) {
