@@ -1,18 +1,15 @@
 package hnau.pinfin.projector.utils
 
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Row
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Shape
+import hnau.common.app.projector.uikit.TripleRow
 import hnau.common.app.projector.uikit.shape.HnauShape
-import hnau.common.app.projector.uikit.utils.Dimens
 import hnau.common.app.projector.utils.Icon
 import hnau.common.kotlin.foldNullable
 import hnau.pinfin.model.utils.budget.state.AccountInfo
-import hnau.pinfin.model.utils.model
 import hnau.pinfin.projector.resources.Res
 import hnau.pinfin.projector.resources.category
 import org.jetbrains.compose.resources.stringResource
@@ -36,10 +33,15 @@ fun AccountContent(
     SwitchHueToAccountInfo(
         info = info,
     ) {
-        AccountContentInner(
-            info = info,
+        Label(
             modifier = modifier,
-        )
+            containerColor = MaterialTheme.colorScheme.secondaryContainer,
+        ) {
+            AccountContentInner(
+                info = info,
+                modifier = modifier,
+            )
+        }
     }
 }
 
@@ -86,17 +88,15 @@ private fun AccountContentInner(
     info: AccountInfo,
     modifier: Modifier = Modifier,
 ) {
-    Row(
+    TripleRow(
         modifier = modifier,
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(Dimens.extraSmallSeparation),
-    ) {
-        info.icon?.image?.let { icon ->
-            Icon(icon)
+        leading = info.icon?.image?.let { icon -> { Icon(icon) } },
+        content = {
+            Text(
+                text = info.title,
+                maxLines = 1,
+
+                )
         }
-        Text(
-            text = info.title,
-            maxLines = 1,
-        )
-    }
+    )
 }

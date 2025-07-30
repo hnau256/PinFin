@@ -17,11 +17,11 @@ import hnau.pinfin.model.utils.model
 private val DynamicSchemeConfigForHue = DynamicSchemeConfig(
     variant = Variant.FIDELITY,
     contrastLevel = 0.0,
-    chroma = 100.0,
-    tone = ThemeBrightnessValues(
+    //chroma = 100.0,
+    /*tone = ThemeBrightnessValues(
         light = 50.0,
         dark = 50.0,
-    )
+    )*/
 )
 
 private val schemesCache: MutableMap<Hue, MutableMap<ThemeBrightness, ColorScheme>> = HashMap()
