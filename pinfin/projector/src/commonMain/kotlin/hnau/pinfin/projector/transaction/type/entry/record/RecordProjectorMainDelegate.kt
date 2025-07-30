@@ -9,13 +9,14 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.relocation.BringIntoViewRequester
+import androidx.compose.foundation.relocation.bringIntoViewRequester
 import androidx.compose.foundation.text.KeyboardActionScope
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.Button
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
@@ -24,8 +25,10 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
+import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import hnau.common.app.model.toEditingString
 import hnau.common.app.projector.uikit.TextInput
@@ -36,7 +39,11 @@ import hnau.common.app.projector.uikit.table.Table
 import hnau.common.app.projector.uikit.table.TableDefaults
 import hnau.common.app.projector.uikit.table.TableOrientation
 import hnau.common.app.projector.utils.Icon
+import hnau.common.kotlin.coroutines.flatMapState
 import hnau.common.kotlin.coroutines.mapState
+import hnau.common.kotlin.coroutines.scopedInState
+import hnau.common.kotlin.coroutines.toMutableStateFlowAsInitial
+import hnau.common.kotlin.foldBoolean
 import hnau.common.kotlin.mapper.Mapper
 import hnau.common.kotlin.mapper.toEnum
 import hnau.pinfin.data.AmountDirection
@@ -53,8 +60,12 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.filterNotNull
+import kotlinx.coroutines.flow.withIndex
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.stringResource
+import kotlin.time.Duration.Companion.seconds
 
 class RecordProjectorMainDelegate(
     scope: CoroutineScope,
@@ -98,11 +109,39 @@ class RecordProjectorMainDelegate(
             }
         }
 
+    private val bringIntoViewRequester = BringIntoViewRequester()
+
+    private val hasFocus: MutableStateFlow<Boolean> =
+        false.toMutableStateFlowAsInitial()
+
+    private val size: MutableStateFlow<IntSize> =
+        IntSize.Zero.toMutableStateFlowAsInitial()
+
+    init {
+        scope.launch {
+            hasFocus
+                .flatMapState(scope) { hasFocus ->
+                    hasFocus.foldBoolean(
+                        ifFalse = { null.toMutableStateFlowAsInitial() },
+                        ifTrue = { size }
+                    )
+                }
+                .filterNotNull()
+                .collectLatest {
+                    bringIntoViewRequester.bringIntoView()
+                }
+        }
+    }
+
     @Composable
     fun Content() {
         Table(
             orientation = TableOrientation.Vertical,
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .bringIntoViewRequester(bringIntoViewRequester)
+                .onFocusChanged { hasFocus.value = it.hasFocus }
+                .onSizeChanged {newSize -> size.value = newSize },
         ) {
             Cell(
                 isLast = false,

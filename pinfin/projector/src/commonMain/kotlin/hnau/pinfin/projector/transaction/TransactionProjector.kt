@@ -126,11 +126,11 @@ class TransactionProjector(
             Column(
                 modifier = Modifier
                     .fillMaxSize()
+                    .imePadding()
                     .verticalScroll(rememberScrollState())
                     .padding(contentPadding)
                     .horizontalDisplayPadding()
                     .verticalDisplayPadding()
-                    .imePadding()
             ) {
                 mainContent
                     .collectAsState()
