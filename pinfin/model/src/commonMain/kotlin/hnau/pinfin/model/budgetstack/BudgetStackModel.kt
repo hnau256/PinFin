@@ -17,7 +17,7 @@ import hnau.pinfin.model.CategoriesModel
 import hnau.pinfin.model.accountstack.AccountStackModel
 import hnau.pinfin.model.budget.BudgetModel
 import hnau.pinfin.model.categorystack.CategoryStackModel
-import hnau.pinfin.model.transaction.TransactionModel
+import hnau.pinfin.model.transaction_old.TransactionModel
 import hnau.pinfin.model.utils.budget.repository.BudgetRepository
 import hnau.pipe.annotations.Pipe
 import kotlinx.coroutines.CoroutineScope

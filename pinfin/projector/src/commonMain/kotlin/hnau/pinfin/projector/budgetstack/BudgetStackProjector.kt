@@ -9,7 +9,7 @@ import hnau.pinfin.projector.CategoriesProjector
 import hnau.pinfin.projector.accountstack.AccountStackProjector
 import hnau.pinfin.projector.budget.BudgetProjector
 import hnau.pinfin.projector.categorystack.CategoryStackProjector
-import hnau.pinfin.projector.transaction.TransactionProjector
+import hnau.pinfin.projector.transaction_old.TransactionProjector
 import hnau.pipe.annotations.Pipe
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.StateFlow
