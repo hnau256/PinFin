@@ -16,7 +16,7 @@ class TemplateModel(
     scope: CoroutineScope,
     dependencies: Dependencies,
     skeleton: Skeleton,
-): GoBackHandlerProvider {
+) {
 
     @Pipe
     interface Dependencies {
@@ -26,5 +26,5 @@ class TemplateModel(
     @Serializable
     /*data*/ class Skeleton
 
-    override val goBackHandler: GoBackHandler = TODO()
+    val goBackHandler: GoBackHandler = TODO()
 }

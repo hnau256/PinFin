@@ -8,7 +8,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Shape
-import hnau.common.app.projector.uikit.TripleRow
+import hnau.common.app.projector.uikit.ItemsRow
 import hnau.common.app.projector.uikit.shape.HnauShape
 import hnau.common.app.projector.uikit.utils.Dimens
 import hnau.common.app.projector.utils.Icon
@@ -93,14 +93,13 @@ private fun CategoryContentInner(
     info: CategoryInfo,
     modifier: Modifier = Modifier,
 ) {
-    TripleRow(
+    ItemsRow(
         modifier = modifier,
-        leading = info.icon?.image?.let { icon -> { Icon(icon) } },
-        content = {
-            Text(
-                text = info.title,
-                maxLines = 1,
-                )
-        }
-    )
+    ) {
+        info.icon?.image?.let { icon -> Icon(icon) }
+        Text(
+            text = info.title,
+            maxLines = 1,
+        )
+    }
 }

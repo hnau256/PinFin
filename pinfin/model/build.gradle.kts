@@ -24,6 +24,7 @@ kotlin {
                 implementation(libs.kotlin.serialization.json)
                 implementation(libs.kotlin.serialization.cbor)
                 implementation(libs.pipe.annotations)
+                implementation(libs.enumvalues.annotations)
             }
         }
         androidMain
@@ -33,6 +34,7 @@ kotlin {
 
 dependencies {
     add("kspCommonMainMetadata", libs.pipe.processor)
+    add("kspCommonMainMetadata", libs.enumvalues.processor)
 }
 
 tasks.withType<KotlinCompile>().configureEach {

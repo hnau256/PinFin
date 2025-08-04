@@ -1,56 +1,73 @@
 package hnau.pinfin.model.budgetstack
 
-import hnau.common.app.model.goback.GoBackHandlerProvider
+import hnau.common.app.model.goback.GoBackHandler
 import hnau.pinfin.model.CategoriesModel
 import hnau.pinfin.model.accountstack.AccountStackModel
 import hnau.pinfin.model.budget.BudgetModel
 import hnau.pinfin.model.categorystack.CategoryStackModel
-import hnau.pinfin.model.transaction_old.TransactionModel
+import hnau.pinfin.model.transaction.TransactionModel
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
-sealed interface BudgetStackElementModel : GoBackHandlerProvider {
+sealed interface BudgetStackElementModel {
 
     val key: Int
 
+    val goBackHandler: GoBackHandler
+
     data class Budget(
         val model: BudgetModel,
-    ) : BudgetStackElementModel, GoBackHandlerProvider by model {
+    ) : BudgetStackElementModel {
 
         override val key: Int
             get() = 0
+
+        override val goBackHandler: GoBackHandler
+            get() = model.goBackHandler
     }
 
     data class Transaction(
         val model: TransactionModel,
-    ) : BudgetStackElementModel, GoBackHandlerProvider by model {
+    ) : BudgetStackElementModel {
 
         override val key: Int
             get() = 1
+
+        override val goBackHandler: GoBackHandler
+            get() = model.goBackHandler
     }
 
     data class Account(
         val model: AccountStackModel,
-    ) : BudgetStackElementModel, GoBackHandlerProvider by model {
+    ) : BudgetStackElementModel {
 
         override val key: Int
             get() = 2
+
+        override val goBackHandler: GoBackHandler
+            get() = model.goBackHandler
     }
 
     data class Categories(
         val model: CategoriesModel,
-    ) : BudgetStackElementModel, GoBackHandlerProvider by model {
+    ) : BudgetStackElementModel {
 
         override val key: Int
             get() = 3
+
+        override val goBackHandler: GoBackHandler
+            get() = model.goBackHandler
     }
 
     data class Category(
         val model: CategoryStackModel,
-    ) : BudgetStackElementModel, GoBackHandlerProvider by model {
+    ) : BudgetStackElementModel {
 
         override val key: Int
             get() = 4
+
+        override val goBackHandler: GoBackHandler
+            get() = model.goBackHandler
     }
 
     @Serializable

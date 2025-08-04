@@ -14,6 +14,7 @@ arrow = "2.1.2"
 kotlinSerialization = "1.9.0"
 kotlinCoroutines = "1.10.2"
 pipe = "1.1.1"
+enumvalues = "1.0.0"
 app = "1.9.0"
 ksp = "2.2.0-2.0.2"
 compose-activity = "1.10.1"
@@ -66,6 +67,9 @@ slf4j-simple = { module = "org.slf4j:slf4j-simple", version = "2.0.17" }
 #pipe
 pipe-annotations = { module = "com.github.hnau256.common-gen-pipe:annotations", version.ref = "pipe" }
 pipe-processor = { module = "com.github.hnau256.common-gen-pipe:processor", version.ref = "pipe" }
+#enumvalues
+enumvalues-annotations = { module = "com.github.hnau256.common-gen-enumvalues:annotations", version.ref = "enumvalues" }
+enumvalues-processor = { module = "com.github.hnau256.common-gen-enumvalues:processor", version.ref = "enumvalues" }
 #hnau
 hnau-kotlin = { module = "com.github.hnau256.common-kotlin:common-kotlin", version = "1.1.0" }
 hnau-gen-kt = { module = "com.github.hnau256:common-gen-kt", version = "1.1.0" }

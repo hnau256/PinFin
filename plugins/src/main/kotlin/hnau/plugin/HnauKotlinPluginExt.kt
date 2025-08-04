@@ -45,9 +45,6 @@ internal fun Project.config(
     val hasComposePlugin =
         project.plugins.hasPlugin("org.jetbrains.kotlin.plugin.compose")
 
-    val hasKspPlugin =
-        project.plugins.hasPlugin("com.google.devtools.ksp")
-
     extensions.configure(KotlinMultiplatformExtension::class.java) { extension ->
 
         extension.androidTarget {
@@ -97,13 +94,6 @@ internal fun Project.config(
                 }
             }
         }
-    }
-
-    if (hasKspPlugin) {
-        dependencies.add(
-            "kspCommonMainMetadata",
-            versions.findLibrary("pipe-processor").get().get()
-        )
     }
 
     extensions.configure(BaseExtension::class.java) { extension ->
