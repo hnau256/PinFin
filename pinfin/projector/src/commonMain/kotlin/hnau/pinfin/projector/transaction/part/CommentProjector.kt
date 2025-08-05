@@ -1,9 +1,8 @@
 package hnau.pinfin.projector.transaction.part
 
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.CalendarMonth
 import androidx.compose.material.icons.filled.Edit
-import androidx.compose.material3.ColorScheme
+import androidx.compose.material.icons.filled.Storefront
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -11,23 +10,19 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import hnau.common.app.projector.uikit.ItemsRow
 import hnau.common.app.projector.utils.Icon
-import hnau.pinfin.model.transaction.part.DateModel
+import hnau.pinfin.model.transaction.part.CommentModel
 import hnau.pinfin.projector.utils.Label
-import hnau.pinfin.projector.utils.formatter.datetime.DateTimeFormatter
 import hnau.pipe.annotations.Pipe
 import kotlinx.coroutines.CoroutineScope
 
-class DateProjector(
+class CommentProjector(
     scope: CoroutineScope,
-    private val model: DateModel,
+    private val model: CommentModel,
     private val dependencies: Dependencies,
 ) {
 
     @Pipe
-    interface Dependencies {
-
-        val dateTimeFormatter: DateTimeFormatter
-    }
+    interface Dependencies
 
     @Composable
     fun Content(
@@ -37,18 +32,18 @@ class DateProjector(
             modifier = modifier,
             selected = model.isFocused.collectAsState().value,
             onClick = model.requestFocus,
-            containerColor = Color.Transparent,
+            containerColor = PartDefaults.background,
         ) {
             ItemsRow {
-                Icon(Icons.Filled.CalendarMonth)
+                Icon(Icons.Filled.Storefront)
                 Text(
+                    modifier = Modifier.weight(1f),
                     text = model
-                        .date
+                        .comment
                         .collectAsState()
                         .value
-                        .let(dependencies.dateTimeFormatter::formatDate),
+                        .text,
                 )
-                Icon(Icons.Filled.Edit)
             }
         }
     }

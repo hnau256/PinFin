@@ -14,6 +14,7 @@ import hnau.common.app.projector.uikit.utils.Dimens
 import hnau.common.app.projector.utils.horizontalDisplayPadding
 import hnau.common.app.projector.utils.verticalDisplayPadding
 import hnau.pinfin.model.transaction.TransactionModel
+import hnau.pinfin.projector.transaction.part.CommentProjector
 import hnau.pinfin.projector.transaction.part.DateProjector
 import hnau.pinfin.projector.transaction.part.TimeProjector
 import hnau.pipe.annotations.Pipe
@@ -31,6 +32,8 @@ class InfoProjector(
         fun date(): DateProjector.Dependencies
 
         fun time(): TimeProjector.Dependencies
+
+        fun comment(): CommentProjector.Dependencies
     }
 
     private val date = DateProjector(
@@ -45,6 +48,12 @@ class InfoProjector(
         model = model.time,
     )
 
+    private val comment = CommentProjector(
+        scope = scope,
+        dependencies = dependencies.comment(),
+        model = model.comment,
+    )
+
     @Composable
     fun Content(
         contentPadding: PaddingValues,
@@ -57,13 +66,11 @@ class InfoProjector(
                .verticalDisplayPadding(),
         ) {
             Row(
-                Modifier.padding(
-                    horizontal = Dimens.separation,
-                    vertical = Dimens.smallSeparation,
-                )
+                Modifier.padding(Dimens.smallSeparation)
             ) {
                 Column(
                     modifier = Modifier.weight(1f),
+                    verticalArrangement = Arrangement.spacedBy(Dimens.smallSeparation),
                 ) {
                     Row(
                         modifier = Modifier.fillMaxWidth(),
@@ -77,6 +84,9 @@ class InfoProjector(
                             modifier = Modifier.weight(1f),
                         )
                     }
+                    comment.Content(
+                        modifier = Modifier.fillMaxWidth(),
+                    )
                 }
                 //TODO type amount
             }

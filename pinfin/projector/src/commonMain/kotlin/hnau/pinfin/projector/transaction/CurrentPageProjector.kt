@@ -9,10 +9,13 @@ import hnau.common.app.projector.uikit.state.StateContent
 import hnau.common.app.projector.utils.getTransitionSpecForHorizontalSlide
 import hnau.common.kotlin.coroutines.mapState
 import hnau.common.kotlin.coroutines.mapWithScope
+import hnau.pinfin.data.Comment
 import hnau.pinfin.model.transaction.Part
 import hnau.pinfin.model.transaction.TransactionModel
+import hnau.pinfin.model.transaction.part.page.CommentPageModel
 import hnau.pinfin.model.transaction.part.page.DatePageModel
 import hnau.pinfin.model.transaction.part.page.TimePageModel
+import hnau.pinfin.projector.transaction.page.CommentPageProjector
 import hnau.pinfin.projector.transaction.page.DatePageProjector
 import hnau.pinfin.projector.transaction.page.PageProjector
 import hnau.pinfin.projector.transaction.page.TimePageProjector
@@ -34,6 +37,8 @@ class CurrentPageProjector(
         fun date(): DatePageProjector.Dependencies
 
         fun time(): TimePageProjector.Dependencies
+
+        fun comment(): CommentPageProjector.Dependencies
     }
 
     private val page: StateFlow<Pair<Part, PageProjector>> = model
@@ -49,6 +54,11 @@ class CurrentPageProjector(
                     scope = pageScope,
                     model = model,
                     dependencies = dependencies.time(),
+                )
+                is CommentPageModel -> CommentPageProjector(
+                    scope = pageScope,
+                    model = model,
+                    dependencies = dependencies.comment(),
                 )
             }
             page to projector

@@ -1,30 +1,36 @@
 package hnau.pinfin.projector.transaction.page
 
-import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.DatePicker
-import androidx.compose.material3.DatePickerDefaults
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.rememberDatePickerState
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import hnau.pinfin.model.transaction.part.page.DatePageModel
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.text.input.KeyboardCapitalization
+import hnau.common.app.projector.utils.collectAsTextFieldValueMutableAccessor
+import hnau.common.app.projector.utils.horizontalDisplayPadding
+import hnau.pinfin.model.transaction.part.page.CommentPageModel
+import hnau.pinfin.projector.resources.Res
+import hnau.pinfin.projector.resources.comment
 import hnau.pipe.annotations.Pipe
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.datetime.TimeZone
-import kotlinx.datetime.atStartOfDayIn
-import kotlinx.datetime.toLocalDateTime
-import kotlin.time.Duration.Companion.days
-import kotlin.time.Instant
+import org.jetbrains.compose.resources.stringResource
 
-class DatePageProjector(
+class CommentPageProjector(
     scope: CoroutineScope,
-    private val model: DatePageModel,
+    private val model: CommentPageModel,
     dependencies: Dependencies,
 ) : PageProjector {
 
@@ -37,35 +43,31 @@ class DatePageProjector(
         modifier: Modifier,
         contentPadding: PaddingValues,
     ) {
-        Box(
+        Column(
             modifier = modifier
-                .fillMaxSize()
-                .padding(contentPadding),
+                .padding(contentPadding)
+                .horizontalDisplayPadding(),
         ) {
-            val state = rememberDatePickerState(
-                initialSelectedDateMillis = model
-                    .date
-                    .collectAsState()
-                    .value
-                    .atStartOfDayIn(TimeZone.currentSystemDefault())
-                    .plus(0.5.days)
-                    .toEpochMilliseconds(),
+            var value by model.comment.collectAsTextFieldValueMutableAccessor()
+            val focusRequester = remember { FocusRequester() }
+            OutlinedTextField(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .focusRequester(focusRequester),
+                value = value,
+                onValueChange = { newValue -> value = newValue },
+                maxLines = 1,
+                shape = MaterialTheme.shapes.medium,
+                label = { Text(stringResource(Res.string.comment)) },
+                keyboardOptions = KeyboardOptions(
+                    capitalization = KeyboardCapitalization.Sentences,
+                    //imeAction =
+                ),
+                keyboardActions = KeyboardActions {
+                    TODO()
+                }
             )
-            val selected = state.selectedDateMillis
-            LaunchedEffect(selected) {
-                selected
-                    ?.let(Instant.Companion::fromEpochMilliseconds)
-                    ?.toLocalDateTime(TimeZone.currentSystemDefault())
-                    ?.date
-                    ?.let(model.onDateChanged)
-            }
-            DatePicker(
-                state = state,
-                modifier = Modifier.fillMaxSize(),
-                colors = DatePickerDefaults.colors(
-                    containerColor = Color.Transparent,
-                )
-            )
+            LaunchedEffect(Unit) { focusRequester.requestFocus() }
         }
     }
 }

@@ -4,25 +4,25 @@
 
 package hnau.pinfin.model.transaction.part
 
+import hnau.common.app.model.EditingString
+import hnau.common.app.model.toEditingString
+import hnau.common.kotlin.coroutines.mapState
 import hnau.common.kotlin.coroutines.toMutableStateFlowAsInitial
 import hnau.common.kotlin.getOrInit
 import hnau.common.kotlin.serialization.MutableStateFlowSerializer
 import hnau.common.kotlin.toAccessor
-import hnau.pinfin.model.transaction.part.page.DatePageModel
+import hnau.pinfin.data.Comment
+import hnau.pinfin.model.transaction.part.page.CommentPageModel
 import hnau.pinfin.model.transaction.part.page.PageModel
 import hnau.pinfin.model.transaction.utils.NavAction
 import hnau.pipe.annotations.Pipe
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.datetime.LocalDate
-import kotlinx.datetime.TimeZone
-import kotlinx.datetime.toLocalDateTime
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.UseSerializers
-import kotlin.time.Clock
 
-class DateModel(
+class CommentModel(
     scope: CoroutineScope,
     private val dependencies: Dependencies,
     private val skeleton: Skeleton,
@@ -33,48 +33,50 @@ class DateModel(
     @Pipe
     interface Dependencies {
 
-        fun page(): DatePageModel.Dependencies
+        fun page(): CommentPageModel.Dependencies
     }
 
     @Serializable
     data class Skeleton(
-        val date: MutableStateFlow<LocalDate>,
-        var page: DatePageModel.Skeleton? = null,
+        val comment: MutableStateFlow<EditingString>,
+        var page: CommentPageModel.Skeleton? = null,
     ) : PartModel.Skeleton {
 
         companion object {
 
             fun createForNew(): Skeleton = Skeleton(
-                date = Clock
-                    .System
-                    .now()
-                    .toLocalDateTime(TimeZone.currentSystemDefault())
-                    .date
-                    .toMutableStateFlowAsInitial(),
+                comment = "".toEditingString().toMutableStateFlowAsInitial(),
             )
 
             fun createForEdit(
-                date: LocalDate,
+                comment: Comment,
             ): Skeleton = Skeleton(
-                date = date.toMutableStateFlowAsInitial(),
+                comment = comment
+                    .text
+                    .toEditingString()
+                    .toMutableStateFlowAsInitial(),
             )
         }
     }
 
-    val date: StateFlow<LocalDate>
-        get() = skeleton.date
+    val comment: StateFlow<Comment> = skeleton
+        .comment
+        .mapState(scope) {comment ->
+            comment
+                .text
+                .let(::Comment)
+        }
 
     override fun createPage(
         scope: CoroutineScope,
         navAction: NavAction
-    ): PageModel = DatePageModel(
+    ): PageModel = CommentPageModel(
         scope = scope,
         dependencies = dependencies.page(),
         skeleton = skeleton::page
             .toAccessor()
-            .getOrInit { DatePageModel.Skeleton() },
+            .getOrInit { CommentPageModel.Skeleton() },
         navAction = navAction,
-        date = skeleton.date,
-        onDateChanged = { skeleton.date.value = it },
+        comment = skeleton.comment,
     )
 }

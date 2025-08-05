@@ -8,4 +8,5 @@ import hnau.common.gen.enumvalues.annotations.EnumValues
 enum class Part {
     Date,
     Time,
+    Comment,
 }

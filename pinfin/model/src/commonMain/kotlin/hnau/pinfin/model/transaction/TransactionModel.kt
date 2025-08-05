@@ -14,6 +14,7 @@ import hnau.common.kotlin.foldNullable
 import hnau.common.kotlin.serialization.MutableStateFlowSerializer
 import hnau.pinfin.data.Transaction
 import hnau.pinfin.data.TransactionType
+import hnau.pinfin.model.transaction.part.CommentModel
 import hnau.pinfin.model.transaction.part.DateModel
 import hnau.pinfin.model.transaction.part.PartModel
 import hnau.pinfin.model.transaction.part.TimeModel
@@ -44,6 +45,8 @@ class TransactionModel(
 
         fun time(): TimeModel.Dependencies
 
+        fun comment(): CommentModel.Dependencies
+
         val budgetRepository: BudgetRepository
     }
 
@@ -53,6 +56,7 @@ class TransactionModel(
         val selectedPart: MutableStateFlow<Part> = Part.Date.toMutableStateFlowAsInitial(),
         val date: DateModel.Skeleton,
         val time: TimeModel.Skeleton,
+        val comment: CommentModel.Skeleton,
     ) {
 
         companion object {
@@ -63,6 +67,7 @@ class TransactionModel(
                 id = null,
                 date = DateModel.Skeleton.createForNew(),
                 time = TimeModel.Skeleton.createForNew(),
+                comment = CommentModel.Skeleton.createForNew(),
             )
 
             fun createForEdit(
@@ -79,6 +84,9 @@ class TransactionModel(
                     time = TimeModel.Skeleton.createForEdit(
                         time = dateTime.time,
                     ),
+                    comment = CommentModel.Skeleton.createForEdit(
+                        comment = transactionInfo.comment,
+                    )
                 )
             }
         }
@@ -113,9 +121,20 @@ class TransactionModel(
             .mapState(scope) { it == Part.Time },
     )
 
+    val comment = CommentModel(
+        scope = scope,
+        dependencies = dependencies.comment(),
+        skeleton = skeleton.comment,
+        requestFocus = { switchToPart(Part.Comment) },
+        isFocused = skeleton
+            .selectedPart
+            .mapState(scope) { it == Part.Comment },
+    )
+
     private val parts: PartValues<PartModel> = PartValues(
         date = date,
         time = time,
+        comment = comment,
     )
 
     //TODO

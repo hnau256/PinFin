@@ -34,7 +34,6 @@ class TimePageProjector(
     ) {
         Box(
             modifier = modifier
-                .fillMaxSize()
                 .padding(contentPadding),
         ) {
             val initialTime by model.time.collectAsState()

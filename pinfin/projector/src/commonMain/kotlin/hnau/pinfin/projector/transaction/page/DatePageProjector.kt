@@ -39,7 +39,6 @@ class DatePageProjector(
     ) {
         Box(
             modifier = modifier
-                .fillMaxSize()
                 .padding(contentPadding),
         ) {
             val state = rememberDatePickerState(
