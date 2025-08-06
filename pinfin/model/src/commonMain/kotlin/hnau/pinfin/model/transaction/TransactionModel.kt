@@ -53,7 +53,7 @@ class TransactionModel(
     @Serializable
     data class Skeleton(
         val id: Transaction.Id?,
-        val selectedPart: MutableStateFlow<Part> = Part.Date.toMutableStateFlowAsInitial(),
+        val selectedPart: MutableStateFlow<Part> = Part.Comment.toMutableStateFlowAsInitial(),
         val date: DateModel.Skeleton,
         val time: TimeModel.Skeleton,
         val comment: CommentModel.Skeleton,

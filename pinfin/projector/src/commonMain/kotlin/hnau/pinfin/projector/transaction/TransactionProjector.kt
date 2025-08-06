@@ -2,7 +2,6 @@ package hnau.pinfin.projector.transaction
 
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -18,12 +17,9 @@ import hnau.common.app.projector.utils.Overcompose
 import hnau.common.app.projector.utils.combineWith
 import hnau.common.app.projector.utils.copy
 import hnau.pinfin.model.transaction.TransactionModel
-import hnau.pinfin.model.utils.TemplateModel
 import hnau.pinfin.projector.resources.Res
 import hnau.pinfin.projector.resources.new_transaction
 import hnau.pinfin.projector.resources.transaction
-import hnau.pinfin.projector.transaction.page.DatePageProjector
-import hnau.pinfin.projector.transaction.part.DateProjector
 import hnau.pipe.annotations.Pipe
 import kotlinx.coroutines.CoroutineScope
 import org.jetbrains.compose.resources.stringResource
