@@ -8,8 +8,8 @@ import hnau.common.kotlin.coroutines.toMutableStateFlowAsInitial
 import hnau.common.kotlin.getOrInit
 import hnau.common.kotlin.serialization.MutableStateFlowSerializer
 import hnau.common.kotlin.toAccessor
-import hnau.pinfin.model.transaction.part.page.DatePageModel
-import hnau.pinfin.model.transaction.part.page.PageModel
+import hnau.pinfin.model.transaction.page.DatePageModel
+import hnau.pinfin.model.transaction.page.PageModel
 import hnau.pinfin.model.transaction.utils.NavAction
 import hnau.pipe.annotations.Pipe
 import kotlinx.coroutines.CoroutineScope
@@ -40,7 +40,7 @@ class DateModel(
     data class Skeleton(
         val date: MutableStateFlow<LocalDate>,
         var page: DatePageModel.Skeleton? = null,
-    ) : PartModel.Skeleton {
+    ) {
 
         companion object {
 

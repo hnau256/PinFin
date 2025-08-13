@@ -7,22 +7,20 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import hnau.common.app.projector.uikit.state.StateContent
 import hnau.common.app.projector.utils.getTransitionSpecForHorizontalSlide
-import hnau.common.kotlin.coroutines.mapState
 import hnau.common.kotlin.coroutines.mapWithScope
-import hnau.pinfin.data.Comment
 import hnau.pinfin.model.transaction.Part
 import hnau.pinfin.model.transaction.TransactionModel
-import hnau.pinfin.model.transaction.part.page.CommentPageModel
-import hnau.pinfin.model.transaction.part.page.DatePageModel
-import hnau.pinfin.model.transaction.part.page.TimePageModel
+import hnau.pinfin.model.transaction.page.CommentPageModel
+import hnau.pinfin.model.transaction.page.DatePageModel
+import hnau.pinfin.model.transaction.page.TimePageModel
 import hnau.pinfin.projector.transaction.page.CommentPageProjector
 import hnau.pinfin.projector.transaction.page.DatePageProjector
 import hnau.pinfin.projector.transaction.page.PageProjector
 import hnau.pinfin.projector.transaction.page.TimePageProjector
+import hnau.pinfin.projector.transaction.part.TypeProjector
 import hnau.pipe.annotations.Pipe
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.datetime.format.Padding
 import kotlin.math.sign
 
 class CurrentPageProjector(
@@ -33,6 +31,8 @@ class CurrentPageProjector(
 
     @Pipe
     interface Dependencies {
+
+        val typeProjector: TypeProjector
 
         fun date(): DatePageProjector.Dependencies
 

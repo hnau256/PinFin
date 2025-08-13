@@ -1,10 +1,8 @@
-package hnau.pinfin.model.transaction.part.page
+package hnau.pinfin.model.transaction.page
 
 import hnau.common.app.model.goback.GoBackHandler
 
 sealed interface PageModel {
-
-    sealed interface Skeleton
 
     val goBackHandler: GoBackHandler
 }

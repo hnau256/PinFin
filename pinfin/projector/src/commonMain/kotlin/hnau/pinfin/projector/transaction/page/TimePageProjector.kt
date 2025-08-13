@@ -12,7 +12,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import hnau.pinfin.model.transaction.part.page.TimePageModel
+import hnau.pinfin.model.transaction.page.TimePageModel
 import hnau.pipe.annotations.Pipe
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.datetime.LocalTime
@@ -44,14 +44,13 @@ class TimePageProjector(
             val hour = state.hour
             val minute = state.minute
             LaunchedEffect(hour, minute) {
-                model.onTimeChanged(
-                    LocalTime(
-                        hour = hour,
-                        minute = minute,
-                        second = 0,
-                        nanosecond = 0,
-                    )
+                model.time.value = LocalTime(
+                    hour = hour,
+                    minute = minute,
+                    second = 0,
+                    nanosecond = 0,
                 )
+
             }
             TimePicker(
                 state = state,

@@ -13,7 +13,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import hnau.pinfin.model.transaction.part.page.DatePageModel
+import hnau.pinfin.model.transaction.page.DatePageModel
 import hnau.pipe.annotations.Pipe
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.datetime.TimeZone
@@ -56,7 +56,7 @@ class DatePageProjector(
                     ?.let(Instant.Companion::fromEpochMilliseconds)
                     ?.toLocalDateTime(TimeZone.currentSystemDefault())
                     ?.date
-                    ?.let(model.onDateChanged)
+                    ?.let(model.date::value::set)
             }
             DatePicker(
                 state = state,

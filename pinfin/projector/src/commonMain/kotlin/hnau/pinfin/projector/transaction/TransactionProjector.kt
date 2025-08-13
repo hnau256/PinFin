@@ -4,7 +4,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -17,12 +16,9 @@ import hnau.common.app.projector.utils.Overcompose
 import hnau.common.app.projector.utils.combineWith
 import hnau.common.app.projector.utils.copy
 import hnau.pinfin.model.transaction.TransactionModel
-import hnau.pinfin.projector.resources.Res
-import hnau.pinfin.projector.resources.new_transaction
-import hnau.pinfin.projector.resources.transaction
+import hnau.pinfin.projector.transaction.part.TypeProjector
 import hnau.pipe.annotations.Pipe
 import kotlinx.coroutines.CoroutineScope
-import org.jetbrains.compose.resources.stringResource
 
 class TransactionProjector(
     scope: CoroutineScope,
@@ -33,9 +29,13 @@ class TransactionProjector(
     @Pipe
     interface Dependencies {
 
-        fun info(): InfoProjector.Dependencies
+        fun type(): TypeProjector.Dependencies
 
-        fun page(): CurrentPageProjector.Dependencies
+            fun info(
+                typeProjector: TypeProjector,
+            ): InfoProjector.Dependencies
+
+            fun page(): CurrentPageProjector.Dependencies
 
         val globalGoBackHandler: GlobalGoBackHandler
     }
@@ -44,9 +44,17 @@ class TransactionProjector(
         .globalGoBackHandler
         .resolve(scope)
 
+    private val type = TypeProjector(
+        scope = scope,
+        dependencies = dependencies.type(),
+        model = model.type,
+    )
+
     private val info = InfoProjector(
         scope = scope,
-        dependencies = dependencies.info(),
+        dependencies = dependencies.info(
+            typeProjector = type,
+        ),
         model = model,
     )
 
@@ -63,16 +71,7 @@ class TransactionProjector(
             modifier = Modifier.fillMaxSize(),
             topBar = {
                 TopAppBar(
-                    title = {
-                        Text(
-                            stringResource(
-                                when (model.isNewTransaction) {
-                                    true -> Res.string.new_transaction
-                                    false -> Res.string.transaction
-                                }
-                            )
-                        )
-                    },
+                    title = { type.HeaderContent() },
                     navigationIcon = { globalGoBackHandler.NavigationIcon() },
                 )
             },

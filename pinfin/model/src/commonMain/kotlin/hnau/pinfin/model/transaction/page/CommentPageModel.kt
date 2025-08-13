@@ -2,7 +2,7 @@
     MutableStateFlowSerializer::class,
 )
 
-package hnau.pinfin.model.transaction.part.page
+package hnau.pinfin.model.transaction.page
 
 import hnau.common.app.model.EditingString
 import hnau.common.app.model.goback.GoBackHandler
@@ -39,7 +39,7 @@ class CommentPageModel(
     }
 
     @Serializable
-    /*data*/ class Skeleton : PageModel.Skeleton
+    /*data*/ class Skeleton
 
     data class Suggest(
         val comment: Comment,

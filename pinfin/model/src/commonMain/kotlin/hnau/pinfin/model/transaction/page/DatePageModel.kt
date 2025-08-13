@@ -2,7 +2,7 @@
     MutableStateFlowSerializer::class,
 )
 
-package hnau.pinfin.model.transaction.part.page
+package hnau.pinfin.model.transaction.page
 
 import hnau.common.app.model.goback.GoBackHandler
 import hnau.common.app.model.goback.NeverGoBackHandler
@@ -28,7 +28,7 @@ class DatePageModel(
     interface Dependencies
 
     @Serializable
-    /*data*/ class Skeleton : PageModel.Skeleton
+    /*data*/ class Skeleton
 
     override val goBackHandler: GoBackHandler
         get() = NeverGoBackHandler

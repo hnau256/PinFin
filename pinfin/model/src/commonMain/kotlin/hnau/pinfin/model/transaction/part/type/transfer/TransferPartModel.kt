@@ -1,13 +1,13 @@
-package hnau.pinfin.model.transaction.part
+package hnau.pinfin.model.transaction.part.type.transfer
 
-import hnau.pinfin.model.transaction.page.PageModel
+import hnau.pinfin.model.transaction.page.type.entry.EntryPageModel
 import hnau.pinfin.model.transaction.utils.NavAction
 import kotlinx.coroutines.CoroutineScope
 
-sealed interface PartModel {
+interface TransferPartModel {
 
     fun createPage(
         scope: CoroutineScope,
         navAction: NavAction,
-    ): PageModel
+    ): EntryPageModel
 }

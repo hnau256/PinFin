@@ -12,8 +12,8 @@ import hnau.common.kotlin.getOrInit
 import hnau.common.kotlin.serialization.MutableStateFlowSerializer
 import hnau.common.kotlin.toAccessor
 import hnau.pinfin.data.Comment
-import hnau.pinfin.model.transaction.part.page.CommentPageModel
-import hnau.pinfin.model.transaction.part.page.PageModel
+import hnau.pinfin.model.transaction.page.CommentPageModel
+import hnau.pinfin.model.transaction.page.PageModel
 import hnau.pinfin.model.transaction.utils.NavAction
 import hnau.pipe.annotations.Pipe
 import kotlinx.coroutines.CoroutineScope
@@ -40,7 +40,7 @@ class CommentModel(
     data class Skeleton(
         val comment: MutableStateFlow<EditingString>,
         var page: CommentPageModel.Skeleton? = null,
-    ) : PartModel.Skeleton {
+    ) {
 
         companion object {
 

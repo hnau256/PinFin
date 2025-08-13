@@ -18,7 +18,8 @@ import hnau.pinfin.model.transaction.part.CommentModel
 import hnau.pinfin.model.transaction.part.DateModel
 import hnau.pinfin.model.transaction.part.PartModel
 import hnau.pinfin.model.transaction.part.TimeModel
-import hnau.pinfin.model.transaction.part.page.PageModel
+import hnau.pinfin.model.transaction.part.TypeModel
+import hnau.pinfin.model.transaction.page.PageModel
 import hnau.pinfin.model.transaction.utils.NavAction
 import hnau.pinfin.model.utils.budget.repository.BudgetRepository
 import hnau.pinfin.model.utils.budget.state.TransactionInfo
@@ -47,6 +48,8 @@ class TransactionModel(
 
         fun comment(): CommentModel.Dependencies
 
+        fun type(): TypeModel.Dependencies
+
         val budgetRepository: BudgetRepository
     }
 
@@ -57,6 +60,7 @@ class TransactionModel(
         val date: DateModel.Skeleton,
         val time: TimeModel.Skeleton,
         val comment: CommentModel.Skeleton,
+        val type: TypeModel.Skeleton,
     ) {
 
         companion object {
@@ -68,6 +72,9 @@ class TransactionModel(
                 date = DateModel.Skeleton.createForNew(),
                 time = TimeModel.Skeleton.createForNew(),
                 comment = CommentModel.Skeleton.createForNew(),
+                type = TypeModel.Skeleton.createForNew(
+                    type = transactionType,
+                ),
             )
 
             fun createForEdit(
@@ -86,6 +93,9 @@ class TransactionModel(
                     ),
                     comment = CommentModel.Skeleton.createForEdit(
                         comment = transactionInfo.comment,
+                    ),
+                    type = TypeModel.Skeleton.createForEdit(
+                        type = transactionInfo.type,
                     )
                 )
             }
@@ -131,10 +141,21 @@ class TransactionModel(
             .mapState(scope) { it == Part.Comment },
     )
 
+    val type = TypeModel(
+        scope = scope,
+        dependencies = dependencies.type(),
+        skeleton = skeleton.type,
+        requestFocus = { switchToPart(Part.Comment) },
+        isFocused = skeleton
+            .selectedPart
+            .mapState(scope) { it == Part.Comment },
+    )
+
     private val parts: PartValues<PartModel> = PartValues(
         date = date,
         time = time,
         comment = comment,
+        type = type,
     )
 
     //TODO

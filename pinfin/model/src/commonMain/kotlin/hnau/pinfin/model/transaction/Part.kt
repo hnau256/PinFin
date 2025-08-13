@@ -9,4 +9,6 @@ enum class Part {
     Date,
     Time,
     Comment,
+
+    Type,
 }

@@ -23,21 +23,23 @@ import hnau.pinfin.model.transaction.TransactionModel
 import hnau.pinfin.projector.transaction.part.CommentProjector
 import hnau.pinfin.projector.transaction.part.DateProjector
 import hnau.pinfin.projector.transaction.part.TimeProjector
+import hnau.pinfin.projector.transaction.part.TypeProjector
 import hnau.pinfin.projector.utils.Tabs
 import hnau.pinfin.projector.utils.title
 import hnau.pipe.annotations.Pipe
 import kotlinx.collections.immutable.toImmutableList
-import kotlinx.collections.immutable.toImmutableSet
 import kotlinx.coroutines.CoroutineScope
 
 class InfoProjector(
     scope: CoroutineScope,
     model: TransactionModel,
-    dependencies: Dependencies,
+    private val dependencies: Dependencies,
 ) {
 
     @Pipe
     interface Dependencies {
+
+        val type: TypeProjector
 
         fun date(): DateProjector.Dependencies
 
@@ -64,6 +66,9 @@ class InfoProjector(
         model = model.comment,
     )
 
+    private val type: TypeProjector
+        get() = dependencies.type
+
     @Composable
     fun Content(
         contentPadding: PaddingValues,
@@ -77,14 +82,6 @@ class InfoProjector(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(Dimens.separation),
         ) {
-            var type by remember { mutableStateOf(TransactionType.Entry) }
-            Tabs(
-                items = TransactionType.entries.toImmutableList(),
-                selected = type,
-                onSelectedChanged = { type = it },
-            ) {
-                Text(it.title)
-            }
             Card(
                 modifier = Modifier.fillMaxWidth(),
             ) {
@@ -110,8 +107,11 @@ class InfoProjector(
                         comment.Content(
                             modifier = Modifier.fillMaxWidth(),
                         )
+                        type.MainContent(
+                            modifier = Modifier.fillMaxWidth(),
+                        )
                     }
-                    //TODO type amount
+                    type.AmountContent()
                 }
             }
         }
