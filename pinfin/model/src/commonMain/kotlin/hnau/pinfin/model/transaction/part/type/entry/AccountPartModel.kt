@@ -4,8 +4,7 @@ import hnau.common.kotlin.coroutines.toMutableStateFlowAsInitial
 import hnau.common.kotlin.getOrInit
 import hnau.common.kotlin.toAccessor
 import hnau.pinfin.model.transaction.page.type.entry.AccountPageModel
-import hnau.pinfin.model.transaction.page.type.entry.EntryPageModel
-import hnau.pinfin.model.transaction.utils.NavAction
+import hnau.pinfin.model.transaction.page.type.entry.EntryPagePageModel
 import hnau.pinfin.model.utils.budget.state.AccountInfo
 import hnau.pipe.annotations.Pipe
 import kotlinx.coroutines.CoroutineScope
@@ -49,14 +48,12 @@ class AccountPartModel(
 
     override fun createPage(
         scope: CoroutineScope,
-        navAction: NavAction
-    ): EntryPageModel = AccountPageModel(
+            ): EntryPagePageModel = AccountPageModel(
         scope = scope,
         dependencies = dependencies.page(),
         skeleton = skeleton::page
             .toAccessor()
             .getOrInit { AccountPageModel.Skeleton() },
-        navAction = navAction,
-        account = skeleton.account,
+                account = skeleton.account,
     )
 }

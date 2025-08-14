@@ -2,7 +2,7 @@ package hnau.pinfin.model.transaction.page.type
 
 import hnau.common.app.model.goback.GoBackHandler
 
-sealed interface PageTypeModel {
+sealed interface TypePageModel {
 
     val goBackHandler: GoBackHandler
 }

@@ -15,9 +15,8 @@ import hnau.pinfin.data.TransactionType
 import hnau.pinfin.model.transaction.page.PageModel
 import hnau.pinfin.model.transaction.page.TypePageModel
 import hnau.pinfin.model.transaction.part.type.EntryModel
-import hnau.pinfin.model.transaction.part.type.PartTypeModel
+import hnau.pinfin.model.transaction.part.type.TypePartModel
 import hnau.pinfin.model.transaction.part.type.TransferModel
-import hnau.pinfin.model.transaction.utils.NavAction
 import hnau.pinfin.model.utils.budget.state.TransactionInfo
 import hnau.pipe.annotations.Pipe
 import kotlinx.coroutines.CoroutineScope
@@ -47,7 +46,7 @@ class TypeModel(
 
     @Serializable
     data class Skeleton(
-        val type: MutableStateFlow<PartTypeModel.Skeleton>,
+        val type: MutableStateFlow<TypePartModel.Skeleton>,
         var page: TypePageModel.Skeleton? = null,
     ) {
 
@@ -55,7 +54,7 @@ class TypeModel(
 
             fun createTypeForNew(
                 type: TransactionType,
-            ): PartTypeModel.Skeleton = when (type) {
+            ): TypePartModel.Skeleton = when (type) {
                 TransactionType.Entry -> EntryModel.Skeleton.createForNew()
                 TransactionType.Transfer -> TransferModel.Skeleton.createForNew()
             }
@@ -82,13 +81,13 @@ class TypeModel(
         }
     }
 
-    private val PartTypeModel.Skeleton.variant: TransactionType
+    private val TypePartModel.Skeleton.variant: TransactionType
         get() = when (this) {
             is EntryModel.Skeleton -> TransactionType.Entry
             is TransferModel.Skeleton -> TransactionType.Transfer
         }
 
-    val type: StateFlow<PartTypeModel> = skeleton
+    val type: StateFlow<TypePartModel> = skeleton
         .type
         .mapWithScope(scope) { typeScope, skeleton ->
             when (skeleton) {
@@ -127,12 +126,10 @@ class TypeModel(
 
     override fun createPage(
         scope: CoroutineScope,
-        navAction: NavAction
-    ): PageModel = TypePageModel(
+            ): PageModel = TypePageModel(
         scope = scope,
         dependencies = dependencies.page(),
-        navAction = navAction,
-        type = type,
+                type = type,
         skeleton = skeleton::page
             .toAccessor()
             .getOrInit { TypePageModel.Skeleton() },

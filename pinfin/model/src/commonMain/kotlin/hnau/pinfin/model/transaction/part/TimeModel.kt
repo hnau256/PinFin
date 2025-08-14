@@ -10,7 +10,6 @@ import hnau.common.kotlin.serialization.MutableStateFlowSerializer
 import hnau.common.kotlin.toAccessor
 import hnau.pinfin.model.transaction.page.PageModel
 import hnau.pinfin.model.transaction.page.TimePageModel
-import hnau.pinfin.model.transaction.utils.NavAction
 import hnau.pipe.annotations.Pipe
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -66,15 +65,13 @@ class TimeModel(
 
     override fun createPage(
         scope: CoroutineScope,
-        navAction: NavAction
-    ): PageModel = TimePageModel(
+            ): PageModel = TimePageModel(
         scope = scope,
         dependencies = dependencies.page(),
         skeleton = skeleton::page
             .toAccessor()
             .getOrInit { TimePageModel.Skeleton() },
-        navAction = navAction,
-        time = skeleton.time,
+                time = skeleton.time,
         onTimeChanged = { skeleton.time.value = it },
     )
 }

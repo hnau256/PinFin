@@ -20,7 +20,6 @@ import hnau.pinfin.model.transaction.part.PartModel
 import hnau.pinfin.model.transaction.part.TimeModel
 import hnau.pinfin.model.transaction.part.TypeModel
 import hnau.pinfin.model.transaction.page.PageModel
-import hnau.pinfin.model.transaction.utils.NavAction
 import hnau.pinfin.model.utils.budget.repository.BudgetRepository
 import hnau.pinfin.model.utils.budget.state.TransactionInfo
 import hnau.pipe.annotations.Pipe
@@ -186,7 +185,7 @@ class TransactionModel(
         .mapWithScope(scope) { pageScope, part ->
            val model = parts[part].createPage(
                 scope = pageScope,
-                navAction = part
+                /*navAction = part
                     .shift(1)
                     .let { nextOrNull ->
                         nextOrNull.foldNullable(
@@ -205,7 +204,7 @@ class TransactionModel(
                                 )
                             }
                         )
-                    }
+                    }*/
             )
             part to model
         }

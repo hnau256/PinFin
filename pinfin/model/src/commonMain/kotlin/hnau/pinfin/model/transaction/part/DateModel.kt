@@ -10,7 +10,6 @@ import hnau.common.kotlin.serialization.MutableStateFlowSerializer
 import hnau.common.kotlin.toAccessor
 import hnau.pinfin.model.transaction.page.DatePageModel
 import hnau.pinfin.model.transaction.page.PageModel
-import hnau.pinfin.model.transaction.utils.NavAction
 import hnau.pipe.annotations.Pipe
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -66,15 +65,13 @@ class DateModel(
 
     override fun createPage(
         scope: CoroutineScope,
-        navAction: NavAction
-    ): PageModel = DatePageModel(
+            ): PageModel = DatePageModel(
         scope = scope,
         dependencies = dependencies.page(),
         skeleton = skeleton::page
             .toAccessor()
             .getOrInit { DatePageModel.Skeleton() },
-        navAction = navAction,
-        date = skeleton.date,
+                date = skeleton.date,
         onDateChanged = { skeleton.date.value = it },
     )
 }

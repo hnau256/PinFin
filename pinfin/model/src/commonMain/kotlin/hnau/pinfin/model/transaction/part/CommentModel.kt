@@ -14,7 +14,6 @@ import hnau.common.kotlin.toAccessor
 import hnau.pinfin.data.Comment
 import hnau.pinfin.model.transaction.page.CommentPageModel
 import hnau.pinfin.model.transaction.page.PageModel
-import hnau.pinfin.model.transaction.utils.NavAction
 import hnau.pipe.annotations.Pipe
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -69,14 +68,12 @@ class CommentModel(
 
     override fun createPage(
         scope: CoroutineScope,
-        navAction: NavAction
-    ): PageModel = CommentPageModel(
+            ): PageModel = CommentPageModel(
         scope = scope,
         dependencies = dependencies.page(),
         skeleton = skeleton::page
             .toAccessor()
             .getOrInit { CommentPageModel.Skeleton() },
-        navAction = navAction,
-        comment = skeleton.comment,
+                comment = skeleton.comment,
     )
 }

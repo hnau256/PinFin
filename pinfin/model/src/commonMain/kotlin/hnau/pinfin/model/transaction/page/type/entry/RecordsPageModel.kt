@@ -1,27 +1,153 @@
+@file:UseSerializers(
+    MutableStateFlowSerializer::class,
+)
+
 package hnau.pinfin.model.transaction.page.type.entry
 
+import arrow.core.NonEmptyList
+import hnau.common.app.model.EditingString
 import hnau.common.app.model.goback.GoBackHandler
-import hnau.common.app.model.goback.NeverGoBackHandler
-import hnau.pinfin.model.transaction.utils.NavAction
+import hnau.common.kotlin.coroutines.combineState
+import hnau.common.kotlin.coroutines.flatMapState
+import hnau.common.kotlin.coroutines.mapReusable
+import hnau.common.kotlin.coroutines.mapState
+import hnau.common.kotlin.coroutines.scopedInState
+import hnau.common.kotlin.coroutines.toMutableStateFlowAsInitial
+import hnau.common.kotlin.foldNullable
+import hnau.common.kotlin.serialization.MutableStateFlowSerializer
+import hnau.pinfin.data.AmountDirection
+import hnau.pinfin.model.AmountModel
+import hnau.pinfin.model.transaction.page.type.entry.record.RecordPageModel
+import hnau.pinfin.model.transaction.part.type.entry.record.RecordId
+import hnau.pinfin.model.utils.budget.state.CategoryInfo
 import hnau.pipe.annotations.Pipe
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.UseSerializers
 
 class RecordsPageModel(
     scope: CoroutineScope,
     dependencies: Dependencies,
     skeleton: Skeleton,
-    navAction: NavAction,
-    records: MutableStateFlow<List<Unit>>,
-): EntryPageModel {
+    val all: StateFlow<NonEmptyList<Pair<RecordId, RecordInfo>>>,
+    val addNew: () -> Unit,
+) : EntryPagePageModel {
+
+    data class RecordInfo(
+        val amount: AmountModel.Skeleton,
+        val category: MutableStateFlow<CategoryInfo?>,
+        val direction: MutableStateFlow<AmountDirection>,
+        val comment: MutableStateFlow<EditingString>,
+    )
 
     @Pipe
-    interface Dependencies
+    interface Dependencies {
+
+        fun record(): RecordPageModel.Dependencies
+    }
 
     @Serializable
-    /*data*/ class Skeleton
+    data class Skeleton(
+        val selected: MutableStateFlow<RecordId?> = null.toMutableStateFlowAsInitial(),
+        var records: Map<RecordId, RecordPageModel.Skeleton> = emptyMap(),
+    )
 
-    override val goBackHandler: GoBackHandler
-        get() = NeverGoBackHandler //TODO
+    val selected: StateFlow<Triple<Int, RecordId, RecordPageModel>> = combineState(
+        scope = scope,
+        a = skeleton.selected,
+        b = all,
+    ) { selectedOrNull, records ->
+        selectedOrNull to records
+    }.mapReusable<_, RecordId, RecordPageModel, _>(
+        scope = scope,
+    ) { (selectedIdOrNull, records) ->
+
+        val allIds = records
+            .map(Pair<RecordId, *>::first)
+            .toSet()
+
+        val recordsSkeletons = skeleton
+            .records
+            .filter { it.key in allIds }
+            .also { clearedRecordsSkeletons ->
+                skeleton.records = clearedRecordsSkeletons
+            }
+
+        val (index, selectedId, info) = selectedIdOrNull.foldNullable(
+            ifNull = {
+                val (selectedId, info) = records.head
+                Triple(
+                    0,
+                    selectedId,
+                    info
+                )
+            },
+            ifNotNull = { selectedId ->
+                val (index, idWithInfo) = records
+                    .asSequence()
+                    .withIndex()
+                    .first { (_, idWithInfo) ->
+                        val (id) = idWithInfo
+                        id == selectedId
+                    }
+                val (_, info) = idWithInfo
+                Triple(
+                    index,
+                    selectedId,
+                    info,
+                )
+            }
+        )
+
+        val recordModel = getOrPutItem(
+            key = selectedId,
+        ) { recordScope ->
+            RecordPageModel(
+                scope = recordScope,
+                dependencies = dependencies.record(),
+                skeleton = run {
+                    var result = recordsSkeletons[selectedId]
+                    if (result == null) {
+                        result = RecordPageModel.Skeleton()
+                        skeleton.records = recordsSkeletons + (selectedId to result)
+                    }
+                    result
+                },
+            )
+        }
+
+        Triple(
+            index,
+            selectedId,
+            recordModel,
+        )
+    }
+
+    override val goBackHandler: GoBackHandler = selected
+        .scopedInState(scope)
+        .flatMapState(scope) { (recordScope, indexWithIdWithModel) ->
+            val (index, _, model) = indexWithIdWithModel
+            model
+                .goBackHandler
+                .scopedInState(recordScope)
+                .flatMapState(recordScope) { (selectedGoBackScope, selectedGoBack) ->
+                    selectedGoBack.foldNullable(
+                        ifNotNull = { it.toMutableStateFlowAsInitial() },
+                        ifNull = {
+                            all.mapState(selectedGoBackScope) { all ->
+                                index
+                                    .minus(1)
+                                    .takeIf { it >= 0 }
+                                    ?.let(all::getOrNull)
+                                    ?.first
+                                    ?.let { newId ->
+                                        { skeleton.selected.value = newId }
+                                    }
+                            }
+                        }
+                    )
+                }
+        }
 }

@@ -1,13 +1,23 @@
 package hnau.pinfin.model.transaction.part.type
 
+import hnau.common.app.model.goback.GoBackHandler
+import hnau.common.kotlin.coroutines.combineState
+import hnau.common.kotlin.coroutines.flatMapState
+import hnau.common.kotlin.coroutines.mapState
+import hnau.common.kotlin.coroutines.mapWithScope
+import hnau.common.kotlin.coroutines.scopedInState
 import hnau.common.kotlin.coroutines.toMutableStateFlowAsInitial
+import hnau.common.kotlin.foldNullable
 import hnau.common.kotlin.getOrInit
 import hnau.common.kotlin.toAccessor
 import hnau.pinfin.model.transaction.page.type.EntryPageModel
-import hnau.pinfin.model.transaction.page.type.PageTypeModel
-import hnau.pinfin.model.transaction.part.type.entry.EntryPart
+import hnau.pinfin.model.transaction.page.type.TypePageModel
+import hnau.pinfin.model.transaction.page.type.entry.EntryPagePageModel
 import hnau.pinfin.model.transaction.part.type.entry.AccountPartModel
-import hnau.pinfin.model.transaction.utils.NavAction
+import hnau.pinfin.model.transaction.part.type.entry.EntryPart
+import hnau.pinfin.model.transaction.part.type.entry.EntryPartModel
+import hnau.pinfin.model.transaction.part.type.entry.EntryPartValues
+import hnau.pinfin.model.transaction.part.type.entry.record.RecordsPartModel
 import hnau.pinfin.model.utils.budget.state.TransactionInfo
 import hnau.pipe.annotations.Pipe
 import kotlinx.coroutines.CoroutineScope
@@ -16,36 +26,45 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.serialization.Serializable
 
 class EntryModel(
-    scope: CoroutineScope,
+    private val scope: CoroutineScope,
     private val dependencies: Dependencies,
     private val skeleton: Skeleton,
     private val requestFocus: () -> Unit,
     private val isFocused: StateFlow<Boolean>,
-) : PartTypeModel {
+) : TypePartModel {
 
     @Pipe
     interface Dependencies {
 
         fun page(): EntryPageModel.Dependencies
+
+        fun records(): RecordsPartModel.Dependencies
+
+        fun account(): AccountPartModel.Dependencies
     }
 
     @Serializable
     data class Skeleton(
         var page: EntryPageModel.Skeleton? = null,
-        val part: MutableStateFlow<EntryPart> =
+        val selectedPart: MutableStateFlow<EntryPart> =
             EntryPart.default.toMutableStateFlowAsInitial(),
+        val records: RecordsPartModel.Skeleton,
         val account: AccountPartModel.Skeleton,
-    ) : PartTypeModel.Skeleton {
+    ) : TypePartModel.Skeleton {
 
         companion object {
 
             fun createForNew(): Skeleton = Skeleton(
+                records = RecordsPartModel.Skeleton.createForNew(),
                 account = AccountPartModel.Skeleton.createForNew(),
             )
 
             fun createForEdit(
                 type: TransactionInfo.Type.Entry,
             ): Skeleton = Skeleton(
+                records = RecordsPartModel.Skeleton.createForEdit(
+                    records = type.records,
+                ),
                 account = AccountPartModel.Skeleton.createForEdit(
                     account = type.account,
                 ),
@@ -53,15 +72,94 @@ class EntryModel(
         }
     }
 
+    private fun switchToPart(
+        part: EntryPart,
+    ) {
+        skeleton.selectedPart.value = part
+    }
+
+    private fun createRequestFocus(
+        part: EntryPart,
+    ): () -> Unit = {
+        switchToPart(part)
+        requestFocus()
+    }
+
+    private fun isFocused(
+        part: EntryPart,
+    ): StateFlow<Boolean> = combineState(
+        scope = scope,
+        a = isFocused,
+        b = skeleton.selectedPart,
+    ) { isFocused, selectedPart ->
+        isFocused && part == selectedPart
+    }
+
+    val records = RecordsPartModel(
+        scope = scope,
+        dependencies = dependencies.records(),
+        skeleton = skeleton.records,
+        requestFocus = createRequestFocus(EntryPart.Records),
+        isFocused = isFocused(EntryPart.Records),
+    )
+
+    val account = AccountPartModel(
+        scope = scope,
+        dependencies = dependencies.account(),
+        skeleton = skeleton.account,
+        requestFocus = createRequestFocus(EntryPart.Account),
+        isFocused = isFocused(EntryPart.Account),
+    )
+
     override fun createPage(
         scope: CoroutineScope,
-        navAction: NavAction
-    ): PageTypeModel = EntryPageModel(
+            ): TypePageModel = EntryPageModel(
         scope = scope,
         dependencies = dependencies.page(),
         skeleton = skeleton::page
             .toAccessor()
             .getOrInit { EntryPageModel.Skeleton() },
-        navAction = navAction,
+            )
+
+    private val parts: EntryPartValues<EntryPartModel> = EntryPartValues(
+        account = account,
+        records = records,
     )
+
+    private fun EntryPart.shift(
+        offset: Int,
+    ): EntryPart? = EntryPart
+        .entries
+        .getOrNull(ordinal + offset)
+
+    val page: StateFlow<Pair<EntryPart, EntryPagePageModel>> = skeleton
+        .selectedPart
+        .mapWithScope(scope) { pageScope, part ->
+            val model = parts[part].createPage(
+                scope = pageScope,
+            )
+            part to model
+        }
+
+    val goBackHandler: GoBackHandler = page
+        .scopedInState(scope)
+        .flatMapState(scope) { (pageScope, partWithPage) ->
+            val (part, pageModel) = partWithPage
+            pageModel.goBackHandler
+                .scopedInState(pageScope)
+                .flatMapState(pageScope) { (goBackScope, goBack) ->
+                    goBack.foldNullable(
+                        ifNotNull = { it.toMutableStateFlowAsInitial() },
+                        ifNull = {
+                            page.mapState(goBackScope) { (part, _) ->
+                                part
+                                    .shift(-1)
+                                    ?.let { previousPart ->
+                                        { skeleton.selectedPart.value = previousPart }
+                                    }
+                            }
+                        },
+                    )
+                }
+        }
 }

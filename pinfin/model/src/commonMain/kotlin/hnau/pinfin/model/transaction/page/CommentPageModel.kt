@@ -12,7 +12,6 @@ import hnau.common.kotlin.Loadable
 import hnau.common.kotlin.coroutines.mapState
 import hnau.common.kotlin.serialization.MutableStateFlowSerializer
 import hnau.pinfin.data.Comment
-import hnau.pinfin.model.transaction.utils.NavAction
 import hnau.pinfin.model.utils.Delayed
 import hnau.pinfin.model.utils.budget.repository.BudgetRepository
 import hnau.pinfin.model.utils.resolveSuggests
@@ -28,8 +27,7 @@ class CommentPageModel(
     scope: CoroutineScope,
     dependencies: Dependencies,
     skeleton: Skeleton,
-    val navAction: NavAction,
-    val comment: MutableStateFlow<EditingString>,
+        val comment: MutableStateFlow<EditingString>,
 ) : PageModel {
 
     @Pipe
