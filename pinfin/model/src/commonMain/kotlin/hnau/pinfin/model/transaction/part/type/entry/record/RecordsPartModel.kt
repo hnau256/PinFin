@@ -8,24 +8,21 @@ package hnau.pinfin.model.transaction.part.type.entry.record
 import arrow.core.NonEmptyList
 import arrow.core.nonEmptyListOf
 import arrow.core.serialization.NonEmptyListSerializer
-import hnau.common.kotlin.coroutines.combineState
 import hnau.common.kotlin.coroutines.mapNonEmptyListReusable
+import hnau.common.kotlin.coroutines.mapState
 import hnau.common.kotlin.coroutines.toMutableStateFlowAsInitial
 import hnau.common.kotlin.getOrInit
 import hnau.common.kotlin.serialization.MutableStateFlowSerializer
 import hnau.common.kotlin.toAccessor
-import hnau.pinfin.data.AmountDirection
-import hnau.pinfin.data.Comment
-import hnau.pinfin.model.AmountModel
 import hnau.pinfin.model.transaction.page.type.entry.RecordsPageModel
 import hnau.pinfin.model.transaction.page.type.entry.EntryPagePageModel
 import hnau.pinfin.model.transaction.part.type.entry.EntryPartModel
-import hnau.pinfin.model.utils.budget.state.CategoryInfo
 import hnau.pinfin.model.utils.budget.state.TransactionInfo
 import hnau.pipe.annotations.Pipe
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.UseSerializers
 
@@ -74,7 +71,7 @@ class RecordsPartModel(
         }
     }
 
-    private val records: StateFlow<NonEmptyList<Pair<RecordId, RecordModel>>> = skeleton
+    val records: StateFlow<NonEmptyList<Pair<RecordId, RecordModel>>> = skeleton
         .records
         .mapNonEmptyListReusable(
             scope = scope,
@@ -96,6 +93,17 @@ class RecordsPartModel(
         skeleton = skeleton::page
             .toAccessor()
             .getOrInit { RecordsPageModel.Skeleton() },
-        selected =
+        all = records.mapState(scope) { records ->
+            records.map { (id, model) ->
+                id to model.info
+            }
+        },
+        addNew = {
+            skeleton.records.update { records ->
+                val id = RecordId.new()
+                val skeleton = RecordModel.Skeleton.createForNew()
+                records + (id to skeleton)
+            }
+        },
     )
 }

@@ -17,6 +17,7 @@ import hnau.pinfin.model.AmountModel
 import hnau.pinfin.model.utils.budget.state.CategoryInfo
 import hnau.pinfin.model.utils.budget.state.TransactionInfo
 import hnau.pipe.annotations.Pipe
+import io.ktor.util.collections.sharedList
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.serialization.Serializable
@@ -29,7 +30,10 @@ class RecordModel(
 ) {
 
     @Pipe
-    interface Dependencies
+    interface Dependencies {
+
+        fun amount(): AmountModel.Dependencies
+    }
 
     @Serializable
     data class Skeleton(
@@ -63,6 +67,19 @@ class RecordModel(
             }
         }
     }
+
+    private val amount = AmountModel(
+        scope = scope,
+        dependencies = dependencies.amount(),
+        skeleton = skeleton.amount,
+    )
+
+    val info = RecordInfo(
+        amount =amount,
+        category = skeleton.category,
+        direction = skeleton.direction,
+        comment = skeleton.comment,
+    )
 
     val goBackHandler: GoBackHandler
         get() = NeverGoBackHandler

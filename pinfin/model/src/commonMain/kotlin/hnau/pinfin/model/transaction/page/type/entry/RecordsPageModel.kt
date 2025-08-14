@@ -5,21 +5,20 @@
 package hnau.pinfin.model.transaction.page.type.entry
 
 import arrow.core.NonEmptyList
-import hnau.common.app.model.EditingString
 import hnau.common.app.model.goback.GoBackHandler
 import hnau.common.kotlin.coroutines.combineState
 import hnau.common.kotlin.coroutines.flatMapState
 import hnau.common.kotlin.coroutines.mapReusable
 import hnau.common.kotlin.coroutines.mapState
+import hnau.common.kotlin.coroutines.mapWithScope
 import hnau.common.kotlin.coroutines.scopedInState
 import hnau.common.kotlin.coroutines.toMutableStateFlowAsInitial
+import hnau.common.kotlin.foldBoolean
 import hnau.common.kotlin.foldNullable
 import hnau.common.kotlin.serialization.MutableStateFlowSerializer
-import hnau.pinfin.data.AmountDirection
-import hnau.pinfin.model.AmountModel
 import hnau.pinfin.model.transaction.page.type.entry.record.RecordPageModel
 import hnau.pinfin.model.transaction.part.type.entry.record.RecordId
-import hnau.pinfin.model.utils.budget.state.CategoryInfo
+import hnau.pinfin.model.transaction.part.type.entry.record.RecordInfo
 import hnau.pipe.annotations.Pipe
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -31,16 +30,9 @@ class RecordsPageModel(
     scope: CoroutineScope,
     dependencies: Dependencies,
     skeleton: Skeleton,
-    val all: StateFlow<NonEmptyList<Pair<RecordId, RecordInfo>>>,
+    all: StateFlow<NonEmptyList<Pair<RecordId, RecordInfo>>>,
     val addNew: () -> Unit,
 ) : EntryPagePageModel {
-
-    data class RecordInfo(
-        val amount: AmountModel.Skeleton,
-        val category: MutableStateFlow<CategoryInfo?>,
-        val direction: MutableStateFlow<AmountDirection>,
-        val comment: MutableStateFlow<EditingString>,
-    )
 
     @Pipe
     interface Dependencies {
@@ -54,7 +46,36 @@ class RecordsPageModel(
         var records: Map<RecordId, RecordPageModel.Skeleton> = emptyMap(),
     )
 
-    val selected: StateFlow<Triple<Int, RecordId, RecordPageModel>> = combineState(
+    data class Tab(
+        val id: RecordId,
+        val info: RecordInfo,
+        val selectIfNotSelected: StateFlow<(() -> Unit)?>,
+    )
+
+    val tabs: StateFlow<NonEmptyList<Tab>> = all.mapWithScope(scope) { allScope, all ->
+        all.map { (id, info) ->
+            Tab(
+                id = id,
+                info = info,
+                selectIfNotSelected = skeleton
+                    .selected
+                    .mapState(allScope) { selected ->
+                        (id == selected).foldBoolean(
+                            ifTrue = { null },
+                            ifFalse = { { skeleton.selected.value = id } }
+                        )
+                    }
+            )
+        }
+    }
+
+    data class Record(
+        val index: Int,
+        val id: RecordId,
+        val model: RecordPageModel,
+    )
+
+    val record: StateFlow<Record> = combineState(
         scope = scope,
         a = skeleton.selected,
         b = all,
@@ -115,20 +136,21 @@ class RecordsPageModel(
                     }
                     result
                 },
+                info = info,
             )
         }
 
-        Triple(
-            index,
-            selectedId,
-            recordModel,
+        Record(
+            index = index,
+            id = selectedId,
+            model = recordModel,
         )
     }
 
-    override val goBackHandler: GoBackHandler = selected
+    override val goBackHandler: GoBackHandler = record
         .scopedInState(scope)
-        .flatMapState(scope) { (recordScope, indexWithIdWithModel) ->
-            val (index, _, model) = indexWithIdWithModel
+        .flatMapState(scope) { (recordScope, record) ->
+            val (index, _, model) = record
             model
                 .goBackHandler
                 .scopedInState(recordScope)
