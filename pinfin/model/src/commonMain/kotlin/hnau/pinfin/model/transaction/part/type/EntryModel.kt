@@ -15,8 +15,6 @@ import hnau.pinfin.model.transaction.page.type.TypePageModel
 import hnau.pinfin.model.transaction.page.type.entry.EntryPagePageModel
 import hnau.pinfin.model.transaction.part.type.entry.AccountPartModel
 import hnau.pinfin.model.transaction.part.type.entry.EntryPart
-import hnau.pinfin.model.transaction.part.type.entry.EntryPartModel
-import hnau.pinfin.model.transaction.part.type.entry.EntryPartValues
 import hnau.pinfin.model.transaction.part.type.entry.record.RecordsPartModel
 import hnau.pinfin.model.utils.budget.state.TransactionInfo
 import hnau.pipe.annotations.Pipe
@@ -31,7 +29,7 @@ class EntryModel(
     private val skeleton: Skeleton,
     private val requestFocus: () -> Unit,
     private val isFocused: StateFlow<Boolean>,
-) : TypePartModel {
+) {
 
     @Pipe
     interface Dependencies {
@@ -50,7 +48,7 @@ class EntryModel(
             EntryPart.default.toMutableStateFlowAsInitial(),
         val records: RecordsPartModel.Skeleton,
         val account: AccountPartModel.Skeleton,
-    ) : TypePartModel.Skeleton {
+    ) {
 
         companion object {
 
@@ -111,19 +109,14 @@ class EntryModel(
         isFocused = isFocused(EntryPart.Account),
     )
 
-    override fun createPage(
+    fun createPage(
         scope: CoroutineScope,
-            ): TypePageModel = EntryPageModel(
+    ): TypePageModel = EntryPageModel(
         scope = scope,
         dependencies = dependencies.page(),
         skeleton = skeleton::page
             .toAccessor()
             .getOrInit { EntryPageModel.Skeleton() },
-            )
-
-    private val parts: EntryPartValues<EntryPartModel> = EntryPartValues(
-        account = account,
-        records = records,
     )
 
     private fun EntryPart.shift(
@@ -135,9 +128,15 @@ class EntryModel(
     val page: StateFlow<Pair<EntryPart, EntryPagePageModel>> = skeleton
         .selectedPart
         .mapWithScope(scope) { pageScope, part ->
-            val model = parts[part].createPage(
-                scope = pageScope,
-            )
+            val model = when (part) {
+                EntryPart.Records -> records.createPage(
+                    scope = pageScope,
+                )
+
+                EntryPart.Account -> account.createPage(
+                    scope = pageScope,
+                )
+            }
             part to model
         }
 

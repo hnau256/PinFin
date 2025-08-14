@@ -15,7 +15,6 @@ import hnau.pinfin.data.TransactionType
 import hnau.pinfin.model.transaction.page.PageModel
 import hnau.pinfin.model.transaction.page.TypePageModel
 import hnau.pinfin.model.transaction.part.type.EntryModel
-import hnau.pinfin.model.transaction.part.type.TypePartModel
 import hnau.pinfin.model.transaction.part.type.TransferModel
 import hnau.pinfin.model.utils.budget.state.TransactionInfo
 import hnau.pipe.annotations.Pipe
@@ -32,7 +31,7 @@ class TypeModel(
     private val skeleton: Skeleton,
     val requestFocus: () -> Unit,
     val isFocused: StateFlow<Boolean>,
-) : PartModel {
+)  {
 
     @Pipe
     interface Dependencies {
@@ -124,7 +123,7 @@ class TypeModel(
             }
     }
 
-    override fun createPage(
+    fun createPage(
         scope: CoroutineScope,
             ): PageModel = TypePageModel(
         scope = scope,

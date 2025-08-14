@@ -27,7 +27,7 @@ class DateModel(
     private val skeleton: Skeleton,
     val requestFocus: () -> Unit,
     val isFocused: StateFlow<Boolean>,
-) : PartModel {
+)  {
 
     @Pipe
     interface Dependencies {
@@ -63,7 +63,7 @@ class DateModel(
     val date: StateFlow<LocalDate>
         get() = skeleton.date
 
-    override fun createPage(
+    fun createPage(
         scope: CoroutineScope,
             ): PageModel = DatePageModel(
         scope = scope,

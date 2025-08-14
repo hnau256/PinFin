@@ -27,7 +27,7 @@ class TimeModel(
     private val skeleton: Skeleton,
     val requestFocus: () -> Unit,
     val isFocused: StateFlow<Boolean>,
-) : PartModel {
+)  {
 
     @Pipe
     interface Dependencies {
@@ -63,7 +63,7 @@ class TimeModel(
     val time: StateFlow<LocalTime>
         get() = skeleton.time
 
-    override fun createPage(
+    fun createPage(
         scope: CoroutineScope,
             ): PageModel = TimePageModel(
         scope = scope,

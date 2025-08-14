@@ -18,7 +18,7 @@ class AccountPartModel(
     private val skeleton: Skeleton,
     val requestFocus: () -> Unit,
     val isFocused: StateFlow<Boolean>,
-) : EntryPartModel {
+) {
 
     @Pipe
     interface Dependencies {
@@ -46,7 +46,7 @@ class AccountPartModel(
         }
     }
 
-    override fun createPage(
+    fun createPage(
         scope: CoroutineScope,
             ): EntryPagePageModel = AccountPageModel(
         scope = scope,

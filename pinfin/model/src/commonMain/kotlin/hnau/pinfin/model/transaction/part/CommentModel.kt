@@ -27,7 +27,7 @@ class CommentModel(
     private val skeleton: Skeleton,
     val requestFocus: () -> Unit,
     val isFocused: StateFlow<Boolean>,
-) : PartModel {
+)  {
 
     @Pipe
     interface Dependencies {
@@ -66,7 +66,7 @@ class CommentModel(
                 .let(::Comment)
         }
 
-    override fun createPage(
+    fun createPage(
         scope: CoroutineScope,
             ): PageModel = CommentPageModel(
         scope = scope,

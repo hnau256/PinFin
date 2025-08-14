@@ -16,7 +16,6 @@ import hnau.pinfin.data.Transaction
 import hnau.pinfin.data.TransactionType
 import hnau.pinfin.model.transaction.part.CommentModel
 import hnau.pinfin.model.transaction.part.DateModel
-import hnau.pinfin.model.transaction.part.PartModel
 import hnau.pinfin.model.transaction.part.TimeModel
 import hnau.pinfin.model.transaction.part.TypeModel
 import hnau.pinfin.model.transaction.page.PageModel
@@ -150,13 +149,6 @@ class TransactionModel(
             .mapState(scope) { it == Part.Comment },
     )
 
-    private val parts: PartValues<PartModel> = PartValues(
-        date = date,
-        time = time,
-        comment = comment,
-        type = type,
-    )
-
     //TODO
     val result: StateFlow<Transaction?> = null.toMutableStateFlowAsInitial()
 
@@ -183,46 +175,60 @@ class TransactionModel(
     val page: StateFlow<Pair<Part, PageModel>> = skeleton
         .selectedPart
         .mapWithScope(scope) { pageScope, part ->
-           val model = parts[part].createPage(
-                scope = pageScope,
-                /*navAction = part
-                    .shift(1)
-                    .let { nextOrNull ->
-                        nextOrNull.foldNullable(
-                            ifNull = {
-                                NavAction(
-                                    type = NavAction.Type.Done,
-                                    onClick = saveAction,
-                                )
-                            },
-                            ifNotNull = { next ->
-                                NavAction(
-                                    type = NavAction.Type.Next,
-                                    onClick = MutableStateFlow {
-                                        switchToPart(next)
-                                    },
-                                )
-                            }
-                        )
-                    }*/
-            )
+            val model = when (part) {
+                Part.Date -> date.createPage(
+                    scope = pageScope,
+                )
+
+                Part.Time -> time.createPage(
+                    scope = pageScope,
+                )
+
+                Part.Comment -> comment.createPage(
+                    scope = pageScope,
+                )
+
+                Part.Type -> type.createPage(
+                    scope = pageScope,
+                )
+            }
+            /*navAction = part
+                .shift(1)
+                .let { nextOrNull ->
+                    nextOrNull.foldNullable(
+                        ifNull = {
+                            NavAction(
+                                type = NavAction.Type.Done,
+                                onClick = saveAction,
+                            )
+                        },
+                        ifNotNull = { next ->
+                            NavAction(
+                                type = NavAction.Type.Next,
+                                onClick = MutableStateFlow {
+                                    switchToPart(next)
+                                },
+                            )
+                        }
+                    )
+                }*/
             part to model
         }
 
     val goBackHandler: GoBackHandler = page
         .scopedInState(scope)
-        .flatMapState(scope) {(pageScope, partWithPage) ->
+        .flatMapState(scope) { (pageScope, partWithPage) ->
             val (part, pageModel) = partWithPage
             pageModel.goBackHandler
                 .scopedInState(pageScope)
-                .flatMapState(pageScope) {(goBackScope, goBack) ->
+                .flatMapState(pageScope) { (goBackScope, goBack) ->
                     goBack.foldNullable(
                         ifNotNull = { it.toMutableStateFlowAsInitial() },
                         ifNull = {
-                            page.mapState(goBackScope) {(part, _) ->
+                            page.mapState(goBackScope) { (part, _) ->
                                 part
                                     .shift(-1)
-                                    ?.let {previousPart ->
+                                    ?.let { previousPart ->
                                         { skeleton.selectedPart.value = previousPart }
                                     }
                             }

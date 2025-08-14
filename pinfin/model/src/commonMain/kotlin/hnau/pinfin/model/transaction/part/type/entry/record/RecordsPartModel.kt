@@ -16,7 +16,6 @@ import hnau.common.kotlin.serialization.MutableStateFlowSerializer
 import hnau.common.kotlin.toAccessor
 import hnau.pinfin.model.transaction.page.type.entry.RecordsPageModel
 import hnau.pinfin.model.transaction.page.type.entry.EntryPagePageModel
-import hnau.pinfin.model.transaction.part.type.entry.EntryPartModel
 import hnau.pinfin.model.utils.budget.state.TransactionInfo
 import hnau.pipe.annotations.Pipe
 import kotlinx.coroutines.CoroutineScope
@@ -32,7 +31,7 @@ class RecordsPartModel(
     private val skeleton: Skeleton,
     val requestFocus: () -> Unit,
     val isFocused: StateFlow<Boolean>,
-) : EntryPartModel {
+) {
 
     @Pipe
     interface Dependencies {
@@ -85,7 +84,7 @@ class RecordsPartModel(
             id to model
         }
 
-    override fun createPage(
+    fun createPage(
         scope: CoroutineScope,
     ): EntryPagePageModel = RecordsPageModel(
         scope = scope,

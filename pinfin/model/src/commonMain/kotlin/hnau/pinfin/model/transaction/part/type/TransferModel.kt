@@ -16,7 +16,7 @@ class TransferModel(
     private val skeleton: Skeleton,
     val requestFocus: () -> Unit,
     val isFocused: StateFlow<Boolean>,
-) : TypePartModel {
+) {
 
     @Pipe
     interface Dependencies {
@@ -27,7 +27,7 @@ class TransferModel(
     @Serializable
     data class Skeleton(
         var part: TransferPageModel.Skeleton? = null,
-    ) : TypePartModel.Skeleton {
+    ) {
 
         companion object {
 
@@ -41,7 +41,7 @@ class TransferModel(
         }
     }
 
-    override fun createPage(
+    fun createPage(
         scope: CoroutineScope,
             ): TypePageModel = TransferPageModel(
         scope = scope,
