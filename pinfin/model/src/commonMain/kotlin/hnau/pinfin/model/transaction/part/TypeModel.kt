@@ -4,6 +4,8 @@
 
 package hnau.pinfin.model.transaction.part
 
+import hnau.common.app.model.goback.GoBackHandler
+import hnau.common.kotlin.coroutines.flatMapStateLite
 import hnau.common.kotlin.coroutines.mapStateLite
 import hnau.common.kotlin.coroutines.mapWithScope
 import hnau.common.kotlin.coroutines.toMutableStateFlowAsInitial
@@ -16,6 +18,7 @@ import hnau.pinfin.model.transaction.page.PageModel
 import hnau.pinfin.model.transaction.page.TypePageModel
 import hnau.pinfin.model.transaction.part.type.EntryModel
 import hnau.pinfin.model.transaction.part.type.TransferModel
+import hnau.pinfin.model.transaction.part.type.TypePartModel
 import hnau.pinfin.model.utils.budget.state.TransactionInfo
 import hnau.pipe.annotations.Pipe
 import kotlinx.coroutines.CoroutineScope
@@ -31,7 +34,7 @@ class TypeModel(
     private val skeleton: Skeleton,
     val requestFocus: () -> Unit,
     val isFocused: StateFlow<Boolean>,
-)  {
+) {
 
     @Pipe
     interface Dependencies {
@@ -54,8 +57,13 @@ class TypeModel(
             fun createTypeForNew(
                 type: TransactionType,
             ): TypePartModel.Skeleton = when (type) {
-                TransactionType.Entry -> EntryModel.Skeleton.createForNew()
-                TransactionType.Transfer -> TransferModel.Skeleton.createForNew()
+                TransactionType.Entry -> TypePartModel.Skeleton.Entry(
+                    skeleton = EntryModel.Skeleton.createForNew(),
+                )
+
+                TransactionType.Transfer -> TypePartModel.Skeleton.Transfer(
+                    skeleton = TransferModel.Skeleton.createForNew(),
+                )
             }
 
             fun createForNew(
@@ -68,12 +76,16 @@ class TypeModel(
                 type: TransactionInfo.Type,
             ): Skeleton = Skeleton(
                 type = when (type) {
-                    is TransactionInfo.Type.Entry -> EntryModel.Skeleton.createForEdit(
-                        type = type,
+                    is TransactionInfo.Type.Entry -> TypePartModel.Skeleton.Entry(
+                        skeleton = EntryModel.Skeleton.createForEdit(
+                            type = type,
+                        ),
                     )
 
-                    is TransactionInfo.Type.Transfer -> TransferModel.Skeleton.createForEdit(
-                        type = type,
+                    is TransactionInfo.Type.Transfer -> TypePartModel.Skeleton.Transfer(
+                        skeleton = TransferModel.Skeleton.createForEdit(
+                            type = type,
+                        ),
                     )
                 }.toMutableStateFlowAsInitial()
             )
@@ -82,28 +94,32 @@ class TypeModel(
 
     private val TypePartModel.Skeleton.variant: TransactionType
         get() = when (this) {
-            is EntryModel.Skeleton -> TransactionType.Entry
-            is TransferModel.Skeleton -> TransactionType.Transfer
+            is TypePartModel.Skeleton.Entry -> TransactionType.Entry
+            is TypePartModel.Skeleton.Transfer -> TransactionType.Transfer
         }
 
     val type: StateFlow<TypePartModel> = skeleton
         .type
         .mapWithScope(scope) { typeScope, skeleton ->
             when (skeleton) {
-                is EntryModel.Skeleton -> EntryModel(
-                    scope = typeScope,
-                    dependencies = dependencies.entry(),
-                    skeleton = skeleton,
-                    requestFocus = requestFocus,
-                    isFocused = isFocused,
+                is TypePartModel.Skeleton.Entry -> TypePartModel.Entry(
+                    model = EntryModel(
+                        scope = typeScope,
+                        dependencies = dependencies.entry(),
+                        skeleton = skeleton.skeleton,
+                        requestFocus = requestFocus,
+                        isFocused = isFocused,
+                    ),
                 )
 
-                is TransferModel.Skeleton -> TransferModel(
-                    scope = typeScope,
-                    dependencies = dependencies.transfer(),
-                    skeleton = skeleton,
-                    requestFocus = requestFocus,
-                    isFocused = isFocused,
+                is TypePartModel.Skeleton.Transfer -> TypePartModel.Transfer(
+                    model = TransferModel(
+                        scope = typeScope,
+                        dependencies = dependencies.transfer(),
+                        skeleton = skeleton.skeleton,
+                        requestFocus = requestFocus,
+                        isFocused = isFocused,
+                    ),
                 )
             }
         }
@@ -125,12 +141,17 @@ class TypeModel(
 
     fun createPage(
         scope: CoroutineScope,
-            ): PageModel = TypePageModel(
-        scope = scope,
-        dependencies = dependencies.page(),
-                type = type,
-        skeleton = skeleton::page
-            .toAccessor()
-            .getOrInit { TypePageModel.Skeleton() },
+    ): PageModel = PageModel.Type(
+        model = TypePageModel(
+            scope = scope,
+            dependencies = dependencies.page(),
+            type = type,
+            skeleton = skeleton::page
+                .toAccessor()
+                .getOrInit { TypePageModel.Skeleton() },
+        ),
     )
+
+    val goBackHandler: GoBackHandler =
+        type.flatMapStateLite(TypePartModel::goBackHandler)
 }

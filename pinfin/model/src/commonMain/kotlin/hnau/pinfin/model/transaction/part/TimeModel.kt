@@ -27,7 +27,7 @@ class TimeModel(
     private val skeleton: Skeleton,
     val requestFocus: () -> Unit,
     val isFocused: StateFlow<Boolean>,
-)  {
+) {
 
     @Pipe
     interface Dependencies {
@@ -65,13 +65,15 @@ class TimeModel(
 
     fun createPage(
         scope: CoroutineScope,
-            ): PageModel = TimePageModel(
-        scope = scope,
-        dependencies = dependencies.page(),
-        skeleton = skeleton::page
-            .toAccessor()
-            .getOrInit { TimePageModel.Skeleton() },
-                time = skeleton.time,
-        onTimeChanged = { skeleton.time.value = it },
+    ): PageModel = PageModel.Time(
+        model = TimePageModel(
+            scope = scope,
+            dependencies = dependencies.page(),
+            skeleton = skeleton::page
+                .toAccessor()
+                .getOrInit { TimePageModel.Skeleton() },
+            time = skeleton.time,
+            onTimeChanged = { skeleton.time.value = it },
+        ),
     )
 }

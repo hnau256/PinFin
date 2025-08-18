@@ -27,7 +27,7 @@ class CommentModel(
     private val skeleton: Skeleton,
     val requestFocus: () -> Unit,
     val isFocused: StateFlow<Boolean>,
-)  {
+) {
 
     @Pipe
     interface Dependencies {
@@ -60,7 +60,7 @@ class CommentModel(
 
     val comment: StateFlow<Comment> = skeleton
         .comment
-        .mapState(scope) {comment ->
+        .mapState(scope) { comment ->
             comment
                 .text
                 .let(::Comment)
@@ -68,12 +68,14 @@ class CommentModel(
 
     fun createPage(
         scope: CoroutineScope,
-            ): PageModel = CommentPageModel(
-        scope = scope,
-        dependencies = dependencies.page(),
-        skeleton = skeleton::page
-            .toAccessor()
-            .getOrInit { CommentPageModel.Skeleton() },
-                comment = skeleton.comment,
+    ): PageModel = PageModel.Comment(
+        model = CommentPageModel(
+            scope = scope,
+            dependencies = dependencies.page(),
+            skeleton = skeleton::page
+                .toAccessor()
+                .getOrInit { CommentPageModel.Skeleton() },
+            comment = skeleton.comment,
+        ),
     )
 }

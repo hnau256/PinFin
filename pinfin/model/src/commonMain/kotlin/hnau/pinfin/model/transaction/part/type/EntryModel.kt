@@ -117,6 +117,19 @@ class EntryModel(
         skeleton = skeleton::page
             .toAccessor()
             .getOrInit { EntryPageModel.Skeleton() },
+        page = skeleton
+            .selectedPart
+            .mapWithScope(scope) { pageScope, part ->
+                when (part) {
+                    EntryPart.Records -> records.createPage(
+                        scope = pageScope,
+                    )
+
+                    EntryPart.Account -> account.createPage(
+                        scope = pageScope,
+                    )
+                }
+            },
     )
 
     private fun EntryPart.shift(

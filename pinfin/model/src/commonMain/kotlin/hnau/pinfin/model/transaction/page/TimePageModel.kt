@@ -18,9 +18,9 @@ class TimePageModel(
     scope: CoroutineScope,
     dependencies: Dependencies,
     skeleton: Skeleton,
-        val time: StateFlow<LocalTime>,
+    val time: StateFlow<LocalTime>,
     val onTimeChanged: (LocalTime) -> Unit,
-) : PageModel {
+) {
 
     @Pipe
     interface Dependencies
@@ -28,6 +28,6 @@ class TimePageModel(
     @Serializable
     /*data*/ class Skeleton
 
-    override val goBackHandler: GoBackHandler
+    val goBackHandler: GoBackHandler
         get() = NeverGoBackHandler
 }

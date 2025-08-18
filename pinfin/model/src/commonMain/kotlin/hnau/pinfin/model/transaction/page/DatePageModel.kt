@@ -20,7 +20,7 @@ class DatePageModel(
     skeleton: Skeleton,
         val date: StateFlow<LocalDate>,
     val onDateChanged: (LocalDate) -> Unit,
-) : PageModel {
+) {
 
     @Pipe
     interface Dependencies
@@ -28,6 +28,6 @@ class DatePageModel(
     @Serializable
     /*data*/ class Skeleton
 
-    override val goBackHandler: GoBackHandler
+    val goBackHandler: GoBackHandler
         get() = NeverGoBackHandler
 }

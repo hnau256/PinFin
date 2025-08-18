@@ -28,7 +28,7 @@ class CommentPageModel(
     dependencies: Dependencies,
     skeleton: Skeleton,
         val comment: MutableStateFlow<EditingString>,
-) : PageModel {
+) {
 
     @Pipe
     interface Dependencies {
@@ -67,6 +67,6 @@ class CommentPageModel(
         convertToResult = Pair<*, Suggest>::second
     )
 
-    override val goBackHandler: GoBackHandler
+    val goBackHandler: GoBackHandler
         get() = NeverGoBackHandler
 }

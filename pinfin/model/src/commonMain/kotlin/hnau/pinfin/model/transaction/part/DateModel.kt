@@ -27,7 +27,7 @@ class DateModel(
     private val skeleton: Skeleton,
     val requestFocus: () -> Unit,
     val isFocused: StateFlow<Boolean>,
-)  {
+) {
 
     @Pipe
     interface Dependencies {
@@ -65,13 +65,15 @@ class DateModel(
 
     fun createPage(
         scope: CoroutineScope,
-            ): PageModel = DatePageModel(
-        scope = scope,
-        dependencies = dependencies.page(),
-        skeleton = skeleton::page
-            .toAccessor()
-            .getOrInit { DatePageModel.Skeleton() },
-                date = skeleton.date,
-        onDateChanged = { skeleton.date.value = it },
+    ): PageModel = PageModel.Date(
+        model = DatePageModel(
+            scope = scope,
+            dependencies = dependencies.page(),
+            skeleton = skeleton::page
+                .toAccessor()
+                .getOrInit { DatePageModel.Skeleton() },
+            date = skeleton.date,
+            onDateChanged = { skeleton.date.value = it },
+        )
     )
 }

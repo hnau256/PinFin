@@ -1,5 +1,6 @@
 package hnau.pinfin.model.transaction.part.type
 
+import hnau.common.app.model.goback.GoBackHandler
 import hnau.common.kotlin.getOrInit
 import hnau.common.kotlin.toAccessor
 import hnau.pinfin.model.transaction.page.type.TypePageModel
@@ -50,4 +51,7 @@ class TransferModel(
             .toAccessor()
             .getOrInit { TransferPageModel.Skeleton() },
             )
+
+    val goBackHandler: GoBackHandler
+        get() = TODO()
 }
