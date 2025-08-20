@@ -28,7 +28,7 @@ import hnau.common.app.projector.uikit.state.TransitionSpec
 import hnau.common.app.projector.uikit.utils.Dimens
 import hnau.common.app.projector.utils.collectAsTextFieldValueMutableAccessor
 import hnau.common.app.projector.utils.horizontalDisplayPadding
-import hnau.pinfin.model.transaction.page.CommentPageModel
+import hnau.pinfin.model.transaction_old_2.page.CommentPageModel
 import hnau.pinfin.projector.resources.Res
 import hnau.pinfin.projector.resources.comment
 import hnau.pinfin.projector.utils.Label

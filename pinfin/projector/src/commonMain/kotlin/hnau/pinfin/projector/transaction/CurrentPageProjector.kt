@@ -8,11 +8,11 @@ import androidx.compose.ui.Modifier
 import hnau.common.app.projector.uikit.state.StateContent
 import hnau.common.app.projector.utils.getTransitionSpecForHorizontalSlide
 import hnau.common.kotlin.coroutines.mapWithScope
-import hnau.pinfin.model.transaction.Part
-import hnau.pinfin.model.transaction.TransactionModel
-import hnau.pinfin.model.transaction.page.CommentPageModel
-import hnau.pinfin.model.transaction.page.DatePageModel
-import hnau.pinfin.model.transaction.page.TimePageModel
+import hnau.pinfin.model.transaction_old_2.Part
+import hnau.pinfin.model.transaction_old_2.TransactionModel
+import hnau.pinfin.model.transaction_old_2.page.CommentPageModel
+import hnau.pinfin.model.transaction_old_2.page.DatePageModel
+import hnau.pinfin.model.transaction_old_2.page.TimePageModel
 import hnau.pinfin.projector.transaction.page.CommentPageProjector
 import hnau.pinfin.projector.transaction.page.DatePageProjector
 import hnau.pinfin.projector.transaction.page.PageProjector

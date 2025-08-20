@@ -1,0 +1,291 @@
+@file:UseSerializers(
+    MutableStateFlowSerializer::class,
+    NonEmptyListSerializer::class,
+)
+
+package hnau.pinfin.model.transaction.pageable
+
+import arrow.core.NonEmptyList
+import arrow.core.nonEmptyListOf
+import arrow.core.serialization.NonEmptyListSerializer
+import arrow.core.toNonEmptyListOrNull
+import hnau.common.app.model.goback.GoBackHandler
+import hnau.common.kotlin.coroutines.flatMapState
+import hnau.common.kotlin.coroutines.mapReusable
+import hnau.common.kotlin.coroutines.mapState
+import hnau.common.kotlin.coroutines.scopedInState
+import hnau.common.kotlin.coroutines.toMutableStateFlowAsInitial
+import hnau.common.kotlin.foldNullable
+import hnau.common.kotlin.getOrInit
+import hnau.common.kotlin.serialization.MutableStateFlowSerializer
+import hnau.common.kotlin.toAccessor
+import hnau.pinfin.model.transaction.utils.remove
+import hnau.pinfin.model.utils.ZipList
+import hnau.pinfin.model.utils.budget.state.TransactionInfo
+import hnau.pinfin.model.utils.toZipListOrNull
+import hnau.pipe.annotations.Pipe
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.update
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.UseSerializers
+import java.util.UUID
+
+class RecordsModel(
+    scope: CoroutineScope,
+    private val dependencies: Dependencies,
+    private val skeleton: Skeleton,
+    val isFocused: StateFlow<Boolean>,
+    val requestFocus: () -> Unit,
+) {
+
+    @Pipe
+    interface Dependencies {
+
+        fun record(): RecordModel.Dependencies
+
+        fun page(): Page.Dependencies
+    }
+
+    @Serializable
+    data class Skeleton(
+        var page: Page.Skeleton? = null,
+        val records: MutableStateFlow<ZipList<Pair<RecordId, RecordModel.Skeleton>>>,
+    ) {
+
+        @Serializable
+        @JvmInline
+        value class RecordId(
+            val id: String,
+        ) {
+
+            companion object {
+
+                fun createNew(): RecordId = RecordId(
+                    id = UUID.randomUUID().toString(),
+                )
+            }
+        }
+
+        companion object {
+
+            fun createForNew(): Skeleton = createInner(
+                records = nonEmptyListOf(
+                    RecordModel.Skeleton.createForNew(),
+                )
+            )
+
+            fun createForEdit(
+                records: NonEmptyList<TransactionInfo.Type.Entry.Record>
+            ): Skeleton = createInner(
+                records = records.map(RecordModel.Skeleton.Companion::createForEdit),
+            )
+
+            private fun createInner(
+                records: NonEmptyList<RecordModel.Skeleton>,
+            ): Skeleton = Skeleton(
+                records = records
+                    .map { record ->
+                        val id = RecordId.createNew()
+                        id to record
+                    }
+                    .let { records ->
+                        ZipList(
+                            before = records.dropLast(1),
+                            selected = records.last(),
+                            after = emptyList(),
+                        )
+                    }
+                    .toMutableStateFlowAsInitial()
+            )
+        }
+    }
+
+    private fun selectRecord(
+        id: Skeleton.RecordId,
+    ) {
+        skeleton
+            .records
+            .update { records ->
+                records
+                    .toZipListOrNull { it.first == id }
+                    ?: return //TODO log error
+            }
+    }
+
+    data class Item(
+        val id: Skeleton.RecordId,
+        val model: RecordModel,
+        val select: () -> Unit,
+    )
+
+    val items: StateFlow<ZipList<Item>> = skeleton
+        .records
+        .mapReusable<_, Skeleton.RecordId, Item, _>(
+            scope = scope,
+        ) { records ->
+
+            records.mapFull { _, isSelected, (id, recordSkeleton) ->
+                getOrPutItem(id) { recordScope ->
+
+                    val model = RecordModel(
+                        scope = recordScope,
+                        dependencies = dependencies.record(),
+                        skeleton = recordSkeleton,
+                        remove = skeleton
+                            .records
+                            .mapState(recordScope) { records ->
+                                records
+                                    .remove { it.first == id }
+                                    ?.let { recordsWithoutCurrent ->
+                                        { skeleton.records.value = recordsWithoutCurrent }
+                                    }
+                            }
+                    )
+
+                    Item(
+                        id = id,
+                        model = model,
+                        select = { selectRecord(id) },
+                    )
+                }
+            }
+        }
+
+    class Page(
+        scope: CoroutineScope,
+        dependencies: Dependencies,
+        skeleton: Skeleton,
+        val items: StateFlow<ZipList<Item>>,
+        val page: StateFlow<Pair<Int, RecordModel.Page>>,
+        val addNewRecord: () -> Unit,
+    ) {
+
+        @Pipe
+        interface Dependencies
+
+        @Serializable
+        /*data*/ class Skeleton
+
+        val goBackHandler: GoBackHandler =
+            page.flatMapState(scope) { it.second.goBackHandler }
+    }
+
+    fun createPage(
+        scope: CoroutineScope,
+    ): Page = Page(
+        scope = scope,
+        dependencies = dependencies.page(),
+        skeleton = skeleton::page
+            .toAccessor()
+            .getOrInit { Page.Skeleton() },
+        items = items,
+        page = items
+            .mapReusable(
+                scope = scope,
+            ) { items ->
+                val selected = items.selected
+                val page = getOrPutItem(selected.id) { pageScope ->
+                    selected.model.createPage(
+                        scope = pageScope,
+                    )
+                }
+                val index = items.before.size
+                index to page
+            },
+        addNewRecord = {
+            skeleton.records.update { records ->
+                ZipList(
+                    before = records,
+                    selected = Pair(
+                        first = Skeleton.RecordId.createNew(),
+                        second = RecordModel.Skeleton.createForNew(),
+                    ),
+                    after = emptyList(),
+                )
+            }
+        }
+    )
+
+    val records: StateFlow<NonEmptyList<TransactionInfo.Type.Entry.Record>?> = items
+        .scopedInState(scope)
+        .flatMapState(scope) { (recordsScope, idWithRecords) ->
+
+            val records = idWithRecords
+                .toNonEmptyList()
+                .map(Item::model)
+
+            records
+                .head
+                .record
+                .mapState(recordsScope) { recordOrNull ->
+                    recordOrNull?.let { record -> nonEmptyListOf(record) }
+                }
+                .add(
+                    scope = recordsScope,
+                    remaining = records.tail,
+                )
+        }
+
+    private fun StateFlow<NonEmptyList<TransactionInfo.Type.Entry.Record>?>.add(
+        scope: CoroutineScope,
+        remaining: List<RecordModel>,
+    ): StateFlow<NonEmptyList<TransactionInfo.Type.Entry.Record>?> = remaining
+        .toNonEmptyListOrNull()
+        .foldNullable(
+            ifNull = { this },
+            ifNotNull = { nonEmptyRemaining ->
+                this
+                    .scopedInState(scope)
+                    .flatMapState(scope) { (recordsScope, recordsOrNull) ->
+                        recordsOrNull.foldNullable(
+                            ifNull = { null.toMutableStateFlowAsInitial() },
+                            ifNotNull = { records ->
+                                nonEmptyRemaining
+                                    .head
+                                    .record
+                                    .mapState(recordsScope) { headRecordOrNull ->
+                                        headRecordOrNull.foldNullable(
+                                            ifNull = { null },
+                                            ifNotNull = { headRecord ->
+                                                records + headRecord
+                                            }
+                                        )
+                                    }
+                                    .add(
+                                        scope = recordsScope,
+                                        remaining = nonEmptyRemaining.tail,
+                                    )
+                            }
+                        )
+                    }
+            }
+        )
+
+    val goBackHandler: GoBackHandler = items
+        .scopedInState(scope)
+        .flatMapState(scope) { (itemsScope, items) ->
+            items
+                .selected
+                .model
+                .goBackHandler
+                .scopedInState(itemsScope)
+                .flatMapState(itemsScope) { (recordGoBackScope, recordGoBackOrNull) ->
+                    recordGoBackOrNull.foldNullable(
+                        ifNotNull = { it.toMutableStateFlowAsInitial() },
+                        ifNull = {
+                            skeleton
+                                .records
+                                .mapState(recordGoBackScope) { records ->
+                                    records
+                                        .back()
+                                        ?.let { newRecords ->
+                                            { skeleton.records.value = newRecords }
+                                        }
+                                }
+                        }
+                    )
+                }
+        }
+}

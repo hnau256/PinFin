@@ -15,7 +15,7 @@ import hnau.common.app.projector.utils.NavigationIcon
 import hnau.common.app.projector.utils.Overcompose
 import hnau.common.app.projector.utils.combineWith
 import hnau.common.app.projector.utils.copy
-import hnau.pinfin.model.transaction.TransactionModel
+import hnau.pinfin.model.transaction_old_2.TransactionModel
 import hnau.pinfin.projector.transaction.part.TypeProjector
 import hnau.pipe.annotations.Pipe
 import kotlinx.coroutines.CoroutineScope

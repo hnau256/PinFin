@@ -2,20 +2,24 @@
     MutableStateFlowSerializer::class,
 )
 
-package hnau.pinfin.model.utils
+package hnau.pinfin.model.transaction_old_2.page.type
 
 import hnau.common.app.model.goback.GoBackHandler
+import hnau.common.app.model.goback.NeverGoBackHandler
 import hnau.common.kotlin.serialization.MutableStateFlowSerializer
+import hnau.pinfin.model.transaction_old_2.page.type.entry.EntryPagePageModel
 import hnau.pipe.annotations.Pipe
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.UseSerializers
 
-class TemplateModel(
+class EntryPageModel(
     scope: CoroutineScope,
     dependencies: Dependencies,
     skeleton: Skeleton,
-) {
+    val page: StateFlow<EntryPagePageModel>,
+) : TypePageModel {
 
     @Pipe
     interface Dependencies
@@ -23,5 +27,6 @@ class TemplateModel(
     @Serializable
     /*data*/ class Skeleton
 
-    val goBackHandler: GoBackHandler = TODO()
+    override val goBackHandler: GoBackHandler
+        get() = NeverGoBackHandler
 }

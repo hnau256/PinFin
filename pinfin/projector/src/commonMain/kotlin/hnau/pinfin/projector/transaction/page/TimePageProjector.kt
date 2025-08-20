@@ -12,7 +12,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import hnau.pinfin.model.transaction.page.TimePageModel
+import hnau.pinfin.model.transaction_old_2.page.TimePageModel
 import hnau.pipe.annotations.Pipe
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.datetime.LocalTime

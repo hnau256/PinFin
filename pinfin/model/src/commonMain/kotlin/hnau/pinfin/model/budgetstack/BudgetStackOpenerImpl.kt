@@ -6,7 +6,7 @@ import hnau.pinfin.data.TransactionType
 import hnau.pinfin.model.CategoriesModel
 import hnau.pinfin.model.accountstack.AccountStackModel
 import hnau.pinfin.model.categorystack.CategoryStackModel
-import hnau.pinfin.model.transaction.TransactionModel
+import hnau.pinfin.model.transaction_old_2.TransactionModel
 import hnau.pinfin.model.utils.budget.state.AccountInfo
 import hnau.pinfin.model.utils.budget.state.CategoryInfo
 import hnau.pinfin.model.utils.budget.state.TransactionInfo

@@ -12,7 +12,7 @@ import androidx.compose.ui.text.font.FontStyle
 import hnau.common.app.projector.uikit.ItemsRow
 import hnau.common.app.projector.utils.Icon
 import hnau.common.kotlin.foldNullable
-import hnau.pinfin.model.transaction.part.CommentModel
+import hnau.pinfin.model.transaction_old_2.part.CommentModel
 import hnau.pinfin.projector.resources.Res
 import hnau.pinfin.projector.resources.comment
 import hnau.pinfin.projector.utils.Label
