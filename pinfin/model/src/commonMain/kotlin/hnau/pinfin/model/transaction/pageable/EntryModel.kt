@@ -98,13 +98,13 @@ class EntryModel(
             )
 
             fun createForEdit(
-                transfer: TransactionInfo.Type.Entry,
+                entry: TransactionInfo.Type.Entry,
             ): Skeleton = Skeleton(
                 account = AccountModel.Skeleton.createForEdit(
-                    account = transfer.account,
+                    account = entry.account,
                 ),
                 records = RecordsModel.Skeleton.createForEdit(
-                    records = transfer.records,
+                    records = entry.records,
                 ),
             )
         }

@@ -1,4 +1,4 @@
-package hnau.pinfin.projector.transaction
+package hnau.pinfin.projector.transaction_old_2
 
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
@@ -13,11 +13,11 @@ import hnau.pinfin.model.transaction_old_2.TransactionModel
 import hnau.pinfin.model.transaction_old_2.page.CommentPageModel
 import hnau.pinfin.model.transaction_old_2.page.DatePageModel
 import hnau.pinfin.model.transaction_old_2.page.TimePageModel
-import hnau.pinfin.projector.transaction.page.CommentPageProjector
-import hnau.pinfin.projector.transaction.page.DatePageProjector
-import hnau.pinfin.projector.transaction.page.PageProjector
-import hnau.pinfin.projector.transaction.page.TimePageProjector
-import hnau.pinfin.projector.transaction.part.TypeProjector
+import hnau.pinfin.projector.transaction_old_2.page.CommentPageProjector
+import hnau.pinfin.projector.transaction_old_2.page.DatePageProjector
+import hnau.pinfin.projector.transaction_old_2.page.PageProjector
+import hnau.pinfin.projector.transaction_old_2.page.TimePageProjector
+import hnau.pinfin.projector.transaction_old_2.part.TypeProjector
 import hnau.pipe.annotations.Pipe
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.StateFlow
@@ -41,7 +41,7 @@ class CurrentPageProjector(
         fun comment(): CommentPageProjector.Dependencies
     }
 
-    private val page: StateFlow<Pair<Part, PageProjector>> = model
+    private val page: StateFlow<Pair<Part, PageProjector>> = TODO()/*model
         .page
         .mapWithScope(scope) { pageScope, (page, model) ->
             val projector = when (model) {
@@ -62,7 +62,7 @@ class CurrentPageProjector(
                 )
             }
             page to projector
-        }
+        }*/
 
     @Composable
     fun Content(

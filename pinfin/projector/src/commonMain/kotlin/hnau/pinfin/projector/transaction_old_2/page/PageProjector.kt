@@ -1,4 +1,4 @@
-package hnau.pinfin.projector.transaction.page
+package hnau.pinfin.projector.transaction_old_2.page
 
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.runtime.Composable

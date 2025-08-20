@@ -1,4 +1,4 @@
-package hnau.pinfin.projector.transaction
+package hnau.pinfin.projector.transaction.delegates
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -13,17 +13,16 @@ import androidx.compose.ui.Modifier
 import hnau.common.app.projector.uikit.utils.Dimens
 import hnau.common.app.projector.utils.horizontalDisplayPadding
 import hnau.common.app.projector.utils.verticalDisplayPadding
-import hnau.pinfin.model.transaction_old_2.TransactionModel
-import hnau.pinfin.projector.transaction.part.CommentProjector
-import hnau.pinfin.projector.transaction.part.DateProjector
-import hnau.pinfin.projector.transaction.part.TimeProjector
-import hnau.pinfin.projector.transaction.part.TypeProjector
+import hnau.pinfin.model.transaction.TransactionModel
+import hnau.pinfin.projector.transaction.pageable.CommentProjector
+import hnau.pinfin.projector.transaction.pageable.DateProjector
+import hnau.pinfin.projector.transaction.pageable.TimeProjector
 import hnau.pipe.annotations.Pipe
 import kotlinx.coroutines.CoroutineScope
 
 class InfoProjector(
     scope: CoroutineScope,
-    model: TransactionModel,
+    private val model: TransactionModel,
     private val dependencies: Dependencies,
 ) {
 

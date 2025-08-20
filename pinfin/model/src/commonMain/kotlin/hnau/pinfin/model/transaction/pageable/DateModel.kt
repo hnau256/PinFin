@@ -25,8 +25,8 @@ class DateModel(
     scope: CoroutineScope,
     private val dependencies: Dependencies,
     private val skeleton: Skeleton,
-    private val isFocused: StateFlow<Boolean>,
-    private val requestFocus: () -> Unit,
+    val isFocused: StateFlow<Boolean>,
+    val requestFocus: () -> Unit,
 ) {
 
     @Pipe
@@ -90,5 +90,6 @@ class DateModel(
     val date: StateFlow<LocalDate>
         get() = skeleton.date
 
-    val goBackHandler: GoBackHandler = TODO()
+    val goBackHandler: GoBackHandler
+        get() = NeverGoBackHandler
 }

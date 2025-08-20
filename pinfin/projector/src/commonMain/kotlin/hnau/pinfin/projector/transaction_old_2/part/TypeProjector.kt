@@ -1,4 +1,4 @@
-package hnau.pinfin.projector.transaction.part
+package hnau.pinfin.projector.transaction_old_2.part
 
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -12,9 +12,9 @@ import hnau.pinfin.data.TransactionType
 import hnau.pinfin.model.transaction_old_2.part.TypeModel
 import hnau.pinfin.model.transaction_old_2.part.type.EntryModel
 import hnau.pinfin.model.transaction_old_2.part.type.TransferModel
-import hnau.pinfin.projector.transaction.part.type.EntryProjector
-import hnau.pinfin.projector.transaction.part.type.PartTypeProjector
-import hnau.pinfin.projector.transaction.part.type.TransferProjector
+import hnau.pinfin.projector.transaction_old_2.part.type.EntryProjector
+import hnau.pinfin.projector.transaction_old_2.part.type.PartTypeProjector
+import hnau.pinfin.projector.transaction_old_2.part.type.TransferProjector
 import hnau.pinfin.projector.utils.Tabs
 import hnau.pinfin.projector.utils.title
 import hnau.pipe.annotations.Pipe
@@ -52,7 +52,7 @@ class TypeProjector(
         }
     }
 
-    private val type: StateFlow<PartTypeProjector> = model
+    private val type: StateFlow<PartTypeProjector> = TODO()/*model
         .type
         .mapWithScope(scope) { typeScope, model ->
             when (model) {
@@ -68,7 +68,7 @@ class TypeProjector(
                     dependencies = dependencies.transfer(),
                 )
             }
-        }
+        }*/
 
     private val PartTypeProjector.key: Int
         get() = when (this) {

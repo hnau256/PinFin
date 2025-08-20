@@ -1,4 +1,4 @@
-package hnau.pinfin.projector.transaction.part
+package hnau.pinfin.projector.transaction_old_2.part
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Storefront

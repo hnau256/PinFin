@@ -1,4 +1,4 @@
-package hnau.pinfin.projector.transaction.page
+package hnau.pinfin.projector.transaction_old_2.page
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
@@ -44,12 +44,12 @@ class TimePageProjector(
             val hour = state.hour
             val minute = state.minute
             LaunchedEffect(hour, minute) {
-                model.time.value = LocalTime(
+                /*model.time.value = LocalTime(
                     hour = hour,
                     minute = minute,
                     second = 0,
                     nanosecond = 0,
-                )
+                )*/
 
             }
             TimePicker(

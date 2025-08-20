@@ -1,4 +1,4 @@
-package hnau.pinfin.projector.transaction.part.type
+package hnau.pinfin.projector.transaction_old_2.part.type
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier

@@ -1,4 +1,4 @@
-package hnau.pinfin.projector.transaction.page
+package hnau.pinfin.projector.transaction_old_2.page
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
@@ -52,11 +52,11 @@ class DatePageProjector(
             )
             val selected = state.selectedDateMillis
             LaunchedEffect(selected) {
-                selected
+                /*selected
                     ?.let(Instant.Companion::fromEpochMilliseconds)
                     ?.toLocalDateTime(TimeZone.currentSystemDefault())
                     ?.date
-                    ?.let(model.date::value::set)
+                    ?.let(model.date::value::set)*/
             }
             DatePicker(
                 state = state,

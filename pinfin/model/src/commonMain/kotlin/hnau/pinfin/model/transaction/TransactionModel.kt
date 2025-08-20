@@ -37,6 +37,7 @@ class TransactionModel(
     private val scope: CoroutineScope,
     dependencies: Dependencies,
     private val skeleton: Skeleton,
+    private val onReady: () -> Unit,
 ) {
 
     enum class Part {

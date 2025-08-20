@@ -49,13 +49,23 @@ class TypeModel(
                 is Transfer -> TransactionType.Transfer
             }
 
+        val goBackHandler: GoBackHandler
+
         data class Entry(
             val model: EntryModel,
-        ) : Type
+        ) : Type {
+
+            override val goBackHandler: GoBackHandler
+                get() = model.goBackHandler
+        }
 
         data class Transfer(
             val model: TransferModel,
-        ) : Type
+        ) : Type {
+
+            override val goBackHandler: GoBackHandler
+                get() = model.goBackHandler
+        }
 
         @Serializable
         sealed interface Skeleton {
@@ -240,5 +250,6 @@ class TypeModel(
         }
     }
 
-    val goBackHandler: GoBackHandler = TODO()
+    val goBackHandler: GoBackHandler =
+        typeModel.flatMapState(scope, Type::goBackHandler)
 }

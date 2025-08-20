@@ -5,7 +5,7 @@ import hnau.pinfin.model.CategoriesModel
 import hnau.pinfin.model.accountstack.AccountStackModel
 import hnau.pinfin.model.budget.BudgetModel
 import hnau.pinfin.model.categorystack.CategoryStackModel
-import hnau.pinfin.model.transaction_old_2.TransactionModel
+import hnau.pinfin.model.transaction.TransactionModel
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 

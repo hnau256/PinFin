@@ -1,4 +1,4 @@
-package hnau.pinfin.projector.transaction
+package hnau.pinfin.projector.transaction_old_2
 
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -15,17 +15,15 @@ import hnau.common.app.projector.utils.NavigationIcon
 import hnau.common.app.projector.utils.Overcompose
 import hnau.common.app.projector.utils.combineWith
 import hnau.common.app.projector.utils.copy
-import hnau.pinfin.model.transaction.TransactionModel
-import hnau.pinfin.projector.transaction.delegates.InfoProjector
-import hnau.pinfin.projector.transaction.delegates.PageProjector
-import hnau.pinfin.projector.transaction.delegates.TypeProjector
+import hnau.pinfin.model.transaction_old_2.TransactionModel
+import hnau.pinfin.projector.transaction_old_2.part.TypeProjector
 import hnau.pipe.annotations.Pipe
 import kotlinx.coroutines.CoroutineScope
 
 class TransactionProjector(
     scope: CoroutineScope,
-    model: TransactionModel,
-    dependencies: Dependencies,
+    private val model: TransactionModel,
+    private val dependencies: Dependencies,
 ) {
 
     @Pipe
@@ -33,11 +31,11 @@ class TransactionProjector(
 
         fun type(): TypeProjector.Dependencies
 
-        fun info(
-            type: TypeProjector,
-        ): InfoProjector.Dependencies
+            fun info(
+                typeProjector: TypeProjector,
+            ): InfoProjector.Dependencies
 
-        fun page(): PageProjector.Dependencies
+            fun page(): CurrentPageProjector.Dependencies
 
         val globalGoBackHandler: GlobalGoBackHandler
     }
@@ -48,22 +46,22 @@ class TransactionProjector(
 
     private val type = TypeProjector(
         scope = scope,
-        model = model,
         dependencies = dependencies.type(),
+        model = model.type,
     )
 
     private val info = InfoProjector(
         scope = scope,
-        model = model,
         dependencies = dependencies.info(
-            type = type,
+            typeProjector = type,
         ),
+        model = model,
     )
 
-    private val page = PageProjector(
+    private val page = CurrentPageProjector(
         scope = scope,
-        model = model,
         dependencies = dependencies.page(),
+        model = model,
     )
 
     @OptIn(ExperimentalMaterial3Api::class)

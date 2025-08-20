@@ -1,14 +1,14 @@
-package hnau.pinfin.projector.transaction.part.type
+package hnau.pinfin.projector.transaction_old_2.part.type
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import hnau.pinfin.model.transaction_old_2.part.type.TransferModel
+import hnau.pinfin.model.transaction_old_2.part.type.EntryModel
 import hnau.pipe.annotations.Pipe
 import kotlinx.coroutines.CoroutineScope
 
-class TransferProjector(
+class EntryProjector(
     scope: CoroutineScope,
-    model: TransferModel,
+    model: EntryModel,
     dependencies: Dependencies,
 ) : PartTypeProjector {
 
