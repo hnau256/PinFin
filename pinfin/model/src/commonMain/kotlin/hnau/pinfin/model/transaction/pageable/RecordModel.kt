@@ -17,6 +17,7 @@ import hnau.common.kotlin.toAccessor
 import hnau.pinfin.data.AmountDirection
 import hnau.pinfin.data.Comment
 import hnau.pinfin.model.transaction.utils.ChooseOrCreateModel
+import hnau.pinfin.model.transaction.utils.allRecords
 import hnau.pinfin.model.utils.budget.state.CategoryInfo
 import hnau.pinfin.model.utils.budget.state.TransactionInfo
 import hnau.pipe.annotations.Pipe
@@ -160,30 +161,21 @@ class RecordModel(
         requestFocus = createRequestFocus(Part.Comment),
         extractSuggests = { state ->
             state
-                .transactions
-                .flatMap { transaction ->
-                    when (val type = transaction.type) {
-                        is TransactionInfo.Type.Entry -> type
-                            .records
-                            .toList()
-                            .flatMap { record ->
-                                record
-                                    .comment
-                                    .text
-                                    .split(',')
-                                    .map { comment ->
-                                        comment
-                                            .trim()
-                                            .replaceFirstChar(Char::uppercaseChar)
-                                    }
-                                    .filter(String::isNotEmpty)
-                                    .map { comment ->
-                                        Comment(comment) to transaction.timestamp
-                                    }
-                            }
-
-                        is TransactionInfo.Type.Transfer -> emptyList()
-                    }
+                .allRecords
+                .flatMap { (timestamp, record) ->
+                    record
+                        .comment
+                        .text
+                        .split(',')
+                        .map { comment ->
+                            comment
+                                .trim()
+                                .replaceFirstChar(Char::uppercaseChar)
+                        }
+                        .filter(String::isNotEmpty)
+                        .map { comment ->
+                            Comment(comment) to timestamp
+                        }
                 }
         }
     )

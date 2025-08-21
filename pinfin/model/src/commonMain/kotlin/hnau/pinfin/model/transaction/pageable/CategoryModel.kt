@@ -7,13 +7,12 @@ package hnau.pinfin.model.transaction.pageable
 import arrow.core.toOption
 import hnau.common.app.model.goback.GoBackHandler
 import hnau.common.app.model.goback.NeverGoBackHandler
-import hnau.common.app.model.toEditingString
-import hnau.common.kotlin.Loadable
-import hnau.common.kotlin.coroutines.combineState
+import hnau.common.kotlin.coroutines.combineStateWith
+import hnau.common.kotlin.coroutines.flatMapState
 import hnau.common.kotlin.coroutines.mapState
-import hnau.common.kotlin.coroutines.mapWithScope
+import hnau.common.kotlin.coroutines.scopedInState
 import hnau.common.kotlin.coroutines.toMutableStateFlowAsInitial
-import hnau.common.kotlin.foldBoolean
+import hnau.common.kotlin.foldNullable
 import hnau.common.kotlin.getOrInit
 import hnau.common.kotlin.mapper.Mapper
 import hnau.common.kotlin.serialization.MutableStateFlowSerializer
@@ -21,17 +20,19 @@ import hnau.common.kotlin.toAccessor
 import hnau.pinfin.data.CategoryId
 import hnau.pinfin.data.Comment
 import hnau.pinfin.model.transaction.utils.ChooseOrCreateModel
-import hnau.pinfin.model.transaction_old_2.page.CommentPageModel.Suggest
-import hnau.pinfin.model.utils.Delayed
+import hnau.pinfin.model.transaction.utils.allRecords
 import hnau.pinfin.model.utils.budget.repository.BudgetRepository
 import hnau.pinfin.model.utils.budget.state.BudgetState
 import hnau.pinfin.model.utils.budget.state.CategoryInfo
-import hnau.pinfin.model.utils.resolveSuggests
 import hnau.pipe.annotations.Pipe
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.mapLatest
+import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.withContext
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.UseSerializers
 import kotlin.time.Instant
@@ -42,11 +43,13 @@ class CategoryModel(
     private val skeleton: Skeleton,
     val isFocused: StateFlow<Boolean>,
     val requestFocus: () -> Unit,
-    comment: StateFlow<Comment>, //TODO use
+    private val comment: StateFlow<Comment>,
 ) {
 
     @Pipe
     interface Dependencies {
+
+        val budgetRepository: BudgetRepository
 
         fun chooseOrCreate(): ChooseOrCreateModel.Dependencies
     }
@@ -54,19 +57,19 @@ class CategoryModel(
     @Serializable
     data class Skeleton(
         var chooseOrCreate: ChooseOrCreateModel.Skeleton? = null,
-        val category: MutableStateFlow<CategoryInfo?>,
+        val manualCategory: MutableStateFlow<CategoryInfo?>,
     ) {
 
         companion object {
 
             fun createForNew(): Skeleton = Skeleton(
-                category = null.toMutableStateFlowAsInitial(),
+                manualCategory = null.toMutableStateFlowAsInitial(),
             )
 
             fun createForEdit(
                 category: CategoryInfo,
             ): Skeleton = Skeleton(
-                category = category.toMutableStateFlowAsInitial(),
+                manualCategory = category.toMutableStateFlowAsInitial(),
             )
         }
     }
@@ -91,15 +94,60 @@ class CategoryModel(
                 )
             }
         ),
-        selected = skeleton.category.mapState(scope, CategoryInfo?::toOption),
+        selected = skeleton.manualCategory.mapState(scope, CategoryInfo?::toOption),
         onReady = { selected ->
-            skeleton.category.value = selected
+            skeleton.manualCategory.value = selected
             //TODO go forward
         }
     )
 
-    val category: StateFlow<CategoryInfo?>
-        get() = skeleton.category
+    private fun getCategoryBasedOnComment(
+        scope: CoroutineScope,
+    ): StateFlow<CategoryInfo?> = dependencies
+        .budgetRepository
+        .state
+        .combineStateWith(
+            scope = scope,
+            other = comment,
+        ) { state, comment ->
+            state to comment
+        }
+        .mapLatest { (state, commentRaw) ->
+            withContext(Dispatchers.Default) {
+                val comment = commentRaw.text.trim()
+                state
+                    .allRecords
+                    .mapNotNull { (timestamp, record) ->
+                        record
+                            .takeIf {
+                                it.comment.text.trim().equals(
+                                    other = comment,
+                                    ignoreCase = true,
+                                )
+                            }
+                            ?.let { recordWithSameComment ->
+                                timestamp to recordWithSameComment.category
+                            }
+                    }
+                    .maxByOrNull(Pair<Instant, *>::first)
+                    ?.second
+            }
+        }
+        .stateIn(
+            scope = scope,
+            started = SharingStarted.Eagerly,
+            initialValue = null,
+        )
+
+    val category: StateFlow<CategoryInfo?> =  skeleton
+        .manualCategory
+    .scopedInState(scope)
+    .flatMapState(scope) { (scope, manualOrNull) ->
+        manualOrNull.foldNullable(
+            ifNotNull = CategoryInfo::toMutableStateFlowAsInitial,
+            ifNull = { getCategoryBasedOnComment(scope) },
+        )
+    }
 
     val goBackHandler: GoBackHandler
         get() = NeverGoBackHandler
