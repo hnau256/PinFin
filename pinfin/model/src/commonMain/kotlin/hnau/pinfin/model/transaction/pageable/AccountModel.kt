@@ -4,13 +4,23 @@
 
 package hnau.pinfin.model.transaction.pageable
 
+import arrow.core.toOption
 import hnau.common.app.model.goback.GoBackHandler
 import hnau.common.app.model.goback.NeverGoBackHandler
+import hnau.common.kotlin.coroutines.mapState
 import hnau.common.kotlin.coroutines.toMutableStateFlowAsInitial
 import hnau.common.kotlin.getOrInit
+import hnau.common.kotlin.mapper.Mapper
 import hnau.common.kotlin.serialization.MutableStateFlowSerializer
 import hnau.common.kotlin.toAccessor
+import hnau.pinfin.data.AccountConfig
+import hnau.pinfin.data.AccountId
+import hnau.pinfin.data.Amount
+import hnau.pinfin.data.CategoryId
+import hnau.pinfin.model.transaction.utils.ChooseOrCreateModel
 import hnau.pinfin.model.utils.budget.state.AccountInfo
+import hnau.pinfin.model.utils.budget.state.BudgetState
+import hnau.pinfin.model.utils.budget.state.CategoryInfo
 import hnau.pipe.annotations.Pipe
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -29,12 +39,12 @@ class AccountModel(
     @Pipe
     interface Dependencies {
 
-        fun page(): Page.Dependencies
+        fun chooseOrCreate(): ChooseOrCreateModel.Dependencies
     }
 
     @Serializable
     data class Skeleton(
-        var page: Page.Skeleton? = null,
+        var chooseOrCreate: ChooseOrCreateModel.Skeleton? = null,
         val account: MutableStateFlow<AccountInfo?>,
     ) {
 
@@ -52,32 +62,31 @@ class AccountModel(
         }
     }
 
-    class Page(
-        scope: CoroutineScope,
-        dependencies: Dependencies,
-        skeleton: Skeleton,
-        val account: MutableStateFlow<AccountInfo?>,
-    ) {
-
-        @Pipe
-        interface Dependencies
-
-        @Serializable
-        /*data*/ class Skeleton
-
-        val goBackHandler: GoBackHandler
-            get() = NeverGoBackHandler
-    }
-
     fun createPage(
         scope: CoroutineScope,
-    ): Page = Page(
+    ): ChooseOrCreateModel<AccountInfo> = ChooseOrCreateModel(
         scope = scope,
-        dependencies = dependencies.page(),
-        skeleton = skeleton::page
+        dependencies = dependencies.chooseOrCreate(),
+        skeleton = skeleton::chooseOrCreate
             .toAccessor()
-            .getOrInit { Page.Skeleton() },
-        account = skeleton.account,
+            .getOrInit { ChooseOrCreateModel.Skeleton() },
+        extractItemsFromState = BudgetState::accounts,
+        additionalItems = skeleton.account.mapState(scope, ::listOfNotNull),
+        itemTextMapper = Mapper(
+            direct = AccountInfo::title,
+            reverse = { title ->
+                AccountInfo(
+                    id = AccountId(title),
+                    config = null,
+                    amount = Amount.zero,
+                )
+            }
+        ),
+        selected = skeleton.account.mapState(scope, AccountInfo?::toOption),
+        onReady = { selected ->
+            skeleton.account.value = selected
+            //TODO go forward
+        }
     )
 
     val account: StateFlow<AccountInfo?>

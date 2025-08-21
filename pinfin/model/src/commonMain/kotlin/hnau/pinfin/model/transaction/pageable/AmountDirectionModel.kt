@@ -9,6 +9,7 @@ import hnau.common.app.model.goback.NeverGoBackHandler
 import hnau.common.kotlin.coroutines.toMutableStateFlowAsInitial
 import hnau.common.kotlin.serialization.MutableStateFlowSerializer
 import hnau.pinfin.data.AmountDirection
+import hnau.pinfin.model.utils.budget.state.CategoryInfo
 import hnau.pipe.annotations.Pipe
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -20,6 +21,7 @@ class AmountDirectionModel(
     scope: CoroutineScope,
     private val dependencies: Dependencies,
     private val skeleton: Skeleton,
+    category: StateFlow<CategoryInfo?>, //TODO use
 ) {
 
     @Pipe

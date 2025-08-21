@@ -10,6 +10,7 @@ import arrow.core.nonEmptyListOf
 import arrow.core.serialization.NonEmptyListSerializer
 import arrow.core.toNonEmptyListOrNull
 import hnau.common.app.model.goback.GoBackHandler
+import hnau.common.kotlin.coroutines.combineState
 import hnau.common.kotlin.coroutines.flatMapState
 import hnau.common.kotlin.coroutines.mapReusable
 import hnau.common.kotlin.coroutines.mapState
@@ -21,12 +22,14 @@ import hnau.common.kotlin.serialization.MutableStateFlowSerializer
 import hnau.common.kotlin.toAccessor
 import hnau.pinfin.model.transaction.utils.remove
 import hnau.pinfin.model.utils.ZipList
+import hnau.pinfin.model.utils.budget.state.CategoryInfo
 import hnau.pinfin.model.utils.budget.state.TransactionInfo
 import hnau.pinfin.model.utils.toZipListOrNull
 import hnau.pipe.annotations.Pipe
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.UseSerializers
@@ -153,12 +156,31 @@ class RecordsModel(
             }
         }
 
+    private val usedCategories: StateFlow<Set<CategoryInfo>> = items
+        .scopedInState(scope)
+        .flatMapState(scope) { (itemsScope, items) ->
+            items.fold(
+                initial = MutableStateFlow(emptySet<CategoryInfo>()).asStateFlow(),
+            ) { acc, item ->
+                combineState(
+                    scope = itemsScope,
+                    a = acc,
+                    b = item.model.category.category,
+                ) { acc, categoryOrNull ->
+                    categoryOrNull.foldNullable(
+                        ifNull = { acc },
+                        ifNotNull = { category -> acc + category }
+                    )
+                }
+            }
+        }
+
     class Page(
         scope: CoroutineScope,
         dependencies: Dependencies,
         skeleton: Skeleton,
         val items: StateFlow<ZipList<Item>>,
-        val page: StateFlow<Pair<Int, RecordModel.Page>>,
+        val currentRecord: StateFlow<Pair<Int, RecordModel.Page>>,
         val addNewRecord: () -> Unit,
     ) {
 
@@ -169,7 +191,7 @@ class RecordsModel(
         /*data*/ class Skeleton
 
         val goBackHandler: GoBackHandler =
-            page.flatMapState(scope) { it.second.goBackHandler }
+            currentRecord.flatMapState(scope) { it.second.goBackHandler }
     }
 
     fun createPage(
@@ -181,7 +203,7 @@ class RecordsModel(
             .toAccessor()
             .getOrInit { Page.Skeleton() },
         items = items,
-        page = items
+        currentRecord = items
             .mapReusable(
                 scope = scope,
             ) { items ->
@@ -189,6 +211,7 @@ class RecordsModel(
                 val page = getOrPutItem(selected.id) { pageScope ->
                     selected.model.createPage(
                         scope = pageScope,
+                        usedCategories = usedCategories,
                     )
                 }
                 val index = items.before.size

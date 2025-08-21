@@ -14,7 +14,9 @@ import hnau.common.kotlin.foldNullable
 import hnau.common.kotlin.getOrInit
 import hnau.common.kotlin.serialization.MutableStateFlowSerializer
 import hnau.common.kotlin.toAccessor
+import hnau.pinfin.data.AmountDirection
 import hnau.pinfin.data.Comment
+import hnau.pinfin.model.transaction.utils.ChooseOrCreateModel
 import hnau.pinfin.model.utils.budget.state.CategoryInfo
 import hnau.pinfin.model.utils.budget.state.TransactionInfo
 import hnau.pipe.annotations.Pipe
@@ -59,7 +61,7 @@ class RecordModel(
         }
 
         data class Category(
-            val model: CategoryModel.Page,
+            val model: ChooseOrCreateModel<CategoryInfo>,
         ) : PageType {
             override val key: Int
                 get() = 1
@@ -156,6 +158,34 @@ class RecordModel(
         skeleton = skeleton.comment,
         isFocused = isPartFocused(Part.Comment),
         requestFocus = createRequestFocus(Part.Comment),
+        extractSuggests = { state ->
+            state
+                .transactions
+                .flatMap { transaction ->
+                    when (val type = transaction.type) {
+                        is TransactionInfo.Type.Entry -> type
+                            .records
+                            .toList()
+                            .flatMap { record ->
+                                record
+                                    .comment
+                                    .text
+                                    .split(',')
+                                    .map { comment ->
+                                        comment
+                                            .trim()
+                                            .replaceFirstChar(Char::uppercaseChar)
+                                    }
+                                    .filter(String::isNotEmpty)
+                                    .map { comment ->
+                                        Comment(comment) to transaction.timestamp
+                                    }
+                            }
+
+                        is TransactionInfo.Type.Transfer -> emptyList()
+                    }
+                }
+        }
     )
 
     val category = CategoryModel(
@@ -164,12 +194,14 @@ class RecordModel(
         skeleton = skeleton.category,
         isFocused = isPartFocused(Part.Category),
         requestFocus = createRequestFocus(Part.Category),
+        comment = comment.comment,
     )
 
     val direction = AmountDirectionModel(
         scope = scope,
         dependencies = dependencies.direction(),
         skeleton = skeleton.direction,
+        category = category.category,
     )
 
     val amount = AmountModel(
@@ -179,33 +211,6 @@ class RecordModel(
         isFocused = isPartFocused(Part.Amount),
         requestFocus = createRequestFocus(Part.Amount),
     )
-
-    val pageType: StateFlow<Pair<Part, PageType>> = skeleton
-        .part
-        .mapWithScope(scope) { pageScope, part ->
-            val pageType = when (part) {
-
-                Part.Comment -> PageType.Comment(
-                    model = comment.createPage(
-                        scope = pageScope,
-                    ),
-                )
-
-                Part.Category -> PageType.Category(
-                    model = category.createPage(
-                        scope = pageScope,
-                    ),
-                )
-
-                Part.Amount -> PageType.Amount(
-                    model = amount.createPage(
-                        scope = pageScope,
-                    ),
-                )
-            }
-
-            part to pageType
-        }
 
     class Page(
         scope: CoroutineScope,
@@ -227,6 +232,7 @@ class RecordModel(
 
     fun createPage(
         scope: CoroutineScope,
+        usedCategories: StateFlow<Set<CategoryInfo>>,
     ): Page = Page(
         scope = scope,
         dependencies = dependencies.page(),
@@ -236,23 +242,25 @@ class RecordModel(
         remove = remove,
         page = skeleton
             .part
-            .mapWithScope(scope) { partScope, part ->
+            .mapWithScope(scope) { pageScope, part ->
                 when (part) {
+
                     Part.Comment -> PageType.Comment(
                         model = comment.createPage(
-                            scope = partScope,
+                            scope = pageScope,
                         ),
                     )
 
                     Part.Category -> PageType.Category(
                         model = category.createPage(
-                            scope = partScope,
+                            scope = pageScope,
+                            usedCategories = usedCategories,
                         ),
                     )
 
                     Part.Amount -> PageType.Amount(
                         model = amount.createPage(
-                            scope = partScope,
+                            scope = pageScope,
                         ),
                     )
                 }
@@ -292,12 +300,29 @@ class RecordModel(
         scope: CoroutineScope,
         comment: Comment,
         category: CategoryInfo,
+    ): StateFlow<TransactionInfo.Type.Entry.Record?> = direction
+        .direction
+        .scopedInState(scope)
+        .flatMapState(scope) { (scope, direction) ->
+            createRecordFromCommentAndCategoryAndDirection(
+                scope = scope,
+                comment = comment,
+                category = category,
+                direction = direction,
+            )
+        }
+
+    private fun createRecordFromCommentAndCategoryAndDirection(
+        scope: CoroutineScope,
+        comment: Comment,
+        category: CategoryInfo,
+        direction: AmountDirection,
     ): StateFlow<TransactionInfo.Type.Entry.Record?> = amount
         .amount
         .mapState(scope) { amountOrNull ->
             amountOrNull?.let { amount ->
                 TransactionInfo.Type.Entry.Record(
-                    amount = amount,
+                    amount = amount.withDirection(direction),
                     comment = comment,
                     category = category,
                 )
@@ -310,29 +335,20 @@ class RecordModel(
         .entries
         .getOrNull(ordinal + offset)
 
-    val goBackHandler: GoBackHandler = pageType
+    val goBackHandler: GoBackHandler = skeleton
+        .part
         .scopedInState(scope)
-        .flatMapState(scope) { (pageScope, partWithPage) ->
-            val (part, pageModel) = partWithPage
-            pageModel.goBackHandler
-                .scopedInState(pageScope)
-                .flatMapState(pageScope) { (goBackScope, goBack) ->
-                    goBack.foldNullable(
-                        ifNotNull = { it.toMutableStateFlowAsInitial() },
-                        ifNull = {
-                            when (part) {
-                                Part.Comment -> comment.goBackHandler
-                                Part.Category -> category.goBackHandler
-                                Part.Amount -> amount.goBackHandler
-                            }.mapState(goBackScope) { partGoBackOrNull ->
-                                partGoBackOrNull ?: part
-                                    .shift(-1)
-                                    ?.let { previousPart ->
-                                        { switchToPart(previousPart) }
-                                    }
-                            }
-                        },
-                    )
-                }
+        .flatMapState(scope) { (partScope, part) ->
+            when (part) {
+                Part.Comment -> comment.goBackHandler
+                Part.Category -> category.goBackHandler
+                Part.Amount -> amount.goBackHandler
+            }.mapState(partScope) { partGoBackOrNull ->
+                partGoBackOrNull ?: part
+                    .shift(-1)
+                    ?.let { previousPart ->
+                        { switchToPart(previousPart) }
+                    }
+            }
         }
 }

@@ -15,6 +15,7 @@ import hnau.common.kotlin.foldNullable
 import hnau.common.kotlin.getOrInit
 import hnau.common.kotlin.serialization.MutableStateFlowSerializer
 import hnau.common.kotlin.toAccessor
+import hnau.pinfin.model.transaction.utils.ChooseOrCreateModel
 import hnau.pinfin.model.utils.budget.state.AccountInfo
 import hnau.pinfin.model.utils.budget.state.TransactionInfo
 import hnau.pipe.annotations.Pipe
@@ -50,7 +51,7 @@ class TransferModel(
         val goBackHandler: GoBackHandler
 
         data class From(
-            val model: AccountModel.Page,
+            val model: ChooseOrCreateModel<AccountInfo>,
         ) : PageType {
             override val key: Int
                 get() = 0
@@ -60,7 +61,7 @@ class TransferModel(
         }
 
         data class To(
-            val model: AccountModel.Page,
+            val model: ChooseOrCreateModel<AccountInfo>,
         ) : PageType {
             override val key: Int
                 get() = 1
