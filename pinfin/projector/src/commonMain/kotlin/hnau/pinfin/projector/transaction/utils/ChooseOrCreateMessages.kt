@@ -1,6 +1,6 @@
-package hnau.pinfin.projector.utils.choose
+package hnau.pinfin.projector.transaction.utils
 
-data class ChooseMessages(
+data class ChooseOrCreateMessages(
     val createNew: String,
     val noVariants: String,
     val notFound: String,

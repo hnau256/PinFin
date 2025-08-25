@@ -54,7 +54,7 @@ class DateProjector(
         @OptIn(ExperimentalMaterial3Api::class)
         @Composable
         fun Content(
-            modifier: Modifier,
+            modifier: Modifier = Modifier,
             contentPadding: PaddingValues,
         ) {
             Box(
@@ -92,7 +92,7 @@ class DateProjector(
 
     @Composable
     fun Content(
-        modifier: Modifier,
+        modifier: Modifier = Modifier,
     ) {
         Label(
             modifier = modifier,

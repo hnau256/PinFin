@@ -29,6 +29,8 @@ import hnau.pinfin.projector.resources.Res
 import hnau.pinfin.projector.resources.analytics
 import hnau.pinfin.projector.resources.config
 import hnau.pinfin.projector.resources.transactions
+import hnau.pinfin.projector.utils.SlideOrientation
+import hnau.pinfin.projector.utils.getTransitionSpecForSlide
 import hnau.pipe.annotations.Pipe
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.StateFlow
@@ -111,7 +113,9 @@ class BudgetProjector(
                 .StateContent(
                     modifier = Modifier.fillMaxSize(),
                     contentKey = { (tab) -> tab },
-                    transitionSpec = getTransitionSpecForHorizontalSlide {
+                    transitionSpec = getTransitionSpecForSlide(
+                        orientation = SlideOrientation.Horizontal,
+                    ) {
                         when (targetState.first.ordinal > initialState.first.ordinal) {
                             true -> 1f
                             false -> -1f

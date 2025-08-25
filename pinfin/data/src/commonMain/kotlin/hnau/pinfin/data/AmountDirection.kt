@@ -13,6 +13,12 @@ enum class AmountDirection {
     Debit,
     ;
 
+    val opposite: AmountDirection
+        get() = when (this) {
+            Credit -> Debit
+            Debit -> Credit
+        }
+
     companion object {
 
         val default: AmountDirection = Debit

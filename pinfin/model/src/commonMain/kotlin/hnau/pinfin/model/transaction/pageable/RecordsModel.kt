@@ -16,10 +16,12 @@ import hnau.common.kotlin.coroutines.mapReusable
 import hnau.common.kotlin.coroutines.mapState
 import hnau.common.kotlin.coroutines.scopedInState
 import hnau.common.kotlin.coroutines.toMutableStateFlowAsInitial
+import hnau.common.kotlin.foldBoolean
 import hnau.common.kotlin.foldNullable
 import hnau.common.kotlin.getOrInit
 import hnau.common.kotlin.serialization.MutableStateFlowSerializer
 import hnau.common.kotlin.toAccessor
+import hnau.pinfin.model.transaction.utils.RecordId
 import hnau.pinfin.model.transaction.utils.remove
 import hnau.pinfin.model.utils.ZipList
 import hnau.pinfin.model.utils.budget.state.CategoryInfo
@@ -57,20 +59,6 @@ class RecordsModel(
         val records: MutableStateFlow<ZipList<Pair<RecordId, RecordModel.Skeleton>>>,
     ) {
 
-        @Serializable
-        @JvmInline
-        value class RecordId(
-            val id: String,
-        ) {
-
-            companion object {
-
-                fun createNew(): RecordId = RecordId(
-                    id = UUID.randomUUID().toString(),
-                )
-            }
-        }
-
         companion object {
 
             fun createForNew(): Skeleton = createInner(
@@ -106,7 +94,7 @@ class RecordsModel(
     }
 
     private fun selectRecord(
-        id: Skeleton.RecordId,
+        id: RecordId,
     ) {
         skeleton
             .records
@@ -118,18 +106,17 @@ class RecordsModel(
     }
 
     data class Item(
-        val id: Skeleton.RecordId,
+        val id: RecordId,
         val model: RecordModel,
-        val select: () -> Unit,
     )
 
     val items: StateFlow<ZipList<Item>> = skeleton
         .records
-        .mapReusable<_, Skeleton.RecordId, Item, _>(
+        .mapReusable<_, RecordId, Item, _>(
             scope = scope,
         ) { records ->
 
-            records.mapFull { _, isSelected, (id, recordSkeleton) ->
+            records.mapFull { _, _, (id, recordSkeleton) ->
                 getOrPutItem(id) { recordScope ->
 
                     val model = RecordModel(
@@ -144,13 +131,30 @@ class RecordsModel(
                                     ?.let { recordsWithoutCurrent ->
                                         { skeleton.records.value = recordsWithoutCurrent }
                                     }
-                            }
+                            },
+                        isFocused = isFocused
+                            .scopedInState(recordScope)
+                            .flatMapState(recordScope) { (scope, isFocused) ->
+                                isFocused.foldBoolean(
+                                    ifFalse = { false.toMutableStateFlowAsInitial() },
+                                    ifTrue = {
+                                        skeleton
+                                            .records
+                                            .mapState(scope) { records ->
+                                                records.selected.first == id
+                                            }
+                                    }
+                                )
+                            },
+                        requestFocus = {
+                            selectRecord(id)
+                            requestFocus()
+                        }
                     )
 
                     Item(
                         id = id,
                         model = model,
-                        select = { selectRecord(id) },
                     )
                 }
             }
@@ -180,7 +184,7 @@ class RecordsModel(
         dependencies: Dependencies,
         skeleton: Skeleton,
         val items: StateFlow<ZipList<Item>>,
-        val currentRecord: StateFlow<Pair<Int, RecordModel.Page>>,
+        val currentRecord: StateFlow<Triple<Int, RecordId, RecordModel.Page>>,
         val addNewRecord: () -> Unit,
     ) {
 
@@ -191,7 +195,7 @@ class RecordsModel(
         /*data*/ class Skeleton
 
         val goBackHandler: GoBackHandler =
-            currentRecord.flatMapState(scope) { it.second.goBackHandler }
+            currentRecord.flatMapState(scope) { it.third.goBackHandler }
     }
 
     fun createPage(
@@ -208,21 +212,22 @@ class RecordsModel(
                 scope = scope,
             ) { items ->
                 val selected = items.selected
-                val page = getOrPutItem(selected.id) { pageScope ->
+                val id = selected.id
+                val page = getOrPutItem(id) { pageScope ->
                     selected.model.createPage(
                         scope = pageScope,
                         usedCategories = usedCategories,
                     )
                 }
                 val index = items.before.size
-                index to page
+                Triple(index, id, page)
             },
         addNewRecord = {
             skeleton.records.update { records ->
                 ZipList(
                     before = records,
                     selected = Pair(
-                        first = Skeleton.RecordId.createNew(),
+                        first = RecordId.createNew(),
                         second = RecordModel.Skeleton.createForNew(),
                     ),
                     after = emptyList(),

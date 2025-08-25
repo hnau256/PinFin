@@ -53,12 +53,23 @@ class ChooseOrCreateModel<T : Comparable<T>>(
     val query: MutableStateFlow<EditingString>
         get() = skeleton.query
 
-    data class State<T>(
-        val filtered: NonEmptyList<Item<T>>?,
+    data class State<out T>(
+        val filtered: Filtered<T>,
         val new: Item<T>?,
     ) {
 
-        data class Item<T>(
+        sealed interface Filtered<out T> {
+
+            data object NothingToFilter : Filtered<Nothing>
+
+            data object AllAreExcluded : Filtered<Nothing>
+
+            data class Items<T>(
+                val items: NonEmptyList<Item<T>>,
+            ) : Filtered<T>
+        }
+
+        data class Item<out T>(
             val value: T,
             val isSelected: StateFlow<Boolean>,
             val onClick: () -> Unit,
@@ -92,6 +103,13 @@ class ChooseOrCreateModel<T : Comparable<T>>(
             other = trimmedQuery,
         ) { (itemsScope, items), queryOrNull ->
 
+            val emptyFiltered = items
+                .isEmpty()
+                .foldBoolean(
+                    ifTrue = { State.Filtered.NothingToFilter },
+                    ifFalse = { State.Filtered.AllAreExcluded },
+                )
+
             val createItem: (T) -> State.Item<T> = { item ->
                 State.Item(
                     value = item,
@@ -112,7 +130,13 @@ class ChooseOrCreateModel<T : Comparable<T>>(
                     State(
                         filtered = items
                             .map(createItem)
-                            .toNonEmptyListOrNull(),
+                            .toNonEmptyListOrNull()
+                            .foldNullable(
+                                ifNull = { emptyFiltered },
+                                ifNotNull = { items ->
+                                    State.Filtered.Items(items)
+                                }
+                            ),
                         new = null,
                     )
                 },
@@ -132,7 +156,14 @@ class ChooseOrCreateModel<T : Comparable<T>>(
                         }
                     }
                     State(
-                        filtered = filtered.toNonEmptyListOrNull(),
+                        filtered = filtered
+                            .toNonEmptyListOrNull()
+                            .foldNullable(
+                                ifNull = { emptyFiltered },
+                                ifNotNull = { items ->
+                                    State.Filtered.Items(items)
+                                }
+                            ),
                         new = hasAbsolutelySameAsQuery.foldBoolean(
                             ifTrue = { null },
                             ifFalse = {

@@ -70,7 +70,7 @@ class AccountModel(
         skeleton = skeleton::chooseOrCreate
             .toAccessor()
             .getOrInit { ChooseOrCreateModel.Skeleton() },
-        extractItemsFromState = BudgetState::accounts,
+        extractItemsFromState = BudgetState::visibleAccounts,
         additionalItems = skeleton.account.mapState(scope, ::listOfNotNull),
         itemTextMapper = Mapper(
             direct = AccountInfo::title,

@@ -109,6 +109,10 @@ class AmountDirectionModel(
             )
         }
 
+    fun switchDirection() {
+        skeleton.manualDirection.value = direction.value.opposite
+    }
+
     val goBackHandler: GoBackHandler
         get() = NeverGoBackHandler
 }

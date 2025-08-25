@@ -2,12 +2,15 @@ package hnau.pinfin.projector.transaction.pageable
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Storefront
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -26,6 +29,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import hnau.common.app.projector.uikit.ItemsRow
+import hnau.common.app.projector.uikit.state.LoadableContent
+import hnau.common.app.projector.uikit.state.TransitionSpec
 import hnau.common.app.projector.uikit.utils.Dimens
 import hnau.common.app.projector.utils.Icon
 import hnau.common.app.projector.utils.collectAsTextFieldValueMutableAccessor
@@ -61,7 +66,7 @@ class CommentProjector(
         @OptIn(ExperimentalMaterial3Api::class)
         @Composable
         fun Content(
-            modifier: Modifier,
+            modifier: Modifier = Modifier,
             contentPadding: PaddingValues,
         ) {
             Column(
@@ -93,7 +98,7 @@ class CommentProjector(
                 )
                 LaunchedEffect(Unit) { focusRequester.requestFocus() }
 
-                /*model
+                model
                     .suggests
                     .collectAsState()
                     .value
@@ -123,7 +128,7 @@ class CommentProjector(
                                     }
                                 }
                         }
-                    }*/
+                    }
             }
         }
     }
@@ -131,7 +136,7 @@ class CommentProjector(
 
     @Composable
     fun Content(
-        modifier: Modifier,
+        modifier: Modifier = Modifier,
     ) {
         Label(
             modifier = modifier,

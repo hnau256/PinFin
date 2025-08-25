@@ -11,6 +11,7 @@ import hnau.common.app.projector.utils.Icon
 import hnau.common.kotlin.foldNullable
 import hnau.pinfin.model.utils.budget.state.AccountInfo
 import hnau.pinfin.projector.resources.Res
+import hnau.pinfin.projector.resources.account
 import hnau.pinfin.projector.resources.category
 import org.jetbrains.compose.resources.stringResource
 
@@ -60,7 +61,10 @@ fun AccountButton(
                 shape = shape,
                 modifier = modifier,
             ) {
-                Text(stringResource(Res.string.category))
+                Text(
+                    text = stringResource(Res.string.account),
+                    maxLines = 1,
+                )
             }
         },
         ifNotNull = { infoNotNull ->
@@ -95,7 +99,6 @@ private fun AccountContentInner(
         Text(
             text = info.title,
             maxLines = 1,
-
-            )
+        )
     }
 }

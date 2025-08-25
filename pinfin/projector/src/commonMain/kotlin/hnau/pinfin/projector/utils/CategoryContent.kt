@@ -34,6 +34,7 @@ fun SwitchHueToCategoryInfo(
 fun CategoryContent(
     info: CategoryInfo,
     modifier: Modifier = Modifier,
+    showTitle: Boolean = true,
 ) {
     SwitchHueToCategoryInfo(
         info = info,
@@ -44,6 +45,7 @@ fun CategoryContent(
         ) {
             CategoryContentInner(
                 info = info,
+                showTitle = showTitle,
                 modifier = modifier,
             )
         }
@@ -54,6 +56,7 @@ fun CategoryContent(
 fun CategoryButton(
     info: CategoryInfo?,
     modifier: Modifier = Modifier,
+    showTitle: Boolean = true,
     selected: Boolean = true,
     shape: Shape = HnauShape(),
     onClick: (() -> Unit)?,
@@ -65,7 +68,10 @@ fun CategoryButton(
                 shape = shape,
                 modifier = modifier,
             ) {
-                Text(stringResource(Res.string.category))
+                Text(
+                    text = stringResource(Res.string.category),
+                    maxLines = 1,
+                )
             }
         },
         ifNotNull = { infoNotNull ->
@@ -80,6 +86,7 @@ fun CategoryButton(
                     content = {
                         CategoryContentInner(
                             info = infoNotNull,
+                            showTitle = showTitle,
                         )
                     },
                 )
@@ -92,14 +99,17 @@ fun CategoryButton(
 private fun CategoryContentInner(
     info: CategoryInfo,
     modifier: Modifier = Modifier,
+    showTitle: Boolean = true,
 ) {
     ItemsRow(
         modifier = modifier,
     ) {
         info.icon?.image?.let { icon -> Icon(icon) }
-        Text(
-            text = info.title,
-            maxLines = 1,
-        )
+        if (showTitle) {
+            Text(
+                text = info.title,
+                maxLines = 1,
+            )
+        }
     }
 }

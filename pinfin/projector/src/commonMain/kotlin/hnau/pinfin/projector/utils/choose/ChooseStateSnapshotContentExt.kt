@@ -33,6 +33,7 @@ import hnau.common.app.projector.utils.Icon
 import hnau.pinfin.model.utils.choose.ChooseStateSnapshot
 import hnau.pinfin.projector.resources.Res
 import hnau.pinfin.projector.resources.search_create
+import hnau.pinfin.projector.transaction.utils.ChooseOrCreateMessages
 import kotlinx.coroutines.flow.MutableStateFlow
 import org.jetbrains.compose.resources.stringResource
 
@@ -41,7 +42,7 @@ fun <T> ChooseStateSnapshot<T>.Content(
     query: MutableStateFlow<EditingString>,
     onReady: () -> Unit,
     updateSelected: (T) -> Unit,
-    messages: ChooseMessages,
+    messages: ChooseOrCreateMessages,
     itemContent: @Composable (value: T, selected: Boolean, onClick: () -> Unit) -> Unit,
 ) {
     Table(

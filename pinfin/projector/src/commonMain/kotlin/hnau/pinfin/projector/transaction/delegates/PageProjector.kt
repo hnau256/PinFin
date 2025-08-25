@@ -6,12 +6,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import hnau.common.app.projector.uikit.state.StateContent
-import hnau.common.app.projector.utils.getTransitionSpecForHorizontalSlide
 import hnau.common.kotlin.coroutines.mapWithScope
 import hnau.pinfin.model.transaction.TransactionModel
 import hnau.pinfin.projector.transaction.pageable.CommentProjector
 import hnau.pinfin.projector.transaction.pageable.DateProjector
 import hnau.pinfin.projector.transaction.pageable.TimeProjector
+import hnau.pinfin.projector.transaction.utils.createPagesTransitionSpec
+import hnau.pinfin.projector.utils.SlideOrientation
+import hnau.pinfin.projector.utils.getTransitionSpecForSlide
 import hnau.pipe.annotations.Pipe
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.StateFlow
@@ -39,7 +41,7 @@ class PageProjector(
 
         @Composable
         fun Content(
-            modifier: Modifier,
+            modifier: Modifier = Modifier,
             contentPadding: PaddingValues,
         )
 
@@ -127,6 +129,7 @@ class PageProjector(
                         dependencies = dependencies.comment(),
                     )
                 )
+
                 is TransactionModel.PageType.Time -> Part.Time(
                     projector = TimeProjector.Page(
                         scope = pageScope,
@@ -134,6 +137,7 @@ class PageProjector(
                         dependencies = dependencies.time(),
                     )
                 )
+
                 is TransactionModel.PageType.Type -> Part.Type(
                     projector = TypeProjector.Page(
                         scope = pageScope,
@@ -156,10 +160,10 @@ class PageProjector(
             .StateContent(
                 modifier = modifier,
                 label = "TransactionPage",
-                contentKey = { it.first },
-                transitionSpec = getTransitionSpecForHorizontalSlide {
-                    (targetState.first.ordinal - initialState.first.ordinal).sign * 0.5
-                }
+                contentKey = Pair<TransactionModel.Part, *>::first,
+                transitionSpec = createPagesTransitionSpec(
+                    orientation = SlideOrientation.Horizontal,
+                ) { it.first.ordinal }
             ) { (_, page) ->
                 page.Content(
                     modifier = Modifier.fillMaxSize(),

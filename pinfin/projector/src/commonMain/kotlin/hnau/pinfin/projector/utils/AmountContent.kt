@@ -9,6 +9,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.text.TextStyle
 import hnau.pinfin.data.Amount
 import hnau.pinfin.data.AmountDirection
 import hnau.pinfin.data.Hue
@@ -43,6 +44,7 @@ fun AmountContent(
     value: Amount,
     amountFormatter: AmountFormatter,
     modifier: Modifier = Modifier,
+    style: TextStyle = MaterialTheme.typography.titleLarge,
 ) {
     val (direction, _) = value.splitToDirectionAndRaw()
     SwitchHueToAmountDirection(
@@ -50,14 +52,13 @@ fun AmountContent(
     ) {
         Text(
             modifier = modifier,
-            style = MaterialTheme.typography.titleLarge,
+            style = style,
             color = MaterialTheme.colorScheme.primary,
             text = remember(value) {
-                val prefix = when (direction) {
-                    AmountDirection.Credit -> "+"
-                    AmountDirection.Debit -> ""
-                }
-                prefix + amountFormatter.format(value)
+                amountFormatter.format(
+                    amount = value,
+                    alwaysShowSign = true,
+                )
             }
         )
     }

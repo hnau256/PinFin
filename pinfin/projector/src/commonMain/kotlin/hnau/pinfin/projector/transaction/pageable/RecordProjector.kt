@@ -1,0 +1,365 @@
+package hnau.pinfin.projector.transaction.pageable
+
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.IntrinsicSize
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.OutlinedCard
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.dp
+import hnau.common.app.projector.uikit.state.NullableStateContent
+import hnau.common.app.projector.uikit.state.StateContent
+import hnau.common.app.projector.uikit.state.TransitionSpec
+import hnau.common.app.projector.uikit.utils.Dimens
+import hnau.common.app.projector.utils.Icon
+import hnau.common.app.projector.utils.Overcompose
+import hnau.common.app.projector.utils.copy
+import hnau.common.app.projector.utils.plus
+import hnau.common.kotlin.coroutines.mapWithScope
+import hnau.pinfin.model.transaction.pageable.RecordModel
+import hnau.pinfin.model.utils.budget.state.CategoryInfo
+import hnau.pinfin.projector.resources.Res
+import hnau.pinfin.projector.resources.categories_not_found
+import hnau.pinfin.projector.resources.create_new_category
+import hnau.pinfin.projector.resources.there_are_no_categories
+import hnau.pinfin.projector.transaction.utils.ChooseOrCreateMessages
+import hnau.pinfin.projector.transaction.utils.ChooseOrCreateProjector
+import hnau.pinfin.projector.transaction.utils.createPagesTransitionSpec
+import hnau.pinfin.projector.utils.SlideOrientation
+import hnau.pipe.annotations.Pipe
+import kotlinx.coroutines.CoroutineScope
+import org.jetbrains.compose.resources.stringResource
+
+class RecordProjector(
+    scope: CoroutineScope,
+    private val model: RecordModel,
+    private val dependencies: Dependencies,
+) {
+
+    @Pipe
+    interface Dependencies {
+
+        fun category(): CategoryProjector.Dependencies
+
+        fun amount(): AmountProjector.Dependencies
+    }
+
+    class Page(
+        scope: CoroutineScope,
+        private val model: RecordModel.Page,
+        dependencies: Dependencies,
+    ) {
+
+        @Pipe
+        interface Dependencies {
+
+            fun commentPage(): CommentProjector.Page.Dependencies
+
+            fun chooseOrCreate(): ChooseOrCreateProjector.Dependencies
+
+            fun amountPage(): AmountProjector.Page.Dependencies
+
+            fun comment(): CommentProjector.Dependencies
+
+            fun category(): CategoryProjector.Dependencies
+
+            fun direction(): AmountDirectionProjector.Dependencies
+
+            fun amount(): AmountProjector.Dependencies
+
+        }
+
+        sealed interface PageType {
+
+            val key: Int
+
+            @Composable
+            fun Content(
+                modifier: Modifier,
+                contentPadding: PaddingValues,
+            )
+
+            data class Comment(
+                val projector: CommentProjector.Page,
+            ) : PageType {
+                override val key: Int
+                    get() = 0
+
+                @Composable
+                override fun Content(
+                    modifier: Modifier,
+                    contentPadding: PaddingValues,
+                ) {
+                    projector.Content(
+                        modifier = modifier,
+                        contentPadding = contentPadding,
+                    )
+                }
+            }
+
+            data class Category(
+                val projector: ChooseOrCreateProjector<CategoryInfo>,
+            ) : PageType {
+                override val key: Int
+                    get() = 1
+
+                @Composable
+                override fun Content(
+                    modifier: Modifier,
+                    contentPadding: PaddingValues,
+                ) {
+                    projector.Content(
+                        modifier = modifier.padding(contentPadding),
+                        messages = ChooseOrCreateMessages(
+                            createNew = stringResource(Res.string.create_new_category),
+                            notFound = stringResource(Res.string.categories_not_found),
+                            noVariants = stringResource(Res.string.there_are_no_categories),
+                        )
+                    )
+                }
+            }
+
+            data class Amount(
+                val projector: AmountProjector.Page,
+            ) : PageType {
+                override val key: Int
+                    get() = 2
+
+                @Composable
+                override fun Content(
+                    modifier: Modifier,
+                    contentPadding: PaddingValues,
+                ) {
+                    projector.Content(
+                        modifier = modifier,
+                        contentPadding = contentPadding,
+                    )
+                }
+            }
+        }
+
+        private val type = model
+            .page
+            .mapWithScope(scope) { scope, type ->
+                when (type) {
+                    is RecordModel.PageType.Amount -> PageType.Amount(
+                        projector = AmountProjector.Page(
+                            scope = scope,
+                            dependencies = dependencies.amountPage(),
+                            model = type.model,
+                        )
+                    )
+
+                    is RecordModel.PageType.Category -> PageType.Category(
+                        projector = CategoryProjector.createPage(
+                            scope = scope,
+                            dependencies = dependencies.chooseOrCreate(),
+                            model = type.model,
+                        )
+                    )
+
+                    is RecordModel.PageType.Comment -> PageType.Comment(
+                        projector = CommentProjector.Page(
+                            scope = scope,
+                            dependencies = dependencies.commentPage(),
+                            model = type.model,
+                        )
+                    )
+                }
+            }
+
+        @Composable
+        private fun Type(
+            modifier: Modifier = Modifier,
+            contentPadding: PaddingValues,
+        ) {
+            type
+                .collectAsState()
+                .value
+                .StateContent(
+                    modifier = modifier,
+                    label = "TransferPage",
+                    contentKey = { it.key },
+                    transitionSpec = createPagesTransitionSpec(
+                        orientation = SlideOrientation.Horizontal,
+                        extractIndex = PageType::key,
+                    )
+                ) { type ->
+                    type.Content(
+                        modifier = Modifier.fillMaxSize(),
+                        contentPadding = contentPadding,
+                    )
+                }
+        }
+
+        private val comment = CommentProjector(
+            scope = scope,
+            dependencies = dependencies.comment(),
+            model = model.comment,
+        )
+
+        private val category = CategoryProjector(
+            scope = scope,
+            dependencies = dependencies.category(),
+            model = model.category,
+        )
+
+        private val direction = AmountDirectionProjector(
+            scope = scope,
+            dependencies = dependencies.direction(),
+            model = model.direction,
+        )
+
+        private val amount = AmountProjector(
+            scope = scope,
+            dependencies = dependencies.amount(),
+            model = model.amount,
+        )
+
+        @Composable
+        private fun Top(
+            modifier: Modifier = Modifier,
+            contentPadding: PaddingValues,
+        ) {
+            OutlinedCard(
+                modifier = modifier.padding(contentPadding),
+            ) {
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(Dimens.smallSeparation),
+                    verticalArrangement = Arrangement.spacedBy(Dimens.smallSeparation),
+                ) {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(IntrinsicSize.Max),
+                    ) {
+                        comment.Content(
+                            modifier = Modifier
+                                .weight(1f)
+                                .fillMaxHeight(),
+                        )
+                        model
+                            .remove
+                            .collectAsState()
+                            .value
+                            .NullableStateContent(
+                                modifier = Modifier.fillMaxHeight(),
+                                transitionSpec = TransitionSpec.horizontal(),
+                            ) { remove ->
+                                IconButton(
+                                    onClick = remove,
+                                    modifier = Modifier.padding(
+                                        start = Dimens.separation,
+                                    )
+                                ) {
+                                    Icon(Icons.Filled.Delete)
+                                }
+                            }
+                    }
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(IntrinsicSize.Max),
+                        horizontalArrangement = Arrangement.spacedBy(Dimens.separation),
+                    ) {
+                        category.Content(
+                            modifier = Modifier.weight(1f),
+                        )
+                        direction.Content()
+                        amount.Content(
+                            modifier = Modifier.weight(1f),
+                        )
+                    }
+                }
+            }
+        }
+
+        @Composable
+        fun Content(
+            modifier: Modifier = Modifier,
+            contentPadding: PaddingValues,
+        ) {
+            Overcompose(
+                modifier = modifier,
+                top = {
+                    Top(
+                        modifier = Modifier.fillMaxWidth(),
+                        contentPadding = contentPadding.copy(bottom = 0.dp),
+                    )
+                },
+                content = { padding ->
+                    Type(
+                        modifier = Modifier.fillMaxSize(),
+                        contentPadding = contentPadding.copy(top = 0.dp) + padding,
+                    )
+                }
+            )
+        }
+    }
+
+    private val category = CategoryProjector(
+        scope = scope,
+        model = model.category,
+        dependencies = dependencies.category(),
+    )
+
+    private val amount = AmountProjector(
+        scope = scope,
+        model = model.amount,
+        dependencies = dependencies.amount(),
+    )
+
+    enum class ViewType { Icon, Tab }
+
+    @Composable
+    fun Content(
+        modifier: Modifier = Modifier,
+        viewType: ViewType,
+    ) {
+        Box(
+            modifier = modifier.then(
+                when (viewType) {
+                    ViewType.Icon -> Modifier
+                    ViewType.Tab -> Modifier.size(tabSize)
+                }
+            ),
+            contentAlignment = Alignment.BottomCenter,
+        ) {
+            category.ContentIcon(
+                modifier = Modifier.fillMaxSize(),
+                onClick = when (viewType) {
+                    ViewType.Icon -> null
+                    ViewType.Tab -> model.requestFocus
+                },
+                selected = model.isFocused.collectAsState().value,
+            )
+            amount.ContentBadge(
+                modifier = Modifier.padding(
+                    vertical = Dimens.extraSmallSeparation,
+                )
+            )
+        }
+    }
+
+    companion object {
+
+        val tabSize: Dp = 48.dp
+    }
+}

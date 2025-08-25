@@ -7,7 +7,7 @@ import hnau.pinfin.projector.resources.accounts_not_found
 import hnau.pinfin.projector.resources.create_new_account
 import hnau.pinfin.projector.resources.there_are_no_accounts
 import hnau.pinfin.projector.utils.AccountButton
-import hnau.pinfin.projector.utils.choose.ChooseMessages
+import hnau.pinfin.projector.transaction.utils.ChooseOrCreateMessages
 import hnau.pinfin.projector.utils.choose.Content
 import hnau.pipe.annotations.Pipe
 import kotlinx.coroutines.CoroutineScope
@@ -27,7 +27,7 @@ class ChooseAccountProjector(
         model
             .state
             .Content(
-                messages = ChooseMessages(
+                messages = ChooseOrCreateMessages(
                     createNew = stringResource(Res.string.create_new_account),
                     notFound = stringResource(Res.string.accounts_not_found),
                     noVariants = stringResource(Res.string.there_are_no_accounts),

@@ -9,20 +9,20 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import hnau.common.app.projector.uikit.state.StateContent
 import hnau.common.app.projector.uikit.state.TransitionSpec
-import hnau.common.app.projector.utils.getTransitionSpecForHorizontalSlide
 import hnau.common.kotlin.coroutines.mapWithScope
 import hnau.pinfin.data.TransactionType
 import hnau.pinfin.model.transaction.TransactionModel
 import hnau.pinfin.model.transaction.pageable.TypeModel
 import hnau.pinfin.projector.transaction.pageable.EntryProjector
 import hnau.pinfin.projector.transaction.pageable.TransferProjector
+import hnau.pinfin.projector.transaction.utils.createPagesTransitionSpec
+import hnau.pinfin.projector.utils.SlideOrientation
 import hnau.pinfin.projector.utils.Tabs
 import hnau.pinfin.projector.utils.title
 import hnau.pipe.annotations.Pipe
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.StateFlow
-import kotlin.math.sign
 
 class TypeProjector(
     scope: CoroutineScope,
@@ -127,7 +127,7 @@ class TypeProjector(
 
             @Composable
             fun Content(
-                modifier: Modifier,
+                modifier: Modifier = Modifier,
                 contentPadding: PaddingValues,
             )
 
@@ -194,7 +194,7 @@ class TypeProjector(
 
         @Composable
         fun Content(
-            modifier: Modifier,
+            modifier: Modifier = Modifier,
             contentPadding: PaddingValues,
         ) {
             type
@@ -204,8 +204,10 @@ class TypeProjector(
                     modifier = modifier,
                     label = "TransactionPage",
                     contentKey = { it.key },
-                    transitionSpec = getTransitionSpecForHorizontalSlide {
-                        (targetState.key.ordinal - initialState.key.ordinal).sign * 0.5
+                    transitionSpec = createPagesTransitionSpec(
+                        orientation = SlideOrientation.Horizontal,
+                    ) { type ->
+                        type.key.ordinal
                     }
                 ) { type ->
                     type.Content(

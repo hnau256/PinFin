@@ -49,7 +49,7 @@ class TimeProjector(
         @OptIn(ExperimentalMaterial3Api::class)
         @Composable
         fun Content(
-            modifier: Modifier,
+            modifier: Modifier = Modifier,
             contentPadding: PaddingValues,
         ) {
             Box(
@@ -83,7 +83,7 @@ class TimeProjector(
 
     @Composable
     fun Content(
-        modifier: Modifier,
+        modifier: Modifier = Modifier,
     ) {
         Label(
             modifier = modifier,

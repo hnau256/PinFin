@@ -31,6 +31,8 @@ class RecordModel(
     private val scope: CoroutineScope,
     private val dependencies: Dependencies,
     private val skeleton: Skeleton,
+    val isFocused: StateFlow<Boolean>,
+    val requestFocus: () -> Unit,
     private val remove: StateFlow<(() -> Unit)?>,
 ) {
 
@@ -208,6 +210,10 @@ class RecordModel(
         scope: CoroutineScope,
         dependencies: Dependencies,
         skeleton: Skeleton,
+        val comment: CommentModel,
+        val category: CategoryModel,
+        val direction: AmountDirectionModel,
+        val amount: AmountModel,
         val page: StateFlow<PageType>,
         val remove: StateFlow<(() -> Unit)?>,
     ) {
@@ -232,6 +238,10 @@ class RecordModel(
             .toAccessor()
             .getOrInit { Page.Skeleton() },
         remove = remove,
+        comment = comment,
+        category = category,
+        direction = direction,
+        amount = amount,
         page = skeleton
             .part
             .mapWithScope(scope) { pageScope, part ->

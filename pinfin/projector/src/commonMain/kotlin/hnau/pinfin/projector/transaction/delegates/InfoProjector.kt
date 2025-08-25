@@ -2,9 +2,12 @@ package hnau.pinfin.projector.transaction.delegates
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Card
 import androidx.compose.runtime.Composable
@@ -76,7 +79,10 @@ class InfoProjector(
                 modifier = Modifier.fillMaxWidth(),
             ) {
                 Row(
-                    Modifier.padding(Dimens.smallSeparation)
+                    modifier = Modifier
+                        .height(IntrinsicSize.Max)
+                        .padding(Dimens.smallSeparation),
+                    horizontalArrangement = Arrangement.spacedBy(Dimens.smallSeparation),
                 ) {
                     Column(
                         modifier = Modifier.weight(1f),
@@ -101,7 +107,9 @@ class InfoProjector(
                             modifier = Modifier.fillMaxWidth(),
                         )
                     }
-                    type.AmountContent()
+                    type.AmountContent(
+                        modifier = Modifier.fillMaxHeight(),
+                    )
                 }
             }
         }

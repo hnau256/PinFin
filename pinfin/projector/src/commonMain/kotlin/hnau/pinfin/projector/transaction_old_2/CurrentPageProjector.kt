@@ -18,6 +18,8 @@ import hnau.pinfin.projector.transaction_old_2.page.DatePageProjector
 import hnau.pinfin.projector.transaction_old_2.page.PageProjector
 import hnau.pinfin.projector.transaction_old_2.page.TimePageProjector
 import hnau.pinfin.projector.transaction_old_2.part.TypeProjector
+import hnau.pinfin.projector.utils.SlideOrientation
+import hnau.pinfin.projector.utils.getTransitionSpecForSlide
 import hnau.pipe.annotations.Pipe
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.StateFlow
@@ -76,7 +78,9 @@ class CurrentPageProjector(
                 modifier = modifier,
                 label = "TransactionPage",
                 contentKey = { it.first },
-                transitionSpec = getTransitionSpecForHorizontalSlide {
+                transitionSpec = getTransitionSpecForSlide(
+                    orientation = SlideOrientation.Horizontal,
+                ) {
                     (targetState.first.ordinal - initialState.first.ordinal).sign * 0.5
                 }
             ) { (_, page) ->

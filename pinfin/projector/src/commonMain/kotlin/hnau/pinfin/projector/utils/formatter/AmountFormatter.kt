@@ -1,5 +1,6 @@
 package hnau.pinfin.projector.utils.formatter
 
+import hnau.common.kotlin.foldBoolean
 import hnau.common.kotlin.ifNull
 import hnau.pinfin.data.Amount
 import kotlin.math.absoluteValue
@@ -8,6 +9,7 @@ interface AmountFormatter {
 
     fun format(
         amount: Amount,
+        alwaysShowSign: Boolean = false,
     ): String
 
     fun parse(
@@ -22,6 +24,7 @@ interface AmountFormatter {
 
             override fun format(
                 amount: Amount,
+                alwaysShowSign: Boolean,//TODO
             ): String = amount
                 .value
                 .toLong()
@@ -44,6 +47,21 @@ interface AmountFormatter {
                         .padStart(2, '0')
                     listOf(count, cents).joinToString(
                         separator = "."
+                    )
+                }
+                .let { raw ->
+                    alwaysShowSign.foldBoolean(
+                        ifFalse = { raw },
+                        ifTrue = {
+                            raw
+                                .firstOrNull()
+                                ?.isDigit()
+                                .ifNull { true }
+                                .foldBoolean(
+                                    ifFalse = { raw },
+                                    ifTrue = { "+$raw" }
+                                )
+                        },
                     )
                 }
 
