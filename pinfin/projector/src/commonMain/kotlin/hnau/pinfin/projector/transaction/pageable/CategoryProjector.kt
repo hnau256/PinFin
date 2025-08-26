@@ -8,6 +8,7 @@ import hnau.pinfin.model.transaction.utils.ChooseOrCreateModel
 import hnau.pinfin.model.utils.budget.state.CategoryInfo
 import hnau.pinfin.projector.transaction.utils.ChooseOrCreateProjector
 import hnau.pinfin.projector.utils.CategoryButton
+import hnau.pinfin.projector.utils.CategoryViewMode
 import hnau.pipe.annotations.Pipe
 import kotlinx.coroutines.CoroutineScope
 
@@ -37,13 +38,14 @@ class CategoryProjector(
         selected: Boolean,
         onClick: (() -> Unit)?,
         modifier: Modifier = Modifier,
+        viewMode: CategoryViewMode = CategoryViewMode.default,
     ) {
         CategoryButton(
             info = model.category.collectAsState().value,
             modifier = modifier,
             selected = selected,
             onClick = onClick,
-            showTitle = false,
+            viewMode = viewMode,
         )
     }
 

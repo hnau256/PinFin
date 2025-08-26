@@ -40,6 +40,7 @@ import hnau.pinfin.projector.resources.there_are_no_categories
 import hnau.pinfin.projector.transaction.utils.ChooseOrCreateMessages
 import hnau.pinfin.projector.transaction.utils.ChooseOrCreateProjector
 import hnau.pinfin.projector.transaction.utils.createPagesTransitionSpec
+import hnau.pinfin.projector.utils.CategoryViewMode
 import hnau.pinfin.projector.utils.SlideOrientation
 import hnau.pipe.annotations.Pipe
 import kotlinx.coroutines.CoroutineScope
@@ -296,21 +297,19 @@ class RecordProjector(
             modifier: Modifier = Modifier,
             contentPadding: PaddingValues,
         ) {
-            Overcompose(
+            Column(
                 modifier = modifier,
-                top = {
-                    Top(
-                        modifier = Modifier.fillMaxWidth(),
-                        contentPadding = contentPadding.copy(bottom = 0.dp),
-                    )
-                },
-                content = { padding ->
-                    Type(
-                        modifier = Modifier.fillMaxSize(),
-                        contentPadding = contentPadding.copy(top = 0.dp) + padding,
-                    )
-                }
-            )
+                verticalArrangement = Arrangement.spacedBy(Dimens.separation),
+            ) {
+                Top(
+                    modifier = Modifier.fillMaxWidth(),
+                    contentPadding = contentPadding.copy(bottom = 0.dp),
+                )
+                Type(
+                    modifier = Modifier.fillMaxSize(),
+                    contentPadding = contentPadding.copy(top = 0.dp),
+                )
+            }
         }
     }
 
@@ -326,40 +325,20 @@ class RecordProjector(
         dependencies = dependencies.amount(),
     )
 
-    enum class ViewType { Icon, Tab }
-
     @Composable
     fun Content(
         modifier: Modifier = Modifier,
-        viewType: ViewType,
     ) {
-        Box(
-            modifier = modifier.then(
-                when (viewType) {
-                    ViewType.Icon -> Modifier
-                    ViewType.Tab -> Modifier.size(tabSize)
-                }
-            ),
-            contentAlignment = Alignment.BottomCenter,
-        ) {
-            category.ContentIcon(
-                modifier = Modifier.fillMaxSize(),
-                onClick = when (viewType) {
-                    ViewType.Icon -> null
-                    ViewType.Tab -> model.requestFocus
-                },
-                selected = model.isFocused.collectAsState().value,
-            )
-            amount.ContentBadge(
-                modifier = Modifier.padding(
-                    vertical = Dimens.extraSmallSeparation,
-                )
-            )
-        }
+        category.ContentIcon(
+            modifier = modifier,
+            onClick = model.requestFocus,
+            selected = model.isFocused.collectAsState().value,
+            viewMode = CategoryViewMode.Icon,
+        )
     }
 
     companion object {
 
-        val tabSize: Dp = 48.dp
+        val size: Dp = 48.dp
     }
 }

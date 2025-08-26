@@ -2,15 +2,14 @@ package hnau.pinfin.projector.transaction.pageable
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.IntrinsicSize
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
@@ -18,7 +17,6 @@ import androidx.compose.material3.Button
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.key
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -32,7 +30,8 @@ import hnau.pinfin.model.transaction.pageable.RecordsModel
 import hnau.pinfin.model.transaction.utils.RecordId
 import hnau.pinfin.model.utils.ZipList
 import hnau.pinfin.projector.transaction.utils.createPagesTransitionSpec
-import hnau.pinfin.projector.utils.Label
+import hnau.pinfin.projector.utils.CategoryButton
+import hnau.pinfin.projector.utils.CategoryViewMode
 import hnau.pinfin.projector.utils.SlideOrientation
 import hnau.pipe.annotations.Pipe
 import kotlinx.coroutines.CoroutineScope
@@ -78,16 +77,16 @@ class RecordsProjector(
             Box(
                 modifier = modifier.padding(horizontal = Dimens.separation),
             ) {
-                Row(
-                    horizontalArrangement = Arrangement.spacedBy(Dimens.smallSeparation),
+                Column(
+                    verticalArrangement = Arrangement.spacedBy(Dimens.smallSeparation),
                 ) {
                     Tabs(
-                        modifier = Modifier.fillMaxHeight(),
-                        contentPadding = contentPadding.copy(end = 0.dp),
+                        modifier = Modifier.fillMaxWidth(),
+                        contentPadding = contentPadding.copy(bottom = 0.dp),
                     )
                     Record(
-                        modifier = Modifier.fillMaxHeight(),
-                        contentPadding = contentPadding.copy(start = 0.dp),
+                        modifier = Modifier.fillMaxSize(),
+                        contentPadding = contentPadding.copy(top = 0.dp),
                     )
                 }
             }
@@ -99,23 +98,19 @@ class RecordsProjector(
             contentPadding: PaddingValues,
         ) {
             val records by records.collectAsState()
-            LazyColumn(
+            LazyRow(
                 modifier = modifier,
                 contentPadding = contentPadding,
-                verticalArrangement = Arrangement.spacedBy(Dimens.smallSeparation),
+                horizontalArrangement = Arrangement.spacedBy(Dimens.smallSeparation),
             ) {
                 items(
                     items = records,
                     key = { it.id.id },
                 ) { item ->
-                    item.projector.Content(
-                        viewType = RecordProjector.ViewType.Tab,
-                    )
+                    item.projector.Content()
                 }
                 item {
                     Button(
-                        modifier = Modifier
-                            .size(RecordProjector.tabSize),
                         onClick = model.addNewRecord,
                     ) {
                         Icon(Icons.Default.Add)
@@ -148,7 +143,7 @@ class RecordsProjector(
                     label = "SelectedRecord",
                     contentKey = Triple<*, RecordId, *>::second,
                     transitionSpec = createPagesTransitionSpec(
-                        orientation = SlideOrientation.Vertical,
+                        orientation = SlideOrientation.Horizontal,
                         extractIndex = Triple<Int, *, *>::first,
                     )
                 ) { (_, _, projector) ->
@@ -193,39 +188,25 @@ class RecordsProjector(
         }
     }
 
-    private val records: StateFlow<List<Item>> = Item.create(
-        scope = scope,
-        dependencies = dependencies.record(),
-        items = model.items,
-    )
-
     @Composable
     fun Content(
         modifier: Modifier = Modifier,
     ) {
-        Label(
-            modifier = modifier.padding(Dimens.extraSmallSeparation),
-            selected = model.isFocused.collectAsState().value,
-            onClick = model.requestFocus,
+        val isFocused by model.isFocused.collectAsState()
+        val categories by model.categories.collectAsState()
+        Row(
+            modifier = modifier,
+            horizontalArrangement = Arrangement.spacedBy(Dimens.smallSeparation),
+            verticalAlignment = Alignment.CenterVertically,
         ) {
-            Row(
-                modifier = Modifier.height(IntrinsicSize.Max),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(Dimens.chipsSeparation),
-            ) {
-                records
-                    .collectAsState()
-                    .value
-                    .forEach { (id, projector) ->
-                        key(id) {
-                            projector.Content(
-                                modifier = Modifier.fillMaxHeight(),
-                                viewType = RecordProjector.ViewType.Icon,
-                            )
-                        }
-                    }
+            categories.forEach { category ->
+                CategoryButton(
+                    info = category,
+                    viewMode = CategoryViewMode.Icon,
+                    onClick = model.requestFocus,
+                    selected = isFocused,
+                )
             }
-
         }
     }
 }

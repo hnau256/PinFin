@@ -11,6 +11,7 @@ import arrow.core.serialization.NonEmptyListSerializer
 import arrow.core.toNonEmptyListOrNull
 import hnau.common.app.model.goback.GoBackHandler
 import hnau.common.kotlin.coroutines.combineState
+import hnau.common.kotlin.coroutines.combineStateWith
 import hnau.common.kotlin.coroutines.flatMapState
 import hnau.common.kotlin.coroutines.mapReusable
 import hnau.common.kotlin.coroutines.mapState
@@ -158,6 +159,26 @@ class RecordsModel(
                     )
                 }
             }
+        }
+
+    val categories: StateFlow<List<CategoryInfo>> = items
+        .scopedInState(scope)
+        .flatMapState(scope) { (scope, items) ->
+            items
+                .fold<_, StateFlow<List<CategoryInfo>>>(
+                    initial = MutableStateFlow(emptyList()),
+                ) { acc, item ->
+                    acc.combineStateWith(
+                        scope = scope,
+                        other = item.model.category.category,
+                    ) { previous, categoryOrNull ->
+                        categoryOrNull.foldNullable(
+                            ifNull = { previous },
+                            ifNotNull = { category -> previous + category },
+                        )
+                    }
+                }
+                .mapState(scope, List<CategoryInfo>::distinct)
         }
 
     private val usedCategories: StateFlow<Set<CategoryInfo>> = items

@@ -1,5 +1,7 @@
 package hnau.pinfin.projector.transaction
 
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -11,6 +13,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.max
 import hnau.common.app.model.goback.GlobalGoBackHandler
 import hnau.common.app.model.goback.GoBackHandler
+import hnau.common.app.projector.uikit.utils.Dimens
 import hnau.common.app.projector.utils.NavigationIcon
 import hnau.common.app.projector.utils.Overcompose
 import hnau.common.app.projector.utils.combineWith
@@ -78,22 +81,17 @@ class TransactionProjector(
                 )
             },
         ) { contentPadding ->
-            Overcompose(
+            Column(
                 modifier = Modifier.fillMaxSize(),
-                top = {
-                    info.Content(
-                        modifier = Modifier.fillMaxWidth(),
-                        contentPadding = contentPadding.copy(bottom = 0.dp),
-                    )
-                },
-            ) { pagePadding ->
-                page.Content(
+                verticalArrangement = Arrangement.spacedBy(Dimens.separation),
+            ) {
+                info.Content(
                     modifier = Modifier.fillMaxWidth(),
-                    contentPadding = contentPadding.combineWith(
-                        other = pagePadding,
-                    ) { content, page ->
-                        max(content, page)
-                    },
+                    contentPadding = contentPadding.copy(bottom = 0.dp),
+                )
+                page.Content(
+                    modifier = Modifier.fillMaxSize(),
+                    contentPadding = contentPadding.copy(top = 0.dp),
                 )
             }
         }

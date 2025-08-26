@@ -43,7 +43,7 @@ class TransactionModel(
 
     enum class Part {
 
-        Type, Date, Time, Comment;
+        Date, Time, Comment, Type;
 
         companion object {
 

@@ -37,7 +37,7 @@ class EntryModel(
 
     enum class Part {
 
-        Account, Records;
+        Records, Account;
 
         companion object {
 

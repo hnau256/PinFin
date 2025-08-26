@@ -85,44 +85,4 @@ class AmountProjector(
             )
         }
     }
-
-    @Composable
-    fun ContentBadge(
-        modifier: Modifier = Modifier,
-    ) {
-        val amountRaw = model
-            .amount
-            .collectAsState()
-            .value
-            ?: return
-        val (direction, amount) = amountRaw.splitToDirectionAndRaw()
-        SwitchHueToAmountDirection(
-            amountDirection = direction,
-        ) {
-            Box(
-                modifier = modifier
-                    .padding(
-                        horizontal = Dimens.smallSeparation,
-                        vertical = Dimens.extraSmallSeparation,
-                    )
-                    .background(
-                        color = MaterialTheme.colorScheme.primaryContainer,
-                        shape = RoundedCornerShape(100),
-                    ),
-            ) {
-                val formatter = dependencies.amountFormatter
-                Text(
-                    text = remember(amount, formatter) {
-                        formatter.format(
-                            amount = amount,
-                            alwaysShowSign = true,
-                        )
-                    },
-                    style = MaterialTheme.typography.labelSmall,
-                    maxLines = 1,
-                    color = MaterialTheme.colorScheme.onPrimaryContainer,
-                )
-            }
-        }
-    }
 }
