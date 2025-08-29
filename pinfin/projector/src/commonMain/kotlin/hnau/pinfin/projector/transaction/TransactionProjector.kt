@@ -10,13 +10,10 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.max
 import hnau.common.app.model.goback.GlobalGoBackHandler
 import hnau.common.app.model.goback.GoBackHandler
 import hnau.common.app.projector.uikit.utils.Dimens
 import hnau.common.app.projector.utils.NavigationIcon
-import hnau.common.app.projector.utils.Overcompose
-import hnau.common.app.projector.utils.combineWith
 import hnau.common.app.projector.utils.copy
 import hnau.pinfin.model.transaction.TransactionModel
 import hnau.pinfin.projector.transaction.delegates.InfoProjector

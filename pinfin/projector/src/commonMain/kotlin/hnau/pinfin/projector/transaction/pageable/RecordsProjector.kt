@@ -1,5 +1,6 @@
 package hnau.pinfin.projector.transaction.pageable
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -7,31 +8,36 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material3.Button
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedIconButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.util.fastForEachIndexed
 import hnau.common.app.projector.uikit.state.StateContent
 import hnau.common.app.projector.uikit.utils.Dimens
 import hnau.common.app.projector.utils.Icon
 import hnau.common.app.projector.utils.copy
+import hnau.common.app.projector.utils.plus
 import hnau.common.kotlin.coroutines.mapReusable
 import hnau.common.kotlin.coroutines.mapWithScope
 import hnau.pinfin.model.transaction.pageable.RecordsModel
 import hnau.pinfin.model.transaction.utils.RecordId
 import hnau.pinfin.model.utils.ZipList
 import hnau.pinfin.projector.transaction.utils.createPagesTransitionSpec
-import hnau.pinfin.projector.utils.CategoryButton
+import hnau.pinfin.projector.transaction_old_2.part.PartDefaults
+import hnau.pinfin.projector.utils.CategoryHint
 import hnau.pinfin.projector.utils.CategoryViewMode
+import hnau.pinfin.projector.utils.Label
 import hnau.pinfin.projector.utils.SlideOrientation
 import hnau.pipe.annotations.Pipe
 import kotlinx.coroutines.CoroutineScope
@@ -75,7 +81,7 @@ class RecordsProjector(
             contentPadding: PaddingValues,
         ) {
             Box(
-                modifier = modifier.padding(horizontal = Dimens.separation),
+                modifier = modifier,
             ) {
                 Column(
                     verticalArrangement = Arrangement.spacedBy(Dimens.smallSeparation),
@@ -100,7 +106,7 @@ class RecordsProjector(
             val records by records.collectAsState()
             LazyRow(
                 modifier = modifier,
-                contentPadding = contentPadding,
+                contentPadding = contentPadding + PaddingValues(horizontal = Dimens.separation),
                 horizontalArrangement = Arrangement.spacedBy(Dimens.smallSeparation),
             ) {
                 items(
@@ -110,7 +116,7 @@ class RecordsProjector(
                     item.projector.Content()
                 }
                 item {
-                    Button(
+                    OutlinedIconButton(
                         onClick = model.addNewRecord,
                     ) {
                         Icon(Icons.Default.Add)
@@ -192,21 +198,35 @@ class RecordsProjector(
     fun Content(
         modifier: Modifier = Modifier,
     ) {
-        val isFocused by model.isFocused.collectAsState()
-        val categories by model.categories.collectAsState()
-        Row(
+        Label(
             modifier = modifier,
-            horizontalArrangement = Arrangement.spacedBy(Dimens.smallSeparation),
-            verticalAlignment = Alignment.CenterVertically,
+            onClick = model.requestFocus,
+            selected = model.isFocused.collectAsState().value,
+            containerColor = PartDefaults.background,
         ) {
-            categories.forEach { category ->
-                CategoryButton(
-                    info = category,
-                    viewMode = CategoryViewMode.Icon,
-                    onClick = model.requestFocus,
-                    selected = isFocused,
-                )
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(Dimens.extraSmallSeparation),
+            ) {
+                val categories by model.categories.collectAsState()
+                categories.fastForEachIndexed { i, category ->
+                    CategoryHint(
+                        info = category,
+                        viewMode = CategoryViewMode.Icon,
+                    )
+                    if (i < categories.lastIndex) {
+                        Box(
+                            modifier = Modifier
+                                .size(4.dp)
+                                .background(
+                                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f),
+                                    shape = CircleShape,
+                                )
+                        )
+                    }
+                }
             }
         }
+
     }
 }

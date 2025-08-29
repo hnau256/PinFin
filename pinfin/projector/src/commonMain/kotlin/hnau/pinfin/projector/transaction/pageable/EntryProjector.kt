@@ -12,7 +12,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.IntSize
 import hnau.common.app.projector.uikit.state.StateContent
 import hnau.common.app.projector.uikit.utils.Dimens
 import hnau.common.app.projector.utils.Icon

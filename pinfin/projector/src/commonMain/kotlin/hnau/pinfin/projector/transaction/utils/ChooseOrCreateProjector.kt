@@ -26,6 +26,7 @@ import hnau.common.app.projector.uikit.state.StateContent
 import hnau.common.app.projector.uikit.state.TransitionSpec
 import hnau.common.app.projector.uikit.utils.Dimens
 import hnau.common.app.projector.utils.collectAsTextFieldValueMutableAccessor
+import hnau.common.app.projector.utils.horizontalDisplayPadding
 import hnau.pinfin.model.transaction.utils.ChooseOrCreateModel
 import hnau.pinfin.projector.resources.Res
 import hnau.pinfin.projector.resources.search_create
@@ -81,7 +82,8 @@ class ChooseOrCreateProjector<T : Comparable<T>>(
     ) {
         val state by model.state.collectAsState()
         Column(
-            modifier = modifier,
+            modifier = modifier
+                .horizontalDisplayPadding(),
         ) {
             Filtered(
                 messages = messages,
@@ -125,7 +127,6 @@ class ChooseOrCreateProjector<T : Comparable<T>>(
 
                     is ChooseOrCreateModel.State.Filtered.Items<T> -> ChipsFlowRow(
                         all = filteredLocal.items,
-                        modifier = Modifier.padding(Dimens.smallSeparation),
                     ) { item -> item.Content() }
 
                     ChooseOrCreateModel.State.Filtered.AllAreExcluded -> Message(
@@ -147,8 +148,7 @@ class ChooseOrCreateProjector<T : Comparable<T>>(
             Text(
                 text = message,
                 modifier = Modifier.padding(
-                    Dimens.separation,
-                    Dimens.smallSeparation,
+                    vertical = Dimens.smallSeparation,
                 ),
                 style = MaterialTheme.typography.titleMedium,
                 color = color,
@@ -170,7 +170,6 @@ class ChooseOrCreateProjector<T : Comparable<T>>(
                 Column(
                     verticalArrangement = Arrangement.spacedBy(Dimens.smallSeparation),
                     modifier = Modifier.padding(
-                        horizontal = Dimens.separation,
                         vertical = Dimens.smallSeparation,
                     ),
                 ) {
@@ -192,11 +191,12 @@ class ChooseOrCreateProjector<T : Comparable<T>>(
         var query by model.query.collectAsTextFieldValueMutableAccessor()
         OutlinedTextField(
             modifier = modifier
-                .focusRequester(focusRequester),
+                .focusRequester(focusRequester)
+                .horizontalDisplayPadding(),
             value = query,
             onValueChange = { query = it },
             maxLines = 1,
-            placeholder = { Text(stringResource(Res.string.search_create)) },
+            label = { Text(stringResource(Res.string.search_create)) },
             keyboardOptions = KeyboardOptions(
                 capitalization = KeyboardCapitalization.Sentences,
             )

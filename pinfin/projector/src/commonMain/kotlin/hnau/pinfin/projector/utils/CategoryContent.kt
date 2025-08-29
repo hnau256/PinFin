@@ -27,6 +27,23 @@ fun SwitchHueToCategoryInfo(
 }
 
 @Composable
+fun CategoryHint(
+    info: CategoryInfo,
+    modifier: Modifier = Modifier,
+    viewMode: CategoryViewMode = CategoryViewMode.default,
+) {
+    SwitchHueToCategoryInfo(
+        info = info,
+    ) {
+        CategoryContentInner(
+            modifier = modifier,
+            info = info,
+            viewMode = viewMode,
+        )
+    }
+}
+
+@Composable
 fun CategoryContent(
     info: CategoryInfo,
     modifier: Modifier = Modifier,

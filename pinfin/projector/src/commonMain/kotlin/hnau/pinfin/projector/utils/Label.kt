@@ -26,6 +26,7 @@ fun Label(
     contentColor: Color = contentColorFor(containerColor),
     selected: Boolean = false,
     onClick: (() -> Unit)? = null,
+    contentAlignment: Alignment = Alignment.Center,
     content: @Composable () -> Unit,
 ) {
     val shape = MaterialTheme.shapes.small
@@ -61,7 +62,7 @@ fun Label(
                 horizontal = Dimens.smallSeparation,
                 vertical = Dimens.extraSmallSeparation,
             ),
-        contentAlignment = Alignment.Center,
+        contentAlignment = contentAlignment,
     ) {
         CompositionLocalProvider(
             LocalContentColor provides contentColor,

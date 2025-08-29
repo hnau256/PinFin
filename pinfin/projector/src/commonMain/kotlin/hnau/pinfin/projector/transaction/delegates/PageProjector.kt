@@ -13,11 +13,9 @@ import hnau.pinfin.projector.transaction.pageable.DateProjector
 import hnau.pinfin.projector.transaction.pageable.TimeProjector
 import hnau.pinfin.projector.transaction.utils.createPagesTransitionSpec
 import hnau.pinfin.projector.utils.SlideOrientation
-import hnau.pinfin.projector.utils.getTransitionSpecForSlide
 import hnau.pipe.annotations.Pipe
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.StateFlow
-import kotlin.math.sign
 
 class PageProjector(
     scope: CoroutineScope,

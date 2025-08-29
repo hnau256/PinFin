@@ -1,7 +1,6 @@
 package hnau.pinfin.projector.transaction.pageable
 
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.PaddingValues
@@ -11,14 +10,12 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedCard
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -27,9 +24,7 @@ import hnau.common.app.projector.uikit.state.StateContent
 import hnau.common.app.projector.uikit.state.TransitionSpec
 import hnau.common.app.projector.uikit.utils.Dimens
 import hnau.common.app.projector.utils.Icon
-import hnau.common.app.projector.utils.Overcompose
 import hnau.common.app.projector.utils.copy
-import hnau.common.app.projector.utils.plus
 import hnau.common.kotlin.coroutines.mapWithScope
 import hnau.pinfin.model.transaction.pageable.RecordModel
 import hnau.pinfin.model.utils.budget.state.CategoryInfo
@@ -44,6 +39,7 @@ import hnau.pinfin.projector.utils.CategoryViewMode
 import hnau.pinfin.projector.utils.SlideOrientation
 import hnau.pipe.annotations.Pipe
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.StateFlow
 import org.jetbrains.compose.resources.stringResource
 
 class RecordProjector(
@@ -154,7 +150,7 @@ class RecordProjector(
             }
         }
 
-        private val type = model
+        private val type: StateFlow<PageType> = model
             .page
             .mapWithScope(scope) { scope, type ->
                 when (type) {
@@ -238,7 +234,9 @@ class RecordProjector(
             contentPadding: PaddingValues,
         ) {
             OutlinedCard(
-                modifier = modifier.padding(contentPadding),
+                modifier = modifier
+                    .padding(contentPadding)
+                    .padding(horizontal = Dimens.separation),
             ) {
                 Column(
                     modifier = Modifier

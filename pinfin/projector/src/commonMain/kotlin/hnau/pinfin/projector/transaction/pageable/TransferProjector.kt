@@ -12,11 +12,6 @@ import hnau.common.app.projector.utils.Icon
 import hnau.common.kotlin.coroutines.mapWithScope
 import hnau.pinfin.model.transaction.pageable.TransferModel
 import hnau.pinfin.model.utils.budget.state.AccountInfo
-import hnau.pinfin.projector.resources.Res
-import hnau.pinfin.projector.resources.accounts_not_found
-import hnau.pinfin.projector.resources.create_new_account
-import hnau.pinfin.projector.resources.there_are_no_accounts
-import hnau.pinfin.projector.transaction.utils.ChooseOrCreateMessages
 import hnau.pinfin.projector.transaction.utils.ChooseOrCreateProjector
 import hnau.pinfin.projector.transaction.utils.createPagesTransitionSpec
 import hnau.pinfin.projector.utils.ArrowDirection
@@ -25,7 +20,6 @@ import hnau.pinfin.projector.utils.SlideOrientation
 import hnau.pipe.annotations.Pipe
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.StateFlow
-import org.jetbrains.compose.resources.stringResource
 
 class TransferProjector(
     scope: CoroutineScope,
