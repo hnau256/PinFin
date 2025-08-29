@@ -55,8 +55,6 @@ class RecordProjector(
     interface Dependencies {
 
         fun category(): CategoryProjector.Dependencies
-
-        fun amount(): AmountProjector.Dependencies
     }
 
     class Page(
@@ -78,7 +76,7 @@ class RecordProjector(
 
             fun category(): CategoryProjector.Dependencies
 
-            fun amount(): AmountProjector.Dependencies
+            fun amount(): AmountWithDirectionProjector.Dependencies
 
         }
 
@@ -217,7 +215,7 @@ class RecordProjector(
             model = model.category,
         )
 
-        private val amount = AmountProjector(
+        private val amount = AmountWithDirectionProjector(
             scope = scope,
             dependencies = dependencies.amount(),
             model = model.amount,
@@ -314,12 +312,6 @@ class RecordProjector(
         scope = scope,
         model = model.category,
         dependencies = dependencies.category(),
-    )
-
-    private val amount = AmountProjector(
-        scope = scope,
-        model = model.amount,
-        dependencies = dependencies.amount(),
     )
 
     @Composable

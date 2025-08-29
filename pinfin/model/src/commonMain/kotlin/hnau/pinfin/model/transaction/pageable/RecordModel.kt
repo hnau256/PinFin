@@ -91,7 +91,7 @@ class RecordModel(
 
         fun category(): CategoryModel.Dependencies
 
-        fun amount(): AmountModel.Dependencies
+        fun amount(): AmountWithDirectionModel.Dependencies
 
         fun page(): Page.Dependencies
     }
@@ -102,7 +102,7 @@ class RecordModel(
         val part: MutableStateFlow<Part> = Part.default.toMutableStateFlowAsInitial(),
         val comment: CommentModel.Skeleton,
         val category: CategoryModel.Skeleton,
-        val amount: AmountModel.Skeleton,
+        val amount: AmountWithDirectionModel.Skeleton,
     ) {
 
         companion object {
@@ -110,7 +110,7 @@ class RecordModel(
             fun createForNew(): Skeleton = Skeleton(
                 comment = CommentModel.Skeleton.createForNew(),
                 category = CategoryModel.Skeleton.createForNew(),
-                amount = AmountModel.Skeleton.createForNew(),
+                amount = AmountWithDirectionModel.Skeleton.createForNew(),
             )
 
             fun createForEdit(
@@ -122,7 +122,7 @@ class RecordModel(
                 category = CategoryModel.Skeleton.createForEdit(
                     category = record.category,
                 ),
-                amount = AmountModel.Skeleton.createForEdit(
+                amount = AmountWithDirectionModel.Skeleton.createForEdit(
                     amount = record.amount,
                 ),
             )
@@ -181,7 +181,7 @@ class RecordModel(
         comment = comment.comment,
     )
 
-    val amount = AmountModel(
+    val amount = AmountWithDirectionModel(
         scope = scope,
         dependencies = dependencies.amount(),
         skeleton = skeleton.amount,
@@ -196,7 +196,7 @@ class RecordModel(
         skeleton: Skeleton,
         val comment: CommentModel,
         val category: CategoryModel,
-        val amount: AmountModel,
+        val amount: AmountWithDirectionModel,
         val page: StateFlow<PageType>,
         val remove: StateFlow<(() -> Unit)?>,
     ) {
@@ -251,8 +251,9 @@ class RecordModel(
             },
     )
 
-    val amountOrZero: StateFlow<Amount>
-        get() = amount.amountOrZero
+    val amountOrZero: StateFlow<Amount> = amount
+        .amount
+        .mapState(scope) { it ?: Amount.zero }
 
     val record: StateFlow<TransactionInfo.Type.Entry.Record?> = comment
         .comment
@@ -288,6 +289,7 @@ class RecordModel(
         comment: Comment,
         category: CategoryInfo,
     ): StateFlow<TransactionInfo.Type.Entry.Record?> = amount
+        .amountModel
         .amount
         .mapState(scope) { amountOrNull ->
             amountOrNull?.let { amount ->

@@ -76,6 +76,20 @@ class AmountProjector(
     }
 
     @Composable
+    fun InnerContent(
+        modifier: Modifier = Modifier
+    ) {
+        AmountOrNullContent(
+            modifier = modifier,
+            amount = model
+                .amount
+                .collectAsState()
+                .value,
+            formatter = dependencies.amountFormatter,
+        )
+    }
+
+    @Composable
     fun Content(
         modifier: Modifier = Modifier,
     ) {
@@ -85,30 +99,7 @@ class AmountProjector(
             onClick = model.requestFocus,
             containerColor = PartDefaults.background,
         ) {
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-            ) {
-                val direction by model.direction.collectAsState()
-                SwitchHueToAmountDirection(
-                    amountDirection = direction,
-                ) {
-                    IconButton(
-                        onClick = { model.switchDirection() },
-                    ) {
-                        Icon(
-                            icon = direction.icon,
-                        )
-                    }
-                }
-                AmountOrNullContent(
-                    modifier = Modifier.weight(1f),
-                    amount = model
-                        .amount
-                        .collectAsState()
-                        .value,
-                    formatter = dependencies.amountFormatter,
-                )
-            }
+            InnerContent()
         }
     }
 }

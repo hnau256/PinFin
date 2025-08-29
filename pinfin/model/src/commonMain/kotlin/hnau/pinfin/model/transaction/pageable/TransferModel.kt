@@ -175,7 +175,6 @@ class TransferModel(
         dependencies = dependencies.amount(),
         isFocused = createIsFocused(Part.Amount),
         requestFocus = createRequestFocus(Part.Amount),
-        category = null.toMutableStateFlowAsInitial(),
     )
 
     class Page(
