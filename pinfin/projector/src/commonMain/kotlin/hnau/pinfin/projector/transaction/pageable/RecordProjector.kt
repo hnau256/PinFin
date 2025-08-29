@@ -78,8 +78,6 @@ class RecordProjector(
 
             fun category(): CategoryProjector.Dependencies
 
-            fun direction(): AmountDirectionProjector.Dependencies
-
             fun amount(): AmountProjector.Dependencies
 
         }
@@ -219,12 +217,6 @@ class RecordProjector(
             model = model.category,
         )
 
-        private val direction = AmountDirectionProjector(
-            scope = scope,
-            dependencies = dependencies.direction(),
-            model = model.direction,
-        )
-
         private val amount = AmountProjector(
             scope = scope,
             dependencies = dependencies.amount(),
@@ -287,7 +279,6 @@ class RecordProjector(
                                 .weight(1f),
                         )
                         Spacer(Modifier.width(Dimens.smallSeparation))
-                        direction.Content()
                         amount.Content(
                             modifier = Modifier
                                 .fillMaxHeight()

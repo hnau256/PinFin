@@ -15,7 +15,6 @@ import hnau.common.kotlin.getOrInit
 import hnau.common.kotlin.serialization.MutableStateFlowSerializer
 import hnau.common.kotlin.toAccessor
 import hnau.pinfin.data.Amount
-import hnau.pinfin.data.AmountDirection
 import hnau.pinfin.data.Comment
 import hnau.pinfin.model.transaction.utils.ChooseOrCreateModel
 import hnau.pinfin.model.transaction.utils.allRecords
@@ -92,8 +91,6 @@ class RecordModel(
 
         fun category(): CategoryModel.Dependencies
 
-        fun direction(): AmountDirectionModel.Dependencies
-
         fun amount(): AmountModel.Dependencies
 
         fun page(): Page.Dependencies
@@ -105,7 +102,6 @@ class RecordModel(
         val part: MutableStateFlow<Part> = Part.default.toMutableStateFlowAsInitial(),
         val comment: CommentModel.Skeleton,
         val category: CategoryModel.Skeleton,
-        val direction: AmountDirectionModel.Skeleton,
         val amount: AmountModel.Skeleton,
     ) {
 
@@ -114,29 +110,22 @@ class RecordModel(
             fun createForNew(): Skeleton = Skeleton(
                 comment = CommentModel.Skeleton.createForNew(),
                 category = CategoryModel.Skeleton.createForNew(),
-                direction = AmountDirectionModel.Skeleton.createForNew(),
                 amount = AmountModel.Skeleton.createForNew(),
             )
 
             fun createForEdit(
                 record: TransactionInfo.Type.Entry.Record,
-            ): Skeleton {
-                val (direction, amount) = record.amount.splitToDirectionAndRaw()
-                return Skeleton(
-                    comment = CommentModel.Skeleton.createForEdit(
-                        comment = record.comment,
-                    ),
-                    category = CategoryModel.Skeleton.createForEdit(
-                        category = record.category,
-                    ),
-                    direction = AmountDirectionModel.Skeleton.createForEdit(
-                        direction = direction,
-                    ),
-                    amount = AmountModel.Skeleton.createForEdit(
-                        amount = amount,
-                    ),
-                )
-            }
+            ): Skeleton = Skeleton(
+                comment = CommentModel.Skeleton.createForEdit(
+                    comment = record.comment,
+                ),
+                category = CategoryModel.Skeleton.createForEdit(
+                    category = record.category,
+                ),
+                amount = AmountModel.Skeleton.createForEdit(
+                    amount = record.amount,
+                ),
+            )
         }
     }
 
@@ -192,19 +181,13 @@ class RecordModel(
         comment = comment.comment,
     )
 
-    val direction = AmountDirectionModel(
-        scope = scope,
-        dependencies = dependencies.direction(),
-        skeleton = skeleton.direction,
-        category = category.category,
-    )
-
     val amount = AmountModel(
         scope = scope,
         dependencies = dependencies.amount(),
         skeleton = skeleton.amount,
         isFocused = isPartFocused(Part.Amount),
         requestFocus = createRequestFocus(Part.Amount),
+        category = category.category,
     )
 
     class Page(
@@ -213,7 +196,6 @@ class RecordModel(
         skeleton: Skeleton,
         val comment: CommentModel,
         val category: CategoryModel,
-        val direction: AmountDirectionModel,
         val amount: AmountModel,
         val page: StateFlow<PageType>,
         val remove: StateFlow<(() -> Unit)?>,
@@ -241,7 +223,6 @@ class RecordModel(
         remove = remove,
         comment = comment,
         category = category,
-        direction = direction,
         amount = amount,
         page = skeleton
             .part
@@ -306,29 +287,12 @@ class RecordModel(
         scope: CoroutineScope,
         comment: Comment,
         category: CategoryInfo,
-    ): StateFlow<TransactionInfo.Type.Entry.Record?> = direction
-        .direction
-        .scopedInState(scope)
-        .flatMapState(scope) { (scope, direction) ->
-            createRecordFromCommentAndCategoryAndDirection(
-                scope = scope,
-                comment = comment,
-                category = category,
-                direction = direction,
-            )
-        }
-
-    private fun createRecordFromCommentAndCategoryAndDirection(
-        scope: CoroutineScope,
-        comment: Comment,
-        category: CategoryInfo,
-        direction: AmountDirection,
     ): StateFlow<TransactionInfo.Type.Entry.Record?> = amount
         .amount
         .mapState(scope) { amountOrNull ->
             amountOrNull?.let { amount ->
                 TransactionInfo.Type.Entry.Record(
-                    amount = amount.withDirection(direction),
+                    amount = amount,
                     comment = comment,
                     category = category,
                 )
