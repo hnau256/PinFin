@@ -6,6 +6,7 @@ package hnau.pinfin.model.transaction.pageable
 
 import hnau.common.app.model.goback.GoBackHandler
 import hnau.common.app.model.goback.NeverGoBackHandler
+import hnau.common.kotlin.coroutines.mapState
 import hnau.common.kotlin.getOrInit
 import hnau.common.kotlin.serialization.MutableStateFlowSerializer
 import hnau.common.kotlin.toAccessor
@@ -91,6 +92,9 @@ class AmountModel(
 
     val amount: StateFlow<Amount?>
         get() = delegate.amount
+
+    val amountOrZero: StateFlow<Amount> =
+        amount.mapState(scope) { it ?: Amount.zero }
 
     val goBackHandler: GoBackHandler
         get() = NeverGoBackHandler

@@ -1,6 +1,7 @@
 package hnau.pinfin.projector.transaction.pageable
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -193,13 +194,17 @@ class EntryProjector(
     fun AmountContent(
         modifier: Modifier = Modifier,
     ) {
-        AmountOrNullContent(
+        Box(
             modifier = modifier,
-            amount = model
-                .amount
-                .collectAsState()
-                .value,
-            formatter = dependencies.amountFormatter,
-        )
+            contentAlignment = Alignment.Center,
+        ) {
+            hnau.pinfin.projector.utils.AmountContent(
+                value = model
+                    .amountOrZero
+                    .collectAsState()
+                    .value,
+                amountFormatter = dependencies.amountFormatter,
+            )
+        }
     }
 }

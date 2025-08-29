@@ -22,6 +22,7 @@ import hnau.common.kotlin.foldNullable
 import hnau.common.kotlin.getOrInit
 import hnau.common.kotlin.serialization.MutableStateFlowSerializer
 import hnau.common.kotlin.toAccessor
+import hnau.pinfin.data.Amount
 import hnau.pinfin.model.transaction.utils.RecordId
 import hnau.pinfin.model.transaction.utils.remove
 import hnau.pinfin.model.utils.ZipList
@@ -159,6 +160,24 @@ class RecordsModel(
                     )
                 }
             }
+        }
+
+    val amountOrZero: StateFlow<Amount> = items
+        .scopedInState(scope)
+        .flatMapState(scope) { (scope, items) ->
+            val nonEmptyItems = items.toNonEmptyList()
+            nonEmptyItems
+                .tail
+                .fold<_, StateFlow<Amount>>(
+                    initial = nonEmptyItems.head.model.amountOrZero,
+                ) { acc, item ->
+                    acc.combineStateWith(
+                        scope = scope,
+                        other = item.model.amountOrZero,
+                    ) { previous, amountOrZero ->
+                        previous + amountOrZero
+                    }
+                }
         }
 
     val categories: StateFlow<List<CategoryInfo>> = items

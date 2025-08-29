@@ -14,6 +14,7 @@ import hnau.common.kotlin.foldNullable
 import hnau.common.kotlin.getOrInit
 import hnau.common.kotlin.serialization.MutableStateFlowSerializer
 import hnau.common.kotlin.toAccessor
+import hnau.pinfin.data.Amount
 import hnau.pinfin.data.AmountDirection
 import hnau.pinfin.data.Comment
 import hnau.pinfin.model.transaction.utils.ChooseOrCreateModel
@@ -268,6 +269,9 @@ class RecordModel(
                 }
             },
     )
+
+    val amountOrZero: StateFlow<Amount>
+        get() = amount.amountOrZero
 
     val record: StateFlow<TransactionInfo.Type.Entry.Record?> = comment
         .comment

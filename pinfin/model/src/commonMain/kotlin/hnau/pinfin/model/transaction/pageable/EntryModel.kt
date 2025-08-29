@@ -229,9 +229,8 @@ class EntryModel(
             }
         }
 
-    val amount: StateFlow<Amount?> = entry.mapState(scope) { entryOrNull ->
-        entryOrNull?.amount
-    }
+    val amountOrZero: StateFlow<Amount>
+        get() = records.amountOrZero
 
     private fun Part.shift(
         offset: Int,

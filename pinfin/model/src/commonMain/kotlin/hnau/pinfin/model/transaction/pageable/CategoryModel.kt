@@ -114,23 +114,28 @@ class CategoryModel(
         }
         .mapLatest { (state, commentRaw) ->
             withContext(Dispatchers.Default) {
-                val comment = commentRaw.text.trim()
-                state
-                    .allRecords
-                    .mapNotNull { (timestamp, record) ->
-                        record
-                            .takeIf {
-                                it.comment.text.trim().equals(
-                                    other = comment,
-                                    ignoreCase = true,
-                                )
+                commentRaw
+                    .text
+                    .trim()
+                    .takeIf(String::isNotEmpty)
+                    ?.let { comment ->
+                        state
+                            .allRecords
+                            .mapNotNull { (timestamp, record) ->
+                                record
+                                    .takeIf {
+                                        it.comment.text.trim().equals(
+                                            other = comment,
+                                            ignoreCase = true,
+                                        )
+                                    }
+                                    ?.let { recordWithSameComment ->
+                                        timestamp to recordWithSameComment.category
+                                    }
                             }
-                            ?.let { recordWithSameComment ->
-                                timestamp to recordWithSameComment.category
-                            }
+                            .maxByOrNull(Pair<Instant, *>::first)
+                            ?.second
                     }
-                    .maxByOrNull(Pair<Instant, *>::first)
-                    ?.second
             }
         }
         .stateIn(
@@ -139,15 +144,15 @@ class CategoryModel(
             initialValue = null,
         )
 
-    val category: StateFlow<CategoryInfo?> =  skeleton
+    val category: StateFlow<CategoryInfo?> = skeleton
         .manualCategory
-    .scopedInState(scope)
-    .flatMapState(scope) { (scope, manualOrNull) ->
-        manualOrNull.foldNullable(
-            ifNotNull = CategoryInfo::toMutableStateFlowAsInitial,
-            ifNull = { getCategoryBasedOnComment(scope) },
-        )
-    }
+        .scopedInState(scope)
+        .flatMapState(scope) { (scope, manualOrNull) ->
+            manualOrNull.foldNullable(
+                ifNotNull = CategoryInfo::toMutableStateFlowAsInitial,
+                ifNull = { getCategoryBasedOnComment(scope) },
+            )
+        }
 
     val goBackHandler: GoBackHandler
         get() = NeverGoBackHandler

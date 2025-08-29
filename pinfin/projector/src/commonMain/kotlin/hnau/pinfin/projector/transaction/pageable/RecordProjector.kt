@@ -5,17 +5,20 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedCard
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -276,14 +279,19 @@ class RecordProjector(
                         modifier = Modifier
                             .fillMaxWidth()
                             .height(IntrinsicSize.Max),
-                        horizontalArrangement = Arrangement.spacedBy(Dimens.separation),
+                        verticalAlignment = Alignment.CenterVertically,
                     ) {
                         category.Content(
-                            modifier = Modifier.weight(1f),
+                            modifier = Modifier
+                                .fillMaxHeight()
+                                .weight(1f),
                         )
+                        Spacer(Modifier.width(Dimens.smallSeparation))
                         direction.Content()
                         amount.Content(
-                            modifier = Modifier.weight(1f),
+                            modifier = Modifier
+                                .fillMaxHeight()
+                                .weight(1f),
                         )
                     }
                 }

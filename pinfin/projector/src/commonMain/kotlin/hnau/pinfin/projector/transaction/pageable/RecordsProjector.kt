@@ -209,6 +209,7 @@ class RecordsProjector(
                 horizontalArrangement = Arrangement.spacedBy(Dimens.extraSmallSeparation),
             ) {
                 val categories by model.categories.collectAsState()
+                //TODO handle empty
                 categories.fastForEachIndexed { i, category ->
                     CategoryHint(
                         info = category,
