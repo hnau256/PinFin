@@ -9,7 +9,7 @@ import hnau.common.kotlin.foldBoolean
 import hnau.common.kotlin.foldNullable
 import kotlinx.serialization.Serializable
 
-//TODO to common-kotlin
+//TODO extract to common-kotlin
 @Serializable
 data class ZipList<T>(
     val before: List<T>,

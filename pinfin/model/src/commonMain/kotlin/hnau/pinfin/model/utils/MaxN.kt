@@ -3,7 +3,7 @@ package hnau.pinfin.model.utils
 import java.util.PriorityQueue
 
 
-//TODO to common-kotlin
+//TODO extract to common-kotlin
 fun <T> Iterable<T>.maxN(
     n: Int,
     comparator: Comparator<in T>,
@@ -25,7 +25,7 @@ fun <T> Iterable<T>.maxN(
         .reversed()
 }
 
-//TODO to common-kotlin
+//TODO extract to common-kotlin
 fun <T : Comparable<T>> Iterable<T>.maxN(
     n: Int,
 ): List<T> = maxN(

@@ -11,13 +11,13 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
-//TODO to common-kotlin
+//TODO extract to common-kotlin
 data class Delayed<out T>(
     val isInProgress: Boolean,
     val value: T,
 )
 
-//TODO to common-kotlin
+//TODO extract to common-kotlin
 inline fun <I, O> StateFlow<I>.mapStateDelayed(
     scope: CoroutineScope,
     crossinline transform: suspend (I) -> O,

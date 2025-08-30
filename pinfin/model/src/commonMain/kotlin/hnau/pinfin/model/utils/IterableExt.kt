@@ -5,7 +5,7 @@ import arrow.core.Option
 import arrow.core.Some
 import hnau.common.kotlin.foldBoolean
 
-//TODO to common-kotlin
+//TODO extract to common-kotlin
 inline fun <T> Iterable<T>.exclude(
     predicate: (T) -> Boolean,
 ): Pair<List<T>, T>? = this

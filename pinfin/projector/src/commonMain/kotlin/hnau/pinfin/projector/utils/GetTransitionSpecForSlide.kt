@@ -15,7 +15,7 @@ import kotlin.math.sign
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.seconds
 
-//TODO to common-app
+//TODO extract to common-app
 
 enum class SlideOrientation { Horizontal, Vertical }
 
