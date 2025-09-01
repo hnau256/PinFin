@@ -14,7 +14,7 @@ import hnau.common.app.projector.utils.horizontalDisplayPadding
 import hnau.pinfin.model.transaction.pageable.AmountModel
 import hnau.pinfin.projector.AmountProjector
 import hnau.pinfin.projector.transaction.utils.AmountOrNullContent
-import hnau.pinfin.projector.transaction_old_2.part.PartDefaults
+import hnau.pinfin.projector.transaction.utils.PartDefaults
 import hnau.pinfin.projector.utils.Label
 import hnau.pinfin.projector.utils.formatter.AmountFormatter
 import hnau.pipe.annotations.Pipe

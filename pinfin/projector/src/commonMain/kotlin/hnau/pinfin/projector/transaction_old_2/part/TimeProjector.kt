@@ -9,6 +9,7 @@ import androidx.compose.ui.Modifier
 import hnau.common.app.projector.uikit.ItemsRow
 import hnau.common.app.projector.utils.Icon
 import hnau.pinfin.model.transaction_old_2.part.TimeModel
+import hnau.pinfin.projector.transaction.utils.PartDefaults
 import hnau.pinfin.projector.utils.Label
 import hnau.pinfin.projector.utils.formatter.datetime.DateTimeFormatter
 import hnau.pipe.annotations.Pipe

@@ -125,6 +125,9 @@ class CommentModel(
         extractSuggests = extractSuggests,
     )
 
+    val commentEditingString: MutableStateFlow<EditingString>
+        get() = skeleton.comment
+
     val comment: StateFlow<Comment> = skeleton
         .comment
         .mapState(scope) { it.text.let(::Comment) }

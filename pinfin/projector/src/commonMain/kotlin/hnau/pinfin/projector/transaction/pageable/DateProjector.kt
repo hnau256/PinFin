@@ -19,7 +19,7 @@ import androidx.compose.ui.graphics.Color
 import hnau.common.app.projector.uikit.ItemsRow
 import hnau.common.app.projector.utils.Icon
 import hnau.pinfin.model.transaction.pageable.DateModel
-import hnau.pinfin.projector.transaction_old_2.part.PartDefaults
+import hnau.pinfin.projector.transaction.utils.PartDefaults
 import hnau.pinfin.projector.utils.Label
 import hnau.pinfin.projector.utils.formatter.datetime.DateTimeFormatter
 import hnau.pipe.annotations.Pipe
@@ -108,6 +108,7 @@ class DateProjector(
                         .collectAsState()
                         .value
                         .let(dependencies.dateTimeFormatter::formatDate),
+                    maxLines = 1,
                 )
             }
         }

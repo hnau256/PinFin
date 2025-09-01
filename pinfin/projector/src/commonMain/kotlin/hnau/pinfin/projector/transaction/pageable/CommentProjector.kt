@@ -17,7 +17,10 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -25,7 +28,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import hnau.common.app.projector.uikit.ItemsRow
@@ -35,12 +40,14 @@ import hnau.common.app.projector.uikit.utils.Dimens
 import hnau.common.app.projector.utils.Icon
 import hnau.common.app.projector.utils.collectAsTextFieldValueMutableAccessor
 import hnau.common.app.projector.utils.horizontalDisplayPadding
+import hnau.common.kotlin.foldBoolean
 import hnau.common.kotlin.foldNullable
 import hnau.pinfin.model.transaction.pageable.CommentModel
 import hnau.pinfin.projector.resources.Res
 import hnau.pinfin.projector.resources.comment
-import hnau.pinfin.projector.transaction_old_2.part.PartDefaults
+import hnau.pinfin.projector.transaction.utils.PartDefaults
 import hnau.pinfin.projector.utils.Label
+import hnau.pinfin.projector.utils.LabelDefaults
 import hnau.pipe.annotations.Pipe
 import kotlinx.coroutines.CoroutineScope
 import org.jetbrains.compose.resources.stringResource
@@ -69,67 +76,38 @@ class CommentProjector(
             modifier: Modifier = Modifier,
             contentPadding: PaddingValues,
         ) {
-            Column(
-                modifier = modifier
-                    .padding(contentPadding)
-                    .horizontalDisplayPadding()
-                    .imePadding(),
-                verticalArrangement = Arrangement.spacedBy(Dimens.separation),
-            ) {
-
-                var value by model.comment.collectAsTextFieldValueMutableAccessor()
-                val focusRequester = remember { FocusRequester() }
-                OutlinedTextField(
-                    modifier = Modifier
+            model
+                .suggests
+                .collectAsState()
+                .value
+                .LoadableContent(
+                    modifier = modifier
+                        .padding(contentPadding)
                         .fillMaxWidth()
-                        .focusRequester(focusRequester),
-                    value = value,
-                    onValueChange = { newValue -> value = newValue },
-                    maxLines = 1,
-                    shape = MaterialTheme.shapes.medium,
-                    label = { Text(stringResource(Res.string.comment)) },
-                    keyboardOptions = KeyboardOptions(
-                        capitalization = KeyboardCapitalization.Sentences,
-                        //imeAction =
-                    ),
-                    keyboardActions = KeyboardActions {
-                        TODO()
-                    }
-                )
-                LaunchedEffect(Unit) { focusRequester.requestFocus() }
-
-                model
-                    .suggests
-                    .collectAsState()
-                    .value
-                    .LoadableContent(
+                        .horizontalDisplayPadding()
+                        .imePadding(),
+                    transitionSpec = TransitionSpec.crossfade(),
+                ) { suggests ->
+                    FlowRow(
                         modifier = Modifier
-                            .weight(1f)
-                            .fillMaxWidth(),
-                        transitionSpec = TransitionSpec.crossfade(),
-                    ) { suggests ->
-                        FlowRow(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .weight(1f)
-                                .verticalScroll(rememberScrollState()),
-                            horizontalArrangement = Arrangement.spacedBy(Dimens.smallSeparation),
-                            verticalArrangement = Arrangement.spacedBy(Dimens.smallSeparation),
-                        ) {
-                            suggests
-                                .value
-                                .forEach { suggest ->
-                                    Label(
-                                        onClick = suggest.onClick,
-                                    ) {
-                                        Text(
-                                            text = suggest.comment.text,
-                                        )
-                                    }
+                            .fillMaxWidth()
+                            .verticalScroll(rememberScrollState()),
+                        horizontalArrangement = Arrangement.spacedBy(Dimens.smallSeparation),
+                        verticalArrangement = Arrangement.spacedBy(Dimens.smallSeparation),
+                    ) {
+                        suggests
+                            .value
+                            .forEach { suggest ->
+                                Label(
+                                    onClick = suggest.onClick,
+                                ) {
+                                    Text(
+                                        text = suggest.comment.text,
+                                    )
                                 }
-                        }
+                            }
                     }
-            }
+                }
         }
     }
 
@@ -138,31 +116,38 @@ class CommentProjector(
     fun Content(
         modifier: Modifier = Modifier,
     ) {
-        Label(
-            modifier = modifier,
-            selected = model.isFocused.collectAsState().value,
-            onClick = model.requestFocus,
-            containerColor = PartDefaults.background,
-        ) {
-            ItemsRow {
-                Icon(Icons.Filled.Storefront)
-                val text = model
-                    .comment
-                    .collectAsState()
-                    .value
-                    .text
-                    .takeIf(String::isNotEmpty)
-                Text(
-                    modifier = Modifier.weight(1f),
-                    text = text ?: stringResource(Res.string.comment),
-                    color = text.foldNullable(
-                        ifNull = { LocalContentColor.current.copy(alpha = 0.5f) },
-                        ifNotNull = { Color.Unspecified },
-                    ),
-                    fontStyle = text.foldNullable(
-                        ifNull = { FontStyle.Italic },
-                        ifNotNull = { null },
-                    )
+
+        var value by model.commentEditingString.collectAsTextFieldValueMutableAccessor()
+        val focusRequester = remember { FocusRequester() }
+        OutlinedTextField(
+            colors = PartDefaults.outlinedTextFieldColors,
+            maxLines = 3,
+            shape = LabelDefaults.shape,
+            modifier = modifier
+                .focusRequester(focusRequester)
+                .onFocusChanged { focusState ->
+                    if (focusState.isFocused) {
+                        model.requestFocus()
+                    }
+                },
+            value = value,
+            onValueChange = { newValue -> value = newValue },
+            placeholder = { Text(stringResource(Res.string.comment)) },
+            keyboardOptions = KeyboardOptions(
+                capitalization = KeyboardCapitalization.Sentences,
+                //imeAction =
+            ),
+            keyboardActions = KeyboardActions {
+                TODO()
+            }
+        )
+        val isFocused = model.isFocused
+        val focusManager = LocalFocusManager.current
+        LaunchedEffect(isFocused) {
+            isFocused.collect { focused ->
+                focused.foldBoolean(
+                    ifTrue = { focusRequester.requestFocus() },
+                    ifFalse = { focusManager.clearFocus() },
                 )
             }
         }

@@ -15,6 +15,7 @@ import hnau.common.kotlin.foldNullable
 import hnau.pinfin.model.transaction_old_2.part.CommentModel
 import hnau.pinfin.projector.resources.Res
 import hnau.pinfin.projector.resources.comment
+import hnau.pinfin.projector.transaction.utils.PartDefaults
 import hnau.pinfin.projector.utils.Label
 import hnau.pipe.annotations.Pipe
 import kotlinx.coroutines.CoroutineScope

@@ -6,8 +6,11 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.SearchBar
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -25,11 +28,13 @@ import hnau.common.app.projector.uikit.state.NullableStateContent
 import hnau.common.app.projector.uikit.state.StateContent
 import hnau.common.app.projector.uikit.state.TransitionSpec
 import hnau.common.app.projector.uikit.utils.Dimens
+import hnau.common.app.projector.utils.Icon
 import hnau.common.app.projector.utils.collectAsTextFieldValueMutableAccessor
 import hnau.common.app.projector.utils.horizontalDisplayPadding
 import hnau.pinfin.model.transaction.utils.ChooseOrCreateModel
 import hnau.pinfin.projector.resources.Res
 import hnau.pinfin.projector.resources.search_create
+import hnau.pinfin.projector.utils.LabelDefaults
 import hnau.pipe.annotations.Pipe
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.StateFlow
@@ -190,13 +195,16 @@ class ChooseOrCreateProjector<T : Comparable<T>>(
         val focusRequester = remember { FocusRequester() }
         var query by model.query.collectAsTextFieldValueMutableAccessor()
         OutlinedTextField(
+            leadingIcon = { Icon(Icons.Default.Search) },
+            colors = PartDefaults.outlinedTextFieldColors,
+            shape = LabelDefaults.shape,
             modifier = modifier
                 .focusRequester(focusRequester)
                 .horizontalDisplayPadding(),
             value = query,
             onValueChange = { query = it },
             maxLines = 1,
-            label = { Text(stringResource(Res.string.search_create)) },
+            placeholder = { Text(stringResource(Res.string.search_create)) },
             keyboardOptions = KeyboardOptions(
                 capitalization = KeyboardCapitalization.Sentences,
             )

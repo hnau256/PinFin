@@ -18,7 +18,7 @@ import androidx.compose.ui.Modifier
 import hnau.common.app.projector.uikit.ItemsRow
 import hnau.common.app.projector.utils.Icon
 import hnau.pinfin.model.transaction.pageable.TimeModel
-import hnau.pinfin.projector.transaction_old_2.part.PartDefaults
+import hnau.pinfin.projector.transaction.utils.PartDefaults
 import hnau.pinfin.projector.utils.Label
 import hnau.pinfin.projector.utils.formatter.datetime.DateTimeFormatter
 import hnau.pipe.annotations.Pipe
@@ -99,6 +99,7 @@ class TimeProjector(
                         .collectAsState()
                         .value
                         .let(dependencies.dateTimeFormatter::formatTime),
+                    maxLines = 1,
                 )
             }
         }
