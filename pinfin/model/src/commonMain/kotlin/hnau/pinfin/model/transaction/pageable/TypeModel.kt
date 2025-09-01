@@ -29,6 +29,7 @@ class TypeModel(
     private val skeleton: Skeleton,
     private val isFocused: StateFlow<Boolean>,
     private val requestFocus: () -> Unit,
+    val goForward: () -> Unit,
 ) {
 
     @Pipe
@@ -159,6 +160,7 @@ class TypeModel(
                         skeleton = skeleton.skeleton,
                         isFocused = isFocused,
                         requestFocus = requestFocus,
+                        goForward = goForward,
                     )
                 )
 
@@ -169,6 +171,7 @@ class TypeModel(
                         skeleton = skeleton.skeleton,
                         isFocused = isFocused,
                         requestFocus = requestFocus,
+                        goForward = goForward,
                     )
                 )
             }

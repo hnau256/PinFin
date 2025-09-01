@@ -175,12 +175,24 @@ class TransactionModel(
         .part
         .mapState(scope) { it == part }
 
+    private fun createGoForward(
+        from: Part,
+    ): () -> Unit = {
+        from
+            .shift(1)
+            .foldNullable(
+                ifNull = { /*TODO*/ },
+                ifNotNull = skeleton.part::value::set,
+            )
+    }
+
     val type = TypeModel(
         scope = scope,
         dependencies = dependencies.type(),
         skeleton = skeleton.type,
         isFocused = isPartFocused(Part.Type),
         requestFocus = createRequestFocus(Part.Type),
+        goForward = createGoForward(Part.Type),
     )
 
     val date = DateModel(
@@ -189,6 +201,7 @@ class TransactionModel(
         skeleton = skeleton.date,
         isFocused = isPartFocused(Part.Date),
         requestFocus = createRequestFocus(Part.Date),
+        goForward = createGoForward(Part.Date),
     )
 
     val time = TimeModel(
@@ -197,6 +210,7 @@ class TransactionModel(
         skeleton = skeleton.time,
         isFocused = isPartFocused(Part.Time),
         requestFocus = createRequestFocus(Part.Time),
+        goForward = createGoForward(Part.Time),
     )
 
     val comment = CommentModel(
@@ -212,7 +226,8 @@ class TransactionModel(
                     .takeIf { comment -> comment.text.isNotEmpty() }
                     ?.let { comment -> comment to transaction.timestamp }
             }
-        }
+        },
+        goForward = createGoForward(Part.Comment),
     )
 
     val pageType: StateFlow<Pair<Part, PageType>> = skeleton

@@ -23,6 +23,7 @@ class AmountModel(
     private val skeleton: Skeleton,
     val isFocused: StateFlow<Boolean>,
     val requestFocus: () -> Unit,
+    val goForward: () -> Unit,
 ) {
 
     @Pipe
@@ -66,6 +67,7 @@ class AmountModel(
         dependencies: Dependencies,
         skeleton: Skeleton,
         val delegate: CommonAmountModel,
+        val goForward: () -> Unit,
     ) {
 
         @Pipe
@@ -87,6 +89,7 @@ class AmountModel(
             .toAccessor()
             .getOrInit { Page.Skeleton() },
         delegate = delegate,
+        goForward = goForward,
     )
 
     val amount: StateFlow<Amount?>

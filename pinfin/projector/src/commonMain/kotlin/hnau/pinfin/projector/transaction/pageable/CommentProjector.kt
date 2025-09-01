@@ -32,6 +32,7 @@ import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import hnau.common.app.projector.uikit.ItemsRow
 import hnau.common.app.projector.uikit.state.LoadableContent
@@ -135,11 +136,9 @@ class CommentProjector(
             placeholder = { Text(stringResource(Res.string.comment)) },
             keyboardOptions = KeyboardOptions(
                 capitalization = KeyboardCapitalization.Sentences,
-                //imeAction =
+                imeAction = ImeAction.Next,
             ),
-            keyboardActions = KeyboardActions {
-                TODO()
-            }
+            keyboardActions = KeyboardActions { model.goForward() },
         )
         val isFocused = model.isFocused
         val focusManager = LocalFocusManager.current

@@ -23,6 +23,7 @@ import hnau.pipe.annotations.Pipe
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.UseSerializers
 
@@ -32,6 +33,7 @@ class EntryModel(
     private val skeleton: Skeleton,
     private val isFocused: StateFlow<Boolean>,
     private val requestFocus: () -> Unit,
+    private val goForward: () -> Unit,
 ) {
 
     enum class Part {
@@ -139,12 +141,24 @@ class EntryModel(
         requestFocus()
     }
 
+    private fun createGoForward(
+        from: Part,
+    ): () -> Unit = {
+        from
+            .shift(1)
+            .foldNullable(
+                ifNull = goForward,
+                ifNotNull = skeleton.part::value::set,
+            )
+    }
+
     val account = AccountModel(
         scope = scope,
         skeleton = skeleton.account,
         dependencies = dependencies.account(),
         isFocused = createIsFocused(Part.Account),
         requestFocus = createRequestFocus(Part.Account),
+        goForward = createGoForward(Part.Account),
     )
 
     val records = RecordsModel(
@@ -153,6 +167,7 @@ class EntryModel(
         dependencies = dependencies.records(),
         isFocused = createIsFocused(Part.Records),
         requestFocus = createRequestFocus(Part.Records),
+        goForward = createGoForward(Part.Records),
     )
 
     class Page(

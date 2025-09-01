@@ -38,6 +38,7 @@ class AmountWithDirectionModel(
     private val category: StateFlow<CategoryInfo?>,
     val isFocused: StateFlow<Boolean>,
     val requestFocus: () -> Unit,
+    val goForward: () -> Unit,
 ) {
 
     @Pipe
@@ -81,6 +82,7 @@ class AmountWithDirectionModel(
         skeleton = skeleton.delegate,
         isFocused = isFocused,
         requestFocus = requestFocus,
+        goForward = goForward,
     )
 
     fun createPage(

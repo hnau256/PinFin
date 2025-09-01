@@ -44,6 +44,7 @@ class RecordsModel(
     private val skeleton: Skeleton,
     val isFocused: StateFlow<Boolean>,
     val requestFocus: () -> Unit,
+    private val goForward: () -> Unit,
 ) {
 
     @Pipe
@@ -150,6 +151,16 @@ class RecordsModel(
                         requestFocus = {
                             selectRecord(id)
                             requestFocus()
+                        },
+                        goForward = {
+                            skeleton
+                                .records
+                                .value
+                                .forward()
+                                .foldNullable(
+                                    ifNull = ::addNewRecord,
+                                    ifNotNull = skeleton.records::value::set,
+                                )
                         }
                     )
 
@@ -198,6 +209,19 @@ class RecordsModel(
             }
         }
 
+    private fun addNewRecord() {
+        skeleton.records.update { records ->
+            ZipList(
+                before = records,
+                selected = Pair(
+                    first = RecordId.createNew(),
+                    second = RecordModel.Skeleton.createForNew(),
+                ),
+                after = emptyList(),
+            )
+        }
+    }
+
     class Page(
         scope: CoroutineScope,
         dependencies: Dependencies,
@@ -241,18 +265,7 @@ class RecordsModel(
                 val index = items.before.size
                 Triple(index, id, page)
             },
-        addNewRecord = {
-            skeleton.records.update { records ->
-                ZipList(
-                    before = records,
-                    selected = Pair(
-                        first = RecordId.createNew(),
-                        second = RecordModel.Skeleton.createForNew(),
-                    ),
-                    after = emptyList(),
-                )
-            }
-        }
+        addNewRecord = ::addNewRecord,
     )
 
     val records: StateFlow<NonEmptyList<TransactionInfo.Type.Entry.Record>?> = items

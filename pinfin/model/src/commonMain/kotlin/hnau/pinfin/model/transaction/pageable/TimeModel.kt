@@ -6,7 +6,9 @@ package hnau.pinfin.model.transaction.pageable
 
 import hnau.common.app.model.goback.GoBackHandler
 import hnau.common.app.model.goback.NeverGoBackHandler
+import hnau.common.kotlin.coroutines.onSet
 import hnau.common.kotlin.coroutines.toMutableStateFlowAsInitial
+import hnau.common.kotlin.foldNullable
 import hnau.common.kotlin.getOrInit
 import hnau.common.kotlin.serialization.MutableStateFlowSerializer
 import hnau.common.kotlin.toAccessor
@@ -14,6 +16,14 @@ import hnau.pipe.annotations.Pipe
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.drop
+import kotlinx.coroutines.flow.filterNotNull
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.runningFold
+import kotlinx.coroutines.launch
+import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalTime
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
@@ -27,6 +37,7 @@ class TimeModel(
     private val skeleton: Skeleton,
     val isFocused: StateFlow<Boolean>,
     val requestFocus: () -> Unit,
+    private val goForward: () -> Unit,
 ) {
 
     @Pipe
@@ -86,6 +97,19 @@ class TimeModel(
             .getOrInit { Page.Skeleton() },
         time = skeleton.time,
     )
+
+    init {
+        scope.launch {
+            var cache = skeleton.time.value
+            skeleton.time.collect { newTime ->
+                val localCache = cache
+                cache = newTime
+                if (newTime.minute != localCache.minute) {
+                    goForward()
+                }
+            }
+        }
+    }
 
     val time: StateFlow<LocalTime>
         get() = skeleton.time

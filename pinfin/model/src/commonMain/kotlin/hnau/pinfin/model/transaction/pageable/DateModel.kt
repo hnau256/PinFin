@@ -6,14 +6,24 @@ package hnau.pinfin.model.transaction.pageable
 
 import hnau.common.app.model.goback.GoBackHandler
 import hnau.common.app.model.goback.NeverGoBackHandler
+import hnau.common.kotlin.coroutines.onSet
 import hnau.common.kotlin.coroutines.toMutableStateFlowAsInitial
+import hnau.common.kotlin.foldNullable
 import hnau.common.kotlin.getOrInit
+import hnau.common.kotlin.it
 import hnau.common.kotlin.serialization.MutableStateFlowSerializer
 import hnau.common.kotlin.toAccessor
 import hnau.pipe.annotations.Pipe
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.drop
+import kotlinx.coroutines.flow.filterNotNull
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.runningFold
+import kotlinx.coroutines.launch
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
@@ -27,6 +37,7 @@ class DateModel(
     private val skeleton: Skeleton,
     val isFocused: StateFlow<Boolean>,
     val requestFocus: () -> Unit,
+    private val goForward: () -> Unit,
 ) {
 
     @Pipe
@@ -86,6 +97,19 @@ class DateModel(
             .getOrInit { Page.Skeleton() },
         date = skeleton.date,
     )
+
+    init {
+        scope.launch {
+            var cache = skeleton.date.value
+            skeleton.date.collect { newTime ->
+                val localCache = cache
+                cache = newTime
+                if (newTime != localCache) {
+                    goForward()
+                }
+            }
+        }
+    }
 
     val date: StateFlow<LocalDate>
         get() = skeleton.date

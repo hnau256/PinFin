@@ -31,6 +31,7 @@ class AccountModel(
     private val skeleton: Skeleton,
     val isFocused: StateFlow<Boolean>,
     val requestFocus: () -> Unit,
+    private val goForward: () -> Unit,
 ) {
 
     @Pipe
@@ -82,7 +83,7 @@ class AccountModel(
         selected = skeleton.account.mapState(scope, AccountInfo?::toOption),
         onReady = { selected ->
             skeleton.account.value = selected
-            //TODO go forward
+            goForward()
         }
     )
 

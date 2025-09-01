@@ -34,6 +34,7 @@ class CommentModel(
     val isFocused: StateFlow<Boolean>,
     val requestFocus: () -> Unit,
     private val extractSuggests: suspend (BudgetState) -> List<Pair<Comment, Instant>>,
+    val goForward: () -> Unit,
 ) {
 
     @Pipe
@@ -73,6 +74,7 @@ class CommentModel(
         skeleton: Skeleton,
         val comment: MutableStateFlow<EditingString>,
         extractSuggests: suspend (BudgetState) -> List<Pair<Comment, Instant>>,
+        private val goForward: () -> Unit,
     ) {
 
         @Pipe
@@ -103,7 +105,7 @@ class CommentModel(
                     comment = item,
                     onClick = {
                         comment.value = item.text.toEditingString()
-                        //TODO forward
+                        goForward()
                     }
                 )
             },
@@ -123,6 +125,7 @@ class CommentModel(
             .getOrInit { Page.Skeleton() },
         comment = skeleton.comment,
         extractSuggests = extractSuggests,
+        goForward = goForward,
     )
 
     val commentEditingString: MutableStateFlow<EditingString>

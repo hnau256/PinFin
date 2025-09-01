@@ -22,8 +22,11 @@ import hnau.pinfin.model.utils.budget.state.CategoryInfo
 import hnau.pinfin.model.utils.budget.state.TransactionInfo
 import hnau.pipe.annotations.Pipe
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.launch
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.UseSerializers
 
@@ -33,6 +36,7 @@ class RecordModel(
     private val skeleton: Skeleton,
     val isFocused: StateFlow<Boolean>,
     val requestFocus: () -> Unit,
+    val goForward: () -> Unit,
     private val remove: StateFlow<(() -> Unit)?>,
 ) {
 
@@ -105,6 +109,26 @@ class RecordModel(
         val amount: AmountWithDirectionModel.Skeleton,
     ) {
 
+        @Serializable
+        sealed interface Part {
+
+            @Serializable
+            @SerialName("simple")
+            data class Simple(
+                val part: RecordModel.Part,
+            ) : Part
+
+            @Serializable
+            @SerialName("after_comment")
+            data object AfterComment : Part
+
+            companion object {
+
+                val default: Part =
+                    Simple(RecordModel.Part.default)
+            }
+        }
+
         companion object {
 
             fun createForNew(): Skeleton = Skeleton(
@@ -129,10 +153,32 @@ class RecordModel(
         }
     }
 
+    private val selectedCategoryWrapper: MutableStateFlow<StateFlow<CategoryInfo?>> =
+        null.toMutableStateFlowAsInitial().toMutableStateFlowAsInitial()
+
+    private val part: StateFlow<Part> = skeleton
+        .part
+        .scopedInState(scope)
+        .flatMapState(scope) { (scope, part) ->
+            when (part) {
+                is Skeleton.Part.Simple -> part.part.toMutableStateFlowAsInitial()
+                Skeleton.Part.AfterComment -> selectedCategoryWrapper
+                    .scopedInState(scope)
+                    .flatMapState(scope) { (scope, category) ->
+                        category.mapState(scope) { categoryOrNull ->
+                            categoryOrNull.foldNullable(
+                                ifNull = { Part.Category },
+                                ifNotNull = { Part.Amount },
+                            )
+                        }
+                    }
+            }
+        }
+
     private fun switchToPart(
         part: Part,
     ) {
-        skeleton.part.value = part
+        skeleton.part.value = Skeleton.Part.Simple(part)
     }
 
     private fun createRequestFocus(
@@ -141,9 +187,20 @@ class RecordModel(
 
     private fun isPartFocused(
         part: Part,
-    ): StateFlow<Boolean> = skeleton
+    ): StateFlow<Boolean> = this
         .part
         .mapState(scope) { it == part }
+
+    private fun createGoForward(
+        from: Part,
+    ): () -> Unit = {
+        from
+            .shift(1)
+            .foldNullable(
+                ifNull = goForward,
+                ifNotNull = ::switchToPart,
+            )
+    }
 
     val comment = CommentModel(
         scope = scope,
@@ -169,7 +226,8 @@ class RecordModel(
                             Comment(comment) to timestamp
                         }
                 }
-        }
+        },
+        goForward = { skeleton.part.value = Skeleton.Part.AfterComment },
     )
 
     val category = CategoryModel(
@@ -179,7 +237,10 @@ class RecordModel(
         isFocused = isPartFocused(Part.Category),
         requestFocus = createRequestFocus(Part.Category),
         comment = comment.comment,
-    )
+        goForward = createGoForward(Part.Category),
+    ).also { category ->
+        selectedCategoryWrapper.value = category.category
+    }
 
     val amount = AmountWithDirectionModel(
         scope = scope,
@@ -188,6 +249,7 @@ class RecordModel(
         isFocused = isPartFocused(Part.Amount),
         requestFocus = createRequestFocus(Part.Amount),
         category = category.category,
+        goForward = createGoForward(Part.Amount),
     )
 
     class Page(
@@ -224,8 +286,7 @@ class RecordModel(
         comment = comment,
         category = category,
         amount = amount,
-        page = skeleton
-            .part
+        page = part
             .mapWithScope(scope) { pageScope, part ->
                 when (part) {
 
@@ -307,8 +368,7 @@ class RecordModel(
         .entries
         .getOrNull(ordinal + offset)
 
-    val goBackHandler: GoBackHandler = skeleton
-        .part
+    val goBackHandler: GoBackHandler = part
         .scopedInState(scope)
         .flatMapState(scope) { (partScope, part) ->
             when (part) {

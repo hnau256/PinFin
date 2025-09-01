@@ -31,6 +31,7 @@ class TransferModel(
     private val skeleton: Skeleton,
     private val isFocused: StateFlow<Boolean>,
     private val requestFocus: () -> Unit,
+    private val goForward: () -> Unit,
 ) {
 
     enum class Part {
@@ -153,12 +154,24 @@ class TransferModel(
         requestFocus()
     }
 
+    private fun createGoForward(
+        from: Part,
+    ): () -> Unit = {
+        from
+            .shift(1)
+            .foldNullable(
+                ifNull = goForward,
+                ifNotNull = skeleton.part::value::set,
+            )
+    }
+
     val from = AccountModel(
         scope = scope,
         skeleton = skeleton.from,
         dependencies = dependencies.account(),
         isFocused = createIsFocused(Part.From),
         requestFocus = createRequestFocus(Part.From),
+        goForward = createGoForward(Part.From),
     )
 
     val to = AccountModel(
@@ -167,6 +180,7 @@ class TransferModel(
         dependencies = dependencies.account(),
         isFocused = createIsFocused(Part.To),
         requestFocus = createRequestFocus(Part.To),
+        goForward = createGoForward(Part.To),
     )
 
     val amount = AmountModel(
@@ -175,6 +189,7 @@ class TransferModel(
         dependencies = dependencies.amount(),
         isFocused = createIsFocused(Part.Amount),
         requestFocus = createRequestFocus(Part.Amount),
+        goForward = createGoForward(Part.Amount),
     )
 
     class Page(

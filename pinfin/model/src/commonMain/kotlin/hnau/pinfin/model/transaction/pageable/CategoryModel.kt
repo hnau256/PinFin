@@ -43,6 +43,7 @@ class CategoryModel(
     private val skeleton: Skeleton,
     val isFocused: StateFlow<Boolean>,
     val requestFocus: () -> Unit,
+    val goForward: () -> Unit,
     private val comment: StateFlow<Comment>,
 ) {
 
@@ -94,10 +95,10 @@ class CategoryModel(
                 )
             }
         ),
-        selected = skeleton.manualCategory.mapState(scope, CategoryInfo?::toOption),
+        selected = category.mapState(scope, CategoryInfo?::toOption),
         onReady = { selected ->
             skeleton.manualCategory.value = selected
-            //TODO go forward
+            goForward()
         }
     )
 
