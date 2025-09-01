@@ -34,11 +34,12 @@ class CategoryProjector(
     }
 
     @Composable
-    fun ContentIcon(
+    fun Content(
         selected: Boolean,
         onClick: (() -> Unit)?,
         modifier: Modifier = Modifier,
         viewMode: ViewMode = ViewMode.default,
+        content: @Composable (inner: @Composable () -> Unit) -> Unit = { inner -> inner() },
     ) {
         CategoryContent(
             info = model.category.collectAsState().value,
@@ -46,6 +47,7 @@ class CategoryProjector(
             selected = selected,
             onClick = onClick,
             viewMode = viewMode,
+            content = content,
         )
     }
 

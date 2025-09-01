@@ -10,6 +10,7 @@ interface AmountFormatter {
     fun format(
         amount: Amount,
         alwaysShowSign: Boolean = false,
+        alwaysShowCents: Boolean = true,
     ): String
 
     fun parse(
@@ -24,7 +25,8 @@ interface AmountFormatter {
 
             override fun format(
                 amount: Amount,
-                alwaysShowSign: Boolean,//TODO
+                alwaysShowSign: Boolean,
+                alwaysShowCents: Boolean,
             ): String = amount
                 .value
                 .toLong()
@@ -45,9 +47,20 @@ interface AmountFormatter {
                         .absoluteValue
                         .toString()
                         .padStart(2, '0')
-                    listOf(count, cents).joinToString(
-                        separator = "."
-                    )
+                    listOf(count, cents)
+                        .joinToString(
+                            separator = "."
+                        )
+                        .let { full ->
+                            alwaysShowCents.foldBoolean(
+                                ifTrue = { full },
+                                ifFalse = {
+                                    full
+                                        .dropLastWhile { char -> char == '0' }
+                                        .removeSuffix(".")
+                                }
+                            )
+                        }
                 }
                 .let { raw ->
                     alwaysShowSign.foldBoolean(

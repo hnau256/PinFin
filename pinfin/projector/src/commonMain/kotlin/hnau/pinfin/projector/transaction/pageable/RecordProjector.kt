@@ -15,13 +15,16 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedCard
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import hnau.common.app.projector.uikit.ItemsRow
 import hnau.common.app.projector.uikit.state.NullableStateContent
 import hnau.common.app.projector.uikit.state.StateContent
 import hnau.common.app.projector.uikit.state.TransitionSpec
@@ -29,6 +32,7 @@ import hnau.common.app.projector.uikit.utils.Dimens
 import hnau.common.app.projector.utils.Icon
 import hnau.common.app.projector.utils.copy
 import hnau.common.kotlin.coroutines.mapWithScope
+import hnau.pinfin.model.transaction.pageable.AmountWithDirectionModel
 import hnau.pinfin.model.transaction.pageable.RecordModel
 import hnau.pinfin.model.utils.budget.state.CategoryInfo
 import hnau.pinfin.projector.resources.Res
@@ -38,8 +42,10 @@ import hnau.pinfin.projector.resources.there_are_no_categories
 import hnau.pinfin.projector.transaction.utils.ChooseOrCreateMessages
 import hnau.pinfin.projector.transaction.utils.ChooseOrCreateProjector
 import hnau.pinfin.projector.transaction.utils.createPagesTransitionSpec
+import hnau.pinfin.projector.utils.AmountContent
 import hnau.pinfin.projector.utils.SlideOrientation
 import hnau.pinfin.projector.utils.ViewMode
+import hnau.pinfin.projector.utils.formatter.AmountFormatter
 import hnau.pipe.annotations.Pipe
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.StateFlow
@@ -54,7 +60,11 @@ class RecordProjector(
     @Pipe
     interface Dependencies {
 
+        val amountFormatter: AmountFormatter
+
         fun category(): CategoryProjector.Dependencies
+
+        fun amount(): AmountWithDirectionProjector.Dependencies
     }
 
     class Page(
@@ -279,8 +289,7 @@ class RecordProjector(
                         Spacer(Modifier.width(Dimens.smallSeparation))
                         amount.Content(
                             modifier = Modifier
-                                .fillMaxHeight()
-                                .weight(1f),
+                                .fillMaxHeight(),
                         )
                     }
                 }
@@ -318,12 +327,26 @@ class RecordProjector(
     fun Content(
         modifier: Modifier = Modifier,
     ) {
-        category.ContentIcon(
+        category.Content(
             modifier = modifier,
             onClick = model.requestFocus,
             selected = model.isFocused.collectAsState().value,
             viewMode = ViewMode.Icon,
-        )
+        ) { category ->
+            ItemsRow {
+                category()
+                Text(
+                    text = dependencies
+                        .amountFormatter
+                        .format(
+                            amount = model.amountOrZero.collectAsState().value,
+                            alwaysShowSign = false,
+                            alwaysShowCents = true,
+                        ),
+                    style = MaterialTheme.typography.titleSmall,
+                )
+            }
+        }
     }
 
     companion object {

@@ -109,7 +109,7 @@ class RecordsProjector(
         ) {
             val records by records.collectAsState()
             LazyRow(
-                modifier = modifier,
+                modifier = modifier.height(40.dp),
                 contentPadding = contentPadding + PaddingValues(horizontal = Dimens.separation),
                 horizontalArrangement = Arrangement.spacedBy(Dimens.smallSeparation),
                 verticalAlignment = Alignment.CenterVertically,
@@ -118,7 +118,9 @@ class RecordsProjector(
                     items = records,
                     key = { it.id.id },
                 ) { item ->
-                    item.projector.Content()
+                    item.projector.Content(
+                        modifier = Modifier.fillMaxHeight(),
+                    )
                 }
                 item {
                     OutlinedIconButton(
