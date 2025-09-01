@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
@@ -19,6 +20,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedIconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -102,13 +104,23 @@ class RecordsProjector(
             }
         }
 
+        private val selectedTabIndex: StateFlow<Int> = model
+            .items
+            .mapState(scope) { it.before.size }
+
         @Composable
         private fun Tabs(
             modifier: Modifier = Modifier,
             contentPadding: PaddingValues,
         ) {
             val records by records.collectAsState()
+            val tabsScrollState = rememberLazyListState()
+            val selectedTabIndex by selectedTabIndex.collectAsState()
+            LaunchedEffect(selectedTabIndex) {
+                tabsScrollState.animateScrollToItem(selectedTabIndex)
+            }
             LazyRow(
+                state = tabsScrollState,
                 modifier = modifier.height(40.dp),
                 contentPadding = contentPadding + PaddingValues(horizontal = Dimens.separation),
                 horizontalArrangement = Arrangement.spacedBy(Dimens.smallSeparation),
