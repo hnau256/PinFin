@@ -4,9 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -19,33 +17,35 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedIconButton
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.util.fastForEachIndexed
+import hnau.common.app.projector.uikit.ItemsRow
 import hnau.common.app.projector.uikit.state.StateContent
 import hnau.common.app.projector.uikit.utils.Dimens
 import hnau.common.app.projector.utils.Icon
 import hnau.common.app.projector.utils.copy
 import hnau.common.app.projector.utils.plus
 import hnau.common.kotlin.coroutines.mapReusable
+import hnau.common.kotlin.coroutines.mapState
 import hnau.common.kotlin.coroutines.mapWithScope
 import hnau.pinfin.model.transaction.pageable.RecordsModel
 import hnau.pinfin.model.transaction.utils.RecordId
 import hnau.pinfin.model.utils.ZipList
+import hnau.pinfin.projector.resources.Res
+import hnau.pinfin.projector.resources.records
 import hnau.pinfin.projector.transaction.utils.createPagesTransitionSpec
 import hnau.pinfin.projector.transaction_old_2.part.PartDefaults
-import hnau.pinfin.projector.utils.CategoryContent
 import hnau.pinfin.projector.utils.Label
 import hnau.pinfin.projector.utils.SlideOrientation
-import hnau.pinfin.projector.utils.ViewMode
 import hnau.pipe.annotations.Pipe
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.StateFlow
+import org.jetbrains.compose.resources.stringResource
 
 class RecordsProjector(
     scope: CoroutineScope,
@@ -201,6 +201,10 @@ class RecordsProjector(
         }
     }
 
+    private val recordsCount: StateFlow<Int> = model
+        .items
+        .mapState(scope, Collection<*>::size)
+
     @Composable
     fun Content(
         modifier: Modifier = Modifier,
@@ -211,28 +215,26 @@ class RecordsProjector(
             selected = model.isFocused.collectAsState().value,
             containerColor = PartDefaults.background,
         ) {
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(Dimens.extraSmallSeparation),
-            ) {
-                val categories by model.categories.collectAsState()
-                //TODO handle empty
-                categories.fastForEachIndexed { i, category ->
-                    CategoryContent(
-                        info = category,
-                        viewMode = ViewMode.Icon,
-                    )
-                    if (i < categories.lastIndex) {
-                        Box(
-                            modifier = Modifier
-                                .size(4.dp)
-                                .background(
-                                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f),
-                                    shape = CircleShape,
-                                )
+            ItemsRow {
+                Text(
+                    text = stringResource(Res.string.records),
+                    maxLines = 1,
+                )
+                Box(
+                    modifier = Modifier
+                        .size(4.dp)
+                        .background(
+                            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f),
+                            shape = CircleShape,
                         )
-                    }
-                }
+                )
+                Text(
+                    text = recordsCount
+                        .collectAsState()
+                        .value
+                        .toString(),
+                    maxLines = 1,
+                )
             }
         }
 

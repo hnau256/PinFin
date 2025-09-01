@@ -6,7 +6,6 @@ package hnau.pinfin.model.transaction.pageable
 
 import hnau.common.app.model.goback.GoBackHandler
 import hnau.common.app.model.goback.NeverGoBackHandler
-import hnau.common.kotlin.coroutines.mapState
 import hnau.common.kotlin.getOrInit
 import hnau.common.kotlin.serialization.MutableStateFlowSerializer
 import hnau.common.kotlin.toAccessor

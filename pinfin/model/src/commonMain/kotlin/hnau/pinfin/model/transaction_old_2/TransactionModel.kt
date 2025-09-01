@@ -14,11 +14,11 @@ import hnau.common.kotlin.foldNullable
 import hnau.common.kotlin.serialization.MutableStateFlowSerializer
 import hnau.pinfin.data.Transaction
 import hnau.pinfin.data.TransactionType
+import hnau.pinfin.model.transaction_old_2.page.PageModel
 import hnau.pinfin.model.transaction_old_2.part.CommentModel
 import hnau.pinfin.model.transaction_old_2.part.DateModel
 import hnau.pinfin.model.transaction_old_2.part.TimeModel
 import hnau.pinfin.model.transaction_old_2.part.TypeModel
-import hnau.pinfin.model.transaction_old_2.page.PageModel
 import hnau.pinfin.model.utils.budget.repository.BudgetRepository
 import hnau.pinfin.model.utils.budget.state.TransactionInfo
 import hnau.pipe.annotations.Pipe

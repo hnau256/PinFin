@@ -32,7 +32,6 @@ import hnau.common.app.projector.uikit.utils.Dimens
 import hnau.common.app.projector.utils.Icon
 import hnau.common.app.projector.utils.copy
 import hnau.common.kotlin.coroutines.mapWithScope
-import hnau.pinfin.model.transaction.pageable.AmountWithDirectionModel
 import hnau.pinfin.model.transaction.pageable.RecordModel
 import hnau.pinfin.model.utils.budget.state.CategoryInfo
 import hnau.pinfin.projector.resources.Res
@@ -42,7 +41,6 @@ import hnau.pinfin.projector.resources.there_are_no_categories
 import hnau.pinfin.projector.transaction.utils.ChooseOrCreateMessages
 import hnau.pinfin.projector.transaction.utils.ChooseOrCreateProjector
 import hnau.pinfin.projector.transaction.utils.createPagesTransitionSpec
-import hnau.pinfin.projector.utils.AmountContent
 import hnau.pinfin.projector.utils.SlideOrientation
 import hnau.pinfin.projector.utils.ViewMode
 import hnau.pinfin.projector.utils.formatter.AmountFormatter

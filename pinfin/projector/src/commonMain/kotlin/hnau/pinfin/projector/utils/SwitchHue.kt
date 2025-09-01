@@ -7,7 +7,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import dynamiccolor.Variant
 import hnau.common.app.model.theme.ThemeBrightness
-import hnau.common.app.model.theme.ThemeBrightnessValues
 import hnau.common.app.projector.utils.theme.DynamicSchemeConfig
 import hnau.common.app.projector.utils.theme.buildColorScheme
 import hnau.common.app.projector.utils.theme.themeBrightness

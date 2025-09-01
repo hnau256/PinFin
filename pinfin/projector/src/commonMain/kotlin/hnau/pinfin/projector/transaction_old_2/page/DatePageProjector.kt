@@ -18,9 +18,7 @@ import hnau.pipe.annotations.Pipe
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.atStartOfDayIn
-import kotlinx.datetime.toLocalDateTime
 import kotlin.time.Duration.Companion.days
-import kotlin.time.Instant
 
 class DatePageProjector(
     scope: CoroutineScope,

@@ -37,7 +37,6 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.UseSerializers
-import java.util.UUID
 
 class RecordsModel(
     scope: CoroutineScope,
@@ -178,26 +177,6 @@ class RecordsModel(
                         previous + amountOrZero
                     }
                 }
-        }
-
-    val categories: StateFlow<List<CategoryInfo>> = items
-        .scopedInState(scope)
-        .flatMapState(scope) { (scope, items) ->
-            items
-                .fold<_, StateFlow<List<CategoryInfo>>>(
-                    initial = MutableStateFlow(emptyList()),
-                ) { acc, item ->
-                    acc.combineStateWith(
-                        scope = scope,
-                        other = item.model.category.category,
-                    ) { previous, categoryOrNull ->
-                        categoryOrNull.foldNullable(
-                            ifNull = { previous },
-                            ifNotNull = { category -> previous + category },
-                        )
-                    }
-                }
-                .mapState(scope, List<CategoryInfo>::distinct)
         }
 
     private val usedCategories: StateFlow<Set<CategoryInfo>> = items

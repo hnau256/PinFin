@@ -25,10 +25,10 @@ import hnau.common.app.projector.utils.Icon
 import hnau.common.app.projector.utils.horizontalDisplayPadding
 import hnau.pinfin.model.utils.amount
 import hnau.pinfin.model.utils.budget.state.TransactionInfo
+import hnau.pinfin.projector.utils.AccountContent
 import hnau.pinfin.projector.utils.AmountContent
 import hnau.pinfin.projector.utils.ArrowDirection
 import hnau.pinfin.projector.utils.ArrowIcon
-import hnau.pinfin.projector.utils.AccountContent
 import hnau.pinfin.projector.utils.CategoryContent
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime

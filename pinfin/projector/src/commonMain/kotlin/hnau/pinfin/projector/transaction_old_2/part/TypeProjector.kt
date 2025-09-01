@@ -7,11 +7,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import hnau.common.app.projector.uikit.state.StateContent
 import hnau.common.app.projector.uikit.state.TransitionSpec
-import hnau.common.kotlin.coroutines.mapWithScope
 import hnau.pinfin.data.TransactionType
 import hnau.pinfin.model.transaction_old_2.part.TypeModel
-import hnau.pinfin.model.transaction_old_2.part.type.EntryModel
-import hnau.pinfin.model.transaction_old_2.part.type.TransferModel
 import hnau.pinfin.projector.transaction_old_2.part.type.EntryProjector
 import hnau.pinfin.projector.transaction_old_2.part.type.PartTypeProjector
 import hnau.pinfin.projector.transaction_old_2.part.type.TransferProjector

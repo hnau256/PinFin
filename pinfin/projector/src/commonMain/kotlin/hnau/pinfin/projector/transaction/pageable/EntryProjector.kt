@@ -19,7 +19,6 @@ import hnau.common.app.projector.utils.Icon
 import hnau.common.kotlin.coroutines.mapWithScope
 import hnau.pinfin.model.transaction.pageable.EntryModel
 import hnau.pinfin.model.utils.budget.state.AccountInfo
-import hnau.pinfin.projector.transaction.utils.AmountOrNullContent
 import hnau.pinfin.projector.transaction.utils.ChooseOrCreateProjector
 import hnau.pinfin.projector.transaction.utils.createPagesTransitionSpec
 import hnau.pinfin.projector.utils.ArrowDirection

@@ -12,7 +12,6 @@ import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.style.TextAlign
 import hnau.common.app.projector.uikit.ItemsRow
-import hnau.common.app.projector.uikit.shape.HnauShape
 import hnau.common.app.projector.utils.Icon
 import hnau.common.kotlin.foldNullable
 import hnau.pinfin.data.Hue

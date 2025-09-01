@@ -3,8 +3,8 @@ package hnau.pinfin.model.transaction_old_2.part.type
 import hnau.common.app.model.goback.GoBackHandler
 import hnau.common.kotlin.getOrInit
 import hnau.common.kotlin.toAccessor
-import hnau.pinfin.model.transaction_old_2.page.type.TypePageModel
 import hnau.pinfin.model.transaction_old_2.page.type.TransferPageModel
+import hnau.pinfin.model.transaction_old_2.page.type.TypePageModel
 import hnau.pinfin.model.utils.budget.state.TransactionInfo
 import hnau.pipe.annotations.Pipe
 import kotlinx.coroutines.CoroutineScope

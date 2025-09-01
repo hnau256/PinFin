@@ -15,7 +15,6 @@ import androidx.compose.ui.Modifier
 import hnau.pinfin.model.transaction_old_2.page.TimePageModel
 import hnau.pipe.annotations.Pipe
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.datetime.LocalTime
 
 class TimePageProjector(
     scope: CoroutineScope,

@@ -7,7 +7,6 @@ import hnau.pinfin.projector.resources.categories_not_found
 import hnau.pinfin.projector.resources.create_new_category
 import hnau.pinfin.projector.resources.there_are_no_categories
 import hnau.pinfin.projector.transaction.utils.ChooseOrCreateMessages
-import hnau.pinfin.projector.utils.AccountContent
 import hnau.pinfin.projector.utils.CategoryContent
 import hnau.pinfin.projector.utils.choose.Content
 import hnau.pipe.annotations.Pipe

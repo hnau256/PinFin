@@ -21,8 +21,8 @@ import hnau.pinfin.model.budget.analytics.tab.AccountsModel
 import hnau.pinfin.model.utils.budget.state.AccountInfo
 import hnau.pinfin.projector.resources.Res
 import hnau.pinfin.projector.resources.accounts
-import hnau.pinfin.projector.utils.AmountContent
 import hnau.pinfin.projector.utils.AccountContent
+import hnau.pinfin.projector.utils.AmountContent
 import hnau.pinfin.projector.utils.formatter.AmountFormatter
 import hnau.pipe.annotations.Pipe
 import kotlinx.coroutines.CoroutineScope
