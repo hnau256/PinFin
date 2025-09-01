@@ -38,8 +38,8 @@ import hnau.pinfin.projector.resources.there_are_no_categories
 import hnau.pinfin.projector.transaction.utils.ChooseOrCreateMessages
 import hnau.pinfin.projector.transaction.utils.ChooseOrCreateProjector
 import hnau.pinfin.projector.transaction.utils.createPagesTransitionSpec
-import hnau.pinfin.projector.utils.CategoryViewMode
 import hnau.pinfin.projector.utils.SlideOrientation
+import hnau.pinfin.projector.utils.ViewMode
 import hnau.pipe.annotations.Pipe
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.StateFlow
@@ -322,7 +322,7 @@ class RecordProjector(
             modifier = modifier,
             onClick = model.requestFocus,
             selected = model.isFocused.collectAsState().value,
-            viewMode = CategoryViewMode.Icon,
+            viewMode = ViewMode.Icon,
         )
     }
 

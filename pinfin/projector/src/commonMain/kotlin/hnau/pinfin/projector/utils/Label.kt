@@ -15,9 +15,17 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Shape
 import hnau.common.app.projector.uikit.utils.Dimens
 import hnau.common.kotlin.foldBoolean
 import hnau.common.kotlin.foldNullable
+
+data object LabelDefaults {
+
+    val shape: Shape
+        @Composable
+        get() = MaterialTheme.shapes.small
+}
 
 @Composable
 fun Label(
@@ -27,9 +35,9 @@ fun Label(
     selected: Boolean = false,
     onClick: (() -> Unit)? = null,
     contentAlignment: Alignment = Alignment.Center,
+    shape: Shape = LabelDefaults.shape,
     content: @Composable () -> Unit,
 ) {
-    val shape = MaterialTheme.shapes.small
     Box(
         modifier = modifier
             .then(

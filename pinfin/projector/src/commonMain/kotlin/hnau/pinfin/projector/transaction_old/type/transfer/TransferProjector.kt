@@ -19,9 +19,9 @@ import hnau.pinfin.model.transaction_old.type.transfer.TransferModel
 import hnau.pinfin.model.transaction_old.type.transfer.TransferSide
 import hnau.pinfin.projector.AmountProjector
 import hnau.pinfin.projector.transaction_old.type.utils.ChooseAccountProjector
+import hnau.pinfin.projector.utils.AccountContent
 import hnau.pinfin.projector.utils.ArrowDirection
 import hnau.pinfin.projector.utils.ArrowIcon
-import hnau.pinfin.projector.utils.AccountButton
 import hnau.pipe.annotations.Pipe
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.StateFlow
@@ -86,7 +86,7 @@ class TransferProjector(
             isLast = isLast,
         ) { modifier ->
             val (account, onClick) = model.accounts[side]
-            AccountButton(
+            AccountContent(
                 modifier = modifier.weight(1f),
                 info = account.collectAsState().value,
                 onClick = onClick,

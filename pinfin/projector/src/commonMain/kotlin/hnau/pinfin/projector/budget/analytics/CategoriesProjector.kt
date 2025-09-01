@@ -24,7 +24,6 @@ import hnau.common.app.projector.uikit.utils.Dimens
 import hnau.common.app.projector.utils.horizontalDisplayPadding
 import hnau.pinfin.model.budget.analytics.tab.CategoriesModel
 import hnau.pinfin.projector.utils.AmountContent
-import hnau.pinfin.projector.utils.SwitchHueToCategoryInfo
 import hnau.pinfin.projector.utils.CategoryContent
 import hnau.pinfin.projector.utils.formatter.AmountFormatter
 import hnau.pipe.annotations.Pipe
@@ -105,9 +104,9 @@ class CategoriesProjector(
     private fun Category(
         item: CategoriesModel.State.Item,
     ) {
-        SwitchHueToCategoryInfo(
+        CategoryContent(
             info = item.info,
-        ) {
+        ) { categoryContent ->
             Column(
                 verticalArrangement = Arrangement.spacedBy(Dimens.smallSeparation),
                 modifier = Modifier
@@ -120,9 +119,7 @@ class CategoriesProjector(
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.spacedBy(Dimens.smallSeparation),
                 ) {
-                    CategoryContent(
-                        info = item.info,
-                    )
+                    categoryContent()
                     Spacer(Modifier.weight(1f))
                     AmountContent(
                         amountFormatter = dependencies.amountFormatter,

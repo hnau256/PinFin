@@ -14,8 +14,8 @@ import hnau.common.app.projector.uikit.utils.Dimens
 import hnau.common.kotlin.coroutines.mapWithScope
 import hnau.pinfin.model.transaction_old.type.entry.EntryModel
 import hnau.pinfin.projector.transaction_old.type.utils.ChooseAccountProjector
+import hnau.pinfin.projector.utils.AccountContent
 import hnau.pinfin.projector.utils.AmountContent
-import hnau.pinfin.projector.utils.AccountButton
 import hnau.pinfin.projector.utils.formatter.AmountFormatter
 import hnau.pipe.annotations.Pipe
 import kotlinx.coroutines.CoroutineScope
@@ -66,7 +66,7 @@ class EntryProjectorHeaderDelegate(
                         Cell(
                             isLast = false,
                         ) {modifier ->
-                            AccountButton(
+                            AccountContent(
                                 modifier = modifier.weight(1f),
                                 info = model.account.collectAsState().value,
                                 onClick = model::chooseAccount,

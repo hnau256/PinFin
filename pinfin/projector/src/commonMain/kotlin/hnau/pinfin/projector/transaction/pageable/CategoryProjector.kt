@@ -7,8 +7,8 @@ import hnau.pinfin.model.transaction.pageable.CategoryModel
 import hnau.pinfin.model.transaction.utils.ChooseOrCreateModel
 import hnau.pinfin.model.utils.budget.state.CategoryInfo
 import hnau.pinfin.projector.transaction.utils.ChooseOrCreateProjector
-import hnau.pinfin.projector.utils.CategoryButton
-import hnau.pinfin.projector.utils.CategoryViewMode
+import hnau.pinfin.projector.utils.CategoryContent
+import hnau.pinfin.projector.utils.ViewMode
 import hnau.pipe.annotations.Pipe
 import kotlinx.coroutines.CoroutineScope
 
@@ -25,7 +25,7 @@ class CategoryProjector(
     fun Content(
         modifier: Modifier = Modifier,
     ) {
-        CategoryButton(
+        CategoryContent(
             info = model.category.collectAsState().value,
             modifier = modifier,
             selected = model.isFocused.collectAsState().value,
@@ -38,9 +38,9 @@ class CategoryProjector(
         selected: Boolean,
         onClick: (() -> Unit)?,
         modifier: Modifier = Modifier,
-        viewMode: CategoryViewMode = CategoryViewMode.default,
+        viewMode: ViewMode = ViewMode.default,
     ) {
-        CategoryButton(
+        CategoryContent(
             info = model.category.collectAsState().value,
             modifier = modifier,
             selected = selected,
@@ -60,7 +60,7 @@ class CategoryProjector(
             model = model,
             dependencies = dependencies,
         ) { category, isSelected, onClick ->
-            CategoryButton(
+            CategoryContent(
                 info = category,
                 selected = isSelected.collectAsState().value,
                 onClick = onClick,

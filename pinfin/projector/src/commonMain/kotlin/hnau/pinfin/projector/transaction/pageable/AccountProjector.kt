@@ -12,7 +12,7 @@ import hnau.pinfin.projector.resources.create_new_account
 import hnau.pinfin.projector.resources.there_are_no_accounts
 import hnau.pinfin.projector.transaction.utils.ChooseOrCreateMessages
 import hnau.pinfin.projector.transaction.utils.ChooseOrCreateProjector
-import hnau.pinfin.projector.utils.AccountButton
+import hnau.pinfin.projector.utils.AccountContent
 import hnau.pipe.annotations.Pipe
 import kotlinx.coroutines.CoroutineScope
 import org.jetbrains.compose.resources.stringResource
@@ -30,7 +30,7 @@ class AccountProjector(
     fun Content(
         modifier: Modifier = Modifier,
     ) {
-        AccountButton(
+        AccountContent(
             info = model.account.collectAsState().value,
             modifier = modifier,
             selected = model.isFocused.collectAsState().value,
@@ -57,7 +57,7 @@ class AccountProjector(
             model = model,
             dependencies = dependencies,
         ) { account, isSelected, onClick ->
-            AccountButton(
+            AccountContent(
                 info = account,
                 selected = isSelected.collectAsState().value,
                 onClick = onClick,

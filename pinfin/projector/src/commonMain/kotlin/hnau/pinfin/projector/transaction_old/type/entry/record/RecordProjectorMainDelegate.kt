@@ -50,9 +50,9 @@ import hnau.pinfin.model.transaction_old.type.entry.record.RecordModel
 import hnau.pinfin.projector.AmountProjector
 import hnau.pinfin.projector.resources.Res
 import hnau.pinfin.projector.resources.comment
+import hnau.pinfin.projector.utils.CategoryContent
 import hnau.pinfin.projector.utils.SuggestsListProjector
 import hnau.pinfin.projector.utils.SwitchHueToAmountDirection
-import hnau.pinfin.projector.utils.CategoryButton
 import hnau.pinfin.projector.utils.icon
 import hnau.pipe.annotations.Pipe
 import kotlinx.coroutines.CoroutineScope
@@ -206,7 +206,7 @@ class RecordProjectorMainDelegate(
                 Cell(
                     isLast = false,
                 ) { modifier ->
-                    CategoryButton(
+                    CategoryContent(
                         modifier = modifier.weight(1f),
                         shape = shape,
                         info = model

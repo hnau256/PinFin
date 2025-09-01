@@ -4,10 +4,13 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
@@ -21,6 +24,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.util.fastForEachIndexed
 import hnau.common.app.projector.uikit.state.StateContent
@@ -35,10 +39,10 @@ import hnau.pinfin.model.transaction.utils.RecordId
 import hnau.pinfin.model.utils.ZipList
 import hnau.pinfin.projector.transaction.utils.createPagesTransitionSpec
 import hnau.pinfin.projector.transaction_old_2.part.PartDefaults
-import hnau.pinfin.projector.utils.CategoryHint
-import hnau.pinfin.projector.utils.CategoryViewMode
+import hnau.pinfin.projector.utils.CategoryContent
 import hnau.pinfin.projector.utils.Label
 import hnau.pinfin.projector.utils.SlideOrientation
+import hnau.pinfin.projector.utils.ViewMode
 import hnau.pipe.annotations.Pipe
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.StateFlow
@@ -108,6 +112,7 @@ class RecordsProjector(
                 modifier = modifier,
                 contentPadding = contentPadding + PaddingValues(horizontal = Dimens.separation),
                 horizontalArrangement = Arrangement.spacedBy(Dimens.smallSeparation),
+                verticalAlignment = Alignment.CenterVertically,
             ) {
                 items(
                     items = records,
@@ -211,9 +216,9 @@ class RecordsProjector(
                 val categories by model.categories.collectAsState()
                 //TODO handle empty
                 categories.fastForEachIndexed { i, category ->
-                    CategoryHint(
+                    CategoryContent(
                         info = category,
-                        viewMode = CategoryViewMode.Icon,
+                        viewMode = ViewMode.Icon,
                     )
                     if (i < categories.lastIndex) {
                         Box(
