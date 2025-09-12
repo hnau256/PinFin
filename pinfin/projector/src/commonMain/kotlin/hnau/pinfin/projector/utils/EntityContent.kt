@@ -1,7 +1,5 @@
 package hnau.pinfin.projector.utils
 
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.Help
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -45,7 +43,7 @@ fun <T : Any> EntityContent(
         ifNull = {
             Label(
                 modifier = modifier,
-                containerColor = MaterialTheme.colorScheme.errorContainer,
+                containerColor = UIConstants.absentValueColor,
                 selected = selected,
                 onClick = onClick,
                 shape = shape,
@@ -53,7 +51,7 @@ fun <T : Any> EntityContent(
                 content {
                     IconWithTitle(
                         state = IconWithTitleState.remember(
-                            icon = Icons.AutoMirrored.Filled.Help,
+                            icon = UIConstants.absentValueIcon,
                             title = entityTypeName,
                             viewMode = viewMode,
                         )

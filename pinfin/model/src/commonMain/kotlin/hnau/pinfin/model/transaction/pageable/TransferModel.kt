@@ -172,6 +172,7 @@ class TransferModel(
         isFocused = createIsFocused(Part.From),
         requestFocus = createRequestFocus(Part.From),
         goForward = createGoForward(Part.From),
+        useMostPopularAccountAsDefault = true,
     )
 
     val to = AccountModel(
@@ -181,6 +182,7 @@ class TransferModel(
         isFocused = createIsFocused(Part.To),
         requestFocus = createRequestFocus(Part.To),
         goForward = createGoForward(Part.To),
+        useMostPopularAccountAsDefault = false,
     )
 
     val amount = AmountModel(

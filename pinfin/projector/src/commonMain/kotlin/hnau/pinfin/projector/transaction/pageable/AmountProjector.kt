@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardActionScope
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -16,15 +17,16 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
-import arrow.core.raise.impure
+import hnau.common.app.projector.utils.Icon
 import hnau.common.app.projector.utils.copy
 import hnau.common.app.projector.utils.horizontalDisplayPadding
-import hnau.common.kotlin.coroutines.toMutableStateFlowAsInitial
+import hnau.common.kotlin.foldNullable
 import hnau.pinfin.model.transaction.pageable.AmountModel
 import hnau.pinfin.projector.AmountProjector
 import hnau.pinfin.projector.transaction.utils.AmountOrNullContent
 import hnau.pinfin.projector.transaction.utils.PartDefaults
 import hnau.pinfin.projector.utils.Label
+import hnau.pinfin.projector.utils.UIConstants
 import hnau.pinfin.projector.utils.formatter.AmountFormatter
 import hnau.pipe.annotations.Pipe
 import kotlinx.coroutines.CoroutineScope
@@ -90,16 +92,34 @@ class AmountProjector(
 
     @Composable
     fun InnerContent(
-        modifier: Modifier = Modifier
+        modifier: Modifier = Modifier,
     ) {
-        AmountOrNullContent(
-            modifier = modifier,
-            amount = model
-                .amount
-                .collectAsState()
-                .value,
-            formatter = dependencies.amountFormatter,
-        )
+        model
+            .amount
+            .collectAsState()
+            .value
+            .foldNullable(
+                ifNull = {
+                    Icon(
+                        modifier = modifier,
+                        icon = UIConstants.absentValueIcon,
+                        tint = UIConstants.absentValueColor,
+                    )
+                },
+                ifNotNull = { amount ->
+                    Text(
+                        modifier = modifier,
+                        text = dependencies.amountFormatter.format(
+                            amount = amount,
+                            alwaysShowSign = false,
+                            alwaysShowCents = false,
+                        ),
+                        maxLines = 1,
+                        color =MaterialTheme.colorScheme.primary,
+                        style = MaterialTheme.typography.titleLarge,
+                    )
+                }
+            )
     }
 
     @Composable

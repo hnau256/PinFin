@@ -4,11 +4,16 @@
 
 package hnau.pinfin.model.transaction.pageable
 
+import arrow.core.identity
 import arrow.core.toOption
 import hnau.common.app.model.goback.GoBackHandler
 import hnau.common.app.model.goback.NeverGoBackHandler
+import hnau.common.kotlin.coroutines.flatMapState
 import hnau.common.kotlin.coroutines.mapState
+import hnau.common.kotlin.coroutines.scopedInState
 import hnau.common.kotlin.coroutines.toMutableStateFlowAsInitial
+import hnau.common.kotlin.foldBoolean
+import hnau.common.kotlin.foldNullable
 import hnau.common.kotlin.getOrInit
 import hnau.common.kotlin.mapper.Mapper
 import hnau.common.kotlin.serialization.MutableStateFlowSerializer
@@ -16,12 +21,17 @@ import hnau.common.kotlin.toAccessor
 import hnau.pinfin.data.AccountId
 import hnau.pinfin.data.Amount
 import hnau.pinfin.model.transaction.utils.ChooseOrCreateModel
+import hnau.pinfin.model.utils.budget.repository.BudgetRepository
 import hnau.pinfin.model.utils.budget.state.AccountInfo
 import hnau.pinfin.model.utils.budget.state.BudgetState
+import hnau.pinfin.model.utils.budget.state.TransactionInfo
 import hnau.pipe.annotations.Pipe
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.UseSerializers
 
@@ -32,10 +42,13 @@ class AccountModel(
     val isFocused: StateFlow<Boolean>,
     val requestFocus: () -> Unit,
     private val goForward: () -> Unit,
+    private val useMostPopularAccountAsDefault: Boolean,
 ) {
 
     @Pipe
     interface Dependencies {
+
+        val budgetRepository: BudgetRepository
 
         fun chooseOrCreate(): ChooseOrCreateModel.Dependencies
     }
@@ -43,22 +56,65 @@ class AccountModel(
     @Serializable
     data class Skeleton(
         var chooseOrCreate: ChooseOrCreateModel.Skeleton? = null,
-        val account: MutableStateFlow<AccountInfo?>,
+        val manualAccount: MutableStateFlow<AccountInfo?>,
     ) {
 
         companion object {
 
             fun createForNew(): Skeleton = Skeleton(
-                account = null.toMutableStateFlowAsInitial(),
+                manualAccount = null.toMutableStateFlowAsInitial(),
             )
 
             fun createForEdit(
                 account: AccountInfo,
             ): Skeleton = Skeleton(
-                account = account.toMutableStateFlowAsInitial(),
+                manualAccount = account.toMutableStateFlowAsInitial(),
             )
         }
     }
+
+
+
+    private fun resolveMostPopularAccount(
+        scope: CoroutineScope,
+    ): StateFlow<AccountInfo?> = dependencies
+        .budgetRepository
+        .state
+        .map { state ->
+            state
+                .transactions
+                .sortedByDescending { it.timestamp }
+                .take(16)
+                .map { transaction ->
+                    when (val type = transaction.type) {
+                        is TransactionInfo.Type.Entry -> type.account
+                        is TransactionInfo.Type.Transfer -> type.from
+                    }
+                }
+                .groupBy(::identity)
+                .maxByOrNull { it.value.size }
+                ?.key
+        }
+        .stateIn(
+            scope = scope,
+            started = SharingStarted.Eagerly,
+            initialValue = null,
+        )
+
+    val account: StateFlow<AccountInfo?> = skeleton
+        .manualAccount
+        .scopedInState(scope)
+        .flatMapState(scope) { (scope, manualAccountOrNull) ->
+            manualAccountOrNull.foldNullable<AccountInfo, StateFlow<AccountInfo?>>(
+                ifNotNull = AccountInfo::toMutableStateFlowAsInitial,
+                ifNull = {
+                    useMostPopularAccountAsDefault.foldBoolean(
+                        ifFalse = { null.toMutableStateFlowAsInitial() },
+                        ifTrue = { resolveMostPopularAccount(scope) },
+                    )
+                }
+            )
+        }
 
     fun createPage(
         scope: CoroutineScope,
@@ -69,7 +125,7 @@ class AccountModel(
             .toAccessor()
             .getOrInit { ChooseOrCreateModel.Skeleton() },
         extractItemsFromState = BudgetState::visibleAccounts,
-        additionalItems = skeleton.account.mapState(scope, ::listOfNotNull),
+        additionalItems = account.mapState(scope, ::listOfNotNull),
         itemTextMapper = Mapper(
             direct = AccountInfo::title,
             reverse = { title ->
@@ -80,15 +136,12 @@ class AccountModel(
                 )
             }
         ),
-        selected = skeleton.account.mapState(scope, AccountInfo?::toOption),
+        selected = account.mapState(scope, AccountInfo?::toOption),
         onReady = { selected ->
-            skeleton.account.value = selected
+            skeleton.manualAccount.value = selected
             goForward()
         }
     )
-
-    val account: StateFlow<AccountInfo?>
-        get() = skeleton.account
 
     val goBackHandler: GoBackHandler
         get() = NeverGoBackHandler

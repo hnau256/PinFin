@@ -159,6 +159,7 @@ class EntryModel(
         isFocused = createIsFocused(Part.Account),
         requestFocus = createRequestFocus(Part.Account),
         goForward = createGoForward(Part.Account),
+        useMostPopularAccountAsDefault = true,
     )
 
     val records = RecordsModel(

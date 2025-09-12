@@ -44,12 +44,12 @@ class AmountWithDirectionProjector(
             onClick = model.requestFocus,
             containerColor = PartDefaults.background,
         ) {
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
+            val direction by model.direction.collectAsState()
+            SwitchHueToAmountDirection(
+                amountDirection = direction,
             ) {
-                val direction by model.direction.collectAsState()
-                SwitchHueToAmountDirection(
-                    amountDirection = direction,
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
                 ) {
                     IconButton(
                         onClick = { model.switchDirection() },
@@ -58,8 +58,8 @@ class AmountWithDirectionProjector(
                             icon = direction.icon,
                         )
                     }
+                    amount.InnerContent()
                 }
-                amount.InnerContent()
             }
         }
     }
