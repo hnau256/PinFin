@@ -32,6 +32,7 @@ import hnau.common.app.projector.uikit.utils.Dimens
 import hnau.common.app.projector.utils.Icon
 import hnau.common.app.projector.utils.copy
 import hnau.common.kotlin.coroutines.mapWithScope
+import hnau.common.kotlin.foldNullable
 import hnau.pinfin.model.transaction.pageable.RecordModel
 import hnau.pinfin.model.utils.budget.state.CategoryInfo
 import hnau.pinfin.projector.resources.Res
@@ -41,7 +42,10 @@ import hnau.pinfin.projector.resources.there_are_no_categories
 import hnau.pinfin.projector.transaction.utils.ChooseOrCreateMessages
 import hnau.pinfin.projector.transaction.utils.ChooseOrCreateProjector
 import hnau.pinfin.projector.transaction.utils.createPagesTransitionSpec
+import hnau.pinfin.projector.utils.CategoryContent
+import hnau.pinfin.projector.utils.Label
 import hnau.pinfin.projector.utils.SlideOrientation
+import hnau.pinfin.projector.utils.UIConstants
 import hnau.pinfin.projector.utils.ViewMode
 import hnau.pinfin.projector.utils.formatter.AmountFormatter
 import hnau.pipe.annotations.Pipe
@@ -315,36 +319,55 @@ class RecordProjector(
         }
     }
 
-    private val category = CategoryProjector(
-        scope = scope,
-        model = model.category,
-        dependencies = dependencies.category(),
-    )
-
     @Composable
     fun Content(
         modifier: Modifier = Modifier,
     ) {
-        category.Content(
-            modifier = modifier,
-            onClick = model.requestFocus,
-            selected = model.isFocused.collectAsState().value,
-            viewMode = ViewMode.Icon,
-        ) { category ->
-            ItemsRow {
-                category()
-                Text(
-                    text = dependencies
-                        .amountFormatter
-                        .format(
-                            amount = model.amountOrZero.collectAsState().value,
-                            alwaysShowSign = false,
-                            alwaysShowCents = true,
-                        ),
-                    style = MaterialTheme.typography.titleSmall,
-                )
-            }
-        }
+
+        val onClick = model.requestFocus
+        val selected = model.isFocused.collectAsState().value
+
+        model
+            .categoryWithAmount
+            .collectAsState()
+            .value
+            .foldNullable(
+                ifNull = {
+                    Label(
+                        modifier = modifier,
+                        containerColor = UIConstants.absentValueColor,
+                        onClick = onClick,
+                        selected = selected,
+                    ) {
+                        Icon(
+                            icon = UIConstants.absentValueIcon
+                        )
+                    }
+                },
+                ifNotNull = { (category, amount) ->
+                    CategoryContent(
+                        modifier = modifier,
+                        info = category,
+                        onClick = onClick,
+                        selected = selected,
+                        viewMode = ViewMode.Icon,
+                    ) { category ->
+                        ItemsRow {
+                            category()
+                            Text(
+                                text = dependencies
+                                    .amountFormatter
+                                    .format(
+                                        amount = amount,
+                                        alwaysShowSign = false,
+                                        alwaysShowCents = false,
+                                    ),
+                                style = MaterialTheme.typography.titleSmall,
+                            )
+                        }
+                    }
+                }
+            )
     }
 
     companion object {

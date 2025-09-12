@@ -1,7 +1,6 @@
 package hnau.pinfin.projector.transaction.pageable
 
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -11,16 +10,9 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Storefront
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.LocalContentColor
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
-import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -29,20 +21,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusChanged
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalFocusManager
-import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
-import hnau.common.app.projector.uikit.ItemsRow
 import hnau.common.app.projector.uikit.state.LoadableContent
 import hnau.common.app.projector.uikit.state.TransitionSpec
 import hnau.common.app.projector.uikit.utils.Dimens
-import hnau.common.app.projector.utils.Icon
 import hnau.common.app.projector.utils.collectAsTextFieldValueMutableAccessor
 import hnau.common.app.projector.utils.horizontalDisplayPadding
 import hnau.common.kotlin.foldBoolean
-import hnau.common.kotlin.foldNullable
 import hnau.pinfin.model.transaction.pageable.CommentModel
 import hnau.pinfin.projector.resources.Res
 import hnau.pinfin.projector.resources.comment
@@ -120,6 +107,7 @@ class CommentProjector(
 
         var value by model.commentEditingString.collectAsTextFieldValueMutableAccessor()
         val focusRequester = remember { FocusRequester() }
+        val isFocused = model.isFocused
         OutlinedTextField(
             colors = PartDefaults.outlinedTextFieldColors,
             maxLines = 3,
@@ -132,7 +120,11 @@ class CommentProjector(
                     }
                 },
             value = value,
-            onValueChange = { newValue -> value = newValue },
+            onValueChange = { newValue ->
+                if (isFocused.value) { //this check blocks send old value on unfocused
+                    value = newValue
+                }
+            },
             placeholder = { Text(stringResource(Res.string.comment)) },
             keyboardOptions = KeyboardOptions(
                 capitalization = KeyboardCapitalization.Sentences,
@@ -140,7 +132,6 @@ class CommentProjector(
             ),
             keyboardActions = KeyboardActions { model.goForward() },
         )
-        val isFocused = model.isFocused
         val focusManager = LocalFocusManager.current
         LaunchedEffect(isFocused) {
             isFocused.collect { focused ->

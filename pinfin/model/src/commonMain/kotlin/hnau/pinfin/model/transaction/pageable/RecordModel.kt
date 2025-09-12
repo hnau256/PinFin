@@ -4,7 +4,9 @@
 
 package hnau.pinfin.model.transaction.pageable
 
+import arrow.core.Ior
 import hnau.common.app.model.goback.GoBackHandler
+import hnau.common.kotlin.coroutines.combineState
 import hnau.common.kotlin.coroutines.flatMapState
 import hnau.common.kotlin.coroutines.mapState
 import hnau.common.kotlin.coroutines.mapWithScope
@@ -249,6 +251,20 @@ class RecordModel(
         category = category.category,
         goForward = createGoForward(Part.Amount),
     )
+
+    val categoryWithAmount: StateFlow<Pair<CategoryInfo, Amount>?> = category
+        .category
+        .scopedInState(scope)
+        .flatMapState(scope) { (scope, categoryOrNull) ->
+            categoryOrNull.foldNullable(
+                ifNull = { null.toMutableStateFlowAsInitial() },
+                ifNotNull = { category ->
+                    amount.amount.mapState(scope) { amountOrNull ->
+                        amountOrNull?.let { amount -> category to amount }
+                    }
+                }
+            )
+        }
 
     class Page(
         scope: CoroutineScope,
