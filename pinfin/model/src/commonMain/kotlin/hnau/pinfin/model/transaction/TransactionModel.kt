@@ -20,6 +20,7 @@ import hnau.pinfin.model.transaction.pageable.CommentModel
 import hnau.pinfin.model.transaction.pageable.DateModel
 import hnau.pinfin.model.transaction.pageable.TimeModel
 import hnau.pinfin.model.transaction.pageable.TypeModel
+import hnau.pinfin.model.transaction.utils.IsChangedUtils
 import hnau.pinfin.model.utils.budget.state.TransactionInfo
 import hnau.pipe.annotations.Pipe
 import kotlinx.coroutines.CoroutineScope
@@ -297,6 +298,14 @@ class TransactionModel(
                 }
             )
         }
+
+    private val isChanged: StateFlow<Boolean> = IsChangedUtils.calcIsChanged(
+        scope = scope,
+        date.isChanged,
+        time.isChanged,
+        comment.isChanged,
+        type.isChanged,
+    )
 
     private fun Part.shift(
         offset: Int,

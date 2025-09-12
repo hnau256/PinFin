@@ -55,24 +55,24 @@ class AccountModel(
 
     @Serializable
     data class Skeleton(
+        val initialAccount: AccountInfo?,
         var chooseOrCreate: ChooseOrCreateModel.Skeleton? = null,
-        val manualAccount: MutableStateFlow<AccountInfo?>,
+        val manualAccount: MutableStateFlow<AccountInfo?> = initialAccount.toMutableStateFlowAsInitial(),
     ) {
 
         companion object {
 
             fun createForNew(): Skeleton = Skeleton(
-                manualAccount = null.toMutableStateFlowAsInitial(),
+                initialAccount = null,
             )
 
             fun createForEdit(
                 account: AccountInfo,
             ): Skeleton = Skeleton(
-                manualAccount = account.toMutableStateFlowAsInitial(),
+                initialAccount = account,
             )
         }
     }
-
 
 
     private fun resolveMostPopularAccount(
@@ -115,6 +115,13 @@ class AccountModel(
                 }
             )
         }
+
+    val isChanged: StateFlow<Boolean> = skeleton.initialAccount.foldNullable(
+        ifNull = { true.toMutableStateFlowAsInitial() },
+        ifNotNull = { initial ->
+            account.mapState(scope) { current -> current != initial }
+        }
+    )
 
     fun createPage(
         scope: CoroutineScope,

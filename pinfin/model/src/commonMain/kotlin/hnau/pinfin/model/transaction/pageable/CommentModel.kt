@@ -11,6 +11,7 @@ import hnau.common.app.model.toEditingString
 import hnau.common.kotlin.Loadable
 import hnau.common.kotlin.coroutines.mapState
 import hnau.common.kotlin.coroutines.toMutableStateFlowAsInitial
+import hnau.common.kotlin.foldNullable
 import hnau.common.kotlin.getOrInit
 import hnau.common.kotlin.serialization.MutableStateFlowSerializer
 import hnau.common.kotlin.toAccessor
@@ -47,24 +48,21 @@ class CommentModel(
     @Serializable
     data class Skeleton(
         var page: Page.Skeleton? = null,
-        val comment: MutableStateFlow<EditingString>,
+        val initialComment: Comment?,
+        val comment: MutableStateFlow<EditingString> =
+            initialComment?.text.orEmpty().toEditingString().toMutableStateFlowAsInitial(),
     ) {
 
         companion object {
 
             fun createForNew(): Skeleton = Skeleton(
-                comment = ""
-                    .toEditingString()
-                    .toMutableStateFlowAsInitial(),
+                initialComment = null,
             )
 
             fun createForEdit(
                 comment: Comment,
             ): Skeleton = Skeleton(
-                comment = comment
-                    .text
-                    .toEditingString()
-                    .toMutableStateFlowAsInitial(),
+                initialComment = comment,
             )
         }
     }
@@ -135,6 +133,13 @@ class CommentModel(
     val comment: StateFlow<Comment> = skeleton
         .comment
         .mapState(scope) { it.text.let(::Comment) }
+
+    val isChanged: StateFlow<Boolean> = skeleton.initialComment.foldNullable(
+        ifNull = { true.toMutableStateFlowAsInitial() },
+        ifNotNull = { initial ->
+            comment.mapState(scope) { current -> current != initial }
+        }
+    )
 
     val goBackHandler: GoBackHandler
         get() = NeverGoBackHandler

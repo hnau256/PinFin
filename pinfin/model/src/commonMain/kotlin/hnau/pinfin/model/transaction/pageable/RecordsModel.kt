@@ -23,6 +23,7 @@ import hnau.common.kotlin.getOrInit
 import hnau.common.kotlin.serialization.MutableStateFlowSerializer
 import hnau.common.kotlin.toAccessor
 import hnau.pinfin.data.Amount
+import hnau.pinfin.model.transaction.utils.IsChangedUtils
 import hnau.pinfin.model.transaction.utils.RecordId
 import hnau.pinfin.model.transaction.utils.remove
 import hnau.pinfin.model.utils.ZipList
@@ -287,6 +288,13 @@ class RecordsModel(
                     remaining = records.tail,
                 )
         }
+
+    val isChanged: StateFlow<Boolean> = IsChangedUtils.calcIsChanged(
+        scope = scope,
+        children = items.mapState(scope) { children ->
+            children.map { child -> child.model.isChanged }
+        },
+    )
 
     private fun StateFlow<NonEmptyList<TransactionInfo.Type.Entry.Record>?>.add(
         scope: CoroutineScope,

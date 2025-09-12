@@ -6,6 +6,9 @@ package hnau.pinfin.model.transaction.pageable
 
 import hnau.common.app.model.goback.GoBackHandler
 import hnau.common.app.model.goback.NeverGoBackHandler
+import hnau.common.kotlin.coroutines.mapState
+import hnau.common.kotlin.coroutines.toMutableStateFlowAsInitial
+import hnau.common.kotlin.foldNullable
 import hnau.common.kotlin.getOrInit
 import hnau.common.kotlin.serialization.MutableStateFlowSerializer
 import hnau.common.kotlin.toAccessor
@@ -37,21 +40,27 @@ class AmountModel(
     @Serializable
     data class Skeleton(
         var page: Page.Skeleton? = null,
-        val delegate: CommonAmountModel.Skeleton,
+        val initialAmount: Amount?,
+        val delegate: CommonAmountModel.Skeleton = initialAmount.foldNullable(
+            ifNull = { CommonAmountModel.Skeleton.empty },
+            ifNotNull = { amount ->
+                CommonAmountModel.Skeleton(
+                    amount = amount,
+                )
+            }
+        ),
     ) {
 
         companion object {
 
             fun createForNew(): Skeleton = Skeleton(
-                delegate = CommonAmountModel.Skeleton.empty,
+                initialAmount = null,
             )
 
             fun createForEdit(
                 amount: Amount,
             ): Skeleton = Skeleton(
-                delegate = CommonAmountModel.Skeleton(
-                    amount = amount,
-                ),
+                initialAmount = amount,
             )
         }
     }
@@ -94,6 +103,13 @@ class AmountModel(
 
     val amount: StateFlow<Amount?>
         get() = delegate.amount
+
+    val isChanged: StateFlow<Boolean> = skeleton.initialAmount.foldNullable(
+        ifNull = { true.toMutableStateFlowAsInitial() },
+        ifNotNull = { initial ->
+            amount.mapState(scope) { current -> current != initial }
+        }
+    )
 
     val goBackHandler: GoBackHandler
         get() = NeverGoBackHandler

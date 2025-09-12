@@ -6,23 +6,17 @@ package hnau.pinfin.model.transaction.pageable
 
 import hnau.common.app.model.goback.GoBackHandler
 import hnau.common.app.model.goback.NeverGoBackHandler
-import hnau.common.kotlin.coroutines.onSet
+import hnau.common.kotlin.coroutines.mapState
 import hnau.common.kotlin.coroutines.toMutableStateFlowAsInitial
 import hnau.common.kotlin.foldNullable
 import hnau.common.kotlin.getOrInit
-import hnau.common.kotlin.it
+import hnau.common.kotlin.ifNull
 import hnau.common.kotlin.serialization.MutableStateFlowSerializer
 import hnau.common.kotlin.toAccessor
 import hnau.pipe.annotations.Pipe
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.drop
-import kotlinx.coroutines.flow.filterNotNull
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.flow.runningFold
 import kotlinx.coroutines.launch
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.TimeZone
@@ -49,23 +43,27 @@ class DateModel(
     @Serializable
     data class Skeleton(
         var page: Page.Skeleton? = null,
-        val date: MutableStateFlow<LocalDate>,
+        val initialDate: LocalDate?,
+        val date: MutableStateFlow<LocalDate> = initialDate
+            .ifNull {
+                Clock.System
+                    .now()
+                    .toLocalDateTime(TimeZone.currentSystemDefault())
+                    .date
+            }
+            .toMutableStateFlowAsInitial(),
     ) {
 
         companion object {
 
             fun createForNew(): Skeleton = Skeleton(
-                date = Clock.System
-                    .now()
-                    .toLocalDateTime(TimeZone.currentSystemDefault())
-                    .date
-                    .toMutableStateFlowAsInitial()
+                initialDate = null,
             )
 
             fun createForEdit(
                 date: LocalDate,
             ): Skeleton = Skeleton(
-                date = date.toMutableStateFlowAsInitial(),
+                initialDate = date,
             )
         }
     }
@@ -113,6 +111,13 @@ class DateModel(
 
     val date: StateFlow<LocalDate>
         get() = skeleton.date
+
+    val isChanged: StateFlow<Boolean> = skeleton.initialDate.foldNullable(
+        ifNull = { true.toMutableStateFlowAsInitial() },
+        ifNotNull = { initial ->
+            date.mapState(scope) { current -> current != initial }
+        }
+    )
 
     val goBackHandler: GoBackHandler
         get() = NeverGoBackHandler

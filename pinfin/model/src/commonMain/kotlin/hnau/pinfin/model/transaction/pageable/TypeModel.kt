@@ -1,9 +1,11 @@
 @file:UseSerializers(
     MutableStateFlowSerializer::class,
+    EitherSerializer::class,
 )
 
 package hnau.pinfin.model.transaction.pageable
 
+import arrow.core.serialization.EitherSerializer
 import hnau.common.app.model.goback.GoBackHandler
 import hnau.common.kotlin.coroutines.flatMapState
 import hnau.common.kotlin.coroutines.mapMutableState
@@ -52,9 +54,14 @@ class TypeModel(
 
         val goBackHandler: GoBackHandler
 
+        val isChanged: StateFlow<Boolean>
+
         data class Entry(
             val model: EntryModel,
         ) : Type {
+
+            override val isChanged: StateFlow<Boolean>
+                get() = model.isChanged
 
             override val goBackHandler: GoBackHandler
                 get() = model.goBackHandler
@@ -63,6 +70,9 @@ class TypeModel(
         data class Transfer(
             val model: TransferModel,
         ) : Type {
+
+            override val isChanged: StateFlow<Boolean>
+                get() = model.isChanged
 
             override val goBackHandler: GoBackHandler
                 get() = model.goBackHandler
@@ -252,6 +262,9 @@ class TypeModel(
             is Type.Transfer -> typeModel.model.transfer
         }
     }
+
+    val isChanged: StateFlow<Boolean> =
+        typeModel.flatMapState(scope, Type::isChanged)
 
     val goBackHandler: GoBackHandler =
         typeModel.flatMapState(scope, Type::goBackHandler)

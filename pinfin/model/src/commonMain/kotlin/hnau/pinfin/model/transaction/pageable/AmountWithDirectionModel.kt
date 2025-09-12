@@ -52,14 +52,16 @@ class AmountWithDirectionModel(
     @Serializable
     data class Skeleton(
         val delegate: AmountModel.Skeleton,
-        val manualDirection: MutableStateFlow<AmountDirection?>,
+        val initialDirection: AmountDirection?,
+        val manualDirection: MutableStateFlow<AmountDirection?> =
+            initialDirection.toMutableStateFlowAsInitial(),
     ) {
 
         companion object {
 
             fun createForNew(): Skeleton = Skeleton(
                 delegate = AmountModel.Skeleton.createForNew(),
-                manualDirection = null.toMutableStateFlowAsInitial(),
+                initialDirection = null,
             )
 
             fun createForEdit(
@@ -70,7 +72,7 @@ class AmountWithDirectionModel(
                     delegate = AmountModel.Skeleton.createForEdit(
                         amount = withoutDirection,
                     ),
-                    manualDirection = direction.toMutableStateFlowAsInitial(),
+                    initialDirection = direction,
                 )
             }
         }
@@ -155,6 +157,20 @@ class AmountWithDirectionModel(
                 }
             )
         }
+
+    val isChanged: StateFlow<Boolean> = skeleton.initialDirection.foldNullable(
+        ifNull = { true.toMutableStateFlowAsInitial() },
+        ifNotNull = { initial ->
+            direction
+                .scopedInState(scope)
+                .flatMapState(scope) { (scope, current) ->
+                    when {
+                        current != initial -> true.toMutableStateFlowAsInitial()
+                        else -> amountModel.isChanged
+                    }
+                }
+        }
+    )
 
 
     val goBackHandler: GoBackHandler

@@ -58,19 +58,21 @@ class CategoryModel(
     @Serializable
     data class Skeleton(
         var chooseOrCreate: ChooseOrCreateModel.Skeleton? = null,
-        val manualCategory: MutableStateFlow<CategoryInfo?>,
+        val initialCategory: CategoryInfo?,
+        val manualCategory: MutableStateFlow<CategoryInfo?> =
+            initialCategory.toMutableStateFlowAsInitial(),
     ) {
 
         companion object {
 
             fun createForNew(): Skeleton = Skeleton(
-                manualCategory = null.toMutableStateFlowAsInitial(),
+                initialCategory = null,
             )
 
             fun createForEdit(
                 category: CategoryInfo,
             ): Skeleton = Skeleton(
-                manualCategory = category.toMutableStateFlowAsInitial(),
+                initialCategory = category,
             )
         }
     }
@@ -154,6 +156,13 @@ class CategoryModel(
                 ifNull = { getCategoryBasedOnComment(scope) },
             )
         }
+
+    val isChanged: StateFlow<Boolean> = skeleton.initialCategory.foldNullable(
+        ifNull = { true.toMutableStateFlowAsInitial() },
+        ifNotNull = { initial ->
+            category.mapState(scope) { current -> current != initial }
+        }
+    )
 
     val goBackHandler: GoBackHandler
         get() = NeverGoBackHandler

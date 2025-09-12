@@ -6,10 +6,12 @@ package hnau.pinfin.model.transaction.pageable
 
 import hnau.common.app.model.goback.GoBackHandler
 import hnau.common.app.model.goback.NeverGoBackHandler
+import hnau.common.kotlin.coroutines.mapState
 import hnau.common.kotlin.coroutines.onSet
 import hnau.common.kotlin.coroutines.toMutableStateFlowAsInitial
 import hnau.common.kotlin.foldNullable
 import hnau.common.kotlin.getOrInit
+import hnau.common.kotlin.ifNull
 import hnau.common.kotlin.serialization.MutableStateFlowSerializer
 import hnau.common.kotlin.toAccessor
 import hnau.pipe.annotations.Pipe
@@ -49,23 +51,27 @@ class TimeModel(
     @Serializable
     data class Skeleton(
         var page: Page.Skeleton? = null,
-        val time: MutableStateFlow<LocalTime>,
+        val initialTime: LocalTime?,
+        val time: MutableStateFlow<LocalTime> = initialTime
+            .ifNull {
+                Clock.System
+                    .now()
+                    .toLocalDateTime(TimeZone.currentSystemDefault())
+                    .time
+            }
+            .toMutableStateFlowAsInitial(),
     ) {
 
         companion object {
 
             fun createForNew(): Skeleton = Skeleton(
-                time = Clock.System
-                    .now()
-                    .toLocalDateTime(TimeZone.currentSystemDefault())
-                    .time
-                    .toMutableStateFlowAsInitial()
+                initialTime = null,
             )
 
             fun createForEdit(
                 time: LocalTime,
             ): Skeleton = Skeleton(
-                time = time.toMutableStateFlowAsInitial(),
+                initialTime = time,
             )
         }
     }
@@ -113,6 +119,13 @@ class TimeModel(
 
     val time: StateFlow<LocalTime>
         get() = skeleton.time
+
+    val isChanged: StateFlow<Boolean> = skeleton.initialTime.foldNullable(
+        ifNull = { true.toMutableStateFlowAsInitial() },
+        ifNotNull = { initial ->
+            time.mapState(scope) { current -> current != initial }
+        }
+    )
 
     val goBackHandler: GoBackHandler
         get() = NeverGoBackHandler

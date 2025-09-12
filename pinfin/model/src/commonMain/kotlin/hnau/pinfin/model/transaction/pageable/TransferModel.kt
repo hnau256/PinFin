@@ -16,6 +16,7 @@ import hnau.common.kotlin.getOrInit
 import hnau.common.kotlin.serialization.MutableStateFlowSerializer
 import hnau.common.kotlin.toAccessor
 import hnau.pinfin.model.transaction.utils.ChooseOrCreateModel
+import hnau.pinfin.model.transaction.utils.IsChangedUtils
 import hnau.pinfin.model.utils.budget.state.AccountInfo
 import hnau.pinfin.model.utils.budget.state.TransactionInfo
 import hnau.pipe.annotations.Pipe
@@ -258,6 +259,13 @@ class TransferModel(
                 }
             )
         }
+
+    val isChanged: StateFlow<Boolean> = IsChangedUtils.calcIsChanged(
+        scope = scope,
+        from.isChanged,
+        to.isChanged,
+        amount.isChanged,
+    )
 
     private fun createTransferFromFrom(
         scope: CoroutineScope,

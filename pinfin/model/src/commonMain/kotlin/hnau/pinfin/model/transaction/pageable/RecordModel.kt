@@ -19,6 +19,7 @@ import hnau.common.kotlin.toAccessor
 import hnau.pinfin.data.Amount
 import hnau.pinfin.data.Comment
 import hnau.pinfin.model.transaction.utils.ChooseOrCreateModel
+import hnau.pinfin.model.transaction.utils.IsChangedUtils
 import hnau.pinfin.model.transaction.utils.allRecords
 import hnau.pinfin.model.utils.budget.state.CategoryInfo
 import hnau.pinfin.model.utils.budget.state.TransactionInfo
@@ -375,6 +376,14 @@ class RecordModel(
                 )
             }
         }
+
+
+    val isChanged: StateFlow<Boolean> = IsChangedUtils.calcIsChanged(
+        scope = scope,
+        comment.isChanged,
+        category.isChanged,
+        amount.isChanged,
+    )
 
     private fun Part.shift(
         offset: Int,
