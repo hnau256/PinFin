@@ -44,7 +44,7 @@ import hnau.pinfin.projector.transaction.utils.ChooseOrCreateProjector
 import hnau.pinfin.projector.transaction.utils.createPagesTransitionSpec
 import hnau.pinfin.projector.utils.CategoryContent
 import hnau.pinfin.projector.utils.Label
-import hnau.pinfin.projector.utils.SlideOrientation
+import hnau.common.app.projector.utils.SlideOrientation
 import hnau.pinfin.projector.utils.UIConstants
 import hnau.pinfin.projector.utils.ViewMode
 import hnau.pinfin.projector.utils.formatter.AmountFormatter

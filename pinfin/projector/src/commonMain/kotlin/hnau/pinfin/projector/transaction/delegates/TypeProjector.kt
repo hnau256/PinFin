@@ -16,7 +16,7 @@ import hnau.pinfin.model.transaction.pageable.TypeModel
 import hnau.pinfin.projector.transaction.pageable.EntryProjector
 import hnau.pinfin.projector.transaction.pageable.TransferProjector
 import hnau.pinfin.projector.transaction.utils.createPagesTransitionSpec
-import hnau.pinfin.projector.utils.SlideOrientation
+import hnau.common.app.projector.utils.SlideOrientation
 import hnau.pinfin.projector.utils.Tabs
 import hnau.pinfin.projector.utils.title
 import hnau.pipe.annotations.Pipe

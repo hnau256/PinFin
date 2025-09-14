@@ -13,8 +13,8 @@ import hnau.pinfin.projector.transaction_old_2.page.DatePageProjector
 import hnau.pinfin.projector.transaction_old_2.page.PageProjector
 import hnau.pinfin.projector.transaction_old_2.page.TimePageProjector
 import hnau.pinfin.projector.transaction_old_2.part.TypeProjector
-import hnau.pinfin.projector.utils.SlideOrientation
-import hnau.pinfin.projector.utils.getTransitionSpecForSlide
+import hnau.common.app.projector.utils.SlideOrientation
+import hnau.common.app.projector.utils.getTransitionSpecForSlide
 import hnau.pipe.annotations.Pipe
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.StateFlow

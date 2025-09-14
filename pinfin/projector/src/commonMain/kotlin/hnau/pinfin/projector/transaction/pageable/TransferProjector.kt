@@ -16,7 +16,7 @@ import hnau.pinfin.projector.transaction.utils.ChooseOrCreateProjector
 import hnau.pinfin.projector.transaction.utils.createPagesTransitionSpec
 import hnau.pinfin.projector.utils.ArrowDirection
 import hnau.pinfin.projector.utils.ArrowIcon
-import hnau.pinfin.projector.utils.SlideOrientation
+import hnau.common.app.projector.utils.SlideOrientation
 import hnau.pipe.annotations.Pipe
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.StateFlow

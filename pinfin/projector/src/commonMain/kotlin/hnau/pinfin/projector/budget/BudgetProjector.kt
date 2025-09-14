@@ -28,8 +28,8 @@ import hnau.pinfin.projector.resources.Res
 import hnau.pinfin.projector.resources.analytics
 import hnau.pinfin.projector.resources.config
 import hnau.pinfin.projector.resources.transactions
-import hnau.pinfin.projector.utils.SlideOrientation
-import hnau.pinfin.projector.utils.getTransitionSpecForSlide
+import hnau.common.app.projector.utils.SlideOrientation
+import hnau.common.app.projector.utils.getTransitionSpecForSlide
 import hnau.pipe.annotations.Pipe
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.StateFlow
