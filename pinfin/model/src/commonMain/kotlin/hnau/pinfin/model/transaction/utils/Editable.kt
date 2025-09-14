@@ -27,7 +27,7 @@ internal sealed interface Editable<out T> {
             ): Value<T> = Value(
                 value = value,
                 changed = initialValueOrNone.fold(
-                    ifEmpty = { false },
+                    ifEmpty = { true },
                     ifSome = { it != value },
                 ),
             )

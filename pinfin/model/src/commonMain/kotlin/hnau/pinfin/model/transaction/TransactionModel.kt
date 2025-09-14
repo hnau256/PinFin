@@ -30,6 +30,7 @@ import hnau.pipe.annotations.Pipe
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.launch
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.atTime
 import kotlinx.datetime.toInstant
@@ -275,7 +276,7 @@ class TransactionModel(
         data object NoChanges : State
 
         data class HasChanges(
-            val saveIsCorrect: (() -> Unit)?,
+            val saveIfCorrect: (() -> Unit)?,
             val closeWithoutSavingDialogInfo: CloseWithoutSavingDialogInfo?,
         ) : State {
 
@@ -284,8 +285,6 @@ class TransactionModel(
                 val cancelChanges: () -> Unit,
             )
         }
-
-        data object Saving : State
     }
 
     private fun createHasChangesState(
@@ -295,7 +294,7 @@ class TransactionModel(
         .closeWithoutSavingDialogIsVisible
         .mapState(scope) { closeWithoutSavingDialogIsVisible ->
             State.HasChanges(
-                saveIsCorrect = save,
+                saveIfCorrect = save,
                 closeWithoutSavingDialogInfo = closeWithoutSavingDialogIsVisible.ifTrue {
                     State.HasChanges.CloseWithoutSavingDialogInfo(
                         close = {
@@ -352,27 +351,42 @@ class TransactionModel(
                     .foldBoolean(
                         ifFalse = { State.NoChanges.toMutableStateFlowAsInitial() },
                         ifTrue = {
-                            actionOrNullIfExecuting(scope) {
-                                dependencies.budgetRepository.transactions.addOrUpdate(
-                                    id = skeleton.id,
-                                    transaction = transactionOrIncorrect.value,
-                                )
-                                onReady()
-                            }
-                                .scopedInState(scope)
-                                .flatMapState(scope) { (scope, saveOrSaving) ->
-                                    saveOrSaving.foldNullable(
-                                        ifNull = { State.Saving.toMutableStateFlowAsInitial() },
-                                        ifNotNull = { save ->
-                                            createHasChangesState(
-                                                scope = scope,
-                                                save = save,
-                                            )
-                                        }
-                                    )
+                            createHasChangesState(
+                                scope = scope,
+                                save = {
+                                    scope.launch {
+                                        dependencies.budgetRepository.transactions.addOrUpdate(
+                                            id = skeleton.id,
+                                            transaction = transactionOrIncorrect.value,
+                                        )
+                                        onReady()
+                                    }
                                 }
+                            )
                         }
                     )
+            }
+        }
+
+    data class CancelDialogInfo(
+        val close: () -> Unit,
+        val cancelChanges: () -> Unit,
+        val saveIfPossible: (() -> Unit)?,
+    )
+
+    val cancelDialogInfo: StateFlow<CancelDialogInfo?> = state
+        .mapState(scope) { state ->
+            when (state) {
+                State.NoChanges -> null
+                is State.HasChanges -> state
+                    .closeWithoutSavingDialogInfo
+                    ?.let { info ->
+                        CancelDialogInfo(
+                            saveIfPossible = state.saveIfCorrect,
+                            close = info.close,
+                            cancelChanges = info.cancelChanges,
+                        )
+                    }
             }
         }
 
@@ -387,10 +401,6 @@ class TransactionModel(
     ): GoBackHandler = state.mapState(scope) { state ->
         when (state) {
             State.NoChanges -> null
-            State.Saving -> {
-                {}
-            }
-
             is State.HasChanges -> state.closeWithoutSavingDialogInfo.foldNullable(
                 ifNull = { { setCloseWithoutSavingDialogIsVisible(true) } },
                 ifNotNull = { { setCloseWithoutSavingDialogIsVisible(false) } },

@@ -16,6 +16,7 @@ import hnau.common.app.projector.uikit.utils.Dimens
 import hnau.common.app.projector.utils.NavigationIcon
 import hnau.common.app.projector.utils.copy
 import hnau.pinfin.model.transaction.TransactionModel
+import hnau.pinfin.projector.transaction.delegates.DialogsProjector
 import hnau.pinfin.projector.transaction.delegates.InfoProjector
 import hnau.pinfin.projector.transaction.delegates.PageProjector
 import hnau.pinfin.projector.transaction.delegates.TypeProjector
@@ -38,6 +39,8 @@ class TransactionProjector(
         ): InfoProjector.Dependencies
 
         fun page(): PageProjector.Dependencies
+
+        fun dialogs(): DialogsProjector.Dependencies
 
         val globalGoBackHandler: GlobalGoBackHandler
     }
@@ -66,6 +69,12 @@ class TransactionProjector(
         dependencies = dependencies.page(),
     )
 
+    private val dialogs = DialogsProjector(
+        scope = scope,
+        model = model,
+        dependencies = dependencies.dialogs(),
+    )
+
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
     fun Content() {
@@ -91,6 +100,7 @@ class TransactionProjector(
                     contentPadding = contentPadding.copy(top = 0.dp),
                 )
             }
+            dialogs.Content()
         }
     }
 }
