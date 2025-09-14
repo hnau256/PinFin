@@ -7,6 +7,7 @@ import hnau.common.kotlin.coroutines.flatMapState
 import hnau.common.kotlin.coroutines.mapState
 import hnau.common.kotlin.coroutines.scopedInState
 import hnau.common.kotlin.coroutines.toMutableStateFlowAsInitial
+import hnau.pinfin.model.utils.flatMapWithScope
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.StateFlow
 
@@ -87,9 +88,7 @@ internal inline fun <A, B, Z> StateFlow<Editable<A>>.combineEditableWith(
     scope: CoroutineScope,
     other: StateFlow<Editable<B>>,
     crossinline combine: (A, B) -> Z,
-): StateFlow<Editable<Z>> = this
-    .scopedInState(scope)
-    .flatMapState(scope) { (scope, a) ->
+): StateFlow<Editable<Z>> = flatMapWithScope(scope) { scope, a ->
         when (a) {
             Editable.Incorrect -> Editable.Incorrect.toMutableStateFlowAsInitial()
             is Editable.Value<A> -> other.mapState(scope) { b ->

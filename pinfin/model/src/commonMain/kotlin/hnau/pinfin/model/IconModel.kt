@@ -20,6 +20,7 @@ import hnau.common.kotlin.coroutines.toMutableStateFlowAsInitial
 import hnau.common.kotlin.foldBoolean
 import hnau.common.kotlin.foldNullable
 import hnau.common.kotlin.serialization.MutableStateFlowSerializer
+import hnau.pinfin.model.utils.flatMapWithScope
 import hnau.pinfin.model.utils.icons.IconCategory
 import hnau.pinfin.model.utils.icons.IconVariant
 import hnau.pinfin.model.utils.icons.category
@@ -115,8 +116,7 @@ class IconModel(
 
     override val goBackHandler: GoBackHandler = skeleton
         .selectedCategory
-        .scopedInState(scope)
-        .flatMapState(scope) { (selectionScope, selectedCategories) ->
+        .flatMapWithScope(scope) { selectionScope, selectedCategories ->
             selectedCategories
                 .foldNullable(
                     ifNotNull = {

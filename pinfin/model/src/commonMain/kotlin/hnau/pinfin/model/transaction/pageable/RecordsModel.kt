@@ -30,6 +30,7 @@ import hnau.pinfin.model.transaction.utils.remove
 import hnau.pinfin.model.utils.ZipList
 import hnau.pinfin.model.utils.budget.state.CategoryInfo
 import hnau.pinfin.model.utils.budget.state.TransactionInfo
+import hnau.pinfin.model.utils.flatMapWithScope
 import hnau.pinfin.model.utils.toZipListOrNull
 import hnau.pipe.annotations.Pipe
 import kotlinx.coroutines.CoroutineScope
@@ -137,8 +138,7 @@ class RecordsModel(
                                     }
                             },
                         isFocused = isFocused
-                            .scopedInState(recordScope)
-                            .flatMapState(recordScope) { (scope, isFocused) ->
+                            .flatMapWithScope(recordScope) { scope, isFocused ->
                                 isFocused.foldBoolean(
                                     ifFalse = { false.toMutableStateFlowAsInitial() },
                                     ifTrue = {
@@ -175,8 +175,7 @@ class RecordsModel(
         }
 
     val amountOrZero: StateFlow<Amount> = items
-        .scopedInState(scope)
-        .flatMapState(scope) { (scope, items) ->
+        .flatMapWithScope(scope) { scope, items ->
             val nonEmptyItems = items.toNonEmptyList()
             nonEmptyItems
                 .tail
@@ -193,8 +192,7 @@ class RecordsModel(
         }
 
     private val usedCategories: StateFlow<Set<CategoryInfo>> = items
-        .scopedInState(scope)
-        .flatMapState(scope) { (itemsScope, items) ->
+        .flatMapWithScope(scope) { itemsScope, items ->
             items.fold(
                 initial = MutableStateFlow(emptySet<CategoryInfo>()).asStateFlow(),
             ) { acc, item ->
@@ -271,25 +269,23 @@ class RecordsModel(
     )
 
     internal val records: StateFlow<Editable<NonEmptyList<TransactionInfo.Type.Entry.Record>>> =
-        items
-            .scopedInState(scope)
-            .flatMapState(scope) { (scope, idWithRecords) ->
+        items.flatMapWithScope(scope) { scope, idWithRecords ->
 
-                val records = idWithRecords
-                    .toNonEmptyList()
-                    .map(Item::model)
+            val records = idWithRecords
+                .toNonEmptyList()
+                .map(Item::model)
 
-                records
-                    .head
-                    .record
-                    .mapState(scope) { recordOrIncorrect ->
-                        recordOrIncorrect.map(::nonEmptyListOf)
-                    }
-                    .add(
-                        scope = scope,
-                        remaining = records.tail,
-                    )
-            }
+            records
+                .head
+                .record
+                .mapState(scope) { recordOrIncorrect ->
+                    recordOrIncorrect.map(::nonEmptyListOf)
+                }
+                .add(
+                    scope = scope,
+                    remaining = records.tail,
+                )
+        }
 
     private fun StateFlow<Editable<NonEmptyList<TransactionInfo.Type.Entry.Record>>>.add(
         scope: CoroutineScope,
@@ -299,9 +295,7 @@ class RecordsModel(
         .foldNullable(
             ifNull = { this },
             ifNotNull = { nonEmptyRemaining ->
-                this
-                    .scopedInState(scope)
-                    .flatMapState(scope) { (recordsScope, recordsOrIncorrect) ->
+                flatMapWithScope(scope) { recordsScope, recordsOrIncorrect ->
                         when (recordsOrIncorrect) {
                             Editable.Incorrect -> Editable.Incorrect.toMutableStateFlowAsInitial()
                             is Editable.Value<NonEmptyList<TransactionInfo.Type.Entry.Record>> -> nonEmptyRemaining
@@ -321,15 +315,12 @@ class RecordsModel(
             }
         )
 
-    val goBackHandler: GoBackHandler = items
-        .scopedInState(scope)
-        .flatMapState(scope) { (itemsScope, items) ->
+    val goBackHandler: GoBackHandler = items.flatMapWithScope(scope) { itemsScope, items ->
             items
                 .selected
                 .model
                 .goBackHandler
-                .scopedInState(itemsScope)
-                .flatMapState(itemsScope) { (recordGoBackScope, recordGoBackOrNull) ->
+                .flatMapWithScope(itemsScope) { recordGoBackScope, recordGoBackOrNull ->
                     recordGoBackOrNull.foldNullable(
                         ifNotNull = { it.toMutableStateFlowAsInitial() },
                         ifNull = {

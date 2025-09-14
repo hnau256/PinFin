@@ -29,6 +29,7 @@ import hnau.pinfin.model.utils.budget.repository.BudgetRepository
 import hnau.pinfin.model.utils.budget.state.AccountInfo
 import hnau.pinfin.model.utils.budget.state.BudgetState
 import hnau.pinfin.model.utils.budget.state.TransactionInfo
+import hnau.pinfin.model.utils.flatMapWithScope
 import hnau.pipe.annotations.Pipe
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -110,8 +111,7 @@ class AccountModel(
         scope = scope,
         valueOrNone = skeleton
             .manualAccount
-            .scopedInState(scope)
-            .flatMapState(scope) { (scope, manualAccountOrNull) ->
+            .flatMapWithScope(scope) { scope, manualAccountOrNull ->
                 manualAccountOrNull
                     .toOption()
                     .fold(

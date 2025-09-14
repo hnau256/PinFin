@@ -26,6 +26,7 @@ import hnau.pinfin.model.transaction_old.type.utils.ChooseCategoryModel
 import hnau.pinfin.model.utils.budget.repository.BudgetRepository
 import hnau.pinfin.model.utils.budget.state.CategoryInfo
 import hnau.pinfin.model.utils.budget.state.TransactionInfo
+import hnau.pinfin.model.utils.flatMapWithScope
 import hnau.pipe.annotations.Pipe
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -151,12 +152,9 @@ class RecordModel(
 
     val overlap: StateFlow<OverlapDialogModel?> = skeleton
         .overlapDialog
-        .scopedInState(
-            parentScope = scope,
-        )
-        .flatMapState(
+        .flatMapWithScope(
             scope = scope,
-        ) { (stateScope, dialogOrNull) ->
+        ) { stateScope, dialogOrNull ->
             when (dialogOrNull) {
 
                 null -> null.toMutableStateFlowAsInitial()
@@ -371,14 +369,12 @@ class RecordModel(
                 }
             )
         }
-        .scopedInState(scope)
-        .flatMapState(scope) { (selectedScope, selectedOrNull) ->
+        .flatMapWithScope(scope) { selectedScope, selectedOrNull ->
             selectedOrNull.foldNullable(
                 ifNotNull = { it.toMutableStateFlowAsInitial() },
                 ifNull = {
                     category
-                        .scopedInState(selectedScope)
-                        .flatMapState(selectedScope) { (categoryScope, categoryOrNull) ->
+                        .flatMapWithScope(selectedScope) { categoryScope, categoryOrNull ->
                             categoryOrNull.foldNullable(
                                 ifNull = { AmountDirection.default.toMutableStateFlowAsInitial() },
                                 ifNotNull = { category ->
@@ -423,8 +419,7 @@ class RecordModel(
             scope = scope,
             other = amount
                 .amount
-                .scopedInState(scope)
-                .flatMapState(scope) { (amountScope, amountOrNull) ->
+                .flatMapWithScope(scope) { amountScope, amountOrNull ->
                     amountOrNull.foldNullable(
                         ifNull = { null.toMutableStateFlowAsInitial() },
                         ifNotNull = { amount ->

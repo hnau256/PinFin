@@ -25,6 +25,7 @@ import hnau.pinfin.model.transaction.utils.combineEditableWith
 import hnau.pinfin.model.transaction.utils.toTransactionType
 import hnau.pinfin.model.utils.budget.repository.BudgetRepository
 import hnau.pinfin.model.utils.budget.state.TransactionInfo
+import hnau.pinfin.model.utils.flatMapWithScope
 import hnau.pipe.annotations.Pipe
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -339,8 +340,7 @@ class TransactionModel(
                 comment = comment,
             )
         }
-        .scopedInState(scope)
-        .flatMapState(scope) { (scope, transactionOrIncorrect) ->
+        .flatMapWithScope(scope) { scope, transactionOrIncorrect ->
             when (transactionOrIncorrect) {
                 Editable.Incorrect -> createHasChangesState(
                     scope = scope,
@@ -440,8 +440,7 @@ class TransactionModel(
         scope: CoroutineScope,
     ): GoBackHandler = skeleton
         .removeDialogIsVisible
-        .scopedInState(scope)
-        .flatMapState(scope) { (scope, removeDialogIsVisible) ->
+        .flatMapWithScope(scope) { scope, removeDialogIsVisible ->
             removeDialogIsVisible.foldBoolean(
                 ifTrue = { ::closeRemoveDialog.toMutableStateFlowAsInitial() },
                 ifFalse = {
@@ -460,12 +459,10 @@ class TransactionModel(
 
 
     val goBackHandler: GoBackHandler = pageType
-        .scopedInState(scope)
-        .flatMapState(scope) { (pageScope, partWithPage) ->
+        .flatMapWithScope(scope) { pageScope, partWithPage ->
             val (part, pageModel) = partWithPage
             pageModel.goBackHandler
-                .scopedInState(pageScope)
-                .flatMapState(pageScope) { (scope, goBack) ->
+                .flatMapWithScope(pageScope) { scope, goBack ->
                     goBack.foldNullable(
                         ifNotNull = { it.toMutableStateFlowAsInitial() },
                         ifNull = {
@@ -475,8 +472,7 @@ class TransactionModel(
                                 Part.Time -> time.goBackHandler
                                 Part.Comment -> comment.goBackHandler
                             }
-                                .scopedInState(scope)
-                                .flatMapState(scope) { (scope, partGoBackOrNull) ->
+                                .flatMapWithScope(scope) { scope, partGoBackOrNull ->
                                     partGoBackOrNull.foldNullable(
                                         ifNotNull = { partGoBack ->
                                             partGoBack.toMutableStateFlowAsInitial()

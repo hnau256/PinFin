@@ -32,6 +32,7 @@ import hnau.common.kotlin.coroutines.toMutableStateFlowAsInitial
 import hnau.common.kotlin.foldBoolean
 import hnau.common.kotlin.foldNullable
 import hnau.pinfin.data.Comment
+import hnau.pinfin.model.utils.flatMapWithScope
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.StateFlow
 
@@ -43,8 +44,7 @@ class SuggestsListProjector(
 ) {
 
     private val suggests: StateFlow<StateFlow<NonEmptyList<Comment>>?> = inputIsFocused
-        .scopedInState(scope)
-        .flatMapState(scope) { (focusScope, focused) ->
+        .flatMapWithScope(scope) { focusScope, focused ->
             focused.foldBoolean(
                 ifFalse = { null.toMutableStateFlowAsInitial() },
                 ifTrue = {

@@ -29,6 +29,7 @@ import hnau.pinfin.model.transaction_old.type.entry.EntryModel
 import hnau.pinfin.model.transaction_old.type.transfer.TransferModel
 import hnau.pinfin.model.utils.budget.repository.BudgetRepository
 import hnau.pinfin.model.utils.budget.state.TransactionInfo
+import hnau.pinfin.model.utils.flatMapWithScope
 import hnau.pipe.annotations.Pipe
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -434,8 +435,7 @@ class TransactionModel(
 
     val exitUnsavedDialogInfo: StateFlow<ExitUnsavedDialogInfo?> = skeleton
         .visibleDialog
-        .scopedInState(scope)
-        .flatMapState(scope) { (dialogScope, visibleDialog) ->
+        .flatMapWithScope(scope) { dialogScope, visibleDialog ->
             when (visibleDialog) {
                 Skeleton.Dialog.ExitUnsaved -> saveAction.mapState(dialogScope) { saveOrNull ->
                     ExitUnsavedDialogInfo(

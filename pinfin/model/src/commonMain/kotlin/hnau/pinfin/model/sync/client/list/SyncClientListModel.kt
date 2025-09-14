@@ -21,6 +21,7 @@ import hnau.pinfin.model.utils.budget.repository.BudgetRepository
 import hnau.pinfin.model.utils.budget.state.BudgetInfo
 import hnau.pinfin.model.utils.budget.storage.BudgetsStorage
 import hnau.pinfin.model.utils.budget.upchain.UpchainHash
+import hnau.pinfin.model.utils.flatMapWithScope
 import hnau.pipe.annotations.Pipe
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -54,8 +55,7 @@ class SyncClientListModel(
     @OptIn(ExperimentalCoroutinesApi::class)
     private val serverBudgets: StateFlow<Loadable<Result<List<SyncHandle.GetBudgets.Response.Budget>>>> =
         serverBudgetsRequestIndex
-            .scopedInState(scope)
-            .flatMapState(scope) { (attemptScope) ->
+            .flatMapWithScope(scope) { attemptScope, _ ->
                 LoadableStateFlow(attemptScope) {
                     dependencies
                         .tcpSyncClient

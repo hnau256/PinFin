@@ -20,6 +20,7 @@ import hnau.pinfin.model.transaction.utils.Editable
 import hnau.pinfin.model.transaction.utils.combineEditableWith
 import hnau.pinfin.model.utils.budget.state.AccountInfo
 import hnau.pinfin.model.utils.budget.state.TransactionInfo
+import hnau.pinfin.model.utils.flatMapWithScope
 import hnau.pipe.annotations.Pipe
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -129,9 +130,7 @@ class TransferModel(
 
     private fun createIsFocused(
         part: Part,
-    ): StateFlow<Boolean> = isFocused
-        .scopedInState(scope)
-        .flatMapState(scope) { (isFocusedScope, isFocused) ->
+    ): StateFlow<Boolean> = isFocused.flatMapWithScope(scope) { isFocusedScope, isFocused ->
             isFocused.foldBoolean(
                 ifFalse = { false.toMutableStateFlowAsInitial() },
                 ifTrue = {
@@ -272,8 +271,7 @@ class TransferModel(
 
     val goBackHandler: GoBackHandler = skeleton
         .part
-        .scopedInState(scope)
-        .flatMapState(scope) { (partScope, part) ->
+        .flatMapWithScope(scope) { partScope, part ->
             val partGoBackHandler = when (part) {
                 Part.From -> from.goBackHandler
                 Part.To -> to.goBackHandler

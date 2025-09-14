@@ -22,6 +22,7 @@ import hnau.common.kotlin.toAccessor
 import hnau.pinfin.data.BudgetId
 import hnau.pinfin.model.utils.budget.repository.BudgetRepository
 import hnau.pinfin.model.utils.budget.storage.BudgetsStorage
+import hnau.pinfin.model.utils.flatMapWithScope
 import hnau.pipe.annotations.Pipe
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -103,8 +104,7 @@ class SyncClientLoadBudgetModel(
         { skeleton.isStopSyncDialogVisible.update(Boolean::not) }.toMutableStateFlowAsInitial()
 
     override val goBackHandler: GoBackHandler = state
-        .scopedInState(scope)
-        .flatMapState(scope) { (budgetScope, budgetOrLoading) ->
+        .flatMapWithScope(scope) { budgetScope, budgetOrLoading ->
             when (budgetOrLoading) {
                 Loading -> fallbackGoBackHandler
                 is Ready -> budgetOrLoading.value.goBackHandler.fallback(

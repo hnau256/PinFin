@@ -20,6 +20,7 @@ import hnau.pinfin.data.BudgetConfig
 import hnau.pinfin.model.budgetstack.BudgetStackOpener
 import hnau.pinfin.model.manage.BudgetsListOpener
 import hnau.pinfin.model.utils.budget.repository.BudgetRepository
+import hnau.pinfin.model.utils.flatMapWithScope
 import hnau.pipe.annotations.Pipe
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -109,8 +110,7 @@ class BudgetConfigModel(
 
     val nameOrEdit: StateFlow<NameOrEdit> = skeleton
         .editName
-        .scopedInState(scope)
-        .flatMapState(scope) { (stateScope, editNameSkeletonOrNull) ->
+        .flatMapWithScope(scope) { stateScope, editNameSkeletonOrNull ->
             editNameSkeletonOrNull.foldNullable(
                 ifNull = {
                     dependencies

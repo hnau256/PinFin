@@ -19,6 +19,7 @@ import hnau.common.kotlin.serialization.MutableStateFlowSerializer
 import hnau.pinfin.model.transaction_old_2.page.type.entry.record.RecordPageModel
 import hnau.pinfin.model.transaction_old_2.part.type.entry.record.RecordId
 import hnau.pinfin.model.transaction_old_2.part.type.entry.record.RecordInfo
+import hnau.pinfin.model.utils.flatMapWithScope
 import hnau.pipe.annotations.Pipe
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -147,29 +148,25 @@ class RecordsPageModel(
         )
     }
 
-    override val goBackHandler: GoBackHandler = record
-        .scopedInState(scope)
-        .flatMapState(scope) { (recordScope, record) ->
+    override val goBackHandler: GoBackHandler =
+        record.flatMapWithScope(scope) { recordScope, record ->
             val (index, _, model) = record
-            model
-                .goBackHandler
-                .scopedInState(recordScope)
-                .flatMapState(recordScope) { (selectedGoBackScope, selectedGoBack) ->
-                    selectedGoBack.foldNullable(
-                        ifNotNull = { it.toMutableStateFlowAsInitial() },
-                        ifNull = {
-                            all.mapState(selectedGoBackScope) { all ->
-                                index
-                                    .minus(1)
-                                    .takeIf { it >= 0 }
-                                    ?.let(all::getOrNull)
-                                    ?.first
-                                    ?.let { newId ->
-                                        { skeleton.selected.value = newId }
-                                    }
-                            }
+            model.goBackHandler.flatMapWithScope(recordScope) { selectedGoBackScope, selectedGoBack ->
+                selectedGoBack.foldNullable(
+                    ifNotNull = { it.toMutableStateFlowAsInitial() },
+                    ifNull = {
+                        all.mapState(selectedGoBackScope) { all ->
+                            index
+                                .minus(1)
+                                .takeIf { it >= 0 }
+                                ?.let(all::getOrNull)
+                                ?.first
+                                ?.let { newId ->
+                                    { skeleton.selected.value = newId }
+                                }
                         }
-                    )
-                }
+                    }
+                )
+            }
         }
 }

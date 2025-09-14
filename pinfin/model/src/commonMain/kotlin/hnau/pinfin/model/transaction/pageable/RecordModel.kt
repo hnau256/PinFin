@@ -24,6 +24,7 @@ import hnau.pinfin.model.transaction.utils.combineEditableWith
 import hnau.pinfin.model.transaction.utils.valueOrNone
 import hnau.pinfin.model.utils.budget.state.CategoryInfo
 import hnau.pinfin.model.utils.budget.state.TransactionInfo
+import hnau.pinfin.model.utils.flatMapWithScope
 import hnau.pipe.annotations.Pipe
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -160,13 +161,11 @@ class RecordModel(
 
     private val part: StateFlow<Part> = skeleton
         .part
-        .scopedInState(scope)
-        .flatMapState(scope) { (scope, part) ->
+        .flatMapWithScope(scope) { scope, part ->
             when (part) {
                 is Skeleton.Part.Simple -> part.part.toMutableStateFlowAsInitial()
                 Skeleton.Part.AfterComment -> selectedCategoryWrapper
-                    .scopedInState(scope)
-                    .flatMapState(scope) { (scope, category) ->
+                    .flatMapWithScope(scope) { scope, category ->
                         category.mapState(scope) { categoryOrNull ->
                             categoryOrNull.foldNullable(
                                 ifNull = { Part.Category },
@@ -262,8 +261,7 @@ class RecordModel(
 
     val categoryWithAmount: StateFlow<Pair<CategoryInfo, Amount>?> = category
         .categoryEditable
-        .scopedInState(scope)
-        .flatMapState(scope) { (scope, categoryOrIncorrect) ->
+        .flatMapWithScope(scope) { scope, categoryOrIncorrect ->
             when (categoryOrIncorrect) {
                 Editable.Incorrect -> null.toMutableStateFlowAsInitial()
                 is Editable.Value<CategoryInfo> -> amount
@@ -365,9 +363,7 @@ class RecordModel(
         .entries
         .getOrNull(ordinal + offset)
 
-    val goBackHandler: GoBackHandler = part
-        .scopedInState(scope)
-        .flatMapState(scope) { (partScope, part) ->
+    val goBackHandler: GoBackHandler = part.flatMapWithScope(scope) { partScope, part ->
             when (part) {
                 Part.Comment -> comment.goBackHandler
                 Part.Category -> category.goBackHandler

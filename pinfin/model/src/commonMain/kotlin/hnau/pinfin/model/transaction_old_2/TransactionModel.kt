@@ -21,6 +21,7 @@ import hnau.pinfin.model.transaction_old_2.part.TimeModel
 import hnau.pinfin.model.transaction_old_2.part.TypeModel
 import hnau.pinfin.model.utils.budget.repository.BudgetRepository
 import hnau.pinfin.model.utils.budget.state.TransactionInfo
+import hnau.pinfin.model.utils.flatMapWithScope
 import hnau.pipe.annotations.Pipe
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -215,13 +216,9 @@ class TransactionModel(
             part to model
         }
 
-    val goBackHandler: GoBackHandler = page
-        .scopedInState(scope)
-        .flatMapState(scope) { (pageScope, partWithPage) ->
+    val goBackHandler: GoBackHandler = page.flatMapWithScope(scope) { pageScope, partWithPage ->
             val (part, pageModel) = partWithPage
-            pageModel.goBackHandler
-                .scopedInState(pageScope)
-                .flatMapState(pageScope) { (goBackScope, goBack) ->
+            pageModel.goBackHandler.flatMapWithScope(pageScope) { goBackScope, goBack ->
                     goBack.foldNullable(
                         ifNotNull = { it.toMutableStateFlowAsInitial() },
                         ifNull = {

@@ -31,6 +31,7 @@ import hnau.pinfin.model.utils.budget.repository.BudgetRepository
 import hnau.pinfin.model.utils.budget.state.AccountInfo
 import hnau.pinfin.model.utils.budget.state.CategoryInfo
 import hnau.pinfin.model.utils.budget.state.TransactionInfo
+import hnau.pinfin.model.utils.flatMapWithScope
 import hnau.pipe.annotations.Pipe
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -103,12 +104,7 @@ class EntryModel(
 
         val localUsedCategories = skeleton
             .records
-            .scopedInState(
-                parentScope = scope,
-            )
-            .flatMapState(
-                scope = scope,
-            ) { (recordsScope, records) ->
+            .flatMapWithScope(scope) { recordsScope, records ->
                 records
                     .fold<_, StateFlow<Set<CategoryInfo>>>(
                         initial = emptySet<CategoryInfo>().toMutableStateFlowAsInitial()
@@ -175,13 +171,7 @@ class EntryModel(
             )
     }
 
-    val amount: StateFlow<Amount> = records
-        .scopedInState(
-            parentScope = scope,
-        )
-        .flatMapState(
-            scope = scope,
-        ) { (recordsScope, records) ->
+    val amount: StateFlow<Amount> = records.flatMapWithScope(scope) { recordsScope, records ->
             records
                 .fold<_, StateFlow<Amount>>(
                     initial = Amount.zero.toMutableStateFlowAsInitial(),
@@ -265,13 +255,7 @@ class EntryModel(
         }
     }
 
-    val result: StateFlow<Transaction.Type.Entry?> = records
-        .scopedInState(
-            parentScope = scope,
-        )
-        .flatMapState(
-            scope = scope,
-        ) { (recordsScope, records) ->
+    val result: StateFlow<Transaction.Type.Entry?> = records.flatMapWithScope(scope) { recordsScope, records ->
             records
                 .tail
                 .fold(
