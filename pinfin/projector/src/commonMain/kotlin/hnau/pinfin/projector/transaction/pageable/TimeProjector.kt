@@ -64,13 +64,10 @@ class TimeProjector(
                 val hour = state.hour
                 val minute = state.minute
                 LaunchedEffect(hour, minute) {
-                    model.time.value = LocalTime(
+                    model.time.value = TimeModel.Time(
                         hour = hour,
                         minute = minute,
-                        second = 0,
-                        nanosecond = 0,
                     )
-
                 }
                 TimePicker(
                     state = state,

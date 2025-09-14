@@ -119,6 +119,13 @@ internal inline fun <I, O> Editable<I>.flatMap(
     }
 }
 
+internal inline fun <I, O> Editable.Value<I>.map(
+    transform: (I) -> O,
+): Editable.Value<O> =    Editable.Value(
+    value = transform(value),
+    changed = false,
+)
+
 internal inline fun <I, O> Editable<I>.map(
     transform: (I) -> O,
 ): Editable<O> = flatMap { value ->

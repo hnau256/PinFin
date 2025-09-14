@@ -15,10 +15,12 @@ import hnau.common.kotlin.serialization.MutableStateFlowSerializer
 import hnau.common.kotlin.toAccessor
 import hnau.pinfin.data.Comment
 import hnau.pinfin.model.transaction.utils.Editable
+import hnau.pinfin.model.transaction.utils.map
 import hnau.pipe.annotations.Pipe
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import kotlinx.datetime.LocalTime
 import kotlinx.datetime.TimeZone
@@ -43,20 +45,34 @@ class TimeModel(
     }
 
     @Serializable
+    data class Time(
+        val hour: Int,
+        val minute: Int,
+    )
+
+    @Serializable
     data class Skeleton(
         var page: Page.Skeleton? = null,
-        val initialTime: LocalTime?,
-        val time: MutableStateFlow<LocalTime> = initialTime
+        val initialTime: Time?,
+        val time: MutableStateFlow<Time> = initialTime
             .ifNull {
                 Clock.System
                     .now()
                     .toLocalDateTime(TimeZone.currentSystemDefault())
                     .time
+                    .let(::createTime)
             }
             .toMutableStateFlowAsInitial(),
     ) {
 
         companion object {
+
+            private fun createTime(
+                localTime: LocalTime,
+            ): Time = Time(
+                hour = localTime.hour,
+                minute = localTime.minute,
+            )
 
             fun createForNew(): Skeleton = Skeleton(
                 initialTime = null,
@@ -65,7 +81,7 @@ class TimeModel(
             fun createForEdit(
                 time: LocalTime,
             ): Skeleton = Skeleton(
-                initialTime = time,
+                initialTime = time.let(::createTime),
             )
         }
     }
@@ -74,7 +90,7 @@ class TimeModel(
         scope: CoroutineScope,
         dependencies: Dependencies,
         skeleton: Skeleton,
-        val time: MutableStateFlow<LocalTime>,
+        val time: MutableStateFlow<Time>,
     ) {
 
         @Pipe
@@ -111,11 +127,22 @@ class TimeModel(
         }
     }
 
-    internal val timeEditable: StateFlow<Editable.Value<LocalTime>> = Editable.Value.create(
-        scope = scope,
-        value = skeleton.time,
-        initialValueOrNone = skeleton.initialTime.toOption(),
-    )
+    internal val timeEditable: StateFlow<Editable.Value<LocalTime>> = Editable.Value
+        .create(
+            scope = scope,
+            value = skeleton.time,
+            initialValueOrNone = skeleton.initialTime.toOption(),
+        )
+        .mapState(scope) { timeEditableValue ->
+            timeEditableValue.map { time ->
+                LocalTime(
+                    hour = time.hour,
+                    minute = time.minute,
+                    second = 0,
+                    nanosecond = 0,
+                )
+            }
+        }
 
     val time: StateFlow<LocalTime> = timeEditable
         .mapState(scope, Editable.Value<LocalTime>::value)
