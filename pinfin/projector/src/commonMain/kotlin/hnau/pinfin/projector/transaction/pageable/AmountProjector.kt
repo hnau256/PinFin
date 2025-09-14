@@ -23,7 +23,6 @@ import hnau.common.app.projector.utils.horizontalDisplayPadding
 import hnau.common.kotlin.foldNullable
 import hnau.pinfin.model.transaction.pageable.AmountModel
 import hnau.pinfin.projector.AmountProjector
-import hnau.pinfin.projector.transaction.utils.AmountOrNullContent
 import hnau.pinfin.projector.transaction.utils.PartDefaults
 import hnau.pinfin.projector.utils.Label
 import hnau.pinfin.projector.utils.UIConstants

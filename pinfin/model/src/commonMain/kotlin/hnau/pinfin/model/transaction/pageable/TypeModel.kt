@@ -16,6 +16,7 @@ import hnau.common.kotlin.mapper.Mapper
 import hnau.common.kotlin.serialization.MutableStateFlowSerializer
 import hnau.common.kotlin.toAccessor
 import hnau.pinfin.data.TransactionType
+import hnau.pinfin.model.transaction.utils.Editable
 import hnau.pinfin.model.utils.budget.state.TransactionInfo
 import hnau.pipe.annotations.Pipe
 import kotlinx.coroutines.CoroutineScope
@@ -54,14 +55,9 @@ class TypeModel(
 
         val goBackHandler: GoBackHandler
 
-        val isChanged: StateFlow<Boolean>
-
         data class Entry(
             val model: EntryModel,
         ) : Type {
-
-            override val isChanged: StateFlow<Boolean>
-                get() = model.isChanged
 
             override val goBackHandler: GoBackHandler
                 get() = model.goBackHandler
@@ -70,9 +66,6 @@ class TypeModel(
         data class Transfer(
             val model: TransferModel,
         ) : Type {
-
-            override val isChanged: StateFlow<Boolean>
-                get() = model.isChanged
 
             override val goBackHandler: GoBackHandler
                 get() = model.goBackHandler
@@ -256,15 +249,12 @@ class TypeModel(
         }
     )
 
-    val type: StateFlow<TransactionInfo.Type?> = typeModel.flatMapState(scope) { typeModel ->
+    internal val type: StateFlow<Editable<TransactionInfo.Type>> = typeModel.flatMapState(scope) { typeModel ->
         when (typeModel) {
             is Type.Entry -> typeModel.model.entry
             is Type.Transfer -> typeModel.model.transfer
         }
     }
-
-    val isChanged: StateFlow<Boolean> =
-        typeModel.flatMapState(scope, Type::isChanged)
 
     val goBackHandler: GoBackHandler =
         typeModel.flatMapState(scope, Type::goBackHandler)

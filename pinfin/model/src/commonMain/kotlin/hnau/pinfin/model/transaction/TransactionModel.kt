@@ -5,22 +5,26 @@
 package hnau.pinfin.model.transaction
 
 import hnau.common.app.model.goback.GoBackHandler
-import hnau.common.kotlin.coroutines.combineStateWith
+import hnau.common.kotlin.coroutines.actionOrNullIfExecuting
 import hnau.common.kotlin.coroutines.flatMapState
 import hnau.common.kotlin.coroutines.mapState
 import hnau.common.kotlin.coroutines.mapWithScope
 import hnau.common.kotlin.coroutines.scopedInState
 import hnau.common.kotlin.coroutines.toMutableStateFlowAsInitial
+import hnau.common.kotlin.foldBoolean
 import hnau.common.kotlin.foldNullable
+import hnau.common.kotlin.ifTrue
 import hnau.common.kotlin.serialization.MutableStateFlowSerializer
-import hnau.pinfin.data.Comment
 import hnau.pinfin.data.Transaction
 import hnau.pinfin.data.TransactionType
 import hnau.pinfin.model.transaction.pageable.CommentModel
 import hnau.pinfin.model.transaction.pageable.DateModel
 import hnau.pinfin.model.transaction.pageable.TimeModel
 import hnau.pinfin.model.transaction.pageable.TypeModel
-import hnau.pinfin.model.transaction.utils.IsChangedUtils
+import hnau.pinfin.model.transaction.utils.Editable
+import hnau.pinfin.model.transaction.utils.combineEditableWith
+import hnau.pinfin.model.transaction.utils.toTransactionType
+import hnau.pinfin.model.utils.budget.repository.BudgetRepository
 import hnau.pinfin.model.utils.budget.state.TransactionInfo
 import hnau.pipe.annotations.Pipe
 import kotlinx.coroutines.CoroutineScope
@@ -32,7 +36,6 @@ import kotlinx.datetime.toInstant
 import kotlinx.datetime.toLocalDateTime
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.UseSerializers
-import kotlin.time.Instant
 
 class TransactionModel(
     private val scope: CoroutineScope,
@@ -102,6 +105,8 @@ class TransactionModel(
     @Pipe
     interface Dependencies {
 
+        val budgetRepository: BudgetRepository
+
         fun type(): TypeModel.Dependencies
 
         fun date(): DateModel.Dependencies
@@ -119,6 +124,8 @@ class TransactionModel(
         val date: DateModel.Skeleton,
         val time: TimeModel.Skeleton,
         val comment: CommentModel.Skeleton,
+        val closeWithoutSavingDialogIsVisible: MutableStateFlow<Boolean> =
+            false.toMutableStateFlowAsInitial()
     ) {
 
         companion object {
@@ -263,49 +270,111 @@ class TransactionModel(
             part to pageType
         }
 
-    private data class TransactionToSave(
-        val type: TransactionInfo.Type,
-        val timestamp: Instant,
-        val comment: Comment,
-    )
+    internal sealed interface State {
 
-    private val transactionToSaveOrNull: StateFlow<TransactionToSave?> = type
-        .type
-        .scopedInState(scope)
-        .flatMapState(scope) { (typeScope, typeOrNull) ->
-            typeOrNull.foldNullable(
-                ifNull = { null.toMutableStateFlowAsInitial() },
-                ifNotNull = { type ->
-                    date.date
-                        .combineStateWith(
-                            scope = typeScope,
-                            other = time.time,
-                        ) { date, time ->
-                            date
-                                .atTime(time)
-                                .toInstant(TimeZone.currentSystemDefault())
-                        }
-                        .combineStateWith(
-                            scope = typeScope,
-                            other = comment.comment,
-                        ) { timestamp, comment ->
-                            TransactionToSave(
-                                type = type,
-                                timestamp = timestamp,
-                                comment = comment,
+        data object NoChanges : State
+
+        data class HasChanges(
+            val saveIsCorrect: (() -> Unit)?,
+            val closeWithoutSavingDialogInfo: CloseWithoutSavingDialogInfo?,
+        ) : State {
+
+            data class CloseWithoutSavingDialogInfo(
+                val close: () -> Unit,
+                val cancelChanges: () -> Unit,
+            )
+        }
+
+        data object Saving : State
+    }
+
+    private fun createHasChangesState(
+        scope: CoroutineScope,
+        save: (() -> Unit)?
+    ): StateFlow<State.HasChanges> = skeleton
+        .closeWithoutSavingDialogIsVisible
+        .mapState(scope) { closeWithoutSavingDialogIsVisible ->
+            State.HasChanges(
+                saveIsCorrect = save,
+                closeWithoutSavingDialogInfo = closeWithoutSavingDialogIsVisible.ifTrue {
+                    State.HasChanges.CloseWithoutSavingDialogInfo(
+                        close = {
+                            setCloseWithoutSavingDialogIsVisible(
+                                visible = false,
                             )
-                        }
+                        },
+                        cancelChanges = onReady,
+                    )
                 }
             )
         }
 
-    private val isChanged: StateFlow<Boolean> = IsChangedUtils.calcIsChanged(
-        scope = scope,
-        date.isChanged,
-        time.isChanged,
-        comment.isChanged,
-        type.isChanged,
-    )
+    private fun setCloseWithoutSavingDialogIsVisible(
+        visible: Boolean,
+    ) {
+        skeleton.closeWithoutSavingDialogIsVisible.value = visible
+    }
+
+    private val state: StateFlow<State> = date.dateEditable
+        .combineEditableWith(
+            scope = scope,
+            other = time.timeEditable,
+        ) { date, time ->
+            date
+                .atTime(time)
+                .toInstant(TimeZone.currentSystemDefault())
+        }
+        .combineEditableWith(
+            scope = scope,
+            other = comment.commentEditable,
+            combine = ::Pair,
+        )
+        .combineEditableWith(
+            scope = scope,
+            other = type.type,
+        ) { (timestamp, comment), type ->
+            Transaction(
+                type = type.toTransactionType(),
+                timestamp = timestamp,
+                comment = comment,
+            )
+        }
+        .scopedInState(scope)
+        .flatMapState(scope) { (scope, transactionOrIncorrect) ->
+            when (transactionOrIncorrect) {
+                Editable.Incorrect -> createHasChangesState(
+                    scope = scope,
+                    save = null,
+                )
+
+                is Editable.Value<Transaction> -> transactionOrIncorrect
+                    .changed
+                    .foldBoolean(
+                        ifFalse = { State.NoChanges.toMutableStateFlowAsInitial() },
+                        ifTrue = {
+                            actionOrNullIfExecuting(scope) {
+                                dependencies.budgetRepository.transactions.addOrUpdate(
+                                    id = skeleton.id,
+                                    transaction = transactionOrIncorrect.value,
+                                )
+                                onReady()
+                            }
+                                .scopedInState(scope)
+                                .flatMapState(scope) { (scope, saveOrSaving) ->
+                                    saveOrSaving.foldNullable(
+                                        ifNull = { State.Saving.toMutableStateFlowAsInitial() },
+                                        ifNotNull = { save ->
+                                            createHasChangesState(
+                                                scope = scope,
+                                                save = save,
+                                            )
+                                        }
+                                    )
+                                }
+                        }
+                    )
+            }
+        }
 
     private fun Part.shift(
         offset: Int,
@@ -313,13 +382,29 @@ class TransactionModel(
         .entries
         .getOrNull(ordinal + offset)
 
+    private fun createLocalGoBackHandler(
+        scope: CoroutineScope,
+    ): GoBackHandler = state.mapState(scope) { state ->
+        when (state) {
+            State.NoChanges -> null
+            State.Saving -> {
+                {}
+            }
+
+            is State.HasChanges -> state.closeWithoutSavingDialogInfo.foldNullable(
+                ifNull = { { setCloseWithoutSavingDialogIsVisible(true) } },
+                ifNotNull = { { setCloseWithoutSavingDialogIsVisible(false) } },
+            )
+        }
+    }
+
     val goBackHandler: GoBackHandler = pageType
         .scopedInState(scope)
         .flatMapState(scope) { (pageScope, partWithPage) ->
             val (part, pageModel) = partWithPage
             pageModel.goBackHandler
                 .scopedInState(pageScope)
-                .flatMapState(pageScope) { (goBackScope, goBack) ->
+                .flatMapState(pageScope) { (scope, goBack) ->
                     goBack.foldNullable(
                         ifNotNull = { it.toMutableStateFlowAsInitial() },
                         ifNull = {
@@ -328,13 +413,25 @@ class TransactionModel(
                                 Part.Date -> date.goBackHandler
                                 Part.Time -> time.goBackHandler
                                 Part.Comment -> comment.goBackHandler
-                            }.mapState(goBackScope) { partGoBackOrNull ->
-                                partGoBackOrNull ?: part
-                                    .shift(-1)
-                                    ?.let { previousPart ->
-                                        { switchToPart(previousPart) }
-                                    }
                             }
+                                .scopedInState(scope)
+                                .flatMapState(scope) { (scope, partGoBackOrNull) ->
+                                    partGoBackOrNull.foldNullable(
+                                        ifNotNull = { partGoBack ->
+                                            partGoBack.toMutableStateFlowAsInitial()
+                                        },
+                                        ifNull = {
+                                            part
+                                                .shift(-1)
+                                                .foldNullable(
+                                                    ifNotNull = { previousPart ->
+                                                        { switchToPart(previousPart) }.toMutableStateFlowAsInitial()
+                                                    },
+                                                    ifNull = { createLocalGoBackHandler(scope) }
+                                                )
+                                        }
+                                    )
+                                }
                         },
                     )
                 }

@@ -23,8 +23,9 @@ import hnau.common.kotlin.getOrInit
 import hnau.common.kotlin.serialization.MutableStateFlowSerializer
 import hnau.common.kotlin.toAccessor
 import hnau.pinfin.data.Amount
-import hnau.pinfin.model.transaction.utils.IsChangedUtils
+import hnau.pinfin.model.transaction.utils.Editable
 import hnau.pinfin.model.transaction.utils.RecordId
+import hnau.pinfin.model.transaction.utils.map
 import hnau.pinfin.model.transaction.utils.remove
 import hnau.pinfin.model.utils.ZipList
 import hnau.pinfin.model.utils.budget.state.CategoryInfo
@@ -200,12 +201,12 @@ class RecordsModel(
                 combineState(
                     scope = itemsScope,
                     a = acc,
-                    b = item.model.category.category,
-                ) { acc, categoryOrNull ->
-                    categoryOrNull.foldNullable(
-                        ifNull = { acc },
-                        ifNotNull = { category -> acc + category }
-                    )
+                    b = item.model.category.categoryEditable,
+                ) { acc, categoryOrIncorrect ->
+                    when (categoryOrIncorrect) {
+                        Editable.Incorrect -> acc
+                        is Editable.Value<CategoryInfo> -> acc + categoryOrIncorrect.value
+                    }
                 }
             }
         }
@@ -269,64 +270,53 @@ class RecordsModel(
         addNewRecord = ::addNewRecord,
     )
 
-    val records: StateFlow<NonEmptyList<TransactionInfo.Type.Entry.Record>?> = items
-        .scopedInState(scope)
-        .flatMapState(scope) { (recordsScope, idWithRecords) ->
+    internal val records: StateFlow<Editable<NonEmptyList<TransactionInfo.Type.Entry.Record>>> =
+        items
+            .scopedInState(scope)
+            .flatMapState(scope) { (scope, idWithRecords) ->
 
-            val records = idWithRecords
-                .toNonEmptyList()
-                .map(Item::model)
+                val records = idWithRecords
+                    .toNonEmptyList()
+                    .map(Item::model)
 
-            records
-                .head
-                .record
-                .mapState(recordsScope) { recordOrNull ->
-                    recordOrNull?.let { record -> nonEmptyListOf(record) }
-                }
-                .add(
-                    scope = recordsScope,
-                    remaining = records.tail,
-                )
-        }
+                records
+                    .head
+                    .record
+                    .mapState(scope) { recordOrIncorrect ->
+                        recordOrIncorrect.map(::nonEmptyListOf)
+                    }
+                    .add(
+                        scope = scope,
+                        remaining = records.tail,
+                    )
+            }
 
-    val isChanged: StateFlow<Boolean> = IsChangedUtils.calcIsChanged(
-        scope = scope,
-        children = items.mapState(scope) { children ->
-            children.map { child -> child.model.isChanged }
-        },
-    )
-
-    private fun StateFlow<NonEmptyList<TransactionInfo.Type.Entry.Record>?>.add(
+    private fun StateFlow<Editable<NonEmptyList<TransactionInfo.Type.Entry.Record>>>.add(
         scope: CoroutineScope,
         remaining: List<RecordModel>,
-    ): StateFlow<NonEmptyList<TransactionInfo.Type.Entry.Record>?> = remaining
+    ): StateFlow<Editable<NonEmptyList<TransactionInfo.Type.Entry.Record>>> = remaining
         .toNonEmptyListOrNull()
         .foldNullable(
             ifNull = { this },
             ifNotNull = { nonEmptyRemaining ->
                 this
                     .scopedInState(scope)
-                    .flatMapState(scope) { (recordsScope, recordsOrNull) ->
-                        recordsOrNull.foldNullable(
-                            ifNull = { null.toMutableStateFlowAsInitial() },
-                            ifNotNull = { records ->
-                                nonEmptyRemaining
-                                    .head
-                                    .record
-                                    .mapState(recordsScope) { headRecordOrNull ->
-                                        headRecordOrNull.foldNullable(
-                                            ifNull = { null },
-                                            ifNotNull = { headRecord ->
-                                                records + headRecord
-                                            }
-                                        )
+                    .flatMapState(scope) { (recordsScope, recordsOrIncorrect) ->
+                        when (recordsOrIncorrect) {
+                            Editable.Incorrect -> Editable.Incorrect.toMutableStateFlowAsInitial()
+                            is Editable.Value<NonEmptyList<TransactionInfo.Type.Entry.Record>> -> nonEmptyRemaining
+                                .head
+                                .record
+                                .mapState(recordsScope) { headRecordOrNull ->
+                                    headRecordOrNull.map { headRecord ->
+                                        recordsOrIncorrect.value + headRecord
                                     }
-                                    .add(
-                                        scope = recordsScope,
-                                        remaining = nonEmptyRemaining.tail,
-                                    )
-                            }
-                        )
+                                }
+                                .add(
+                                    scope = recordsScope,
+                                    remaining = nonEmptyRemaining.tail,
+                                )
+                        }
                     }
             }
         )

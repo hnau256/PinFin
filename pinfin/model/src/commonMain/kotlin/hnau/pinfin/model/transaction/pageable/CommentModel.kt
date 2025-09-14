@@ -4,6 +4,7 @@
 
 package hnau.pinfin.model.transaction.pageable
 
+import arrow.core.toOption
 import hnau.common.app.model.EditingString
 import hnau.common.app.model.goback.GoBackHandler
 import hnau.common.app.model.goback.NeverGoBackHandler
@@ -11,11 +12,13 @@ import hnau.common.app.model.toEditingString
 import hnau.common.kotlin.Loadable
 import hnau.common.kotlin.coroutines.mapState
 import hnau.common.kotlin.coroutines.toMutableStateFlowAsInitial
-import hnau.common.kotlin.foldNullable
 import hnau.common.kotlin.getOrInit
 import hnau.common.kotlin.serialization.MutableStateFlowSerializer
 import hnau.common.kotlin.toAccessor
+import hnau.pinfin.data.Amount
 import hnau.pinfin.data.Comment
+import hnau.pinfin.model.transaction.utils.Editable
+import hnau.pinfin.model.transaction.utils.valueOrNone
 import hnau.pinfin.model.utils.Delayed
 import hnau.pinfin.model.utils.budget.repository.BudgetRepository
 import hnau.pinfin.model.utils.budget.state.BudgetState
@@ -24,7 +27,6 @@ import hnau.pipe.annotations.Pipe
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.UseSerializers
 import kotlin.time.Instant
@@ -130,16 +132,16 @@ class CommentModel(
     val commentEditingString: MutableStateFlow<EditingString>
         get() = skeleton.comment
 
-    val comment: StateFlow<Comment> = skeleton
-        .comment
-        .mapState(scope) { it.text.let(::Comment) }
-
-    val isChanged: StateFlow<Boolean> = skeleton.initialComment.foldNullable(
-        ifNull = { true.toMutableStateFlowAsInitial() },
-        ifNotNull = { initial ->
-            comment.mapState(scope) { current -> current != initial }
-        }
+    internal val commentEditable: StateFlow<Editable.Value<Comment>> = Editable.Value.create(
+        scope = scope,
+        value = skeleton
+            .comment
+            .mapState(scope) { it.text.let(::Comment) },
+        initialValueOrNone = skeleton.initialComment.toOption(),
     )
+
+    val comment: StateFlow<Comment> = commentEditable
+        .mapState(scope, Editable.Value<Comment>::value)
 
     val goBackHandler: GoBackHandler
         get() = NeverGoBackHandler

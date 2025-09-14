@@ -4,6 +4,7 @@
 
 package hnau.pinfin.model.transaction.pageable
 
+import arrow.core.toOption
 import hnau.common.app.model.goback.GoBackHandler
 import hnau.common.app.model.goback.NeverGoBackHandler
 import hnau.common.kotlin.coroutines.combineStateWith
@@ -15,7 +16,10 @@ import hnau.common.kotlin.foldNullable
 import hnau.common.kotlin.serialization.MutableStateFlowSerializer
 import hnau.pinfin.data.Amount
 import hnau.pinfin.data.AmountDirection
+import hnau.pinfin.model.transaction.utils.Editable
 import hnau.pinfin.model.transaction.utils.allRecords
+import hnau.pinfin.model.transaction.utils.combineEditableWith
+import hnau.pinfin.model.transaction.utils.valueOrNone
 import hnau.pinfin.model.utils.budget.repository.BudgetRepository
 import hnau.pinfin.model.utils.budget.state.CategoryInfo
 import hnau.pipe.annotations.Pipe
@@ -144,34 +148,21 @@ class AmountWithDirectionModel(
         skeleton.manualDirection.value = direction.value.opposite
     }
 
-    val amount: StateFlow<Amount?> = amountModel
-        .amount
-        .scopedInState(scope)
-        .flatMapState(scope) { (scope, amountOrNull) ->
-            amountOrNull.foldNullable(
-                ifNull = { null.toMutableStateFlowAsInitial() },
-                ifNotNull = { amount ->
-                    direction.mapState(scope) { direction ->
-                        amount.withDirection(direction)
-                    }
-                }
+    internal val amountEditable: StateFlow<Editable<Amount>> = amountModel
+        .amountEditable
+        .combineEditableWith(
+            scope = scope,
+            other = Editable.Value.create(
+                scope = scope,
+                value = direction,
+                initialValueOrNone = skeleton.initialDirection.toOption(),
             )
+        ) { amount, direction ->
+            amount.withDirection(direction)
         }
 
-    val isChanged: StateFlow<Boolean> = skeleton.initialDirection.foldNullable(
-        ifNull = { true.toMutableStateFlowAsInitial() },
-        ifNotNull = { initial ->
-            direction
-                .scopedInState(scope)
-                .flatMapState(scope) { (scope, current) ->
-                    when {
-                        current != initial -> true.toMutableStateFlowAsInitial()
-                        else -> amountModel.isChanged
-                    }
-                }
-        }
-    )
-
+    val amount: StateFlow<Amount?> = amountEditable
+        .mapState(scope) { it.valueOrNone.getOrNull() }
 
     val goBackHandler: GoBackHandler
         get() = NeverGoBackHandler

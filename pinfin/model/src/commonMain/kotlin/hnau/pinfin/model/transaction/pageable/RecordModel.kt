@@ -4,9 +4,8 @@
 
 package hnau.pinfin.model.transaction.pageable
 
-import arrow.core.Ior
+import arrow.core.getOrElse
 import hnau.common.app.model.goback.GoBackHandler
-import hnau.common.kotlin.coroutines.combineState
 import hnau.common.kotlin.coroutines.flatMapState
 import hnau.common.kotlin.coroutines.mapState
 import hnau.common.kotlin.coroutines.mapWithScope
@@ -19,8 +18,10 @@ import hnau.common.kotlin.toAccessor
 import hnau.pinfin.data.Amount
 import hnau.pinfin.data.Comment
 import hnau.pinfin.model.transaction.utils.ChooseOrCreateModel
-import hnau.pinfin.model.transaction.utils.IsChangedUtils
+import hnau.pinfin.model.transaction.utils.Editable
 import hnau.pinfin.model.transaction.utils.allRecords
+import hnau.pinfin.model.transaction.utils.combineEditableWith
+import hnau.pinfin.model.transaction.utils.valueOrNone
 import hnau.pinfin.model.utils.budget.state.CategoryInfo
 import hnau.pinfin.model.utils.budget.state.TransactionInfo
 import hnau.pipe.annotations.Pipe
@@ -237,10 +238,16 @@ class RecordModel(
         skeleton = skeleton.category,
         isFocused = isPartFocused(Part.Category),
         requestFocus = createRequestFocus(Part.Category),
-        comment = comment.comment,
+        comment = comment.commentEditable.mapState(scope, Editable.Value<Comment>::value),
         goForward = createGoForward(Part.Category),
     ).also { category ->
-        selectedCategoryWrapper.value = category.category
+        selectedCategoryWrapper.value = category
+            .categoryEditable
+            .mapState(scope) { categoryInfoOrIncorrect ->
+                categoryInfoOrIncorrect
+                    .valueOrNone
+                    .getOrNull()
+            }
     }
 
     val amount = AmountWithDirectionModel(
@@ -249,22 +256,25 @@ class RecordModel(
         skeleton = skeleton.amount,
         isFocused = isPartFocused(Part.Amount),
         requestFocus = createRequestFocus(Part.Amount),
-        category = category.category,
+        category = category.categoryEditable.mapState(scope) { it.valueOrNone.getOrNull() },
         goForward = createGoForward(Part.Amount),
     )
 
     val categoryWithAmount: StateFlow<Pair<CategoryInfo, Amount>?> = category
-        .category
+        .categoryEditable
         .scopedInState(scope)
-        .flatMapState(scope) { (scope, categoryOrNull) ->
-            categoryOrNull.foldNullable(
-                ifNull = { null.toMutableStateFlowAsInitial() },
-                ifNotNull = { category ->
-                    amount.amount.mapState(scope) { amountOrNull ->
-                        amountOrNull?.let { amount -> category to amount }
+        .flatMapState(scope) { (scope, categoryOrIncorrect) ->
+            when (categoryOrIncorrect) {
+                Editable.Incorrect -> null.toMutableStateFlowAsInitial()
+                is Editable.Value<CategoryInfo> -> amount
+                    .amountEditable
+                    .mapState(scope) { amountOrNull ->
+                        amountOrNull
+                            .valueOrNone
+                            .getOrNull()
+                            ?.let { amount -> categoryOrIncorrect.value to amount }
                     }
-                }
-            )
+            }
         }
 
     class Page(
@@ -328,62 +338,26 @@ class RecordModel(
     )
 
     val amountOrZero: StateFlow<Amount> = amount
-        .amount
-        .mapState(scope) { it ?: Amount.zero }
+        .amountEditable
+        .mapState(scope) { it.valueOrNone.getOrElse { Amount.zero } }
 
-    val record: StateFlow<TransactionInfo.Type.Entry.Record?> = comment
-        .comment
-        .scopedInState(scope)
-        .flatMapState(scope) { (commentScope, comment) ->
-            createRecordFromComment(
-                scope = commentScope,
+    internal val record: StateFlow<Editable<TransactionInfo.Type.Entry.Record>> = comment
+        .commentEditable
+        .combineEditableWith(
+            scope = scope,
+            other = category.categoryEditable,
+            combine = ::Pair,
+        )
+        .combineEditableWith(
+            scope = scope,
+            other = amount.amountEditable,
+        ) { (comment, category), amount ->
+            TransactionInfo.Type.Entry.Record(
+                amount = amount,
                 comment = comment,
+                category = category,
             )
         }
-
-    private fun createRecordFromComment(
-        scope: CoroutineScope,
-        comment: Comment,
-    ): StateFlow<TransactionInfo.Type.Entry.Record?> = category
-        .category
-        .scopedInState(scope)
-        .flatMapState(scope) { (categoryScope, categoryOrNull) ->
-            categoryOrNull.foldNullable(
-                ifNull = { null.toMutableStateFlowAsInitial() },
-                ifNotNull = { category ->
-                    createRecordFromCommentAndCategory(
-                        scope = categoryScope,
-                        comment = comment,
-                        category = category,
-                    )
-                }
-            )
-        }
-
-    private fun createRecordFromCommentAndCategory(
-        scope: CoroutineScope,
-        comment: Comment,
-        category: CategoryInfo,
-    ): StateFlow<TransactionInfo.Type.Entry.Record?> = amount
-        .amountModel
-        .amount
-        .mapState(scope) { amountOrNull ->
-            amountOrNull?.let { amount ->
-                TransactionInfo.Type.Entry.Record(
-                    amount = amount,
-                    comment = comment,
-                    category = category,
-                )
-            }
-        }
-
-
-    val isChanged: StateFlow<Boolean> = IsChangedUtils.calcIsChanged(
-        scope = scope,
-        comment.isChanged,
-        category.isChanged,
-        amount.isChanged,
-    )
 
     private fun Part.shift(
         offset: Int,

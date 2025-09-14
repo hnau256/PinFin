@@ -4,15 +4,17 @@
 
 package hnau.pinfin.model.transaction.pageable
 
+import arrow.core.toOption
 import hnau.common.app.model.goback.GoBackHandler
 import hnau.common.app.model.goback.NeverGoBackHandler
 import hnau.common.kotlin.coroutines.mapState
 import hnau.common.kotlin.coroutines.toMutableStateFlowAsInitial
-import hnau.common.kotlin.foldNullable
 import hnau.common.kotlin.getOrInit
 import hnau.common.kotlin.ifNull
 import hnau.common.kotlin.serialization.MutableStateFlowSerializer
 import hnau.common.kotlin.toAccessor
+import hnau.pinfin.data.Comment
+import hnau.pinfin.model.transaction.utils.Editable
 import hnau.pipe.annotations.Pipe
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -109,15 +111,14 @@ class DateModel(
         }
     }
 
-    val date: StateFlow<LocalDate>
-        get() = skeleton.date
-
-    val isChanged: StateFlow<Boolean> = skeleton.initialDate.foldNullable(
-        ifNull = { true.toMutableStateFlowAsInitial() },
-        ifNotNull = { initial ->
-            date.mapState(scope) { current -> current != initial }
-        }
+    internal val dateEditable: StateFlow<Editable.Value<LocalDate>> = Editable.Value.create(
+        scope = scope,
+        value = skeleton.date,
+        initialValueOrNone = skeleton.initialDate.toOption(),
     )
+
+    val date: StateFlow<LocalDate> = dateEditable
+        .mapState(scope, Editable.Value<LocalDate>::value)
 
     val goBackHandler: GoBackHandler
         get() = NeverGoBackHandler

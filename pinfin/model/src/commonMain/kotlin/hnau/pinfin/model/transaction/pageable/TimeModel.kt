@@ -4,28 +4,22 @@
 
 package hnau.pinfin.model.transaction.pageable
 
+import arrow.core.toOption
 import hnau.common.app.model.goback.GoBackHandler
 import hnau.common.app.model.goback.NeverGoBackHandler
 import hnau.common.kotlin.coroutines.mapState
-import hnau.common.kotlin.coroutines.onSet
 import hnau.common.kotlin.coroutines.toMutableStateFlowAsInitial
-import hnau.common.kotlin.foldNullable
 import hnau.common.kotlin.getOrInit
 import hnau.common.kotlin.ifNull
 import hnau.common.kotlin.serialization.MutableStateFlowSerializer
 import hnau.common.kotlin.toAccessor
+import hnau.pinfin.data.Comment
+import hnau.pinfin.model.transaction.utils.Editable
 import hnau.pipe.annotations.Pipe
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.drop
-import kotlinx.coroutines.flow.filterNotNull
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.runningFold
 import kotlinx.coroutines.launch
-import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalTime
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
@@ -117,15 +111,14 @@ class TimeModel(
         }
     }
 
-    val time: StateFlow<LocalTime>
-        get() = skeleton.time
-
-    val isChanged: StateFlow<Boolean> = skeleton.initialTime.foldNullable(
-        ifNull = { true.toMutableStateFlowAsInitial() },
-        ifNotNull = { initial ->
-            time.mapState(scope) { current -> current != initial }
-        }
+    internal val timeEditable: StateFlow<Editable.Value<LocalTime>> = Editable.Value.create(
+        scope = scope,
+        value = skeleton.time,
+        initialValueOrNone = skeleton.initialTime.toOption(),
     )
+
+    val time: StateFlow<LocalTime> = timeEditable
+        .mapState(scope, Editable.Value<LocalTime>::value)
 
     val goBackHandler: GoBackHandler
         get() = NeverGoBackHandler

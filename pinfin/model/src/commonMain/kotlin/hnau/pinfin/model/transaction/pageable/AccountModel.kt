@@ -4,6 +4,9 @@
 
 package hnau.pinfin.model.transaction.pageable
 
+import arrow.core.None
+import arrow.core.Option
+import arrow.core.Some
 import arrow.core.identity
 import arrow.core.toOption
 import hnau.common.app.model.goback.GoBackHandler
@@ -13,7 +16,6 @@ import hnau.common.kotlin.coroutines.mapState
 import hnau.common.kotlin.coroutines.scopedInState
 import hnau.common.kotlin.coroutines.toMutableStateFlowAsInitial
 import hnau.common.kotlin.foldBoolean
-import hnau.common.kotlin.foldNullable
 import hnau.common.kotlin.getOrInit
 import hnau.common.kotlin.mapper.Mapper
 import hnau.common.kotlin.serialization.MutableStateFlowSerializer
@@ -21,6 +23,8 @@ import hnau.common.kotlin.toAccessor
 import hnau.pinfin.data.AccountId
 import hnau.pinfin.data.Amount
 import hnau.pinfin.model.transaction.utils.ChooseOrCreateModel
+import hnau.pinfin.model.transaction.utils.Editable
+import hnau.pinfin.model.transaction.utils.valueOrNone
 import hnau.pinfin.model.utils.budget.repository.BudgetRepository
 import hnau.pinfin.model.utils.budget.state.AccountInfo
 import hnau.pinfin.model.utils.budget.state.BudgetState
@@ -77,7 +81,7 @@ class AccountModel(
 
     private fun resolveMostPopularAccount(
         scope: CoroutineScope,
-    ): StateFlow<AccountInfo?> = dependencies
+    ): StateFlow<Option<AccountInfo>> = dependencies
         .budgetRepository
         .state
         .map { state ->
@@ -94,34 +98,37 @@ class AccountModel(
                 .groupBy(::identity)
                 .maxByOrNull { it.value.size }
                 ?.key
+                .toOption()
         }
         .stateIn(
             scope = scope,
             started = SharingStarted.Eagerly,
-            initialValue = null,
+            initialValue = None,
         )
 
-    val account: StateFlow<AccountInfo?> = skeleton
-        .manualAccount
-        .scopedInState(scope)
-        .flatMapState(scope) { (scope, manualAccountOrNull) ->
-            manualAccountOrNull.foldNullable<AccountInfo, StateFlow<AccountInfo?>>(
-                ifNotNull = AccountInfo::toMutableStateFlowAsInitial,
-                ifNull = {
-                    useMostPopularAccountAsDefault.foldBoolean(
-                        ifFalse = { null.toMutableStateFlowAsInitial() },
-                        ifTrue = { resolveMostPopularAccount(scope) },
+    internal val accountEditable: StateFlow<Editable<AccountInfo>> = Editable.create(
+        scope = scope,
+        valueOrNone = skeleton
+            .manualAccount
+            .scopedInState(scope)
+            .flatMapState(scope) { (scope, manualAccountOrNull) ->
+                manualAccountOrNull
+                    .toOption()
+                    .fold(
+                        ifSome = { Some(it).toMutableStateFlowAsInitial() },
+                        ifEmpty = {
+                            useMostPopularAccountAsDefault.foldBoolean(
+                                ifFalse = { None.toMutableStateFlowAsInitial() },
+                                ifTrue = { resolveMostPopularAccount(scope) },
+                            )
+                        }
                     )
-                }
-            )
-        }
-
-    val isChanged: StateFlow<Boolean> = skeleton.initialAccount.foldNullable(
-        ifNull = { true.toMutableStateFlowAsInitial() },
-        ifNotNull = { initial ->
-            account.mapState(scope) { current -> current != initial }
-        }
+            },
+        initialValueOrNone = skeleton.initialAccount.toOption(),
     )
+
+    val account: StateFlow<AccountInfo?> = accountEditable
+        .mapState(scope) { it.valueOrNone.getOrNull() }
 
     fun createPage(
         scope: CoroutineScope,
@@ -132,7 +139,7 @@ class AccountModel(
             .toAccessor()
             .getOrInit { ChooseOrCreateModel.Skeleton() },
         extractItemsFromState = BudgetState::visibleAccounts,
-        additionalItems = account.mapState(scope, ::listOfNotNull),
+        additionalItems = accountEditable.mapState(scope) { listOfNotNull(it.valueOrNone.getOrNull()) },
         itemTextMapper = Mapper(
             direct = AccountInfo::title,
             reverse = { title ->
@@ -143,7 +150,7 @@ class AccountModel(
                 )
             }
         ),
-        selected = account.mapState(scope, AccountInfo?::toOption),
+        selected = accountEditable.mapState(scope, Editable<AccountInfo>::valueOrNone),
         onReady = { selected ->
             skeleton.manualAccount.value = selected
             goForward()

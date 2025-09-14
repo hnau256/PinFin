@@ -1,17 +1,8 @@
-package hnau.pinfin.model.transaction_old
+package hnau.pinfin.model.transaction.utils
 
 import hnau.pinfin.data.Record
 import hnau.pinfin.data.Transaction
 import hnau.pinfin.model.utils.budget.state.TransactionInfo
-
-fun TransactionInfo.toTransaction(): Pair<Transaction.Id, Transaction> {
-    val transaction = Transaction(
-        timestamp = timestamp,
-        comment = comment,
-        type = type.toTransactionType(),
-    )
-    return id to transaction
-}
 
 fun TransactionInfo.Type.toTransactionType(): Transaction.Type = when (this) {
     is TransactionInfo.Type.Transfer -> toTransactionTransferType()

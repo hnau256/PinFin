@@ -17,14 +17,14 @@ import hnau.common.kotlin.serialization.MutableStateFlowSerializer
 import hnau.common.kotlin.toAccessor
 import hnau.pinfin.data.Amount
 import hnau.pinfin.model.transaction.utils.ChooseOrCreateModel
-import hnau.pinfin.model.transaction.utils.IsChangedUtils
+import hnau.pinfin.model.transaction.utils.Editable
+import hnau.pinfin.model.transaction.utils.combineEditableWith
 import hnau.pinfin.model.utils.budget.state.AccountInfo
 import hnau.pinfin.model.utils.budget.state.TransactionInfo
 import hnau.pipe.annotations.Pipe
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.update
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.UseSerializers
 
@@ -216,40 +216,15 @@ class EntryModel(
             },
     )
 
-    val entry: StateFlow<TransactionInfo.Type.Entry?> = account
-        .account
-        .scopedInState(scope)
-        .flatMapState(scope) { (accountScope, accountOrNull) ->
-            accountOrNull.foldNullable(
-                ifNull = { null.toMutableStateFlowAsInitial() },
-                ifNotNull = { account ->
-                    createEntryFromFromAndTo(
-                        scope = accountScope,
-                        account = account,
-                    )
-                }
-            )
-        }
-
-    val isChanged: StateFlow<Boolean> = IsChangedUtils.calcIsChanged(
+    internal val entry: StateFlow<Editable<TransactionInfo.Type.Entry>> = records.records.combineEditableWith(
         scope = scope,
-        records.isChanged,
-        account.isChanged,
-    )
-
-    private fun createEntryFromFromAndTo(
-        scope: CoroutineScope,
-        account: AccountInfo,
-    ): StateFlow<TransactionInfo.Type.Entry?> = records
-        .records
-        .mapState(scope) { recordsOrNull ->
-            recordsOrNull?.let { records ->
-                TransactionInfo.Type.Entry(
-                    records = records,
-                    account = account,
-                )
-            }
-        }
+        other = account.accountEditable,
+    ) {records, account ->
+        TransactionInfo.Type.Entry(
+            records = records,
+            account = account,
+        )
+    }
 
     val amountOrZero: StateFlow<Amount>
         get() = records.amountOrZero

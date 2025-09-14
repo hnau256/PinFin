@@ -16,7 +16,8 @@ import hnau.common.kotlin.getOrInit
 import hnau.common.kotlin.serialization.MutableStateFlowSerializer
 import hnau.common.kotlin.toAccessor
 import hnau.pinfin.model.transaction.utils.ChooseOrCreateModel
-import hnau.pinfin.model.transaction.utils.IsChangedUtils
+import hnau.pinfin.model.transaction.utils.Editable
+import hnau.pinfin.model.transaction.utils.combineEditableWith
 import hnau.pinfin.model.utils.budget.state.AccountInfo
 import hnau.pinfin.model.utils.budget.state.TransactionInfo
 import hnau.pipe.annotations.Pipe
@@ -245,61 +246,22 @@ class TransferModel(
             },
     )
 
-    val transfer: StateFlow<TransactionInfo.Type.Transfer?> = from
-        .account
-        .scopedInState(scope)
-        .flatMapState(scope) { (fromScope, fromOrNull) ->
-            fromOrNull.foldNullable(
-                ifNull = { null.toMutableStateFlowAsInitial() },
-                ifNotNull = { from ->
-                    createTransferFromFrom(
-                        scope = fromScope,
-                        from = from,
-                    )
-                }
+    internal val transfer: StateFlow<Editable<TransactionInfo.Type.Transfer>> = from
+        .accountEditable
+        .combineEditableWith(
+            scope = scope,
+            other = to.accountEditable,
+            combine = ::Pair,
+        )
+        .combineEditableWith(
+            scope = scope,
+            other = amount.amountEditable,
+        ) { (from, to), amount ->
+            TransactionInfo.Type.Transfer(
+                to = to,
+                from = from,
+                amount = amount,
             )
-        }
-
-    val isChanged: StateFlow<Boolean> = IsChangedUtils.calcIsChanged(
-        scope = scope,
-        from.isChanged,
-        to.isChanged,
-        amount.isChanged,
-    )
-
-    private fun createTransferFromFrom(
-        scope: CoroutineScope,
-        from: AccountInfo,
-    ): StateFlow<TransactionInfo.Type.Transfer?> = to
-        .account
-        .scopedInState(scope)
-        .flatMapState(scope) { (fromScope, toOrNull) ->
-            toOrNull.foldNullable(
-                ifNull = { null.toMutableStateFlowAsInitial() },
-                ifNotNull = { to ->
-                    createTransferFromFromAndTo(
-                        scope = fromScope,
-                        to = to,
-                        from = from,
-                    )
-                }
-            )
-        }
-
-    private fun createTransferFromFromAndTo(
-        scope: CoroutineScope,
-        from: AccountInfo,
-        to: AccountInfo,
-    ): StateFlow<TransactionInfo.Type.Transfer?> = amount
-        .amount
-        .mapState(scope) { amountOrNull ->
-            amountOrNull?.let { amount ->
-                TransactionInfo.Type.Transfer(
-                    to = to,
-                    from = from,
-                    amount = amount,
-                )
-            }
         }
 
     private fun Part.shift(

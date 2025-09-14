@@ -4,15 +4,18 @@
 
 package hnau.pinfin.model.transaction.pageable
 
+import arrow.core.toOption
 import hnau.common.app.model.goback.GoBackHandler
 import hnau.common.app.model.goback.NeverGoBackHandler
 import hnau.common.kotlin.coroutines.mapState
-import hnau.common.kotlin.coroutines.toMutableStateFlowAsInitial
 import hnau.common.kotlin.foldNullable
 import hnau.common.kotlin.getOrInit
 import hnau.common.kotlin.serialization.MutableStateFlowSerializer
 import hnau.common.kotlin.toAccessor
 import hnau.pinfin.data.Amount
+import hnau.pinfin.model.transaction.utils.Editable
+import hnau.pinfin.model.transaction.utils.valueOrNone
+import hnau.pinfin.model.utils.budget.state.AccountInfo
 import hnau.pipe.annotations.Pipe
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.StateFlow
@@ -101,15 +104,14 @@ class AmountModel(
         goForward = goForward,
     )
 
-    val amount: StateFlow<Amount?>
-        get() = delegate.amount
-
-    val isChanged: StateFlow<Boolean> = skeleton.initialAmount.foldNullable(
-        ifNull = { true.toMutableStateFlowAsInitial() },
-        ifNotNull = { initial ->
-            amount.mapState(scope) { current -> current != initial }
-        }
+    internal val amountEditable: StateFlow<Editable<Amount>> = Editable.create(
+        scope = scope,
+        valueOrNone = delegate.amount.mapState(scope, Amount?::toOption),
+        initialValueOrNone = skeleton.initialAmount.toOption(),
     )
+
+    val amount: StateFlow<Amount?> = amountEditable
+        .mapState(scope) { it.valueOrNone.getOrNull() }
 
     val goBackHandler: GoBackHandler
         get() = NeverGoBackHandler
