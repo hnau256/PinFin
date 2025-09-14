@@ -23,7 +23,6 @@ import hnau.pinfin.projector.utils.Label
 import hnau.pinfin.projector.utils.formatter.datetime.DateTimeFormatter
 import hnau.pipe.annotations.Pipe
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.datetime.LocalTime
 
 class TimeProjector(
     scope: CoroutineScope,

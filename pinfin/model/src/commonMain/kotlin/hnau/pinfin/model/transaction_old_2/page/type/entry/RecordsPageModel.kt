@@ -7,11 +7,9 @@ package hnau.pinfin.model.transaction_old_2.page.type.entry
 import arrow.core.NonEmptyList
 import hnau.common.app.model.goback.GoBackHandler
 import hnau.common.kotlin.coroutines.combineState
-import hnau.common.kotlin.coroutines.flatMapState
 import hnau.common.kotlin.coroutines.mapReusable
 import hnau.common.kotlin.coroutines.mapState
 import hnau.common.kotlin.coroutines.mapWithScope
-import hnau.common.kotlin.coroutines.scopedInState
 import hnau.common.kotlin.coroutines.toMutableStateFlowAsInitial
 import hnau.common.kotlin.foldBoolean
 import hnau.common.kotlin.foldNullable

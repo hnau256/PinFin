@@ -15,7 +15,6 @@ import hnau.common.kotlin.toAccessor
 import hnau.pinfin.data.Amount
 import hnau.pinfin.model.transaction.utils.Editable
 import hnau.pinfin.model.transaction.utils.valueOrNone
-import hnau.pinfin.model.utils.budget.state.AccountInfo
 import hnau.pipe.annotations.Pipe
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.StateFlow

@@ -15,7 +15,6 @@ import hnau.common.kotlin.castOrNull
 import hnau.common.kotlin.coroutines.flatMapState
 import hnau.common.kotlin.coroutines.mapState
 import hnau.common.kotlin.coroutines.mapWithScope
-import hnau.common.kotlin.coroutines.scopedInState
 import hnau.common.kotlin.coroutines.toMutableStateFlowAsInitial
 import hnau.common.kotlin.getOrInit
 import hnau.common.kotlin.mapper.Mapper

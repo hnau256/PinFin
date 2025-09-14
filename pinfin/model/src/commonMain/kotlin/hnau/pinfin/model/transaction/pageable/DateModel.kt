@@ -13,7 +13,6 @@ import hnau.common.kotlin.getOrInit
 import hnau.common.kotlin.ifNull
 import hnau.common.kotlin.serialization.MutableStateFlowSerializer
 import hnau.common.kotlin.toAccessor
-import hnau.pinfin.data.Comment
 import hnau.pinfin.model.transaction.utils.Editable
 import hnau.pipe.annotations.Pipe
 import kotlinx.coroutines.CoroutineScope

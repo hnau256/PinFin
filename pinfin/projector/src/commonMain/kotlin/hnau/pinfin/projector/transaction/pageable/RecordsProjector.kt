@@ -40,8 +40,8 @@ import hnau.pinfin.model.transaction.utils.RecordId
 import hnau.pinfin.model.utils.ZipList
 import hnau.pinfin.projector.resources.Res
 import hnau.pinfin.projector.resources.records
-import hnau.pinfin.projector.transaction.utils.createPagesTransitionSpec
 import hnau.pinfin.projector.transaction.utils.PartDefaults
+import hnau.pinfin.projector.transaction.utils.createPagesTransitionSpec
 import hnau.pinfin.projector.utils.Label
 import hnau.pinfin.projector.utils.SlideOrientation
 import hnau.pipe.annotations.Pipe
