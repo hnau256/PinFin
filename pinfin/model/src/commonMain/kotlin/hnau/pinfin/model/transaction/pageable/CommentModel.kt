@@ -17,7 +17,7 @@ import hnau.common.kotlin.serialization.MutableStateFlowSerializer
 import hnau.common.kotlin.toAccessor
 import hnau.pinfin.data.Comment
 import hnau.pinfin.model.transaction.utils.Editable
-import hnau.pinfin.model.utils.Delayed
+import hnau.common.kotlin.coroutines.Delayed
 import hnau.pinfin.model.utils.budget.repository.BudgetRepository
 import hnau.pinfin.model.utils.budget.state.BudgetState
 import hnau.pinfin.model.utils.resolveSuggests

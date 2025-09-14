@@ -5,7 +5,7 @@ import arrow.core.Option
 import arrow.core.Some
 import hnau.common.kotlin.coroutines.mapState
 import hnau.common.kotlin.coroutines.toMutableStateFlowAsInitial
-import hnau.pinfin.model.utils.flatMapWithScope
+import hnau.common.kotlin.coroutines.flatMapWithScope
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.StateFlow
 

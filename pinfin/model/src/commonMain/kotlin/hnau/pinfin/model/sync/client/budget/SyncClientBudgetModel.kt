@@ -18,7 +18,7 @@ import hnau.pinfin.data.BudgetId
 import hnau.pinfin.model.sync.client.budget.utils.syncWithRemote
 import hnau.pinfin.model.sync.client.utils.TcpSyncClient
 import hnau.pinfin.model.utils.budget.repository.BudgetRepository
-import hnau.pinfin.model.utils.flatMapWithScope
+import hnau.common.kotlin.coroutines.flatMapWithScope
 import hnau.pipe.annotations.Pipe
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers

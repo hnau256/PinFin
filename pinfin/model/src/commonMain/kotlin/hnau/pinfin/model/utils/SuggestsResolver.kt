@@ -8,6 +8,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.withContext
 import kotlin.time.Instant
+import hnau.common.kotlin.coroutines.Delayed
+import hnau.common.kotlin.coroutines.mapStateDelayed
 
 inline fun <S, T, R> resolveSuggests(
     scope: CoroutineScope,

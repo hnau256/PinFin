@@ -30,7 +30,7 @@ import hnau.common.kotlin.coroutines.toMutableStateFlowAsInitial
 import hnau.common.kotlin.foldBoolean
 import hnau.common.kotlin.foldNullable
 import hnau.pinfin.data.Comment
-import hnau.pinfin.model.utils.flatMapWithScope
+import hnau.common.kotlin.coroutines.flatMapWithScope
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.StateFlow
 

@@ -32,12 +32,12 @@ import hnau.common.app.projector.uikit.utils.Dimens
 import hnau.common.app.projector.utils.Icon
 import hnau.common.app.projector.utils.copy
 import hnau.common.app.projector.utils.plus
+import hnau.common.kotlin.ZipList
 import hnau.common.kotlin.coroutines.mapReusable
 import hnau.common.kotlin.coroutines.mapState
 import hnau.common.kotlin.coroutines.mapWithScope
 import hnau.pinfin.model.transaction.pageable.RecordsModel
 import hnau.pinfin.model.transaction.utils.RecordId
-import hnau.pinfin.model.utils.ZipList
 import hnau.pinfin.projector.resources.Res
 import hnau.pinfin.projector.resources.records
 import hnau.pinfin.projector.transaction.utils.PartDefaults

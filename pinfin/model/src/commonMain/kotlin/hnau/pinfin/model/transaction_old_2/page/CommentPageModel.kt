@@ -12,7 +12,7 @@ import hnau.common.kotlin.Loadable
 import hnau.common.kotlin.coroutines.mapState
 import hnau.common.kotlin.serialization.MutableStateFlowSerializer
 import hnau.pinfin.data.Comment
-import hnau.pinfin.model.utils.Delayed
+import hnau.common.kotlin.coroutines.Delayed
 import hnau.pinfin.model.utils.budget.repository.BudgetRepository
 import hnau.pinfin.model.utils.resolveSuggests
 import hnau.pipe.annotations.Pipe

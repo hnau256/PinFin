@@ -10,6 +10,7 @@ import arrow.core.nonEmptyListOf
 import arrow.core.serialization.NonEmptyListSerializer
 import arrow.core.toNonEmptyListOrNull
 import hnau.common.app.model.goback.GoBackHandler
+import hnau.common.kotlin.ZipList
 import hnau.common.kotlin.coroutines.combineState
 import hnau.common.kotlin.coroutines.combineStateWith
 import hnau.common.kotlin.coroutines.flatMapState
@@ -26,11 +27,10 @@ import hnau.pinfin.model.transaction.utils.Editable
 import hnau.pinfin.model.transaction.utils.RecordId
 import hnau.pinfin.model.transaction.utils.map
 import hnau.pinfin.model.transaction.utils.remove
-import hnau.pinfin.model.utils.ZipList
 import hnau.pinfin.model.utils.budget.state.CategoryInfo
 import hnau.pinfin.model.utils.budget.state.TransactionInfo
-import hnau.pinfin.model.utils.flatMapWithScope
-import hnau.pinfin.model.utils.toZipListOrNull
+import hnau.common.kotlin.coroutines.flatMapWithScope
+import hnau.common.kotlin.toZipListOrNull
 import hnau.pipe.annotations.Pipe
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow

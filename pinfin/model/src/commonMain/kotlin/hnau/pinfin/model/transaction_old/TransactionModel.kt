@@ -28,7 +28,7 @@ import hnau.pinfin.model.transaction_old.type.entry.EntryModel
 import hnau.pinfin.model.transaction_old.type.transfer.TransferModel
 import hnau.pinfin.model.utils.budget.repository.BudgetRepository
 import hnau.pinfin.model.utils.budget.state.TransactionInfo
-import hnau.pinfin.model.utils.flatMapWithScope
+import hnau.common.kotlin.coroutines.flatMapWithScope
 import hnau.pipe.annotations.Pipe
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers

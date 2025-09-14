@@ -17,7 +17,7 @@ import hnau.common.kotlin.serialization.MutableStateFlowSerializer
 import hnau.pinfin.model.transaction_old_2.page.type.entry.record.RecordPageModel
 import hnau.pinfin.model.transaction_old_2.part.type.entry.record.RecordId
 import hnau.pinfin.model.transaction_old_2.part.type.entry.record.RecordInfo
-import hnau.pinfin.model.utils.flatMapWithScope
+import hnau.common.kotlin.coroutines.flatMapWithScope
 import hnau.pipe.annotations.Pipe
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow

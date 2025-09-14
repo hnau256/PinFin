@@ -1,8 +1,8 @@
 package hnau.pinfin.model.transaction.utils
 
 import arrow.core.toNonEmptyListOrNull
-import hnau.pinfin.model.utils.ZipList
-import hnau.pinfin.model.utils.exclude
+import hnau.common.kotlin.ZipList
+import hnau.common.kotlin.exclude
 
 inline fun <T> ZipList<T>.remove(
     predicate: (T) -> Boolean,

@@ -23,7 +23,7 @@ import hnau.pinfin.model.transaction.utils.combineEditableWith
 import hnau.pinfin.model.transaction.utils.toTransactionType
 import hnau.pinfin.model.utils.budget.repository.BudgetRepository
 import hnau.pinfin.model.utils.budget.state.TransactionInfo
-import hnau.pinfin.model.utils.flatMapWithScope
+import hnau.common.kotlin.coroutines.flatMapWithScope
 import hnau.pipe.annotations.Pipe
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
