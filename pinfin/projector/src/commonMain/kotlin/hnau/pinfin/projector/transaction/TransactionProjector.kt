@@ -2,12 +2,14 @@ package hnau.pinfin.projector.transaction
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import hnau.common.app.model.goback.GlobalGoBackHandler
@@ -19,6 +21,7 @@ import hnau.pinfin.model.transaction.TransactionModel
 import hnau.pinfin.projector.transaction.delegates.DialogsProjector
 import hnau.pinfin.projector.transaction.delegates.InfoProjector
 import hnau.pinfin.projector.transaction.delegates.PageProjector
+import hnau.pinfin.projector.transaction.delegates.TopBarActionsProjector
 import hnau.pinfin.projector.transaction.delegates.TypeProjector
 import hnau.pipe.annotations.Pipe
 import kotlinx.coroutines.CoroutineScope
@@ -41,6 +44,8 @@ class TransactionProjector(
         fun page(): PageProjector.Dependencies
 
         fun dialogs(): DialogsProjector.Dependencies
+
+        fun topBarActions(): TopBarActionsProjector.Dependencies
 
         val globalGoBackHandler: GlobalGoBackHandler
     }
@@ -75,6 +80,12 @@ class TransactionProjector(
         dependencies = dependencies.dialogs(),
     )
 
+    private val topBarActions = TopBarActionsProjector(
+        scope = scope,
+        model = model,
+        dependencies = dependencies.topBarActions(),
+    )
+
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
     fun Content() {
@@ -82,7 +93,19 @@ class TransactionProjector(
             modifier = Modifier.fillMaxSize(),
             topBar = {
                 TopAppBar(
-                    title = { type.HeaderContent() },
+                    title = {
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                        ) {
+                            Row(
+                                modifier = Modifier.weight(1f),
+                                horizontalArrangement = Arrangement.Start,
+                            ) {
+                                type.HeaderContent()
+                            }
+                            topBarActions.Content()
+                        }
+                    },
                     navigationIcon = { globalGoBackHandler.NavigationIcon() },
                 )
             },

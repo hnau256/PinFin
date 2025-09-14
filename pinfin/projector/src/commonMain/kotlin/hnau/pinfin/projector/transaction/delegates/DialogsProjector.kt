@@ -11,9 +11,12 @@ import hnau.common.kotlin.foldNullable
 import hnau.pinfin.model.transaction.TransactionModel
 import hnau.pinfin.projector.resources.Res
 import hnau.pinfin.projector.resources.close
+import hnau.pinfin.projector.resources.no
 import hnau.pinfin.projector.resources.not_save
+import hnau.pinfin.projector.resources.remove_transaction
 import hnau.pinfin.projector.resources.save
 import hnau.pinfin.projector.resources.save_changes
+import hnau.pinfin.projector.resources.yes
 import hnau.pipe.annotations.Pipe
 import kotlinx.coroutines.CoroutineScope
 import org.jetbrains.compose.resources.stringResource
@@ -30,6 +33,7 @@ class DialogsProjector(
     @Composable
     fun Content() {
         Cancel()
+        Remove()
     }
 
     @OptIn(ExperimentalMaterial3Api::class)
@@ -63,6 +67,36 @@ class DialogsProjector(
                                         content = { Text(stringResource(Res.string.save)) },
                                     )
                                 }
+                            )
+                        }
+                    )
+                }
+            }
+    }
+
+    @OptIn(ExperimentalMaterial3Api::class)
+    @Composable
+    private fun Remove() {
+        model
+            .removeDialogInfo
+            .collectAsState()
+            .value
+            ?.let { info ->
+                BasicAlertDialog(
+                    onDismissRequest = info.close,
+                ) {
+                    AlertDialogContent(
+                        title = { Text(stringResource(Res.string.remove_transaction)) },
+                        dismissButton = {
+                            TextButton(
+                                onClick = info.close,
+                                content = { Text(stringResource(Res.string.no)) },
+                            )
+                        },
+                        confirmButton = {
+                            TextButton(
+                                onClick = info.remove,
+                                content = { Text(stringResource(Res.string.yes)) },
                             )
                         }
                     )
