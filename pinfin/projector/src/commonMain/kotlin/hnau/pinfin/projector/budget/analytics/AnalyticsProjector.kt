@@ -13,6 +13,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.util.fastForEachIndexed
@@ -23,7 +24,9 @@ import hnau.common.app.projector.utils.rememberPagerState
 import hnau.pinfin.model.budget.analytics.AnalyticsModel
 import hnau.pinfin.model.budget.analytics.tab.AnalyticsTab
 import hnau.pinfin.model.budget.analytics.tab.AnalyticsTabValues
+import hnau.pinfin.projector.utils.Tabs
 import hnau.pipe.annotations.Pipe
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.CoroutineScope
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -72,22 +75,14 @@ class AnalyticsProjector(
                         .padding(vertical = Dimens.smallSeparation),
                     contentAlignment = Alignment.Center,
                 ) {
-                    SingleChoiceSegmentedButtonRow {
-                        AnalyticsTab.entries.fastForEachIndexed { i, tab ->
-                            SegmentedButton(
-                                selected = tab == selectedTab,
-                                onClick = { model.selectedTab.value = tab },
-                                label = {
-                                    Text(
-                                        text = tab.title,
-                                    )
-                                },
-                                shape = SegmentedButtonDefaults.itemShape(
-                                    index = i,
-                                    count = AnalyticsTab.entries.size,
-                                )
-                            )
-                        }
+                    Tabs(
+                        items = remember { AnalyticsTab.entries.toImmutableList() },
+                        selected = selectedTab,
+                        onSelectedChanged = { model.selectedTab.value = it },
+                    ) { tab ->
+                        Text(
+                            text = tab.title,
+                        )
                     }
                 }
             },

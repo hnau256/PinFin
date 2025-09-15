@@ -4,7 +4,6 @@ import hnau.common.kotlin.foldBoolean
 import hnau.common.kotlin.ifNull
 import hnau.pinfin.data.Amount
 import kotlin.math.absoluteValue
-import kotlin.math.sign
 
 interface AmountFormatter {
 

@@ -25,6 +25,7 @@ import hnau.common.app.projector.utils.horizontalDisplayPadding
 import hnau.pinfin.model.budget.analytics.tab.CategoriesModel
 import hnau.pinfin.projector.utils.AmountContent
 import hnau.pinfin.projector.utils.CategoryContent
+import hnau.pinfin.projector.utils.SwitchHue
 import hnau.pinfin.projector.utils.formatter.AmountFormatter
 import hnau.pipe.annotations.Pipe
 import kotlinx.coroutines.CoroutineScope
@@ -104,28 +105,31 @@ class CategoriesProjector(
     private fun Category(
         item: CategoriesModel.State.Item,
     ) {
-        CategoryContent(
-            info = item.info,
-        ) { categoryContent ->
-            Column(
-                verticalArrangement = Arrangement.spacedBy(Dimens.smallSeparation),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(
-                        vertical = Dimens.separation,
-                    ),
+        val cateogry = item.info
+        Column(
+            verticalArrangement = Arrangement.spacedBy(Dimens.smallSeparation),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(
+                    vertical = Dimens.separation,
+                ),
+        ) {
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(Dimens.smallSeparation),
             ) {
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(Dimens.smallSeparation),
-                ) {
-                    categoryContent()
-                    Spacer(Modifier.weight(1f))
-                    AmountContent(
-                        amountFormatter = dependencies.amountFormatter,
-                        value = item.amount,
-                    )
-                }
+                CategoryContent(
+                    info = cateogry,
+                )
+                Spacer(Modifier.weight(1f))
+                AmountContent(
+                    amountFormatter = dependencies.amountFormatter,
+                    value = item.amount,
+                )
+            }
+            SwitchHue(
+                hue = cateogry.hue,
+            ) {
                 LinearProgressIndicator(
                     progress = { item.fraction },
                     modifier = Modifier
