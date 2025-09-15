@@ -4,6 +4,7 @@ import hnau.common.kotlin.foldBoolean
 import hnau.common.kotlin.ifNull
 import hnau.pinfin.data.Amount
 import kotlin.math.absoluteValue
+import kotlin.math.sign
 
 interface AmountFormatter {
 
@@ -30,8 +31,9 @@ interface AmountFormatter {
             ): String = amount
                 .value
                 .toLong()
-                .let {
-                    val count = (it / factor)
+                .let { amountInCents ->
+                    val absolute = amountInCents.absoluteValue
+                    val count = (absolute / factor)
                         .toString()
                         .reversed()
                         .windowed(
@@ -43,8 +45,7 @@ interface AmountFormatter {
                             separator = '\u00A0'.toString(),
                         )
                         .reversed()
-                    val cents = (it % factor)
-                        .absoluteValue
+                    val cents = (absolute % factor)
                         .toString()
                         .padStart(2, '0')
                     listOf(count, cents)
@@ -59,6 +60,12 @@ interface AmountFormatter {
                                         .dropLastWhile { char -> char == '0' }
                                         .removeSuffix(".")
                                 }
+                            )
+                        }
+                        .let { absoluteString ->
+                            (amountInCents < 0).foldBoolean(
+                                ifTrue = { "-$absoluteString" },
+                                ifFalse = { absoluteString }
                             )
                         }
                 }
