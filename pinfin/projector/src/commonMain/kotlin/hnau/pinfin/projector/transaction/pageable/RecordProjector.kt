@@ -30,6 +30,7 @@ import hnau.common.app.projector.uikit.state.StateContent
 import hnau.common.app.projector.uikit.state.TransitionSpec
 import hnau.common.app.projector.uikit.utils.Dimens
 import hnau.common.app.projector.utils.Icon
+import hnau.common.app.projector.utils.SlideOrientation
 import hnau.common.app.projector.utils.copy
 import hnau.common.kotlin.coroutines.mapWithScope
 import hnau.common.kotlin.foldNullable
@@ -44,7 +45,6 @@ import hnau.pinfin.projector.transaction.utils.ChooseOrCreateProjector
 import hnau.pinfin.projector.transaction.utils.createPagesTransitionSpec
 import hnau.pinfin.projector.utils.CategoryContent
 import hnau.pinfin.projector.utils.Label
-import hnau.common.app.projector.utils.SlideOrientation
 import hnau.pinfin.projector.utils.UIConstants
 import hnau.pinfin.projector.utils.ViewMode
 import hnau.pinfin.projector.utils.formatter.AmountFormatter

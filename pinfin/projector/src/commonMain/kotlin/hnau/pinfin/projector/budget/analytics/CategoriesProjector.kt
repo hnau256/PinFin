@@ -105,7 +105,7 @@ class CategoriesProjector(
     private fun Category(
         item: CategoriesModel.State.Item,
     ) {
-        val cateogry = item.info
+        val category = item.info
         Column(
             verticalArrangement = Arrangement.spacedBy(Dimens.smallSeparation),
             modifier = Modifier
@@ -119,7 +119,7 @@ class CategoriesProjector(
                 horizontalArrangement = Arrangement.spacedBy(Dimens.smallSeparation),
             ) {
                 CategoryContent(
-                    info = cateogry,
+                    info = category,
                 )
                 Spacer(Modifier.weight(1f))
                 AmountContent(
@@ -128,7 +128,7 @@ class CategoriesProjector(
                 )
             }
             SwitchHue(
-                hue = cateogry.hue,
+                hue = category.hue,
             ) {
                 LinearProgressIndicator(
                     progress = { item.fraction },

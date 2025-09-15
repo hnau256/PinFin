@@ -17,6 +17,8 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.util.fastForEach
 import hnau.common.app.projector.uikit.state.StateContent
 import hnau.common.app.projector.utils.Icon
+import hnau.common.app.projector.utils.SlideOrientation
+import hnau.common.app.projector.utils.getTransitionSpecForSlide
 import hnau.common.kotlin.coroutines.mapState
 import hnau.pinfin.model.budget.BudgetModel
 import hnau.pinfin.model.budget.BudgetPageModel
@@ -28,8 +30,6 @@ import hnau.pinfin.projector.resources.Res
 import hnau.pinfin.projector.resources.analytics
 import hnau.pinfin.projector.resources.config
 import hnau.pinfin.projector.resources.transactions
-import hnau.common.app.projector.utils.SlideOrientation
-import hnau.common.app.projector.utils.getTransitionSpecForSlide
 import hnau.pipe.annotations.Pipe
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.StateFlow

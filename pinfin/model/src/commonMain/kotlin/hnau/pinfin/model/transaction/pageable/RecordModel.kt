@@ -7,6 +7,7 @@ package hnau.pinfin.model.transaction.pageable
 import arrow.core.getOrElse
 import hnau.common.app.model.goback.GoBackHandler
 import hnau.common.kotlin.coroutines.flatMapState
+import hnau.common.kotlin.coroutines.flatMapWithScope
 import hnau.common.kotlin.coroutines.mapState
 import hnau.common.kotlin.coroutines.mapWithScope
 import hnau.common.kotlin.coroutines.toMutableStateFlowAsInitial
@@ -23,7 +24,6 @@ import hnau.pinfin.model.transaction.utils.combineEditableWith
 import hnau.pinfin.model.transaction.utils.valueOrNone
 import hnau.pinfin.model.utils.budget.state.CategoryInfo
 import hnau.pinfin.model.utils.budget.state.TransactionInfo
-import hnau.common.kotlin.coroutines.flatMapWithScope
 import hnau.pipe.annotations.Pipe
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow

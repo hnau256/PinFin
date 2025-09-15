@@ -30,6 +30,7 @@ import hnau.common.app.projector.uikit.ItemsRow
 import hnau.common.app.projector.uikit.state.StateContent
 import hnau.common.app.projector.uikit.utils.Dimens
 import hnau.common.app.projector.utils.Icon
+import hnau.common.app.projector.utils.SlideOrientation
 import hnau.common.app.projector.utils.copy
 import hnau.common.app.projector.utils.plus
 import hnau.common.kotlin.ZipList
@@ -43,7 +44,6 @@ import hnau.pinfin.projector.resources.records
 import hnau.pinfin.projector.transaction.utils.PartDefaults
 import hnau.pinfin.projector.transaction.utils.createPagesTransitionSpec
 import hnau.pinfin.projector.utils.Label
-import hnau.common.app.projector.utils.SlideOrientation
 import hnau.pipe.annotations.Pipe
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.StateFlow

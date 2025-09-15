@@ -3,9 +3,9 @@ package hnau.pinfin.model.transaction.utils
 import arrow.core.None
 import arrow.core.Option
 import arrow.core.Some
+import hnau.common.kotlin.coroutines.flatMapWithScope
 import hnau.common.kotlin.coroutines.mapState
 import hnau.common.kotlin.coroutines.toMutableStateFlowAsInitial
-import hnau.common.kotlin.coroutines.flatMapWithScope
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.StateFlow
 
