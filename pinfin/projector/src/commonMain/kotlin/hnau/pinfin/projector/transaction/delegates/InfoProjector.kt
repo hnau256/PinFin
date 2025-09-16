@@ -78,37 +78,42 @@ class InfoProjector(
             Card(
                 modifier = Modifier.fillMaxWidth(),
             ) {
-                Row(
+                Column(
                     modifier = Modifier
-                        .height(IntrinsicSize.Max)
                         .padding(Dimens.smallSeparation),
-                    horizontalArrangement = Arrangement.spacedBy(Dimens.smallSeparation),
+                    verticalArrangement = Arrangement.spacedBy(Dimens.smallSeparation),
                 ) {
-                    Column(
-                        modifier = Modifier.weight(1f),
-                        verticalArrangement = Arrangement.spacedBy(Dimens.smallSeparation),
+                    Row(
+                        modifier = Modifier
+                            .weight(1f)
+                            .height(IntrinsicSize.Max),
                     ) {
-                        Row(
-                            modifier = Modifier.fillMaxWidth(),
-                            horizontalArrangement = Arrangement.spacedBy(Dimens.smallSeparation),
-                            verticalAlignment = Alignment.CenterVertically,
+                        Column(
+                            modifier = Modifier.weight(1f),
+                            verticalArrangement = Arrangement.spacedBy(Dimens.smallSeparation),
                         ) {
-                            date.Content(
-                                modifier = Modifier.weight(1f),
-                            )
-                            time.Content(
-                                modifier = Modifier.weight(1f),
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
+                                horizontalArrangement = Arrangement.spacedBy(Dimens.smallSeparation),
+                                verticalAlignment = Alignment.CenterVertically,
+                            ) {
+                                date.Content(
+                                    modifier = Modifier.weight(1f),
+                                )
+                                time.Content(
+                                    modifier = Modifier.weight(1f),
+                                )
+                            }
+                            comment.Content(
+                                modifier = Modifier.fillMaxWidth(),
                             )
                         }
-                        comment.Content(
-                            modifier = Modifier.fillMaxWidth(),
-                        )
-                        type.MainContent(
-                            modifier = Modifier.fillMaxWidth(),
+                        type.AmountContent(
+                            modifier = Modifier.fillMaxHeight(),
                         )
                     }
-                    type.AmountContent(
-                        modifier = Modifier.fillMaxHeight(),
+                    type.MainContent(
+                        modifier = Modifier.fillMaxWidth(),
                     )
                 }
             }

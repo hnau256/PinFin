@@ -176,7 +176,6 @@ class EntryProjector(
         ) {
             records.Content(
                 modifier = Modifier
-                    .weight(1f)
                     .fillMaxHeight(),
             )
             Icon(
@@ -184,7 +183,7 @@ class EntryProjector(
             )
             account.Content(
                 modifier = Modifier
-                    .fillMaxHeight(),
+                    .fillMaxSize(),
             )
         }
     }
