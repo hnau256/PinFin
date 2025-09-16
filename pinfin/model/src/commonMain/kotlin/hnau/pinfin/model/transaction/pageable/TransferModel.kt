@@ -271,17 +271,10 @@ class TransferModel(
     val goBackHandler: GoBackHandler = skeleton
         .part
         .flatMapWithScope(scope) { partScope, part ->
-            val partGoBackHandler = when (part) {
+            when (part) {
                 Part.From -> from.goBackHandler
                 Part.To -> to.goBackHandler
                 Part.Amount -> amount.goBackHandler
-            }
-            partGoBackHandler.mapState(partScope) { partGoBack ->
-                partGoBack ?: part
-                    .shift(-1)
-                    ?.let { previousPart ->
-                        { switchToPart(previousPart) }
-                    }
             }
         }
 }

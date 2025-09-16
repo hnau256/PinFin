@@ -215,15 +215,16 @@ class EntryModel(
             },
     )
 
-    internal val entry: StateFlow<Editable<TransactionInfo.Type.Entry>> = records.records.combineEditableWith(
-        scope = scope,
-        other = account.accountEditable,
-    ) {records, account ->
-        TransactionInfo.Type.Entry(
-            records = records,
-            account = account,
-        )
-    }
+    internal val entry: StateFlow<Editable<TransactionInfo.Type.Entry>> =
+        records.records.combineEditableWith(
+            scope = scope,
+            other = account.accountEditable,
+        ) { records, account ->
+            TransactionInfo.Type.Entry(
+                records = records,
+                account = account,
+            )
+        }
 
     val amountOrZero: StateFlow<Amount>
         get() = records.amountOrZero
@@ -237,16 +238,9 @@ class EntryModel(
     val goBackHandler: GoBackHandler = skeleton
         .part
         .flatMapWithScope(scope) { partScope, part ->
-            val partGoBackHandler = when (part) {
+            when (part) {
                 Part.Account -> account.goBackHandler
                 Part.Records -> records.goBackHandler
-            }
-            partGoBackHandler.mapState(partScope) { partGoBack ->
-                partGoBack ?: part
-                    .shift(-1)
-                    ?.let { previousPart ->
-                        { switchToPart(previousPart) }
-                    }
             }
         }
 }

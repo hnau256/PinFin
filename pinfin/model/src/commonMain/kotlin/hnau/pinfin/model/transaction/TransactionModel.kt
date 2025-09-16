@@ -472,19 +472,8 @@ class TransactionModel(
                             }
                                 .flatMapWithScope(scope) { scope, partGoBackOrNull ->
                                     partGoBackOrNull.foldNullable(
-                                        ifNotNull = { partGoBack ->
-                                            partGoBack.toMutableStateFlowAsInitial()
-                                        },
-                                        ifNull = {
-                                            part
-                                                .shift(-1)
-                                                .foldNullable(
-                                                    ifNotNull = { previousPart ->
-                                                        { switchToPart(previousPart) }.toMutableStateFlowAsInitial()
-                                                    },
-                                                    ifNull = { createLocalGoBackHandler(scope) }
-                                                )
-                                        }
+                                        ifNull = { createLocalGoBackHandler(scope) },
+                                        ifNotNull = { it.toMutableStateFlowAsInitial() },
                                     )
                                 }
                         },
