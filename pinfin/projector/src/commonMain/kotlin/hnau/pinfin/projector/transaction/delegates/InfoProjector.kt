@@ -83,35 +83,36 @@ class InfoProjector(
                         .padding(Dimens.smallSeparation),
                     verticalArrangement = Arrangement.spacedBy(Dimens.smallSeparation),
                 ) {
+
                     Row(
-                        modifier = Modifier
-                            .weight(1f)
-                            .height(IntrinsicSize.Max),
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.spacedBy(Dimens.smallSeparation),
+                        verticalAlignment = Alignment.CenterVertically,
                     ) {
-                        Column(
+                        date.Content(
                             modifier = Modifier.weight(1f),
-                            verticalArrangement = Arrangement.spacedBy(Dimens.smallSeparation),
-                        ) {
-                            Row(
-                                modifier = Modifier.fillMaxWidth(),
-                                horizontalArrangement = Arrangement.spacedBy(Dimens.smallSeparation),
-                                verticalAlignment = Alignment.CenterVertically,
-                            ) {
-                                date.Content(
-                                    modifier = Modifier.weight(1f),
-                                )
-                                time.Content(
-                                    modifier = Modifier.weight(1f),
-                                )
-                            }
-                            comment.Content(
-                                modifier = Modifier.fillMaxWidth(),
-                            )
-                        }
+                        )
+                        time.Content(
+                            modifier = Modifier.weight(1f),
+                        )
+                    }
+
+                    Row(
+                        modifier
+                            .fillMaxWidth()
+                            .height(IntrinsicSize.Max),
+                        horizontalArrangement = Arrangement.spacedBy(Dimens.smallSeparation),
+                    ) {
+                        comment.Content(
+                            modifier = Modifier
+                                .fillMaxHeight()
+                                .weight(1f),
+                        )
                         type.AmountContent(
                             modifier = Modifier.fillMaxHeight(),
                         )
                     }
+
                     type.MainContent(
                         modifier = Modifier.fillMaxWidth(),
                     )
