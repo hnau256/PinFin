@@ -82,24 +82,47 @@ internal val <T> Editable<T>.valueOrNone: Option<T>
         is Editable.Value<T> -> Some(value)
     }
 
+
+internal inline fun <A, B, Z> Editable.Value<A>.combineEditableValueWith(
+    other: Editable.Value<B>,
+    crossinline combine: (A, B) -> Z,
+): Editable<Z> = Editable.Value(
+    value = combine(value, other.value),
+    changed = changed || other.changed,
+)
+
+internal inline fun <A, B, Z> Editable<A>.combineEditableWith(
+    other: Editable<B>,
+    crossinline combine: (A, B) -> Z,
+): Editable<Z> = when (this) {
+    Editable.Incorrect -> Editable.Incorrect
+    is Editable.Value<A> -> when (other) {
+        Editable.Incorrect -> Editable.Incorrect
+        is Editable.Value<B> -> combineEditableValueWith(
+            other = other,
+            combine = combine,
+        )
+    }
+}
+
 internal inline fun <A, B, Z> StateFlow<Editable<A>>.combineEditableWith(
     scope: CoroutineScope,
     other: StateFlow<Editable<B>>,
     crossinline combine: (A, B) -> Z,
 ): StateFlow<Editable<Z>> = flatMapWithScope(scope) { scope, a ->
-        when (a) {
-            Editable.Incorrect -> Editable.Incorrect.toMutableStateFlowAsInitial()
-            is Editable.Value<A> -> other.mapState(scope) { b ->
-                when (b) {
-                    Editable.Incorrect -> Editable.Incorrect
-                    is Editable.Value<B> -> Editable.Value(
-                        value = combine(a.value, b.value),
-                        changed = a.changed || b.changed,
-                    )
-                }
+    when (a) {
+        Editable.Incorrect -> Editable.Incorrect.toMutableStateFlowAsInitial()
+        is Editable.Value<A> -> other.mapState(scope) { b ->
+            when (b) {
+                Editable.Incorrect -> Editable.Incorrect
+                is Editable.Value<B> -> a.combineEditableValueWith(
+                    other = b,
+                    combine = combine,
+                )
             }
         }
     }
+}
 
 internal inline fun <I, O> Editable<I>.flatMap(
     transform: (I) -> Editable<O>,
@@ -118,7 +141,7 @@ internal inline fun <I, O> Editable<I>.flatMap(
 
 internal inline fun <I, O> Editable.Value<I>.map(
     transform: (I) -> O,
-): Editable.Value<O> =    Editable.Value(
+): Editable.Value<O> = Editable.Value(
     value = transform(value),
     changed = false,
 )

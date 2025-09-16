@@ -27,6 +27,8 @@ import hnau.common.kotlin.toZipListOrNull
 import hnau.pinfin.data.Amount
 import hnau.pinfin.model.transaction.utils.Editable
 import hnau.pinfin.model.transaction.utils.RecordId
+import hnau.pinfin.model.transaction.utils.combineEditableWith
+import hnau.pinfin.model.transaction.utils.flatMap
 import hnau.pinfin.model.transaction.utils.map
 import hnau.pinfin.model.transaction.utils.remove
 import hnau.pinfin.model.utils.budget.state.CategoryInfo
@@ -36,6 +38,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.update
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.UseSerializers
@@ -295,45 +298,47 @@ class RecordsModel(
             ifNull = { this },
             ifNotNull = { nonEmptyRemaining ->
                 flatMapWithScope(scope) { recordsScope, recordsOrIncorrect ->
-                        when (recordsOrIncorrect) {
-                            Editable.Incorrect -> Editable.Incorrect.toMutableStateFlowAsInitial()
-                            is Editable.Value<NonEmptyList<TransactionInfo.Type.Entry.Record>> -> nonEmptyRemaining
-                                .head
-                                .record
-                                .mapState(recordsScope) { headRecordOrNull ->
-                                    headRecordOrNull.map { headRecord ->
-                                        recordsOrIncorrect.value + headRecord
-                                    }
+                    when (recordsOrIncorrect) {
+                        Editable.Incorrect -> Editable.Incorrect.toMutableStateFlowAsInitial()
+                        is Editable.Value<NonEmptyList<TransactionInfo.Type.Entry.Record>> -> nonEmptyRemaining
+                            .head
+                            .record
+                            .mapState(recordsScope) { headRecordOrNull ->
+                                recordsOrIncorrect.combineEditableWith(
+                                    other = headRecordOrNull,
+                                ) { acc, record ->
+                                    acc + record
                                 }
-                                .add(
-                                    scope = recordsScope,
-                                    remaining = nonEmptyRemaining.tail,
-                                )
-                        }
+                            }
+                            .add(
+                                scope = recordsScope,
+                                remaining = nonEmptyRemaining.tail,
+                            )
                     }
+                }
             }
         )
 
     val goBackHandler: GoBackHandler = items.flatMapWithScope(scope) { itemsScope, items ->
-            items
-                .selected
-                .model
-                .goBackHandler
-                .flatMapWithScope(itemsScope) { recordGoBackScope, recordGoBackOrNull ->
-                    recordGoBackOrNull.foldNullable(
-                        ifNotNull = { it.toMutableStateFlowAsInitial() },
-                        ifNull = {
-                            skeleton
-                                .records
-                                .mapState(recordGoBackScope) { records ->
-                                    records
-                                        .back()
-                                        ?.let { newRecords ->
-                                            { skeleton.records.value = newRecords }
-                                        }
-                                }
-                        }
-                    )
-                }
-        }
+        items
+            .selected
+            .model
+            .goBackHandler
+            .flatMapWithScope(itemsScope) { recordGoBackScope, recordGoBackOrNull ->
+                recordGoBackOrNull.foldNullable(
+                    ifNotNull = { it.toMutableStateFlowAsInitial() },
+                    ifNull = {
+                        skeleton
+                            .records
+                            .mapState(recordGoBackScope) { records ->
+                                records
+                                    .back()
+                                    ?.let { newRecords ->
+                                        { skeleton.records.value = newRecords }
+                                    }
+                            }
+                    }
+                )
+            }
+    }
 }
