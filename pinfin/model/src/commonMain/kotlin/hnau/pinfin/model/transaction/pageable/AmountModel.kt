@@ -60,7 +60,6 @@ class AmountModel(
     )
 
     class Page(
-        scope: CoroutineScope,
         val delegate: CommonAmountModel,
         val goForward: () -> Unit,
     ) {
@@ -69,10 +68,7 @@ class AmountModel(
             get() = delegate.goBackHandler
     }
 
-    fun createPage(
-        scope: CoroutineScope,
-    ): Page = Page(
-        scope = scope,
+    fun createPage(): Page = Page(
         delegate = delegate,
         goForward = goForward,
     )

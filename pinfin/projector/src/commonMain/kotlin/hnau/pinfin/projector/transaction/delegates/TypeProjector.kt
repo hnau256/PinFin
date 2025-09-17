@@ -249,7 +249,6 @@ class TypeProjector(
 
                 is TypeModel.Type.Transfer -> Type.Transfer(
                     projector = TransferProjector(
-                        scope = typeScope,
                         model = model.model,
                         dependencies = dependencies.transfer(),
                     )

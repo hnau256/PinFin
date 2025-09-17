@@ -87,11 +87,8 @@ class AmountWithDirectionModel(
         goForward = goForward,
     )
 
-    fun createPage(
-        scope: CoroutineScope,
-    ): AmountModel.Page = amountModel.createPage(
-        scope = scope,
-    )
+    fun createPage(): AmountModel.Page =
+        amountModel.createPage()
 
     private fun getDirectionBasedOnCategory(
         scope: CoroutineScope,

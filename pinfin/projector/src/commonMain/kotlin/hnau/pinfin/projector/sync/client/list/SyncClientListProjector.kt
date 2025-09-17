@@ -63,9 +63,8 @@ class SyncClientListProjector(
                 itemsOrErrorOrLoading.map { itemsOrError ->
                     itemsOrError.map { items ->
                         items?.map { (id, item) ->
-                            getOrPutItem(id) { itemScope ->
+                            getOrPutItem(id) {
                                 val itemProjector = SyncClientListItemProjector(
-                                    scope = itemScope,
                                     model = item,
                                 )
                                 id to itemProjector

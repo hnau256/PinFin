@@ -309,9 +309,7 @@ class RecordModel(
                     )
 
                     Part.Amount -> PageType.Amount(
-                        model = amount.createPage(
-                            scope = pageScope,
-                        ),
+                        model = amount.createPage(),
                     )
                 }
             },
@@ -346,16 +344,16 @@ class RecordModel(
         .getOrNull(ordinal + offset)
 
     val goBackHandler: GoBackHandler = part.flatMapWithScope(scope) { partScope, part ->
-            when (part) {
-                Part.Comment -> comment.goBackHandler
-                Part.Category -> category.goBackHandler
-                Part.Amount -> amount.goBackHandler
-            }.mapState(partScope) { partGoBackOrNull ->
-                partGoBackOrNull ?: part
-                    .shift(-1)
-                    ?.let { previousPart ->
-                        { switchToPart(previousPart) }
-                    }
-            }
+        when (part) {
+            Part.Comment -> comment.goBackHandler
+            Part.Category -> category.goBackHandler
+            Part.Amount -> amount.goBackHandler
+        }.mapState(partScope) { partGoBackOrNull ->
+            partGoBackOrNull ?: part
+                .shift(-1)
+                ?.let { previousPart ->
+                    { switchToPart(previousPart) }
+                }
         }
+    }
 }

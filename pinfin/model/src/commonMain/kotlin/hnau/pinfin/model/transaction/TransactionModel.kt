@@ -235,29 +235,25 @@ class TransactionModel(
 
     val pageType: StateFlow<Pair<Part, PageType>> = skeleton
         .part
-        .mapWithScope(scope) { pageScope, part ->
+        .mapWithScope(scope) { scope, part ->
             val pageType = when (part) {
                 Part.Type -> PageType.Type(
                     model = type.createPage(
-                        scope = pageScope,
+                        scope = scope,
                     ),
                 )
 
                 Part.Date -> PageType.Date(
-                    model = date.createPage(
-                        scope = pageScope,
-                    ),
+                    model = date.createPage(),
                 )
 
                 Part.Time -> PageType.Time(
-                    model = time.createPage(
-                        scope = pageScope,
-                    ),
+                    model = time.createPage(),
                 )
 
                 Part.Comment -> PageType.Comment(
                     model = comment.createPage(
-                        scope = pageScope,
+                        scope = scope,
                     ),
                 )
             }

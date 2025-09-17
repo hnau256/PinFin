@@ -57,7 +57,6 @@ class TransactionProjector(
     )
 
     private val info = InfoProjector(
-        scope = scope,
         model = model,
         dependencies = dependencies.info(
             type = type,
@@ -71,12 +70,10 @@ class TransactionProjector(
     )
 
     private val dialogs = DialogsProjector(
-        scope = scope,
         model = model,
     )
 
     private val topBarActions = TopBarActionsProjector(
-        scope = scope,
         model = model,
     )
 

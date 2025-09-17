@@ -21,10 +21,8 @@ import hnau.pinfin.projector.transaction.pageable.CommentProjector
 import hnau.pinfin.projector.transaction.pageable.DateProjector
 import hnau.pinfin.projector.transaction.pageable.TimeProjector
 import hnau.pipe.annotations.Pipe
-import kotlinx.coroutines.CoroutineScope
 
 class InfoProjector(
-    scope: CoroutineScope,
     private val model: TransactionModel,
     private val dependencies: Dependencies,
 ) {
@@ -40,19 +38,16 @@ class InfoProjector(
     }
 
     private val date = DateProjector(
-        scope = scope,
         dependencies = dependencies.date(),
         model = model.date,
     )
 
     private val time = TimeProjector(
-        scope = scope,
         dependencies = dependencies.time(),
         model = model.time,
     )
 
     private val comment = CommentProjector(
-        scope = scope,
         model = model.comment,
     )
 

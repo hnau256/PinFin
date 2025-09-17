@@ -39,8 +39,6 @@ class EntryProjector(
     interface Dependencies {
 
         val amountFormatter: AmountFormatter
-
-        fun records(): RecordsProjector.Dependencies
     }
 
     class Page(
@@ -116,7 +114,6 @@ class EntryProjector(
 
                     is EntryModel.PageType.Account -> PageType.Account(
                         projector = AccountProjector.createPage(
-                            scope = scope,
                             model = type.model,
                         )
                     )
@@ -150,12 +147,10 @@ class EntryProjector(
 
     private val records = RecordsProjector(
         scope = scope,
-        dependencies = dependencies.records(),
         model = model.records,
     )
 
     private val account = AccountProjector(
-        scope = scope,
         model = model.account,
     )
 

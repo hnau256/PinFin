@@ -23,7 +23,6 @@ import hnau.pinfin.projector.transaction.utils.PartDefaults
 import hnau.pinfin.projector.utils.Label
 import hnau.pinfin.projector.utils.formatter.datetime.DateTimeFormatter
 import hnau.pipe.annotations.Pipe
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.atStartOfDayIn
 import kotlinx.datetime.toLocalDateTime
@@ -31,7 +30,6 @@ import kotlin.time.Duration.Companion.days
 import kotlin.time.Instant
 
 class DateProjector(
-    scope: CoroutineScope,
     private val model: DateModel,
     private val dependencies: Dependencies,
 ) {
@@ -43,7 +41,6 @@ class DateProjector(
     }
 
     class Page(
-        scope: CoroutineScope,
         private val model: DateModel.Page,
     ) {
 

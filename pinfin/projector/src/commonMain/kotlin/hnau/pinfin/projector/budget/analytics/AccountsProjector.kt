@@ -25,11 +25,9 @@ import hnau.pinfin.projector.utils.AccountContent
 import hnau.pinfin.projector.utils.AmountContent
 import hnau.pinfin.projector.utils.formatter.AmountFormatter
 import hnau.pipe.annotations.Pipe
-import kotlinx.coroutines.CoroutineScope
 import org.jetbrains.compose.resources.stringResource
 
 class AccountsProjector(
-    scope: CoroutineScope,
     private val model: AccountsModel,
     private val dependencies: Dependencies,
 ) {

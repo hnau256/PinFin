@@ -8,10 +8,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import hnau.common.app.projector.utils.Icon
 import hnau.pinfin.model.transaction.TransactionModel
-import kotlinx.coroutines.CoroutineScope
 
 class TopBarActionsProjector(
-    scope: CoroutineScope,
     private val model: TransactionModel,
 ) {
 

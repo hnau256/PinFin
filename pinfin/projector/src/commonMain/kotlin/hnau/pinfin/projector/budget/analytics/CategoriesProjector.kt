@@ -28,10 +28,8 @@ import hnau.pinfin.projector.utils.CategoryContent
 import hnau.pinfin.projector.utils.SwitchHue
 import hnau.pinfin.projector.utils.formatter.AmountFormatter
 import hnau.pipe.annotations.Pipe
-import kotlinx.coroutines.CoroutineScope
 
 class CategoriesProjector(
-    scope: CoroutineScope,
     private val model: CategoriesModel,
     private val dependencies: Dependencies,
 ) {

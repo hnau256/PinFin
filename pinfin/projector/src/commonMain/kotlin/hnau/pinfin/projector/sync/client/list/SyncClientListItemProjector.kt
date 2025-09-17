@@ -20,10 +20,8 @@ import hnau.common.app.projector.uikit.table.TableOrientation
 import hnau.common.app.projector.utils.Icon
 import hnau.pinfin.model.sync.client.list.SyncClientListItemModel
 import hnau.pinfin.projector.utils.BidgetInfoContent
-import kotlinx.coroutines.CoroutineScope
 
 class SyncClientListItemProjector(
-    scope: CoroutineScope,
     private val model: SyncClientListItemModel,
 ) {
 

@@ -9,10 +9,8 @@ import hnau.pinfin.model.utils.budget.state.CategoryInfo
 import hnau.pinfin.projector.transaction.utils.ChooseOrCreateProjector
 import hnau.pinfin.projector.utils.CategoryContent
 import hnau.pinfin.projector.utils.ViewMode
-import kotlinx.coroutines.CoroutineScope
 
 class CategoryProjector(
-    scope: CoroutineScope,
     private val model: CategoryModel,
 ) {
 
@@ -50,10 +48,8 @@ class CategoryProjector(
     companion object {
 
         fun createPage(
-            scope: CoroutineScope,
             model: ChooseOrCreateModel<CategoryInfo>,
         ): ChooseOrCreateProjector<CategoryInfo> = ChooseOrCreateProjector(
-            scope = scope,
             model = model,
         ) { category, isSelected, onClick ->
             CategoryContent(

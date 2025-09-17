@@ -59,7 +59,6 @@ class DateModel(
     }
 
     class Page(
-        scope: CoroutineScope,
         val date: MutableStateFlow<LocalDate>,
     ) {
 
@@ -67,10 +66,7 @@ class DateModel(
             get() = NeverGoBackHandler
     }
 
-    fun createPage(
-        scope: CoroutineScope,
-    ): Page = Page(
-        scope = scope,
+    fun createPage(): Page = Page(
         date = skeleton.date,
     )
 

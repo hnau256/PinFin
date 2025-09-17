@@ -36,17 +36,13 @@ import hnau.pinfin.projector.resources.comment
 import hnau.pinfin.projector.transaction.utils.PartDefaults
 import hnau.pinfin.projector.utils.Label
 import hnau.pinfin.projector.utils.LabelDefaults
-import kotlinx.coroutines.CoroutineScope
 import org.jetbrains.compose.resources.stringResource
 
 class CommentProjector(
-    scope: CoroutineScope,
     private val model: CommentModel,
 ) {
 
-
     class Page(
-        scope: CoroutineScope,
         private val model: CommentModel.Page,
     ) {
 

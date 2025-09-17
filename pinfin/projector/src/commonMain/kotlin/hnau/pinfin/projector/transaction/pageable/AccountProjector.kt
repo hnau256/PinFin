@@ -13,11 +13,9 @@ import hnau.pinfin.projector.resources.there_are_no_accounts
 import hnau.pinfin.projector.transaction.utils.ChooseOrCreateMessages
 import hnau.pinfin.projector.transaction.utils.ChooseOrCreateProjector
 import hnau.pinfin.projector.utils.AccountContent
-import kotlinx.coroutines.CoroutineScope
 import org.jetbrains.compose.resources.stringResource
 
 class AccountProjector(
-    scope: CoroutineScope,
     private val model: AccountModel,
 ) {
 
@@ -45,10 +43,8 @@ class AccountProjector(
             )
 
         fun createPage(
-            scope: CoroutineScope,
             model: ChooseOrCreateModel<AccountInfo>,
         ): ChooseOrCreateProjector<AccountInfo> = ChooseOrCreateProjector(
-            scope = scope,
             model = model,
         ) { account, isSelected, onClick ->
             AccountContent(

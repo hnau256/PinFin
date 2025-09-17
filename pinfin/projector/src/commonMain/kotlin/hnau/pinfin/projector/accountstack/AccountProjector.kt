@@ -55,7 +55,8 @@ class AccountProjector(
         val globalGoBackHandler: GlobalGoBackHandler
     }
 
-    private val globalGoBackHandler: GoBackHandler = dependencies.globalGoBackHandler.resolve(scope)
+    private val globalGoBackHandler: GoBackHandler =
+        dependencies.globalGoBackHandler.resolve(scope)
 
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable

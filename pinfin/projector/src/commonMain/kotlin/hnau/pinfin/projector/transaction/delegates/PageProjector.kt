@@ -108,21 +108,18 @@ class PageProjector(
             val projector = when (model) {
                 is TransactionModel.PageType.Date -> Part.Date(
                     projector = DateProjector.Page(
-                        scope = pageScope,
                         model = model.model,
                     )
                 )
 
                 is TransactionModel.PageType.Comment -> Part.Comment(
                     projector = CommentProjector.Page(
-                        scope = pageScope,
                         model = model.model,
                     )
                 )
 
                 is TransactionModel.PageType.Time -> Part.Time(
                     projector = TimeProjector.Page(
-                        scope = pageScope,
                         model = model.model,
                     )
                 )

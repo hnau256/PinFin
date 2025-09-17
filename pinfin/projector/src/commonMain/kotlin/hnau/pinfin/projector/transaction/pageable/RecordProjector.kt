@@ -54,7 +54,6 @@ import kotlinx.coroutines.flow.StateFlow
 import org.jetbrains.compose.resources.stringResource
 
 class RecordProjector(
-    scope: CoroutineScope,
     private val model: RecordModel,
     private val dependencies: Dependencies,
 ) {
@@ -165,14 +164,12 @@ class RecordProjector(
 
                     is RecordModel.PageType.Category -> PageType.Category(
                         projector = CategoryProjector.createPage(
-                            scope = scope,
                             model = type.model,
                         )
                     )
 
                     is RecordModel.PageType.Comment -> PageType.Comment(
                         projector = CommentProjector.Page(
-                            scope = scope,
                             model = type.model,
                         )
                     )
@@ -204,17 +201,14 @@ class RecordProjector(
         }
 
         private val comment = CommentProjector(
-            scope = scope,
             model = model.comment,
         )
 
         private val category = CategoryProjector(
-            scope = scope,
             model = model.category,
         )
 
         private val amount = AmountWithDirectionProjector(
-            scope = scope,
             dependencies = dependencies.amount(),
             model = model.amount,
         )

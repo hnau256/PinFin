@@ -74,7 +74,6 @@ class TimeModel(
     }
 
     class Page(
-        scope: CoroutineScope,
         val time: MutableStateFlow<Time>,
     ) {
 
@@ -82,10 +81,7 @@ class TimeModel(
             get() = NeverGoBackHandler
     }
 
-    fun createPage(
-        scope: CoroutineScope,
-    ): Page = Page(
-        scope = scope,
+    fun createPage(): Page = Page(
         time = skeleton.time,
     )
 

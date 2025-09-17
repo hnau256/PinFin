@@ -17,11 +17,9 @@ import hnau.pinfin.projector.resources.remove_transaction
 import hnau.pinfin.projector.resources.save
 import hnau.pinfin.projector.resources.save_changes
 import hnau.pinfin.projector.resources.yes
-import kotlinx.coroutines.CoroutineScope
 import org.jetbrains.compose.resources.stringResource
 
 class DialogsProjector(
-    scope: CoroutineScope,
     private val model: TransactionModel,
 ) {
 

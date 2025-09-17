@@ -22,7 +22,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.StateFlow
 
 class TransferProjector(
-    scope: CoroutineScope,
     model: TransferModel,
     dependencies: Dependencies,
 ) {
@@ -124,14 +123,12 @@ class TransferProjector(
 
                     is TransferModel.PageType.From -> PageType.From(
                         projector = AccountProjector.createPage(
-                            scope = scope,
                             model = type.model,
                         )
                     )
 
                     is TransferModel.PageType.To -> PageType.To(
                         projector = AccountProjector.createPage(
-                            scope = scope,
                             model = type.model,
                         )
                     )
@@ -164,17 +161,14 @@ class TransferProjector(
     }
 
     private val from = AccountProjector(
-        scope = scope,
         model = model.from,
     )
 
     private val to = AccountProjector(
-        scope = scope,
         model = model.to,
     )
 
     private val amount = AmountProjector(
-        scope = scope,
         model = model.amount,
         dependencies = dependencies.amount(),
     )

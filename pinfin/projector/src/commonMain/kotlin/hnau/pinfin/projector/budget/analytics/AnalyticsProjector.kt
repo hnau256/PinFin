@@ -23,11 +23,9 @@ import hnau.pinfin.model.budget.analytics.tab.AnalyticsTabValues
 import hnau.pinfin.projector.utils.Tabs
 import hnau.pipe.annotations.Pipe
 import kotlinx.collections.immutable.toImmutableList
-import kotlinx.coroutines.CoroutineScope
 
 @OptIn(ExperimentalMaterial3Api::class)
 class AnalyticsProjector(
-    scope: CoroutineScope,
     private val model: AnalyticsModel,
     private val dependencies: Dependencies,
 ) {
@@ -43,14 +41,12 @@ class AnalyticsProjector(
     private val tabs: AnalyticsTabValues<AnalyticsTabProjector> = AnalyticsTabValues(
         accounts = AnalyticsTabProjector.Accounts(
             AccountsProjector(
-                scope = scope,
                 model = model.accounts,
                 dependencies = dependencies.accounts(),
             )
         ),
         categories = AnalyticsTabProjector.Categories(
             CategoriesProjector(
-                scope = scope,
                 model = model.categories,
                 dependencies = dependencies.categories(),
             )

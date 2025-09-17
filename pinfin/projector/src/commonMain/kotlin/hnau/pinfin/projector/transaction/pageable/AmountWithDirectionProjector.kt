@@ -14,10 +14,8 @@ import hnau.pinfin.projector.utils.Label
 import hnau.pinfin.projector.utils.SwitchHueToAmountDirection
 import hnau.pinfin.projector.utils.icon
 import hnau.pipe.annotations.Pipe
-import kotlinx.coroutines.CoroutineScope
 
 class AmountWithDirectionProjector(
-    scope: CoroutineScope,
     private val model: AmountWithDirectionModel,
     private val dependencies: Dependencies,
 ) {
@@ -29,7 +27,6 @@ class AmountWithDirectionProjector(
     }
 
     private val amount = AmountProjector(
-        scope = scope,
         dependencies = dependencies.amount(),
         model = model.amountModel,
     )

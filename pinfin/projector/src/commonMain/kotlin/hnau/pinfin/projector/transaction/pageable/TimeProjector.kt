@@ -22,10 +22,8 @@ import hnau.pinfin.projector.transaction.utils.PartDefaults
 import hnau.pinfin.projector.utils.Label
 import hnau.pinfin.projector.utils.formatter.datetime.DateTimeFormatter
 import hnau.pipe.annotations.Pipe
-import kotlinx.coroutines.CoroutineScope
 
 class TimeProjector(
-    scope: CoroutineScope,
     private val model: TimeModel,
     private val dependencies: Dependencies,
 ) {
@@ -37,7 +35,6 @@ class TimeProjector(
     }
 
     class Page(
-        scope: CoroutineScope,
         private val model: TimeModel.Page,
     ) {
 

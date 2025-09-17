@@ -34,12 +34,10 @@ import hnau.pinfin.model.transaction.utils.ChooseOrCreateModel
 import hnau.pinfin.projector.resources.Res
 import hnau.pinfin.projector.resources.search_create
 import hnau.pinfin.projector.utils.LabelDefaults
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.StateFlow
 import org.jetbrains.compose.resources.stringResource
 
 class ChooseOrCreateProjector<T : Comparable<T>>(
-    scope: CoroutineScope,
     private val model: ChooseOrCreateModel<T>,
     private val itemContent: @Composable (
         value: T,

@@ -52,14 +52,7 @@ import org.jetbrains.compose.resources.stringResource
 class RecordsProjector(
     scope: CoroutineScope,
     private val model: RecordsModel,
-    private val dependencies: Dependencies,
 ) {
-
-    @Pipe
-    interface Dependencies {
-
-        fun record(): RecordProjector.Dependencies
-    }
 
     class Page(
         scope: CoroutineScope,
@@ -196,9 +189,8 @@ class RecordsProjector(
                     scope = scope,
                 ) { items ->
                     items.mapIndexed { i, item ->
-                        getOrPutItem(item.id) { scope ->
+                        getOrPutItem(item.id) {
                             val projector = RecordProjector(
-                                scope = scope,
                                 model = item.model,
                                 dependencies = dependencies,
                             )

@@ -69,7 +69,6 @@ class BudgetProjector(
 
                     is BudgetPageModel.Analytics -> BudgetPageProjector.Analytics(
                         projector = AnalyticsProjector(
-                            scope = scope,
                             model = model.model,
                             dependencies = dependencies.analytics(),
                         )
@@ -77,7 +76,6 @@ class BudgetProjector(
 
                     is BudgetPageModel.Config -> BudgetPageProjector.Config(
                         projector = BudgetConfigProjector(
-                            scope = scope,
                             model = model.model,
                         )
                     )

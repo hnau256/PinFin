@@ -29,7 +29,7 @@ import kotlinx.serialization.UseSerializers
 
 class SelectCategoriesModel(
     scope: CoroutineScope,
-    private val dependencies: Dependencies,
+    dependencies: Dependencies,
     private val skeleton: Skeleton,
 ) {
 

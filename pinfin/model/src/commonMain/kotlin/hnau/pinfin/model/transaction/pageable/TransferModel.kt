@@ -216,9 +216,7 @@ class TransferModel(
                     )
 
                     Part.Amount -> PageType.Amount(
-                        model = amount.createPage(
-                            scope = partScope,
-                        ),
+                        model = amount.createPage(),
                     )
                 }
             },

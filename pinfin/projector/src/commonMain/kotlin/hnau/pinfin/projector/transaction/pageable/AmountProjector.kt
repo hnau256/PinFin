@@ -33,7 +33,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
 class AmountProjector(
-    scope: CoroutineScope,
     private val model: AmountModel,
     private val dependencies: Dependencies,
 ) {

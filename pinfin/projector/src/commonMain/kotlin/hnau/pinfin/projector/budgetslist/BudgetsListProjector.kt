@@ -54,7 +54,7 @@ import org.jetbrains.compose.resources.stringResource
 class BudgetsListProjector(
     scope: CoroutineScope,
     private val model: BudgetsListModel,
-    private val dependencies: Dependencies,
+    dependencies: Dependencies,
 ) {
 
     @Pipe
@@ -65,17 +65,17 @@ class BudgetsListProjector(
 
     private val globalGoBackHandler: GoBackHandler = dependencies.globalGoBackHandler.resolve(scope)
 
-    private val items: StateFlow<NonEmptyList<BudgetItemProjector>?> =
-        model.items.mapReusable(scope) { itemsOrNull ->
-                itemsOrNull?.map { item ->
-                    getOrPutItem(item.id) { itemProjectorScope ->
-                        BudgetItemProjector(
-                            scope = itemProjectorScope,
-                            model = item.model,
-                        )
-                    }
+    private val items: StateFlow<NonEmptyList<BudgetItemProjector>?> = model
+        .items
+        .mapReusable(scope) { itemsOrNull ->
+            itemsOrNull?.map { item ->
+                getOrPutItem(item.id) {
+                    BudgetItemProjector(
+                        model = item.model,
+                    )
                 }
             }
+        }
 
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
@@ -96,59 +96,59 @@ class BudgetsListProjector(
             },
         ) { contentPadding ->
             items.collectAsState().value.NullableStateContent(
-                    transitionSpec = TransitionSpec.crossfade(),
-                    nullContent = {
-                        ErrorPanel(
-                            title = { Text(stringResource(Res.string.no_budgets)) },
-                            button = {
-                                Column(
-                                    verticalArrangement = Arrangement.spacedBy(Dimens.smallSeparation),
-                                    horizontalAlignment = Alignment.CenterHorizontally,
+                transitionSpec = TransitionSpec.crossfade(),
+                nullContent = {
+                    ErrorPanel(
+                        title = { Text(stringResource(Res.string.no_budgets)) },
+                        button = {
+                            Column(
+                                verticalArrangement = Arrangement.spacedBy(Dimens.smallSeparation),
+                                horizontalAlignment = Alignment.CenterHorizontally,
+                            ) {
+                                Button(
+                                    onClick = model::createNewBudget,
                                 ) {
-                                    Button(
-                                        onClick = model::createNewBudget,
-                                    ) {
-                                        Text(stringResource(Res.string.create_new_budget))
-                                    }
-                                    OutlinedButton(
-                                        onClick = model::openSync,
-                                    ) {
-                                        Text(stringResource(Res.string.budgets_sync))
-                                    }
-                                    OutlinedButton(
-                                        onClick = model::createDemoBudget,
-                                    ) {
-                                        Text(stringResource(Res.string.create_demo_budget))
-                                    }
+                                    Text(stringResource(Res.string.create_new_budget))
                                 }
-                            })
-                    },
-                    anyContent = { items ->
-                        LazyColumn(
-                            contentPadding = contentPadding + PaddingValues(Dimens.separation) + PaddingValues(
-                                bottom = 96.dp
-                            ),
-                            modifier = Modifier.fillMaxSize(),
-                            verticalArrangement = Arrangement.spacedBy(Dimens.smallSeparation),
-                        ) {
-                            items(
-                                items = items,
-                            ) { item ->
-                                item.Content()
+                                OutlinedButton(
+                                    onClick = model::openSync,
+                                ) {
+                                    Text(stringResource(Res.string.budgets_sync))
+                                }
+                                OutlinedButton(
+                                    onClick = model::createDemoBudget,
+                                ) {
+                                    Text(stringResource(Res.string.create_demo_budget))
+                                }
                             }
-                        }
-                        Box(
-                            modifier = Modifier.fillMaxSize().padding(contentPadding)
-                                .horizontalDisplayPadding().verticalDisplayPadding(),
-                            contentAlignment = Alignment.BottomEnd,
-                        ) {
-                            ExtendedFloatingActionButton(
-                                onClick = model::createNewBudget,
-                                icon = { Icon(Icons.Filled.Add) },
-                                text = { Text(stringResource(Res.string.add)) },
-                            )
+                        })
+                },
+                anyContent = { items ->
+                    LazyColumn(
+                        contentPadding = contentPadding + PaddingValues(Dimens.separation) + PaddingValues(
+                            bottom = 96.dp
+                        ),
+                        modifier = Modifier.fillMaxSize(),
+                        verticalArrangement = Arrangement.spacedBy(Dimens.smallSeparation),
+                    ) {
+                        items(
+                            items = items,
+                        ) { item ->
+                            item.Content()
                         }
                     }
+                    Box(
+                        modifier = Modifier.fillMaxSize().padding(contentPadding)
+                            .horizontalDisplayPadding().verticalDisplayPadding(),
+                        contentAlignment = Alignment.BottomEnd,
+                    ) {
+                        ExtendedFloatingActionButton(
+                            onClick = model::createNewBudget,
+                            icon = { Icon(Icons.Filled.Add) },
+                            text = { Text(stringResource(Res.string.add)) },
+                        )
+                    }
+                }
             )
             InProgress(
                 inProgress = model.inProgress,
