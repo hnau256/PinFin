@@ -47,8 +47,6 @@ class BudgetProjector(
         fun transactions(): TransactionsProjector.Dependencies
 
         fun analytics(): AnalyticsProjector.Dependencies
-
-        fun config(): BudgetConfigProjector.Dependencies
     }
 
     private val tabsCache: MutableMap<BudgetPageModel, Pair<BudgetTab, BudgetPageProjector>> =
@@ -81,7 +79,6 @@ class BudgetProjector(
                         projector = BudgetConfigProjector(
                             scope = scope,
                             model = model.model,
-                            dependencies = dependencies.config(),
                         )
                     )
                 }

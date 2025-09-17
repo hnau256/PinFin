@@ -50,7 +50,6 @@ import hnau.pinfin.projector.resources.no
 import hnau.pinfin.projector.resources.remove_budget
 import hnau.pinfin.projector.resources.to_budgets_list
 import hnau.pinfin.projector.resources.yes
-import hnau.pipe.annotations.Pipe
 import kotlinx.coroutines.CoroutineScope
 import org.jetbrains.compose.resources.StringResource
 import org.jetbrains.compose.resources.stringResource
@@ -58,11 +57,8 @@ import org.jetbrains.compose.resources.stringResource
 class BudgetConfigProjector(
     scope: CoroutineScope,
     private val model: BudgetConfigModel,
-    dependencies: Dependencies,
 ) {
 
-    @Pipe
-    interface Dependencies
 
     @Composable
     fun Content(

@@ -11,10 +11,8 @@ import hnau.common.kotlin.coroutines.flatMapState
 import hnau.common.kotlin.coroutines.mapMutableState
 import hnau.common.kotlin.coroutines.mapWithScope
 import hnau.common.kotlin.coroutines.toMutableStateFlowAsInitial
-import hnau.common.kotlin.getOrInit
 import hnau.common.kotlin.mapper.Mapper
 import hnau.common.kotlin.serialization.MutableStateFlowSerializer
-import hnau.common.kotlin.toAccessor
 import hnau.pinfin.data.TransactionType
 import hnau.pinfin.model.transaction.utils.Editable
 import hnau.pinfin.model.utils.budget.state.TransactionInfo
@@ -41,8 +39,6 @@ class TypeModel(
         fun entry(): EntryModel.Dependencies
 
         fun transfer(): TransferModel.Dependencies
-
-        fun page(): Page.Dependencies
     }
 
     sealed interface Type {
@@ -97,7 +93,6 @@ class TypeModel(
     @Serializable
     data class Skeleton(
         val type: MutableStateFlow<Type.Skeleton>,
-        var page: Page.Skeleton? = null,
     ) {
 
         companion object {
@@ -182,16 +177,8 @@ class TypeModel(
 
     class Page(
         scope: CoroutineScope,
-        dependencies: Dependencies,
-        skeleton: Skeleton,
         val page: StateFlow<Type>,
     ) {
-
-        @Pipe
-        interface Dependencies
-
-        @Serializable
-        /*data*/ class Skeleton
 
         sealed interface Type {
 
@@ -228,10 +215,6 @@ class TypeModel(
         scope: CoroutineScope,
     ): Page = Page(
         scope = scope,
-        dependencies = dependencies.page(),
-        skeleton = skeleton::page
-            .toAccessor()
-            .getOrInit { Page.Skeleton() },
         page = typeModel.mapWithScope(scope) { typeScope, typeModel ->
             when (typeModel) {
                 is Type.Entry -> Page.Type.Entry(

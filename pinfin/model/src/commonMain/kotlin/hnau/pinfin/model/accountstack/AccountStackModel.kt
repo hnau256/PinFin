@@ -49,8 +49,6 @@ class AccountStackModel(
     interface Dependencies {
 
         fun info(): AccountModel.Dependencies
-
-        fun icon(): IconModel.Dependencies
     }
 
     val stack: StateFlow<NonEmptyStack<AccountStackElementModel>> = run {
@@ -91,7 +89,6 @@ class AccountStackModel(
             IconModel(
                 scope = modelScope,
                 skeleton = skeleton.skeleton,
-                dependencies = dependencies.icon(),
                 selected = this@AccountStackModel.skeleton.icon.value,
                 onSelect = {icon ->
                     this@AccountStackModel.skeleton.icon.value = icon

@@ -60,8 +60,6 @@ class ManageModel(
             budgetRepository: BudgetRepository,
             budgetsListOpener: BudgetsListOpener,
         ): BudgetStackModel.Dependencies
-
-        fun icon(): IconModel.Dependencies
     }
 
     @Serializable

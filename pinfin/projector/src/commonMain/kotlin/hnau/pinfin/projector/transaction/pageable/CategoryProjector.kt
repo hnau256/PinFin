@@ -9,17 +9,13 @@ import hnau.pinfin.model.utils.budget.state.CategoryInfo
 import hnau.pinfin.projector.transaction.utils.ChooseOrCreateProjector
 import hnau.pinfin.projector.utils.CategoryContent
 import hnau.pinfin.projector.utils.ViewMode
-import hnau.pipe.annotations.Pipe
 import kotlinx.coroutines.CoroutineScope
 
 class CategoryProjector(
     scope: CoroutineScope,
     private val model: CategoryModel,
-    private val dependencies: Dependencies,
 ) {
 
-    @Pipe
-    interface Dependencies
 
     @Composable
     fun Content(
@@ -56,11 +52,9 @@ class CategoryProjector(
         fun createPage(
             scope: CoroutineScope,
             model: ChooseOrCreateModel<CategoryInfo>,
-            dependencies: ChooseOrCreateProjector.Dependencies,
         ): ChooseOrCreateProjector<CategoryInfo> = ChooseOrCreateProjector(
             scope = scope,
             model = model,
-            dependencies = dependencies,
         ) { category, isSelected, onClick ->
             CategoryContent(
                 info = category,

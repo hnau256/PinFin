@@ -12,9 +12,7 @@ import hnau.common.kotlin.coroutines.mapWithScope
 import hnau.common.kotlin.coroutines.toMutableStateFlowAsInitial
 import hnau.common.kotlin.foldBoolean
 import hnau.common.kotlin.foldNullable
-import hnau.common.kotlin.getOrInit
 import hnau.common.kotlin.serialization.MutableStateFlowSerializer
-import hnau.common.kotlin.toAccessor
 import hnau.pinfin.model.transaction.utils.ChooseOrCreateModel
 import hnau.pinfin.model.transaction.utils.Editable
 import hnau.pinfin.model.transaction.utils.combineEditableWith
@@ -88,16 +86,11 @@ class TransferModel(
     interface Dependencies {
 
         fun account(): AccountModel.Dependencies
-
-        fun amount(): AmountModel.Dependencies
-
-        fun page(): Page.Dependencies
     }
 
     @Serializable
     data class Skeleton(
         val part: MutableStateFlow<Part> = Part.default.toMutableStateFlowAsInitial(),
-        var page: Page.Skeleton? = null,
         val from: AccountModel.Skeleton,
         val to: AccountModel.Skeleton,
         val amount: AmountModel.Skeleton,
@@ -188,7 +181,6 @@ class TransferModel(
     val amount = AmountModel(
         scope = scope,
         skeleton = skeleton.amount,
-        dependencies = dependencies.amount(),
         isFocused = createIsFocused(Part.Amount),
         requestFocus = createRequestFocus(Part.Amount),
         goForward = createGoForward(Part.Amount),
@@ -196,16 +188,8 @@ class TransferModel(
 
     class Page(
         scope: CoroutineScope,
-        dependencies: Dependencies,
-        skeleton: Skeleton,
         val page: StateFlow<PageType>,
     ) {
-
-        @Pipe
-        interface Dependencies
-
-        @Serializable
-        /*data*/ class Skeleton
 
         val goBackHandler: GoBackHandler =
             page.flatMapState(scope, PageType::goBackHandler)
@@ -215,10 +199,6 @@ class TransferModel(
         scope: CoroutineScope,
     ): Page = Page(
         scope = scope,
-        dependencies = dependencies.page(),
-        skeleton = skeleton::page
-            .toAccessor()
-            .getOrInit { Page.Skeleton() },
         page = skeleton
             .part
             .mapWithScope(scope) { partScope, part ->

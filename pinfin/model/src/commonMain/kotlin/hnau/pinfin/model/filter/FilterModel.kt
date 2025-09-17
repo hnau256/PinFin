@@ -1,14 +1,11 @@
 package hnau.pinfin.model.filter
 
 import hnau.common.app.model.goback.GoBackHandler
-import hnau.common.app.model.goback.NeverGoBackHandler
 import hnau.common.kotlin.coroutines.mapState
 import hnau.common.kotlin.coroutines.mapWithScope
 import hnau.common.kotlin.coroutines.stickNotNull
 import hnau.common.kotlin.coroutines.toMutableStateFlowAsInitial
 import hnau.common.kotlin.foldNullable
-import hnau.common.kotlin.getOrInit
-import hnau.common.kotlin.toAccessor
 import hnau.pinfin.data.CategoryId
 import hnau.pinfin.model.filter.pageable.SelectCategoriesModel
 import hnau.pipe.annotations.Pipe
@@ -28,8 +25,6 @@ class FilterModel(
     interface Dependencies {
 
         fun categories(): SelectCategoriesModel.Dependencies
-
-        fun page(): Page.Dependencies
     }
 
     data class Filters(
@@ -59,7 +54,6 @@ class FilterModel(
         val categories: SelectCategoriesModel.Skeleton,
         val selectedTab: MutableStateFlow<Tab?> =
             null.toMutableStateFlowAsInitial(),
-        var page: Page.Skeleton? = null,
     ) {
 
         companion object {
@@ -76,8 +70,6 @@ class FilterModel(
 
     class Page(
         scope: CoroutineScope,
-        dependencies: Dependencies,
-        skeleton: Skeleton,
         val type: StateFlow<Type>,
     ) {
 
@@ -94,11 +86,7 @@ class FilterModel(
             }
         }
 
-        @Pipe
-        interface Dependencies
 
-        @Serializable
-        /*data*/ class Skeleton
     }
 
     val categories = SelectCategoriesModel(
@@ -122,10 +110,6 @@ class FilterModel(
             selectedTabOrNull?.let { selectedTab ->
                 Page(
                     scope = scope,
-                    dependencies = dependencies.page(),
-                    skeleton = skeleton::page
-                        .toAccessor()
-                        .getOrInit { Page.Skeleton() },
                     type = selectedTab.mapWithScope(scope) { scope, tab ->
                         when (tab) {
                             Tab.SelectedCategories -> Page.Type.Categories(

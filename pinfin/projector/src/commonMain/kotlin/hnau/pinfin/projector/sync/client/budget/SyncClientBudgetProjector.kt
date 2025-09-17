@@ -17,20 +17,13 @@ import hnau.pinfin.projector.resources.back
 import hnau.pinfin.projector.resources.butget_was_synchronized
 import hnau.pinfin.projector.resources.error_while_budget_synchronization
 import hnau.pinfin.projector.resources.try_again
-import hnau.pipe.annotations.Pipe
 import kotlinx.coroutines.CoroutineScope
 import org.jetbrains.compose.resources.stringResource
 
 class SyncClientBudgetProjector(
     scope: CoroutineScope,
     private val model: SyncClientBudgetModel,
-    dependencies: Dependencies,
 ) {
-
-    @Pipe
-    interface Dependencies {
-
-    }
 
 
     @Composable

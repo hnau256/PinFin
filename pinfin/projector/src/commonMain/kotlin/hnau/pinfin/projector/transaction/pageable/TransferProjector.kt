@@ -30,8 +30,6 @@ class TransferProjector(
     @Pipe
     interface Dependencies {
 
-        fun account(): AccountProjector.Dependencies
-
         fun amount(): AmountProjector.Dependencies
     }
 
@@ -43,8 +41,6 @@ class TransferProjector(
 
         @Pipe
         interface Dependencies {
-
-            fun chooseOrCreate(): ChooseOrCreateProjector.Dependencies
 
             fun amount(): AmountProjector.Page.Dependencies
         }
@@ -130,7 +126,6 @@ class TransferProjector(
                         projector = AccountProjector.createPage(
                             scope = scope,
                             model = type.model,
-                            dependencies = dependencies.chooseOrCreate(),
                         )
                     )
 
@@ -138,7 +133,6 @@ class TransferProjector(
                         projector = AccountProjector.createPage(
                             scope = scope,
                             model = type.model,
-                            dependencies = dependencies.chooseOrCreate(),
                         )
                     )
                 }
@@ -172,13 +166,11 @@ class TransferProjector(
     private val from = AccountProjector(
         scope = scope,
         model = model.from,
-        dependencies = dependencies.account(),
     )
 
     private val to = AccountProjector(
         scope = scope,
         model = model.to,
-        dependencies = dependencies.account(),
     )
 
     private val amount = AmountProjector(

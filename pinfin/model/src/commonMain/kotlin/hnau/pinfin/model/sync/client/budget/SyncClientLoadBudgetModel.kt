@@ -14,10 +14,8 @@ import hnau.common.kotlin.Ready
 import hnau.common.kotlin.coroutines.flatMapWithScope
 import hnau.common.kotlin.coroutines.mapWithScope
 import hnau.common.kotlin.coroutines.toMutableStateFlowAsInitial
-import hnau.common.kotlin.getOrInit
 import hnau.common.kotlin.map
 import hnau.common.kotlin.serialization.MutableStateFlowSerializer
-import hnau.common.kotlin.toAccessor
 import hnau.pinfin.data.BudgetId
 import hnau.pinfin.model.utils.budget.repository.BudgetRepository
 import hnau.pinfin.model.utils.budget.storage.BudgetsStorage
@@ -52,7 +50,6 @@ class SyncClientLoadBudgetModel(
     @Serializable
     data class Skeleton(
         val id: BudgetId,
-        var state: SyncClientBudgetModel.Skeleton? = null,
         val isStopSyncDialogVisible: MutableStateFlow<Boolean> =
             false.toMutableStateFlowAsInitial(),
     )
@@ -80,9 +77,6 @@ class SyncClientLoadBudgetModel(
                     id = skeleton.id,
                     repository = repository,
                 ),
-                skeleton = skeleton::state
-                    .toAccessor()
-                    .getOrInit { SyncClientBudgetModel.Skeleton() },
                 goBack = goBack,
             )
         }

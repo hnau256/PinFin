@@ -30,13 +30,11 @@ import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import kotlinx.serialization.Serializable
 import kotlinx.serialization.UseSerializers
 
 class BudgetsListModel(
     private val scope: CoroutineScope,
     private val dependencies: Dependencies,
-    private val skeleton: Skeleton,
 ) : GoBackHandlerProvider {
 
     @Pipe
@@ -54,11 +52,6 @@ class BudgetsListModel(
         ): BudgetItemModel.Dependencies
     }
 
-    @Serializable
-    data class Skeleton(
-        var itemSkeletons: Map<BudgetId, BudgetItemModel.Skeleton> = emptyMap(),
-    )
-
     fun openSync() {
         dependencies.syncOpener.openSync()
     }
@@ -71,7 +64,6 @@ class BudgetsListModel(
     private data class ItemInfoWithScope(
         val info: ItemInfo,
         val scope: CoroutineScope,
-        val skeleton: BudgetItemModel.Skeleton,
     )
 
     private fun updateItems(
@@ -85,10 +77,6 @@ class BudgetsListModel(
             itemsCache
                 .remove(id)
                 .ifNull {
-                    val skeleton = skeleton
-                        .itemSkeletons[id]
-                        ?: BudgetItemModel.Skeleton()
-
                     val itemScope = scope.createChild()
                     val model = BudgetItemModel(
                         scope = itemScope,
@@ -96,7 +84,6 @@ class BudgetsListModel(
                             id = id,
                             repository = repository,
                         ),
-                        skeleton = skeleton,
                     )
                     ItemInfoWithScope(
                         info = ItemInfo(
@@ -104,12 +91,10 @@ class BudgetsListModel(
                             model = model,
                         ),
                         scope = scope,
-                        skeleton = skeleton,
                     )
                 }
         }
         itemsCache.values.forEach { it.scope.cancel() }
-        skeleton.itemSkeletons = result.associate { it.info.id to it.skeleton }
         return result
     }
 
@@ -120,9 +105,6 @@ class BudgetsListModel(
             scope = scope,
             extractKey = Pair<BudgetId, *>::first,
             transform = { budgetScope, (id, repository) ->
-                val skeleton = skeleton
-                    .itemSkeletons[id]
-                    ?: BudgetItemModel.Skeleton()
 
                 val model = BudgetItemModel(
                     scope = budgetScope,
@@ -130,7 +112,6 @@ class BudgetsListModel(
                         id = id,
                         repository = repository,
                     ),
-                    skeleton = skeleton,
                 )
                 ItemInfo(
                     id = id,

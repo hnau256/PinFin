@@ -48,8 +48,6 @@ class AmountWithDirectionModel(
     interface Dependencies {
 
         val budgetRepository: BudgetRepository
-
-        fun amount(): AmountModel.Dependencies
     }
 
     @Serializable
@@ -83,7 +81,6 @@ class AmountWithDirectionModel(
 
     val amountModel = AmountModel(
         scope = scope,
-        dependencies = dependencies.amount(),
         skeleton = skeleton.delegate,
         isFocused = isFocused,
         requestFocus = requestFocus,

@@ -49,8 +49,6 @@ class CategoryStackModel(
     interface Dependencies {
 
         fun info(): CategoryModel.Dependencies
-
-        fun icon(): IconModel.Dependencies
     }
 
     val stack: StateFlow<NonEmptyStack<CategoryStackElementModel>> = run {
@@ -91,7 +89,6 @@ class CategoryStackModel(
             IconModel(
                 scope = modelScope,
                 skeleton = skeleton.skeleton,
-                dependencies = dependencies.icon(),
                 selected = this@CategoryStackModel.skeleton.icon.value,
                 onSelect = {icon ->
                     this@CategoryStackModel.skeleton.icon.value = icon

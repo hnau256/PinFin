@@ -20,15 +20,12 @@ import hnau.common.kotlin.coroutines.mapState
 import hnau.common.kotlin.coroutines.toMutableStateFlowAsInitial
 import hnau.common.kotlin.foldBoolean
 import hnau.common.kotlin.foldNullable
-import hnau.common.kotlin.getOrInit
 import hnau.common.kotlin.serialization.MutableStateFlowSerializer
-import hnau.common.kotlin.toAccessor
 import hnau.common.kotlin.toZipListOrNull
 import hnau.pinfin.data.Amount
 import hnau.pinfin.model.transaction.utils.Editable
 import hnau.pinfin.model.transaction.utils.RecordId
 import hnau.pinfin.model.transaction.utils.combineEditableWith
-import hnau.pinfin.model.transaction.utils.flatMap
 import hnau.pinfin.model.transaction.utils.map
 import hnau.pinfin.model.transaction.utils.remove
 import hnau.pinfin.model.utils.budget.state.CategoryInfo
@@ -38,7 +35,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.update
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.UseSerializers
@@ -56,13 +52,10 @@ class RecordsModel(
     interface Dependencies {
 
         fun record(): RecordModel.Dependencies
-
-        fun page(): Page.Dependencies
     }
 
     @Serializable
     data class Skeleton(
-        var page: Page.Skeleton? = null,
         val records: MutableStateFlow<ZipList<Pair<RecordId, RecordModel.Skeleton>>>,
     ) {
 
@@ -226,18 +219,10 @@ class RecordsModel(
 
     class Page(
         scope: CoroutineScope,
-        dependencies: Dependencies,
-        skeleton: Skeleton,
         val items: StateFlow<ZipList<Item>>,
         val currentRecord: StateFlow<Triple<Int, RecordId, RecordModel.Page>>,
         val addNewRecord: () -> Unit,
     ) {
-
-        @Pipe
-        interface Dependencies
-
-        @Serializable
-        /*data*/ class Skeleton
 
         val goBackHandler: GoBackHandler =
             currentRecord.flatMapState(scope) { it.third.goBackHandler }
@@ -247,10 +232,6 @@ class RecordsModel(
         scope: CoroutineScope,
     ): Page = Page(
         scope = scope,
-        dependencies = dependencies.page(),
-        skeleton = skeleton::page
-            .toAccessor()
-            .getOrInit { Page.Skeleton() },
         items = items,
         currentRecord = items
             .mapReusable(

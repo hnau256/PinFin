@@ -27,7 +27,6 @@ import kotlinx.datetime.LocalDate
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.atTime
 import kotlinx.datetime.toLocalDateTime
-import kotlinx.serialization.Serializable
 import kotlinx.serialization.UseSerializers
 import kotlin.math.absoluteValue
 import kotlin.time.Clock
@@ -35,7 +34,6 @@ import kotlin.time.Clock
 class CategoriesModel(
     scope: CoroutineScope,
     dependencies: Dependencies,
-    skeleton: Skeleton,
 ) : GoBackHandlerProvider {
 
     @Pipe
@@ -44,8 +42,6 @@ class CategoriesModel(
         val budgetsRepository: BudgetRepository
     }
 
-    @Serializable
-    /*data*/ class Skeleton
 
     data class State private constructor(
         val items: List<Item>,

@@ -14,10 +14,8 @@ import hnau.common.kotlin.coroutines.mapWithScope
 import hnau.common.kotlin.coroutines.toMutableStateFlowAsInitial
 import hnau.common.kotlin.foldBoolean
 import hnau.common.kotlin.foldNullable
-import hnau.common.kotlin.getOrInit
 import hnau.common.kotlin.ifTrue
 import hnau.common.kotlin.serialization.MutableStateFlowSerializer
-import hnau.common.kotlin.toAccessor
 import hnau.pinfin.data.CategoryId
 import hnau.pinfin.model.utils.budget.repository.BudgetRepository
 import hnau.pinfin.model.utils.budget.state.CategoryInfo
@@ -39,14 +37,11 @@ class SelectCategoriesModel(
     interface Dependencies {
 
         val budgetRepository: BudgetRepository
-
-        fun page(): Page.Dependencies
     }
 
     @Serializable
     data class Skeleton(
         val selectedCategories: MutableStateFlow<Set<CategoryId>>,
-        var page: Page.Skeleton? = null,
     ) {
 
         companion object {
@@ -63,8 +58,6 @@ class SelectCategoriesModel(
 
     class Page(
         scope: CoroutineScope,
-        dependencies: Dependencies,
-        skeleton: Skeleton,
         val categories: StateFlow<List<Category>>,
     ) {
 
@@ -73,11 +66,7 @@ class SelectCategoriesModel(
             val selected: MutableStateFlow<Boolean>,
         )
 
-        @Pipe
-        interface Dependencies
 
-        @Serializable
-        /*data*/ class Skeleton
 
         val goBackHandler: GoBackHandler
             get() = NeverGoBackHandler
@@ -175,10 +164,6 @@ class SelectCategoriesModel(
         scope: CoroutineScope,
     ): Page = Page(
         scope = scope,
-        dependencies = dependencies.page(),
-        skeleton = skeleton::page
-            .toAccessor()
-            .getOrInit { Page.Skeleton() },
         categories = categories,
     )
 

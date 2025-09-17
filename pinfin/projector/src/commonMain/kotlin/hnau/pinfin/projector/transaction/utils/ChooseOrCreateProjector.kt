@@ -34,7 +34,6 @@ import hnau.pinfin.model.transaction.utils.ChooseOrCreateModel
 import hnau.pinfin.projector.resources.Res
 import hnau.pinfin.projector.resources.search_create
 import hnau.pinfin.projector.utils.LabelDefaults
-import hnau.pipe.annotations.Pipe
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.StateFlow
 import org.jetbrains.compose.resources.stringResource
@@ -42,7 +41,6 @@ import org.jetbrains.compose.resources.stringResource
 class ChooseOrCreateProjector<T : Comparable<T>>(
     scope: CoroutineScope,
     private val model: ChooseOrCreateModel<T>,
-    dependencies: Dependencies,
     private val itemContent: @Composable (
         value: T,
         isSelected: StateFlow<Boolean>,
@@ -55,8 +53,6 @@ class ChooseOrCreateProjector<T : Comparable<T>>(
         itemContent(value, isSelected, onClick)
     }
 
-    @Pipe
-    interface Dependencies
 
     @Composable
     fun Content(

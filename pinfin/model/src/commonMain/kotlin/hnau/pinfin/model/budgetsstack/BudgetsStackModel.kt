@@ -31,7 +31,7 @@ class BudgetsStackModel(
     @Serializable
     data class Skeleton(
         val stack: MutableStateFlow<NonEmptyStack<BudgetsStackElementModel.Skeleton>> =
-            MutableStateFlow(NonEmptyStack(BudgetsStackElementModel.Skeleton.List())),
+            MutableStateFlow(NonEmptyStack(BudgetsStackElementModel.Skeleton.List)),
     )
 
     @Pipe
@@ -65,7 +65,6 @@ class BudgetsStackModel(
         is BudgetsStackElementModel.Skeleton.List -> BudgetsStackElementModel.List(
             BudgetsListModel(
                 scope = modelScope,
-                skeleton = skeleton.skeleton,
                 dependencies = dependencies.list(
                     syncOpener = {
                         this@BudgetsStackModel

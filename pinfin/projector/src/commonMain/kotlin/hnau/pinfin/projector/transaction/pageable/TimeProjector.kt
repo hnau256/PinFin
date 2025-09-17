@@ -39,11 +39,8 @@ class TimeProjector(
     class Page(
         scope: CoroutineScope,
         private val model: TimeModel.Page,
-        dependencies: Dependencies,
     ) {
 
-        @Pipe
-        interface Dependencies
 
         @OptIn(ExperimentalMaterial3Api::class)
         @Composable

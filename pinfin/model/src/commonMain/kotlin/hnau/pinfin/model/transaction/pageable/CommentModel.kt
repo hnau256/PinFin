@@ -13,9 +13,7 @@ import hnau.common.kotlin.Loadable
 import hnau.common.kotlin.coroutines.Delayed
 import hnau.common.kotlin.coroutines.mapState
 import hnau.common.kotlin.coroutines.toMutableStateFlowAsInitial
-import hnau.common.kotlin.getOrInit
 import hnau.common.kotlin.serialization.MutableStateFlowSerializer
-import hnau.common.kotlin.toAccessor
 import hnau.pinfin.data.Comment
 import hnau.pinfin.model.transaction.utils.Editable
 import hnau.pinfin.model.utils.budget.repository.BudgetRepository
@@ -25,7 +23,6 @@ import hnau.pipe.annotations.Pipe
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.UseSerializers
 import kotlin.time.Instant
@@ -48,7 +45,6 @@ class CommentModel(
 
     @Serializable
     data class Skeleton(
-        var page: Page.Skeleton? = null,
         val initialComment: Comment?,
         val comment: MutableStateFlow<EditingString> =
             initialComment?.text.orEmpty().toEditingString().toMutableStateFlowAsInitial(),
@@ -71,7 +67,6 @@ class CommentModel(
     class Page(
         scope: CoroutineScope,
         dependencies: Dependencies,
-        skeleton: Skeleton,
         val comment: MutableStateFlow<EditingString>,
         extractSuggests: suspend (BudgetState) -> List<Pair<Comment, Instant>>,
         private val goForward: () -> Unit,
@@ -83,8 +78,6 @@ class CommentModel(
             val budgetRepository: BudgetRepository
         }
 
-        @Serializable
-        /*data*/ class Skeleton
 
         data class Suggest(
             val comment: Comment,
@@ -120,9 +113,6 @@ class CommentModel(
     ): Page = Page(
         scope = scope,
         dependencies = dependencies.page(),
-        skeleton = skeleton::page
-            .toAccessor()
-            .getOrInit { Page.Skeleton() },
         comment = skeleton.comment,
         extractSuggests = extractSuggests,
         goForward = goForward,

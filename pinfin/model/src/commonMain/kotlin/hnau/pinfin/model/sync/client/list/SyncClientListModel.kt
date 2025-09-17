@@ -26,12 +26,10 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
-import kotlinx.serialization.Serializable
 
 class SyncClientListModel(
     scope: CoroutineScope,
     private val dependencies: Dependencies,
-    skeleton: Skeleton,
 ) : GoBackHandlerProvider {
 
     @Pipe
@@ -44,8 +42,6 @@ class SyncClientListModel(
         fun item(): SyncClientListItemModel.Dependencies
     }
 
-    @Serializable
-    /*data*/ class Skeleton
 
     private val serverBudgetsRequestIndex: MutableStateFlow<Int> =
         0.toMutableStateFlowAsInitial()

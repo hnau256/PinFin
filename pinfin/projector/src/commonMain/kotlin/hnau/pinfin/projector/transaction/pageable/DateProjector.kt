@@ -45,11 +45,8 @@ class DateProjector(
     class Page(
         scope: CoroutineScope,
         private val model: DateModel.Page,
-        dependencies: Dependencies,
     ) {
 
-        @Pipe
-        interface Dependencies
 
         @OptIn(ExperimentalMaterial3Api::class)
         @Composable

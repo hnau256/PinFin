@@ -17,18 +17,14 @@ import hnau.pinfin.projector.resources.remove_transaction
 import hnau.pinfin.projector.resources.save
 import hnau.pinfin.projector.resources.save_changes
 import hnau.pinfin.projector.resources.yes
-import hnau.pipe.annotations.Pipe
 import kotlinx.coroutines.CoroutineScope
 import org.jetbrains.compose.resources.stringResource
 
 class DialogsProjector(
     scope: CoroutineScope,
-    dependencies: Dependencies,
     private val model: TransactionModel,
 ) {
 
-    @Pipe
-    interface Dependencies
 
     @Composable
     fun Content() {

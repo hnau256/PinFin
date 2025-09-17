@@ -9,13 +9,10 @@ import hnau.common.app.model.goback.GoBackHandler
 import hnau.common.app.model.goback.NeverGoBackHandler
 import hnau.common.kotlin.coroutines.mapState
 import hnau.common.kotlin.foldNullable
-import hnau.common.kotlin.getOrInit
 import hnau.common.kotlin.serialization.MutableStateFlowSerializer
-import hnau.common.kotlin.toAccessor
 import hnau.pinfin.data.Amount
 import hnau.pinfin.model.transaction.utils.Editable
 import hnau.pinfin.model.transaction.utils.valueOrNone
-import hnau.pipe.annotations.Pipe
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.serialization.Serializable
@@ -24,24 +21,14 @@ import hnau.pinfin.model.AmountModel as CommonAmountModel
 
 class AmountModel(
     scope: CoroutineScope,
-    private val dependencies: Dependencies,
     private val skeleton: Skeleton,
     val isFocused: StateFlow<Boolean>,
     val requestFocus: () -> Unit,
     val goForward: () -> Unit,
 ) {
 
-    @Pipe
-    interface Dependencies {
-
-        fun common(): CommonAmountModel.Dependencies
-
-        fun page(): Page.Dependencies
-    }
-
     @Serializable
     data class Skeleton(
-        var page: Page.Skeleton? = null,
         val initialAmount: Amount?,
         val delegate: CommonAmountModel.Skeleton = initialAmount.foldNullable(
             ifNull = { CommonAmountModel.Skeleton.empty },
@@ -69,23 +56,14 @@ class AmountModel(
 
     private val delegate: CommonAmountModel = CommonAmountModel(
         scope = scope,
-        dependencies = dependencies.common(),
         skeleton = skeleton.delegate,
     )
 
     class Page(
         scope: CoroutineScope,
-        dependencies: Dependencies,
-        skeleton: Skeleton,
         val delegate: CommonAmountModel,
         val goForward: () -> Unit,
     ) {
-
-        @Pipe
-        interface Dependencies
-
-        @Serializable
-        /*data*/ class Skeleton
 
         val goBackHandler: GoBackHandler
             get() = delegate.goBackHandler
@@ -95,10 +73,6 @@ class AmountModel(
         scope: CoroutineScope,
     ): Page = Page(
         scope = scope,
-        dependencies = dependencies.page(),
-        skeleton = skeleton::page
-            .toAccessor()
-            .getOrInit { Page.Skeleton() },
         delegate = delegate,
         goForward = goForward,
     )

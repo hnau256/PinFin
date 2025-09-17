@@ -43,10 +43,6 @@ class TransactionProjector(
 
         fun page(): PageProjector.Dependencies
 
-        fun dialogs(): DialogsProjector.Dependencies
-
-        fun topBarActions(): TopBarActionsProjector.Dependencies
-
         val globalGoBackHandler: GlobalGoBackHandler
     }
 
@@ -77,13 +73,11 @@ class TransactionProjector(
     private val dialogs = DialogsProjector(
         scope = scope,
         model = model,
-        dependencies = dependencies.dialogs(),
     )
 
     private val topBarActions = TopBarActionsProjector(
         scope = scope,
         model = model,
-        dependencies = dependencies.topBarActions(),
     )
 
     @OptIn(ExperimentalMaterial3Api::class)

@@ -60,8 +60,6 @@ class BudgetsListProjector(
     @Pipe
     interface Dependencies {
 
-        fun item(): BudgetItemProjector.Dependencies
-
         val globalGoBackHandler: GlobalGoBackHandler
     }
 
@@ -74,7 +72,6 @@ class BudgetsListProjector(
                         BudgetItemProjector(
                             scope = itemProjectorScope,
                             model = item.model,
-                            dependencies = dependencies.item(),
                         )
                     }
                 }

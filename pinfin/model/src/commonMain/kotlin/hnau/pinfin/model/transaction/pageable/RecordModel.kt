@@ -12,9 +12,7 @@ import hnau.common.kotlin.coroutines.mapState
 import hnau.common.kotlin.coroutines.mapWithScope
 import hnau.common.kotlin.coroutines.toMutableStateFlowAsInitial
 import hnau.common.kotlin.foldNullable
-import hnau.common.kotlin.getOrInit
 import hnau.common.kotlin.serialization.MutableStateFlowSerializer
-import hnau.common.kotlin.toAccessor
 import hnau.pinfin.data.Amount
 import hnau.pinfin.data.Comment
 import hnau.pinfin.model.transaction.utils.ChooseOrCreateModel
@@ -98,13 +96,10 @@ class RecordModel(
         fun category(): CategoryModel.Dependencies
 
         fun amount(): AmountWithDirectionModel.Dependencies
-
-        fun page(): Page.Dependencies
     }
 
     @Serializable
     data class Skeleton(
-        var page: Page.Skeleton? = null,
         val part: MutableStateFlow<Part> = Part.default.toMutableStateFlowAsInitial(),
         val comment: CommentModel.Skeleton,
         val category: CategoryModel.Skeleton,
@@ -276,20 +271,12 @@ class RecordModel(
 
     class Page(
         scope: CoroutineScope,
-        dependencies: Dependencies,
-        skeleton: Skeleton,
         val comment: CommentModel,
         val category: CategoryModel,
         val amount: AmountWithDirectionModel,
         val page: StateFlow<PageType>,
         val remove: StateFlow<(() -> Unit)?>,
     ) {
-
-        @Pipe
-        interface Dependencies
-
-        @Serializable
-        /*data*/ class Skeleton
 
         val goBackHandler: GoBackHandler =
             page.flatMapState(scope, PageType::goBackHandler)
@@ -300,10 +287,6 @@ class RecordModel(
         usedCategories: StateFlow<Set<CategoryInfo>>,
     ): Page = Page(
         scope = scope,
-        dependencies = dependencies.page(),
-        skeleton = skeleton::page
-            .toAccessor()
-            .getOrInit { Page.Skeleton() },
         remove = remove,
         comment = comment,
         category = category,

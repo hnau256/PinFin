@@ -108,10 +108,6 @@ class TransactionModel(
 
         fun type(): TypeModel.Dependencies
 
-        fun date(): DateModel.Dependencies
-
-        fun time(): TimeModel.Dependencies
-
         fun comment(): CommentModel.Dependencies
     }
 
@@ -206,7 +202,6 @@ class TransactionModel(
 
     val date = DateModel(
         scope = scope,
-        dependencies = dependencies.date(),
         skeleton = skeleton.date,
         isFocused = isPartFocused(Part.Date),
         requestFocus = createRequestFocus(Part.Date),
@@ -215,7 +210,6 @@ class TransactionModel(
 
     val time = TimeModel(
         scope = scope,
-        dependencies = dependencies.time(),
         skeleton = skeleton.time,
         isFocused = isPartFocused(Part.Time),
         requestFocus = createRequestFocus(Part.Time),

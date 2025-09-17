@@ -50,8 +50,6 @@ class SyncClientListProjector(
     interface Dependencies {
 
         val globalGoBackHandler: GlobalGoBackHandler
-
-        fun item(): SyncClientListItemProjector.Dependencies
     }
 
     private val globalGoBackHandler: GoBackHandler = dependencies
@@ -69,7 +67,6 @@ class SyncClientListProjector(
                                 val itemProjector = SyncClientListItemProjector(
                                     scope = itemScope,
                                     model = item,
-                                    dependencies = dependencies.item(),
                                 )
                                 id to itemProjector
                             }

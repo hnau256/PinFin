@@ -19,17 +19,13 @@ import hnau.common.app.projector.uikit.table.TableOrientation
 import hnau.common.app.projector.uikit.utils.Dimens
 import hnau.pinfin.model.budgetslist.item.BudgetItemModel
 import hnau.pinfin.projector.utils.BidgetInfoContent
-import hnau.pipe.annotations.Pipe
 import kotlinx.coroutines.CoroutineScope
 
 class BudgetItemProjector(
     scope: CoroutineScope,
     private val model: BudgetItemModel,
-    dependencies: Dependencies,
 ) {
 
-    @Pipe
-    interface Dependencies
 
     @Composable
     fun Content() {

@@ -37,7 +37,6 @@ class AnalyticsModel(
         val selectedTab: MutableStateFlow<AnalyticsTab> =
             AnalyticsTab.default.toMutableStateFlowAsInitial(),
         val accounts: AccountsModel.Skeleton = AccountsModel.Skeleton(),
-        val categories: CategoriesModel.Skeleton = CategoriesModel.Skeleton(),
     )
 
     val accounts: AccountsModel = AccountsModel(
@@ -49,7 +48,6 @@ class AnalyticsModel(
     val categories: CategoriesModel = CategoriesModel(
         scope = scope,
         dependencies = dependencies.categories(),
-        skeleton = skeleton.categories
     )
 
     val selectedTab: MutableStateFlow<AnalyticsTab>

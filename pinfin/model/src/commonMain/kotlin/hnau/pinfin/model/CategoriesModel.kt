@@ -17,13 +17,11 @@ import hnau.pinfin.model.utils.budget.state.CategoryInfo
 import hnau.pipe.annotations.Pipe
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.serialization.Serializable
 import kotlinx.serialization.UseSerializers
 
 class CategoriesModel(
     scope: CoroutineScope,
     private val dependencies: Dependencies,
-    skeleton: Skeleton,
 ) : GoBackHandlerProvider {
 
     @Pipe
@@ -34,8 +32,6 @@ class CategoriesModel(
         val budgetStackOpener: BudgetStackOpener
     }
 
-    @Serializable
-    /*data*/ class Skeleton
 
     data class Item(
         val info: CategoryInfo,

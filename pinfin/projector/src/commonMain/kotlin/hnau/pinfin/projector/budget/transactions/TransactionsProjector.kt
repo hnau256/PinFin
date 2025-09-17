@@ -39,16 +39,13 @@ import org.jetbrains.compose.resources.stringResource
 import kotlin.uuid.ExperimentalUuidApi
 
 class TransactionsProjector(
-    private val scope: CoroutineScope,
+    scope: CoroutineScope,
     private val model: TransactionsModel,
     private val dependencies: Dependencies,
 ) {
 
     @Pipe
     interface Dependencies {
-
-        //TODO remove
-        //val bubblesShower: BubblesShower
 
         val dateTimeFormatter: DateTimeFormatter
 

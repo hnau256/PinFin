@@ -33,9 +33,7 @@ sealed interface BudgetsStackElementModel : GoBackHandlerProvider {
 
         @Serializable
         @SerialName("list")
-        data class List(
-            val skeleton: BudgetsListModel.Skeleton = BudgetsListModel.Skeleton(),
-        ) : Skeleton {
+        data object List : Skeleton {
 
             override val key: Int
                 get() = 0

@@ -26,12 +26,6 @@ class PageProjector(
     @Pipe
     interface Dependencies {
 
-        fun date(): DateProjector.Page.Dependencies
-
-        fun time(): TimeProjector.Page.Dependencies
-
-        fun comment(): CommentProjector.Page.Dependencies
-
         fun type(): TypeProjector.Page.Dependencies
     }
 
@@ -116,7 +110,6 @@ class PageProjector(
                     projector = DateProjector.Page(
                         scope = pageScope,
                         model = model.model,
-                        dependencies = dependencies.date(),
                     )
                 )
 
@@ -124,7 +117,6 @@ class PageProjector(
                     projector = CommentProjector.Page(
                         scope = pageScope,
                         model = model.model,
-                        dependencies = dependencies.comment(),
                     )
                 )
 
@@ -132,7 +124,6 @@ class PageProjector(
                     projector = TimeProjector.Page(
                         scope = pageScope,
                         model = model.model,
-                        dependencies = dependencies.time(),
                     )
                 )
 

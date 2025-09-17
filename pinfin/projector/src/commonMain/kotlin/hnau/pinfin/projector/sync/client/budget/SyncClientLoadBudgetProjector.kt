@@ -40,8 +40,6 @@ class SyncClientLoadBudgetProjector(
     @Pipe
     interface Dependencies {
 
-        fun budget(): SyncClientBudgetProjector.Dependencies
-
         val globalGoBackHandler: GlobalGoBackHandler
     }
 
@@ -55,7 +53,6 @@ class SyncClientLoadBudgetProjector(
             stateOrLoading.map { state ->
                 SyncClientBudgetProjector(
                     scope = stateScope,
-                    dependencies = dependencies.budget(),
                     model = state,
                 )
             }

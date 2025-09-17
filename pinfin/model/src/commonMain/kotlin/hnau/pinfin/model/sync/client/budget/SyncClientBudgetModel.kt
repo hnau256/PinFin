@@ -26,13 +26,11 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.withContext
-import kotlinx.serialization.Serializable
 import kotlinx.serialization.UseSerializers
 
 class SyncClientBudgetModel(
     scope: CoroutineScope,
     private val dependencies: Dependencies,
-    skeleton: Skeleton,
     goBack: () -> Unit,
 ) : GoBackHandlerProvider {
 
@@ -46,8 +44,6 @@ class SyncClientBudgetModel(
         val tcpSyncClient: TcpSyncClient
     }
 
-    @Serializable
-    /*data*/ class Skeleton
 
     private val synchronizationAttempt: MutableStateFlow<Int> =
         0.toMutableStateFlowAsInitial()

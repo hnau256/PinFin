@@ -107,9 +107,7 @@ sealed interface BudgetStackElementModel {
 
         @Serializable
         @SerialName("categories")
-        data class Categories(
-            val skeleton: CategoriesModel.Skeleton,
-        ) : Skeleton {
+        data object Categories : Skeleton {
 
             override val key: Int
                 get() = 3

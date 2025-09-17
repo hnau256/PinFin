@@ -115,7 +115,6 @@ class BudgetStackModel(
         is BudgetStackElementModel.Skeleton.Categories -> BudgetStackElementModel.Categories(
             CategoriesModel(
                 scope = modelScope,
-                skeleton = skeleton.skeleton,
                 dependencies = dependenciesWithOpeners.categories(),
             )
         )

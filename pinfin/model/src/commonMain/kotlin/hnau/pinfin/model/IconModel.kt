@@ -24,7 +24,6 @@ import hnau.pinfin.model.utils.icons.IconVariant
 import hnau.pinfin.model.utils.icons.category
 import hnau.pinfin.model.utils.icons.tags
 import hnau.pinfin.model.utils.icons.weight
-import hnau.pipe.annotations.Pipe
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -39,14 +38,11 @@ import kotlinx.serialization.UseSerializers
 
 class IconModel(
     scope: CoroutineScope,
-    dependencies: Dependencies,
     private val skeleton: Skeleton,
     private val selected: IconVariant?,
     val onSelect: (IconVariant) -> Unit,
 ) : GoBackHandlerProvider {
 
-    @Pipe
-    interface Dependencies
 
     @Serializable
     data class Skeleton(

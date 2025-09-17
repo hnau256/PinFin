@@ -12,7 +12,6 @@ import hnau.common.kotlin.coroutines.mapState
 import hnau.common.kotlin.coroutines.toMutableStateFlowAsInitial
 import hnau.common.kotlin.serialization.MutableStateFlowSerializer
 import hnau.pinfin.data.Amount
-import hnau.pipe.annotations.Pipe
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -22,7 +21,6 @@ import kotlinx.serialization.UseSerializers
 class AmountModel(
     private val scope: CoroutineScope,
     private val skeleton: Skeleton,
-    private val dependencies: Dependencies,
 ) : GoBackHandlerProvider {
 
     @Serializable
@@ -57,8 +55,6 @@ class AmountModel(
         val input: EditingString?,
     )
 
-    @Pipe
-    interface Dependencies
 
     val state: MutableStateFlow<State>
         get() = skeleton.state

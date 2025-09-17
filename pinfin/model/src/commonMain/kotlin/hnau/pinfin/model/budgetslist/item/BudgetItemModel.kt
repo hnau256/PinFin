@@ -11,12 +11,10 @@ import hnau.pipe.annotations.Pipe
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
-import kotlinx.serialization.Serializable
 
 class BudgetItemModel(
     private val scope: CoroutineScope,
     private val dependencies: Dependencies,
-    private val skeleton: Skeleton,
 ) {
 
     @Pipe
@@ -29,8 +27,6 @@ class BudgetItemModel(
         val budgetOpener: BudgetOpener
     }
 
-    @Serializable
-    /*data*/ class Skeleton
 
     private val inProgressRegistry = InProgressRegistry()
 

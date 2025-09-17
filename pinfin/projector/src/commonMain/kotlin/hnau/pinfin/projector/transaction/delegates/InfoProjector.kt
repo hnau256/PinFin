@@ -37,8 +37,6 @@ class InfoProjector(
         fun date(): DateProjector.Dependencies
 
         fun time(): TimeProjector.Dependencies
-
-        fun comment(): CommentProjector.Dependencies
     }
 
     private val date = DateProjector(
@@ -55,7 +53,6 @@ class InfoProjector(
 
     private val comment = CommentProjector(
         scope = scope,
-        dependencies = dependencies.comment(),
         model = model.comment,
     )
 

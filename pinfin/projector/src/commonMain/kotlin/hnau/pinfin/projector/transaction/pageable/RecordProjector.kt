@@ -64,8 +64,6 @@ class RecordProjector(
 
         val amountFormatter: AmountFormatter
 
-        fun category(): CategoryProjector.Dependencies
-
         fun amount(): AmountWithDirectionProjector.Dependencies
     }
 
@@ -78,15 +76,7 @@ class RecordProjector(
         @Pipe
         interface Dependencies {
 
-            fun commentPage(): CommentProjector.Page.Dependencies
-
-            fun chooseOrCreate(): ChooseOrCreateProjector.Dependencies
-
             fun amountPage(): AmountProjector.Page.Dependencies
-
-            fun comment(): CommentProjector.Dependencies
-
-            fun category(): CategoryProjector.Dependencies
 
             fun amount(): AmountWithDirectionProjector.Dependencies
 
@@ -176,7 +166,6 @@ class RecordProjector(
                     is RecordModel.PageType.Category -> PageType.Category(
                         projector = CategoryProjector.createPage(
                             scope = scope,
-                            dependencies = dependencies.chooseOrCreate(),
                             model = type.model,
                         )
                     )
@@ -184,7 +173,6 @@ class RecordProjector(
                     is RecordModel.PageType.Comment -> PageType.Comment(
                         projector = CommentProjector.Page(
                             scope = scope,
-                            dependencies = dependencies.commentPage(),
                             model = type.model,
                         )
                     )
@@ -217,13 +205,11 @@ class RecordProjector(
 
         private val comment = CommentProjector(
             scope = scope,
-            dependencies = dependencies.comment(),
             model = model.comment,
         )
 
         private val category = CategoryProjector(
             scope = scope,
-            dependencies = dependencies.category(),
             model = model.category,
         )
 

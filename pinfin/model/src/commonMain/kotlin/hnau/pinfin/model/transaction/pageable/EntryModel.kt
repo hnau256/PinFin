@@ -12,9 +12,7 @@ import hnau.common.kotlin.coroutines.mapWithScope
 import hnau.common.kotlin.coroutines.toMutableStateFlowAsInitial
 import hnau.common.kotlin.foldBoolean
 import hnau.common.kotlin.foldNullable
-import hnau.common.kotlin.getOrInit
 import hnau.common.kotlin.serialization.MutableStateFlowSerializer
-import hnau.common.kotlin.toAccessor
 import hnau.pinfin.data.Amount
 import hnau.pinfin.model.transaction.utils.ChooseOrCreateModel
 import hnau.pinfin.model.transaction.utils.Editable
@@ -81,14 +79,11 @@ class EntryModel(
         fun account(): AccountModel.Dependencies
 
         fun records(): RecordsModel.Dependencies
-
-        fun page(): Page.Dependencies
     }
 
     @Serializable
     data class Skeleton(
         val part: MutableStateFlow<Part> = Part.default.toMutableStateFlowAsInitial(),
-        var page: Page.Skeleton? = null,
         val account: AccountModel.Skeleton,
         val records: RecordsModel.Skeleton,
     ) {
@@ -173,16 +168,8 @@ class EntryModel(
 
     class Page(
         scope: CoroutineScope,
-        dependencies: Dependencies,
-        skeleton: Skeleton,
         val page: StateFlow<PageType>,
     ) {
-
-        @Pipe
-        interface Dependencies
-
-        @Serializable
-        /*data*/ class Skeleton
 
         val goBackHandler: GoBackHandler =
             page.flatMapState(scope, PageType::goBackHandler)
@@ -192,10 +179,6 @@ class EntryModel(
         scope: CoroutineScope,
     ): Page = Page(
         scope = scope,
-        dependencies = dependencies.page(),
-        skeleton = skeleton::page
-            .toAccessor()
-            .getOrInit { Page.Skeleton() },
         page = skeleton
             .part
             .mapWithScope(scope) { partScope, part ->

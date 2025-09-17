@@ -66,7 +66,7 @@ class SyncClientStackModel(
         val port: ServerPort,
         val address: ServerAddress,
         val stack: MutableStateFlow<NonEmptyStack<SyncClientStackElementModel.Skeleton>> =
-            MutableStateFlow(NonEmptyStack(SyncClientStackElementModel.Skeleton.List())),
+            MutableStateFlow(NonEmptyStack(SyncClientStackElementModel.Skeleton.List)),
     )
 
     val stack: StateFlow<NonEmptyStack<SyncClientStackElementModel>> = run {
@@ -90,7 +90,6 @@ class SyncClientStackModel(
         is SyncClientStackElementModel.Skeleton.List -> SyncClientStackElementModel.List(
             SyncClientListModel(
                 scope = modelScope,
-                skeleton = skeleton.skeleton,
                 dependencies = dependenciesWithSyncClient.list(
                     budgetOpener = { budgetId ->
                         this@SyncClientStackModel
