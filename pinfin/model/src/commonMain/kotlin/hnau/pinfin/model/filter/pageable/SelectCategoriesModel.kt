@@ -31,6 +31,8 @@ class SelectCategoriesModel(
     scope: CoroutineScope,
     dependencies: Dependencies,
     private val skeleton: Skeleton,
+    val isFocused: StateFlow<Boolean>,
+    val requestFocus: () -> Unit,
 ) {
 
     @Pipe

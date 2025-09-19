@@ -21,7 +21,6 @@ class RootProjector(
     interface Dependencies {
 
         fun loadBudgets(
-            //bubblesShower: BubblesShower,
             dateTimeFormatter: DateTimeFormatter,
             amountFormatter: AmountFormatter,
         ): LoadBudgetsProjector.Dependencies

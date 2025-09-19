@@ -16,7 +16,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.serialization.Serializable
 
 class FilterModel(
-    scope: CoroutineScope,
+    private val scope: CoroutineScope,
     dependencies: Dependencies,
     private val skeleton: Skeleton,
 ) {
@@ -69,7 +69,6 @@ class FilterModel(
     }
 
     class Page(
-        scope: CoroutineScope,
         val type: StateFlow<Type>,
     ) {
 
@@ -85,14 +84,26 @@ class FilterModel(
                     get() = Tab.SelectedCategories
             }
         }
+    }
 
+    private fun createIsFocused(
+        tab: Tab,
+    ): StateFlow<Boolean> = skeleton
+        .selectedTab
+        .mapState(scope) { it == tab }
 
+    private fun createRequestFocus(
+        tab: Tab,
+    ): () -> Unit = {
+        skeleton.selectedTab.value = tab
     }
 
     val categories = SelectCategoriesModel(
         scope = scope,
         dependencies = dependencies.categories(),
         skeleton = skeleton.categories,
+        isFocused = createIsFocused(Tab.SelectedCategories),
+        requestFocus = createRequestFocus(Tab.SelectedCategories),
     )
 
     val filters: StateFlow<Filters> = categories
@@ -106,10 +117,9 @@ class FilterModel(
     val page: StateFlow<Page?> = skeleton
         .selectedTab
         .stickNotNull(scope)
-        .mapWithScope(scope) { scope, selectedTabOrNull ->
+        .mapState(scope) { selectedTabOrNull ->
             selectedTabOrNull?.let { selectedTab ->
                 Page(
-                    scope = scope,
                     type = selectedTab.mapWithScope(scope) { scope, tab ->
                         when (tab) {
                             Tab.SelectedCategories -> Page.Type.Categories(
