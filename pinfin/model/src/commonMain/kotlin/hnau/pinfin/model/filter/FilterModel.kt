@@ -120,10 +120,10 @@ class FilterModel(
         .mapState(scope) { selectedTabOrNull ->
             selectedTabOrNull?.let { selectedTab ->
                 Page(
-                    type = selectedTab.mapWithScope(scope) { scope, tab ->
+                    type = selectedTab.mapState(scope) { tab ->
                         when (tab) {
                             Tab.SelectedCategories -> Page.Type.Categories(
-                                categories.createPage(scope),
+                                categories.createPage(),
                             )
                         }
                     }

@@ -59,7 +59,6 @@ class SelectCategoriesModel(
     }
 
     class Page(
-        scope: CoroutineScope,
         val categories: StateFlow<List<Category>>,
     ) {
 
@@ -162,10 +161,7 @@ class SelectCategoriesModel(
             categories.map { category -> category.id }
         }
 
-    fun createPage(
-        scope: CoroutineScope,
-    ): Page = Page(
-        scope = scope,
+    fun createPage(): Page = Page(
         categories = categories,
     )
 
