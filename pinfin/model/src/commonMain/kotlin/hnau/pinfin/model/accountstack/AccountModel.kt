@@ -104,9 +104,9 @@ class AccountModel(
         }
 
     val save: StateFlow<StateFlow<(() -> Unit)?>?> = config
-        .mapWithScope(scope) { configScope, configOrNull ->
+        .mapWithScope(scope) { scope, configOrNull ->
             configOrNull?.let { config ->
-                actionOrNullIfExecuting(configScope) {
+                actionOrNullIfExecuting(scope) {
                     dependencies
                         .budgetRepository
                         .accounts

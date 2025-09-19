@@ -172,11 +172,11 @@ class TypeProjector(
 
         private val type: StateFlow<Type> = model
             .page
-            .mapWithScope(scope) { typeScope, type ->
+            .mapWithScope(scope) { scope, type ->
                 when (type) {
                     is TypeModel.Page.Type.Entry -> Type.Entry(
                         projector = EntryProjector.Page(
-                            scope = typeScope,
+                            scope = scope,
                             dependencies = dependencies.entry(),
                             model = type.model,
                         )
@@ -184,7 +184,7 @@ class TypeProjector(
 
                     is TypeModel.Page.Type.Transfer -> Type.Transfer(
                         projector = TransferProjector.Page(
-                            scope = typeScope,
+                            scope = scope,
                             dependencies = dependencies.transfer(),
                             model = type.model,
                         )
@@ -237,11 +237,11 @@ class TypeProjector(
     private val type: StateFlow<Type> = model
         .type
         .typeModel
-        .mapWithScope(scope) { typeScope, model ->
+        .mapWithScope(scope) { scope, model ->
             when (model) {
                 is TypeModel.Type.Entry -> Type.Entry(
                     projector = EntryProjector(
-                        scope = typeScope,
+                        scope = scope,
                         model = model.model,
                         dependencies = dependencies.entry(),
                     )

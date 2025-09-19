@@ -69,10 +69,10 @@ class SyncClientLoadBudgetModel(
                     ?.second
             }
             .first()
-    }.mapWithScope(scope) { repositoryScope, repositoryOrLoading ->
+    }.mapWithScope(scope) { scope, repositoryOrLoading ->
         repositoryOrLoading.map { repository ->
             SyncClientBudgetModel(
-                scope = repositoryScope,
+                scope = scope,
                 dependencies = dependencies.budget(
                     id = skeleton.id,
                     repository = repository,
@@ -96,11 +96,11 @@ class SyncClientLoadBudgetModel(
         { skeleton.isStopSyncDialogVisible.update(Boolean::not) }.toMutableStateFlowAsInitial()
 
     override val goBackHandler: GoBackHandler = state
-        .flatMapWithScope(scope) { budgetScope, budgetOrLoading ->
+        .flatMapWithScope(scope) { scope, budgetOrLoading ->
             when (budgetOrLoading) {
                 Loading -> fallbackGoBackHandler
                 is Ready -> budgetOrLoading.value.goBackHandler.fallback(
-                    scope = budgetScope,
+                    scope = scope,
                     fallback = fallbackGoBackHandler
                 )
             }

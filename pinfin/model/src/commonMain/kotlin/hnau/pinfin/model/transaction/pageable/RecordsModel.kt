@@ -187,12 +187,12 @@ class RecordsModel(
         }
 
     private val usedCategories: StateFlow<Set<CategoryInfo>> = items
-        .flatMapWithScope(scope) { itemsScope, items ->
+        .flatMapWithScope(scope) { scope, items ->
             items.fold(
                 initial = MutableStateFlow(emptySet<CategoryInfo>()).asStateFlow(),
             ) { acc, item ->
                 combineState(
-                    scope = itemsScope,
+                    scope = scope,
                     a = acc,
                     b = item.model.category.categoryEditable,
                 ) { acc, categoryOrIncorrect ->
@@ -278,13 +278,13 @@ class RecordsModel(
         .foldNullable(
             ifNull = { this },
             ifNotNull = { nonEmptyRemaining ->
-                flatMapWithScope(scope) { recordsScope, recordsOrIncorrect ->
+                flatMapWithScope(scope) { scope, recordsOrIncorrect ->
                     when (recordsOrIncorrect) {
                         Editable.Incorrect -> Editable.Incorrect.toMutableStateFlowAsInitial()
                         is Editable.Value<NonEmptyList<TransactionInfo.Type.Entry.Record>> -> nonEmptyRemaining
                             .head
                             .record
-                            .mapState(recordsScope) { headRecordOrNull ->
+                            .mapState(scope) { headRecordOrNull ->
                                 recordsOrIncorrect.combineEditableWith(
                                     other = headRecordOrNull,
                                 ) { acc, record ->
@@ -292,7 +292,7 @@ class RecordsModel(
                                 }
                             }
                             .add(
-                                scope = recordsScope,
+                                scope = scope,
                                 remaining = nonEmptyRemaining.tail,
                             )
                     }
@@ -300,18 +300,18 @@ class RecordsModel(
             }
         )
 
-    val goBackHandler: GoBackHandler = items.flatMapWithScope(scope) { itemsScope, items ->
+    val goBackHandler: GoBackHandler = items.flatMapWithScope(scope) { scope, items ->
         items
             .selected
             .model
             .goBackHandler
-            .flatMapWithScope(itemsScope) { recordGoBackScope, recordGoBackOrNull ->
+            .flatMapWithScope(scope) { scope, recordGoBackOrNull ->
                 recordGoBackOrNull.foldNullable(
                     ifNotNull = { it.toMutableStateFlowAsInitial() },
                     ifNull = {
                         skeleton
                             .records
-                            .mapState(recordGoBackScope) { records ->
+                            .mapState(scope) { records ->
                                 records
                                     .back()
                                     ?.let { newRecords ->

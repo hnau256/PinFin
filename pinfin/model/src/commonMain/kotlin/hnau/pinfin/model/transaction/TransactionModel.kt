@@ -447,10 +447,10 @@ class TransactionModel(
 
 
     val goBackHandler: GoBackHandler = pageType
-        .flatMapWithScope(scope) { pageScope, partWithPage ->
+        .flatMapWithScope(scope) { scope, partWithPage ->
             val (part, pageModel) = partWithPage
             pageModel.goBackHandler
-                .flatMapWithScope(pageScope) { scope, goBack ->
+                .flatMapWithScope(scope) { scope, goBack ->
                     goBack.foldNullable(
                         ifNotNull = { it.toMutableStateFlowAsInitial() },
                         ifNull = {

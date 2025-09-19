@@ -49,8 +49,8 @@ class SyncClientListModel(
     @OptIn(ExperimentalCoroutinesApi::class)
     private val serverBudgets: StateFlow<Loadable<Result<List<SyncHandle.GetBudgets.Response.Budget>>>> =
         serverBudgetsRequestIndex
-            .flatMapWithScope(scope) { attemptScope, _ ->
-                LoadableStateFlow(attemptScope) {
+            .flatMapWithScope(scope) { scope, _ ->
+                LoadableStateFlow(scope) {
                     dependencies
                         .tcpSyncClient
                         .handle(SyncHandle.GetBudgets)

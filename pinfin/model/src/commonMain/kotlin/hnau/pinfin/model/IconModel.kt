@@ -110,7 +110,7 @@ class IconModel(
 
     override val goBackHandler: GoBackHandler = skeleton
         .selectedCategory
-        .flatMapWithScope(scope) { selectionScope, selectedCategories ->
+        .flatMapWithScope(scope) { scope, selectedCategories ->
             selectedCategories
                 .foldNullable(
                     ifNotNull = {
@@ -121,7 +121,7 @@ class IconModel(
                     ifNull = {
                         skeleton
                             .query
-                            .mapState(selectionScope) { query ->
+                            .mapState(scope) { query ->
                                 query
                                     .text
                                     .isNotEmpty()

@@ -104,7 +104,7 @@ class PageProjector(
 
     private val page: StateFlow<Pair<TransactionModel.Part, Part>> = model
         .pageType
-        .mapWithScope(scope) { pageScope, (page, model) ->
+        .mapWithScope(scope) { scope, (page, model) ->
             val projector = when (model) {
                 is TransactionModel.PageType.Date -> Part.Date(
                     projector = DateProjector.Page(
@@ -126,7 +126,7 @@ class PageProjector(
 
                 is TransactionModel.PageType.Type -> Part.Type(
                     projector = TypeProjector.Page(
-                        scope = pageScope,
+                        scope = scope,
                         model = model.model,
                         dependencies = dependencies.type(),
                     )

@@ -109,23 +109,23 @@ class ManageModel(
 
     val state: StateFlow<ManageStateModel> = selectedBudgetPreference
         .value
-        .flatMapWithScope(scope) { selectedScope, selectedOrNone ->
+        .flatMapWithScope(scope) { scope, selectedOrNone ->
             val selected = selectedOrNone
             when (selectedOrNone) {
                 null -> null.toMutableStateFlowAsInitial()
                 else -> budgetRepositories.mapState(
-                    scope = selectedScope,
+                    scope = scope,
                     transform = { it[selected] },
                 )
             }
         }
         .mapWithScope(
             scope = scope,
-        ) { stateScope, budgetRepositoryOrNull ->
+        ) { scope, budgetRepositoryOrNull ->
             when (budgetRepositoryOrNull) {
                 null -> ManageStateModel.BudgetsStack(
                     model = BudgetsStackModel(
-                        scope = stateScope,
+                        scope = scope,
                         dependencies = dependencies.budgetsStack(
                             budgetRepositories = budgetRepositories,
                             budgetOpener = selectedBudgetPreference.update
@@ -144,7 +144,7 @@ class ManageModel(
 
                 else -> ManageStateModel.BudgetStack(
                     model = BudgetStackModel(
-                        scope = stateScope,
+                        scope = scope,
                         dependencies = dependencies.budget(
                             budgetRepository = budgetRepositoryOrNull,
                             budgetsListOpener = { selectedBudgetPreference.update(null) },

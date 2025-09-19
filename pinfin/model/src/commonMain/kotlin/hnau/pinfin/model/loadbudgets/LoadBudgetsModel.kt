@@ -71,10 +71,10 @@ class LoadBudgetsModel(
     }
         .mapWithScope(
             scope = scope,
-        ) { stateScope, readyOrLoading ->
+        ) { scope, readyOrLoading ->
             readyOrLoading.map { ready ->
                 ManageModel(
-                    scope = stateScope,
+                    scope = scope,
                     dependencies = dependencies.manage(
                         budgetsStorage = ready.budgetsStorage,
                         preferences = ready.preferences,

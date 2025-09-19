@@ -34,11 +34,11 @@ class ManageProjector(
 
     private val state: StateFlow<ManageElementProjector> = model
         .state
-        .mapWithScope(scope) { stateScope, state ->
+        .mapWithScope(scope) { scope, state ->
             when (state) {
                 is ManageStateModel.BudgetsStack -> ManageElementProjector.BudgetsStack(
                     projector = BudgetsStackProjector(
-                        scope = stateScope,
+                        scope = scope,
                         dependencies = dependencies.budgetsStack(),
                         model = state.model,
                     )
@@ -46,7 +46,7 @@ class ManageProjector(
 
                 is ManageStateModel.BudgetStack -> ManageElementProjector.BudgetStack(
                     projector = BudgetStackProjector(
-                        scope = stateScope,
+                        scope = scope,
                         dependencies = dependencies.budgetStack(),
                         model = state.model,
                     )

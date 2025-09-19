@@ -111,13 +111,13 @@ class EntryModel(
     private fun createIsFocused(
         part: Part,
     ): StateFlow<Boolean> = isFocused
-        .flatMapWithScope(scope) { isFocusedScope, isFocused ->
+        .flatMapWithScope(scope) { scope, isFocused ->
             isFocused.foldBoolean(
                 ifFalse = { false.toMutableStateFlowAsInitial() },
                 ifTrue = {
                     skeleton
                         .part
-                        .mapState(isFocusedScope) { it == part }
+                        .mapState(scope) { it == part }
                 }
             )
         }
@@ -181,17 +181,17 @@ class EntryModel(
         scope = scope,
         page = skeleton
             .part
-            .mapWithScope(scope) { partScope, part ->
+            .mapWithScope(scope) { scope, part ->
                 when (part) {
                     Part.Account -> PageType.Account(
                         model = account.createPage(
-                            scope = partScope,
+                            scope = scope,
                         ),
                     )
 
                     Part.Records -> PageType.Records(
                         model = records.createPage(
-                            scope = partScope,
+                            scope = scope,
                         ),
                     )
                 }
@@ -220,7 +220,7 @@ class EntryModel(
 
     val goBackHandler: GoBackHandler = skeleton
         .part
-        .flatMapWithScope(scope) { partScope, part ->
+        .flatMapWithScope(scope) { scope, part ->
             when (part) {
                 Part.Account -> account.goBackHandler
                 Part.Records -> records.goBackHandler

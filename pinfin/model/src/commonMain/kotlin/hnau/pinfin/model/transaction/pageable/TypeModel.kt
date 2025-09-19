@@ -149,11 +149,11 @@ class TypeModel(
 
     val typeModel: StateFlow<Type> = skeleton
         .type
-        .mapWithScope(scope) { typeScope, skeleton ->
+        .mapWithScope(scope) { scope, skeleton ->
             when (skeleton) {
                 is Type.Skeleton.Entry -> Type.Entry(
                     model = EntryModel(
-                        scope = typeScope,
+                        scope = scope,
                         dependencies = dependencies.entry(),
                         skeleton = skeleton.skeleton,
                         isFocused = isFocused,
@@ -164,7 +164,7 @@ class TypeModel(
 
                 is Type.Skeleton.Transfer -> Type.Transfer(
                     model = TransferModel(
-                        scope = typeScope,
+                        scope = scope,
                         dependencies = dependencies.transfer(),
                         skeleton = skeleton.skeleton,
                         isFocused = isFocused,
@@ -215,17 +215,17 @@ class TypeModel(
         scope: CoroutineScope,
     ): Page = Page(
         scope = scope,
-        page = typeModel.mapWithScope(scope) { typeScope, typeModel ->
+        page = typeModel.mapWithScope(scope) { scope, typeModel ->
             when (typeModel) {
                 is Type.Entry -> Page.Type.Entry(
                     model = typeModel.model.createPage(
-                        scope = typeScope,
+                        scope = scope,
                     )
                 )
 
                 is Type.Transfer -> Page.Type.Transfer(
                     model = typeModel.model.createPage(
-                        scope = typeScope,
+                        scope = scope,
                     )
                 )
             }

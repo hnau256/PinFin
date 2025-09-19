@@ -122,16 +122,16 @@ class TransferModel(
 
     private fun createIsFocused(
         part: Part,
-    ): StateFlow<Boolean> = isFocused.flatMapWithScope(scope) { isFocusedScope, isFocused ->
-            isFocused.foldBoolean(
-                ifFalse = { false.toMutableStateFlowAsInitial() },
-                ifTrue = {
-                    skeleton
-                        .part
-                        .mapState(isFocusedScope) { it == part }
-                }
-            )
-        }
+    ): StateFlow<Boolean> = isFocused.flatMapWithScope(scope) { scope, isFocused ->
+        isFocused.foldBoolean(
+            ifFalse = { false.toMutableStateFlowAsInitial() },
+            ifTrue = {
+                skeleton
+                    .part
+                    .mapState(scope) { it == part }
+            }
+        )
+    }
 
 
     private fun switchToPart(
@@ -201,17 +201,17 @@ class TransferModel(
         scope = scope,
         page = skeleton
             .part
-            .mapWithScope(scope) { partScope, part ->
+            .mapWithScope(scope) { scope, part ->
                 when (part) {
                     Part.From -> PageType.From(
                         model = from.createPage(
-                            scope = partScope,
+                            scope = scope,
                         ),
                     )
 
                     Part.To -> PageType.To(
                         model = to.createPage(
-                            scope = partScope,
+                            scope = scope,
                         ),
                     )
 
@@ -248,7 +248,7 @@ class TransferModel(
 
     val goBackHandler: GoBackHandler = skeleton
         .part
-        .flatMapWithScope(scope) { partScope, part ->
+        .flatMapState(scope) { part ->
             when (part) {
                 Part.From -> from.goBackHandler
                 Part.To -> to.goBackHandler

@@ -94,10 +94,10 @@ class SyncClientBudgetModel(
     }
 
     val resultOrLoading: StateFlow<Loadable<Result>> = synchronizationAttempt
-        .flatMapWithScope(scope) { attemptScope, _ ->
-            LoadableStateFlow(attemptScope) {
+        .flatMapWithScope(scope) { scope, _ ->
+            LoadableStateFlow(scope) {
                 doSynchronization()
-            }.mapState(attemptScope) { resultOrLoading ->
+            }.mapState(scope) { resultOrLoading ->
                 resultOrLoading.map { result ->
                     when (result) {
                         true -> Result.Success(

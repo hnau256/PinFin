@@ -108,13 +108,13 @@ class BudgetConfigModel(
 
     val nameOrEdit: StateFlow<NameOrEdit> = skeleton
         .editName
-        .flatMapWithScope(scope) { stateScope, editNameSkeletonOrNull ->
+        .flatMapWithScope(scope) { scope, editNameSkeletonOrNull ->
             editNameSkeletonOrNull.foldNullable(
                 ifNull = {
                     dependencies
                         .repository
                         .state
-                        .mapState(stateScope) {
+                        .mapState(scope) {
                             NameOrEdit.Name(
                                 name = it.info.title,
                                 edit = {
@@ -136,7 +136,7 @@ class BudgetConfigModel(
                     NameOrEdit
                         .Edit(
                             input = nameEditStringState,
-                            save = actionOrNullIfExecuting(stateScope) {
+                            save = actionOrNullIfExecuting(scope) {
                                 inProgressRegistry.executeRegistered {
                                     dependencies
                                         .repository
