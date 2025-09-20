@@ -1,6 +1,7 @@
 package hnau.pinfin.model.budget
 
 import hnau.common.app.model.goback.GoBackHandlerProvider
+import hnau.pinfin.model.TransactionsModel
 import hnau.pinfin.model.budget.analytics.AnalyticsModel
 import hnau.pinfin.model.budget.config.BudgetConfigModel
 import kotlinx.serialization.SerialName

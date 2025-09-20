@@ -2,7 +2,6 @@ package hnau.pinfin.model.filter
 
 import hnau.common.app.model.goback.GoBackHandler
 import hnau.common.kotlin.coroutines.mapState
-import hnau.common.kotlin.coroutines.mapWithScope
 import hnau.common.kotlin.coroutines.stickNotNull
 import hnau.common.kotlin.coroutines.toMutableStateFlowAsInitial
 import hnau.common.kotlin.foldNullable
@@ -25,18 +24,6 @@ class FilterModel(
     interface Dependencies {
 
         fun categories(): SelectCategoriesModel.Dependencies
-    }
-
-    data class Filters(
-        val selectedCategories: List<CategoryId>,
-    ) {
-
-        companion object {
-
-            val empty = Filters(
-                selectedCategories = emptyList(),
-            )
-        }
     }
 
     enum class Tab {

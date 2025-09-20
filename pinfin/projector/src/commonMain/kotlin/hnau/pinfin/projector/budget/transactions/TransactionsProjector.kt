@@ -10,7 +10,6 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.Button
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -21,13 +20,14 @@ import androidx.compose.ui.unit.dp
 import hnau.common.app.model.goback.GlobalGoBackHandler
 import hnau.common.app.model.goback.GoBackHandler
 import hnau.common.app.projector.uikit.ErrorPanel
+import hnau.common.app.projector.uikit.state.LoadableContent
 import hnau.common.app.projector.uikit.state.NullableStateContent
 import hnau.common.app.projector.uikit.state.TransitionSpec
 import hnau.common.app.projector.uikit.utils.Dimens
 import hnau.common.app.projector.utils.Icon
 import hnau.common.app.projector.utils.plus
 import hnau.common.app.projector.utils.toLazyListState
-import hnau.pinfin.model.budget.TransactionsModel
+import hnau.pinfin.model.TransactionsModel
 import hnau.pinfin.projector.resources.Res
 import hnau.pinfin.projector.resources.add_transaction
 import hnau.pinfin.projector.resources.no_transactions
@@ -58,17 +58,19 @@ class TransactionsProjector(
         .globalGoBackHandler
         .resolve(scope)
 
-    @OptIn(ExperimentalMaterial3Api::class)
     @Composable
     fun Content(
         contentPadding: PaddingValues,
+        showAddButton: Boolean = true,
     ) {
         Transactions(
             contentPadding = contentPadding + PaddingValues(bottom = 96.dp)
         )
-        AddTransactionButton(
-            contentPadding = contentPadding,
-        )
+        if (showAddButton) {
+            AddTransactionButton(
+                contentPadding = contentPadding,
+            )
+        }
     }
 
     @OptIn(ExperimentalUuidApi::class)
@@ -96,22 +98,28 @@ class TransactionsProjector(
                         }
                     )
                 },
-            ) { transactions ->
-                LazyColumn(
-                    contentPadding = contentPadding + PaddingValues(vertical = Dimens.separation),
-                    verticalArrangement = Arrangement.spacedBy(Dimens.separation),
-                    state = model.scrollState.toLazyListState(),
-                ) {
-                    items(
-                        items = transactions,
-                        key = { it.id.id },
-                    ) { info ->
-                        info.Content(
-                            dependencies = dependencies,
-                            onClick = { model.onEditTransactionClick(info) },
-                        )
+            ) { loadableTransactions ->
+                loadableTransactions
+                    .LoadableContent(
+                        modifier = Modifier.fillMaxSize(),
+                        transitionSpec = TransitionSpec.crossfade(),
+                    ) { delayedTransactions ->
+                        LazyColumn(
+                            contentPadding = contentPadding + PaddingValues(vertical = Dimens.separation),
+                            verticalArrangement = Arrangement.spacedBy(Dimens.separation),
+                            state = model.scrollState.toLazyListState(model::updateScrollState),
+                        ) {
+                            items(
+                                items = delayedTransactions.value,
+                                key = { it.id.id },
+                            ) { info ->
+                                info.Content(
+                                    dependencies = dependencies,
+                                    onClick = { model.onEditTransactionClick(info) },
+                                )
+                            }
+                        }
                     }
-                }
             }
     }
 
