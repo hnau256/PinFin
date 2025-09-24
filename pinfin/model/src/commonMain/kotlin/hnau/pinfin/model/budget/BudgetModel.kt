@@ -5,7 +5,6 @@
 package hnau.pinfin.model.budget
 
 import hnau.common.app.model.goback.GoBackHandler
-import hnau.common.app.model.goback.GoBackHandlerProvider
 import hnau.common.kotlin.coroutines.mapState
 import hnau.common.kotlin.coroutines.toMutableStateFlowAsInitial
 import hnau.common.kotlin.ifNull
@@ -24,7 +23,7 @@ class BudgetModel(
     private val scope: CoroutineScope,
     private val dependencies: Dependencies,
     private val skeleton: Skeleton,
-) : GoBackHandlerProvider {
+) {
 
     @Pipe
     interface Dependencies {
@@ -102,7 +101,7 @@ class BudgetModel(
         .selectedTab
         .mapState(scope, ::getModel)
 
-    override val goBackHandler: GoBackHandler = skeleton
+    val goBackHandler: GoBackHandler = skeleton
         .selectedTab
         .mapState(scope) { selectedTab ->
             when (selectedTab) {

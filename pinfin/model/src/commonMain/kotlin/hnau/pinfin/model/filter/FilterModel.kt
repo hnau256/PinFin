@@ -1,3 +1,7 @@
+@file:UseSerializers(
+    MutableStateFlowSerializer::class,
+)
+
 package hnau.pinfin.model.filter
 
 import hnau.common.app.model.goback.GoBackHandler
@@ -5,7 +9,7 @@ import hnau.common.kotlin.coroutines.mapState
 import hnau.common.kotlin.coroutines.stickNotNull
 import hnau.common.kotlin.coroutines.toMutableStateFlowAsInitial
 import hnau.common.kotlin.foldNullable
-import hnau.pinfin.data.CategoryId
+import hnau.common.kotlin.serialization.MutableStateFlowSerializer
 import hnau.pinfin.model.filter.pageable.SelectCategoriesModel
 import hnau.pipe.annotations.Pipe
 import kotlinx.coroutines.CoroutineScope
@@ -13,6 +17,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.UseSerializers
 
 class FilterModel(
     private val scope: CoroutineScope,

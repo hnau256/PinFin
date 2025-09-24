@@ -8,20 +8,21 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Scaffold
+import hnau.common.app.projector.uikit.FullScreen
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import arrow.core.NonEmptyList
-import hnau.common.app.model.goback.GlobalGoBackHandler
+import hnau.pinfin.projector.utils.BackButtonWidth
 import hnau.common.app.model.goback.GoBackHandler
 import hnau.common.app.projector.uikit.ErrorPanel
+import hnau.common.app.projector.uikit.TopBar
+import hnau.common.app.projector.uikit.TopBarTitle
 import hnau.common.app.projector.uikit.state.LoadableContent
 import hnau.common.app.projector.uikit.state.TransitionSpec
 import hnau.common.app.projector.uikit.utils.Dimens
-import hnau.common.app.projector.utils.NavigationIcon
 import hnau.common.app.projector.utils.horizontalDisplayPadding
 import hnau.common.app.projector.utils.verticalDisplayPadding
 import hnau.common.kotlin.Loadable
@@ -43,18 +44,14 @@ import kotlin.uuid.ExperimentalUuidApi
 class SyncClientListProjector(
     scope: CoroutineScope,
     private val model: SyncClientListModel,
-    dependencies: Dependencies,
+    private val dependencies: Dependencies,
 ) {
 
     @Pipe
     interface Dependencies {
 
-        val globalGoBackHandler: GlobalGoBackHandler
+        val backButtonWidth: BackButtonWidth
     }
-
-    private val globalGoBackHandler: GoBackHandler = dependencies
-        .globalGoBackHandler
-        .resolve(scope)
 
     private val items: StateFlow<Loadable<Result<NonEmptyList<Pair<BudgetId, SyncClientListItemProjector>>?>>> =
         model
@@ -77,13 +74,14 @@ class SyncClientListProjector(
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
     fun Content() {
-        Scaffold(
-            modifier = Modifier.fillMaxSize(),
-            topBar = {
-                TopAppBar(
-                    title = { Text(stringResource(Res.string.budgets_to_synchronization)) },
-                    navigationIcon = { globalGoBackHandler.NavigationIcon() },
-                )
+        FullScreen(
+            backButtonWidth = dependencies.backButtonWidth.width,
+            top = { contentPadding ->
+                TopBar(
+                    modifier = Modifier.padding(contentPadding),
+                ) {
+                    TopBarTitle { Text(stringResource(Res.string.budgets_to_synchronization)) }
+                }
             },
         ) { contentPadding ->
             items

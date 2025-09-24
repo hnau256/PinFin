@@ -1,9 +1,10 @@
 package hnau.pinfin.projector.sync.client.budget
 
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.BasicAlertDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Scaffold
+import hnau.common.app.projector.uikit.FullScreen
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
@@ -11,12 +12,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import hnau.common.app.model.goback.GlobalGoBackHandler
+import hnau.pinfin.projector.utils.BackButtonWidth
 import hnau.common.app.model.goback.GoBackHandler
 import hnau.common.app.projector.uikit.AlertDialogContent
+import hnau.common.app.projector.uikit.TopBar
+import hnau.common.app.projector.uikit.TopBarTitle
 import hnau.common.app.projector.uikit.state.LoadableContent
 import hnau.common.app.projector.uikit.state.TransitionSpec
-import hnau.common.app.projector.utils.NavigationIcon
 import hnau.common.kotlin.Loadable
 import hnau.common.kotlin.coroutines.mapState
 import hnau.common.kotlin.map
@@ -34,18 +36,14 @@ import org.jetbrains.compose.resources.stringResource
 class SyncClientLoadBudgetProjector(
     scope: CoroutineScope,
     private val model: SyncClientLoadBudgetModel,
-    dependencies: Dependencies,
+    private val dependencies: Dependencies,
 ) {
 
     @Pipe
     interface Dependencies {
 
-        val globalGoBackHandler: GlobalGoBackHandler
+        val backButtonWidth: BackButtonWidth
     }
-
-    private val globalGoBackHandler: GoBackHandler = dependencies
-        .globalGoBackHandler
-        .resolve(scope)
 
     private val state: StateFlow<Loadable<SyncClientBudgetProjector>> = model
         .state
@@ -61,13 +59,14 @@ class SyncClientLoadBudgetProjector(
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
     fun Content() {
-        Scaffold(
-            modifier = Modifier.fillMaxSize(),
-            topBar = {
-                TopAppBar(
-                    title = { Text(stringResource(Res.string.budget_sync)) },
-                    navigationIcon = { globalGoBackHandler.NavigationIcon() },
-                )
+        FullScreen(
+            backButtonWidth = dependencies.backButtonWidth.width,
+            top = { contentPadding ->
+                TopBar(
+                    modifier = Modifier.padding(contentPadding),
+                ) {
+                    TopBarTitle { Text(stringResource(Res.string.budget_sync)) }
+                }
             },
         ) { contentPadding ->
             state

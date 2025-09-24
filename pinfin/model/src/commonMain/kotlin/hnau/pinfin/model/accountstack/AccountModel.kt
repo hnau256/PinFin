@@ -2,7 +2,6 @@ package hnau.pinfin.model.accountstack
 
 import hnau.common.app.model.EditingString
 import hnau.common.app.model.goback.GoBackHandler
-import hnau.common.app.model.goback.GoBackHandlerProvider
 import hnau.common.app.model.goback.NeverGoBackHandler
 import hnau.common.app.model.toEditingString
 import hnau.common.kotlin.coroutines.actionOrNullIfExecuting
@@ -30,7 +29,7 @@ class AccountModel(
     private val skeleton: Skeleton,
     onReady: () -> Unit,
     val chooseIcon: () -> Unit,
-) : GoBackHandlerProvider {
+) {
 
     @Pipe
     interface Dependencies {
@@ -119,6 +118,6 @@ class AccountModel(
             }
         }
 
-    override val goBackHandler: GoBackHandler
+    val goBackHandler: GoBackHandler
         get() = NeverGoBackHandler //TODO show cancel edit dialog
 }

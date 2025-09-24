@@ -14,26 +14,24 @@ import androidx.compose.material.icons.filled.Sync
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExtendedFloatingActionButton
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedButton
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import arrow.core.NonEmptyList
-import hnau.common.app.model.goback.GlobalGoBackHandler
-import hnau.common.app.model.goback.GoBackHandler
 import hnau.common.app.projector.uikit.ErrorPanel
+import hnau.common.app.projector.uikit.FullScreen
+import hnau.common.app.projector.uikit.TopBar
+import hnau.common.app.projector.uikit.TopBarAction
+import hnau.common.app.projector.uikit.TopBarTitle
 import hnau.common.app.projector.uikit.progressindicator.InProgress
 import hnau.common.app.projector.uikit.state.NullableStateContent
 import hnau.common.app.projector.uikit.state.TransitionSpec
 import hnau.common.app.projector.uikit.utils.Dimens
 import hnau.common.app.projector.utils.Icon
-import hnau.common.app.projector.utils.NavigationIcon
 import hnau.common.app.projector.utils.horizontalDisplayPadding
 import hnau.common.app.projector.utils.plus
 import hnau.common.app.projector.utils.verticalDisplayPadding
@@ -46,6 +44,7 @@ import hnau.pinfin.projector.resources.budgets_sync
 import hnau.pinfin.projector.resources.create_demo_budget
 import hnau.pinfin.projector.resources.create_new_budget
 import hnau.pinfin.projector.resources.no_budgets
+import hnau.pinfin.projector.utils.BackButtonWidth
 import hnau.pipe.annotations.Pipe
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.StateFlow
@@ -54,16 +53,14 @@ import org.jetbrains.compose.resources.stringResource
 class BudgetsListProjector(
     scope: CoroutineScope,
     private val model: BudgetsListModel,
-    dependencies: Dependencies,
+    private val dependencies: Dependencies,
 ) {
 
     @Pipe
     interface Dependencies {
 
-        val globalGoBackHandler: GlobalGoBackHandler
+        val backButtonWidth: BackButtonWidth
     }
-
-    private val globalGoBackHandler: GoBackHandler = dependencies.globalGoBackHandler.resolve(scope)
 
     private val items: StateFlow<NonEmptyList<BudgetItemProjector>?> = model
         .items
@@ -80,19 +77,21 @@ class BudgetsListProjector(
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
     fun Content() {
-        Scaffold(
-            modifier = Modifier.fillMaxSize(),
-            topBar = {
-                TopAppBar(
-                    title = { Text(stringResource(Res.string.budgets)) },
-                    navigationIcon = { globalGoBackHandler.NavigationIcon() },
-                    actions = {
-                        IconButton(
-                            onClick = model::openSync,
-                        ) {
-                            Icon(Icons.Filled.Sync)
-                        }
-                    })
+        FullScreen(
+            backButtonWidth = dependencies.backButtonWidth.width,
+            top = { contentPadding ->
+                TopBar(
+                    modifier = Modifier.padding(contentPadding),
+                ) {
+                    TopBarTitle {
+                        Text(stringResource(Res.string.budgets))
+                    }
+                    TopBarAction(
+                        onClick = model::openSync,
+                    ) {
+                        Icon(Icons.Filled.Sync)
+                    }
+                }
             },
         ) { contentPadding ->
             items.collectAsState().value.NullableStateContent(

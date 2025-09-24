@@ -5,7 +5,6 @@
 package hnau.pinfin.model.budget.analytics.tab
 
 import hnau.common.app.model.goback.GoBackHandler
-import hnau.common.app.model.goback.GoBackHandlerProvider
 import hnau.common.app.model.goback.NeverGoBackHandler
 import hnau.common.kotlin.Loadable
 import hnau.common.kotlin.Loading
@@ -34,7 +33,7 @@ import kotlin.time.Clock
 class CategoriesModel(
     scope: CoroutineScope,
     dependencies: Dependencies,
-) : GoBackHandlerProvider {
+) {
 
     @Pipe
     interface Dependencies {
@@ -149,6 +148,6 @@ class CategoriesModel(
             initialValue = Loading,
         )
 
-    override val goBackHandler: GoBackHandler
+    val goBackHandler: GoBackHandler
         get() = NeverGoBackHandler
 }

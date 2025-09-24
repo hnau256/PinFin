@@ -25,7 +25,7 @@ class AppActivity : ComponentActivity() {
     }
 
     private val goBackHandler: StateFlow<(() -> Unit)?>
-        get() = viewModel.appModel.goBackHandler
+        get() = viewModel.appModel.model.goBackHandler
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

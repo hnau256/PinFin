@@ -5,7 +5,6 @@
 package hnau.pinfin.model.budget.analytics
 
 import hnau.common.app.model.goback.GoBackHandler
-import hnau.common.app.model.goback.GoBackHandlerProvider
 import hnau.common.app.model.goback.NeverGoBackHandler
 import hnau.common.kotlin.coroutines.toMutableStateFlowAsInitial
 import hnau.common.kotlin.serialization.MutableStateFlowSerializer
@@ -22,7 +21,7 @@ class AnalyticsModel(
     private val scope: CoroutineScope,
     private val dependencies: Dependencies,
     private val skeleton: Skeleton,
-) : GoBackHandlerProvider {
+) {
 
     @Pipe
     interface Dependencies {
@@ -53,6 +52,6 @@ class AnalyticsModel(
     val selectedTab: MutableStateFlow<AnalyticsTab>
         get() = skeleton.selectedTab
 
-    override val goBackHandler: GoBackHandler
+    val goBackHandler: GoBackHandler
         get() = NeverGoBackHandler
 }

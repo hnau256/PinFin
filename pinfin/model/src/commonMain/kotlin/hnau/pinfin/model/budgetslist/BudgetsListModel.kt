@@ -7,7 +7,6 @@ package hnau.pinfin.model.budgetslist
 import arrow.core.NonEmptySet
 import arrow.core.toNonEmptySetOrNull
 import hnau.common.app.model.goback.GoBackHandler
-import hnau.common.app.model.goback.GoBackHandlerProvider
 import hnau.common.app.model.goback.NeverGoBackHandler
 import hnau.common.kotlin.coroutines.InProgressRegistry
 import hnau.common.kotlin.coroutines.createChild
@@ -35,7 +34,7 @@ import kotlinx.serialization.UseSerializers
 class BudgetsListModel(
     private val scope: CoroutineScope,
     private val dependencies: Dependencies,
-) : GoBackHandlerProvider {
+) {
 
     @Pipe
     interface Dependencies {
@@ -154,6 +153,6 @@ class BudgetsListModel(
         }
     }
 
-    override val goBackHandler: GoBackHandler
+    val goBackHandler: GoBackHandler
         get() = NeverGoBackHandler
 }

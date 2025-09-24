@@ -6,7 +6,6 @@ package hnau.pinfin.model.budget.config
 
 import hnau.common.app.model.EditingString
 import hnau.common.app.model.goback.GoBackHandler
-import hnau.common.app.model.goback.GoBackHandlerProvider
 import hnau.common.app.model.toEditingString
 import hnau.common.kotlin.coroutines.InProgressRegistry
 import hnau.common.kotlin.coroutines.actionOrNullIfExecuting
@@ -31,7 +30,7 @@ class BudgetConfigModel(
     private val scope: CoroutineScope,
     private val dependencies: Dependencies,
     private val skeleton: Skeleton,
-) : GoBackHandlerProvider {
+) {
 
     @Pipe
     interface Dependencies {
@@ -155,7 +154,7 @@ class BudgetConfigModel(
             )
         }
 
-    override val goBackHandler: GoBackHandler = nameOrEdit.mapState(scope) { nameOrEditModel ->
+    val goBackHandler: GoBackHandler = nameOrEdit.mapState(scope) { nameOrEditModel ->
         when (nameOrEditModel) {
             is NameOrEdit.Edit -> nameOrEditModel.cancel
             is NameOrEdit.Name -> null

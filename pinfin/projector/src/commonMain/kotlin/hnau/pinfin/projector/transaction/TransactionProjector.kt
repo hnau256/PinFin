@@ -3,19 +3,22 @@ package hnau.pinfin.projector.transaction
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Scaffold
+import hnau.common.app.projector.uikit.FullScreen
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import hnau.common.app.model.goback.GlobalGoBackHandler
+import hnau.pinfin.projector.utils.BackButtonWidth
 import hnau.common.app.model.goback.GoBackHandler
+import hnau.common.app.projector.uikit.TopBar
+import hnau.common.app.projector.uikit.TopBarTitle
 import hnau.common.app.projector.uikit.utils.Dimens
-import hnau.common.app.projector.utils.NavigationIcon
 import hnau.common.app.projector.utils.copy
 import hnau.pinfin.model.transaction.TransactionModel
 import hnau.pinfin.projector.transaction.delegates.DialogsProjector
@@ -29,7 +32,7 @@ import kotlinx.coroutines.CoroutineScope
 class TransactionProjector(
     scope: CoroutineScope,
     model: TransactionModel,
-    dependencies: Dependencies,
+    private val dependencies: Dependencies,
 ) {
 
     @Pipe
@@ -43,12 +46,8 @@ class TransactionProjector(
 
         fun page(): PageProjector.Dependencies
 
-        val globalGoBackHandler: GlobalGoBackHandler
+        val backButtonWidth: BackButtonWidth
     }
-
-    private val globalGoBackHandler: GoBackHandler = dependencies
-        .globalGoBackHandler
-        .resolve(scope)
 
     private val type = TypeProjector(
         scope = scope,
@@ -80,25 +79,16 @@ class TransactionProjector(
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
     fun Content() {
-        Scaffold(
-            modifier = Modifier.fillMaxSize(),
-            topBar = {
-                TopAppBar(
-                    title = {
-                        Row(
-                            verticalAlignment = Alignment.CenterVertically,
-                        ) {
-                            Row(
-                                modifier = Modifier.weight(1f),
-                                horizontalArrangement = Arrangement.Start,
-                            ) {
-                                type.HeaderContent()
-                            }
-                            topBarActions.Content()
-                        }
-                    },
-                    navigationIcon = { globalGoBackHandler.NavigationIcon() },
-                )
+        FullScreen(
+            backButtonWidth = dependencies.backButtonWidth.width,
+            top = { contentPadding ->
+                TopBar(
+                    modifier = Modifier.padding(contentPadding),
+                ) {
+                    type.HeaderContent()
+                    Spacer(Modifier.weight(1f))
+                    topBarActions.Content()
+                }
             },
         ) { contentPadding ->
             Column(

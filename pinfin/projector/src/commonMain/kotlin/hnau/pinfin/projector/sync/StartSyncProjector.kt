@@ -10,7 +10,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Scaffold
+import hnau.common.app.projector.uikit.FullScreen
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
@@ -20,9 +20,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
-import hnau.common.app.model.goback.GlobalGoBackHandler
+import hnau.pinfin.projector.utils.BackButtonWidth
 import hnau.common.app.model.goback.GoBackHandler
 import hnau.common.app.projector.uikit.TextInput
+import hnau.common.app.projector.uikit.TopBar
+import hnau.common.app.projector.uikit.TopBarTitle
 import hnau.common.app.projector.uikit.progressindicator.InProgress
 import hnau.common.app.projector.uikit.table.CellBox
 import hnau.common.app.projector.uikit.table.Subtable
@@ -30,7 +32,6 @@ import hnau.common.app.projector.uikit.table.Table
 import hnau.common.app.projector.uikit.table.TableOrientation
 import hnau.common.app.projector.uikit.table.TableScope
 import hnau.common.app.projector.uikit.utils.Dimens
-import hnau.common.app.projector.utils.NavigationIcon
 import hnau.common.app.projector.utils.horizontalDisplayPadding
 import hnau.common.app.projector.utils.plus
 import hnau.common.app.projector.utils.verticalDisplayPadding
@@ -50,29 +51,26 @@ import androidx.compose.material3.Button as MaterialButton
 class StartSyncProjector(
     scope: CoroutineScope,
     private val model: StartSyncModel,
-    dependencies: Dependencies,
+    private val dependencies: Dependencies,
 ) {
 
     @Pipe
     interface Dependencies {
 
-        val globalGoBackHandler: GlobalGoBackHandler
+        val backButtonWidth: BackButtonWidth
     }
-
-    private val globalGoBackHandler: GoBackHandler = dependencies
-        .globalGoBackHandler
-        .resolve(scope)
 
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
     fun Content() {
-        Scaffold(
-            modifier = Modifier.fillMaxSize(),
-            topBar = {
-                TopAppBar(
-                    title = { Text(stringResource(Res.string.budgets_sync)) },
-                    navigationIcon = { globalGoBackHandler.NavigationIcon() },
-                )
+        FullScreen(
+            backButtonWidth = dependencies.backButtonWidth.width,
+            top = { contentPadding ->
+                TopBar(
+                    modifier = Modifier.padding(contentPadding),
+                ) {
+                    TopBarTitle { Text(stringResource(Res.string.budgets_sync)) }
+                }
             },
         ) { contentPadding ->
             LazyColumn(

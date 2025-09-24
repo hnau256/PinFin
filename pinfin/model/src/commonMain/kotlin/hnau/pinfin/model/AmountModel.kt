@@ -6,7 +6,6 @@ package hnau.pinfin.model
 
 import hnau.common.app.model.EditingString
 import hnau.common.app.model.goback.GoBackHandler
-import hnau.common.app.model.goback.GoBackHandlerProvider
 import hnau.common.app.model.goback.NeverGoBackHandler
 import hnau.common.kotlin.coroutines.mapState
 import hnau.common.kotlin.coroutines.toMutableStateFlowAsInitial
@@ -21,7 +20,7 @@ import kotlinx.serialization.UseSerializers
 class AmountModel(
     private val scope: CoroutineScope,
     private val skeleton: Skeleton,
-) : GoBackHandlerProvider {
+) {
 
     @Serializable
     data class Skeleton(
@@ -71,6 +70,6 @@ class AmountModel(
         scope = scope,
     ) { it == null }
 
-    override val goBackHandler: GoBackHandler
+    val goBackHandler: GoBackHandler
         get() = NeverGoBackHandler
 }

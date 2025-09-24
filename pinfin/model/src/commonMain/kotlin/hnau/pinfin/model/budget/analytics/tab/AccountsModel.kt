@@ -8,7 +8,6 @@ import arrow.core.NonEmptyList
 import arrow.core.toNonEmptyListOrNull
 import hnau.common.app.model.ListScrollState
 import hnau.common.app.model.goback.GoBackHandler
-import hnau.common.app.model.goback.GoBackHandlerProvider
 import hnau.common.app.model.goback.NeverGoBackHandler
 import hnau.common.kotlin.coroutines.mapState
 import hnau.common.kotlin.coroutines.toMutableStateFlowAsInitial
@@ -27,7 +26,7 @@ class AccountsModel(
     scope: CoroutineScope,
     private val dependencies: Dependencies,
     private val skeleton: Skeleton,
-) : GoBackHandlerProvider {
+) {
 
     @Pipe
     interface Dependencies {
@@ -66,6 +65,6 @@ class AccountsModel(
             )
     }
 
-    override val goBackHandler: GoBackHandler
+    val goBackHandler: GoBackHandler
         get() = NeverGoBackHandler
 }

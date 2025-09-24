@@ -1,26 +1,20 @@
 package hnau.pinfin.model
 
-import arrow.core.NonEmptyList
-import arrow.core.toNonEmptyListOrNull
 import hnau.common.app.model.ListScrollState
 import hnau.common.app.model.goback.GoBackHandler
-import hnau.common.app.model.goback.GoBackHandlerProvider
 import hnau.common.app.model.goback.NeverGoBackHandler
 import hnau.common.kotlin.Loadable
 import hnau.common.kotlin.coroutines.Delayed
 import hnau.common.kotlin.coroutines.combineState
 import hnau.common.kotlin.coroutines.flatMapState
-import hnau.common.kotlin.coroutines.mapState
 import hnau.common.kotlin.coroutines.mapStateDelayed
 import hnau.common.kotlin.coroutines.toMutableStateFlowAsInitial
 import hnau.common.kotlin.filter
 import hnau.common.kotlin.getOrInit
-import hnau.common.kotlin.shrinkType
 import hnau.common.kotlin.toAccessor
 import hnau.pinfin.data.TransactionType
 import hnau.pinfin.model.budgetstack.BudgetStackOpener
 import hnau.pinfin.model.filter.FilterModel
-import hnau.pinfin.model.filter.FilterModel.Filters
 import hnau.pinfin.model.filter.Filters
 import hnau.pinfin.model.filter.check
 import hnau.pinfin.model.utils.budget.repository.BudgetRepository
@@ -37,7 +31,7 @@ class TransactionsModel(
     private val scope: CoroutineScope,
     private val skeleton: Skeleton,
     private val dependencies: Dependencies,
-) : GoBackHandlerProvider {
+) {
 
     @Pipe
     interface Dependencies {
@@ -113,6 +107,6 @@ class TransactionsModel(
         }
     }
 
-    override val goBackHandler: GoBackHandler
+    val goBackHandler: GoBackHandler
         get() = NeverGoBackHandler
 }

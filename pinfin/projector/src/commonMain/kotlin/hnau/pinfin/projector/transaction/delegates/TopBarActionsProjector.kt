@@ -6,6 +6,7 @@ import androidx.compose.material.icons.filled.Save
 import androidx.compose.material3.IconButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import hnau.common.app.projector.uikit.TopBarAction
 import hnau.common.app.projector.utils.Icon
 import hnau.pinfin.model.transaction.TransactionModel
 
@@ -19,7 +20,7 @@ class TopBarActionsProjector(
         model
             .remove
             ?.let { remove ->
-                IconButton(
+                TopBarAction(
                     onClick = remove,
                 ) {
                     Icon(Icons.Default.Delete)
@@ -29,9 +30,8 @@ class TopBarActionsProjector(
             .saveOrDisabled
             .collectAsState()
             .value
-        IconButton(
-            onClick = { saveOrNull?.invoke() },
-            enabled = saveOrNull != null,
+        TopBarAction(
+            onClick = saveOrNull,
         ) {
             Icon(Icons.Default.Save)
         }

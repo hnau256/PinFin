@@ -12,7 +12,7 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.ListItem
-import androidx.compose.material3.Scaffold
+import hnau.common.app.projector.uikit.FullScreen
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
@@ -23,11 +23,13 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
-import hnau.common.app.model.goback.GlobalGoBackHandler
+import hnau.pinfin.projector.utils.BackButtonWidth
 import hnau.common.app.model.goback.GoBackHandler
 import hnau.common.app.projector.uikit.TextInput
+import hnau.common.app.projector.uikit.TopBar
+import hnau.common.app.projector.uikit.TopBarAction
+import hnau.common.app.projector.uikit.TopBarTitle
 import hnau.common.app.projector.utils.Icon
-import hnau.common.app.projector.utils.NavigationIcon
 import hnau.common.app.projector.utils.collectAsMutableAccessor
 import hnau.common.kotlin.ifNull
 import hnau.pinfin.model.accountstack.AccountModel
@@ -46,29 +48,27 @@ import org.jetbrains.compose.resources.stringResource
 class AccountProjector(
     scope: CoroutineScope,
     private val model: AccountModel,
-    dependencies: Dependencies,
+    private val dependencies: Dependencies,
 ) {
 
     @Pipe
     interface Dependencies {
 
-        val globalGoBackHandler: GlobalGoBackHandler
+        val backButtonWidth: BackButtonWidth
     }
-
-    private val globalGoBackHandler: GoBackHandler =
-        dependencies.globalGoBackHandler.resolve(scope)
 
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
     fun Content() {
-        Scaffold(
-            modifier = Modifier.Companion.fillMaxSize(),
-            topBar = {
-                TopAppBar(
-                    title = { Text(stringResource(Res.string.account_settings)) },
-                    navigationIcon = { globalGoBackHandler.NavigationIcon() },
-                    actions = { SaveAction() },
-                )
+        FullScreen(
+            backButtonWidth = dependencies.backButtonWidth.width,
+            top = { contentPadding ->
+                TopBar(
+                    modifier = Modifier.padding(contentPadding),
+                ) {
+                    TopBarTitle { Text(stringResource(Res.string.account_settings)) }
+                    SaveAction()
+                }
             },
         ) { contentPadding ->
             LazyColumn(
@@ -164,9 +164,8 @@ class AccountProjector(
         val saveFlow by model.save.collectAsState()
         val save = saveFlow?.collectAsState()?.value
         val isSaving = saveFlow != null && save == null
-        IconButton(
-            enabled = save != null,
-            onClick = { save?.invoke() },
+        TopBarAction(
+            onClick = save,
         ) {
             when (isSaving) {
                 true -> CircularProgressIndicator()

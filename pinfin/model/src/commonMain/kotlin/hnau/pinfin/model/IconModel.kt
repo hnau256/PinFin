@@ -8,7 +8,6 @@ import arrow.core.NonEmptyList
 import arrow.core.toNonEmptyListOrNull
 import hnau.common.app.model.EditingString
 import hnau.common.app.model.goback.GoBackHandler
-import hnau.common.app.model.goback.GoBackHandlerProvider
 import hnau.common.app.model.toEditingString
 import hnau.common.kotlin.Loadable
 import hnau.common.kotlin.Loading
@@ -41,7 +40,7 @@ class IconModel(
     private val skeleton: Skeleton,
     private val selected: IconVariant?,
     val onSelect: (IconVariant) -> Unit,
-) : GoBackHandlerProvider {
+) {
 
 
     @Serializable
@@ -108,7 +107,7 @@ class IconModel(
             initialValue = Loading,
         )
 
-    override val goBackHandler: GoBackHandler = skeleton
+    val goBackHandler: GoBackHandler = skeleton
         .selectedCategory
         .flatMapWithScope(scope) { scope, selectedCategories ->
             selectedCategories

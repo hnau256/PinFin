@@ -1,18 +1,23 @@
 package hnau.pinfin.model.budgetsstack
 
-import hnau.common.app.model.goback.GoBackHandlerProvider
+import hnau.common.app.model.goback.GoBackHandler
 import hnau.pinfin.model.budgetslist.BudgetsListModel
 import hnau.pinfin.model.sync.SyncStackModel
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
-sealed interface BudgetsStackElementModel : GoBackHandlerProvider {
+sealed interface BudgetsStackElementModel {
 
     val key: Int
 
+    val goBackHandler: GoBackHandler
+
     data class List(
         val model: BudgetsListModel,
-    ) : BudgetsStackElementModel, GoBackHandlerProvider by model {
+    ) : BudgetsStackElementModel {
+
+        override val goBackHandler: GoBackHandler
+            get() = model.goBackHandler
 
         override val key: Int
             get() = 0
@@ -20,7 +25,10 @@ sealed interface BudgetsStackElementModel : GoBackHandlerProvider {
 
     data class Sync(
         val model: SyncStackModel,
-    ) : BudgetsStackElementModel, GoBackHandlerProvider by model {
+    ) : BudgetsStackElementModel {
+
+        override val goBackHandler: GoBackHandler
+            get() = model.goBackHandler
 
         override val key: Int
             get() = 1

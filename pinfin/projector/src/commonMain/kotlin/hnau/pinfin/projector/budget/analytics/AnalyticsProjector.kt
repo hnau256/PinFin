@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
@@ -13,6 +14,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.Dp
 import hnau.common.app.projector.uikit.utils.Dimens
 import hnau.common.app.projector.utils.Overcompose
 import hnau.common.app.projector.utils.copy
@@ -55,7 +57,7 @@ class AnalyticsProjector(
 
     @Composable
     fun Content(
-        contentPadding: PaddingValues,
+        bottomInset: Dp,
     ) {
         val selectedTab by model.selectedTab.collectAsState()
         Overcompose(
@@ -63,8 +65,7 @@ class AnalyticsProjector(
             top = {
                 Box(
                     modifier = Modifier
-                        .padding(top = contentPadding.calculateTopPadding())
-                        .padding(vertical = Dimens.smallSeparation),
+                        .statusBarsPadding(),
                     contentAlignment = Alignment.Center,
                 ) {
                     Tabs(
@@ -84,8 +85,9 @@ class AnalyticsProjector(
             ) { i ->
                 val tab = AnalyticsTab.entries[i]
                 tabs[tab].Content(
-                    contentPadding = contentPadding.copy(
+                    contentPadding = PaddingValues(
                         top = tabContentPadding.calculateTopPadding(),
+                        bottom = bottomInset,
                     )
                 )
             }

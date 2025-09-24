@@ -6,7 +6,6 @@ package hnau.pinfin.model.sync.client.budget
 
 import arrow.core.flatMap
 import hnau.common.app.model.goback.GoBackHandler
-import hnau.common.app.model.goback.GoBackHandlerProvider
 import hnau.common.app.model.goback.NeverGoBackHandler
 import hnau.common.kotlin.Loadable
 import hnau.common.kotlin.LoadableStateFlow
@@ -32,7 +31,7 @@ class SyncClientBudgetModel(
     scope: CoroutineScope,
     private val dependencies: Dependencies,
     goBack: () -> Unit,
-) : GoBackHandlerProvider {
+) {
 
     @Pipe
     interface Dependencies {
@@ -112,6 +111,6 @@ class SyncClientBudgetModel(
             }
         }
 
-    override val goBackHandler: GoBackHandler
+    val goBackHandler: GoBackHandler
         get() = NeverGoBackHandler
 }

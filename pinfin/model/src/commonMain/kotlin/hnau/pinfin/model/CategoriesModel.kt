@@ -7,7 +7,6 @@ package hnau.pinfin.model
 import arrow.core.NonEmptyList
 import arrow.core.toNonEmptyListOrNull
 import hnau.common.app.model.goback.GoBackHandler
-import hnau.common.app.model.goback.GoBackHandlerProvider
 import hnau.common.app.model.goback.NeverGoBackHandler
 import hnau.common.kotlin.coroutines.mapState
 import hnau.common.kotlin.serialization.MutableStateFlowSerializer
@@ -22,7 +21,7 @@ import kotlinx.serialization.UseSerializers
 class CategoriesModel(
     scope: CoroutineScope,
     private val dependencies: Dependencies,
-) : GoBackHandlerProvider {
+) {
 
     @Pipe
     interface Dependencies {
@@ -57,6 +56,6 @@ class CategoriesModel(
                 }
         }
 
-    override val goBackHandler: GoBackHandler
+    val goBackHandler: GoBackHandler
         get() = NeverGoBackHandler
 }

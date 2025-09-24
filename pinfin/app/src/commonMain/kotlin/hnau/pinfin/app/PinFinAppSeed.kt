@@ -31,5 +31,4 @@ fun createPinFinAppSeed(
             skeleton = skeleton,
         )
     },
-    extractGoBackHandler = RootModel::goBackHandler,
 )

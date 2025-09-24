@@ -1,19 +1,22 @@
 package hnau.pinfin.model.budget
 
-import hnau.common.app.model.goback.GoBackHandlerProvider
+import hnau.common.app.model.goback.GoBackHandler
 import hnau.pinfin.model.TransactionsModel
 import hnau.pinfin.model.budget.analytics.AnalyticsModel
 import hnau.pinfin.model.budget.config.BudgetConfigModel
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
-sealed interface BudgetPageModel : GoBackHandlerProvider {
+sealed interface BudgetPageModel {
 
     val tab: BudgetTab
 
     data class Transactions(
         val model: TransactionsModel,
-    ) : BudgetPageModel, GoBackHandlerProvider by model {
+    ) : BudgetPageModel {
+
+        val goBackHandler: GoBackHandler
+            get() = model.goBackHandler
 
         override val tab: BudgetTab
             get() = BudgetTab.Transactions
@@ -21,7 +24,10 @@ sealed interface BudgetPageModel : GoBackHandlerProvider {
 
     data class Analytics(
         val model: AnalyticsModel,
-    ) : BudgetPageModel, GoBackHandlerProvider by model {
+    ) : BudgetPageModel {
+
+        val goBackHandler: GoBackHandler
+            get() = model.goBackHandler
 
         override val tab: BudgetTab
             get() = BudgetTab.Analytics
@@ -29,7 +35,10 @@ sealed interface BudgetPageModel : GoBackHandlerProvider {
 
     data class Config(
         val model: BudgetConfigModel,
-    ) : BudgetPageModel, GoBackHandlerProvider by model {
+    ) : BudgetPageModel {
+
+        val goBackHandler: GoBackHandler
+            get() = model.goBackHandler
 
         override val tab: BudgetTab
             get() = BudgetTab.Config
@@ -43,7 +52,7 @@ sealed interface BudgetPageModel : GoBackHandlerProvider {
         @Serializable
         @SerialName("transactions")
         data class Transactions(
-            val skeleton: TransactionsModel.Skeleton = TransactionsModel.Skeleton(),
+            val skeleton: TransactionsModel.Skeleton = TransactionsModel.Skeleton.create(),
         ) : Skeleton {
 
             override val tab: BudgetTab

@@ -1,17 +1,22 @@
 package hnau.pinfin.model.categorystack
 
-import hnau.common.app.model.goback.GoBackHandlerProvider
+import hnau.common.app.model.goback.GoBackHandler
 import hnau.pinfin.model.IconModel
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
-sealed interface CategoryStackElementModel : GoBackHandlerProvider {
+sealed interface CategoryStackElementModel {
 
     val key: Int
 
+    val goBackHandler: GoBackHandler
+
     data class Info(
         val model: CategoryModel,
-    ) : CategoryStackElementModel, GoBackHandlerProvider by model {
+    ) : CategoryStackElementModel {
+
+        override val goBackHandler: GoBackHandler
+            get() = model.goBackHandler
 
         override val key: Int
             get() = 0
@@ -19,7 +24,10 @@ sealed interface CategoryStackElementModel : GoBackHandlerProvider {
 
     data class Icon(
         val model: IconModel,
-    ) : CategoryStackElementModel, GoBackHandlerProvider by model {
+    ) : CategoryStackElementModel {
+
+        override val goBackHandler: GoBackHandler
+            get() = model.goBackHandler
 
         override val key: Int
             get() = 1

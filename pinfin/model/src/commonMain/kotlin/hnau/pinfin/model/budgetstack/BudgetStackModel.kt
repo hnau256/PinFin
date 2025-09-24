@@ -5,11 +5,11 @@
 package hnau.pinfin.model.budgetstack
 
 import hnau.common.app.model.goback.GoBackHandler
-import hnau.common.app.model.goback.GoBackHandlerProvider
 import hnau.common.app.model.goback.fallback
 import hnau.common.app.model.stack.NonEmptyStack
 import hnau.common.app.model.stack.StackModelElements
 import hnau.common.app.model.stack.stackGoBackHandler
+import hnau.common.app.model.stack.tailGoBackHandler
 import hnau.common.app.model.stack.tryDropLast
 import hnau.common.kotlin.coroutines.flatMapState
 import hnau.common.kotlin.serialization.MutableStateFlowSerializer
@@ -30,7 +30,7 @@ class BudgetStackModel(
     private val scope: CoroutineScope,
     private val skeleton: Skeleton,
     private val dependencies: Dependencies,
-) : GoBackHandlerProvider {
+) {
 
     @Serializable
     data class Skeleton(
@@ -129,8 +129,8 @@ class BudgetStackModel(
         )
     }
 
-    override val goBackHandler: GoBackHandler = stack
-        .flatMapState(scope) { it.tail.goBackHandler }
+    val goBackHandler: GoBackHandler = stack
+        .tailGoBackHandler(scope, BudgetStackElementModel::goBackHandler)
         .fallback(
             scope = scope,
             fallback = skeleton.stack.stackGoBackHandler(scope),

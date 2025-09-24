@@ -3,12 +3,13 @@ package hnau.pinfin.projector.sync
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.BasicAlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
+import hnau.common.app.projector.uikit.FullScreen
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
@@ -17,12 +18,13 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import hnau.common.app.model.goback.GlobalGoBackHandler
+import hnau.pinfin.projector.utils.BackButtonWidth
 import hnau.common.app.model.goback.GoBackHandler
 import hnau.common.app.projector.uikit.AlertDialogContent
 import hnau.common.app.projector.uikit.ErrorPanel
+import hnau.common.app.projector.uikit.TopBar
+import hnau.common.app.projector.uikit.TopBarTitle
 import hnau.common.app.projector.uikit.utils.Dimens
-import hnau.common.app.projector.utils.NavigationIcon
 import hnau.pinfin.model.sync.server.SyncServerModel
 import hnau.pinfin.projector.resources.Res
 import hnau.pinfin.projector.resources.addresses_to_connect
@@ -39,27 +41,26 @@ import org.jetbrains.compose.resources.stringResource
 class SyncServerProjector(
     scope: CoroutineScope,
     private val model: SyncServerModel,
-    dependencies: Dependencies,
+    private val dependencies: Dependencies,
 ) {
 
     @Pipe
     interface Dependencies {
 
-        val globalGoBackHandler: GlobalGoBackHandler
+        val backButtonWidth: BackButtonWidth
     }
-
-    private val globalGoBackHandler: GoBackHandler = dependencies.globalGoBackHandler.resolve(scope)
 
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
     fun Content() {
-        Scaffold(
-            modifier = Modifier.fillMaxSize(),
-            topBar = {
-                TopAppBar(
-                    title = { Text(stringResource(Res.string.sync_server)) },
-                    navigationIcon = { globalGoBackHandler.NavigationIcon() },
-                )
+        FullScreen(
+            backButtonWidth = dependencies.backButtonWidth.width,
+            top = { contentPadding ->
+                TopBar(
+                    modifier = Modifier.padding(contentPadding),
+                ) {
+                    TopBarTitle { Text(stringResource(Res.string.sync_server)) }
+                }
             },
         ) { contentPadding ->
             ErrorPanel(

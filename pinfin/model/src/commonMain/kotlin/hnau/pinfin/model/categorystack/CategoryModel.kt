@@ -2,7 +2,6 @@ package hnau.pinfin.model.categorystack
 
 import hnau.common.app.model.EditingString
 import hnau.common.app.model.goback.GoBackHandler
-import hnau.common.app.model.goback.GoBackHandlerProvider
 import hnau.common.app.model.goback.NeverGoBackHandler
 import hnau.common.app.model.toEditingString
 import hnau.common.kotlin.coroutines.actionOrNullIfExecuting
@@ -30,7 +29,7 @@ class CategoryModel(
     private val skeleton: Skeleton,
     onReady: () -> Unit,
     val chooseIcon: () -> Unit,
-) : GoBackHandlerProvider {
+) {
 
     @Pipe
     interface Dependencies {
@@ -106,6 +105,6 @@ class CategoryModel(
             }
         }
 
-    override val goBackHandler: GoBackHandler
+    val goBackHandler: GoBackHandler
         get() = NeverGoBackHandler //TODO show cancel edit dialog
 }

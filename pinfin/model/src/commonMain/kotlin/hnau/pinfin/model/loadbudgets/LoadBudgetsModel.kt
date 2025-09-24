@@ -1,6 +1,5 @@
 package hnau.pinfin.model.loadbudgets
 
-import hnau.common.app.model.goback.GoBackHandlerProvider
 import hnau.common.app.model.goback.NeverGoBackHandler
 import hnau.common.app.model.preferences.Preferences
 import hnau.common.kotlin.Loadable
@@ -24,7 +23,7 @@ class LoadBudgetsModel(
     private val scope: CoroutineScope,
     dependencies: Dependencies,
     skeleton: Skeleton,
-) : GoBackHandlerProvider {
+) {
 
     @Pipe
     interface Dependencies {
@@ -86,11 +85,11 @@ class LoadBudgetsModel(
             }
         }
 
-    override val goBackHandler: StateFlow<(() -> Unit)?> = budgetsOrSync
+    val goBackHandler: StateFlow<(() -> Unit)?> = budgetsOrSync
         .flatMapState(scope) { currentMainModel ->
             currentMainModel.fold(
                 ifLoading = { NeverGoBackHandler },
-                ifReady = GoBackHandlerProvider::goBackHandler,
+                ifReady = ManageModel::goBackHandler,
             )
         }
 }

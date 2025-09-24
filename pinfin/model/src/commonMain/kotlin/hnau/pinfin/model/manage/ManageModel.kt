@@ -6,7 +6,6 @@ package hnau.pinfin.model.manage
 
 import arrow.core.identity
 import hnau.common.app.model.goback.GoBackHandler
-import hnau.common.app.model.goback.GoBackHandlerProvider
 import hnau.common.app.model.preferences.Preference
 import hnau.common.app.model.preferences.Preferences
 import hnau.common.app.model.preferences.map
@@ -42,7 +41,7 @@ class ManageModel(
     scope: CoroutineScope,
     dependencies: Dependencies,
     skeleton: Skeleton,
-) : GoBackHandlerProvider {
+) {
 
     @Pipe
     interface Dependencies {
@@ -163,6 +162,6 @@ class ManageModel(
             }
         }
 
-    override val goBackHandler: GoBackHandler = state
-        .flatMapState(scope, GoBackHandlerProvider::goBackHandler)
+    val goBackHandler: GoBackHandler = state
+        .flatMapState(scope, ManageStateModel::goBackHandler)
 }

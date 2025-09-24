@@ -6,7 +6,6 @@ package hnau.pinfin.model.sync.client.list
 
 import arrow.core.Ior
 import hnau.common.app.model.goback.GoBackHandler
-import hnau.common.app.model.goback.GoBackHandlerProvider
 import hnau.common.app.model.goback.NeverGoBackHandler
 import hnau.common.kotlin.coroutines.toMutableStateFlowAsInitial
 import hnau.common.kotlin.serialization.MutableStateFlowSerializer
@@ -25,7 +24,7 @@ class SyncClientListItemModel(
     dependencies: Dependencies,
     val id: BudgetId,
     localOrServer: Ior<BudgetRepository, SyncClientListModel.ServerBudget>,
-) : GoBackHandlerProvider {
+) {
 
     @Pipe
     interface Dependencies {
@@ -87,6 +86,6 @@ class SyncClientListItemModel(
         }
     }
 
-    override val goBackHandler: GoBackHandler
+    val goBackHandler: GoBackHandler
         get() = NeverGoBackHandler
 }

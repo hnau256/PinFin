@@ -67,8 +67,6 @@ class SelectCategoriesModel(
             val selected: MutableStateFlow<Boolean>,
         )
 
-
-
         val goBackHandler: GoBackHandler
             get() = NeverGoBackHandler
     }

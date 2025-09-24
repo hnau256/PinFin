@@ -6,7 +6,6 @@ package hnau.pinfin.model.sync.start
 
 import hnau.common.app.model.EditingString
 import hnau.common.app.model.goback.GoBackHandler
-import hnau.common.app.model.goback.GoBackHandlerProvider
 import hnau.common.app.model.goback.NeverGoBackHandler
 import hnau.common.app.model.preferences.Preference
 import hnau.common.app.model.preferences.Preferences
@@ -37,7 +36,7 @@ class StartSyncModel(
     private val scope: CoroutineScope,
     private val dependencies: Dependencies,
     private val skeleton: Skeleton,
-) : GoBackHandlerProvider {
+) {
 
     @Pipe
     interface Dependencies {
@@ -176,6 +175,6 @@ class StartSyncModel(
         }
     }
 
-    override val goBackHandler: GoBackHandler
+    val goBackHandler: GoBackHandler
         get() = NeverGoBackHandler
 }

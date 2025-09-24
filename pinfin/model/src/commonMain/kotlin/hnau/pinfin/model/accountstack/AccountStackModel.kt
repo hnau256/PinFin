@@ -5,7 +5,6 @@
 package hnau.pinfin.model.accountstack
 
 import hnau.common.app.model.goback.GoBackHandler
-import hnau.common.app.model.goback.GoBackHandlerProvider
 import hnau.common.app.model.goback.fallback
 import hnau.common.app.model.stack.NonEmptyStack
 import hnau.common.app.model.stack.StackModelElements
@@ -30,7 +29,7 @@ class AccountStackModel(
     private val skeleton: Skeleton,
     private val dependencies: Dependencies,
     private val onReady: () -> Unit,
-) : GoBackHandlerProvider {
+) {
 
     @Serializable
     data class Skeleton(
@@ -98,8 +97,8 @@ class AccountStackModel(
         )
     }
 
-    override val goBackHandler: GoBackHandler = stack
-        .tailGoBackHandler(scope)
+    val goBackHandler: GoBackHandler = stack
+        .tailGoBackHandler(scope, AccountStackElementModel::goBackHandler)
         .fallback(
             scope = scope,
             fallback = skeleton.stack.stackGoBackHandler(scope),

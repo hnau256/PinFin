@@ -2,8 +2,11 @@ package hnau.pinfin.projector.budget.config
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.text.KeyboardActions
@@ -34,8 +37,11 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
+import androidx.compose.ui.unit.Dp
 import hnau.common.app.projector.uikit.AlertDialogContent
+import hnau.common.app.projector.uikit.FullScreen
 import hnau.common.app.projector.uikit.TextInput
+import hnau.common.app.projector.uikit.TopBarDefaults
 import hnau.common.app.projector.uikit.progressindicator.InProgress
 import hnau.common.app.projector.uikit.state.StateContent
 import hnau.common.app.projector.uikit.state.TransitionSpec
@@ -60,10 +66,15 @@ class BudgetConfigProjector(
 
     @Composable
     fun Content(
-        contentPadding: PaddingValues,
+        bottomInset: Dp,
     ) {
+        val topPadding = WindowInsets.statusBars.asPaddingValues().calculateTopPadding() +
+                TopBarDefaults.height
         LazyColumn(
-            contentPadding = contentPadding,
+            contentPadding = PaddingValues(
+                top = topPadding,
+                bottom = bottomInset,
+            ),
             modifier = Modifier.Companion.fillMaxSize(),
         ) {
             button(

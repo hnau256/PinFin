@@ -16,10 +16,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import hnau.common.app.model.goback.GlobalGoBackHandler
+import hnau.pinfin.projector.utils.BackButtonWidth
 import hnau.common.app.model.goback.GoBackHandler
 import hnau.common.app.projector.uikit.ErrorPanel
+import hnau.common.app.projector.uikit.TopBarDefaults
 import hnau.common.app.projector.uikit.state.LoadableContent
 import hnau.common.app.projector.uikit.state.NullableStateContent
 import hnau.common.app.projector.uikit.state.TransitionSpec
@@ -51,24 +53,20 @@ class TransactionsProjector(
 
         val amountFormatter: AmountFormatter
 
-        val globalGoBackHandler: GlobalGoBackHandler
+        val backButtonWidth: BackButtonWidth
     }
-
-    private val globalGoBackHandler: GoBackHandler = dependencies
-        .globalGoBackHandler
-        .resolve(scope)
 
     @Composable
     fun Content(
-        contentPadding: PaddingValues,
+        bottomInset: Dp,
         showAddButton: Boolean = true,
     ) {
         Transactions(
-            contentPadding = contentPadding + PaddingValues(bottom = 96.dp)
+            bottomInset = bottomInset + 96.dp,
         )
         if (showAddButton) {
             AddTransactionButton(
-                contentPadding = contentPadding,
+                bottomInset = bottomInset,
             )
         }
     }
@@ -76,7 +74,7 @@ class TransactionsProjector(
     @OptIn(ExperimentalUuidApi::class)
     @Composable
     private fun Transactions(
-        contentPadding: PaddingValues,
+        bottomInset: Dp,
     ) {
         model
             .transactions
@@ -105,7 +103,10 @@ class TransactionsProjector(
                         transitionSpec = TransitionSpec.crossfade(),
                     ) { delayedTransactions ->
                         LazyColumn(
-                            contentPadding = contentPadding + PaddingValues(vertical = Dimens.separation),
+                            contentPadding = PaddingValues(
+                                top = TopBarDefaults.height + Dimens.separation,
+                                bottom = bottomInset + Dimens.separation,
+                            ),
                             verticalArrangement = Arrangement.spacedBy(Dimens.separation),
                             state = model.scrollState.toLazyListState(model::updateScrollState),
                         ) {
@@ -125,12 +126,12 @@ class TransactionsProjector(
 
     @Composable
     private fun AddTransactionButton(
-        contentPadding: PaddingValues,
+        bottomInset: Dp,
     ) {
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(contentPadding)
+                .padding(bottom = bottomInset)
                 .padding(Dimens.largeSeparation),
             contentAlignment = Alignment.BottomEnd,
         ) {

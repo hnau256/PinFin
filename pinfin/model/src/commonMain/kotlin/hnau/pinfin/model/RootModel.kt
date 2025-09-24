@@ -1,7 +1,6 @@
 package hnau.pinfin.model
 
 import hnau.common.app.model.goback.GoBackHandler
-import hnau.common.app.model.goback.GoBackHandlerProvider
 import hnau.common.kotlin.getOrInit
 import hnau.common.kotlin.toAccessor
 import hnau.pinfin.model.loadbudgets.LoadBudgetsModel
@@ -13,7 +12,7 @@ class RootModel(
     scope: CoroutineScope,
     private val dependencies: Dependencies,
     skeleton: Skeleton,
-) : GoBackHandlerProvider {
+) {
 
     @Pipe
     interface Dependencies {
@@ -36,6 +35,6 @@ class RootModel(
             .getOrInit { LoadBudgetsModel.Skeleton() },
     )
 
-    override val goBackHandler: GoBackHandler
+    val goBackHandler: GoBackHandler
         get() = loadBudgets.goBackHandler
 }

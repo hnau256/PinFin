@@ -1,7 +1,7 @@
 package hnau.pinfin.projector.budget
 
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.unit.Dp
 import hnau.pinfin.projector.budget.analytics.AnalyticsProjector
 import hnau.pinfin.projector.budget.config.BudgetConfigProjector
 import hnau.pinfin.projector.budget.transactions.TransactionsProjector
@@ -10,7 +10,7 @@ sealed interface BudgetPageProjector {
 
     @Composable
     fun Content(
-        contentPadding: PaddingValues,
+        bottomInset: Dp,
     )
 
     data class Transactions(
@@ -19,10 +19,10 @@ sealed interface BudgetPageProjector {
 
         @Composable
         override fun Content(
-            contentPadding: PaddingValues,
+            bottomInset: Dp,
         ) {
             projector.Content(
-                contentPadding = contentPadding,
+                bottomInset = bottomInset,
             )
         }
     }
@@ -33,10 +33,10 @@ sealed interface BudgetPageProjector {
 
         @Composable
         override fun Content(
-            contentPadding: PaddingValues,
+            bottomInset: Dp,
         ) {
             projector.Content(
-                contentPadding = contentPadding,
+                bottomInset = bottomInset,
             )
         }
     }
@@ -47,10 +47,10 @@ sealed interface BudgetPageProjector {
 
         @Composable
         override fun Content(
-            contentPadding: PaddingValues,
+            bottomInset: Dp,
         ) {
             projector.Content(
-                contentPadding = contentPadding,
+                bottomInset = bottomInset,
             )
         }
     }

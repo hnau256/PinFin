@@ -5,7 +5,6 @@
 package hnau.pinfin.model.sync.server
 
 import hnau.common.app.model.goback.GoBackHandler
-import hnau.common.app.model.goback.GoBackHandlerProvider
 import hnau.common.kotlin.coroutines.toMutableStateFlowAsInitial
 import hnau.common.kotlin.serialization.MutableStateFlowSerializer
 import hnau.pinfin.model.sync.server.utils.ServerSyncApi
@@ -27,7 +26,7 @@ class SyncServerModel(
     dependencies: Dependencies,
     private val skeleton: Skeleton,
     private val goBack: () -> Unit,
-) : GoBackHandlerProvider {
+) {
 
     @Pipe
     interface Dependencies {
@@ -81,7 +80,7 @@ class SyncServerModel(
         skeleton.stopServerDialogIsOpened.value = false
     }
 
-    override val goBackHandler: GoBackHandler = {
+    val goBackHandler: GoBackHandler = {
         skeleton.stopServerDialogIsOpened.update { !it }
     }.toMutableStateFlowAsInitial()
 }

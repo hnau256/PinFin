@@ -5,7 +5,6 @@
 package hnau.pinfin.model.sync.client
 
 import hnau.common.app.model.goback.GoBackHandler
-import hnau.common.app.model.goback.GoBackHandlerProvider
 import hnau.common.app.model.goback.fallback
 import hnau.common.app.model.stack.NonEmptyStack
 import hnau.common.app.model.stack.StackModelElements
@@ -31,7 +30,7 @@ class SyncClientStackModel(
     scope: CoroutineScope,
     dependencies: Dependencies,
     private val skeleton: Skeleton,
-) : GoBackHandlerProvider {
+) {
 
     @Pipe
     interface Dependencies {
@@ -122,8 +121,8 @@ class SyncClientStackModel(
         )
     }
 
-    override val goBackHandler: GoBackHandler = stack
-        .tailGoBackHandler(scope)
+    val goBackHandler: GoBackHandler = stack
+        .tailGoBackHandler(scope, SyncClientStackElementModel::goBackHandler)
         .fallback(
             scope = scope,
             fallback = skeleton.stack.stackGoBackHandler(scope),

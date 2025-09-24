@@ -1,29 +1,37 @@
 package hnau.pinfin.model.manage
 
-import hnau.common.app.model.goback.GoBackHandlerProvider
+import hnau.common.app.model.goback.GoBackHandler
 import hnau.pinfin.model.budgetsstack.BudgetsStackModel
 import hnau.pinfin.model.budgetstack.BudgetStackModel
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
-sealed interface ManageStateModel : GoBackHandlerProvider {
+sealed interface ManageStateModel {
 
     val id: Int
 
+    val goBackHandler: GoBackHandler
+
     data class BudgetsStack(
         val model: BudgetsStackModel,
-    ) : GoBackHandlerProvider by model, ManageStateModel {
+    ): ManageStateModel {
 
         override val id: Int
             get() = 0
+
+        override val goBackHandler: GoBackHandler
+            get() = model.goBackHandler
     }
 
     data class BudgetStack(
         val model: BudgetStackModel,
-    ) : GoBackHandlerProvider by model, ManageStateModel {
+    ):  ManageStateModel {
 
         override val id: Int
             get() = 1
+
+        override val goBackHandler: GoBackHandler
+            get() = model.goBackHandler
     }
 
     @Serializable
