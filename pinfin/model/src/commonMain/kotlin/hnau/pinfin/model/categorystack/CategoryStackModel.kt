@@ -5,13 +5,13 @@
 package hnau.pinfin.model.categorystack
 
 import hnau.common.app.model.goback.GoBackHandler
-import hnau.common.app.model.goback.fallback
 import hnau.common.app.model.stack.NonEmptyStack
-import hnau.common.app.model.stack.StackModelElements
+import hnau.common.app.model.stack.SkeletonWithModel
+import hnau.common.app.model.stack.goBackHandler
+import hnau.common.app.model.stack.modelsOnly
 import hnau.common.app.model.stack.push
-import hnau.common.app.model.stack.stackGoBackHandler
-import hnau.common.app.model.stack.tailGoBackHandler
 import hnau.common.app.model.stack.tryDropLast
+import hnau.common.app.model.stack.withModels
 import hnau.common.kotlin.coroutines.toMutableStateFlowAsInitial
 import hnau.common.kotlin.serialization.MutableStateFlowSerializer
 import hnau.pinfin.model.IconModel
@@ -50,19 +50,18 @@ class CategoryStackModel(
         fun info(): CategoryModel.Dependencies
     }
 
-    val stack: StateFlow<NonEmptyStack<CategoryStackElementModel>> = run {
-        val stack = skeleton.stack
-        StackModelElements(
-            scope = scope,
-            getKey = CategoryStackElementModel.Skeleton::key,
-            skeletonsStack = stack,
-        ) { modelScope, skeleton ->
-            createModel(
-                modelScope = modelScope,
-                skeleton = skeleton,
-            )
-        }
-    }
+    private val stackWithModels: StateFlow<NonEmptyStack<SkeletonWithModel<CategoryStackElementModel.Skeleton, CategoryStackElementModel>>> =
+        skeleton
+            .stack
+            .withModels(
+                scope = scope,
+                getKey = CategoryStackElementModel.Skeleton::key,
+            ) { modelScope, skeleton ->
+                createModel(
+                    modelScope = modelScope,
+                    skeleton = skeleton,
+                )
+            }
 
     private fun createModel(
         modelScope: CoroutineScope,
@@ -89,7 +88,7 @@ class CategoryStackModel(
                 scope = modelScope,
                 skeleton = skeleton.skeleton,
                 selected = this@CategoryStackModel.skeleton.icon.value,
-                onSelect = {icon ->
+                onSelect = { icon ->
                     this@CategoryStackModel.skeleton.icon.value = icon
                     this@CategoryStackModel.skeleton.stack.tryDropLast()
                 },
@@ -97,10 +96,12 @@ class CategoryStackModel(
         )
     }
 
-    val goBackHandler: GoBackHandler = stack
-        .tailGoBackHandler(scope, CategoryStackElementModel::goBackHandler)
-        .fallback(
-            scope = scope,
-            fallback = skeleton.stack.stackGoBackHandler(scope),
-        )
+    val stack: StateFlow<NonEmptyStack<CategoryStackElementModel>> =
+        stackWithModels.modelsOnly(scope)
+
+    val goBackHandler: GoBackHandler = stackWithModels.goBackHandler(
+        scope = scope,
+        extractGoBackHandler = CategoryStackElementModel::goBackHandler,
+        updateSkeletonStack = skeleton.stack::value::set,
+    )
 }

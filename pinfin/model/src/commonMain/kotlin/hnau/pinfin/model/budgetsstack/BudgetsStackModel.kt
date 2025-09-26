@@ -5,12 +5,12 @@
 package hnau.pinfin.model.budgetsstack
 
 import hnau.common.app.model.goback.GoBackHandler
-import hnau.common.app.model.goback.fallback
 import hnau.common.app.model.stack.NonEmptyStack
-import hnau.common.app.model.stack.StackModelElements
+import hnau.common.app.model.stack.SkeletonWithModel
+import hnau.common.app.model.stack.goBackHandler
+import hnau.common.app.model.stack.modelsOnly
 import hnau.common.app.model.stack.push
-import hnau.common.app.model.stack.stackGoBackHandler
-import hnau.common.app.model.stack.tailGoBackHandler
+import hnau.common.app.model.stack.withModels
 import hnau.common.kotlin.serialization.MutableStateFlowSerializer
 import hnau.pinfin.model.budgetslist.BudgetsListModel
 import hnau.pinfin.model.sync.SyncStackModel
@@ -43,19 +43,18 @@ class BudgetsStackModel(
         fun sync(): SyncStackModel.Dependencies
     }
 
-    val stack: StateFlow<NonEmptyStack<BudgetsStackElementModel>> = run {
-        val stack = skeleton.stack
-        StackModelElements(
-            scope = scope,
-            getKey = BudgetsStackElementModel.Skeleton::key,
-            skeletonsStack = stack,
-        ) { modelScope, skeleton ->
-            createModel(
-                modelScope = modelScope,
-                skeleton = skeleton,
-            )
-        }
-    }
+    private val stackWithModels: StateFlow<NonEmptyStack<SkeletonWithModel<BudgetsStackElementModel.Skeleton, BudgetsStackElementModel>>> =
+        skeleton
+            .stack
+            .withModels(
+                scope = scope,
+                getKey = BudgetsStackElementModel.Skeleton::key,
+            ) { modelScope, skeleton ->
+                createModel(
+                    modelScope = modelScope,
+                    skeleton = skeleton,
+                )
+            }
 
     private fun createModel(
         modelScope: CoroutineScope,
@@ -84,10 +83,13 @@ class BudgetsStackModel(
         )
     }
 
-    val goBackHandler: GoBackHandler = stack
-        .tailGoBackHandler(scope, BudgetsStackElementModel::goBackHandler)
-        .fallback(
+    val stack: StateFlow<NonEmptyStack<BudgetsStackElementModel>> =
+        stackWithModels.modelsOnly(scope)
+
+    val goBackHandler: GoBackHandler = stackWithModels
+        .goBackHandler(
             scope = scope,
-            fallback = skeleton.stack.stackGoBackHandler(scope),
+            extractGoBackHandler = BudgetsStackElementModel::goBackHandler,
+            updateSkeletonStack = skeleton.stack::value::set,
         )
 }

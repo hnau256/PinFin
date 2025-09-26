@@ -37,16 +37,6 @@ class RootProjector(
         scope = scope,
     )*/
 
-    init {
-        scope.launch {
-            model
-                .goBackHandler
-                .collect {
-                    println("QWERTY, goBackHandler: $it")
-                }
-        }
-    }
-
     private val backButton = BackButtonProjector(
         scope = scope,
         goBackHandler = model.goBackHandler,

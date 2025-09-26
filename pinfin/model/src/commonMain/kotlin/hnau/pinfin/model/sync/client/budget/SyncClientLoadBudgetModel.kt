@@ -5,7 +5,6 @@
 package hnau.pinfin.model.sync.client.budget
 
 import hnau.common.app.model.goback.GoBackHandler
-import hnau.common.app.model.goback.fallback
 import hnau.common.kotlin.Loadable
 import hnau.common.kotlin.LoadableStateFlow
 import hnau.common.kotlin.Loading
@@ -91,17 +90,21 @@ class SyncClientLoadBudgetModel(
             .value = false
     }
 
-    private val fallbackGoBackHandler: GoBackHandler =
-        { skeleton.isStopSyncDialogVisible.update(Boolean::not) }.toMutableStateFlowAsInitial()
+    private fun switchIsStopSyncDialogVisibility() {
+        skeleton.isStopSyncDialogVisible.update(Boolean::not)
+    }
+
 
     val goBackHandler: GoBackHandler = state
         .flatMapWithScope(scope) { scope, budgetOrLoading ->
             when (budgetOrLoading) {
-                Loading -> fallbackGoBackHandler
-                is Ready -> budgetOrLoading.value.goBackHandler.fallback(
-                    scope = scope,
-                    fallback = fallbackGoBackHandler
-                )
+                Loading -> ::switchIsStopSyncDialogVisibility.toMutableStateFlowAsInitial()
+                is Ready -> budgetOrLoading
+                    .value
+                    .goBackHandler
+                    .mapWithScope(scope) { scope, goBackOrNull ->
+                        goBackOrNull ?: ::switchIsStopSyncDialogVisibility
+                    }
             }
         }
 }
