@@ -60,21 +60,16 @@ class FilterModel(
         }
     }
 
-    class Page(
-        val type: StateFlow<Type>,
+    class Config(
+        val type: StateFlow<Pair<Tab, Type>>,
+        val categories: SelectCategoriesModel,
     ) {
 
         sealed interface Type {
 
-            val tab: Tab
-
             data class Categories(
                 val model: SelectCategoriesModel.Page,
-            ) : Type {
-
-                override val tab: Tab
-                    get() = Tab.SelectedCategories
-            }
+            ) : Type
         }
     }
 
@@ -106,24 +101,26 @@ class FilterModel(
             )
         }
 
-    val page: StateFlow<Page?> = skeleton
+    val config: StateFlow<Config?> = skeleton
         .selectedTab
         .stickNotNull(scope)
         .mapState(scope) { selectedTabOrNull ->
             selectedTabOrNull?.let { selectedTab ->
-                Page(
+                Config(
                     type = selectedTab.mapState(scope) { tab ->
-                        when (tab) {
-                            Tab.SelectedCategories -> Page.Type.Categories(
+                        val model = when (tab) {
+                            Tab.SelectedCategories -> Config.Type.Categories(
                                 categories.createPage(),
                             )
                         }
-                    }
+                        tab to model
+                    },
+                    categories = categories,
                 )
             }
         }
 
-    fun switchPageVisibility() {
+    fun switchConfigVisibility() {
         skeleton.selectedTab.update { selected ->
             selected.foldNullable(
                 ifNull = { Tab.default },

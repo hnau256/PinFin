@@ -5,9 +5,12 @@
 package hnau.pinfin.model.budget
 
 import hnau.common.app.model.goback.GoBackHandler
+import hnau.common.kotlin.coroutines.flatMapWithScope
 import hnau.common.kotlin.coroutines.mapState
 import hnau.common.kotlin.coroutines.toMutableStateFlowAsInitial
+import hnau.common.kotlin.foldNullable
 import hnau.common.kotlin.ifNull
+import hnau.common.kotlin.it
 import hnau.common.kotlin.serialization.MutableStateFlowSerializer
 import hnau.pinfin.model.TransactionsModel
 import hnau.pinfin.model.budget.analytics.AnalyticsModel
@@ -98,17 +101,23 @@ class BudgetModel(
         skeleton.selectedTab.value = tab
     }
 
-    val currentModel: StateFlow<BudgetPageModel> = skeleton
+    val currentModelWithTab: StateFlow<Pair<BudgetTab, BudgetPageModel>> = skeleton
         .selectedTab
-        .mapState(scope, ::getModel)
+        .mapState(scope) { tab ->
+            val model = getModel(tab)
+            tab to model
+        }
 
-    val goBackHandler: GoBackHandler = skeleton
-        .selectedTab
-        .mapState(scope) { selectedTab ->
-            when (selectedTab) {
-                BudgetTab.default -> null
-                else -> {
-                    { skeleton.selectedTab.value = BudgetTab.default }
+    val currentModel: StateFlow<BudgetPageModel> = currentModelWithTab
+        .mapState(scope, Pair<*, BudgetPageModel>::second)
+
+    val goBackHandler: GoBackHandler = currentModelWithTab
+        .flatMapWithScope(scope) { scope, (tab, model) ->
+            model.goBackHandler.mapState(scope) { modelGoBackOrNull ->
+                modelGoBackOrNull.ifNull {
+                    tab.takeIf { it != BudgetTab.default }?.let {
+                        { skeleton.selectedTab.value = BudgetTab.default }
+                    }
                 }
             }
         }

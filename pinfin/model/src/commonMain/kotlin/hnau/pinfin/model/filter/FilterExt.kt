@@ -1,5 +1,6 @@
 package hnau.pinfin.model.filter
 
+import arrow.core.NonEmptyList
 import hnau.pinfin.data.CategoryId
 import hnau.pinfin.model.utils.budget.state.TransactionInfo
 
@@ -10,10 +11,10 @@ internal fun Filters.check(
     else -> true
 }
 
-private fun List<CategoryId>.check(
+private fun NonEmptyList<CategoryId>?.check(
     transaction: TransactionInfo,
 ): Boolean {
-    if (isEmpty()) {
+    if (this == null) {
         return true
     }
     val set = toSet()

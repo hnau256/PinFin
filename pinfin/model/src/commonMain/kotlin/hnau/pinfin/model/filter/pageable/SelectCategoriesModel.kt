@@ -4,6 +4,8 @@
 
 package hnau.pinfin.model.filter.pageable
 
+import arrow.core.NonEmptyList
+import arrow.core.toNonEmptyListOrNull
 import hnau.common.app.model.goback.GoBackHandler
 import hnau.common.app.model.goback.NeverGoBackHandler
 import hnau.common.kotlin.coroutines.combineStateWith
@@ -14,6 +16,7 @@ import hnau.common.kotlin.coroutines.mapWithScope
 import hnau.common.kotlin.coroutines.toMutableStateFlowAsInitial
 import hnau.common.kotlin.foldBoolean
 import hnau.common.kotlin.foldNullable
+import hnau.common.kotlin.ifNull
 import hnau.common.kotlin.ifTrue
 import hnau.common.kotlin.serialization.MutableStateFlowSerializer
 import hnau.pinfin.data.CategoryId
@@ -49,9 +52,10 @@ class SelectCategoriesModel(
         companion object {
 
             fun create(
-                initialSelectedCategoriesIds: List<CategoryId>,
+                initialSelectedCategoriesIds: NonEmptyList<CategoryId>?,
             ): Skeleton = Skeleton(
                 selectedCategories = initialSelectedCategoriesIds
+                    .ifNull { emptyList() }
                     .toSet()
                     .toMutableStateFlowAsInitial(),
             )
@@ -111,7 +115,7 @@ class SelectCategoriesModel(
             }
         }
 
-    val selectedCategories: StateFlow<List<CategoryInfo>> = categories
+    val selectedCategories: StateFlow<NonEmptyList<CategoryInfo>?> = categories
         .mapWithScope(scope) { scope, categories ->
             categories.map { category ->
                 category
@@ -151,13 +155,18 @@ class SelectCategoriesModel(
                     categories
                         .toList()
                         .sorted()
+                        .toNonEmptyListOrNull()
                 }
         }
 
-    val selectedCategoriesIds: StateFlow<List<CategoryId>> = selectedCategories
+    val selectedCategoriesIds: StateFlow<NonEmptyList<CategoryId>?> = selectedCategories
         .mapState(scope) { categories ->
-            categories.map { category -> category.id }
+            categories?.map { category -> category.id }
         }
+
+    fun clear() {
+        skeleton.selectedCategories.value = emptySet()
+    }
 
     fun createPage(): Page = Page(
         categories = categories,

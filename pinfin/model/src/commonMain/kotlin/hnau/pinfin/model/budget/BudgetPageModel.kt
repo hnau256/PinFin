@@ -11,11 +11,13 @@ sealed interface BudgetPageModel {
 
     val tab: BudgetTab
 
+    val goBackHandler: GoBackHandler
+
     data class Transactions(
         val model: TransactionsModel,
     ) : BudgetPageModel {
 
-        val goBackHandler: GoBackHandler
+        override val goBackHandler: GoBackHandler
             get() = model.goBackHandler
 
         override val tab: BudgetTab
@@ -26,7 +28,7 @@ sealed interface BudgetPageModel {
         val model: AnalyticsModel,
     ) : BudgetPageModel {
 
-        val goBackHandler: GoBackHandler
+        override val goBackHandler: GoBackHandler
             get() = model.goBackHandler
 
         override val tab: BudgetTab
@@ -37,7 +39,7 @@ sealed interface BudgetPageModel {
         val model: BudgetConfigModel,
     ) : BudgetPageModel {
 
-        val goBackHandler: GoBackHandler
+        override val goBackHandler: GoBackHandler
             get() = model.goBackHandler
 
         override val tab: BudgetTab
