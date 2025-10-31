@@ -13,9 +13,14 @@ interface GraphProvider {
         val period: LocalDateRange
 
         data class Content(
-            val getTransactions: suspend () -> NonEmptyList<TransactionInfo>,
-            val getValues: suspend () -> Map<GroupKey?, Amount>,
-        )
+            val getValues: suspend () -> Map<GroupKey?, Value>,
+        ) {
+
+            data class Value(
+                val transactions: NonEmptyList<TransactionInfo>,
+                val amount: Amount,
+            )
+        }
 
         val content: Content?
     }

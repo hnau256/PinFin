@@ -12,6 +12,7 @@ data class AnalyticsEntry(
     val account: AccountId,
     val category: CategoryId?,
     val amount: Amount,
+    val transaction: TransactionInfo,
 )
 
 fun TransactionInfo.toAnalyticsEntries(): NonEmptyList<AnalyticsEntry> = when (type) {
@@ -20,11 +21,13 @@ fun TransactionInfo.toAnalyticsEntries(): NonEmptyList<AnalyticsEntry> = when (t
             account = type.from.id,
             category = null,
             amount = -amount,
+            transaction = this,
         ),
         AnalyticsEntry(
             account = type.to.id,
             category = null,
             amount = amount,
+            transaction = this,
         )
     )
 
@@ -35,6 +38,7 @@ fun TransactionInfo.toAnalyticsEntries(): NonEmptyList<AnalyticsEntry> = when (t
                 account = type.account.id,
                 category = record.category.id,
                 amount = amount,
+                transaction = this,
             )
         }
 }

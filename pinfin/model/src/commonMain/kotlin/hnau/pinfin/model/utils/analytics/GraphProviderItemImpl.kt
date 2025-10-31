@@ -18,12 +18,10 @@ class GraphProviderItemImpl(
 
     override val content: GraphProvider.Item.Content? = getTransactions?.let { get ->
 
-        val transactions = AsyncLazy { get() }
-
         val values = AsyncLazy {
             withContext(Dispatchers.Default) {
-                val transactions = transactions.get()
-                val entries = transactions
+
+                val entries = get()
                     .flatMap(TransactionInfo::toAnalyticsEntries)
                     .let { entries ->
                         config.usedAccounts.foldNullable(
@@ -46,7 +44,7 @@ class GraphProviderItemImpl(
                         )
                     }
 
-                val groupedAmounts: Map<out GroupKey?, NonEmptyList<Amount>> =
+                val groupedAmounts: Map<out GroupKey?, Pair<NonEmptyList<TransactionInfo>, NonEmptyList<Amount>>> =
                     when (config.groupBy) {
                         GraphConfig.GroupBy.Account -> entries.groupBy { entry ->
                             GroupKey.Account(entry.account)
@@ -59,12 +57,17 @@ class GraphProviderItemImpl(
                         null -> mapOf(null to entries)
                     }.mapValues { (_, entries) ->
                         entries
-                            .map(AnalyticsEntry::amount)
                             .toNonEmptyListOrThrow()
+                            .let { nonEmptyEntries ->
+                                val transactions = nonEmptyEntries.map { it.transaction }
+                                val amounts = nonEmptyEntries.map { it.amount }
+                                transactions to amounts
+                            }
                     }
 
-                groupedAmounts.mapValues { (_, amounts) ->
-                    amounts
+                groupedAmounts.mapValues { (_, transactionsWithAmounts) ->
+                    val (transactions, amounts) = transactionsWithAmounts
+                    val amount = amounts
                         .fold(
                             initial = Amount.zero,
                         ) { acc, amount ->
@@ -81,12 +84,15 @@ class GraphProviderItemImpl(
                                     .let(::Amount)
                             }
                         }
+                    GraphProvider.Item.Content.Value(
+                        transactions = transactions,
+                        amount = amount,
+                    )
                 }
             }
         }
 
         GraphProvider.Item.Content(
-            getTransactions = transactions::get,
             getValues = values::get,
         )
     }
