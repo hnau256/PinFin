@@ -22,7 +22,7 @@ data class GraphConfig(
     val operation: Operation,
     val groupBy: GroupBy?,
     val usedAccounts: NonEmptySet<AccountId>?,
-    val usedCategories: NonEmptySet<CategoryId>?,
+    val usedCategories: NonEmptySet<CategoryId?>?,
 ) {
 
     @Serializable
@@ -37,8 +37,8 @@ data class GraphConfig(
         data class Fixed(
             val duration: DatePeriod,
             val startOfOneOfPeriods: LocalDate,
-            val scrollable: Boolean,
-            val incremental: Boolean,
+            /*val scrollable: Boolean,
+            val incremental: Boolean,*/
         ) : Period
     }
 

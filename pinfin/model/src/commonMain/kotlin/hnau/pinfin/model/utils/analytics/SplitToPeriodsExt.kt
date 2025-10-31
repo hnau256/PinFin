@@ -9,7 +9,6 @@ import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalDateRange
 import kotlinx.datetime.minus
 import kotlinx.datetime.plus
-import kotlin.collections.plus
 
 fun <T> NonEmptyList<T>.splitToPeriods(
     customStartOfOneOfPeriods: LocalDate?,
@@ -30,14 +29,18 @@ fun <T> NonEmptyList<T>.splitToPeriods(
                 }
                 val end = start + step - oneDay
                 val period = start..end
-                val last = period to listOf(head)
+                val last = period to nonEmptyListOf(head)
                 listOf<Pair<LocalDateRange, List<T>>>() to last
             }
         ) { (previous, last), transaction ->
             val (lastRange, lastTransactions) = last
             val date = extractDate(transaction)
             if (date in lastRange) {
-                val newLast = lastRange to (lastTransactions + transaction)
+                val newTransactions = lastTransactions.toNonEmptyListOrNull().foldNullable(
+                    ifNull = { nonEmptyListOf(transaction) },
+                    ifNotNull = { it + transaction },
+                )
+                val newLast = lastRange to newTransactions
                 return@fold previous to newLast
             }
             var newLastRange: LocalDateRange = lastRange.offset(step)
@@ -49,7 +52,7 @@ fun <T> NonEmptyList<T>.splitToPeriods(
                     newLastRange = newLastRange.offset(step)
                 }
             }
-            val newLast = newLastRange to listOf(transaction)
+            val newLast = newLastRange to nonEmptyListOf(transaction)
             newPrevious to newLast
         }
         .let { (previous, last) ->
