@@ -149,6 +149,7 @@ data class BudgetStateBuilder(
         }
 
         BudgetState(
+            hash = hash,
             transactions = transactions
                 .map { (id, transaction) ->
                     TransactionInfo.Companion.fromTransaction(

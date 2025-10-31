@@ -1,9 +1,11 @@
 package hnau.pinfin.data
 
+import hnau.common.gen.enumvalues.annotations.EnumValues
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
+@EnumValues
 enum class AmountDirection {
 
     @SerialName("credit")
