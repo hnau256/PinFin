@@ -10,7 +10,7 @@ import kotlinx.datetime.LocalDateRange
 import kotlinx.datetime.minus
 import kotlinx.datetime.plus
 
-fun <T> NonEmptyList<T>.splitToPeriods(
+inline fun <T> NonEmptyList<T>.splitToPeriods(
     customStartOfOneOfPeriods: LocalDate?,
     duration: DatePeriod,
     extractDate: (T) -> LocalDate,
@@ -67,6 +67,7 @@ fun <T> NonEmptyList<T>.splitToPeriods(
 
 private val oneDay: DatePeriod = DatePeriod(days = 1)
 
-private fun LocalDate.toRange(
+@PublishedApi
+internal fun LocalDate.toRange(
     duration: DatePeriod,
 ): LocalDateRange = this..(this + duration - oneDay)
