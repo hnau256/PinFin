@@ -46,4 +46,21 @@ sealed interface AnalyticsTabProjector {
             )
         }
     }
+
+    data class Graph(
+        val projector: GraphProjector,
+    ) : AnalyticsTabProjector {
+
+        override val tab: AnalyticsTab
+            get() = AnalyticsTab.Graph
+
+        @Composable
+        override fun Content(
+            contentPadding: PaddingValues,
+        ) {
+            projector.Content(
+                contentPadding = contentPadding,
+            )
+        }
+    }
 }

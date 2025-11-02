@@ -21,11 +21,12 @@ import androidx.compose.ui.unit.dp
 import hnau.common.app.projector.uikit.state.LoadableContent
 import hnau.common.app.projector.uikit.state.TransitionSpec
 import hnau.common.app.projector.uikit.utils.Dimens
+import hnau.common.app.projector.utils.SwitchHue
 import hnau.common.app.projector.utils.horizontalDisplayPadding
 import hnau.pinfin.model.budget.analytics.tab.CategoriesModel
+import hnau.pinfin.model.utils.model
 import hnau.pinfin.projector.utils.AmountContent
 import hnau.pinfin.projector.utils.CategoryContent
-import hnau.pinfin.projector.utils.SwitchHue
 import hnau.pinfin.projector.utils.formatter.AmountFormatter
 import hnau.pipe.annotations.Pipe
 
@@ -126,7 +127,7 @@ class CategoriesProjector(
                 )
             }
             SwitchHue(
-                hue = category.hue,
+                hue = category.hue.model,
             ) {
                 LinearProgressIndicator(
                     progress = { item.fraction },

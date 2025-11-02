@@ -28,7 +28,7 @@ class GraphProviderItemImpl(
                             ifNull = { entries },
                             ifNotNull = { usedAccounts ->
                                 entries.filter { entry ->
-                                    entry.account in usedAccounts
+                                    entry.account.id in usedAccounts
                                 }
                             }
                         )
@@ -38,7 +38,7 @@ class GraphProviderItemImpl(
                             ifNull = { entries },
                             ifNotNull = { usedCategories ->
                                 entries.filter { entry ->
-                                    entry.category in usedCategories
+                                    entry.category?.id in usedCategories
                                 }
                             }
                         )

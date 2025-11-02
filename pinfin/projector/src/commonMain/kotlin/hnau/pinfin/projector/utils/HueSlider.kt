@@ -27,7 +27,7 @@ import hnau.common.app.projector.utils.theme.themeBrightness
 import hnau.pinfin.data.Hue
 import hnau.pinfin.model.utils.model
 import kotlinx.coroutines.flow.MutableStateFlow
-import hnau.common.app.model.theme.Hue as ModelHue
+import hnau.common.app.model.utils.Hue as ModelHue
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -110,7 +110,7 @@ private fun calcColor(
 ): Color {
     return Hct
         .from(
-            /* hue = */ hue.degrees,
+            /* hue = */ hue.degrees.toDouble(),
             /* chroma = */ dynamicColorsConfig.chroma,
             /* tone = */ dynamicColorsConfig.tone[brightness],
         )
@@ -126,7 +126,7 @@ private val rainbowBrushes: ThemeBrightnessValues<Brush> = run {
                 calcColor(
                     brightness = brightness,
                     hue = ModelHue(
-                        degrees = 360.0 * i.toDouble() / (pointsCount - 1).toDouble(),
+                        degrees = (360.0 * i.toDouble() / (pointsCount - 1)).toInt(),
                     ),
                 )
             }

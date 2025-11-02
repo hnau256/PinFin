@@ -152,14 +152,14 @@ data class BudgetStateBuilder(
             hash = hash,
             transactions = transactions
                 .map { (id, transaction) ->
-                    TransactionInfo.Companion.fromTransaction(
+                    TransactionInfo.fromTransaction(
                         id = id,
                         transaction = transaction,
                         categories = categories,
                         accounts = accounts,
                     )
                 }
-                .sortedByDescending(TransactionInfo::timestamp),
+                .sortedBy(TransactionInfo::timestamp),
             categories = categories.values.toList(),
             accounts = accounts.values.toList(),
             info = BudgetInfo.create(

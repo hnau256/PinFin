@@ -27,32 +27,31 @@ fun <T> NonEmptyList<T>.splitToPeriods(
                 while (start > firstDate) {
                     start -= step
                 }
-                val end = start + step - oneDay
-                val period = start..end
-                val last = period to nonEmptyListOf(head)
-                listOf<Pair<LocalDateRange, List<T>>>() to last
+                val last = start to nonEmptyListOf(head)
+                listOf<Pair<LocalDate, List<T>>>() to last
             }
-        ) { (previous, last), transaction ->
-            val (lastRange, lastTransactions) = last
-            val date = extractDate(transaction)
+        ) { (previous, last), item ->
+            val (lastRangeStart, lastTransactions) = last
+            val lastRange = lastRangeStart.toRange(duration)
+            val date = extractDate(item)
             if (date in lastRange) {
                 val newTransactions = lastTransactions.toNonEmptyListOrNull().foldNullable(
-                    ifNull = { nonEmptyListOf(transaction) },
-                    ifNotNull = { it + transaction },
+                    ifNull = { nonEmptyListOf(item) },
+                    ifNotNull = { it + item },
                 )
-                val newLast = lastRange to newTransactions
+                val newLast = lastRangeStart to newTransactions
                 return@fold previous to newLast
             }
-            var newLastRange: LocalDateRange = lastRange.offset(step)
+            var newLastRangeStart: LocalDate = lastRangeStart + step
             val newPrevious = buildList {
                 addAll(previous)
                 add(last)
-                while (date !in newLastRange) {
-                    add(newLastRange to emptyList())
-                    newLastRange = newLastRange.offset(step)
+                while (date !in newLastRangeStart.toRange(duration)) {
+                    add(newLastRangeStart to emptyList())
+                    newLastRangeStart += duration
                 }
             }
-            val newLast = newLastRange to nonEmptyListOf(transaction)
+            val newLast = newLastRangeStart to nonEmptyListOf(item)
             newPrevious to newLast
         }
         .let { (previous, last) ->
@@ -62,11 +61,15 @@ fun <T> NonEmptyList<T>.splitToPeriods(
                     ifNull = { nonEmptyListOf(last) },
                     ifNotNull = { it + last }
                 )
+                .map { (rangeStart, items) ->
+                    val range = rangeStart.toRange(duration)
+                    range to items
+                }
         }
 }
 
 private val oneDay: DatePeriod = DatePeriod(days = 1)
 
-private fun LocalDateRange.offset(
-    period: DatePeriod,
-): LocalDateRange = (start + period)..(endInclusive + period)
+private fun LocalDate.toRange(
+    duration: DatePeriod,
+): LocalDateRange = this..(this + duration - oneDay)

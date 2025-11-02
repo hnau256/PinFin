@@ -3,7 +3,6 @@ package hnau.pinfin.projector.budget.analytics
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -15,9 +14,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.Dp
-import hnau.common.app.projector.uikit.utils.Dimens
 import hnau.common.app.projector.utils.Overcompose
-import hnau.common.app.projector.utils.copy
 import hnau.common.app.projector.utils.rememberPagerState
 import hnau.pinfin.model.budget.analytics.AnalyticsModel
 import hnau.pinfin.model.budget.analytics.tab.AnalyticsTab
@@ -38,6 +35,8 @@ class AnalyticsProjector(
         fun accounts(): AccountsProjector.Dependencies
 
         fun categories(): CategoriesProjector.Dependencies
+
+        fun graph(): GraphProjector.Dependencies
     }
 
     private val tabs: AnalyticsTabValues<AnalyticsTabProjector> = AnalyticsTabValues(
@@ -51,6 +50,12 @@ class AnalyticsProjector(
             CategoriesProjector(
                 model = model.categories,
                 dependencies = dependencies.categories(),
+            )
+        ),
+        graph = AnalyticsTabProjector.Graph(
+            GraphProjector(
+                model = model.graph,
+                dependencies = dependencies.graph(),
             )
         )
     )

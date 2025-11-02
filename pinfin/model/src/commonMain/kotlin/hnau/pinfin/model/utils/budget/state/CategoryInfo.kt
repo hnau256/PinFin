@@ -1,5 +1,6 @@
 package hnau.pinfin.model.utils.budget.state
 
+import hnau.common.app.model.utils.Hue as ModelHue
 import hnau.pinfin.data.CategoryConfig
 import hnau.pinfin.data.CategoryId
 import hnau.pinfin.data.Hue
@@ -21,7 +22,7 @@ data class CategoryInfo(
     ): this(
         id = id,
         title = config?.title ?: id.id,
-        hue = config?.hue ?: Hue.calcDefault(id.id.hashCode()),
+        hue = config?.hue ?: ModelHue.calcDefault(id.id.hashCode()).degrees.let(::Hue),
         icon = config?.icon?.variant,
     )
 

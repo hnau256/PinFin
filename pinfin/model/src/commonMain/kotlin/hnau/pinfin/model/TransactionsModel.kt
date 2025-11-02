@@ -4,6 +4,7 @@ import hnau.common.app.model.goback.GoBackHandler
 import hnau.common.kotlin.Loadable
 import hnau.common.kotlin.coroutines.Delayed
 import hnau.common.kotlin.coroutines.combineState
+import hnau.common.kotlin.coroutines.mapState
 import hnau.common.kotlin.coroutines.mapStateDelayed
 import hnau.pinfin.data.TransactionType
 import hnau.pinfin.model.budgetstack.BudgetStackOpener
@@ -11,6 +12,7 @@ import hnau.pinfin.model.filter.FilterModel
 import hnau.pinfin.model.filter.Filters
 import hnau.pinfin.model.filter.check
 import hnau.pinfin.model.utils.budget.repository.BudgetRepository
+import hnau.pinfin.model.utils.budget.state.BudgetState
 import hnau.pinfin.model.utils.budget.state.TransactionInfo
 import hnau.pipe.annotations.Pipe
 import kotlinx.coroutines.CoroutineScope
@@ -71,7 +73,10 @@ class TransactionsModel(
 
     val transactions: StateFlow<Loadable<Delayed<List<TransactionInfo>>>> = combineState(
         scope = scope,
-        a = dependencies.budgetRepository.transactions.list,
+        a = dependencies
+            .budgetRepository
+            .state
+            .mapState(scope) { it.transactions.asReversed() },
         b = filter.filters,
         combine = ::Pair,
     ).mapStateDelayed(scope) { (transactions, filters) ->

@@ -7,6 +7,7 @@ import hnau.pinfin.data.Hue
 import hnau.pinfin.model.utils.icons.IconVariant
 import hnau.pinfin.model.utils.icons.variant
 import kotlinx.serialization.Serializable
+import hnau.common.app.model.utils.Hue as ModelHue
 
 @Serializable
 data class AccountInfo(
@@ -27,7 +28,7 @@ data class AccountInfo(
         amount = amount,
         title = config?.title ?: id.id,
         hideIfAmountIsZero = config?.hideIfAmountIsZero == true,
-        hue = config?.hue ?: Hue.calcDefault(id.id.hashCode()),
+        hue = config?.hue ?: ModelHue.calcDefault(id.id.hashCode()).degrees.let(::Hue),
         icon = config?.icon?.variant,
     )
 

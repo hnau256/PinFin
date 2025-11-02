@@ -27,7 +27,7 @@ class GraphProviderImpl(
         val hash = budgetState.hash
         cache
             ?.takeIf { it.first == hash }
-            ?.foldNullable(
+            .foldNullable(
                 ifNotNull = { (_, items) -> items },
                 ifNull = {
                     calcItems(budgetState)

@@ -11,8 +11,10 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.style.TextAlign
 import hnau.common.app.projector.uikit.ItemsRow
 import hnau.common.app.projector.utils.Icon
+import hnau.common.app.projector.utils.SwitchHue
 import hnau.common.kotlin.foldNullable
 import hnau.pinfin.data.Hue
+import hnau.pinfin.model.utils.model
 
 
 enum class ViewMode {
@@ -61,7 +63,7 @@ fun <T : Any> EntityContent(
         },
         ifNotNull = { existingEntity ->
             SwitchHue(
-                hue = extractHue(existingEntity),
+                hue = extractHue(existingEntity).model,
             ) {
                 Label(
                     modifier = modifier,

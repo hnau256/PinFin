@@ -73,4 +73,5 @@
     <string name="hue">Цвет</string>
     <string name="icon">Иконка</string>
     <string name="records">Записи</string>
+    <string name="graph">Графики</string>
 </resources>

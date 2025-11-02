@@ -11,6 +11,7 @@ import hnau.common.kotlin.serialization.MutableStateFlowSerializer
 import hnau.pinfin.model.budget.analytics.tab.AccountsModel
 import hnau.pinfin.model.budget.analytics.tab.AnalyticsTab
 import hnau.pinfin.model.budget.analytics.tab.CategoriesModel
+import hnau.pinfin.model.budget.analytics.tab.GraphModel
 import hnau.pipe.annotations.Pipe
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -29,6 +30,8 @@ class AnalyticsModel(
         fun accounts(): AccountsModel.Dependencies
 
         fun categories(): CategoriesModel.Dependencies
+
+        fun graph(): GraphModel.Dependencies
     }
 
     @Serializable
@@ -36,6 +39,7 @@ class AnalyticsModel(
         val selectedTab: MutableStateFlow<AnalyticsTab> =
             AnalyticsTab.default.toMutableStateFlowAsInitial(),
         val accounts: AccountsModel.Skeleton = AccountsModel.Skeleton(),
+        val graph: GraphModel.Skeleton = GraphModel.Skeleton(),
     )
 
     val accounts: AccountsModel = AccountsModel(
@@ -47,6 +51,12 @@ class AnalyticsModel(
     val categories: CategoriesModel = CategoriesModel(
         scope = scope,
         dependencies = dependencies.categories(),
+    )
+
+    val graph: GraphModel = GraphModel(
+        scope = scope,
+        dependencies = dependencies.graph(),
+        skeleton = skeleton.graph,
     )
 
     val selectedTab: MutableStateFlow<AnalyticsTab>
