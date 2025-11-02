@@ -1,6 +1,7 @@
 package hnau.pinfin.model.utils.analytics
 
 import arrow.core.NonEmptyList
+import arrow.core.mapValuesNotNull
 import arrow.core.toNonEmptyListOrThrow
 import hnau.common.kotlin.foldNullable
 import hnau.common.kotlin.lazy.AsyncLazy
@@ -18,7 +19,7 @@ class GraphProviderItemImpl(
 
     override val content: GraphProvider.Item.Content? = getTransactions?.let { get ->
 
-        val values = AsyncLazy {
+        val values: AsyncLazy<Map<GroupKey?, GraphProvider.Item.Content.Value>> = AsyncLazy {
             withContext(Dispatchers.Default) {
 
                 val entries = get()
@@ -44,7 +45,7 @@ class GraphProviderItemImpl(
                         )
                     }
 
-                val groupedAmounts: Map<out GroupKey?, Pair<NonEmptyList<TransactionInfo>, NonEmptyList<Amount>>> =
+                val groupedAmounts: Map<GroupKey?, Pair<NonEmptyList<TransactionInfo>, NonEmptyList<Amount>>> =
                     when (config.groupBy) {
                         GraphConfig.GroupBy.Account -> entries.groupBy { entry ->
                             GroupKey.Account(entry.account)
@@ -65,9 +66,11 @@ class GraphProviderItemImpl(
                             }
                     }
 
-                groupedAmounts.mapValues { (_, transactionsWithAmounts) ->
+                groupedAmounts.mapValuesNotNull { (_, transactionsWithAmounts) ->
+
                     val (transactions, amounts) = transactionsWithAmounts
-                    val amount = amounts
+                    
+                    val nonZeroAmount = amounts
                         .fold(
                             initial = Amount.zero,
                         ) { acc, amount ->
@@ -84,9 +87,12 @@ class GraphProviderItemImpl(
                                     .let(::Amount)
                             }
                         }
+                        .takeIf { it != Amount.zero }
+                        ?: return@mapValuesNotNull null
+
                     GraphProvider.Item.Content.Value(
                         transactions = transactions,
-                        amount = amount,
+                        amount = nonZeroAmount,
                     )
                 }
             }
