@@ -12,7 +12,7 @@ import kotlin.jvm.JvmInline
 @Serializable(Amount.Serializer::class)
 value class Amount(
     val value: Int,
-) {
+) : Comparable<Amount> {
 
     object Serializer : MappingKSerializer<String, Amount>(
         base = String.serializer(),
@@ -27,7 +27,7 @@ value class Amount(
     fun withDirection(
         direction: AmountDirection,
     ): Amount = when (direction) {
-        AmountDirection.Credit ->this
+        AmountDirection.Credit -> this
         AmountDirection.Debit -> {
             val (currentDirection, raw) = splitToDirectionAndRaw()
             when (currentDirection) {
@@ -46,6 +46,16 @@ value class Amount(
     ): Amount = Amount(
         value = value + other.value,
     )
+
+    operator fun minus(
+        other: Amount,
+    ): Amount = Amount(
+        value = value - other.value,
+    )
+
+    override fun compareTo(
+        other: Amount,
+    ): Int = value.compareTo(other.value)
 
     companion object {
 

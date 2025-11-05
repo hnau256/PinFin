@@ -13,16 +13,37 @@ interface GraphProvider {
         val period: LocalDateRange
 
         data class Content(
-            val getValues: suspend () -> Map<GroupKey?, Value>,
+            val values: NonEmptyList<Value>,
         ) {
 
             data class Value(
+                val key: GroupKey?,
                 val transactions: NonEmptyList<TransactionInfo>,
                 val amount: Amount,
             )
+
+            private val amounts: NonEmptyList<Amount> = values
+                .map(Value::amount)
+
+            val amountsRange: ClosedRange<Amount> = amounts.tail.fold(
+                initial = amounts.head.let { first -> first..first },
+            ) { acc, amount ->
+                val min = acc.start
+                val max = acc.endInclusive
+                when {
+                    amount < min -> amount..max
+                    amount > max -> min..amount
+                    else -> acc
+                }
+            }
+
+            val sum: Amount = amounts.tail.fold(
+                initial = amounts.head,
+                operation = Amount::plus,
+            )
         }
 
-        val content: Content?
+        suspend fun getContent(): Content?
     }
 
     suspend fun getItems(
