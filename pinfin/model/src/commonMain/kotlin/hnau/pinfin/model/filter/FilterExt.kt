@@ -7,7 +7,7 @@ import hnau.pinfin.model.utils.budget.state.TransactionInfo
 internal fun Filters.check(
     transaction: TransactionInfo,
 ): Boolean = when {
-    !selectedCategories.check(transaction) -> false
+    !categories.check(transaction) -> false
     else -> true
 }
 

@@ -4,6 +4,7 @@ import arrow.core.NonEmptyList
 import arrow.core.nonEmptyListOf
 import arrow.core.toNonEmptyListOrNull
 import hnau.common.kotlin.foldNullable
+import hnau.pinfin.model.utils.analytics.config.AnalyticsConfig
 import hnau.pinfin.model.utils.budget.state.BudgetState
 import hnau.pinfin.model.utils.budget.state.TransactionInfo
 import hnau.pinfin.model.utils.budget.upchain.UpchainHash
@@ -14,7 +15,7 @@ import kotlinx.coroutines.withContext
 import kotlinx.datetime.LocalDateRange
 
 class GraphProviderImpl(
-    private val config: GraphConfig
+    private val config: AnalyticsConfig
 ) : GraphProvider {
 
     private val accessCacheMutex = Mutex()
@@ -59,15 +60,15 @@ class GraphProviderImpl(
     companion object {
 
         private fun NonEmptyList<TransactionInfo>.splitTransactionsToPeriods(
-            period: GraphConfig.Period,
+            period: AnalyticsConfig.Period,
         ): NonEmptyList<Pair<LocalDateRange, List<TransactionInfo>>>? = when (period) {
-            GraphConfig.Period.Inclusive -> {
+            AnalyticsConfig.Period.Inclusive -> {
                 val firstTransactionDate = first().date
                 val lastTransactionDate = last().date
                 nonEmptyListOf((firstTransactionDate..lastTransactionDate) to this)
             }
 
-            is GraphConfig.Period.Fixed -> splitToPeriods(
+            is AnalyticsConfig.Period.Fixed -> splitToPeriods(
                 customStartOfOneOfPeriods = period.startOfOneOfPeriods,
                 duration = period.duration,
                 extractDate = TransactionInfo::date,

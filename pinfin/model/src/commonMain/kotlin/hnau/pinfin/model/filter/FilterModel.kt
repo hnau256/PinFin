@@ -54,7 +54,7 @@ class FilterModel(
                 initialFilters: Filters = Filters.empty,
             ): Skeleton = Skeleton(
                 categories = SelectCategoriesModel.Skeleton.create(
-                    initialSelectedCategoriesIds = initialFilters.selectedCategories,
+                    initialSelectedCategoriesIds = initialFilters.categories,
                 )
             )
         }
@@ -97,7 +97,7 @@ class FilterModel(
         .selectedCategoriesIds
         .mapState(scope) { categories ->
             Filters(
-                selectedCategories = categories,
+                categories = categories,
             )
         }
 

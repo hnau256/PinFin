@@ -6,13 +6,14 @@ import arrow.core.toNonEmptyListOrThrow
 import hnau.common.kotlin.foldNullable
 import hnau.common.kotlin.lazy.AsyncLazy
 import hnau.pinfin.data.Amount
+import hnau.pinfin.model.utils.analytics.config.AnalyticsConfig
 import hnau.pinfin.model.utils.budget.state.TransactionInfo
 import kotlinx.datetime.LocalDateRange
 
 class GraphProviderItemImpl(
     override val period: LocalDateRange,
     getTransactions: (suspend () -> NonEmptyList<TransactionInfo>)?,
-    config: GraphConfig,
+    config: AnalyticsConfig,
 ) : GraphProvider.Item {
 
     private val content: AsyncLazy<GraphProvider.Item.Content?> = AsyncLazy {
@@ -46,13 +47,13 @@ class GraphProviderItemImpl(
 
         val groupedAmounts: NonEmptyList<Pair<GroupKey?, Pair<NonEmptyList<TransactionInfo>, NonEmptyList<Amount>>>> =
             when (config.groupBy) {
-                GraphConfig.GroupBy.Account -> entries
+                AnalyticsConfig.GroupBy.Account -> entries
                     .groupBy { entry -> GroupKey.Account(entry.account) }
                     .mapValues { (_, entries) ->
                         entries.toNonEmptyListOrThrow()
                     }
 
-                GraphConfig.GroupBy.Category -> entries
+                AnalyticsConfig.GroupBy.Category -> entries
                     .groupBy { entry -> GroupKey.Category(entry.category) }
                     .mapValues { (_, entries) ->
                         entries.toNonEmptyListOrThrow()
@@ -92,14 +93,14 @@ class GraphProviderItemImpl(
                         initial = Amount.zero,
                     ) { acc, amount ->
                         when (config.operation) {
-                            GraphConfig.Operation.Sum -> acc + amount
-                            GraphConfig.Operation.Average -> acc + amount
+                            AnalyticsConfig.Operation.Sum -> acc + amount
+                            AnalyticsConfig.Operation.Average -> acc + amount
                         }
                     }
                     .let { amount ->
                         when (config.operation) {
-                            GraphConfig.Operation.Sum -> amount
-                            GraphConfig.Operation.Average -> (amount.value.toFloat() / amounts.size)
+                            AnalyticsConfig.Operation.Sum -> amount
+                            AnalyticsConfig.Operation.Average -> (amount.value.toFloat() / amounts.size)
                                 .toInt()
                                 .let(::Amount)
                         }

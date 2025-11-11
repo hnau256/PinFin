@@ -53,7 +53,7 @@ import hnau.common.kotlin.map
 import hnau.pinfin.data.Amount
 import hnau.pinfin.data.AmountDirection
 import hnau.pinfin.data.Hue
-import hnau.pinfin.model.budget.analytics.tab.GraphModel
+import hnau.pinfin.model.budget.analytics.tab.graph.GraphModel
 import hnau.pinfin.model.utils.analytics.GraphProvider
 import hnau.pinfin.model.utils.analytics.GroupKey
 import hnau.pinfin.model.utils.budget.state.TransactionInfo

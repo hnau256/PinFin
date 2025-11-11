@@ -2,7 +2,7 @@
     NonEmptySetSerializer::class,
 )
 
-package hnau.pinfin.model.utils.analytics
+package hnau.pinfin.model.utils.analytics.config
 
 import arrow.core.NonEmptySet
 import arrow.core.serialization.NonEmptySetSerializer
@@ -15,15 +15,14 @@ import kotlinx.serialization.Serializable
 import kotlinx.serialization.UseSerializers
 
 @Serializable
-data class GraphConfig(
+data class AnalyticsSplitConfig(
     val period: Period,
-    val subPeriod: DatePeriod,
-    val view: View,
-    val operation: Operation,
-    val groupBy: GroupBy?,
     val usedAccounts: NonEmptySet<AccountId>?,
     val usedCategories: NonEmptySet<CategoryId?>?,
+    val groupBy: GroupBy?,
 ) {
+
+    enum class GroupBy { Account, Category }
 
     @Serializable
     sealed interface Period {
@@ -37,14 +36,6 @@ data class GraphConfig(
         data class Fixed(
             val duration: DatePeriod,
             val startOfOneOfPeriods: LocalDate,
-            /*val scrollable: Boolean,
-            val incremental: Boolean,*/
         ) : Period
     }
-
-    enum class View { Stack, Column, Row }
-
-    enum class GroupBy { Account, Category }
-
-    enum class Operation { Sum, Average }
 }

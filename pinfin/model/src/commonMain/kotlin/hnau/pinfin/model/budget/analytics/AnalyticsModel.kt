@@ -11,7 +11,7 @@ import hnau.common.kotlin.serialization.MutableStateFlowSerializer
 import hnau.pinfin.model.budget.analytics.tab.AccountsModel
 import hnau.pinfin.model.budget.analytics.tab.AnalyticsTab
 import hnau.pinfin.model.budget.analytics.tab.CategoriesModel
-import hnau.pinfin.model.budget.analytics.tab.GraphModel
+import hnau.pinfin.model.budget.analytics.tab.graph.GraphModel
 import hnau.pipe.annotations.Pipe
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
