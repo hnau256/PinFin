@@ -5,6 +5,7 @@
 package hnau.pinfin.model.filter.pageable
 
 import arrow.core.NonEmptyList
+import arrow.core.NonEmptySet
 import arrow.core.toNonEmptyListOrNull
 import hnau.common.app.model.goback.GoBackHandler
 import hnau.common.app.model.goback.NeverGoBackHandler
@@ -46,13 +47,13 @@ class SelectCategoriesModel(
 
     @Serializable
     data class Skeleton(
-        val selectedCategories: MutableStateFlow<Set<CategoryId>>,
+        val selectedCategories: MutableStateFlow<Set<CategoryId?>>,
     ) {
 
         companion object {
 
             fun create(
-                initialSelectedCategoriesIds: NonEmptyList<CategoryId>?,
+                initialSelectedCategoriesIds: NonEmptySet<CategoryId?>?,
             ): Skeleton = Skeleton(
                 selectedCategories = initialSelectedCategoriesIds
                     .ifNull { emptyList() }
@@ -83,7 +84,7 @@ class SelectCategoriesModel(
             allCategories.map { info ->
                 val id = info.id
 
-                val updateIds: (Set<CategoryId>, Boolean) -> Set<CategoryId> =
+                val updateIds: (Set<CategoryId?>, Boolean) -> Set<CategoryId?> =
                     { selectedIds, selected ->
                         selected.foldBoolean(
                             ifTrue = { selectedIds + id },
@@ -159,9 +160,11 @@ class SelectCategoriesModel(
                 }
         }
 
-    val selectedCategoriesIds: StateFlow<NonEmptyList<CategoryId>?> = selectedCategories
+    val selectedCategoriesIds: StateFlow<NonEmptySet<CategoryId?>?> = selectedCategories
         .mapState(scope) { categories ->
-            categories?.map { category -> category.id }
+            categories
+                ?.map { category -> category.id }
+                ?.toNonEmptySet()
         }
 
     fun clear() {

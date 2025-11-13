@@ -6,15 +6,17 @@ package hnau.pinfin.model.budget.analytics.tab.graph
 
 import arrow.core.NonEmptyList
 import arrow.core.toNonEmptyListOrNull
+import arrow.core.toNonEmptyListOrThrow
 import hnau.common.app.model.ListScrollState
 import hnau.common.kotlin.KeyValue
 import hnau.common.kotlin.Loadable
 import hnau.common.kotlin.LoadableStateFlow
 import hnau.common.kotlin.coroutines.toMutableStateFlowAsInitial
-import hnau.common.kotlin.findMinMax
 import hnau.common.kotlin.foldNullable
+import hnau.common.kotlin.groupByToNonEmpty
 import hnau.common.kotlin.serialization.MutableStateFlowSerializer
 import hnau.pinfin.data.Amount
+import hnau.pinfin.data.AmountDirection
 import hnau.pinfin.model.utils.analytics.AnalyticsEntry
 import hnau.pinfin.model.utils.analytics.AnalyticsPage
 import hnau.pinfin.model.utils.analytics.config.AnalyticsPageConfig
@@ -31,7 +33,7 @@ class GraphPageModel(
     scope: CoroutineScope,
     dependencies: Dependencies,
     private val skeleton: Skeleton,
-    page: AnalyticsPage,
+    private val page: AnalyticsPage,
     config: AnalyticsPageConfig,
 ) {
 
@@ -50,6 +52,9 @@ class GraphPageModel(
     val scrollState: MutableStateFlow<ListScrollState>
         get() = skeleton.scrollState
 
+    val period: LocalDateRange
+        get() = page.period
+
     private val subperiods: NonEmptyList<LocalDateRange> = page
         .period
         .splitToPeriods(
@@ -57,16 +62,32 @@ class GraphPageModel(
             startOfOneOfPeriods = page.period.start,
         )
 
-    data class State(
-        val items: NonEmptyList<KeyValue<AnalyticsPage.Item.Key?, Amount>>,
-    ) {
+    sealed interface State {
 
-        val amountRange: ClosedRange<Amount> = items
-            .map(KeyValue<*, Amount>::value)
-            .findMinMax()
+        data class CreditOnly(
+            val credit: Half,
+        ) : State
+
+        data class DebitOnly(
+            val debit: Half,
+        ) : State
+
+        data class CreditAndDebit(
+            val credit: Half,
+            val debit: Half,
+        ) : State
+
+        data class Half(
+            val values: NonEmptyList<KeyValue<AnalyticsPage.Item.Key?, Amount>>,
+        ) {
+
+            val max: Amount = values
+                .map(KeyValue<*, Amount>::value)
+                .max()
+        }
     }
 
-    val items: StateFlow<Loadable<State?>> = LoadableStateFlow(
+    val state: StateFlow<Loadable<State?>> = LoadableStateFlow(
         scope = scope,
     ) {
         page
@@ -81,8 +102,43 @@ class GraphPageModel(
                     )
                 )
             }
-            .toNonEmptyListOrNull()
-            ?.let(::State)
+            .groupByToNonEmpty { (key, amount) ->
+                amount
+                    .splitToDirectionAndRaw()
+                    .map { positiveAmount ->
+                        KeyValue(
+                            key = key,
+                            value = positiveAmount,
+                        )
+                    }
+            }
+            .mapValues { (_, values) ->
+                values
+                    .sortedByDescending(KeyValue<*, Amount>::value)
+                    .toNonEmptyListOrThrow()
+            }
+            .let { valuesByDirection ->
+                val creditOrNull = valuesByDirection[AmountDirection.Credit]
+                val debitOrNull = valuesByDirection[AmountDirection.Debit]
+                creditOrNull.foldNullable(
+                    ifNull = {
+                        debitOrNull?.let { debit ->
+                            State.DebitOnly(State.Half(debit))
+                        }
+                    },
+                    ifNotNull = { credit ->
+                        debitOrNull.foldNullable(
+                            ifNull = { State.CreditOnly(State.Half(credit)) },
+                            ifNotNull = { debit ->
+                                State.CreditAndDebit(
+                                    credit = State.Half(credit),
+                                    debit = State.Half(debit),
+                                )
+                            }
+                        )
+                    },
+                )
+            }
     }
 
     private fun calcItemAmount(

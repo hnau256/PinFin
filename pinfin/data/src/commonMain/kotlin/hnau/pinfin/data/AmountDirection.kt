@@ -1,5 +1,7 @@
 package hnau.pinfin.data
 
+import arrow.core.NonEmptyList
+import arrow.core.toNonEmptyListOrThrow
 import hnau.common.gen.enumvalues.annotations.EnumValues
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -24,6 +26,9 @@ enum class AmountDirection {
     companion object {
 
         val default: AmountDirection = Debit
+
+        val nonEmptyEntries: NonEmptyList<AmountDirection> =
+            entries.toNonEmptyListOrThrow()
     }
 }
 

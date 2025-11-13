@@ -1,6 +1,6 @@
 package hnau.pinfin.model.filter
 
-import arrow.core.NonEmptyList
+import arrow.core.NonEmptySet
 import hnau.pinfin.data.CategoryId
 import hnau.pinfin.model.utils.budget.state.TransactionInfo
 
@@ -11,7 +11,7 @@ internal fun Filters.check(
     else -> true
 }
 
-private fun NonEmptyList<CategoryId>?.check(
+private fun NonEmptySet<CategoryId?>?.check(
     transaction: TransactionInfo,
 ): Boolean {
     if (this == null) {
@@ -25,6 +25,6 @@ private fun NonEmptyList<CategoryId>?.check(
                 record.category.id in set
             }
 
-        is TransactionInfo.Type.Transfer -> false
+        is TransactionInfo.Type.Transfer -> null in set
     }
 }

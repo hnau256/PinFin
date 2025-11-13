@@ -19,12 +19,15 @@ import hnau.common.app.projector.utils.rememberPagerState
 import hnau.pinfin.model.budget.analytics.AnalyticsModel
 import hnau.pinfin.model.budget.analytics.tab.AnalyticsTab
 import hnau.pinfin.model.budget.analytics.tab.AnalyticsTabValues
+import hnau.pinfin.projector.budget.analytics.graph.GraphProjector
 import hnau.pinfin.projector.utils.Tabs
 import hnau.pipe.annotations.Pipe
 import kotlinx.collections.immutable.toImmutableList
+import kotlinx.coroutines.CoroutineScope
 
 @OptIn(ExperimentalMaterial3Api::class)
 class AnalyticsProjector(
+    scope: CoroutineScope,
     private val model: AnalyticsModel,
     private val dependencies: Dependencies,
 ) {
@@ -54,6 +57,7 @@ class AnalyticsProjector(
         ),
         graph = AnalyticsTabProjector.Graph(
             GraphProjector(
+                scope = scope,
                 model = model.graph,
                 dependencies = dependencies.graph(),
             )

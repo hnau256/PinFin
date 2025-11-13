@@ -38,7 +38,7 @@ class GraphPagesModel(
         var page: Pair<Int, GraphPageModel.Skeleton>? = null,
     )
 
-    private val pageWithIndex: StateFlow<IndexedValue<GraphPageModel>> = skeleton
+    val pageWithIndex: StateFlow<IndexedValue<GraphPageModel>> = skeleton
         .index
         .mapWithScope(scope) { scope, indexOrNull ->
             val lastIndex = pages.lastIndex

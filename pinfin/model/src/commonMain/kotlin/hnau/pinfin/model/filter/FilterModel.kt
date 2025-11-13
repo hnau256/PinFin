@@ -97,7 +97,9 @@ class FilterModel(
         .selectedCategoriesIds
         .mapState(scope) { categories ->
             Filters(
+                accounts = null, //TODO
                 categories = categories,
+                period = null, //TODO
             )
         }
 

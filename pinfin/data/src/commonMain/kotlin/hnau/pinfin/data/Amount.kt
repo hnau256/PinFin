@@ -1,5 +1,6 @@
 package hnau.pinfin.data
 
+import hnau.common.kotlin.KeyValue
 import hnau.common.kotlin.mapper.Mapper
 import hnau.common.kotlin.mapper.plus
 import hnau.common.kotlin.mapper.stringToInt
@@ -19,9 +20,9 @@ value class Amount(
         mapper = Mapper.stringToInt + Mapper(::Amount, Amount::value)
     )
 
-    fun splitToDirectionAndRaw(): Pair<AmountDirection, Amount> = when {
-        value >= 0 -> AmountDirection.Credit to this
-        else -> AmountDirection.Debit to -this
+    fun splitToDirectionAndRaw(): KeyValue<AmountDirection, Amount> = when {
+        value >= 0 -> KeyValue(AmountDirection.Credit, this)
+        else -> KeyValue(AmountDirection.Debit, -this)
     }
 
     fun withDirection(

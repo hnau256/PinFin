@@ -19,6 +19,7 @@ kotlin {
         commonMain {
             kotlin.srcDir("build/generated/ksp/metadata/commonMain/kotlin")
             dependencies {
+                implementation(libs.hnau.kotlin)
                 implementation(libs.kotlin.datetime)
                 implementation(libs.enumvalues.annotations)
             }

@@ -1,6 +1,5 @@
 package hnau.pinfin.projector.budget
 
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.navigationBarsPadding
@@ -10,7 +9,6 @@ import androidx.compose.material.icons.filled.QueryStats
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
-import hnau.common.app.projector.uikit.FullScreen
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -34,7 +32,6 @@ import hnau.pinfin.projector.resources.Res
 import hnau.pinfin.projector.resources.analytics
 import hnau.pinfin.projector.resources.config
 import hnau.pinfin.projector.resources.transactions
-import hnau.pinfin.projector.utils.BackButtonWidth
 import hnau.pipe.annotations.Pipe
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.StateFlow
@@ -74,6 +71,7 @@ class BudgetProjector(
 
                     is BudgetPageModel.Analytics -> BudgetPageProjector.Analytics(
                         projector = AnalyticsProjector(
+                            scope = scope,
                             model = model.model,
                             dependencies = dependencies.analytics(),
                         )

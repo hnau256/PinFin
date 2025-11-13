@@ -3,6 +3,7 @@ package hnau.pinfin.projector.budget.analytics
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.runtime.Composable
 import hnau.pinfin.model.budget.analytics.tab.AnalyticsTab
+import hnau.pinfin.projector.budget.analytics.graph.GraphProjector
 
 sealed interface AnalyticsTabProjector {
 
