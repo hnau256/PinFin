@@ -9,12 +9,15 @@ import hnau.common.app.model.stack.NonEmptyStack
 import hnau.common.app.model.stack.SkeletonWithModel
 import hnau.common.app.model.stack.goBackHandler
 import hnau.common.app.model.stack.modelsOnly
+import hnau.common.app.model.stack.push
 import hnau.common.app.model.stack.tryDropLast
 import hnau.common.app.model.stack.withModels
 import hnau.common.kotlin.serialization.MutableStateFlowSerializer
 import hnau.pinfin.model.CategoriesModel
+import hnau.pinfin.model.TransactionsModel
 import hnau.pinfin.model.accountstack.AccountStackModel
 import hnau.pinfin.model.budget.BudgetModel
+import hnau.pinfin.model.budget.analytics.tab.graph.TransactionsOpener
 import hnau.pinfin.model.categorystack.CategoryStackModel
 import hnau.pinfin.model.transaction.TransactionModel
 import hnau.pinfin.model.utils.budget.repository.BudgetRepository
@@ -51,11 +54,14 @@ class BudgetStackModel(
 
             fun transaction(): TransactionModel.Dependencies
 
+            fun transactions(): TransactionsModel.Dependencies
+
             fun categories(): CategoriesModel.Dependencies
         }
 
         fun withOpener(
             opener: BudgetStackOpener,
+            transactionsOpener: TransactionsOpener,
         ): WithOpeners
 
         val budgetRepository: BudgetRepository
@@ -64,7 +70,16 @@ class BudgetStackModel(
     private val dependenciesWithOpeners: Dependencies.WithOpeners = dependencies.withOpener(
         opener = BudgetStackOpenerImpl(
             stack = skeleton.stack,
-        )
+        ),
+        transactionsOpener = { filters ->
+            skeleton.stack.push(
+                BudgetStackElementModel.Skeleton.Transactions(
+                    skeleton = TransactionsModel.Skeleton.create(
+                        initialFilters = filters,
+                    )
+                )
+            )
+        }
     )
 
     private val stackWithModels: StateFlow<NonEmptyStack<SkeletonWithModel<BudgetStackElementModel.Skeleton, BudgetStackElementModel>>> =
@@ -98,6 +113,14 @@ class BudgetStackModel(
                 skeleton = skeleton.skeleton,
                 dependencies = dependenciesWithOpeners.transaction(),
                 onReady = { this@BudgetStackModel.skeleton.stack.tryDropLast() },
+            )
+        )
+
+        is BudgetStackElementModel.Skeleton.Transactions -> BudgetStackElementModel.Transactions(
+            TransactionsModel(
+                scope = modelScope,
+                skeleton = skeleton.skeleton,
+                dependencies = dependenciesWithOpeners.transactions(),
             )
         )
 

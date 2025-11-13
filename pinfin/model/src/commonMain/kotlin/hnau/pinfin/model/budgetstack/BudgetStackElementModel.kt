@@ -2,6 +2,7 @@ package hnau.pinfin.model.budgetstack
 
 import hnau.common.app.model.goback.GoBackHandler
 import hnau.pinfin.model.CategoriesModel
+import hnau.pinfin.model.TransactionsModel
 import hnau.pinfin.model.accountstack.AccountStackModel
 import hnau.pinfin.model.budget.BudgetModel
 import hnau.pinfin.model.categorystack.CategoryStackModel
@@ -37,12 +38,23 @@ sealed interface BudgetStackElementModel {
             get() = model.goBackHandler
     }
 
+    data class Transactions(
+        val model: TransactionsModel,
+    ) : BudgetStackElementModel {
+
+        override val key: Int
+            get() = 2
+
+        override val goBackHandler: GoBackHandler
+            get() = model.goBackHandler
+    }
+
     data class Account(
         val model: AccountStackModel,
     ) : BudgetStackElementModel {
 
         override val key: Int
-            get() = 2
+            get() = 3
 
         override val goBackHandler: GoBackHandler
             get() = model.goBackHandler
@@ -53,7 +65,7 @@ sealed interface BudgetStackElementModel {
     ) : BudgetStackElementModel {
 
         override val key: Int
-            get() = 3
+            get() = 4
 
         override val goBackHandler: GoBackHandler
             get() = model.goBackHandler
@@ -64,7 +76,7 @@ sealed interface BudgetStackElementModel {
     ) : BudgetStackElementModel {
 
         override val key: Int
-            get() = 4
+            get() = 5
 
         override val goBackHandler: GoBackHandler
             get() = model.goBackHandler
@@ -96,9 +108,9 @@ sealed interface BudgetStackElementModel {
         }
 
         @Serializable
-        @SerialName("account")
-        data class Account(
-            val skeleton: AccountStackModel.Skeleton,
+        @SerialName("transactions")
+        data class Transactions(
+            val skeleton: TransactionsModel.Skeleton,
         ) : Skeleton {
 
             override val key: Int
@@ -106,11 +118,21 @@ sealed interface BudgetStackElementModel {
         }
 
         @Serializable
+        @SerialName("account")
+        data class Account(
+            val skeleton: AccountStackModel.Skeleton,
+        ) : Skeleton {
+
+            override val key: Int
+                get() = 3
+        }
+
+        @Serializable
         @SerialName("categories")
         data object Categories : Skeleton {
 
             override val key: Int
-                get() = 3
+                get() = 4
         }
 
         @Serializable
@@ -120,7 +142,7 @@ sealed interface BudgetStackElementModel {
         ) : Skeleton {
 
             override val key: Int
-                get() = 4
+                get() = 5
         }
     }
 }

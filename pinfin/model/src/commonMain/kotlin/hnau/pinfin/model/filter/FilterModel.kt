@@ -10,6 +10,7 @@ import hnau.common.kotlin.coroutines.mapState
 import hnau.common.kotlin.coroutines.stickNotNull
 import hnau.common.kotlin.coroutines.toMutableStateFlowAsInitial
 import hnau.common.kotlin.foldNullable
+import hnau.common.kotlin.serialization.LocalDateRangeSerializer
 import hnau.common.kotlin.serialization.MutableStateFlowSerializer
 import hnau.pinfin.model.filter.pageable.SelectAccountsModel
 import hnau.pinfin.model.filter.pageable.SelectCategoriesModel
@@ -18,6 +19,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.datetime.LocalDateRange
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.UseSerializers
 
@@ -50,6 +52,7 @@ class FilterModel(
     data class Skeleton(
         val categories: SelectCategoriesModel.Skeleton,
         val accounts: SelectAccountsModel.Skeleton,
+        val period: @Serializable(LocalDateRangeSerializer::class) LocalDateRange?,
         val selectedTab: MutableStateFlow<Tab?> =
             null.toMutableStateFlowAsInitial(),
     ) {
@@ -65,6 +68,7 @@ class FilterModel(
                 accounts = SelectAccountsModel.Skeleton.create(
                     initialSelectedAccountsIds = initialFilters.accounts,
                 ),
+                period = initialFilters.period,
             )
         }
     }
@@ -121,9 +125,9 @@ class FilterModel(
         b = accounts.selectedAccountsIds,
     ) { categories, accounts ->
         Filters(
-            accounts = accounts, //TODO
+            accounts = accounts,
             categories = categories,
-            period = null, //TODO
+            period = skeleton.period, //TODO
         )
     }
 

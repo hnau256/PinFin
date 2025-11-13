@@ -18,6 +18,7 @@ import hnau.common.kotlin.serialization.MutableStateFlowSerializer
 import hnau.pinfin.data.Amount
 import hnau.pinfin.data.AmountDirection
 import hnau.pinfin.data.AmountDirectionValues
+import hnau.pinfin.model.filter.Filters
 import hnau.pinfin.model.utils.analytics.AnalyticsEntry
 import hnau.pinfin.model.utils.analytics.AnalyticsPage
 import hnau.pinfin.model.utils.analytics.config.AnalyticsPageConfig
@@ -32,7 +33,7 @@ import kotlinx.serialization.UseSerializers
 
 class GraphPageModel(
     scope: CoroutineScope,
-    dependencies: Dependencies,
+    private val dependencies: Dependencies,
     private val skeleton: Skeleton,
     private val page: AnalyticsPage,
     config: AnalyticsPageConfig,
@@ -40,6 +41,8 @@ class GraphPageModel(
 
     @Pipe
     interface Dependencies {
+
+        val transactionsOpener: TransactionsOpener
 
         val analyticsEntries: List<AnalyticsEntry>
     }
@@ -52,6 +55,9 @@ class GraphPageModel(
 
     val scrollState: MutableStateFlow<ListScrollState>
         get() = skeleton.scrollState
+
+    val transactionsOpener: TransactionsOpener
+        get() = dependencies.transactionsOpener
 
     val period: LocalDateRange
         get() = page.period
@@ -68,11 +74,16 @@ class GraphPageModel(
     ) {
 
         data class Half(
-            val values: NonEmptyList<KeyValue<AnalyticsPage.Item.Key?, Amount>>,
+            val values: NonEmptyList<KeyValue<AnalyticsPage.Item.Key?, Value>>,
         ) {
 
+            data class Value(
+                val amount: Amount,
+                val filters: Filters,
+            )
+
             val max: Amount = values
-                .map(KeyValue<*, Amount>::value)
+                .map { item -> item.value.amount }
                 .max()
         }
     }
@@ -90,24 +101,36 @@ class GraphPageModel(
                 )
                     .takeIf { it != Amount.zero }
                     ?: return@mapNotNull null
+
                 KeyValue(
                     key = item.key,
-                    value = amount,
+                    value = State.Half.Value(
+                        amount = amount,
+                        filters = Filters(
+                            categories = item.constraints.categories,
+                            accounts = item.constraints.accounts,
+                            period = page.period,
+                        ),
+                    ),
                 )
             }
-            .groupByToNonEmpty { (key, amount) ->
-                amount
+            .groupByToNonEmpty { (key, value) ->
+                value
+                    .amount
                     .splitToDirectionAndRaw()
                     .map { positiveAmount ->
                         KeyValue(
                             key = key,
-                            value = positiveAmount,
+                            value = State.Half.Value(
+                                amount = positiveAmount,
+                                filters = value.filters,
+                            ),
                         )
                     }
             }
             .mapValues { (_, values) ->
                 values
-                    .sortedByDescending(KeyValue<*, Amount>::value)
+                    .sortedByDescending { item -> item.value.amount }
                     .toNonEmptyListOrThrow()
             }
             .let { valuesByDirection ->

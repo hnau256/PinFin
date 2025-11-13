@@ -12,7 +12,6 @@ import hnau.pinfin.model.filter.FilterModel
 import hnau.pinfin.model.filter.Filters
 import hnau.pinfin.model.filter.check
 import hnau.pinfin.model.utils.budget.repository.BudgetRepository
-import hnau.pinfin.model.utils.budget.state.BudgetState
 import hnau.pinfin.model.utils.budget.state.TransactionInfo
 import hnau.pipe.annotations.Pipe
 import kotlinx.coroutines.CoroutineScope

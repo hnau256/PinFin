@@ -1,5 +1,6 @@
 package hnau.pinfin.projector.budget.analytics.graph
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -18,10 +19,10 @@ import androidx.compose.ui.Modifier
 import hnau.common.app.projector.uikit.state.LoadableContent
 import hnau.common.app.projector.uikit.state.TransitionSpec
 import hnau.common.app.projector.uikit.utils.Dimens
-import hnau.common.app.projector.utils.Icon
 import hnau.common.app.projector.utils.SwitchHue
 import hnau.common.app.projector.utils.horizontalDisplayPadding
 import hnau.common.app.projector.utils.plus
+import hnau.common.app.projector.utils.toLazyListState
 import hnau.common.app.projector.utils.verticalDisplayPadding
 import hnau.common.kotlin.foldNullable
 import hnau.pinfin.data.Amount
@@ -33,14 +34,12 @@ import hnau.pinfin.model.utils.model
 import hnau.pinfin.projector.utils.AccountContent
 import hnau.pinfin.projector.utils.AmountContent
 import hnau.pinfin.projector.utils.CategoryContent
-import hnau.pinfin.projector.utils.SwitchHueToAmountDirection
 import hnau.pinfin.projector.utils.formatter.AmountFormatter
-import hnau.pinfin.projector.utils.icon
 import hnau.pipe.annotations.Pipe
 
 class GraphPageProjector(
     private val model: GraphPageModel,
-    private val dependencies: Dependencies
+    private val dependencies: Dependencies,
 ) {
 
     @Pipe
@@ -75,6 +74,7 @@ class GraphPageProjector(
         contentPadding: PaddingValues,
     ) {
         LazyColumn(
+            state = model.scrollState.toLazyListState(),
             modifier = Modifier.fillMaxSize(),
             contentPadding = contentPadding + PaddingValues(
                 horizontal = Dimens.horizontalDisplayPadding,
@@ -106,11 +106,11 @@ class GraphPageProjector(
                     null -> "${keyPrefix}_null"
                 }
             }
-        ) { (key, amount) ->
+        ) { (key, value) ->
             Item(
                 direction = direction,
                 key = key,
-                amount = amount,
+                value = value,
                 max = half.max,
             )
         }
@@ -120,13 +120,13 @@ class GraphPageProjector(
     private fun Item(
         direction: AmountDirection,
         key: AnalyticsPage.Item.Key?,
-        amount: Amount,
+        value: GraphPageModel.State.Half.Value,
         max: Amount,
     ) {
         when (key) {
             is AnalyticsPage.Item.Key.Account -> Item(
                 hue = key.account.hue,
-                amount = amount,
+                value = value,
                 direction = direction,
                 max = max,
             ) {
@@ -137,7 +137,7 @@ class GraphPageProjector(
 
             is AnalyticsPage.Item.Key.Category -> Item(
                 hue = key.category?.hue,
-                amount = amount,
+                value = value,
                 direction = direction,
                 max = max,
                 title = {
@@ -149,7 +149,7 @@ class GraphPageProjector(
 
             null -> Item(
                 hue = null,
-                amount = amount,
+                value = value,
                 direction = direction,
                 max = max,
                 title = null,
@@ -160,7 +160,7 @@ class GraphPageProjector(
     @Composable
     private fun Item(
         hue: Hue?,
-        amount: Amount,
+        value: GraphPageModel.State.Half.Value,
         max: Amount,
         direction: AmountDirection,
         title: (@Composable () -> Unit)?,
@@ -168,7 +168,7 @@ class GraphPageProjector(
         hue.foldNullable(
             ifNull = {
                 Item(
-                    amount = amount,
+                    value = value,
                     max = max,
                     direction = direction,
                     title = title,
@@ -179,7 +179,7 @@ class GraphPageProjector(
                     hue = hueNotNull.model,
                 ) {
                     Item(
-                        amount = amount,
+                        value = value,
                         max = max,
                         direction = direction,
                         title = title,
@@ -191,13 +191,21 @@ class GraphPageProjector(
 
     @Composable
     private fun Item(
-        amount: Amount,
+        value: GraphPageModel.State.Half.Value,
         max: Amount,
         direction: AmountDirection,
         title: (@Composable () -> Unit)?,
     ) {
         Column(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .clickable {
+                    model
+                        .transactionsOpener
+                        .openTransactions(
+                            filters = value.filters,
+                        )
+                },
             verticalArrangement = Arrangement.spacedBy(Dimens.extraSmallSeparation),
         ) {
             Row(
@@ -207,7 +215,7 @@ class GraphPageProjector(
                 title?.invoke()
                 Spacer(Modifier.weight(1f))
                 AmountContent(
-                    value = amount.withDirection(direction),
+                    value = value.amount.withDirection(direction),
                     amountFormatter = dependencies.amountFormatter,
                 )
             }
@@ -218,7 +226,7 @@ class GraphPageProjector(
                         .value
                         .takeIf { max -> max > 0 }
                         ?.toFloat()
-                        ?.let { max -> amount.value.toFloat() / max }
+                        ?.let { max -> value.amount.value.toFloat() / max }
                         ?: 0f
                 }
             )

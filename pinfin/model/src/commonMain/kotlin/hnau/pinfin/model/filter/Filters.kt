@@ -6,9 +6,10 @@ package hnau.pinfin.model.filter
 
 import arrow.core.NonEmptySet
 import arrow.core.serialization.NonEmptySetSerializer
+import hnau.common.kotlin.serialization.LocalDateRangeSerializer
 import hnau.pinfin.data.AccountId
 import hnau.pinfin.data.CategoryId
-import kotlinx.datetime.LocalDate
+import kotlinx.datetime.LocalDateRange
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.UseSerializers
 
@@ -16,14 +17,13 @@ import kotlinx.serialization.UseSerializers
 data class Filters(
     val categories: NonEmptySet<CategoryId?>?,
     val accounts: NonEmptySet<AccountId>?,
-    val period: ClosedRange<LocalDate>?,
+    val period: @Serializable(LocalDateRangeSerializer::class) LocalDateRange?,
 ) {
 
     val any: Boolean
         get() = categories != null ||
                 accounts != null ||
                 period != null
-
 
 
     companion object {
