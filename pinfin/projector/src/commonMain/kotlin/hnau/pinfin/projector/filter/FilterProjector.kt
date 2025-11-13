@@ -4,6 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -11,6 +12,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.FilterAlt
@@ -29,7 +31,6 @@ import hnau.common.app.projector.uikit.state.TransitionSpec
 import hnau.common.app.projector.uikit.utils.Dimens
 import hnau.common.app.projector.utils.Icon
 import hnau.common.app.projector.utils.SlideOrientation
-import hnau.common.app.projector.utils.horizontalDisplayPadding
 import hnau.common.kotlin.coroutines.mapState
 import hnau.common.kotlin.coroutines.mapWithScope
 import hnau.pinfin.model.filter.FilterModel
@@ -75,10 +76,27 @@ class FilterProjector(
                     projector.Content()
                 }
             }
+
+            data class Accounts(
+                val projector: SelectAccountsProjector.Page,
+            ) : Page {
+
+                override val tab: FilterModel.Tab
+                    get() = FilterModel.Tab.SelectedAccounts
+
+                @Composable
+                override fun Content() {
+                    projector.Content()
+                }
+            }
         }
 
         private val categories = SelectCategoriesProjector(
             model = model.categories,
+        )
+
+        private val accounts = SelectAccountsProjector(
+            model = model.accounts,
         )
 
         private val page: StateFlow<Pair<FilterModel.Tab, Page>> = model
@@ -90,6 +108,12 @@ class FilterProjector(
                             model = type.model,
                         )
                     )
+
+                    is FilterModel.Config.Type.Accounts -> Page.Accounts(
+                        SelectAccountsProjector.Page(
+                            model = type.model,
+                        )
+                    )
                 }
                 tab to projector
             }
@@ -97,15 +121,34 @@ class FilterProjector(
         @Composable
         fun Content() {
             Column(
-                modifier = Modifier.fillMaxWidth().padding(Dimens.smallSeparation),
+                modifier = Modifier.fillMaxWidth().padding(vertical = Dimens.smallSeparation),
                 verticalArrangement = Arrangement.spacedBy(Dimens.smallSeparation),
             ) {
-                categories.Content()
+                LazyRow(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(Dimens.smallSeparation),
+                    contentPadding = PaddingValues(
+                        horizontal = Dimens.smallSeparation,
+                    ),
+                ) {
+                    item(
+                        key = "categories",
+                    ) {
+                        categories.Content()
+                    }
+                    item(
+                        key = "accounts",
+                    ) {
+                        accounts.Content()
+                    }
+                }
                 page
                     .collectAsState()
                     .value
                     .StateContent(
-                        modifier = Modifier.fillMaxWidth(),
+                        modifier = Modifier.fillMaxWidth().padding(
+                            horizontal = Dimens.smallSeparation,
+                        ),
                         contentKey = Pair<FilterModel.Tab, *>::first,
                         transitionSpec = createPagesTransitionSpec(
                             orientation = SlideOrientation.Horizontal,
@@ -182,8 +225,8 @@ class FilterProjector(
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(
-                                start = Dimens.smallSeparation,
-                                end = Dimens.smallSeparation,
+                                start = Dimens.separation,
+                                end = Dimens.separation,
                                 top = Dimens.smallSeparation,
                             ),
                     ) {

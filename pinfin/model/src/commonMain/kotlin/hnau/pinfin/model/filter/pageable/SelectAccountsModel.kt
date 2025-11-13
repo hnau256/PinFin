@@ -20,9 +20,9 @@ import hnau.common.kotlin.foldNullable
 import hnau.common.kotlin.ifNull
 import hnau.common.kotlin.ifTrue
 import hnau.common.kotlin.serialization.MutableStateFlowSerializer
-import hnau.pinfin.data.CategoryId
+import hnau.pinfin.data.AccountId
 import hnau.pinfin.model.utils.budget.repository.BudgetRepository
-import hnau.pinfin.model.utils.budget.state.CategoryInfo
+import hnau.pinfin.model.utils.budget.state.AccountInfo
 import hnau.pipe.annotations.Pipe
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -31,7 +31,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.UseSerializers
 
-class SelectCategoriesModel(
+class SelectAccountsModel(
     scope: CoroutineScope,
     dependencies: Dependencies,
     private val skeleton: Skeleton,
@@ -47,15 +47,15 @@ class SelectCategoriesModel(
 
     @Serializable
     data class Skeleton(
-        val selectedCategories: MutableStateFlow<Set<CategoryId?>>,
+        val selectedAccounts: MutableStateFlow<Set<AccountId>>,
     ) {
 
         companion object {
 
             fun create(
-                initialSelectedCategoriesIds: NonEmptySet<CategoryId?>?,
+                initialSelectedAccountsIds: NonEmptySet<AccountId>?,
             ): Skeleton = Skeleton(
-                selectedCategories = initialSelectedCategoriesIds
+                selectedAccounts = initialSelectedAccountsIds
                     .ifNull { emptyList() }
                     .toSet()
                     .toMutableStateFlowAsInitial(),
@@ -64,11 +64,11 @@ class SelectCategoriesModel(
     }
 
     class Page(
-        val categories: StateFlow<List<Category>>,
+        val accounts: StateFlow<List<Account>>,
     ) {
 
-        data class Category(
-            val info: CategoryInfo,
+        data class Account(
+            val info: AccountInfo,
             val selected: MutableStateFlow<Boolean>,
         )
 
@@ -76,16 +76,16 @@ class SelectCategoriesModel(
             get() = NeverGoBackHandler
     }
 
-    private val categories: StateFlow<List<Page.Category>> = dependencies
+    private val accounts: StateFlow<List<Page.Account>> = dependencies
         .budgetRepository
         .state
         .mapWithScope(scope) { scope, state ->
             state
-                .categories
+                .accounts
                 .map { info ->
                     val id = info.id
 
-                    val updateIds: (Set<CategoryId?>, Boolean) -> Set<CategoryId?> =
+                    val updateIds: (Set<AccountId>, Boolean) -> Set<AccountId> =
                         { selectedIds, selected ->
                             selected.foldBoolean(
                                 ifTrue = { selectedIds + id },
@@ -93,10 +93,10 @@ class SelectCategoriesModel(
                             )
                         }
 
-                    Page.Category(
+                    Page.Account(
                         info = info,
                         selected = skeleton
-                            .selectedCategories
+                            .selectedAccounts
                             .mapMutableState(
                                 scope = scope,
                                 transform = { selectedIds -> id in selectedIds },
@@ -117,63 +117,63 @@ class SelectCategoriesModel(
                 }
         }
 
-    val selectedCategories: StateFlow<NonEmptyList<CategoryInfo>?> = categories
-        .mapWithScope(scope) { scope, categories ->
-            categories.map { category ->
-                category
+    val selectedAccounts: StateFlow<NonEmptyList<AccountInfo>?> = accounts
+        .mapWithScope(scope) { scope, accounts ->
+            accounts.map { account ->
+                account
                     .selected
                     .mapState(scope) { selected ->
-                        selected.ifTrue { category.info }
+                        selected.ifTrue { account.info }
                     }
             }
         }
         .flatMapWithScope(
             scope = scope,
-        ) { scope, categories ->
-            categories
+        ) { scope, accounts ->
+            accounts
                 .drop(1)
                 .fold(
-                    initial = categories
+                    initial = accounts
                         .firstOrNull()
                         .foldNullable(
-                            ifNull = { emptySet<CategoryInfo>().toMutableStateFlowAsInitial() },
+                            ifNull = { emptySet<AccountInfo>().toMutableStateFlowAsInitial() },
                             ifNotNull = { first ->
                                 first.mapState(scope) { setOfNotNull(it) }
                             }
                         ),
-                ) { acc, categoryOrNull ->
+                ) { acc, accountOrNull ->
                     acc
                         .combineStateWith(
                             scope = scope,
-                            other = categoryOrNull,
-                        ) { acc, categoryOrNull ->
-                            categoryOrNull.foldNullable(
+                            other = accountOrNull,
+                        ) { acc, accountOrNull ->
+                            accountOrNull.foldNullable(
                                 ifNull = { acc },
                                 ifNotNull = { acc + it }
                             )
                         }
                 }
-                .mapState(scope) { categories ->
-                    categories
+                .mapState(scope) { accounts ->
+                    accounts
                         .toList()
                         .sorted()
                         .toNonEmptyListOrNull()
                 }
         }
 
-    val selectedCategoriesIds: StateFlow<NonEmptySet<CategoryId?>?> = selectedCategories
-        .mapState(scope) { categories ->
-            categories
-                ?.map { category -> category.id }
+    val selectedAccountsIds: StateFlow<NonEmptySet<AccountId>?> = selectedAccounts
+        .mapState(scope) { accounts ->
+            accounts
+                ?.map { account -> account.id }
                 ?.toNonEmptySet()
         }
 
     fun clear() {
-        skeleton.selectedCategories.value = emptySet()
+        skeleton.selectedAccounts.value = emptySet()
     }
 
     fun createPage(): Page = Page(
-        categories = categories,
+        accounts = accounts,
     )
 
     val goBackHandler: GoBackHandler

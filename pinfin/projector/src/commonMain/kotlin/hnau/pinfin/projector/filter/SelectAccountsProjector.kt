@@ -11,30 +11,30 @@ import hnau.common.app.projector.uikit.row.ChipsFlowRow
 import hnau.common.app.projector.utils.collectAsMutableAccessor
 import hnau.common.kotlin.foldBoolean
 import hnau.common.kotlin.foldNullable
-import hnau.pinfin.model.filter.pageable.SelectCategoriesModel
-import hnau.pinfin.model.utils.budget.state.CategoryInfo
+import hnau.pinfin.model.filter.pageable.SelectAccountsModel
+import hnau.pinfin.model.utils.budget.state.AccountInfo
 import hnau.pinfin.projector.resources.Res
-import hnau.pinfin.projector.resources.categories
-import hnau.pinfin.projector.utils.CategoryContent
+import hnau.pinfin.projector.resources.accounts
+import hnau.pinfin.projector.utils.AccountContent
 import hnau.pinfin.projector.utils.Label
 import org.jetbrains.compose.resources.stringResource
 
-class SelectCategoriesProjector(
-    private val model: SelectCategoriesModel,
+class SelectAccountsProjector(
+    private val model: SelectAccountsModel,
 ) {
 
     class Page(
-        private val model: SelectCategoriesModel.Page,
+        private val model: SelectAccountsModel.Page,
     ) {
 
         @Composable
         fun Content() {
-            val categories: List<SelectCategoriesModel.Page.Category> by model.categories.collectAsState()
+            val accounts: List<SelectAccountsModel.Page.Account> by model.accounts.collectAsState()
             ChipsFlowRow(
-                all = categories,
+                all = accounts,
             ) { item ->
                 var selected by item.selected.collectAsMutableAccessor()
-                CategoryContent(
+                AccountContent(
                     info = item.info,
                     selected = selected,
                     onClick = { selected = !selected },
@@ -45,26 +45,26 @@ class SelectCategoriesProjector(
 
     @Composable
     fun Content() {
-        val selectedCategories: NonEmptyList<CategoryInfo>? by model.selectedCategories.collectAsState()
-        val hasSelectedCategories: Boolean = selectedCategories != null
+        val selectedAccounts: NonEmptyList<AccountInfo>? by model.selectedAccounts.collectAsState()
+        val hasSelectedAccounts: Boolean = selectedAccounts != null
         Label(
             selected = model.isFocused.collectAsState().value,
             onClick = model.requestFocus,
-            containerColor = hasSelectedCategories.foldBoolean(
+            containerColor = hasSelectedAccounts.foldBoolean(
                 ifTrue = { MaterialTheme.colorScheme.primaryContainer },
                 ifFalse = { MaterialTheme.colorScheme.surfaceContainer },
             ),
         ) {
             Text(
-                selectedCategories.foldNullable(
-                    ifNull = { stringResource(Res.string.categories) },
-                    ifNotNull = { categories ->
-                        remember(categories) {
+                selectedAccounts.foldNullable(
+                    ifNull = { stringResource(Res.string.accounts) },
+                    ifNotNull = { accounts ->
+                        remember(accounts) {
                             listOfNotNull(
-                                categories
+                                accounts
                                     .take(maxCount)
-                                    .joinToString(transform = CategoryInfo::title),
-                                categories
+                                    .joinToString(transform = AccountInfo::title),
+                                accounts
                                     .drop(maxCount)
                                     .size
                                     .takeIf { it > 0 }

@@ -5,11 +5,13 @@
 package hnau.pinfin.model.filter
 
 import hnau.common.app.model.goback.GoBackHandler
+import hnau.common.kotlin.coroutines.combineState
 import hnau.common.kotlin.coroutines.mapState
 import hnau.common.kotlin.coroutines.stickNotNull
 import hnau.common.kotlin.coroutines.toMutableStateFlowAsInitial
 import hnau.common.kotlin.foldNullable
 import hnau.common.kotlin.serialization.MutableStateFlowSerializer
+import hnau.pinfin.model.filter.pageable.SelectAccountsModel
 import hnau.pinfin.model.filter.pageable.SelectCategoriesModel
 import hnau.pipe.annotations.Pipe
 import kotlinx.coroutines.CoroutineScope
@@ -29,10 +31,13 @@ class FilterModel(
     interface Dependencies {
 
         fun categories(): SelectCategoriesModel.Dependencies
+
+        fun accounts(): SelectAccountsModel.Dependencies
     }
 
     enum class Tab {
-        SelectedCategories;
+        SelectedCategories,
+        SelectedAccounts;
 
         companion object {
 
@@ -44,6 +49,7 @@ class FilterModel(
     @Serializable
     data class Skeleton(
         val categories: SelectCategoriesModel.Skeleton,
+        val accounts: SelectAccountsModel.Skeleton,
         val selectedTab: MutableStateFlow<Tab?> =
             null.toMutableStateFlowAsInitial(),
     ) {
@@ -55,7 +61,10 @@ class FilterModel(
             ): Skeleton = Skeleton(
                 categories = SelectCategoriesModel.Skeleton.create(
                     initialSelectedCategoriesIds = initialFilters.categories,
-                )
+                ),
+                accounts = SelectAccountsModel.Skeleton.create(
+                    initialSelectedAccountsIds = initialFilters.accounts,
+                ),
             )
         }
     }
@@ -63,12 +72,17 @@ class FilterModel(
     class Config(
         val type: StateFlow<Pair<Tab, Type>>,
         val categories: SelectCategoriesModel,
+        val accounts: SelectAccountsModel,
     ) {
 
         sealed interface Type {
 
             data class Categories(
                 val model: SelectCategoriesModel.Page,
+            ) : Type
+
+            data class Accounts(
+                val model: SelectAccountsModel.Page,
             ) : Type
         }
     }
@@ -93,15 +107,25 @@ class FilterModel(
         requestFocus = createRequestFocus(Tab.SelectedCategories),
     )
 
-    val filters: StateFlow<Filters> = categories
-        .selectedCategoriesIds
-        .mapState(scope) { categories ->
-            Filters(
-                accounts = null, //TODO
-                categories = categories,
-                period = null, //TODO
-            )
-        }
+    val accounts = SelectAccountsModel(
+        scope = scope,
+        dependencies = dependencies.accounts(),
+        skeleton = skeleton.accounts,
+        isFocused = createIsFocused(Tab.SelectedAccounts),
+        requestFocus = createRequestFocus(Tab.SelectedAccounts),
+    )
+
+    val filters: StateFlow<Filters> = combineState(
+        scope = scope,
+        a = categories.selectedCategoriesIds,
+        b = accounts.selectedAccountsIds,
+    ) { categories, accounts ->
+        Filters(
+            accounts = accounts, //TODO
+            categories = categories,
+            period = null, //TODO
+        )
+    }
 
     val config: StateFlow<Config?> = skeleton
         .selectedTab
@@ -114,10 +138,15 @@ class FilterModel(
                             Tab.SelectedCategories -> Config.Type.Categories(
                                 categories.createPage(),
                             )
+
+                            Tab.SelectedAccounts -> Config.Type.Accounts(
+                                accounts.createPage(),
+                            )
                         }
                         tab to model
                     },
                     categories = categories,
+                    accounts = accounts,
                 )
             }
         }

@@ -1,17 +1,19 @@
 package hnau.pinfin.model.filter
 
 import arrow.core.NonEmptySet
+import hnau.pinfin.data.AccountId
 import hnau.pinfin.data.CategoryId
 import hnau.pinfin.model.utils.budget.state.TransactionInfo
 
 internal fun Filters.check(
     transaction: TransactionInfo,
 ): Boolean = when {
-    !categories.check(transaction) -> false
+    !categories.checkCategories(transaction) -> false
+    !accounts.checkAccounts(transaction) -> false
     else -> true
 }
 
-private fun NonEmptySet<CategoryId?>?.check(
+private fun NonEmptySet<CategoryId?>?.checkCategories(
     transaction: TransactionInfo,
 ): Boolean {
     if (this == null) {
@@ -26,5 +28,21 @@ private fun NonEmptySet<CategoryId?>?.check(
             }
 
         is TransactionInfo.Type.Transfer -> null in set
+    }
+}
+
+private fun NonEmptySet<AccountId>?.checkAccounts(
+    transaction: TransactionInfo,
+): Boolean {
+    if (this == null) {
+        return true
+    }
+    val set = toSet()
+    return when (val type = transaction.type) {
+        is TransactionInfo.Type.Entry ->
+            type.account.id in set
+
+        is TransactionInfo.Type.Transfer ->
+            type.from.id in set || type.to.id in set
     }
 }
