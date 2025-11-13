@@ -75,7 +75,7 @@ class BudgetConfigProjector(
                 top = topPadding,
                 bottom = bottomInset,
             ),
-            modifier = Modifier.Companion.fillMaxSize(),
+            modifier = Modifier.fillMaxSize(),
         ) {
             button(
                 titleRes = Res.string.to_budgets_list,
@@ -230,7 +230,7 @@ class BudgetConfigProjector(
         ) {
             ListItem(
                 leadingContent = { Icon(icon = icon) },
-                modifier = Modifier.Companion.clickable(onClick = onClick),
+                modifier = Modifier.clickable(onClick = onClick),
                 headlineContent = { Text(stringResource(titleRes)) },
                 trailingContent = { Icon(Icons.Filled.ChevronRight) }
             )

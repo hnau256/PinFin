@@ -37,8 +37,6 @@ class AnalyticsProjector(
 
         fun accounts(): AccountsProjector.Dependencies
 
-        fun categories(): CategoriesProjector.Dependencies
-
         fun graph(): GraphProjector.Dependencies
     }
 
@@ -47,12 +45,6 @@ class AnalyticsProjector(
             AccountsProjector(
                 model = model.accounts,
                 dependencies = dependencies.accounts(),
-            )
-        ),
-        categories = AnalyticsTabProjector.Categories(
-            CategoriesProjector(
-                model = model.categories,
-                dependencies = dependencies.categories(),
             )
         ),
         graph = AnalyticsTabProjector.Graph(

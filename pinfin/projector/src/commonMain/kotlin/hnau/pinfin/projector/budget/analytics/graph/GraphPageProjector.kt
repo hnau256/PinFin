@@ -82,26 +82,11 @@ class GraphPageProjector(
             ),
             verticalArrangement = Arrangement.spacedBy(Dimens.separation),
         ) {
-            when (state) {
-                is GraphPageModel.State.CreditAndDebit -> {
-                    stateHalf(
-                        direction = AmountDirection.Credit,
-                        half = state.credit,
-                    )
-                    stateHalf(
-                        direction = AmountDirection.Credit,
-                        half = state.debit,
-                    )
-                }
-
-                is GraphPageModel.State.CreditOnly -> stateHalf(
-                    direction = AmountDirection.Credit,
-                    half = state.credit,
-                )
-
-                is GraphPageModel.State.DebitOnly -> stateHalf(
-                    direction = AmountDirection.Credit,
-                    half = state.debit,
+            AmountDirection.entries.forEach { direction ->
+                val half = state.values[direction] ?: return@forEach
+                stateHalf(
+                    direction = direction,
+                    half = half,
                 )
             }
         }
@@ -111,13 +96,14 @@ class GraphPageProjector(
         direction: AmountDirection,
         half: GraphPageModel.State.Half,
     ) {
+        val keyPrefix = direction.name
         items(
             items = half.values,
             key = {
                 when (val key = it.key) {
-                    is AnalyticsPage.Item.Key.Account -> "account_${key.account.id.id}"
-                    is AnalyticsPage.Item.Key.Category -> "category_${key.category?.id?.id}"
-                    null -> "null"
+                    is AnalyticsPage.Item.Key.Account -> "${keyPrefix}_account_${key.account.id.id}"
+                    is AnalyticsPage.Item.Key.Category -> "${keyPrefix}_category_${key.category?.id?.id}"
+                    null -> "${keyPrefix}_null"
                 }
             }
         ) { (key, amount) ->
@@ -154,12 +140,10 @@ class GraphPageProjector(
                 amount = amount,
                 direction = direction,
                 max = max,
-                title = key.category?.let { category ->
-                    {
-                        CategoryContent(
-                            info = category,
-                        )
-                    }
+                title = {
+                    CategoryContent(
+                        info = key.category,
+                    )
                 }
             )
 

@@ -10,7 +10,6 @@ import hnau.common.kotlin.coroutines.toMutableStateFlowAsInitial
 import hnau.common.kotlin.serialization.MutableStateFlowSerializer
 import hnau.pinfin.model.budget.analytics.tab.AccountsModel
 import hnau.pinfin.model.budget.analytics.tab.AnalyticsTab
-import hnau.pinfin.model.budget.analytics.tab.CategoriesModel
 import hnau.pinfin.model.budget.analytics.tab.graph.GraphModel
 import hnau.pipe.annotations.Pipe
 import kotlinx.coroutines.CoroutineScope
@@ -29,8 +28,6 @@ class AnalyticsModel(
 
         fun accounts(): AccountsModel.Dependencies
 
-        fun categories(): CategoriesModel.Dependencies
-
         fun graph(): GraphModel.Dependencies
     }
 
@@ -46,11 +43,6 @@ class AnalyticsModel(
         scope = scope,
         dependencies = dependencies.accounts(),
         skeleton = skeleton.accounts
-    )
-
-    val categories: CategoriesModel = CategoriesModel(
-        scope = scope,
-        dependencies = dependencies.categories(),
     )
 
     val graph: GraphModel = GraphModel(

@@ -45,7 +45,7 @@ class GraphPagesModel(
             val index = indexOrNull
                 ?.takeIf { index -> index in 0..lastIndex }
                 .ifNull { lastIndex }
-            val page = pages[lastIndex]
+            val page = pages[index]
             val pageSkeleton: GraphPageModel.Skeleton = skeleton
                 .page
                 ?.takeIf { it.first == index }

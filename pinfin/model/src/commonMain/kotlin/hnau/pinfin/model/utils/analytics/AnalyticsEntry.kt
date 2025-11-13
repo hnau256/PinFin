@@ -42,7 +42,7 @@ fun TransactionInfo.toAnalyticsEntries(): NonEmptyList<AnalyticsEntry> {
                 AnalyticsEntry(
                     account = type.account,
                     category = record.category,
-                    amount = amount,
+                    amount = record.amount,
                     date = date,
                 )
             }

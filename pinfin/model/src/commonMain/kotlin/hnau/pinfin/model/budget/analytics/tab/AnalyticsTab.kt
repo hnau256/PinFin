@@ -5,7 +5,6 @@ import hnau.common.gen.enumvalues.annotations.EnumValues
 @EnumValues
 enum class AnalyticsTab {
     Accounts,
-    Categories,
     Graph,
     ;
     companion object {

@@ -31,23 +31,6 @@ sealed interface AnalyticsTabProjector {
         }
     }
 
-    data class Categories(
-        val projector: CategoriesProjector,
-    ) : AnalyticsTabProjector {
-
-        override val tab: AnalyticsTab
-            get() = AnalyticsTab.Categories
-
-        @Composable
-        override fun Content(
-            contentPadding: PaddingValues,
-        ) {
-            projector.Content(
-                contentPadding = contentPadding,
-            )
-        }
-    }
-
     data class Graph(
         val projector: GraphProjector,
     ) : AnalyticsTabProjector {

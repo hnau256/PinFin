@@ -48,7 +48,7 @@ class AccountsProjector(
             .collectAsState()
             .value
         LazyColumn(
-            modifier = Modifier.Companion.fillMaxSize(),
+            modifier = Modifier.fillMaxSize(),
             state = model.scrollState.toLazyListState(),
             contentPadding = contentPadding,
         ) {
@@ -88,7 +88,7 @@ class AccountsProjector(
                     amountFormatter = dependencies.amountFormatter,
                 )
             },
-            modifier = Modifier.Companion
+            modifier = Modifier
                 .fillMaxWidth()
                 .clickable { model.onAccountClick(info) },
         )
@@ -102,7 +102,7 @@ class AccountsProjector(
             text = text,
             color = MaterialTheme.colorScheme.onBackground,
             style = MaterialTheme.typography.titleLarge,
-            modifier = Modifier.Companion
+            modifier = Modifier
                 .background(MaterialTheme.colorScheme.background)
                 .fillMaxWidth()
                 .padding(

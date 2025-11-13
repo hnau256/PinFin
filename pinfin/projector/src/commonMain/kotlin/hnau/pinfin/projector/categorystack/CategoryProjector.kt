@@ -68,7 +68,7 @@ class CategoryProjector(
             },
         ) { contentPadding ->
             LazyColumn(
-                modifier = Modifier.Companion
+                modifier = Modifier
                     .fillMaxSize()
                     .padding(contentPadding),
             ) {
@@ -84,7 +84,7 @@ class CategoryProjector(
                             val focusRequester = remember { FocusRequester() }
                             TextInput(
                                 maxLines = 1,
-                                modifier = Modifier.Companion
+                                modifier = Modifier
                                     .fillMaxWidth()
                                     .focusRequester(focusRequester),
                                 value = model.title,
@@ -104,7 +104,7 @@ class CategoryProjector(
                         headlineContent = {
                             HueSlider(
                                 value = model.hue,
-                                modifier = Modifier.Companion
+                                modifier = Modifier
                                     .fillMaxWidth(),
                             )
                         },

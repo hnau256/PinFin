@@ -41,6 +41,7 @@ import hnau.pipe.annotations.Pipe
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.datetime.LocalDateRange
+import kotlin.time.Duration.Companion.seconds
 
 class GraphPagesProjector(
     scope: CoroutineScope,
@@ -57,8 +58,9 @@ class GraphPagesProjector(
         fun page(): GraphPageProjector.Dependencies
     }
 
-    private val page: StateFlow<IndexedValue<KeyValue<LocalDateRange, GraphPageProjector>>> =
-        model.pageWithIndex.mapState(scope) { indexedPage ->
+    private val page: StateFlow<IndexedValue<KeyValue<LocalDateRange, GraphPageProjector>>> = model
+        .pageWithIndex
+        .mapState(scope) { indexedPage ->
             indexedPage.map { page ->
                 KeyValue(
                     key = page.period,
@@ -114,13 +116,14 @@ class GraphPagesProjector(
                     modifier = Modifier.fillMaxSize(),
                     transitionSpec = getTransitionSpecForSlide(
                         orientation = SlideOrientation.Horizontal,
+                        duration = 0.5.seconds,
                     ) {
                         when (targetState.index > initialState.index) {
                             true -> 1f
                             false -> -1f
                         } * 0.25f
                     },
-                    label = "Period",
+                    label = "Page",
                     contentKey = IndexedValue<*>::index,
                 ) { (_, page) ->
                     page.Content(
@@ -148,7 +151,7 @@ class GraphPagesProjector(
                 when (targetState.index > initialState.index) {
                     true -> 1f
                     false -> -1f
-                } * 0.25f
+                } * 0.5f
             },
             label = "Period",
             contentKey = IndexedValue<*>::index,

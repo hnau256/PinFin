@@ -17,6 +17,7 @@ import hnau.common.kotlin.groupByToNonEmpty
 import hnau.common.kotlin.serialization.MutableStateFlowSerializer
 import hnau.pinfin.data.Amount
 import hnau.pinfin.data.AmountDirection
+import hnau.pinfin.data.AmountDirectionValues
 import hnau.pinfin.model.utils.analytics.AnalyticsEntry
 import hnau.pinfin.model.utils.analytics.AnalyticsPage
 import hnau.pinfin.model.utils.analytics.config.AnalyticsPageConfig
@@ -62,20 +63,9 @@ class GraphPageModel(
             startOfOneOfPeriods = page.period.start,
         )
 
-    sealed interface State {
-
-        data class CreditOnly(
-            val credit: Half,
-        ) : State
-
-        data class DebitOnly(
-            val debit: Half,
-        ) : State
-
-        data class CreditAndDebit(
-            val credit: Half,
-            val debit: Half,
-        ) : State
+    data class State(
+        val values: AmountDirectionValues<Half?>,
+    ) {
 
         data class Half(
             val values: NonEmptyList<KeyValue<AnalyticsPage.Item.Key?, Amount>>,
@@ -92,14 +82,17 @@ class GraphPageModel(
     ) {
         page
             .items
-            .map { item ->
+            .mapNotNull { item ->
+                val amount = calcItemAmount(
+                    operation = config.operation,
+                    constraints = item.constraints,
+                    entries = dependencies.analyticsEntries,
+                )
+                    .takeIf { it != Amount.zero }
+                    ?: return@mapNotNull null
                 KeyValue(
                     key = item.key,
-                    value = calcItemAmount(
-                        operation = config.operation,
-                        constraints = item.constraints,
-                        entries = dependencies.analyticsEntries,
-                    )
+                    value = amount,
                 )
             }
             .groupByToNonEmpty { (key, amount) ->
@@ -118,25 +111,11 @@ class GraphPageModel(
                     .toNonEmptyListOrThrow()
             }
             .let { valuesByDirection ->
-                val creditOrNull = valuesByDirection[AmountDirection.Credit]
-                val debitOrNull = valuesByDirection[AmountDirection.Debit]
-                creditOrNull.foldNullable(
-                    ifNull = {
-                        debitOrNull?.let { debit ->
-                            State.DebitOnly(State.Half(debit))
-                        }
-                    },
-                    ifNotNull = { credit ->
-                        debitOrNull.foldNullable(
-                            ifNull = { State.CreditOnly(State.Half(credit)) },
-                            ifNotNull = { debit ->
-                                State.CreditAndDebit(
-                                    credit = State.Half(credit),
-                                    debit = State.Half(debit),
-                                )
-                            }
-                        )
-                    },
+                State(
+                    AmountDirectionValues.create { direction ->
+                        val values = valuesByDirection[direction] ?: return@create null
+                        State.Half(values)
+                    }
                 )
             }
     }
