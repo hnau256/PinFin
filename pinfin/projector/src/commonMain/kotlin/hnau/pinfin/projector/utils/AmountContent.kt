@@ -48,20 +48,45 @@ fun AmountContent(
     modifier: Modifier = Modifier,
     style: TextStyle = MaterialTheme.typography.titleLarge,
 ) {
+    if (value == Amount.zero) {
+        AmountContentWithoutHue(
+            value = value,
+            amountFormatter = amountFormatter,
+            modifier = modifier,
+            style = style,
+        )
+        return
+    }
+
     val (direction, _) = value.splitToDirectionAndRaw()
     SwitchHueToAmountDirection(
         amountDirection = direction,
     ) {
-        Text(
+        AmountContentWithoutHue(
+            value = value,
+            amountFormatter = amountFormatter,
             modifier = modifier,
             style = style,
-            color = MaterialTheme.colorScheme.primary,
-            text = remember(value) {
-                amountFormatter.format(
-                    amount = value,
-                    alwaysShowSign = true,
-                )
-            }
         )
     }
+}
+
+@Composable
+private fun AmountContentWithoutHue(
+    value: Amount,
+    amountFormatter: AmountFormatter,
+    modifier: Modifier = Modifier,
+    style: TextStyle = MaterialTheme.typography.titleLarge,
+) {
+    Text(
+        modifier = modifier,
+        style = style,
+        color = MaterialTheme.colorScheme.primary,
+        text = remember(value) {
+            amountFormatter.format(
+                amount = value,
+                alwaysShowSign = true,
+            )
+        }
+    )
 }
