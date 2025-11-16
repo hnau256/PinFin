@@ -73,5 +73,7 @@
     <string name="hue">Цвет</string>
     <string name="icon">Иконка</string>
     <string name="records">Записи</string>
-    <string name="graph">Графики</string>
+    <string name="credits">Доходы</string>
+    <string name="debits">Расходы</string>
+    <string name="total">Всего</string>
 </resources>

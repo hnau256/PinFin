@@ -65,3 +65,8 @@ value class Amount(
         )
     }
 }
+
+fun Iterable<Amount>.sum(): Amount = fold(
+    initial = Amount.zero,
+    operation = Amount::plus,
+)

@@ -18,6 +18,7 @@ import hnau.common.kotlin.serialization.MutableStateFlowSerializer
 import hnau.pinfin.data.Amount
 import hnau.pinfin.data.AmountDirection
 import hnau.pinfin.data.AmountDirectionValues
+import hnau.pinfin.data.sum
 import hnau.pinfin.model.filter.Filters
 import hnau.pinfin.model.utils.analytics.AnalyticsEntry
 import hnau.pinfin.model.utils.analytics.AnalyticsPage
@@ -82,10 +83,23 @@ class GraphPageModel(
                 val filters: Filters,
             )
 
-            val max: Amount = values
+            private val amounts: NonEmptyList<Amount> = values
                 .map { item -> item.value.amount }
-                .max()
+
+            val max: Amount = amounts.max()
+
+            val sum: Amount = amounts.sum()
         }
+
+        val total: Amount? = AmountDirection
+            .entries
+            .mapNotNull { direction ->
+                values[direction]
+                    ?.sum
+                    ?.withDirection(direction)
+            }
+            .takeIf { it.size > 1 }
+            ?.sum()
     }
 
     val state: StateFlow<Loadable<State?>> = LoadableStateFlow(
