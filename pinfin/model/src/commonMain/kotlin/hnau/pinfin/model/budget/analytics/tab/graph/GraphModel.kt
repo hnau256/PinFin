@@ -118,6 +118,7 @@ class GraphModel(
                 usedAccounts = null,
                 usedCategories = null,
                 groupBy = AnalyticsSplitConfig.GroupBy.Category,
+                incremental = false,
             ),
             page = AnalyticsPageConfig(
                 subPeriod = DatePeriod(

@@ -7,7 +7,6 @@ import kotlinx.serialization.Serializable
 data class AnalyticsPageConfig(
     val subPeriod: DatePeriod,
     val operation: Operation,
-    //val incremental: Boolean,
 ) {
 
     enum class Operation { Sum, Average }

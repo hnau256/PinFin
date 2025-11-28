@@ -28,11 +28,12 @@ data class AnalyticsPagesProvider(
             today = today,
         )
             .let { range ->
-                when (config.period) {
+                when (val period = config.period) {
                     AnalyticsSplitConfig.Period.Inclusive -> nonEmptyListOf(range)
                     is AnalyticsSplitConfig.Period.Fixed -> range.splitToPeriods(
-                        duration = config.period.duration,
-                        startOfOneOfPeriods = config.period.startOfOneOfPeriods,
+                        duration = period.duration,
+                        startOfOneOfPeriods = period.startOfOneOfPeriods,
+                        incremental = period.incremental,
                     )
                 }
 

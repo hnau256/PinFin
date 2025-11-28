@@ -68,6 +68,7 @@ class GraphPageModel(
         .splitToPeriods(
             duration = config.subPeriod,
             startOfOneOfPeriods = page.period.start,
+            incremental = false,
         )
 
     data class State(

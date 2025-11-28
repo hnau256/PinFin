@@ -2,6 +2,7 @@ package hnau.pinfin.model.utils.analytics
 
 import arrow.core.NonEmptyList
 import arrow.core.nonEmptyListOf
+import hnau.common.kotlin.foldBoolean
 import kotlinx.datetime.DatePeriod
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalDateRange
@@ -12,6 +13,7 @@ import kotlinx.datetime.plus
 internal fun LocalDateRange.splitToPeriods(
     duration: DatePeriod,
     startOfOneOfPeriods: LocalDate,
+    incremental: Boolean,
 ): NonEmptyList<LocalDateRange> {
 
     var startOfFirstPeriod = startOfOneOfPeriods
@@ -35,7 +37,11 @@ internal fun LocalDateRange.splitToPeriods(
         *(tailStarts.toTypedArray()),
     ).map { startOfPeriod ->
         val endOfPeriod = startOfPeriod + duration - oneDay
-        startOfPeriod..endOfPeriod
+        val start = incremental.foldBoolean(
+            ifTrue = { startOfFirstPeriod },
+            ifFalse = { startOfPeriod }
+        )
+        start..endOfPeriod
     }
 }
 
