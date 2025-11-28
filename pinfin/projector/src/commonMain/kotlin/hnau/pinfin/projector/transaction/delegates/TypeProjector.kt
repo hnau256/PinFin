@@ -7,6 +7,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import hnau.common.app.projector.uikit.Tabs
 import hnau.common.app.projector.uikit.state.StateContent
 import hnau.common.app.projector.uikit.state.TransitionSpec
 import hnau.common.app.projector.utils.SlideOrientation
@@ -17,7 +18,6 @@ import hnau.pinfin.model.transaction.pageable.TypeModel
 import hnau.pinfin.projector.transaction.pageable.EntryProjector
 import hnau.pinfin.projector.transaction.pageable.TransferProjector
 import hnau.pinfin.projector.transaction.utils.createPagesTransitionSpec
-import hnau.pinfin.projector.utils.Tabs
 import hnau.pinfin.projector.utils.title
 import hnau.pipe.annotations.Pipe
 import kotlinx.collections.immutable.toImmutableList
