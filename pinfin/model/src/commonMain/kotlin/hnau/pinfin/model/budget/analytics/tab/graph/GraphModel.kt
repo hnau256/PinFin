@@ -113,12 +113,12 @@ class GraphModel(
                                 month = today.month,
                                 day = 1,
                             )
-                        }
+                        },
+                    incremental = false,
                 ),
                 usedAccounts = null,
                 usedCategories = null,
                 groupBy = AnalyticsSplitConfig.GroupBy.Category,
-                incremental = false,
             ),
             page = AnalyticsPageConfig(
                 subPeriod = DatePeriod(
