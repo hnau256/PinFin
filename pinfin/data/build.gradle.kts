@@ -29,7 +29,7 @@ kotlin {
 
 dependencies {
     add("kspCommonMainMetadata", libs.pipe.processor)
-    add("kspCommonMainMetadata", libs.enumvalues.processor)
+    
 }
 
 tasks.withType<KotlinCompile>().configureEach {

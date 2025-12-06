@@ -30,6 +30,7 @@ kotlin {
                 implementation(libs.kotlin.datetime)
                 implementation(libs.kotlin.immutable)
                 implementation(libs.pipe.annotations)
+                implementation(libs.sealup.annotations)
             }
         }
     }
@@ -37,6 +38,7 @@ kotlin {
 
 dependencies {
     add("kspCommonMainMetadata", libs.pipe.processor)
+    add("kspCommonMainMetadata", libs.sealup.processor)
 }
 
 tasks.withType<KotlinCompile>().configureEach {

@@ -7,7 +7,6 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-@EnumValues
 enum class AmountDirection {
 
     @SerialName("credit")

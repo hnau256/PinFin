@@ -24,6 +24,7 @@ kotlin {
                 implementation(libs.kotlin.serialization.json)
                 implementation(libs.kotlin.serialization.cbor)
                 implementation(libs.pipe.annotations)
+                implementation(libs.sealup.annotations)
                 implementation(libs.enumvalues.annotations)
             }
         }
@@ -34,7 +35,8 @@ kotlin {
 
 dependencies {
     add("kspCommonMainMetadata", libs.pipe.processor)
-    add("kspCommonMainMetadata", libs.enumvalues.processor)
+    add("kspCommonMainMetadata", libs.sealup.processor)
+    
 }
 
 tasks.withType<KotlinCompile>().configureEach {

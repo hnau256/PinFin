@@ -5,6 +5,8 @@
 package hnau.pinfin.model.budget
 
 import hnau.common.app.model.goback.GoBackHandler
+import hnau.common.gen.sealup.annotations.SealUp
+import hnau.common.gen.sealup.annotations.Variant
 import hnau.common.kotlin.coroutines.flatMapWithScope
 import hnau.common.kotlin.coroutines.mapState
 import hnau.common.kotlin.coroutines.toMutableStateFlowAsInitial
@@ -42,6 +44,31 @@ class BudgetModel(
             BudgetTab.default.toMutableStateFlowAsInitial(),
         val pages: MutableList<BudgetPageModel.Skeleton> = mutableListOf(),
     )
+
+    @SealUp(
+        variants = [
+            Variant(
+                type = TransactionsModel::class,
+                identifier = "transactions",
+            ),
+            Variant(
+                type = AnalyticsModel::class,
+                identifier = "analytics",
+            ),
+            Variant(
+                type = BudgetConfigModel::class,
+                identifier = "config",
+            ),
+        ],
+        wrappedValuePropertyName = "model",
+        sealedInterfaceName = "BudgetModelPage",
+    )
+    interface Page {
+
+        val goBackHandler: GoBackHandler
+
+        companion object
+    }
 
     private val tabsCache: MutableList<BudgetPageModel> = mutableListOf()
 

@@ -15,16 +15,23 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.util.fastForEach
+import hnau.common.app.model.goback.GoBackHandler
 import hnau.common.app.projector.uikit.state.StateContent
 import hnau.common.app.projector.utils.Icon
 import hnau.common.app.projector.utils.Overcompose
 import hnau.common.app.projector.utils.SlideOrientation
 import hnau.common.app.projector.utils.getTransitionSpecForSlide
+import hnau.common.gen.sealup.annotations.SealUp
+import hnau.common.gen.sealup.annotations.Variant
 import hnau.common.kotlin.coroutines.mapState
+import hnau.pinfin.model.TransactionsModel
 import hnau.pinfin.model.budget.BudgetModel
 import hnau.pinfin.model.budget.BudgetPageModel
 import hnau.pinfin.model.budget.BudgetTab
+import hnau.pinfin.model.budget.analytics.AnalyticsModel
+import hnau.pinfin.model.budget.config.BudgetConfigModel
 import hnau.pinfin.projector.budget.analytics.AnalyticsProjector
 import hnau.pinfin.projector.budget.config.BudgetConfigProjector
 import hnau.pinfin.projector.budget.transactions.TransactionsProjector
@@ -49,6 +56,35 @@ class BudgetProjector(
         fun transactions(): TransactionsProjector.Dependencies
 
         fun analytics(): AnalyticsProjector.Dependencies
+    }
+    
+    @SealUp(
+        variants = [
+            Variant(
+                type = TransactionsProjector::class,
+                identifier = "transactions",
+            ),
+            Variant(
+                type = AnalyticsProjector::class,
+                identifier = "analytics",
+            ),
+            Variant(
+                type = BudgetConfigProjector::class,
+                identifier = "config",
+            ),
+        ],
+        wrappedValuePropertyName = "projector",
+        sealedInterfaceName = "BudgetProjectorPage",
+        factoryMethods = false,
+    )
+    interface Page {
+
+        @Composable
+        fun Content(
+            bottomInset: Dp,
+        )
+
+        companion object
     }
 
     private val tabsCache: MutableMap<BudgetPageModel, Pair<BudgetTab, BudgetPageProjector>> =
