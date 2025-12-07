@@ -2,6 +2,7 @@ package hnau.pinfin.model.budget.analytics.tab
 
 import hnau.common.gen.enumvalues.annotations.EnumValues
 
+@EnumValues
 enum class AnalyticsTab {
     Accounts,
     Graph,
