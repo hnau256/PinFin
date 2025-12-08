@@ -17,7 +17,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.util.fastForEach
-import hnau.common.app.model.goback.GoBackHandler
 import hnau.common.app.projector.uikit.state.StateContent
 import hnau.common.app.projector.utils.Icon
 import hnau.common.app.projector.utils.Overcompose
@@ -26,12 +25,9 @@ import hnau.common.app.projector.utils.getTransitionSpecForSlide
 import hnau.common.gen.sealup.annotations.SealUp
 import hnau.common.gen.sealup.annotations.Variant
 import hnau.common.kotlin.coroutines.mapState
-import hnau.pinfin.model.TransactionsModel
 import hnau.pinfin.model.budget.BudgetModel
 import hnau.pinfin.model.budget.BudgetPageModel
 import hnau.pinfin.model.budget.BudgetTab
-import hnau.pinfin.model.budget.analytics.AnalyticsModel
-import hnau.pinfin.model.budget.config.BudgetConfigModel
 import hnau.pinfin.model.budget.fold
 import hnau.pinfin.model.budget.tab
 import hnau.pinfin.projector.budget.analytics.AnalyticsProjector
@@ -78,7 +74,7 @@ class BudgetProjector(
         wrappedValuePropertyName = "projector",
         sealedInterfaceName = "BudgetPageProjector",
     )
-    interface Page {
+    interface PageProjector {
 
         @Composable
         fun Content(
@@ -99,21 +95,21 @@ class BudgetProjector(
             ) {
                 val projector = model.fold(
                     ifTransactions = { transactionsModel ->
-                        Page.transactions(
+                        PageProjector.transactions(
                             scope = scope,
                             model = transactionsModel,
                             dependencies = dependencies.transactions(),
                         )
                     },
                     ifAnalytics = { analyticsModel ->
-                        Page.analytics(
+                        PageProjector.analytics(
                             scope = scope,
                             model = analyticsModel,
                             dependencies = dependencies.analytics(),
                         )
                     },
                     ifConfig = { budgetModel ->
-                        Page.config(
+                        PageProjector.config(
                             model = budgetModel,
                         )
                     }

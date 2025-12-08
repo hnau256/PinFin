@@ -1,17 +1,12 @@
 package hnau.pinfin.projector.sync
 
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.unit.Dp
 import hnau.common.app.projector.stack.Content
 import hnau.common.app.projector.stack.StackProjectorTail
 import hnau.common.gen.sealup.annotations.SealUp
 import hnau.common.gen.sealup.annotations.Variant
-import hnau.pinfin.model.sync.SyncStackElementModel
 import hnau.pinfin.model.sync.SyncStackModel
 import hnau.pinfin.model.sync.fold
-import hnau.pinfin.projector.budget.analytics.AnalyticsProjector
-import hnau.pinfin.projector.budget.config.BudgetConfigProjector
-import hnau.pinfin.projector.budget.transactions.TransactionsProjector
 import hnau.pinfin.projector.sync.client.SyncClientStackProjector
 import hnau.pipe.annotations.Pipe
 import kotlinx.coroutines.CoroutineScope
@@ -51,7 +46,7 @@ class SyncStackProjector(
         wrappedValuePropertyName = "projector",
         sealedInterfaceName = "SyncPageProjector",
     )
-    interface Page {
+    interface PageProjector {
 
         @Composable
         fun Content()
@@ -67,21 +62,21 @@ class SyncStackProjector(
             createProjector = { scope, model ->
                 model.fold(
                     ifStart = { startModel ->
-                        Page.start(
+                        PageProjector.start(
                             scope = scope,
                             model = startModel,
                             dependencies = dependencies.start(),
                         )
                     },
                     ifClient = { clientModel ->
-                        Page.client(
+                        PageProjector.client(
                             scope = scope,
                             model = clientModel,
                             dependencies = dependencies.client(),
                         )
                     },
                     ifServer ={ serverModel ->
-                        Page.server(
+                        PageProjector.server(
                             scope = scope,
                             model = serverModel,
                             dependencies = dependencies.server(),
