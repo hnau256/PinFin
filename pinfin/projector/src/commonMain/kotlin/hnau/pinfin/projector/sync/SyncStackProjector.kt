@@ -1,10 +1,17 @@
 package hnau.pinfin.projector.sync
 
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.unit.Dp
 import hnau.common.app.projector.stack.Content
 import hnau.common.app.projector.stack.StackProjectorTail
+import hnau.common.gen.sealup.annotations.SealUp
+import hnau.common.gen.sealup.annotations.Variant
 import hnau.pinfin.model.sync.SyncStackElementModel
 import hnau.pinfin.model.sync.SyncStackModel
+import hnau.pinfin.model.sync.fold
+import hnau.pinfin.projector.budget.analytics.AnalyticsProjector
+import hnau.pinfin.projector.budget.config.BudgetConfigProjector
+import hnau.pinfin.projector.budget.transactions.TransactionsProjector
 import hnau.pinfin.projector.sync.client.SyncClientStackProjector
 import hnau.pipe.annotations.Pipe
 import kotlinx.coroutines.CoroutineScope
@@ -26,37 +33,61 @@ class SyncStackProjector(
         fun server(): SyncServerProjector.Dependencies
     }
 
-    private val tail: StateFlow<StackProjectorTail<Int, SyncStackElementProjector>> =
+    @SealUp(
+        variants = [
+            Variant(
+                type = StartSyncProjector::class,
+                identifier = "start",
+            ),
+            Variant(
+                type = SyncClientStackProjector::class,
+                identifier = "client",
+            ),
+            Variant(
+                type = SyncServerProjector::class,
+                identifier = "server",
+            ),
+        ],
+        wrappedValuePropertyName = "projector",
+        sealedInterfaceName = "SyncPageProjector",
+    )
+    interface Page {
+
+        @Composable
+        fun Content()
+
+        companion object
+    }
+
+    private val tail: StateFlow<StackProjectorTail<Int, SyncPageProjector>> =
         StackProjectorTail(
             scope = scope,
             modelsStack = model.stack,
-            extractKey = { model -> model.key },
+            extractKey = { model -> model.ordinal },
             createProjector = { scope, model ->
-                when (model) {
-                    is SyncStackElementModel.Start -> SyncStackElementProjector.Start(
-                        StartSyncProjector(
+                model.fold(
+                    ifStart = { startModel ->
+                        Page.start(
                             scope = scope,
-                            model = model.model,
+                            model = startModel,
                             dependencies = dependencies.start(),
                         )
-                    )
-
-                    is SyncStackElementModel.Client -> SyncStackElementProjector.Client(
-                        SyncClientStackProjector(
+                    },
+                    ifClient = { clientModel ->
+                        Page.client(
                             scope = scope,
-                            model = model.model,
+                            model = clientModel,
                             dependencies = dependencies.client(),
                         )
-                    )
-
-                    is SyncStackElementModel.Server -> SyncStackElementProjector.Server(
-                        SyncServerProjector(
+                    },
+                    ifServer ={ serverModel ->
+                        Page.server(
                             scope = scope,
-                            model = model.model,
+                            model = serverModel,
                             dependencies = dependencies.server(),
                         )
-                    )
-                }
+                    },
+                )
             }
         )
 
