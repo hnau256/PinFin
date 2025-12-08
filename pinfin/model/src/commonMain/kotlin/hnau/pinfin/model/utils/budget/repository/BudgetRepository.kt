@@ -8,6 +8,7 @@ import hnau.pinfin.model.utils.budget.state.BudgetStateBuilder
 import hnau.pinfin.model.utils.budget.state.updateTypeMapper
 import hnau.pinfin.model.utils.budget.storage.UpchainStorage
 import hnau.pinfin.model.utils.budget.storage.addUpdate
+import hnau.pinfin.model.utils.budget.upchain.Sha256
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
@@ -18,6 +19,7 @@ class BudgetRepository(
     scope: CoroutineScope,
     val state: StateFlow<BudgetState>,
     val upchainStorage: UpchainStorage,
+    private val sha256: Sha256,
     val remove: suspend () -> Unit,
 ) {
 
@@ -66,11 +68,12 @@ class BudgetRepository(
             scope: CoroutineScope,
             id: BudgetId,
             upchainStorage: UpchainStorage,
+            sha256: Sha256,
             remove: suspend () -> Unit,
         ): BudgetRepository {
             val upchainFlow = upchainStorage.upchain
             val initialState = BudgetStateBuilder
-                .empty
+                .empty(sha256)
                 .withNewUpchain(upchainFlow.value)
             val state = upchainFlow
                 .runningFold(
@@ -89,6 +92,7 @@ class BudgetRepository(
                 state = state,
                 upchainStorage = upchainStorage,
                 remove = remove,
+                sha256 = sha256,
             )
         }
     }

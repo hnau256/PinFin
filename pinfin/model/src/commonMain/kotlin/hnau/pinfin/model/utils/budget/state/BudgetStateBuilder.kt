@@ -12,9 +12,11 @@ import hnau.pinfin.data.Record
 import hnau.pinfin.data.Transaction
 import hnau.pinfin.data.UpdateType
 import hnau.pinfin.model.utils.amount
+import hnau.pinfin.model.utils.budget.upchain.Sha256
 import hnau.pinfin.model.utils.budget.upchain.Upchain
 import hnau.pinfin.model.utils.budget.upchain.UpchainHash
 import hnau.pinfin.model.utils.budget.upchain.Update
+import hnau.pinfin.model.utils.budget.upchain.calcNext
 import hnau.pinfin.model.utils.budget.upchain.plus
 import hnau.pinfin.model.utils.budget.upchain.utils.getUpdatesAfterHashIfPossible
 import kotlinx.coroutines.Dispatchers
@@ -23,6 +25,7 @@ import kotlinx.coroutines.withContext
 data class BudgetStateBuilder(
     private val hash: UpchainHash?,
     private val config: BudgetConfig,
+    private val sha256: Sha256,
     private val transactions: Map<Transaction.Id, Transaction>,
     private val accountsConfigs: Map<AccountId, AccountConfig>,
     private val categoriesConfigs: Map<CategoryId, CategoryConfig>,
@@ -61,11 +64,15 @@ data class BudgetStateBuilder(
                 categoriesConfigs.getOrElse(updateType.id) { CategoryConfig.empty } + updateType.config
         }
         return BudgetStateBuilder(
-            hash = hash + update,
+            hash = hash.calcNext(
+                update = update,
+                sha256 = sha256,
+            ),
             transactions = transactions,
             accountsConfigs = accountsConfigs,
             categoriesConfigs = categoriesConfigs,
             config = info,
+            sha256 = sha256,
         )
     }
 
@@ -77,7 +84,10 @@ data class BudgetStateBuilder(
             hash = hash,
         )
         val (state, updates) = when (additionalUpdates) {
-            null -> empty to newUpchain.items.map(Upchain.Item::update)
+            null -> empty(
+                sha256 = sha256,
+            ) to newUpchain.items.map(Upchain.Item::update)
+
             else -> this@BudgetStateBuilder to additionalUpdates
         }
         updates.fold(
@@ -171,12 +181,15 @@ data class BudgetStateBuilder(
 
     companion object {
 
-        val empty = BudgetStateBuilder(
+        fun empty(
+            sha256: Sha256,
+        ): BudgetStateBuilder = BudgetStateBuilder(
             hash = null,
             config = BudgetConfig.empty,
             accountsConfigs = emptyMap(),
             transactions = emptyMap(),
             categoriesConfigs = emptyMap(),
+            sha256 = sha256,
         )
     }
 }

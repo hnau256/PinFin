@@ -18,18 +18,18 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.UseSerializers
-import java.net.InetAddress
-import java.net.NetworkInterface
 
 class SyncServerModel(
     scope: CoroutineScope,
-    dependencies: Dependencies,
+    private val dependencies: Dependencies,
     private val skeleton: Skeleton,
     private val goBack: () -> Unit,
 ) {
 
     @Pipe
     interface Dependencies {
+
+        val inetAddressesProvider: InetAddressesProvider
 
         fun serverSyncApi(): ServerSyncApi.Dependencies
     }
@@ -54,16 +54,8 @@ class SyncServerModel(
         }
     }
 
-    val addresses: List<String> = NetworkInterface
-        .getNetworkInterfaces()
-        .asSequence()
-        .filter { it.isUp && !it.isLoopback }
-        .flatMap { it.inetAddresses.asSequence() }
-        .filterNotNull()
-        .map(InetAddress::getHostAddress)
-        .mapNotNull { it.takeIf(String::isNotEmpty) }
-        .toList()
-        .sortedBy(String::length)
+    val addresses: List<String>
+        get() = dependencies.inetAddressesProvider.addresses
 
     val stopServerDialogIsOpened: StateFlow<Boolean>
         get() = skeleton.stopServerDialogIsOpened

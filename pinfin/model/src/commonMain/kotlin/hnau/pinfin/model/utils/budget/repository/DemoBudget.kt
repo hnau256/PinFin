@@ -21,8 +21,8 @@ import kotlinx.datetime.atTime
 import kotlinx.datetime.plus
 import kotlinx.datetime.toInstant
 import kotlinx.datetime.toLocalDateTime
-import java.util.Random
 import kotlin.math.roundToInt
+import kotlin.random.Random
 import kotlin.time.Clock
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.days
@@ -117,7 +117,7 @@ object DemoBudget {
         val minFloat = min.toFloat()
         val maxFloat = max.toFloat()
         val delta = maxFloat - minFloat
-        return (minFloat + random.nextGaussian() / 3 * delta).toFloat().coerceIn(minFloat, maxFloat)
+        return (minFloat + random.nextFloat() / 3 * delta).toFloat().coerceIn(minFloat, maxFloat)
     }
 
     private fun createTransferTransactions(

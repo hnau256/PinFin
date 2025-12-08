@@ -1,3 +1,5 @@
+import org.gradle.kotlin.dsl.withType
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import java.util.Properties
 
 plugins {
@@ -42,7 +44,7 @@ android {
 
     buildTypes {
         getByName("debug") {
-            applicationIdSuffix =".debug"
+            applicationIdSuffix = ".debug"
         }
         getByName("release") {
             isShrinkResources = true
@@ -55,7 +57,7 @@ android {
             initWith(getByName("release"))
             matchingFallbacks += listOf("release")
             signingConfig = signingConfigs.getByName("qa")
-            applicationIdSuffix =".qa"
+            applicationIdSuffix = ".qa"
         }
     }
 }
@@ -66,7 +68,8 @@ compose.resources {
 
 kotlin {
     sourceSets {
-        commonMain {
+
+        val commonMain by getting {
             kotlin.srcDir("build/generated/ksp/metadata/commonMain/kotlin")
             dependencies {
                 implementation(libs.hnau.projector)
@@ -77,10 +80,18 @@ kotlin {
                 implementation(compose.components.resources)
                 implementation(libs.kotlin.datetime)
                 implementation(libs.kotlin.serialization.core)
+                implementation(libs.pipe.annotations)
+                implementation(libs.sealup.annotations)
+                implementation(libs.enumvalues.annotations)
             }
         }
 
+        val commonJvmMain by creating {
+            dependsOn(commonMain)
+        }
+
         androidMain {
+           dependsOn(commonJvmMain)
             dependencies {
                 implementation(libs.android.activity.compose)
                 implementation(libs.android.appcompat)
@@ -88,8 +99,21 @@ kotlin {
         }
 
         desktopMain {
+            dependsOn(commonJvmMain)
             kotlin.srcDir("build/generated/ksp/metadata/commonMain/kotlin")
         }
+    }
+}
+
+dependencies {
+    add("kspCommonMainMetadata", libs.pipe.processor)
+    add("kspCommonMainMetadata", libs.enumvalues.processor)
+    add("kspCommonMainMetadata", libs.sealup.processor)
+}
+
+tasks.withType<KotlinCompile>().configureEach {
+    if (name != "kspCommonMainKotlinMetadata") {
+        dependsOn("kspCommonMainKotlinMetadata")
     }
 }
 

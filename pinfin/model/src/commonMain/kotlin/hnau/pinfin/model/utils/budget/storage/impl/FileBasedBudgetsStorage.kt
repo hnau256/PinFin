@@ -10,7 +10,9 @@ import hnau.common.kotlin.ifNull
 import hnau.pinfin.data.BudgetId
 import hnau.pinfin.model.utils.budget.repository.BudgetRepository
 import hnau.pinfin.model.utils.budget.storage.BudgetsStorage
+import hnau.pinfin.model.utils.budget.upchain.Sha256
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.IO
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -20,6 +22,7 @@ import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
 
 fun BudgetsStorage.Factory.Companion.files(
+    sha256: Sha256,
     budgetsDir: File,
 ): BudgetsStorage.Factory = BudgetsStorage.Factory { scope ->
 
@@ -34,6 +37,7 @@ fun BudgetsStorage.Factory.Companion.files(
         val upchainStorage = FileBasedUpchainStorage.create(
             scope = scope,
             budgetFile = file,
+            sha256 = sha256,
         )
         BudgetRepository.create(
             scope = scope,
@@ -44,7 +48,8 @@ fun BudgetsStorage.Factory.Companion.files(
                 accessStoragesMutex.withLock {
                     storages!!.update { it.filter { it.first != id } }
                 }
-            }
+            },
+            sha256 = sha256,
         )
     }
 

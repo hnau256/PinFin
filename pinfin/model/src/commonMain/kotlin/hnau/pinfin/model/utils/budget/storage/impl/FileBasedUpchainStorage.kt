@@ -8,12 +8,17 @@ import hnau.common.app.model.file.sink
 import hnau.common.app.model.file.source
 import hnau.common.kotlin.coroutines.toMutableStateFlowAsInitial
 import hnau.pinfin.model.utils.budget.storage.UpchainStorage
+import hnau.pinfin.model.utils.budget.upchain.Sha256
 import hnau.pinfin.model.utils.budget.upchain.Upchain
 import hnau.pinfin.model.utils.budget.upchain.Update
 import hnau.pinfin.model.utils.budget.upchain.plus
 import hnau.pinfin.model.utils.budget.upchain.utils.getUpdatesAfterHashIfPossible
+import io.ktor.utils.io.charsets.Charset
+import io.ktor.utils.io.charsets.Charsets
+import io.ktor.utils.io.core.toByteArray
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.IO
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.sync.Mutex
@@ -21,7 +26,6 @@ import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
 import kotlinx.io.buffered
 import kotlinx.io.readLine
-import java.nio.charset.Charset
 
 class FileBasedUpchainStorage(
     initialUpchain: Upchain,
@@ -89,6 +93,7 @@ class FileBasedUpchainStorage(
         suspend fun create(
             scope: CoroutineScope,
             budgetFile: File,
+            sha256: Sha256,
         ): FileBasedUpchainStorage {
             val updatesFromFile: List<Update> = withContext(Dispatchers.IO) {
                 budgetFile
@@ -103,7 +108,7 @@ class FileBasedUpchainStorage(
                     ?: emptyList()
             }
             val initialUpchain: Upchain = withContext(Dispatchers.Default) {
-                Upchain.empty + updatesFromFile
+                Upchain.empty(sha256) + updatesFromFile
             }
             return FileBasedUpchainStorage(
                 initialUpchain = initialUpchain,

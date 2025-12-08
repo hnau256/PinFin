@@ -18,9 +18,13 @@ import kotlinx.coroutines.launch
 class AppActivity : ComponentActivity() {
 
     private val viewModel: AppViewModel<RootModel, RootModel.Skeleton> by viewModels {
-        AppViewModel.Companion.factory(
+        AppViewModel.factory(
             context = applicationContext,
-            seed = createPinFinAppSeed(),
+            seed = createPinFinAppSeed(
+                dependencies = PinFinAppDependencies.impl(
+                    inetAddressesProvider = JvmInetAddressesProvider,
+                )
+            ),
         )
     }
 

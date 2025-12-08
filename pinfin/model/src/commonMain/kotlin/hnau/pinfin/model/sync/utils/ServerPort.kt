@@ -1,6 +1,7 @@
 package hnau.pinfin.model.sync.utils
 
 import kotlinx.serialization.Serializable
+import kotlin.jvm.JvmInline
 
 @Serializable
 @JvmInline

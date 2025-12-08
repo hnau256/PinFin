@@ -5,9 +5,10 @@ import hnau.common.kotlin.mapper.Mapper
 import hnau.common.kotlin.mapper.plus
 import hnau.common.kotlin.mapper.stringAsBase64ByteArray
 import hnau.common.kotlin.serialization.MappingKSerializer
+import io.ktor.utils.io.charsets.Charsets
+import io.ktor.utils.io.core.toByteArray
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.builtins.serializer
-import java.security.MessageDigest
 
 @Serializable(UpchainHash.Serializer::class)
 class UpchainHash private constructor(
@@ -35,13 +36,14 @@ class UpchainHash private constructor(
         fun create(
             previous: UpchainHash?,
             update: Update,
+            sha256: Sha256,
         ): UpchainHash {
             val updateBytes = update.value.toByteArray(Charsets.UTF_8)
             val hashWithUpdateBytes = when (previous) {
                 null -> updateBytes
                 else -> previous.hash + updateBytes
             }
-            val newHash = createDigest().digest(hashWithUpdateBytes)
+            val newHash = sha256.calcSha256(hashWithUpdateBytes)
             return UpchainHash(
                 hash = newHash,
             )
@@ -49,16 +51,15 @@ class UpchainHash private constructor(
 
         val stringMapper: Mapper<String, UpchainHash> =
             Mapper.stringAsBase64ByteArray + Mapper(::UpchainHash, UpchainHash::hash)
-
-        private fun createDigest(): MessageDigest =
-            MessageDigest.getInstance("SHA-256")
     }
 }
 
 
-operator fun UpchainHash?.plus(
+fun UpchainHash?.calcNext(
     update: Update,
+    sha256: Sha256,
 ): UpchainHash = UpchainHash.create(
     previous = this,
     update = update,
+    sha256 = sha256,
 )

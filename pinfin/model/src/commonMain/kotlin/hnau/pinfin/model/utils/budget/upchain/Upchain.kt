@@ -6,6 +6,7 @@ import kotlinx.serialization.Serializable
 class Upchain private constructor(
     val items: List<Item>,
     val indexesByHash: Map<UpchainHash, Int>,
+    private val sha256: Sha256,
 ) {
 
     @Serializable
@@ -21,13 +22,17 @@ class Upchain private constructor(
     operator fun plus(
         update: Update,
     ): Upchain {
-        val newHash = peekHash + update
+        val newHash = peekHash.calcNext(
+            update = update,
+            sha256 = sha256,
+        )
         return Upchain(
             items = items + Item(
                 update = update,
                 hash = newHash,
             ),
             indexesByHash = indexesByHash + (newHash to items.size),
+            sha256 = sha256,
         )
     }
 
@@ -37,6 +42,7 @@ class Upchain private constructor(
         val upchain = Upchain(
             items = items.take(count),
             indexesByHash = indexesByHash.filterValues { it < count },
+            sha256 = sha256,
         )
         val detachedUpdates = items
             .drop(count)
@@ -56,9 +62,12 @@ class Upchain private constructor(
 
     companion object {
 
-        val empty = Upchain(
+        fun empty(
+            sha256: Sha256,
+        ): Upchain = Upchain(
             items = emptyList(),
             indexesByHash = emptyMap(),
+            sha256 = sha256,
         )
     }
 }

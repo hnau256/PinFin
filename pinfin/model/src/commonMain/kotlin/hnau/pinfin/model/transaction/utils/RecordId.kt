@@ -1,7 +1,9 @@
 package hnau.pinfin.model.transaction.utils
 
 import kotlinx.serialization.Serializable
-import java.util.UUID
+import kotlin.jvm.JvmInline
+import kotlin.uuid.ExperimentalUuidApi
+import kotlin.uuid.Uuid
 
 @Serializable
 @JvmInline
@@ -11,8 +13,9 @@ value class RecordId(
 
     companion object {
 
+        @OptIn(ExperimentalUuidApi::class)
         fun createNew(): RecordId = RecordId(
-            id = UUID.randomUUID().toString(),
+            id = Uuid.random().toString(),
         )
     }
 }
