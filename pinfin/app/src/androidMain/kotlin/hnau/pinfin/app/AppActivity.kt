@@ -23,6 +23,7 @@ class AppActivity : ComponentActivity() {
             seed = createPinFinAppSeed(
                 dependencies = PinFinAppDependencies.impl(
                     inetAddressesProvider = JvmInetAddressesProvider,
+                    sha256 = JvmSha256,
                 )
             ),
         )

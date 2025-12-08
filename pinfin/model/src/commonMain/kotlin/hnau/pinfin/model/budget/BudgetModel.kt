@@ -15,6 +15,7 @@ import hnau.common.kotlin.serialization.MutableStateFlowSerializer
 import hnau.pinfin.model.TransactionsModel
 import hnau.pinfin.model.budget.analytics.AnalyticsModel
 import hnau.pinfin.model.budget.config.BudgetConfigModel
+import hnau.pinfin.model.filter.FilterModel
 import hnau.pipe.annotations.Pipe
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -42,7 +43,7 @@ class BudgetModel(
     data class Skeleton(
         val selectedTab: MutableStateFlow<BudgetTab> =
             BudgetTab.default.toMutableStateFlowAsInitial(),
-        val pages: MutableList<BudgetPageModel.Skeleton> = mutableListOf(),
+        val pages: MutableList<BudgetPageModelSkeleton> = mutableListOf(),
     )
 
     @SealUp(
@@ -61,7 +62,7 @@ class BudgetModel(
             ),
         ],
         wrappedValuePropertyName = "model",
-        sealedInterfaceName = "BudgetModelPage",
+        sealedInterfaceName = "BudgetPageModel",
     )
     interface Page {
 
@@ -70,52 +71,82 @@ class BudgetModel(
         companion object
     }
 
+    @SealUp(
+        variants = [
+            Variant(
+                type = TransactionsModel.Skeleton::class,
+                identifier = "transactions",
+            ),
+            Variant(
+                type = AnalyticsModel.Skeleton::class,
+                identifier = "analytics",
+            ),
+            Variant(
+                type = BudgetConfigModel.Skeleton::class,
+                identifier = "config",
+            ),
+        ],
+        wrappedValuePropertyName = "skeleton",
+        sealedInterfaceName = "BudgetPageModelSkeleton",
+        serializable = true,
+    )
+    interface PageSkeleton {
+
+        companion object
+    }
+
     private val tabsCache: MutableList<BudgetPageModel> = mutableListOf()
+
+    private val BudgetPageModelSkeleton.tab: BudgetTab
+        get() = fold(
+            ifTransactions = { BudgetTab.Transactions },
+            ifAnalytics = { BudgetTab.Analytics },
+            ifConfig = { BudgetTab.Config },
+        )
 
     private fun getModel(
         tab: BudgetTab,
     ): BudgetPageModel {
 
-        fun getSkeleton(): BudgetPageModel.Skeleton = skeleton
+        fun getSkeleton(): BudgetPageModelSkeleton = skeleton
             .pages
             .firstOrNull { it.tab == tab }
             .ifNull {
                 when (tab) {
-                    BudgetTab.Transactions -> BudgetPageModel.Skeleton.Transactions()
-                    BudgetTab.Analytics -> BudgetPageModel.Skeleton.Analytics()
-                    BudgetTab.Config -> BudgetPageModel.Skeleton.Config()
+                    BudgetTab.Transactions -> PageSkeleton.transactions(FilterModel.Skeleton.create())
+                    BudgetTab.Analytics -> PageSkeleton.analytics()
+                    BudgetTab.Config -> PageSkeleton.config()
                 }.also(skeleton.pages::add)
             }
 
         return tabsCache
             .firstOrNull { it.tab == tab }
             .ifNull {
-                val skeleton = getSkeleton()
-                when (skeleton) {
-                    is BudgetPageModel.Skeleton.Transactions -> BudgetPageModel.Transactions(
-                        TransactionsModel(
+                getSkeleton().fold(
+                    ifTransactions = { transactionsSkeleton ->
+                        Page.transactions(
                             scope = scope,
-                            skeleton = skeleton.skeleton,
+                            skeleton = transactionsSkeleton,
                             dependencies = dependencies.transactions(),
                         )
-                    )
+                    },
 
-                    is BudgetPageModel.Skeleton.Analytics -> BudgetPageModel.Analytics(
-                        AnalyticsModel(
+                    ifAnalytics = { analyticsSkeleton ->
+                        Page.analytics(
                             scope = scope,
-                            skeleton = skeleton.skeleton,
+                            skeleton = analyticsSkeleton,
                             dependencies = dependencies.analytics(),
                         )
-                    )
+                    },
 
-                    is BudgetPageModel.Skeleton.Config -> BudgetPageModel.Config(
-                        BudgetConfigModel(
+                    ifConfig = { configSkeleton ->
+                        Page.config(
                             scope = scope,
-                            skeleton = skeleton.skeleton,
+                            skeleton = configSkeleton,
                             dependencies = dependencies.config(),
                         )
-                    )
-                }.also(tabsCache::add)
+                    },
+                ).also(tabsCache::add)
             }
     }
 
@@ -146,3 +177,10 @@ class BudgetModel(
             }
         }
 }
+
+val BudgetPageModel.tab: BudgetTab
+    get() = fold(
+        ifTransactions = { BudgetTab.Transactions },
+        ifAnalytics = { BudgetTab.Analytics },
+        ifConfig = { BudgetTab.Config },
+    )

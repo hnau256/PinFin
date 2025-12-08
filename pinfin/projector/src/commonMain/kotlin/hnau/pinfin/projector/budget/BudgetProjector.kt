@@ -32,6 +32,8 @@ import hnau.pinfin.model.budget.BudgetPageModel
 import hnau.pinfin.model.budget.BudgetTab
 import hnau.pinfin.model.budget.analytics.AnalyticsModel
 import hnau.pinfin.model.budget.config.BudgetConfigModel
+import hnau.pinfin.model.budget.fold
+import hnau.pinfin.model.budget.tab
 import hnau.pinfin.projector.budget.analytics.AnalyticsProjector
 import hnau.pinfin.projector.budget.config.BudgetConfigProjector
 import hnau.pinfin.projector.budget.transactions.TransactionsProjector
@@ -74,7 +76,7 @@ class BudgetProjector(
             ),
         ],
         wrappedValuePropertyName = "projector",
-        sealedInterfaceName = "BudgetProjectorPage",
+        sealedInterfaceName = "BudgetPageProjector",
     )
     interface Page {
 
@@ -95,29 +97,27 @@ class BudgetProjector(
             tabsCache.getOrPut(
                 key = model,
             ) {
-                val projector = when (model) {
-                    is BudgetPageModel.Transactions -> BudgetPageProjector.Transactions(
-                        projector = TransactionsProjector(
+                val projector = model.fold(
+                    ifTransactions = { transactionsModel ->
+                        Page.transactions(
                             scope = scope,
-                            model = model.model,
+                            model = transactionsModel,
                             dependencies = dependencies.transactions(),
                         )
-                    )
-
-                    is BudgetPageModel.Analytics -> BudgetPageProjector.Analytics(
-                        projector = AnalyticsProjector(
+                    },
+                    ifAnalytics = { analyticsModel ->
+                        Page.analytics(
                             scope = scope,
-                            model = model.model,
+                            model = analyticsModel,
                             dependencies = dependencies.analytics(),
                         )
-                    )
-
-                    is BudgetPageModel.Config -> BudgetPageProjector.Config(
-                        projector = BudgetConfigProjector(
-                            model = model.model,
+                    },
+                    ifConfig = { budgetModel ->
+                        Page.config(
+                            model = budgetModel,
                         )
-                    )
-                }
+                    }
+                )
                 model.tab to projector
             }
         }
