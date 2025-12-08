@@ -69,7 +69,7 @@ compose.resources {
 kotlin {
     sourceSets {
 
-        val commonMain by getting {
+        commonMain  {
             kotlin.srcDir("build/generated/ksp/metadata/commonMain/kotlin")
             dependencies {
                 implementation(libs.hnau.projector)
@@ -86,12 +86,8 @@ kotlin {
             }
         }
 
-        val commonJvmMain by creating {
-            dependsOn(commonMain)
-        }
-
         androidMain {
-           dependsOn(commonJvmMain)
+            kotlin.srcDir("build/generated/ksp/metadata/androidMain/kotlin")
             dependencies {
                 implementation(libs.android.activity.compose)
                 implementation(libs.android.appcompat)
@@ -99,8 +95,7 @@ kotlin {
         }
 
         desktopMain {
-            dependsOn(commonJvmMain)
-            kotlin.srcDir("build/generated/ksp/metadata/commonMain/kotlin")
+            kotlin.srcDir("build/generated/ksp/metadata/desktopMain/kotlin")
         }
     }
 }

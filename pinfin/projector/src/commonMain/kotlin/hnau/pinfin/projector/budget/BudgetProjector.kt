@@ -75,7 +75,6 @@ class BudgetProjector(
         ],
         wrappedValuePropertyName = "projector",
         sealedInterfaceName = "BudgetProjectorPage",
-        factoryMethods = false,
     )
     interface Page {
 

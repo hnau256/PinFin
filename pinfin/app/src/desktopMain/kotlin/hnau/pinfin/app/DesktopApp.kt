@@ -18,6 +18,10 @@ fun main() = runBlocking {
         scope = this,
         seed = createPinFinAppSeed(
             defaultBrightness = ThemeBrightness.Dark,
+            dependencies = PinFinAppDependencies.impl(
+                inetAddressesProvider = JvmInetAddressesProvider,
+                sha256 = JvmSha256,
+            )
         ),
     )
     val projector = createAppProjector(
