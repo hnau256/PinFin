@@ -31,6 +31,7 @@ kotlin {
                 implementation(libs.kotlin.immutable)
                 implementation(libs.pipe.annotations)
                 implementation(libs.sealup.annotations)
+                implementation(libs.bignum)
             }
         }
     }

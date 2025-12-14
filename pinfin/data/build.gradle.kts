@@ -22,6 +22,7 @@ kotlin {
                 implementation(libs.hnau.kotlin)
                 implementation(libs.kotlin.datetime)
                 implementation(libs.enumvalues.annotations)
+                implementation(libs.bignum)
             }
         }
     }

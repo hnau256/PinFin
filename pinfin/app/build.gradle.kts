@@ -83,6 +83,7 @@ kotlin {
                 implementation(libs.pipe.annotations)
                 implementation(libs.sealup.annotations)
                 implementation(libs.enumvalues.annotations)
+                implementation(libs.bignum)
             }
         }
 

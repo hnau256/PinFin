@@ -82,4 +82,5 @@ hnau-projector = { module = "com.github.hnau256.common-app:projector", version.r
 #other
 ooxml = { module = "org.apache.poi:poi-ooxml", version.ref = "ooxml" }
 ktor-network = { module = "io.ktor:ktor-network", version.ref = "ktor" }
+bignum = { module = "com.ionspin.kotlin:bignum", version = "0.3.10" }
 
