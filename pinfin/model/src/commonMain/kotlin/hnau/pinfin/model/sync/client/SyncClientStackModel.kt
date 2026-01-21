@@ -95,7 +95,7 @@ class SyncClientStackModel(
                             .stack
                             .push(
                                 SyncClientStackElementModel.Skeleton.Budget(
-                                    SyncClientLoadBudgetModel.Skeleton(
+                                    skeleton = SyncClientLoadBudgetModel.Skeleton(
                                         id = budgetId,
                                     )
                                 )

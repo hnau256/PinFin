@@ -12,6 +12,8 @@ import hnau.common.app.model.stack.modelsOnly
 import hnau.common.app.model.stack.push
 import hnau.common.app.model.stack.tryDropLast
 import hnau.common.app.model.stack.withModels
+import hnau.common.gen.sealup.annotations.SealUp
+import hnau.common.gen.sealup.annotations.Variant
 import hnau.common.kotlin.coroutines.toMutableStateFlowAsInitial
 import hnau.common.kotlin.serialization.MutableStateFlowSerializer
 import hnau.pinfin.model.IconModel
@@ -35,11 +37,9 @@ class AccountStackModel(
     data class Skeleton(
         val info: AccountInfo,
         val icon: MutableStateFlow<IconVariant?> = info.icon.toMutableStateFlowAsInitial(),
-        val stack: MutableStateFlow<NonEmptyStack<AccountStackElementModel.Skeleton>> = NonEmptyStack(
-            tail = AccountStackElementModel.Skeleton.Info(
-                skeleton = AccountModel.Skeleton(
-                    info = info,
-                )
+        val stack: MutableStateFlow<NonEmptyStack<AccountStackElementSkeleton>> = NonEmptyStack(
+            tail = ElementSkeleton.info(
+                info = info,
             )
         ).toMutableStateFlowAsInitial(),
     )
@@ -50,12 +50,53 @@ class AccountStackModel(
         fun info(): AccountModel.Dependencies
     }
 
-    private val stackWithModels: StateFlow<NonEmptyStack<SkeletonWithModel<AccountStackElementModel.Skeleton, AccountStackElementModel>>> =
+    @SealUp(
+        variants = [
+            Variant(
+                type = AccountModel::class,
+                identifier = "info",
+            ),
+            Variant(
+                type = IconModel::class,
+                identifier = "icon",
+            ),
+        ],
+        wrappedValuePropertyName = "model",
+        sealedInterfaceName = "AccountStackElementModel",
+    )
+    interface Element {
+
+        val goBackHandler: GoBackHandler
+
+        companion object
+    }
+
+    @SealUp(
+        variants = [
+            Variant(
+                type = AccountModel.Skeleton::class,
+                identifier = "info",
+            ),
+            Variant(
+                type = IconModel.Skeleton::class,
+                identifier = "icon",
+            ),
+        ],
+        wrappedValuePropertyName = "skeleton",
+        sealedInterfaceName = "AccountStackElementSkeleton",
+        serializable = true,
+    )
+    interface ElementSkeleton {
+
+        companion object
+    }
+
+    private val stackWithModels: StateFlow<NonEmptyStack<SkeletonWithModel<AccountStackElementSkeleton, AccountStackElementModel>>> =
         skeleton
             .stack
             .withModels(
                 scope = scope,
-                getKey = AccountStackElementModel.Skeleton::key,
+                getKey = AccountStackElementSkeleton::ordinal,
             ) { modelScope, skeleton ->
                 createModel(
                     modelScope = modelScope,
@@ -65,36 +106,35 @@ class AccountStackModel(
 
     private fun createModel(
         modelScope: CoroutineScope,
-        skeleton: AccountStackElementModel.Skeleton,
-    ): AccountStackElementModel = when (skeleton) {
-        is AccountStackElementModel.Skeleton.Info -> AccountStackElementModel.Info(
-            AccountModel(
+        skeleton: AccountStackElementSkeleton,
+    ): AccountStackElementModel = skeleton.fold(
+        ifInfo = { infoSkeleton ->
+            Element.info(
                 scope = modelScope,
-                skeleton = skeleton.skeleton,
+                skeleton = infoSkeleton,
                 dependencies = dependencies.info(),
                 onReady = onReady,
                 info = this@AccountStackModel.skeleton.info,
                 icon = this@AccountStackModel.skeleton.icon,
                 chooseIcon = {
                     this@AccountStackModel.skeleton.stack.push(
-                        AccountStackElementModel.Skeleton.Icon()
+                        ElementSkeleton.icon()
                     )
                 }
             )
-        )
-
-        is AccountStackElementModel.Skeleton.Icon -> AccountStackElementModel.Icon(
-            IconModel(
+        },
+        ifIcon = { iconSkeleton ->
+            Element.icon(
                 scope = modelScope,
-                skeleton = skeleton.skeleton,
+                skeleton = iconSkeleton,
                 selected = this@AccountStackModel.skeleton.icon.value,
                 onSelect = { icon ->
                     this@AccountStackModel.skeleton.icon.value = icon
                     this@AccountStackModel.skeleton.stack.tryDropLast()
                 },
             )
-        )
-    }
+        },
+    )
 
     val stack: StateFlow<NonEmptyStack<AccountStackElementModel>> =
         stackWithModels.modelsOnly(scope)

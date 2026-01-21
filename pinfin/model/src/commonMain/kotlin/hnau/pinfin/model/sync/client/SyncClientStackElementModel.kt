@@ -16,22 +16,22 @@ sealed interface SyncClientStackElementModel {
         val model: SyncClientListModel,
     ) : SyncClientStackElementModel {
 
-        override val goBackHandler: GoBackHandler
-            get() = model.goBackHandler
-
         override val key: Int
             get() = 0
+
+        override val goBackHandler: GoBackHandler
+            get() = model.goBackHandler
     }
 
     data class Budget(
         val model: SyncClientLoadBudgetModel,
     ) : SyncClientStackElementModel {
 
-        override val goBackHandler: GoBackHandler
-            get() = model.goBackHandler
-
         override val key: Int
             get() = 1
+
+        override val goBackHandler: GoBackHandler
+            get() = model.goBackHandler
     }
 
     @Serializable

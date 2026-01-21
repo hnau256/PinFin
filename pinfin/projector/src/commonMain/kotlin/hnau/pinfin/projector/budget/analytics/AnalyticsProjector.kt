@@ -17,6 +17,8 @@ import androidx.compose.ui.unit.Dp
 import hnau.common.app.projector.uikit.Tabs
 import hnau.common.app.projector.utils.Overcompose
 import hnau.common.app.projector.utils.rememberPagerState
+import hnau.common.gen.sealup.annotations.SealUp
+import hnau.common.gen.sealup.annotations.Variant
 import hnau.pinfin.model.budget.analytics.AnalyticsModel
 import hnau.pinfin.model.budget.analytics.tab.AnalyticsTab
 import hnau.pinfin.model.budget.analytics.tab.AnalyticsTabValues
@@ -40,19 +42,39 @@ class AnalyticsProjector(
         fun graph(): GraphProjector.Dependencies
     }
 
+    @SealUp(
+        variants = [
+            Variant(
+                type = AccountsProjector::class,
+                identifier = "accounts",
+            ),
+            Variant(
+                type = GraphProjector::class,
+                identifier = "graph",
+            ),
+        ],
+        wrappedValuePropertyName = "projector",
+        sealedInterfaceName = "AnalyticsTabProjector",
+    )
+    interface TabProjector {
+
+        @Composable
+        fun Content(
+            contentPadding: PaddingValues,
+        )
+
+        companion object
+    }
+
     private val tabs: AnalyticsTabValues<AnalyticsTabProjector> = AnalyticsTabValues(
-        accounts = AnalyticsTabProjector.Accounts(
-            AccountsProjector(
-                model = model.accounts,
-                dependencies = dependencies.accounts(),
-            )
+        accounts = TabProjector.accounts(
+            model = model.accounts,
+            dependencies = dependencies.accounts(),
         ),
-        graph = AnalyticsTabProjector.Graph(
-            GraphProjector(
-                scope = scope,
-                model = model.graph,
-                dependencies = dependencies.graph(),
-            )
+        graph = TabProjector.graph(
+            scope = scope,
+            model = model.graph,
+            dependencies = dependencies.graph(),
         )
     )
 

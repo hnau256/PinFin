@@ -3,8 +3,11 @@ package hnau.pinfin.projector.accountstack
 import androidx.compose.runtime.Composable
 import hnau.common.app.projector.stack.Content
 import hnau.common.app.projector.stack.StackProjectorTail
+import hnau.common.gen.sealup.annotations.SealUp
+import hnau.common.gen.sealup.annotations.Variant
 import hnau.pinfin.model.accountstack.AccountStackElementModel
 import hnau.pinfin.model.accountstack.AccountStackModel
+import hnau.pinfin.model.accountstack.fold
 import hnau.pinfin.projector.IconProjector
 import hnau.pipe.annotations.Pipe
 import kotlinx.coroutines.CoroutineScope
@@ -24,29 +27,50 @@ class AccountStackProjector(
         fun icon(): IconProjector.Dependencies
     }
 
+    @SealUp(
+        variants = [
+            Variant(
+                type = AccountProjector::class,
+                identifier = "info",
+            ),
+            Variant(
+                type = IconProjector::class,
+                identifier = "icon",
+            ),
+        ],
+        wrappedValuePropertyName = "projector",
+        sealedInterfaceName = "AccountStackElementProjector",
+    )
+    interface PageProjector {
+
+        @Composable
+        fun Content()
+
+        companion object
+    }
+
     private val tail: StateFlow<StackProjectorTail<Int, AccountStackElementProjector>> =
         StackProjectorTail(
             scope = scope,
             modelsStack = model.stack,
-            extractKey = { model -> model.key },
+            extractKey = AccountStackElementModel::ordinal,
             createProjector = { scope, model ->
-                when (model) {
-                    is AccountStackElementModel.Info -> AccountStackElementProjector.Info(
-                        AccountProjector(
+                model.fold(
+                    ifInfo = { infoModel ->
+                        PageProjector.info(
                             scope = scope,
-                            model = model.model,
+                            model = infoModel,
                             dependencies = dependencies.info(),
                         )
-                    )
-
-                    is AccountStackElementModel.Icon -> AccountStackElementProjector.Icon(
-                        IconProjector(
+                    },
+                    ifIcon = { iconModel ->
+                        PageProjector.icon(
                             scope = scope,
-                            model = model.model,
+                            model = iconModel,
                             dependencies = dependencies.icon(),
                         )
-                    )
-                }
+                    },
+                )
             }
         )
 
