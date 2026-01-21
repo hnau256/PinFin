@@ -10,7 +10,6 @@ import hnau.common.gen.sealup.annotations.SealUp
 import hnau.common.gen.sealup.annotations.Variant
 import hnau.common.kotlin.coroutines.flow.state.mapWithScope
 import hnau.pinfin.model.manage.ManageModel
-import hnau.pinfin.model.manage.ManageStateModel
 import hnau.pinfin.model.manage.fold
 import hnau.pinfin.projector.IconProjector
 import hnau.pinfin.projector.budgetsstack.BudgetsStackProjector

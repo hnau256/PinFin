@@ -10,15 +10,12 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ChevronRight
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ListItem
-import hnau.common.app.projector.uikit.FullScreen
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
-import hnau.pinfin.projector.utils.BackButtonWidth
-import hnau.common.app.model.goback.GoBackHandler
 import hnau.common.app.projector.uikit.ErrorPanel
+import hnau.common.app.projector.uikit.FullScreen
 import hnau.common.app.projector.uikit.TopBar
 import hnau.common.app.projector.uikit.TopBarTitle
 import hnau.common.app.projector.uikit.state.NullableStateContent
@@ -28,6 +25,7 @@ import hnau.pinfin.model.CategoriesModel
 import hnau.pinfin.projector.resources.Res
 import hnau.pinfin.projector.resources.categories
 import hnau.pinfin.projector.resources.there_are_no_categories
+import hnau.pinfin.projector.utils.BackButtonWidth
 import hnau.pinfin.projector.utils.CategoryContent
 import hnau.pipe.annotations.Pipe
 import kotlinx.coroutines.CoroutineScope

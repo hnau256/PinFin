@@ -1,12 +1,12 @@
 package hnau.pinfin.model.utils.budget.state
 
-import hnau.common.app.model.utils.Hue as ModelHue
 import hnau.pinfin.data.CategoryConfig
 import hnau.pinfin.data.CategoryId
 import hnau.pinfin.data.Hue
 import hnau.pinfin.model.utils.icons.IconVariant
 import hnau.pinfin.model.utils.icons.variant
 import kotlinx.serialization.Serializable
+import hnau.common.app.model.utils.Hue as ModelHue
 
 @Serializable
 data class CategoryInfo(

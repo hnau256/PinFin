@@ -22,9 +22,7 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
-import hnau.common.app.projector.uikit.FullScreen
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -39,9 +37,8 @@ import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import arrow.core.NonEmptyList
-import hnau.pinfin.projector.utils.BackButtonWidth
-import hnau.common.app.model.goback.GoBackHandler
 import hnau.common.app.projector.uikit.ErrorPanel
+import hnau.common.app.projector.uikit.FullScreen
 import hnau.common.app.projector.uikit.TextInput
 import hnau.common.app.projector.uikit.TopBar
 import hnau.common.app.projector.uikit.TopBarTitle
@@ -69,6 +66,7 @@ import hnau.pinfin.projector.resources.Res
 import hnau.pinfin.projector.resources.no_icons_found
 import hnau.pinfin.projector.resources.search
 import hnau.pinfin.projector.resources.select_icon
+import hnau.pinfin.projector.utils.BackButtonWidth
 import hnau.pinfin.projector.utils.colors
 import hnau.pinfin.projector.utils.image
 import hnau.pipe.annotations.Pipe

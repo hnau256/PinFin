@@ -8,16 +8,13 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
-import hnau.common.app.projector.uikit.FullScreen
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import arrow.core.NonEmptyList
-import hnau.pinfin.projector.utils.BackButtonWidth
-import hnau.common.app.model.goback.GoBackHandler
 import hnau.common.app.projector.uikit.ErrorPanel
+import hnau.common.app.projector.uikit.FullScreen
 import hnau.common.app.projector.uikit.TopBar
 import hnau.common.app.projector.uikit.TopBarTitle
 import hnau.common.app.projector.uikit.state.LoadableContent
@@ -35,6 +32,7 @@ import hnau.pinfin.projector.resources.budgets_to_synchronization
 import hnau.pinfin.projector.resources.error_while_loading_budgets_list_from_server
 import hnau.pinfin.projector.resources.there_is_no_budgets_for_synchronization
 import hnau.pinfin.projector.resources.try_again
+import hnau.pinfin.projector.utils.BackButtonWidth
 import hnau.pipe.annotations.Pipe
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.StateFlow

@@ -12,8 +12,8 @@ import hnau.common.app.model.goback.GoBackHandler
 import hnau.common.app.model.toEditingString
 import hnau.common.kotlin.coroutines.flow.state.combineStateWith
 import hnau.common.kotlin.coroutines.flow.state.mapState
-import hnau.common.kotlin.coroutines.flow.state.scopedInState
 import hnau.common.kotlin.coroutines.flow.state.mutable.toMutableStateFlowAsInitial
+import hnau.common.kotlin.coroutines.flow.state.scopedInState
 import hnau.common.kotlin.foldBoolean
 import hnau.common.kotlin.foldNullable
 import hnau.common.kotlin.mapper.Mapper

@@ -10,12 +10,9 @@ import androidx.compose.material.icons.filled.Image
 import androidx.compose.material.icons.filled.Save
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.ListItem
-import hnau.common.app.projector.uikit.FullScreen
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -23,8 +20,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
-import hnau.pinfin.projector.utils.BackButtonWidth
-import hnau.common.app.model.goback.GoBackHandler
+import hnau.common.app.projector.uikit.FullScreen
 import hnau.common.app.projector.uikit.TextInput
 import hnau.common.app.projector.uikit.TopBar
 import hnau.common.app.projector.uikit.TopBarAction
@@ -39,6 +35,7 @@ import hnau.pinfin.projector.resources.hide_if_amount_is_zero
 import hnau.pinfin.projector.resources.hue
 import hnau.pinfin.projector.resources.icon
 import hnau.pinfin.projector.resources.name
+import hnau.pinfin.projector.utils.BackButtonWidth
 import hnau.pinfin.projector.utils.HueSlider
 import hnau.pinfin.projector.utils.image
 import hnau.pipe.annotations.Pipe

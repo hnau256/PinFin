@@ -2,26 +2,22 @@ package hnau.pinfin.projector.sync
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.BasicAlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
-import hnau.common.app.projector.uikit.FullScreen
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
-import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import hnau.pinfin.projector.utils.BackButtonWidth
-import hnau.common.app.model.goback.GoBackHandler
 import hnau.common.app.projector.uikit.AlertDialogContent
 import hnau.common.app.projector.uikit.ErrorPanel
+import hnau.common.app.projector.uikit.FullScreen
 import hnau.common.app.projector.uikit.TopBar
 import hnau.common.app.projector.uikit.TopBarTitle
 import hnau.common.app.projector.uikit.utils.Dimens
@@ -34,6 +30,7 @@ import hnau.pinfin.projector.resources.stop_sync_server
 import hnau.pinfin.projector.resources.sync_server
 import hnau.pinfin.projector.resources.sync_server_is_active
 import hnau.pinfin.projector.resources.yes
+import hnau.pinfin.projector.utils.BackButtonWidth
 import hnau.pipe.annotations.Pipe
 import kotlinx.coroutines.CoroutineScope
 import org.jetbrains.compose.resources.stringResource

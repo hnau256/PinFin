@@ -39,7 +39,6 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.unit.Dp
 import hnau.common.app.projector.uikit.AlertDialogContent
-import hnau.common.app.projector.uikit.FullScreen
 import hnau.common.app.projector.uikit.TextInput
 import hnau.common.app.projector.uikit.TopBarDefaults
 import hnau.common.app.projector.uikit.progressindicator.InProgress

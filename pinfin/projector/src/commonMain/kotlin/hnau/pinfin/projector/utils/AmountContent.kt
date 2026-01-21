@@ -10,10 +10,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.TextStyle
+import hnau.common.app.projector.utils.SwitchHue
 import hnau.pinfin.data.Amount
 import hnau.pinfin.data.AmountDirection
 import hnau.pinfin.data.Hue
-import hnau.common.app.projector.utils.SwitchHue
 import hnau.pinfin.model.utils.model
 import hnau.pinfin.projector.utils.formatter.AmountFormatter
 

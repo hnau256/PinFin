@@ -2,22 +2,16 @@ package hnau.pinfin.projector.transaction
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
-import hnau.common.app.projector.uikit.FullScreen
-import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import hnau.pinfin.projector.utils.BackButtonWidth
-import hnau.common.app.model.goback.GoBackHandler
+import hnau.common.app.projector.uikit.FullScreen
 import hnau.common.app.projector.uikit.TopBar
-import hnau.common.app.projector.uikit.TopBarTitle
 import hnau.common.app.projector.uikit.utils.Dimens
 import hnau.common.app.projector.utils.copy
 import hnau.pinfin.model.transaction.TransactionModel
@@ -26,6 +20,7 @@ import hnau.pinfin.projector.transaction.delegates.InfoProjector
 import hnau.pinfin.projector.transaction.delegates.PageProjector
 import hnau.pinfin.projector.transaction.delegates.TopBarActionsProjector
 import hnau.pinfin.projector.transaction.delegates.TypeProjector
+import hnau.pinfin.projector.utils.BackButtonWidth
 import hnau.pipe.annotations.Pipe
 import kotlinx.coroutines.CoroutineScope
 
