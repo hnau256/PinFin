@@ -31,8 +31,8 @@ import hnau.common.app.projector.uikit.state.TransitionSpec
 import hnau.common.app.projector.uikit.utils.Dimens
 import hnau.common.app.projector.utils.Icon
 import hnau.common.app.projector.utils.SlideOrientation
-import hnau.common.kotlin.coroutines.mapState
-import hnau.common.kotlin.coroutines.mapWithScope
+import hnau.common.kotlin.coroutines.flow.state.mapState
+import hnau.common.kotlin.coroutines.flow.state.mapWithScope
 import hnau.pinfin.model.filter.FilterModel
 import hnau.pinfin.projector.transaction.utils.createPagesTransitionSpec
 import hnau.pinfin.projector.utils.BackButtonWidth

@@ -1,6 +1,6 @@
 package hnau.pinfin.model.utils
 
-import hnau.common.kotlin.coroutines.mapState
+import hnau.common.kotlin.coroutines.flow.state.mapState
 import hnau.pinfin.model.utils.budget.repository.BudgetRepository
 import hnau.pinfin.model.utils.budget.state.BudgetInfo
 import kotlinx.coroutines.CoroutineScope

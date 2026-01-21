@@ -7,7 +7,7 @@ package hnau.pinfin.model.sync.client.list
 import arrow.core.Ior
 import hnau.common.app.model.goback.GoBackHandler
 import hnau.common.app.model.goback.NeverGoBackHandler
-import hnau.common.kotlin.coroutines.toMutableStateFlowAsInitial
+import hnau.common.kotlin.coroutines.flow.state.mutable.toMutableStateFlowAsInitial
 import hnau.common.kotlin.serialization.MutableStateFlowSerializer
 import hnau.pinfin.data.BudgetId
 import hnau.pinfin.model.sync.client.BudgetSyncOpener

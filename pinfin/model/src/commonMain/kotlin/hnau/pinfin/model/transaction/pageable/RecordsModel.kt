@@ -11,13 +11,13 @@ import arrow.core.serialization.NonEmptyListSerializer
 import arrow.core.toNonEmptyListOrNull
 import hnau.common.app.model.goback.GoBackHandler
 import hnau.common.kotlin.ZipList
-import hnau.common.kotlin.coroutines.combineState
-import hnau.common.kotlin.coroutines.combineStateWith
-import hnau.common.kotlin.coroutines.flatMapState
-import hnau.common.kotlin.coroutines.flatMapWithScope
-import hnau.common.kotlin.coroutines.mapReusable
-import hnau.common.kotlin.coroutines.mapState
-import hnau.common.kotlin.coroutines.toMutableStateFlowAsInitial
+import hnau.common.kotlin.coroutines.flow.state.combineState
+import hnau.common.kotlin.coroutines.flow.state.combineStateWith
+import hnau.common.kotlin.coroutines.flow.state.flatMapState
+import hnau.common.kotlin.coroutines.flow.state.flatMapWithScope
+import hnau.common.kotlin.coroutines.flow.state.mapReusable
+import hnau.common.kotlin.coroutines.flow.state.mapState
+import hnau.common.kotlin.coroutines.flow.state.mutable.toMutableStateFlowAsInitial
 import hnau.common.kotlin.foldBoolean
 import hnau.common.kotlin.foldNullable
 import hnau.common.kotlin.serialization.MutableStateFlowSerializer
@@ -193,8 +193,8 @@ class RecordsModel(
             ) { acc, item ->
                 combineState(
                     scope = scope,
-                    a = acc,
-                    b = item.model.category.categoryEditable,
+                    first = acc,
+                    second = item.model.category.categoryEditable,
                 ) { acc, categoryOrIncorrect ->
                     when (categoryOrIncorrect) {
                         Editable.Incorrect -> acc

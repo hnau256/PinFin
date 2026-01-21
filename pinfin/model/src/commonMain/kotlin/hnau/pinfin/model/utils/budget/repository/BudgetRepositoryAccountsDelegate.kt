@@ -1,6 +1,6 @@
 package hnau.pinfin.model.utils.budget.repository
 
-import hnau.common.kotlin.coroutines.mapState
+import hnau.common.kotlin.coroutines.flow.state.mapState
 import hnau.pinfin.data.AccountConfig
 import hnau.pinfin.data.AccountId
 import hnau.pinfin.data.UpdateType

@@ -2,8 +2,8 @@ package hnau.pinfin.model.sync.server.utils
 
 import arrow.core.identity
 import arrow.core.raise.result
-import hnau.common.kotlin.coroutines.mapListReusable
-import hnau.common.kotlin.coroutines.mapState
+import hnau.common.kotlin.coroutines.flow.state.mapListReusable
+import hnau.common.kotlin.coroutines.flow.state.mapState
 import hnau.common.kotlin.foldNullable
 import hnau.pinfin.data.BudgetId
 import hnau.pinfin.model.sync.utils.SyncHandle

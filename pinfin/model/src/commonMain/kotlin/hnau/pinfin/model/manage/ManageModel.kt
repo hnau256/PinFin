@@ -11,11 +11,11 @@ import hnau.common.app.model.preferences.Preferences
 import hnau.common.app.model.preferences.map
 import hnau.common.app.model.preferences.withDefault
 import hnau.common.kotlin.castOrNull
-import hnau.common.kotlin.coroutines.flatMapState
-import hnau.common.kotlin.coroutines.flatMapWithScope
-import hnau.common.kotlin.coroutines.mapState
-import hnau.common.kotlin.coroutines.mapWithScope
-import hnau.common.kotlin.coroutines.toMutableStateFlowAsInitial
+import hnau.common.kotlin.coroutines.flow.state.flatMapState
+import hnau.common.kotlin.coroutines.flow.state.flatMapWithScope
+import hnau.common.kotlin.coroutines.flow.state.mapState
+import hnau.common.kotlin.coroutines.flow.state.mapWithScope
+import hnau.common.kotlin.coroutines.flow.state.mutable.toMutableStateFlowAsInitial
 import hnau.common.kotlin.getOrInit
 import hnau.common.kotlin.mapper.Mapper
 import hnau.common.kotlin.mapper.nullable

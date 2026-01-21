@@ -15,8 +15,8 @@ import androidx.compose.ui.text.input.KeyboardType
 import hnau.common.app.model.EditingString
 import hnau.common.app.model.toEditingString
 import hnau.common.app.projector.uikit.TextInput
-import hnau.common.kotlin.coroutines.mapMutableState
-import hnau.common.kotlin.coroutines.toMutableStateFlowAsInitial
+import hnau.common.kotlin.coroutines.flow.state.mutable.mapMutableState
+import hnau.common.kotlin.coroutines.flow.state.mutable.toMutableStateFlowAsInitial
 import hnau.common.kotlin.ifNull
 import hnau.common.kotlin.mapper.Mapper
 import hnau.pinfin.model.AmountModel

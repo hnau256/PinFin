@@ -17,7 +17,7 @@ import hnau.common.app.projector.uikit.state.StateContent
 import hnau.common.app.projector.uikit.utils.Dimens
 import hnau.common.app.projector.utils.Icon
 import hnau.common.app.projector.utils.SlideOrientation
-import hnau.common.kotlin.coroutines.mapWithScope
+import hnau.common.kotlin.coroutines.flow.state.mapWithScope
 import hnau.pinfin.model.transaction.pageable.EntryModel
 import hnau.pinfin.model.utils.budget.state.AccountInfo
 import hnau.pinfin.projector.transaction.utils.ChooseOrCreateProjector

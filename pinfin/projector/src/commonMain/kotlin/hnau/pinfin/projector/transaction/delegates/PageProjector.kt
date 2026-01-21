@@ -7,7 +7,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import hnau.common.app.projector.uikit.state.StateContent
 import hnau.common.app.projector.utils.SlideOrientation
-import hnau.common.kotlin.coroutines.mapWithScope
+import hnau.common.kotlin.coroutines.flow.state.mapWithScope
 import hnau.pinfin.model.transaction.TransactionModel
 import hnau.pinfin.projector.transaction.pageable.CommentProjector
 import hnau.pinfin.projector.transaction.pageable.DateProjector

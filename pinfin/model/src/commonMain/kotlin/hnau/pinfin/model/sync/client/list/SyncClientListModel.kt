@@ -7,10 +7,10 @@ import hnau.common.app.model.goback.GoBackHandler
 import hnau.common.app.model.goback.NeverGoBackHandler
 import hnau.common.kotlin.Loadable
 import hnau.common.kotlin.LoadableStateFlow
-import hnau.common.kotlin.coroutines.combineState
-import hnau.common.kotlin.coroutines.flatMapWithScope
-import hnau.common.kotlin.coroutines.mapReusable
-import hnau.common.kotlin.coroutines.toMutableStateFlowAsInitial
+import hnau.common.kotlin.coroutines.flow.state.combineState
+import hnau.common.kotlin.coroutines.flow.state.flatMapWithScope
+import hnau.common.kotlin.coroutines.flow.state.mapReusable
+import hnau.common.kotlin.coroutines.flow.state.mutable.toMutableStateFlowAsInitial
 import hnau.common.kotlin.map
 import hnau.pinfin.data.BudgetId
 import hnau.pinfin.model.sync.client.utils.TcpSyncClient
@@ -69,8 +69,8 @@ class SyncClientListModel(
     val items: StateFlow<Loadable<Result<NonEmptyList<Pair<BudgetId, SyncClientListItemModel>>?>>> =
         combineState(
             scope = scope,
-            a = serverBudgets,
-            b = dependencies.budgetsStorage.list,
+            first = serverBudgets,
+            second = dependencies.budgetsStorage.list,
         ) { serverBudgetsOrErrorOrLoading, local ->
             serverBudgetsOrErrorOrLoading.map { serverBudgetsOrError ->
                 serverBudgetsOrError.map { serverBudgets ->

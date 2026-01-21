@@ -11,7 +11,7 @@ import hnau.common.app.model.ListScrollState
 import hnau.common.kotlin.KeyValue
 import hnau.common.kotlin.Loadable
 import hnau.common.kotlin.LoadableStateFlow
-import hnau.common.kotlin.coroutines.toMutableStateFlowAsInitial
+import hnau.common.kotlin.coroutines.flow.state.mutable.toMutableStateFlowAsInitial
 import hnau.common.kotlin.foldNullable
 import hnau.common.kotlin.groupByToNonEmpty
 import hnau.common.kotlin.serialization.MutableStateFlowSerializer

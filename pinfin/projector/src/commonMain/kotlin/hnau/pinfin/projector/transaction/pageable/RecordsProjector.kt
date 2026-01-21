@@ -34,9 +34,9 @@ import hnau.common.app.projector.utils.SlideOrientation
 import hnau.common.app.projector.utils.copy
 import hnau.common.app.projector.utils.plus
 import hnau.common.kotlin.ZipList
-import hnau.common.kotlin.coroutines.mapReusable
-import hnau.common.kotlin.coroutines.mapState
-import hnau.common.kotlin.coroutines.mapWithScope
+import hnau.common.kotlin.coroutines.flow.state.mapReusable
+import hnau.common.kotlin.coroutines.flow.state.mapState
+import hnau.common.kotlin.coroutines.flow.state.mapWithScope
 import hnau.pinfin.model.transaction.pageable.RecordsModel
 import hnau.pinfin.model.transaction.utils.RecordId
 import hnau.pinfin.projector.resources.Res

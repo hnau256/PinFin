@@ -35,7 +35,7 @@ import hnau.common.app.projector.utils.Icon
 import hnau.common.app.projector.utils.horizontalDisplayPadding
 import hnau.common.app.projector.utils.plus
 import hnau.common.app.projector.utils.verticalDisplayPadding
-import hnau.common.kotlin.coroutines.mapReusable
+import hnau.common.kotlin.coroutines.flow.state.mapReusable
 import hnau.pinfin.model.budgetslist.BudgetsListModel
 import hnau.pinfin.projector.resources.Res
 import hnau.pinfin.projector.resources.add

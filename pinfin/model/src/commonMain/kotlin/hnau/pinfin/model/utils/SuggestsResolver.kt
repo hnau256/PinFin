@@ -2,7 +2,7 @@ package hnau.pinfin.model.utils
 
 import hnau.common.kotlin.Loadable
 import hnau.common.kotlin.coroutines.Delayed
-import hnau.common.kotlin.coroutines.combineStateWith
+import hnau.common.kotlin.coroutines.flow.state.combineStateWith
 import hnau.common.kotlin.coroutines.mapStateDelayed
 import hnau.common.kotlin.foldNullable
 import kotlinx.coroutines.CoroutineScope

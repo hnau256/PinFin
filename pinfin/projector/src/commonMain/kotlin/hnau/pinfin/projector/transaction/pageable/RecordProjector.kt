@@ -32,7 +32,7 @@ import hnau.common.app.projector.uikit.utils.Dimens
 import hnau.common.app.projector.utils.Icon
 import hnau.common.app.projector.utils.SlideOrientation
 import hnau.common.app.projector.utils.copy
-import hnau.common.kotlin.coroutines.mapWithScope
+import hnau.common.kotlin.coroutines.flow.state.mapWithScope
 import hnau.common.kotlin.foldNullable
 import hnau.pinfin.model.transaction.pageable.RecordModel
 import hnau.pinfin.model.utils.budget.state.CategoryInfo

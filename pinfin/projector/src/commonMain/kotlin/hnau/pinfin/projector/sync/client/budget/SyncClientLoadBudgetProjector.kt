@@ -20,7 +20,7 @@ import hnau.common.app.projector.uikit.TopBarTitle
 import hnau.common.app.projector.uikit.state.LoadableContent
 import hnau.common.app.projector.uikit.state.TransitionSpec
 import hnau.common.kotlin.Loadable
-import hnau.common.kotlin.coroutines.mapState
+import hnau.common.kotlin.coroutines.flow.state.mapState
 import hnau.common.kotlin.map
 import hnau.pinfin.model.sync.client.budget.SyncClientLoadBudgetModel
 import hnau.pinfin.projector.resources.Res

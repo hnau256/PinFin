@@ -4,8 +4,8 @@ import hnau.common.app.model.goback.NeverGoBackHandler
 import hnau.common.app.model.preferences.Preferences
 import hnau.common.kotlin.Loadable
 import hnau.common.kotlin.LoadableStateFlow
-import hnau.common.kotlin.coroutines.flatMapState
-import hnau.common.kotlin.coroutines.mapWithScope
+import hnau.common.kotlin.coroutines.flow.state.flatMapState
+import hnau.common.kotlin.coroutines.flow.state.mapWithScope
 import hnau.common.kotlin.fold
 import hnau.common.kotlin.getOrInit
 import hnau.common.kotlin.map

@@ -7,7 +7,7 @@ package hnau.pinfin.model.budget.analytics.tab.graph
 import hnau.common.kotlin.Loadable
 import hnau.common.kotlin.coroutines.Delayed
 import hnau.common.kotlin.coroutines.mapStateDelayed
-import hnau.common.kotlin.coroutines.scopedInState
+import hnau.common.kotlin.coroutines.flow.state.scopedInState
 import hnau.common.kotlin.getOrInit
 import hnau.common.kotlin.map
 import hnau.common.kotlin.mapper.Mapper

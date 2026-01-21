@@ -10,8 +10,8 @@ import hnau.common.app.model.goback.GoBackHandler
 import hnau.common.app.model.goback.NeverGoBackHandler
 import hnau.common.kotlin.coroutines.InProgressRegistry
 import hnau.common.kotlin.coroutines.createChild
-import hnau.common.kotlin.coroutines.mapListReusable
-import hnau.common.kotlin.coroutines.mapState
+import hnau.common.kotlin.coroutines.flow.state.mapListReusable
+import hnau.common.kotlin.coroutines.flow.state.mapState
 import hnau.common.kotlin.ifNull
 import hnau.common.kotlin.serialization.MutableStateFlowSerializer
 import hnau.pinfin.data.BudgetId
@@ -122,7 +122,9 @@ class BudgetsListModel(
             items.toNonEmptySetOrNull()
         }
 
-    private val inProgressRegistry = InProgressRegistry()
+    private val inProgressRegistry = InProgressRegistry(
+        scope = scope,
+    )
 
     val inProgress: StateFlow<Boolean>
         get() = inProgressRegistry.inProgress

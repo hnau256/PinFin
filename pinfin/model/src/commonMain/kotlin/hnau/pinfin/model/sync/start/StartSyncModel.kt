@@ -13,10 +13,10 @@ import hnau.common.app.model.preferences.map
 import hnau.common.app.model.preferences.withDefault
 import hnau.common.app.model.toEditingString
 import hnau.common.kotlin.coroutines.InProgressRegistry
-import hnau.common.kotlin.coroutines.combineState
-import hnau.common.kotlin.coroutines.filterSet
-import hnau.common.kotlin.coroutines.mapState
-import hnau.common.kotlin.coroutines.toMutableStateFlowAsInitial
+import hnau.common.kotlin.coroutines.flow.state.combineState
+import hnau.common.kotlin.coroutines.flow.state.mapState
+import hnau.common.kotlin.coroutines.flow.state.mutable.filterSet
+import hnau.common.kotlin.coroutines.flow.state.mutable.toMutableStateFlowAsInitial
 import hnau.common.kotlin.mapper.Mapper
 import hnau.common.kotlin.mapper.plus
 import hnau.common.kotlin.mapper.stringToInt
@@ -74,7 +74,9 @@ class StartSyncModel(
         .value
         .value
 
-    private val inProgressRegistry = InProgressRegistry()
+    private val inProgressRegistry = InProgressRegistry(
+        scope = scope,
+    )
 
     val inProgress: StateFlow<Boolean>
         get() = inProgressRegistry.inProgress
@@ -145,8 +147,8 @@ class StartSyncModel(
 
     val openClient: StateFlow<(() -> Unit)?> = combineState(
         scope = scope,
-        a = port,
-        b = serverAddress,
+        first = port,
+        second = serverAddress,
     ) { portOrNull, serverAddressOrNull ->
         portOrNull?.let { port ->
             serverAddressOrNull?.let { serverAddress ->

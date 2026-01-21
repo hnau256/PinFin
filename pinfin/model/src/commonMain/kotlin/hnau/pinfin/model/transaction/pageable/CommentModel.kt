@@ -11,8 +11,8 @@ import hnau.common.app.model.goback.NeverGoBackHandler
 import hnau.common.app.model.toEditingString
 import hnau.common.kotlin.Loadable
 import hnau.common.kotlin.coroutines.Delayed
-import hnau.common.kotlin.coroutines.mapState
-import hnau.common.kotlin.coroutines.toMutableStateFlowAsInitial
+import hnau.common.kotlin.coroutines.flow.state.mapState
+import hnau.common.kotlin.coroutines.flow.state.mutable.toMutableStateFlowAsInitial
 import hnau.common.kotlin.serialization.MutableStateFlowSerializer
 import hnau.pinfin.data.Comment
 import hnau.pinfin.model.transaction.utils.Editable

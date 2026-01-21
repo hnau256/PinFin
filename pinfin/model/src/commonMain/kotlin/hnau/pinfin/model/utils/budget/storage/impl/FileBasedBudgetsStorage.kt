@@ -5,7 +5,7 @@ import hnau.common.app.model.file.delete
 import hnau.common.app.model.file.exists
 import hnau.common.app.model.file.list
 import hnau.common.app.model.file.plus
-import hnau.common.kotlin.coroutines.toMutableStateFlowAsInitial
+import hnau.common.kotlin.coroutines.flow.state.mutable.toMutableStateFlowAsInitial
 import hnau.common.kotlin.ifNull
 import hnau.pinfin.data.BudgetId
 import hnau.pinfin.model.utils.budget.repository.BudgetRepository

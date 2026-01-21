@@ -33,7 +33,7 @@ import hnau.common.app.projector.utils.horizontalDisplayPadding
 import hnau.common.app.projector.utils.plus
 import hnau.common.app.projector.utils.rememberLet
 import hnau.common.kotlin.KeyValue
-import hnau.common.kotlin.coroutines.mapState
+import hnau.common.kotlin.coroutines.flow.state.mapState
 import hnau.common.kotlin.map
 import hnau.pinfin.model.budget.analytics.tab.graph.GraphPagesModel
 import hnau.pinfin.projector.utils.formatter.datetime.DateTimeFormatter

@@ -24,7 +24,7 @@ import hnau.common.app.projector.utils.SlideOrientation
 import hnau.common.app.projector.utils.getTransitionSpecForSlide
 import hnau.common.gen.sealup.annotations.SealUp
 import hnau.common.gen.sealup.annotations.Variant
-import hnau.common.kotlin.coroutines.mapState
+import hnau.common.kotlin.coroutines.flow.state.mapState
 import hnau.pinfin.model.budget.BudgetModel
 import hnau.pinfin.model.budget.BudgetPageModel
 import hnau.pinfin.model.budget.BudgetTab

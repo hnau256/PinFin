@@ -5,10 +5,10 @@ import hnau.common.app.model.goback.GoBackHandler
 import hnau.common.app.model.goback.NeverGoBackHandler
 import hnau.common.app.model.toEditingString
 import hnau.common.kotlin.coroutines.actionOrNullIfExecuting
-import hnau.common.kotlin.coroutines.combineStateWith
-import hnau.common.kotlin.coroutines.mapState
-import hnau.common.kotlin.coroutines.mapWithScope
-import hnau.common.kotlin.coroutines.toMutableStateFlowAsInitial
+import hnau.common.kotlin.coroutines.flow.state.combineStateWith
+import hnau.common.kotlin.coroutines.flow.state.mapState
+import hnau.common.kotlin.coroutines.flow.state.mapWithScope
+import hnau.common.kotlin.coroutines.flow.state.mutable.toMutableStateFlowAsInitial
 import hnau.pinfin.data.CategoryConfig
 import hnau.pinfin.data.Hue
 import hnau.pinfin.model.utils.budget.repository.BudgetRepository

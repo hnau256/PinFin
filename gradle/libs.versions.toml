@@ -1,32 +1,32 @@
 [versions]
 #tools
-kotlin = "2.2.21"
+kotlin = "2.3.0"
 #kotest = "5.8.0"
 java = "VERSION_21"
-androidGradlePlugin = "8.13.1"
+androidGradlePlugin = "8.13.2"
 androidCompileSdk = "36"
 androidMinSdk = "23"
 androidBuildTools = "35.0.0"
-composeDesktop = "1.9.3"
+composeDesktop = "1.10.0"
 googleServices = "4.4.4"
 #libs
-arrow = "2.2.0"
+arrow = "2.2.1.1"
 kotlinSerialization = "1.9.0"
 kotlinCoroutines = "1.10.2"
 pipe = "1.2.0"
 sealup = "1.5.0"
 enumvalues = "1.3.0"
 app = "1.11.0"
-compose-activity = "1.12.0"
+compose-activity = "1.12.2"
 kotlin-date-time = "0.7.1"
 material3 = "1.3.1"
-ooxml = "5.5.0"
+ooxml = "5.5.1"
 ktor = "3.3.3"
 
 [plugins]
 android-app = { id = "com.android.application", version.ref = "androidGradlePlugin" }
 android-lib = { id = "com.android.library", version.ref = "androidGradlePlugin" }
-ksp = { id = "com.google.devtools.ksp", version = "2.3.3" }
+ksp = { id = "com.google.devtools.ksp", version = "2.3.4" }
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 kotlin-multiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
@@ -62,7 +62,7 @@ arrow-core = { module = "io.arrow-kt:arrow-core", version.ref = "arrow" }
 arrow-coroutines = { module = "io.arrow-kt:arrow-fx-coroutines", version.ref = "arrow" }
 arrow-serialization = { module = "io.arrow-kt:arrow-core-serialization", version.ref = "arrow" }
 #logging
-slf4j-kotlin = { module = "io.github.oshai:kotlin-logging-jvm", version = "7.0.13" }
+slf4j-kotlin = { module = "io.github.oshai:kotlin-logging-jvm", version = "7.0.14" }
 slf4j-simple = { module = "org.slf4j:slf4j-simple", version = "2.0.17" }
 #pipe
 pipe-annotations = { module = "com.github.hnau256.common-gen-pipe:annotations", version.ref = "pipe" }
@@ -74,8 +74,8 @@ sealup-processor = { module = "com.github.hnau256.common-gen-sealup:processor", 
 enumvalues-annotations = { module = "com.github.hnau256.common-gen-enumvalues:annotations", version.ref = "enumvalues" }
 enumvalues-processor = { module = "com.github.hnau256.common-gen-enumvalues:processor", version.ref = "enumvalues" }
 #hnau
-hnau-kotlin = { module = "com.github.hnau256.common-kotlin:common-kotlin", version = "1.5.0" }
-hnau-gen-kt = { module = "com.github.hnau256:common-gen-kt", version = "1.1.0" }
+hnau-kotlin = { module = "com.github.hnau256.common-kotlin:common-kotlin", version = "1.9.0" }
+hnau-gen-kt = { module = "com.github.hnau256:common-gen-kt", version = "1.6.0" }
 hnau-dynamiccolor = { module = "com.github.hnau256:common-dynamiccolor", version = "1.1.1" }
 hnau-model = { module = "com.github.hnau256.common-app:model", version.ref = "app" }
 hnau-projector = { module = "com.github.hnau256.common-app:projector", version.ref = "app" }

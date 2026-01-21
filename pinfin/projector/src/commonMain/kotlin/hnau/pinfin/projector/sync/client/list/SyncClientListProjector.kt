@@ -26,7 +26,7 @@ import hnau.common.app.projector.uikit.utils.Dimens
 import hnau.common.app.projector.utils.horizontalDisplayPadding
 import hnau.common.app.projector.utils.verticalDisplayPadding
 import hnau.common.kotlin.Loadable
-import hnau.common.kotlin.coroutines.mapReusable
+import hnau.common.kotlin.coroutines.flow.state.mapReusable
 import hnau.common.kotlin.map
 import hnau.pinfin.data.BudgetId
 import hnau.pinfin.model.sync.client.list.SyncClientListModel

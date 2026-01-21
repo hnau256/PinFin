@@ -1,7 +1,7 @@
 package hnau.pinfin.model.budgetslist.item
 
 import hnau.common.kotlin.coroutines.InProgressRegistry
-import hnau.common.kotlin.coroutines.mapStateLite
+import hnau.common.kotlin.coroutines.flow.state.mapStateLite
 import hnau.pinfin.data.BudgetId
 import hnau.pinfin.model.manage.BudgetOpener
 import hnau.pinfin.model.utils.budget.repository.BudgetRepository
@@ -28,7 +28,9 @@ class BudgetItemModel(
     }
 
 
-    private val inProgressRegistry = InProgressRegistry()
+    private val inProgressRegistry = InProgressRegistry(
+        scope = scope,
+    )
 
     val info: StateFlow<BudgetInfo> = dependencies
         .repository

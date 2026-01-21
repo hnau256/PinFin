@@ -6,7 +6,7 @@ package hnau.pinfin.model.budget.analytics
 
 import hnau.common.app.model.goback.GoBackHandler
 import hnau.common.app.model.goback.NeverGoBackHandler
-import hnau.common.kotlin.coroutines.toMutableStateFlowAsInitial
+import hnau.common.kotlin.coroutines.flow.state.mutable.toMutableStateFlowAsInitial
 import hnau.common.kotlin.serialization.MutableStateFlowSerializer
 import hnau.pinfin.model.budget.analytics.tab.AccountsModel
 import hnau.pinfin.model.budget.analytics.tab.AnalyticsTab

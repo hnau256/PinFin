@@ -11,7 +11,7 @@ import hnau.common.app.projector.uikit.Tabs
 import hnau.common.app.projector.uikit.state.StateContent
 import hnau.common.app.projector.uikit.state.TransitionSpec
 import hnau.common.app.projector.utils.SlideOrientation
-import hnau.common.kotlin.coroutines.mapWithScope
+import hnau.common.kotlin.coroutines.flow.state.mapWithScope
 import hnau.pinfin.data.TransactionType
 import hnau.pinfin.model.transaction.TransactionModel
 import hnau.pinfin.model.transaction.pageable.TypeModel
