@@ -1,10 +1,16 @@
 package hnau.pinfin.projector.budgetstack
 
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.asPaddingValues
+import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.runtime.Composable
 import hnau.common.app.projector.stack.Content
 import hnau.common.app.projector.stack.StackProjectorTail
+import hnau.common.gen.sealup.annotations.SealUp
+import hnau.common.gen.sealup.annotations.Variant
 import hnau.pinfin.model.budgetstack.BudgetStackElementModel
 import hnau.pinfin.model.budgetstack.BudgetStackModel
+import hnau.pinfin.model.budgetstack.fold
 import hnau.pinfin.projector.CategoriesProjector
 import hnau.pinfin.projector.accountstack.AccountStackProjector
 import hnau.pinfin.projector.budget.BudgetProjector
@@ -37,68 +43,113 @@ class BudgetStackProjector(
         fun category(): CategoryStackProjector.Dependencies
     }
 
+    @SealUp(
+        variants = [
+            Variant(
+                type = BudgetProjector::class,
+                identifier = "budget",
+            ),
+            Variant(
+                type = TransactionProjector::class,
+                identifier = "transaction",
+            ),
+            Variant(
+                type = TransactionsProjector::class,
+                identifier = "transactions",
+            ),
+            Variant(
+                type = AccountStackProjector::class,
+                identifier = "account",
+            ),
+            Variant(
+                type = CategoriesProjector::class,
+                identifier = "categories",
+            ),
+            Variant(
+                type = CategoryStackProjector::class,
+                identifier = "category",
+            ),
+        ],
+        wrappedValuePropertyName = "projector",
+        sealedInterfaceName = "BudgetStackElementProjector",
+    )
+    interface PageProjector {
+
+        companion object
+    }
+
     private val tail: StateFlow<StackProjectorTail<Int, BudgetStackElementProjector>> =
         StackProjectorTail(
             scope = scope,
             modelsStack = model.stack,
-            extractKey = { model -> model.key },
+            extractKey = BudgetStackElementModel::ordinal,
             createProjector = { scope, model ->
-                when (model) {
-                    is BudgetStackElementModel.Budget -> BudgetStackElementProjector.Budget(
-                        BudgetProjector(
+                model.fold(
+                    ifBudget = { budgetModel ->
+                        PageProjector.budget(
                             scope = scope,
-                            model = model.model,
+                            model = budgetModel,
                             dependencies = dependencies.budget(),
                         )
-                    )
-
-                    is BudgetStackElementModel.Transaction -> BudgetStackElementProjector.Transaction(
-                        TransactionProjector(
+                    },
+                    ifTransaction = { transactionModel ->
+                        PageProjector.transaction(
                             scope = scope,
-                            model = model.model,
+                            model = transactionModel,
                             dependencies = dependencies.transaction(),
                         )
-                    )
-
-                    is BudgetStackElementModel.Transactions -> BudgetStackElementProjector.Transactions(
-                        TransactionsProjector(
+                    },
+                    ifTransactions = { transactionsModel ->
+                        PageProjector.transactions(
                             scope = scope,
-                            model = model.model,
+                            model = transactionsModel,
                             dependencies = dependencies.transactions(),
                         )
-                    )
-
-                    is BudgetStackElementModel.Account -> BudgetStackElementProjector.Account(
-                        AccountStackProjector(
+                    },
+                    ifAccount = { accountModel ->
+                        PageProjector.account(
                             scope = scope,
-                            model = model.model,
+                            model = accountModel,
                             dependencies = dependencies.account(),
                         )
-                    )
-
-                    is BudgetStackElementModel.Categories -> BudgetStackElementProjector.Categories(
-                        CategoriesProjector(
+                    },
+                    ifCategories = { categoriesModel ->
+                        PageProjector.categories(
                             scope = scope,
-                            model = model.model,
+                            model = categoriesModel,
                             dependencies = dependencies.categories(),
                         )
-                    )
-
-                    is BudgetStackElementModel.Category -> BudgetStackElementProjector.Category(
-                        CategoryStackProjector(
+                    },
+                    ifCategory = { categoryModel ->
+                        PageProjector.category(
                             scope = scope,
-                            model = model.model,
+                            model = categoryModel,
                             dependencies = dependencies.category(),
                         )
-                    )
-                }
+                    },
+                )
             }
         )
 
     @Composable
     fun Content() {
         tail.Content { elementProjector ->
-            elementProjector.Content()
+            elementProjector.fold(
+                ifBudget = { it.Content() },
+                ifTransaction = { it.Content() },
+                ifTransactions = {
+                    it.Content(
+                        bottomInset = WindowInsets
+                            .navigationBars
+                            .asPaddingValues()
+                            .calculateBottomPadding(),
+                        showAddButton = false,
+                    )
+                },
+                ifAccount = { it.Content() },
+                ifCategories = { it.Content() },
+                ifCategory = { it.Content() },
+            )
         }
     }
 }

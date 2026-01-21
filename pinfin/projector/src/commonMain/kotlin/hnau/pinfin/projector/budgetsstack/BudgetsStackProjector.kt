@@ -3,8 +3,11 @@ package hnau.pinfin.projector.budgetsstack
 import androidx.compose.runtime.Composable
 import hnau.common.app.projector.stack.Content
 import hnau.common.app.projector.stack.StackProjectorTail
+import hnau.common.gen.sealup.annotations.SealUp
+import hnau.common.gen.sealup.annotations.Variant
 import hnau.pinfin.model.budgetsstack.BudgetsStackElementModel
 import hnau.pinfin.model.budgetsstack.BudgetsStackModel
+import hnau.pinfin.model.budgetsstack.fold
 import hnau.pinfin.projector.budgetslist.BudgetsListProjector
 import hnau.pinfin.projector.sync.SyncStackProjector
 import hnau.pipe.annotations.Pipe
@@ -25,29 +28,50 @@ class BudgetsStackProjector(
         fun sync(): SyncStackProjector.Dependencies
     }
 
+    @SealUp(
+        variants = [
+            Variant(
+                type = BudgetsListProjector::class,
+                identifier = "list",
+            ),
+            Variant(
+                type = SyncStackProjector::class,
+                identifier = "sync",
+            ),
+        ],
+        wrappedValuePropertyName = "projector",
+        sealedInterfaceName = "BudgetsStackElementProjector",
+    )
+    interface PageProjector {
+
+        @Composable
+        fun Content()
+
+        companion object
+    }
+
     private val tail: StateFlow<StackProjectorTail<Int, BudgetsStackElementProjector>> =
         StackProjectorTail(
             scope = scope,
             modelsStack = model.stack,
-            extractKey = { model -> model.key },
+            extractKey = BudgetsStackElementModel::ordinal,
             createProjector = { scope, model ->
-                when (model) {
-                    is BudgetsStackElementModel.List -> BudgetsStackElementProjector.List(
-                        BudgetsListProjector(
+                model.fold(
+                    ifList = { listModel ->
+                        PageProjector.list(
                             scope = scope,
-                            model = model.model,
+                            model = listModel,
                             dependencies = dependencies.list(),
                         )
-                    )
-
-                    is BudgetsStackElementModel.Sync -> BudgetsStackElementProjector.Sync(
-                        SyncStackProjector(
+                    },
+                    ifSync = { syncModel ->
+                        PageProjector.sync(
                             scope = scope,
-                            model = model.model,
+                            model = syncModel,
                             dependencies = dependencies.sync(),
                         )
-                    )
-                }
+                    },
+                )
             }
         )
 

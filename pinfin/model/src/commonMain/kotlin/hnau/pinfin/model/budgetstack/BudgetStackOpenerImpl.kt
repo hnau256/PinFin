@@ -12,11 +12,11 @@ import hnau.pinfin.model.utils.budget.state.TransactionInfo
 import kotlinx.coroutines.flow.MutableStateFlow
 
 class BudgetStackOpenerImpl(
-    private val stack: MutableStateFlow<NonEmptyStack<BudgetStackElementModel.Skeleton>>,
+    private val stack: MutableStateFlow<NonEmptyStack<BudgetStackElementSkeleton>>,
 ) : BudgetStackOpener {
 
     private fun open(
-        skeleton: BudgetStackElementModel.Skeleton,
+        skeleton: BudgetStackElementSkeleton,
     ) {
         stack.push(skeleton)
     }
@@ -25,8 +25,8 @@ class BudgetStackOpenerImpl(
         transactionType: TransactionType,
     ) {
         open(
-            BudgetStackElementModel.Skeleton.Transaction(
-                skeleton = TransactionModel.Skeleton.createForNew(
+            BudgetStackModel.ElementSkeleton.transaction(
+                transaction = TransactionModel.Skeleton.createForNew(
                     type = transactionType,
                 )
             )
@@ -37,8 +37,8 @@ class BudgetStackOpenerImpl(
         info: TransactionInfo,
     ) {
         open(
-            BudgetStackElementModel.Skeleton.Transaction(
-                skeleton = TransactionModel.Skeleton.createForEdit(
+            BudgetStackModel.ElementSkeleton.transaction(
+                transaction = TransactionModel.Skeleton.createForEdit(
                     transaction = info,
                 )
             )
@@ -49,17 +49,15 @@ class BudgetStackOpenerImpl(
         info: AccountInfo,
     ) {
         open(
-            BudgetStackElementModel.Skeleton.Account(
-                skeleton = AccountStackModel.Skeleton(
-                    info = info,
-                )
+            BudgetStackModel.ElementSkeleton.account(
+                info = info,
             )
         )
     }
 
     override fun openCategories() {
         open(
-            BudgetStackElementModel.Skeleton.Categories
+            BudgetStackModel.ElementSkeleton.categories(Unit)
         )
     }
 
@@ -67,10 +65,8 @@ class BudgetStackOpenerImpl(
         info: CategoryInfo,
     ) {
         open(
-            BudgetStackElementModel.Skeleton.Category(
-                skeleton = CategoryStackModel.Skeleton(
-                    info = info,
-                )
+            BudgetStackModel.ElementSkeleton.category(
+                info = info,
             )
         )
     }

@@ -11,6 +11,8 @@ import hnau.common.app.model.stack.goBackHandler
 import hnau.common.app.model.stack.modelsOnly
 import hnau.common.app.model.stack.push
 import hnau.common.app.model.stack.withModels
+import hnau.common.gen.sealup.annotations.SealUp
+import hnau.common.gen.sealup.annotations.Variant
 import hnau.common.kotlin.serialization.MutableStateFlowSerializer
 import hnau.pinfin.model.budgetslist.BudgetsListModel
 import hnau.pinfin.model.sync.SyncStackModel
@@ -29,8 +31,8 @@ class BudgetsStackModel(
 
     @Serializable
     data class Skeleton(
-        val stack: MutableStateFlow<NonEmptyStack<BudgetsStackElementModel.Skeleton>> =
-            MutableStateFlow(NonEmptyStack(BudgetsStackElementModel.Skeleton.List)),
+        val stack: MutableStateFlow<NonEmptyStack<BudgetsStackElementSkeleton>> =
+            MutableStateFlow(NonEmptyStack(ElementSkeleton.list(Unit))),
     )
 
     @Pipe
@@ -43,12 +45,53 @@ class BudgetsStackModel(
         fun sync(): SyncStackModel.Dependencies
     }
 
-    private val stackWithModels: StateFlow<NonEmptyStack<SkeletonWithModel<BudgetsStackElementModel.Skeleton, BudgetsStackElementModel>>> =
+    @SealUp(
+        variants = [
+            Variant(
+                type = BudgetsListModel::class,
+                identifier = "list",
+            ),
+            Variant(
+                type = SyncStackModel::class,
+                identifier = "sync",
+            ),
+        ],
+        wrappedValuePropertyName = "model",
+        sealedInterfaceName = "BudgetsStackElementModel",
+    )
+    interface Element {
+
+        val goBackHandler: GoBackHandler
+
+        companion object
+    }
+
+    @SealUp(
+        variants = [
+            Variant(
+                type = Unit::class,
+                identifier = "list",
+            ),
+            Variant(
+                type = SyncStackModel.Skeleton::class,
+                identifier = "sync",
+            ),
+        ],
+        wrappedValuePropertyName = "skeleton",
+        sealedInterfaceName = "BudgetsStackElementSkeleton",
+        serializable = true,
+    )
+    interface ElementSkeleton {
+
+        companion object
+    }
+
+    private val stackWithModels: StateFlow<NonEmptyStack<SkeletonWithModel<BudgetsStackElementSkeleton, BudgetsStackElementModel>>> =
         skeleton
             .stack
             .withModels(
                 scope = scope,
-                getKey = BudgetsStackElementModel.Skeleton::key,
+                getKey = BudgetsStackElementSkeleton::ordinal,
             ) { modelScope, skeleton ->
                 createModel(
                     modelScope = modelScope,
@@ -58,30 +101,29 @@ class BudgetsStackModel(
 
     private fun createModel(
         modelScope: CoroutineScope,
-        skeleton: BudgetsStackElementModel.Skeleton,
-    ): BudgetsStackElementModel = when (skeleton) {
-        is BudgetsStackElementModel.Skeleton.List -> BudgetsStackElementModel.List(
-            BudgetsListModel(
+        skeleton: BudgetsStackElementSkeleton,
+    ): BudgetsStackElementModel = skeleton.fold(
+        ifList = {
+            Element.list(
                 scope = modelScope,
                 dependencies = dependencies.list(
                     syncOpener = {
                         this@BudgetsStackModel
                             .skeleton
                             .stack
-                            .push(BudgetsStackElementModel.Skeleton.Sync())
+                            .push(ElementSkeleton.sync())
                     }
                 ),
             )
-        )
-
-        is BudgetsStackElementModel.Skeleton.Sync -> BudgetsStackElementModel.Sync(
-            SyncStackModel(
+        },
+        ifSync = { syncSkeleton ->
+            Element.sync(
                 scope = modelScope,
-                skeleton = skeleton.skeleton,
+                skeleton = syncSkeleton,
                 dependencies = dependencies.sync(),
             )
-        )
-    }
+        },
+    )
 
     val stack: StateFlow<NonEmptyStack<BudgetsStackElementModel>> =
         stackWithModels.modelsOnly(scope)

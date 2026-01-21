@@ -12,6 +12,8 @@ import hnau.common.app.model.stack.modelsOnly
 import hnau.common.app.model.stack.push
 import hnau.common.app.model.stack.tryDropLast
 import hnau.common.app.model.stack.withModels
+import hnau.common.gen.sealup.annotations.SealUp
+import hnau.common.gen.sealup.annotations.Variant
 import hnau.common.kotlin.serialization.MutableStateFlowSerializer
 import hnau.pinfin.model.sync.client.budget.SyncClientLoadBudgetModel
 import hnau.pinfin.model.sync.client.list.SyncClientListModel
@@ -64,16 +66,57 @@ class SyncClientStackModel(
     data class Skeleton(
         val port: ServerPort,
         val address: ServerAddress,
-        val stack: MutableStateFlow<NonEmptyStack<SyncClientStackElementModel.Skeleton>> =
-            MutableStateFlow(NonEmptyStack(SyncClientStackElementModel.Skeleton.List)),
+        val stack: MutableStateFlow<NonEmptyStack<SyncClientStackElementSkeleton>> =
+            MutableStateFlow(NonEmptyStack(ElementSkeleton.list(Unit))),
     )
 
-    private val stackWithModels: StateFlow<NonEmptyStack<SkeletonWithModel<SyncClientStackElementModel.Skeleton, SyncClientStackElementModel>>> =
+    @SealUp(
+        variants = [
+            Variant(
+                type = SyncClientListModel::class,
+                identifier = "list",
+            ),
+            Variant(
+                type = SyncClientLoadBudgetModel::class,
+                identifier = "budget",
+            ),
+        ],
+        wrappedValuePropertyName = "model",
+        sealedInterfaceName = "SyncClientStackElementModel",
+    )
+    interface Element {
+
+        val goBackHandler: GoBackHandler
+
+        companion object
+    }
+
+    @SealUp(
+        variants = [
+            Variant(
+                type = Unit::class,
+                identifier = "list",
+            ),
+            Variant(
+                type = SyncClientLoadBudgetModel.Skeleton::class,
+                identifier = "budget",
+            ),
+        ],
+        wrappedValuePropertyName = "skeleton",
+        sealedInterfaceName = "SyncClientStackElementSkeleton",
+        serializable = true,
+    )
+    interface ElementSkeleton {
+
+        companion object
+    }
+
+    private val stackWithModels: StateFlow<NonEmptyStack<SkeletonWithModel<SyncClientStackElementSkeleton, SyncClientStackElementModel>>> =
         skeleton
             .stack
             .withModels(
                 scope = scope,
-                getKey = SyncClientStackElementModel.Skeleton::key,
+                getKey = SyncClientStackElementSkeleton::ordinal,
             ) { modelScope, skeleton ->
                 createModel(
                     modelScope = modelScope,
@@ -83,10 +126,10 @@ class SyncClientStackModel(
 
     private fun createModel(
         modelScope: CoroutineScope,
-        skeleton: SyncClientStackElementModel.Skeleton,
-    ): SyncClientStackElementModel = when (skeleton) {
-        is SyncClientStackElementModel.Skeleton.List -> SyncClientStackElementModel.List(
-            SyncClientListModel(
+        skeleton: SyncClientStackElementSkeleton,
+    ): SyncClientStackElementModel = skeleton.fold(
+        ifList = {
+            Element.list(
                 scope = modelScope,
                 dependencies = dependenciesWithSyncClient.list(
                     budgetOpener = { budgetId ->
@@ -94,21 +137,18 @@ class SyncClientStackModel(
                             .skeleton
                             .stack
                             .push(
-                                SyncClientStackElementModel.Skeleton.Budget(
-                                    skeleton = SyncClientLoadBudgetModel.Skeleton(
-                                        id = budgetId,
-                                    )
+                                ElementSkeleton.budget(
+                                    id = budgetId,
                                 )
                             )
                     }
                 ),
             )
-        )
-
-        is SyncClientStackElementModel.Skeleton.Budget -> SyncClientStackElementModel.Budget(
-            SyncClientLoadBudgetModel(
+        },
+        ifBudget = { budgetSkeleton ->
+            Element.budget(
                 scope = modelScope,
-                skeleton = skeleton.skeleton,
+                skeleton = budgetSkeleton,
                 dependencies = dependenciesWithSyncClient.budget(),
                 goBack = {
                     this@SyncClientStackModel
@@ -117,8 +157,8 @@ class SyncClientStackModel(
                         .tryDropLast()
                 },
             )
-        )
-    }
+        },
+    )
 
     val stack: StateFlow<NonEmptyStack<SyncClientStackElementModel>> =
         stackWithModels.modelsOnly(scope)

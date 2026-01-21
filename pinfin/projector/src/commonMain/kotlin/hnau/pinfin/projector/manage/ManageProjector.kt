@@ -6,9 +6,12 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import hnau.common.app.projector.uikit.state.StateContent
 import hnau.common.app.projector.uikit.state.TransitionSpec
+import hnau.common.gen.sealup.annotations.SealUp
+import hnau.common.gen.sealup.annotations.Variant
 import hnau.common.kotlin.coroutines.flow.state.mapWithScope
 import hnau.pinfin.model.manage.ManageModel
 import hnau.pinfin.model.manage.ManageStateModel
+import hnau.pinfin.model.manage.fold
 import hnau.pinfin.projector.IconProjector
 import hnau.pinfin.projector.budgetsstack.BudgetsStackProjector
 import hnau.pinfin.projector.budgetstack.BudgetStackProjector
@@ -32,26 +35,47 @@ class ManageProjector(
         fun icon(): IconProjector.Dependencies
     }
 
+    @SealUp(
+        variants = [
+            Variant(
+                type = BudgetsStackProjector::class,
+                identifier = "budgetsStack",
+            ),
+            Variant(
+                type = BudgetStackProjector::class,
+                identifier = "budgetStack",
+            ),
+        ],
+        wrappedValuePropertyName = "projector",
+        sealedInterfaceName = "ManageElementProjector",
+    )
+    interface StateProjector {
+
+        @Composable
+        fun Content()
+
+        companion object
+    }
+
     private val state: StateFlow<ManageElementProjector> = model
         .state
         .mapWithScope(scope) { scope, state ->
-            when (state) {
-                is ManageStateModel.BudgetsStack -> ManageElementProjector.BudgetsStack(
-                    projector = BudgetsStackProjector(
+            state.fold(
+                ifBudgetsStack = { budgetsStackModel ->
+                    StateProjector.budgetsStack(
                         scope = scope,
                         dependencies = dependencies.budgetsStack(),
-                        model = state.model,
+                        model = budgetsStackModel,
                     )
-                )
-
-                is ManageStateModel.BudgetStack -> ManageElementProjector.BudgetStack(
-                    projector = BudgetStackProjector(
+                },
+                ifBudgetStack = { budgetStackModel ->
+                    StateProjector.budgetStack(
                         scope = scope,
                         dependencies = dependencies.budgetStack(),
-                        model = state.model,
+                        model = budgetStackModel,
                     )
-                )
-            }
+                },
+            )
         }
 
     @Composable
@@ -63,7 +87,7 @@ class ManageProjector(
                 modifier = Modifier.fillMaxSize(),
                 label = "Manage",
                 transitionSpec = TransitionSpec.crossfade(),
-                contentKey = ManageElementProjector::key,
+                contentKey = ManageElementProjector::ordinal,
             ) { elementProjector ->
                 elementProjector.Content()
             }
