@@ -3,7 +3,7 @@
 kotlin = "2.3.0"
 #kotest = "5.8.0"
 java = "VERSION_21"
-androidGradlePlugin = "8.13.2"
+androidGradlePlugin = "9.0.1"
 androidCompileSdk = "36"
 androidMinSdk = "23"
 androidBuildTools = "35.0.0"
@@ -25,7 +25,7 @@ ktor = "3.3.3"
 
 [plugins]
 android-app = { id = "com.android.application", version.ref = "androidGradlePlugin" }
-android-lib = { id = "com.android.library", version.ref = "androidGradlePlugin" }
+android-lib = { id = "com.android.kotlin.multiplatform.library", version.ref = "androidGradlePlugin" }
 ksp = { id = "com.google.devtools.ksp", version = "2.3.4" }
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 kotlin-multiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
@@ -38,6 +38,7 @@ googleServices = { id = "com.google.gms.google-services", version.ref = "googleS
 #plugins as libraries
 gradle-plugin-kotlin-jvm = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 gradle-plugin-android = { module = "com.android.tools.build:gradle", version.ref = "androidGradlePlugin" }
+gradle-plugin-android-api = { module = "com.android.tools.build:gradle-api", version.ref = "androidGradlePlugin" }
 gradle-plugin-compose = { module = "org.jetbrains.compose:compose-gradle-plugin", version.ref = "composeDesktop" }
 # kotlin
 kotlin-serialization-core = { module = "org.jetbrains.kotlinx:kotlinx-serialization-core", version.ref = "kotlinSerialization" }

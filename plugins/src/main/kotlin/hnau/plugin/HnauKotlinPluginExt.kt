@@ -1,27 +1,28 @@
 package hnau.plugin
 
-import com.android.build.gradle.BaseExtension
+import com.android.build.api.dsl.KotlinMultiplatformAndroidLibraryExtension
 import org.gradle.api.JavaVersion
 import org.gradle.api.Project
+import org.gradle.api.artifacts.MinimalExternalModuleDependency
 import org.gradle.api.artifacts.VersionCatalog
 import org.gradle.api.artifacts.VersionCatalogsExtension
+import org.gradle.api.internal.project.DefaultProject
 import org.gradle.jvm.toolchain.JavaLanguageVersion
 import org.jetbrains.compose.ComposePlugin
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
 
-internal enum class AndroidMode { Lib, App }
+internal enum class AndroidMode { Lib }
 
-internal fun Project.config(
-    androidMode: AndroidMode,
-) {
+internal fun Project.config(androidMode: AndroidMode?) {
+    val versions: VersionCatalog =
+        extensions
+            .getByType(VersionCatalogsExtension::class.java)
+            .named("libs")
 
-    val versions: VersionCatalog = extensions
-        .getByType(VersionCatalogsExtension::class.java)
-        .named("libs")
-
-    val javaVersionString = versions
-        .requireVersion("java")
+    val javaVersionString =
+        versions
+            .requireVersion("java")
 
     val javaVersionNumberString: String =
         javaVersionString.dropWhile { !it.isDigit() }
@@ -32,11 +33,14 @@ internal fun Project.config(
     val javaVersion: JavaVersion =
         JavaVersion.valueOf(javaVersionString)
 
+    val javaLanguageVersion: JavaLanguageVersion =
+        JavaLanguageVersion.of(javaVersionNumberString.toInt())
+
     plugins.apply("org.jetbrains.kotlin.multiplatform")
 
     when (androidMode) {
-        AndroidMode.Lib -> plugins.apply("com.android.library")
-        AndroidMode.App -> plugins.apply("com.android.application")
+        AndroidMode.Lib -> plugins.apply("com.android.kotlin.multiplatform.library")
+        null -> Unit
     }
 
     val hasSerializationPlugin =
@@ -45,24 +49,29 @@ internal fun Project.config(
     val hasComposePlugin =
         project.plugins.hasPlugin("org.jetbrains.kotlin.plugin.compose")
 
-    extensions.configure(KotlinMultiplatformExtension::class.java) { extension ->
+    val hasKspPlugin =
+        project.plugins.hasPlugin("com.google.devtools.ksp")
 
-        extension.androidTarget {
-            compilerOptions {
-                jvmTarget.set(javaTarget)
-            }
-        }
+    extensions.configure(KotlinMultiplatformExtension::class.java) { extension ->
 
         extension.jvmToolchain { javaToolchainSpec ->
             javaToolchainSpec
                 .languageVersion
                 .set(JavaLanguageVersion.of(javaVersionNumberString))
         }
+
+        extension.extensions.configure(KotlinMultiplatformAndroidLibraryExtension::class.java) { androidLibrary ->
+            androidLibrary.namespace = "hnau." + path.drop(1).replace(':', '.')
+            androidLibrary.compileSdk = versions.requireVersion("androidCompileSdk").toInt()
+            androidLibrary.minSdk = versions.requireVersion("androidMinSdk").toInt()
+        }
+
         extension.jvm("desktop") {
             compilerOptions {
                 jvmTarget.set(javaTarget)
             }
         }
+
         if (hasComposePlugin) {
             extension.sourceSets.getByName("desktopMain").apply {
                 dependencies {
@@ -74,7 +83,6 @@ internal fun Project.config(
         extension.sourceSets.getByName("commonMain").apply {
             languageSettings.enableLanguageFeature("ContextReceivers")
             dependencies {
-
                 implementation(versions.findLibrary("arrow-core").get().get())
                 implementation(versions.findLibrary("arrow-coroutines").get().get())
                 implementation(versions.findLibrary("kotlin-coroutines-core").get().get())
@@ -92,33 +100,58 @@ internal fun Project.config(
                     implementation(composeDependencies.material3)
                     implementation(composeDependencies.materialIconsExtended)
                 }
+
+                if (hasKspPlugin) {
+                    kotlin.srcDir("build/generated/ksp/metadata/commonMain/kotlin")
+                    withKspProcessorLibraries(
+                        versions = versions,
+                        suffix = "annotations",
+                    ) { dependency ->
+                        implementation(dependency)
+                    }
+                }
             }
         }
     }
 
-    extensions.configure(BaseExtension::class.java) { extension ->
-
-        val compileSdk = versions.requireVersion("androidCompileSdk").toInt()
-        val minSdk = versions.requireVersion("androidMinSdk").toInt()
-        extension.compileSdkVersion(compileSdk)
-        extension.buildToolsVersion(versions.requireVersion("androidBuildTools"))
-
-        extension.defaultConfig { config ->
-            config.minSdk = minSdk
-            config.targetSdk = compileSdk
+    if (hasKspPlugin) {
+        withKspProcessorLibraries(
+            versions = versions,
+            suffix = "processor",
+        ) { dependency ->
+            dependencies.add(
+                "kspCommonMainMetadata",
+                dependency,
+            )
         }
 
-        extension.compileOptions { options ->
-            options.targetCompatibility = javaVersion
-            options.sourceCompatibility = javaVersion
+        tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile::class.java).configureEach { task ->
+            if (task.name != "kspCommonMainKotlinMetadata") {
+                task.dependsOn("kspCommonMainKotlinMetadata")
+            }
         }
-        extension.namespace = "hnau." + path.drop(1).replace(':', '.')
     }
 }
 
+private val Project.identitifer: String
+    get() = (project as DefaultProject).identityPath.toString()
 
-private fun VersionCatalog.requireVersion(
-    alias: String,
-): String = findVersion(alias)
-    .get()
-    .requiredVersion
+private fun VersionCatalog.requireVersion(alias: String): String =
+    findVersion(alias)
+        .get()
+        .requiredVersion
+
+private val kspProcessorsNames: List<String> =
+    listOf("pipe", "enumvalues", "sealup")
+
+private fun withKspProcessorLibraries(
+    versions: VersionCatalog,
+    suffix: String,
+    block: (MinimalExternalModuleDependency) -> Unit,
+) {
+    kspProcessorsNames.forEach { prefix ->
+        val name = "$prefix-$suffix"
+        val dependency = versions.findLibrary(name).get().get()
+        block(dependency)
+    }
+}
