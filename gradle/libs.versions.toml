@@ -13,16 +13,12 @@ googleServices = "4.4.4"
 arrow = "2.2.2"
 kotlinSerialization = "1.10.0"
 kotlinCoroutines = "1.10.2"
-pipe = "1.2.0"
-sealup = "1.5.0"
-enumvalues = "1.3.0"
-app = "1.11.0"
+hnau = "1.2.4"
 compose-activity = "1.12.4"
 kotlin-date-time = "0.7.1"
 material3 = "1.3.1"
 ooxml = "5.5.1"
 ktor = "3.4.1"
-hnau = "1.2.3"
 
 [plugins]
 android-app = { id = "com.android.application", version.ref = "androidGradlePlugin" }
@@ -85,4 +81,3 @@ hnau-projector = { module = "org.hnau.commons:app-projector", version.ref = "hna
 ooxml = { module = "org.apache.poi:poi-ooxml", version.ref = "ooxml" }
 ktor-network = { module = "io.ktor:ktor-network", version.ref = "ktor" }
 bignum = { module = "com.ionspin.kotlin:bignum", version = "0.3.10" }
-

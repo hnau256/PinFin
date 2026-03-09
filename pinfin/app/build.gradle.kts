@@ -13,7 +13,6 @@ compose.resources {
 
 kotlin {
     sourceSets {
-
         commonMain {
             kotlin.srcDir("build/generated/ksp/metadata/commonMain/kotlin")
             dependencies {
@@ -29,14 +28,6 @@ kotlin {
                 implementation(libs.sealup.annotations)
                 implementation(libs.enumvalues.annotations)
                 implementation(libs.bignum)
-            }
-        }
-
-        androidMain {
-            kotlin.srcDir("build/generated/ksp/metadata/androidMain/kotlin")
-            dependencies {
-                implementation(libs.android.activity.compose)
-                implementation(libs.android.appcompat)
             }
         }
 
