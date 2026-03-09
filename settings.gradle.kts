@@ -1,12 +1,28 @@
 rootProject.name = "PinFin"
 
 pluginManagement {
-    includeBuild("plugins")
     repositories {
+        mavenLocal()
         gradlePluginPortal()
         google()
         mavenCentral()
-        maven("https://maven.pkg.jetbrains.space/public/p/compose/dev")
+    }
+    plugins {
+        id("org.jetbrains.kotlin.android") version "2.3.10"
+        id("org.jetbrains.kotlin.plugin.compose") version "2.3.10"
+        id("org.jetbrains.kotlin.plugin.serialization") version "2.3.10"
+        id("com.google.devtools.ksp") version "2.3.6"
+    }
+}
+
+plugins {
+    id("org.hnau.settings") version "1.0.2"
+}
+
+hnauSettings {
+    allModules {
+        group = "hnau"
+        includeHnauCommons = true
     }
 }
 

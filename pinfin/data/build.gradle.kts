@@ -1,40 +1,20 @@
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-
 plugins {
-    alias(libs.plugins.kotlin.serialization)
-    alias(libs.plugins.ksp)
-    id("hnau.android.lib")
+    id("org.hnau.project")
 }
 
-kotlin {
-    linuxX64()
-    sourceSets {
-        all {
-            languageSettings {
-                optIn("kotlin.time.ExperimentalTime")
-            }
+hnau {
+    kmp {
+        ksp {
+            pipe = true
+            sealUp = true
+            enumValues = true
         }
 
-        commonMain {
-            kotlin.srcDir("build/generated/ksp/metadata/commonMain/kotlin")
-            dependencies {
-                implementation(libs.hnau.kotlin)
-                implementation(libs.kotlin.datetime)
-                implementation(libs.enumvalues.annotations)
-                implementation(libs.bignum)
-            }
-        }
+        implementation(libs.hnau.kotlin)
+        implementation(libs.kotlin.datetime)
+        implementation(libs.enumvalues.annotations)
+        implementation(libs.bignum)
     }
-}
 
-dependencies {
-    add("kspCommonMainMetadata", libs.pipe.processor)
-    add("kspCommonMainMetadata", libs.enumvalues.processor)
-    add("kspCommonMainMetadata", libs.sealup.processor)
-}
-
-tasks.withType<KotlinCompile>().configureEach {
-    if (name != "kspCommonMainKotlinMetadata") {
-        dependsOn("kspCommonMainKotlinMetadata")
-    }
+    serialization = true
 }

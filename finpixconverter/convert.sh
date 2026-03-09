@@ -1,1 +1,0 @@
-../gradlew :finpixconverter:run
