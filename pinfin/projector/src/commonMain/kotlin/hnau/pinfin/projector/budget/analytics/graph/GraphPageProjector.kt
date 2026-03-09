@@ -20,15 +20,15 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import hnau.common.app.projector.uikit.state.LoadableContent
-import hnau.common.app.projector.uikit.state.TransitionSpec
-import hnau.common.app.projector.uikit.utils.Dimens
-import hnau.common.app.projector.utils.SwitchHue
-import hnau.common.app.projector.utils.horizontalDisplayPadding
-import hnau.common.app.projector.utils.plus
-import hnau.common.app.projector.utils.toLazyListState
-import hnau.common.app.projector.utils.verticalDisplayPadding
-import hnau.common.kotlin.foldNullable
+import org.hnau.commons.app.projector.uikit.state.LoadableContent
+import org.hnau.commons.app.projector.uikit.state.TransitionSpec
+import org.hnau.commons.app.projector.uikit.utils.Dimens
+import org.hnau.commons.app.projector.utils.SwitchHue
+import org.hnau.commons.app.projector.utils.horizontalDisplayPadding
+import org.hnau.commons.app.projector.utils.plus
+import org.hnau.commons.app.projector.utils.toLazyListState
+import org.hnau.commons.app.projector.utils.verticalDisplayPadding
+import org.hnau.commons.kotlin.foldNullable
 import hnau.pinfin.data.Amount
 import hnau.pinfin.data.AmountDirection
 import hnau.pinfin.data.Hue
@@ -43,7 +43,7 @@ import hnau.pinfin.projector.utils.AccountContent
 import hnau.pinfin.projector.utils.AmountContent
 import hnau.pinfin.projector.utils.CategoryContent
 import hnau.pinfin.projector.utils.formatter.AmountFormatter
-import hnau.pipe.annotations.Pipe
+import org.hnau.commons.gen.pipe.annotations.Pipe
 import org.jetbrains.compose.resources.stringResource
 
 class GraphPageProjector(

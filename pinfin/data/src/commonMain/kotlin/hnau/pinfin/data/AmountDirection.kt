@@ -2,7 +2,7 @@ package hnau.pinfin.data
 
 import arrow.core.NonEmptyList
 import arrow.core.toNonEmptyListOrThrow
-import hnau.common.gen.enumvalues.annotations.EnumValues
+import org.hnau.commons.gen.enumvalues.annotations.EnumValues
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 

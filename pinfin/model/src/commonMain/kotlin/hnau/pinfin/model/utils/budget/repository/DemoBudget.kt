@@ -2,7 +2,7 @@ package hnau.pinfin.model.utils.budget.repository
 
 import arrow.core.nonEmptyListOf
 import arrow.core.toNonEmptyListOrNull
-import hnau.common.kotlin.sumOf
+import org.hnau.commons.kotlin.sumOf
 import hnau.pinfin.data.AccountId
 import hnau.pinfin.data.Amount
 import hnau.pinfin.data.BudgetConfig

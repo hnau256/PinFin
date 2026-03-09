@@ -14,10 +14,10 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import hnau.common.app.projector.uikit.table.CellBox
-import hnau.common.app.projector.uikit.table.Table
-import hnau.common.app.projector.uikit.table.TableOrientation
-import hnau.common.app.projector.utils.Icon
+import org.hnau.commons.app.projector.uikit.table.CellBox
+import org.hnau.commons.app.projector.uikit.table.Table
+import org.hnau.commons.app.projector.uikit.table.TableOrientation
+import org.hnau.commons.app.projector.utils.Icon
 import hnau.pinfin.model.sync.client.list.SyncClientListItemModel
 import hnau.pinfin.projector.utils.BidgetInfoContent
 
@@ -34,7 +34,7 @@ class SyncClientListItemProjector(
         ) {
             CellBox(
                 configModifier = { modifier -> modifier.weight(1f) },
-                isLast = false,
+                
             ) {
                 BidgetInfoContent(
                     info = model
@@ -50,7 +50,7 @@ class SyncClientListItemProjector(
                     when (state) {
                         SyncClientListItemModel.State.Actual ->
                             CellBox(
-                                isLast = false,
+                                
                                 configModifier = { modifier -> modifier.width(buttonWidth) },
                             ) {
                                 Icon(
@@ -60,7 +60,7 @@ class SyncClientListItemProjector(
                             }
 
                         is SyncClientListItemModel.State.Syncable -> Cell(
-                            isLast = true,
+                            
                         ) { modifier ->
                             Button(
                                 modifier = modifier.width(buttonWidth),

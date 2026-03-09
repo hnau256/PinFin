@@ -1,8 +1,8 @@
 package hnau.pinfin.model.utils.budget.state
 
-import hnau.common.kotlin.mapper.Mapper
-import hnau.common.kotlin.mapper.plus
-import hnau.common.kotlin.mapper.toMapper
+import org.hnau.commons.kotlin.mapper.Mapper
+import org.hnau.commons.kotlin.mapper.plus
+import org.hnau.commons.kotlin.mapper.toMapper
 import hnau.pinfin.data.UpdateType
 import hnau.pinfin.model.utils.budget.upchain.Update
 import kotlinx.serialization.json.Json

@@ -2,7 +2,7 @@ package hnau.pinfin.model.sync.server.utils
 
 import hnau.pinfin.model.sync.utils.SyncApi
 import hnau.pinfin.model.sync.utils.SyncHandle
-import hnau.pipe.annotations.Pipe
+import org.hnau.commons.gen.pipe.annotations.Pipe
 import kotlinx.coroutines.CoroutineScope
 
 class ServerSyncApi(

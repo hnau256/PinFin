@@ -2,10 +2,10 @@ package hnau.pinfin.data
 
 import arrow.core.NonEmptyList
 import arrow.core.serialization.NonEmptyListSerializer
-import hnau.common.kotlin.mapper.Mapper
-import hnau.common.kotlin.mapper.plus
-import hnau.common.kotlin.mapper.stringToUuid
-import hnau.common.kotlin.serialization.UuidSerializer
+import org.hnau.commons.kotlin.mapper.Mapper
+import org.hnau.commons.kotlin.mapper.plus
+import org.hnau.commons.kotlin.mapper.stringToUuid
+import org.hnau.commons.kotlin.serialization.UuidSerializer
 import hnau.pinfin.data.utils.InstantSerializer
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable

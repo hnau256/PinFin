@@ -6,8 +6,8 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
-import hnau.common.app.projector.uikit.AlertDialogContent
-import hnau.common.kotlin.foldNullable
+import org.hnau.commons.app.projector.uikit.AlertDialogContent
+import org.hnau.commons.kotlin.foldNullable
 import hnau.pinfin.model.transaction.TransactionModel
 import hnau.pinfin.projector.resources.Res
 import hnau.pinfin.projector.resources.close

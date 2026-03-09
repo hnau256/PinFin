@@ -18,11 +18,11 @@ import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.util.fastForEach
 import arrow.core.nonEmptySetOf
 import arrow.core.toNonEmptyListOrNull
-import hnau.common.app.projector.uikit.table.Table
-import hnau.common.app.projector.uikit.table.TableOrientation
-import hnau.common.app.projector.uikit.utils.Dimens
-import hnau.common.app.projector.utils.Icon
-import hnau.common.app.projector.utils.horizontalDisplayPadding
+import org.hnau.commons.app.projector.uikit.table.Table
+import org.hnau.commons.app.projector.uikit.table.TableOrientation
+import org.hnau.commons.app.projector.uikit.utils.Dimens
+import org.hnau.commons.app.projector.utils.Icon
+import org.hnau.commons.app.projector.utils.horizontalDisplayPadding
 import hnau.pinfin.model.utils.amount
 import hnau.pinfin.model.utils.budget.state.TransactionInfo
 import hnau.pinfin.projector.utils.AccountContent
@@ -45,7 +45,7 @@ fun TransactionInfo.Content(
             .horizontalDisplayPadding(),
     ) {
         Cell(
-            isLast = true,
+            
         ) {
             CellContent(
                 dependencies = dependencies,

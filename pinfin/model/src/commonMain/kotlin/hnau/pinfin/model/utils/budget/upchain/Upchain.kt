@@ -1,6 +1,6 @@
 package hnau.pinfin.model.utils.budget.upchain
 
-import hnau.common.kotlin.castOrNull
+import org.hnau.commons.kotlin.castOrNull
 import kotlinx.serialization.Serializable
 
 class Upchain private constructor(

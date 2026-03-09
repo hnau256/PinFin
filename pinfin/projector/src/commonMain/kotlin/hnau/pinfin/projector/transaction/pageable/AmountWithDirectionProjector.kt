@@ -7,13 +7,13 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import hnau.common.app.projector.utils.Icon
+import org.hnau.commons.app.projector.utils.Icon
 import hnau.pinfin.model.transaction.pageable.AmountWithDirectionModel
 import hnau.pinfin.projector.transaction.utils.PartDefaults
 import hnau.pinfin.projector.utils.Label
 import hnau.pinfin.projector.utils.SwitchHueToAmountDirection
 import hnau.pinfin.projector.utils.icon
-import hnau.pipe.annotations.Pipe
+import org.hnau.commons.gen.pipe.annotations.Pipe
 
 class AmountWithDirectionProjector(
     private val model: AmountWithDirectionModel,

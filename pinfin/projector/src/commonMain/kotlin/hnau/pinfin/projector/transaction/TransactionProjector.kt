@@ -10,10 +10,10 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import hnau.common.app.projector.uikit.FullScreen
-import hnau.common.app.projector.uikit.TopBar
-import hnau.common.app.projector.uikit.utils.Dimens
-import hnau.common.app.projector.utils.copy
+import org.hnau.commons.app.projector.uikit.FullScreen
+import org.hnau.commons.app.projector.uikit.TopBar
+import org.hnau.commons.app.projector.uikit.utils.Dimens
+import org.hnau.commons.app.projector.utils.copy
 import hnau.pinfin.model.transaction.TransactionModel
 import hnau.pinfin.projector.transaction.delegates.DialogsProjector
 import hnau.pinfin.projector.transaction.delegates.InfoProjector
@@ -21,7 +21,7 @@ import hnau.pinfin.projector.transaction.delegates.PageProjector
 import hnau.pinfin.projector.transaction.delegates.TopBarActionsProjector
 import hnau.pinfin.projector.transaction.delegates.TypeProjector
 import hnau.pinfin.projector.utils.BackButtonWidth
-import hnau.pipe.annotations.Pipe
+import org.hnau.commons.gen.pipe.annotations.Pipe
 import kotlinx.coroutines.CoroutineScope
 
 class TransactionProjector(

@@ -18,16 +18,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import hct.Hct
-import hnau.common.app.model.theme.ThemeBrightness
-import hnau.common.app.model.theme.ThemeBrightnessValues
-import hnau.common.app.projector.utils.collectAsMutableAccessor
-import hnau.common.app.projector.utils.theme.DynamicSchemeConfig
-import hnau.common.app.projector.utils.theme.themeBrightness
+import org.hnau.commons.app.model.theme.ThemeBrightness
+import org.hnau.commons.app.model.theme.ThemeBrightnessValues
+import org.hnau.commons.app.projector.utils.collectAsMutableAccessor
+import org.hnau.commons.app.projector.utils.theme.DynamicSchemeConfig
+import org.hnau.commons.app.projector.utils.theme.themeBrightness
 import hnau.pinfin.data.Hue
 import hnau.pinfin.model.utils.model
 import kotlinx.coroutines.flow.MutableStateFlow
-import hnau.common.app.model.utils.Hue as ModelHue
+import org.hnau.commons.dynamiccolor.hct.Hct
+import org.hnau.commons.app.model.utils.Hue as ModelHue
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

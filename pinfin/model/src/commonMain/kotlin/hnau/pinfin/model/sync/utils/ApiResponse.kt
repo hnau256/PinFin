@@ -1,6 +1,6 @@
 package hnau.pinfin.model.sync.utils
 
-import hnau.common.kotlin.mapper.Mapper
+import org.hnau.commons.kotlin.mapper.Mapper
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.SerialName

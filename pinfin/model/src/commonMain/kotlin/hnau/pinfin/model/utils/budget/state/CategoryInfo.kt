@@ -6,7 +6,7 @@ import hnau.pinfin.data.Hue
 import hnau.pinfin.model.utils.icons.IconVariant
 import hnau.pinfin.model.utils.icons.variant
 import kotlinx.serialization.Serializable
-import hnau.common.app.model.utils.Hue as ModelHue
+import org.hnau.commons.app.model.utils.Hue as ModelHue
 
 @Serializable
 data class CategoryInfo(

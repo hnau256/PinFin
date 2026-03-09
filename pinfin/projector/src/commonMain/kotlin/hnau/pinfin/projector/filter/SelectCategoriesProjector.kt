@@ -7,10 +7,10 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import arrow.core.NonEmptyList
-import hnau.common.app.projector.uikit.row.ChipsFlowRow
-import hnau.common.app.projector.utils.collectAsMutableAccessor
-import hnau.common.kotlin.foldBoolean
-import hnau.common.kotlin.foldNullable
+import org.hnau.commons.app.projector.uikit.row.ChipsFlowRow
+import org.hnau.commons.app.projector.utils.collectAsMutableAccessor
+import org.hnau.commons.kotlin.foldBoolean
+import org.hnau.commons.kotlin.foldNullable
 import hnau.pinfin.model.filter.pageable.SelectCategoriesModel
 import hnau.pinfin.model.utils.budget.state.CategoryInfo
 import hnau.pinfin.projector.resources.Res

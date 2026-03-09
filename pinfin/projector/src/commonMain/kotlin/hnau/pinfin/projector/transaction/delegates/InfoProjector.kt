@@ -13,14 +13,14 @@ import androidx.compose.material3.Card
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import hnau.common.app.projector.uikit.utils.Dimens
-import hnau.common.app.projector.utils.horizontalDisplayPadding
-import hnau.common.app.projector.utils.verticalDisplayPadding
+import org.hnau.commons.app.projector.uikit.utils.Dimens
+import org.hnau.commons.app.projector.utils.horizontalDisplayPadding
+import org.hnau.commons.app.projector.utils.verticalDisplayPadding
 import hnau.pinfin.model.transaction.TransactionModel
 import hnau.pinfin.projector.transaction.pageable.CommentProjector
 import hnau.pinfin.projector.transaction.pageable.DateProjector
 import hnau.pinfin.projector.transaction.pageable.TimeProjector
-import hnau.pipe.annotations.Pipe
+import org.hnau.commons.gen.pipe.annotations.Pipe
 
 class InfoProjector(
     private val model: TransactionModel,

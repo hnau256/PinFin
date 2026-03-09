@@ -3,7 +3,7 @@ package hnau.pinfin.model.utils.analytics
 import arrow.core.NonEmptyList
 import arrow.core.nonEmptyListOf
 import arrow.core.toNonEmptyListOrNull
-import hnau.common.kotlin.foldNullable
+import org.hnau.commons.kotlin.foldNullable
 import kotlinx.datetime.DatePeriod
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalDateRange

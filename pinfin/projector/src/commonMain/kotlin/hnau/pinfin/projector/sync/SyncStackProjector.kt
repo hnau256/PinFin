@@ -1,14 +1,14 @@
 package hnau.pinfin.projector.sync
 
 import androidx.compose.runtime.Composable
-import hnau.common.app.projector.stack.Content
-import hnau.common.app.projector.stack.StackProjectorTail
-import hnau.common.gen.sealup.annotations.SealUp
-import hnau.common.gen.sealup.annotations.Variant
+import org.hnau.commons.app.projector.stack.Content
+import org.hnau.commons.app.projector.stack.StackProjectorTail
+import org.hnau.commons.gen.sealup.annotations.SealUp
+import org.hnau.commons.gen.sealup.annotations.Variant
 import hnau.pinfin.model.sync.SyncStackModel
 import hnau.pinfin.model.sync.fold
 import hnau.pinfin.projector.sync.client.SyncClientStackProjector
-import hnau.pipe.annotations.Pipe
+import org.hnau.commons.gen.pipe.annotations.Pipe
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.StateFlow
 

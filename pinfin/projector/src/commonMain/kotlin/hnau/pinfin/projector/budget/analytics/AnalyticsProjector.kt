@@ -14,16 +14,16 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.Dp
-import hnau.common.app.projector.uikit.Tabs
-import hnau.common.app.projector.utils.Overcompose
-import hnau.common.app.projector.utils.rememberPagerState
-import hnau.common.gen.sealup.annotations.SealUp
-import hnau.common.gen.sealup.annotations.Variant
+import org.hnau.commons.app.projector.uikit.Tabs
+import org.hnau.commons.app.projector.utils.Overcompose
+import org.hnau.commons.app.projector.utils.rememberPagerState
+import org.hnau.commons.gen.sealup.annotations.SealUp
+import org.hnau.commons.gen.sealup.annotations.Variant
 import hnau.pinfin.model.budget.analytics.AnalyticsModel
 import hnau.pinfin.model.budget.analytics.tab.AnalyticsTab
 import hnau.pinfin.model.budget.analytics.tab.AnalyticsTabValues
 import hnau.pinfin.projector.budget.analytics.graph.GraphProjector
-import hnau.pipe.annotations.Pipe
+import org.hnau.commons.gen.pipe.annotations.Pipe
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.CoroutineScope
 

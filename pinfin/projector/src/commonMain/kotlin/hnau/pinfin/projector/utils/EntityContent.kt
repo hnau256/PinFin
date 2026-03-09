@@ -9,10 +9,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.style.TextAlign
-import hnau.common.app.projector.uikit.ItemsRow
-import hnau.common.app.projector.utils.Icon
-import hnau.common.app.projector.utils.SwitchHue
-import hnau.common.kotlin.foldNullable
+import org.hnau.commons.app.projector.uikit.ItemsRow
+import org.hnau.commons.app.projector.utils.Icon
+import org.hnau.commons.app.projector.utils.SwitchHue
+import org.hnau.commons.kotlin.foldNullable
 import hnau.pinfin.data.Hue
 import hnau.pinfin.model.utils.model
 

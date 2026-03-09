@@ -15,8 +15,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
-import hnau.common.app.projector.uikit.utils.Dimens
-import hnau.common.app.projector.utils.toLazyListState
+import org.hnau.commons.app.projector.uikit.utils.Dimens
+import org.hnau.commons.app.projector.utils.toLazyListState
 import hnau.pinfin.model.budget.analytics.tab.AccountsModel
 import hnau.pinfin.model.utils.budget.state.AccountInfo
 import hnau.pinfin.projector.resources.Res
@@ -24,7 +24,7 @@ import hnau.pinfin.projector.resources.accounts
 import hnau.pinfin.projector.utils.AccountContent
 import hnau.pinfin.projector.utils.AmountContent
 import hnau.pinfin.projector.utils.formatter.AmountFormatter
-import hnau.pipe.annotations.Pipe
+import org.hnau.commons.gen.pipe.annotations.Pipe
 import org.jetbrains.compose.resources.stringResource
 
 class AccountsProjector(

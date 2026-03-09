@@ -4,8 +4,8 @@ import arrow.core.NonEmptyList
 import arrow.core.nonEmptyListOf
 import arrow.core.nonEmptySetOf
 import arrow.core.toNonEmptyListOrNull
-import hnau.common.kotlin.foldNullable
-import hnau.common.kotlin.map
+import org.hnau.commons.kotlin.foldNullable
+import org.hnau.commons.kotlin.map
 import hnau.pinfin.model.utils.analytics.config.AnalyticsSplitConfig
 import hnau.pinfin.model.utils.budget.state.BudgetState
 import kotlinx.coroutines.Dispatchers

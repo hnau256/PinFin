@@ -1,10 +1,10 @@
 package hnau.pinfin.model
 
-import hnau.common.app.model.goback.GoBackHandler
-import hnau.common.kotlin.getOrInit
-import hnau.common.kotlin.toAccessor
+import org.hnau.commons.app.model.goback.GoBackHandler
+import org.hnau.commons.kotlin.getOrInit
+import org.hnau.commons.kotlin.toAccessor
 import hnau.pinfin.model.loadbudgets.LoadBudgetsModel
-import hnau.pipe.annotations.Pipe
+import org.hnau.commons.gen.pipe.annotations.Pipe
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.serialization.Serializable
 

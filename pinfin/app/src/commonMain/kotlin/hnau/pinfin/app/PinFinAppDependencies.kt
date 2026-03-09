@@ -2,7 +2,7 @@ package hnau.pinfin.app
 
 import hnau.pinfin.model.sync.server.InetAddressesProvider
 import hnau.pinfin.model.utils.budget.upchain.Sha256
-import hnau.pipe.annotations.Pipe
+import org.hnau.commons.gen.pipe.annotations.Pipe
 
 @Pipe
 interface PinFinAppDependencies {

@@ -2,7 +2,7 @@ package hnau.pinfin.model.utils.analytics
 
 import arrow.core.NonEmptyList
 import arrow.core.nonEmptyListOf
-import hnau.common.kotlin.foldBoolean
+import org.hnau.commons.kotlin.foldBoolean
 import kotlinx.datetime.DatePeriod
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalDateRange

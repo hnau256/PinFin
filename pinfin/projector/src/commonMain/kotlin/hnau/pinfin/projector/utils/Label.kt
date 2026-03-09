@@ -16,9 +16,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
-import hnau.common.app.projector.uikit.utils.Dimens
-import hnau.common.kotlin.foldBoolean
-import hnau.common.kotlin.foldNullable
+import org.hnau.commons.app.projector.uikit.utils.Dimens
+import org.hnau.commons.kotlin.foldBoolean
+import org.hnau.commons.kotlin.foldNullable
 
 data object LabelDefaults {
 

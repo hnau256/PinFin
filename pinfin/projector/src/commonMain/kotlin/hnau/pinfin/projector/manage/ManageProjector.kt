@@ -4,17 +4,17 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
-import hnau.common.app.projector.uikit.state.StateContent
-import hnau.common.app.projector.uikit.state.TransitionSpec
-import hnau.common.gen.sealup.annotations.SealUp
-import hnau.common.gen.sealup.annotations.Variant
-import hnau.common.kotlin.coroutines.flow.state.mapWithScope
+import org.hnau.commons.app.projector.uikit.state.StateContent
+import org.hnau.commons.app.projector.uikit.state.TransitionSpec
+import org.hnau.commons.gen.sealup.annotations.SealUp
+import org.hnau.commons.gen.sealup.annotations.Variant
+import org.hnau.commons.kotlin.coroutines.flow.state.mapWithScope
 import hnau.pinfin.model.manage.ManageModel
 import hnau.pinfin.model.manage.fold
 import hnau.pinfin.projector.IconProjector
 import hnau.pinfin.projector.budgetsstack.BudgetsStackProjector
 import hnau.pinfin.projector.budgetstack.BudgetStackProjector
-import hnau.pipe.annotations.Pipe
+import org.hnau.commons.gen.pipe.annotations.Pipe
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.StateFlow
 

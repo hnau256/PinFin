@@ -6,7 +6,7 @@ package hnau.pinfin.model.filter
 
 import arrow.core.NonEmptySet
 import arrow.core.serialization.NonEmptySetSerializer
-import hnau.common.kotlin.serialization.LocalDateRangeSerializer
+import org.hnau.commons.kotlin.serialization.LocalDateRangeSerializer
 import hnau.pinfin.data.AccountId
 import hnau.pinfin.data.CategoryId
 import kotlinx.datetime.LocalDateRange

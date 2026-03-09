@@ -15,12 +15,12 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import hnau.common.app.projector.uikit.AlertDialogContent
-import hnau.common.app.projector.uikit.ErrorPanel
-import hnau.common.app.projector.uikit.FullScreen
-import hnau.common.app.projector.uikit.TopBar
-import hnau.common.app.projector.uikit.TopBarTitle
-import hnau.common.app.projector.uikit.utils.Dimens
+import org.hnau.commons.app.projector.uikit.AlertDialogContent
+import org.hnau.commons.app.projector.uikit.ErrorPanel
+import org.hnau.commons.app.projector.uikit.FullScreen
+import org.hnau.commons.app.projector.uikit.TopBar
+import org.hnau.commons.app.projector.uikit.TopBarTitle
+import org.hnau.commons.app.projector.uikit.utils.Dimens
 import hnau.pinfin.model.sync.server.SyncServerModel
 import hnau.pinfin.projector.resources.Res
 import hnau.pinfin.projector.resources.addresses_to_connect
@@ -31,7 +31,7 @@ import hnau.pinfin.projector.resources.sync_server
 import hnau.pinfin.projector.resources.sync_server_is_active
 import hnau.pinfin.projector.resources.yes
 import hnau.pinfin.projector.utils.BackButtonWidth
-import hnau.pipe.annotations.Pipe
+import org.hnau.commons.gen.pipe.annotations.Pipe
 import kotlinx.coroutines.CoroutineScope
 import org.jetbrains.compose.resources.stringResource
 

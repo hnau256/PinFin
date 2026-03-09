@@ -1,6 +1,6 @@
 package hnau.pinfin.model.utils.budget.state
 
-import hnau.common.kotlin.castOrNull
+import org.hnau.commons.kotlin.castOrNull
 import hnau.pinfin.data.AccountConfig
 import hnau.pinfin.data.AccountId
 import hnau.pinfin.data.Amount

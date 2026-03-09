@@ -13,10 +13,10 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import hnau.common.app.projector.uikit.progressindicator.InProgress
-import hnau.common.app.projector.uikit.table.Table
-import hnau.common.app.projector.uikit.table.TableOrientation
-import hnau.common.app.projector.uikit.utils.Dimens
+import org.hnau.commons.app.projector.uikit.progressindicator.InProgress
+import org.hnau.commons.app.projector.uikit.table.Table
+import org.hnau.commons.app.projector.uikit.table.TableOrientation
+import org.hnau.commons.app.projector.uikit.utils.Dimens
 import hnau.pinfin.model.budgetslist.item.BudgetItemModel
 import hnau.pinfin.projector.utils.BidgetInfoContent
 
@@ -36,7 +36,7 @@ class BudgetItemProjector(
                 modifier = Modifier.fillMaxWidth(),
             ) {
                 Cell(
-                    isLast = true,
+                    
                 ) { modifier ->
                     Row(
                         modifier = modifier

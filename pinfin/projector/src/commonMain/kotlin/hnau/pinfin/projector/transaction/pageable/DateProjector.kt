@@ -16,13 +16,13 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import hnau.common.app.projector.uikit.ItemsRow
-import hnau.common.app.projector.utils.Icon
+import org.hnau.commons.app.projector.uikit.ItemsRow
+import org.hnau.commons.app.projector.utils.Icon
 import hnau.pinfin.model.transaction.pageable.DateModel
 import hnau.pinfin.projector.transaction.utils.PartDefaults
 import hnau.pinfin.projector.utils.Label
 import hnau.pinfin.projector.utils.formatter.datetime.DateTimeFormatter
-import hnau.pipe.annotations.Pipe
+import org.hnau.commons.gen.pipe.annotations.Pipe
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.atStartOfDayIn
 import kotlinx.datetime.toLocalDateTime

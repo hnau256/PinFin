@@ -1,14 +1,14 @@
 package hnau.pinfin.model.budget.analytics.tab.graph
 
 import arrow.core.NonEmptyList
-import hnau.common.kotlin.coroutines.flow.state.mapState
-import hnau.common.kotlin.coroutines.flow.state.mapWithScope
-import hnau.common.kotlin.coroutines.flow.state.mutable.toMutableStateFlowAsInitial
-import hnau.common.kotlin.ifNull
+import org.hnau.commons.kotlin.coroutines.flow.state.mapState
+import org.hnau.commons.kotlin.coroutines.flow.state.mapWithScope
+import org.hnau.commons.kotlin.coroutines.flow.state.mutable.toMutableStateFlowAsInitial
+import org.hnau.commons.kotlin.ifNull
 import hnau.pinfin.model.utils.analytics.AnalyticsEntry
 import hnau.pinfin.model.utils.analytics.AnalyticsPage
 import hnau.pinfin.model.utils.analytics.config.AnalyticsPageConfig
-import hnau.pipe.annotations.Pipe
+import org.hnau.commons.gen.pipe.annotations.Pipe
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow

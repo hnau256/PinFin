@@ -18,20 +18,20 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
-import hnau.common.app.projector.uikit.FullScreen
-import hnau.common.app.projector.uikit.TextInput
-import hnau.common.app.projector.uikit.TopBar
-import hnau.common.app.projector.uikit.TopBarTitle
-import hnau.common.app.projector.uikit.progressindicator.InProgress
-import hnau.common.app.projector.uikit.table.CellBox
-import hnau.common.app.projector.uikit.table.Subtable
-import hnau.common.app.projector.uikit.table.Table
-import hnau.common.app.projector.uikit.table.TableOrientation
-import hnau.common.app.projector.uikit.table.TableScope
-import hnau.common.app.projector.uikit.utils.Dimens
-import hnau.common.app.projector.utils.horizontalDisplayPadding
-import hnau.common.app.projector.utils.plus
-import hnau.common.app.projector.utils.verticalDisplayPadding
+import org.hnau.commons.app.projector.uikit.FullScreen
+import org.hnau.commons.app.projector.uikit.TextInput
+import org.hnau.commons.app.projector.uikit.TopBar
+import org.hnau.commons.app.projector.uikit.TopBarTitle
+import org.hnau.commons.app.projector.uikit.progressindicator.InProgress
+import org.hnau.commons.app.projector.uikit.table.CellBox
+import org.hnau.commons.app.projector.uikit.table.Subtable
+import org.hnau.commons.app.projector.uikit.table.Table
+import org.hnau.commons.app.projector.uikit.table.TableOrientation
+import org.hnau.commons.app.projector.uikit.table.TableScope
+import org.hnau.commons.app.projector.uikit.utils.Dimens
+import org.hnau.commons.app.projector.utils.horizontalDisplayPadding
+import org.hnau.commons.app.projector.utils.plus
+import org.hnau.commons.app.projector.utils.verticalDisplayPadding
 import hnau.pinfin.model.sync.start.StartSyncModel
 import hnau.pinfin.projector.resources.Res
 import hnau.pinfin.projector.resources.address
@@ -40,7 +40,7 @@ import hnau.pinfin.projector.resources.open_client
 import hnau.pinfin.projector.resources.port
 import hnau.pinfin.projector.resources.start_server
 import hnau.pinfin.projector.utils.BackButtonWidth
-import hnau.pipe.annotations.Pipe
+import org.hnau.commons.gen.pipe.annotations.Pipe
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.StateFlow
 import org.jetbrains.compose.resources.stringResource
@@ -101,11 +101,11 @@ class StartSyncProjector(
             modifier = Modifier.fillMaxWidth(),
         ) {
             PortInput(
-                isLast = false,
+                
                 onDone = { model.startServer.value?.invoke() },
             )
             Button(
-                isLast = true,
+                
                 onClick = model.startServer,
                 title = { stringResource(Res.string.start_server) },
             )
@@ -119,11 +119,11 @@ class StartSyncProjector(
             modifier = Modifier.fillMaxWidth(),
         ) {
             Input(
-                isLast = false,
+                
                 title = { stringResource(Res.string.address) },
             ) {
                 Cell(
-                    isLast = true,
+                    
                 ) {modifier ->
                     TextInput(
                         modifier = modifier,
@@ -145,11 +145,11 @@ class StartSyncProjector(
                 }
             }
             PortInput(
-                isLast = false,
+                
                 onDone = { model.openClient.value?.invoke() },
             )
             Button(
-                isLast = true,
+                
                 onClick = model.openClient,
                 title = { stringResource(Res.string.open_client) },
             )
@@ -158,12 +158,10 @@ class StartSyncProjector(
 
     @Composable
     private fun TableScope.Button(
-        isLast: Boolean,
         title: @Composable () -> String,
         onClick: StateFlow<(() -> Unit)?>,
     ) {
         Cell(
-            isLast = isLast,
         ) { modifier ->
             val onClick by onClick.collectAsState()
             MaterialButton(
@@ -178,15 +176,13 @@ class StartSyncProjector(
 
     @Composable
     private fun TableScope.Input(
-        isLast: Boolean,
         title: @Composable () -> String,
         input: @Composable TableScope.() -> Unit,
     ) {
         Subtable(
-            isLast = isLast,
         ) {
             CellBox(
-                isLast = false,
+                
                 configModifier = { modifier -> modifier.width(96.dp) },
             ) {
                 Text(
@@ -202,15 +198,13 @@ class StartSyncProjector(
 
     @Composable
     private fun TableScope.PortInput(
-        isLast: Boolean,
         onDone: () -> Unit,
     ) {
         Input(
-            isLast = isLast,
             title = { stringResource(Res.string.port) },
         ) {
             Cell(
-                isLast = true,
+                
             ) { modifier ->
                 TextInput(
                     maxLines = 1,

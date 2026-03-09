@@ -20,14 +20,14 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
-import hnau.common.app.projector.uikit.FullScreen
-import hnau.common.app.projector.uikit.TextInput
-import hnau.common.app.projector.uikit.TopBar
-import hnau.common.app.projector.uikit.TopBarAction
-import hnau.common.app.projector.uikit.TopBarTitle
-import hnau.common.app.projector.utils.Icon
-import hnau.common.app.projector.utils.collectAsMutableAccessor
-import hnau.common.kotlin.ifNull
+import org.hnau.commons.app.projector.uikit.FullScreen
+import org.hnau.commons.app.projector.uikit.TextInput
+import org.hnau.commons.app.projector.uikit.TopBar
+import org.hnau.commons.app.projector.uikit.TopBarAction
+import org.hnau.commons.app.projector.uikit.TopBarTitle
+import org.hnau.commons.app.projector.utils.Icon
+import org.hnau.commons.app.projector.utils.collectAsMutableAccessor
+import org.hnau.commons.kotlin.ifNull
 import hnau.pinfin.model.accountstack.AccountModel
 import hnau.pinfin.projector.resources.Res
 import hnau.pinfin.projector.resources.account_settings
@@ -38,7 +38,7 @@ import hnau.pinfin.projector.resources.name
 import hnau.pinfin.projector.utils.BackButtonWidth
 import hnau.pinfin.projector.utils.HueSlider
 import hnau.pinfin.projector.utils.image
-import hnau.pipe.annotations.Pipe
+import org.hnau.commons.gen.pipe.annotations.Pipe
 import kotlinx.coroutines.CoroutineScope
 import org.jetbrains.compose.resources.stringResource
 

@@ -1,7 +1,7 @@
 package hnau.pinfin.projector.utils.formatter
 
-import hnau.common.kotlin.foldBoolean
-import hnau.common.kotlin.ifNull
+import org.hnau.commons.kotlin.foldBoolean
+import org.hnau.commons.kotlin.ifNull
 import hnau.pinfin.data.Amount
 import kotlin.math.absoluteValue
 
