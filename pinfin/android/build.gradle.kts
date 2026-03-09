@@ -1,28 +1,57 @@
 plugins {
-    id("org.hnau.project")
+    kotlin("plugin.serialization")
+    id("com.google.devtools.ksp")
+    id("org.hnau.androidapp")
 }
 
-hnau {
-    androidApp(
-        namespace = "hnau.pinfin",
-        qaKeystorePath = "keystores/qa.keystore",
-        qaKeyAlias = "qa",
-        qaStorePassword = "password",
-        qaKeyPassword = "password",
-    ) {
-        implementation(project(":pinfin:app"))
-        implementation(project(":pinfin:model"))
-        implementation(project(":pinfin:data"))
-        implementation(project(":pinfin:projector"))
+android {
+    namespace = "hnau.pinfin.android"
 
-        implementation(libs.hnau.projector)
-        implementation(libs.hnau.model)
-
-        implementation(libs.kotlin.datetime)
-        implementation(libs.kotlin.serialization.core)
-        implementation(libs.bignum)
-
-        implementation(libs.android.activity.compose)
-        implementation(libs.android.appcompat)
+    defaultConfig {
+        applicationId = "hnau.pinfin"
+        versionCode = 1
+        versionName = "1.0.0"
     }
+
+    signingConfigs {
+        create("qa") {
+            storeFile = file("keystores/qa.keystore")
+            storePassword = "password"
+            keyAlias = "qa"
+            keyPassword = "password"
+        }
+    }
+
+    buildTypes {
+        getByName("debug") {
+            applicationIdSuffix = ".debug"
+        }
+        getByName("release") {
+            isShrinkResources = true
+            isMinifyEnabled = true
+            isDebuggable = false
+            proguardFile("proguard-rules.pro")
+        }
+        create("qa") {
+            initWith(getByName("release"))
+            matchingFallbacks += listOf("release")
+            signingConfig = signingConfigs.getByName("qa")
+            applicationIdSuffix = ".qa"
+        }
+    }
+}
+
+dependencies {
+    implementation(libs.hnau.projector)
+    implementation(libs.hnau.model)
+    implementation(project(":pinfin:app"))
+    implementation(project(":pinfin:model"))
+    implementation(project(":pinfin:data"))
+    implementation(project(":pinfin:projector"))
+    implementation(libs.kotlin.datetime)
+    implementation(libs.kotlin.serialization.core)
+    implementation(libs.pipe.annotations)
+    implementation(libs.sealup.annotations)
+    implementation(libs.enumvalues.annotations)
+    implementation(libs.bignum)
 }

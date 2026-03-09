@@ -1,26 +1,24 @@
 plugins {
-    id("org.hnau.project")
+    kotlin("multiplatform")
+    id("com.google.devtools.ksp")
+    id("org.hnau.ui")
 }
 
-hnau {
-    kmp {
-        compose = true
-
-        ksp {
-            pipe = true
-            sealUp = true
-            enumValues = true
+kotlin {
+    sourceSets {
+        commonMain {
+            dependencies {
+                implementation(libs.hnau.projector)
+                implementation(libs.hnau.model)
+                implementation(libs.hnau.dynamiccolor)
+                implementation(project(":pinfin:model"))
+                implementation(project(":pinfin:data"))
+                implementation(libs.kotlin.datetime)
+                implementation(libs.kotlin.immutable)
+                implementation(libs.pipe.annotations)
+                implementation(libs.sealup.annotations)
+                implementation(libs.bignum)
+            }
         }
-
-        implementation(libs.hnau.projector)
-        implementation(libs.hnau.model)
-        implementation(libs.hnau.dynamiccolor)
-        implementation(project(":pinfin:model"))
-        implementation(project(":pinfin:data"))
-        implementation(libs.kotlin.datetime)
-        implementation(libs.kotlin.immutable)
-        implementation(libs.pipe.annotations)
-        implementation(libs.sealup.annotations)
-        implementation(libs.bignum)
     }
 }

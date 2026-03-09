@@ -1,20 +1,19 @@
 plugins {
-    id("org.hnau.project")
+    kotlin("multiplatform")
+    kotlin("plugin.serialization")
+    id("com.google.devtools.ksp")
+    id("org.hnau.kmp")
 }
 
-hnau {
-    kmp {
-        ksp {
-            pipe = true
-            sealUp = true
-            enumValues = true
+kotlin {
+    sourceSets {
+        commonMain {
+            dependencies {
+                implementation(libs.hnau.kotlin)
+                implementation(libs.kotlin.datetime)
+                implementation(libs.enumvalues.annotations)
+                implementation(libs.bignum)
+            }
         }
-
-        implementation(libs.hnau.kotlin)
-        implementation(libs.kotlin.datetime)
-        implementation(libs.enumvalues.annotations)
-        implementation(libs.bignum)
     }
-
-    serialization = true
 }
