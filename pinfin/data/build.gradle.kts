@@ -1,5 +1,5 @@
 plugins {
-    alias(hnau.plugins.kotlin.multiplatform)
+    kotlin("multiplatform")
     kotlin("plugin.serialization")
     id("com.google.devtools.ksp")
     id("org.hnau.kmp")
