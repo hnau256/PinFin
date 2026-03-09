@@ -13,8 +13,8 @@ import org.hnau.commons.kotlin.foldBoolean
 import org.hnau.commons.kotlin.foldNullable
 import hnau.pinfin.model.filter.pageable.SelectCategoriesModel
 import hnau.pinfin.model.utils.budget.state.CategoryInfo
-import hnau.pinfin.projector.resources.Res
-import hnau.pinfin.projector.resources.categories
+import hnau.pinfin.projector.Res
+import hnau.pinfin.projector.categories
 import hnau.pinfin.projector.utils.CategoryContent
 import hnau.pinfin.projector.utils.Label
 import org.jetbrains.compose.resources.stringResource

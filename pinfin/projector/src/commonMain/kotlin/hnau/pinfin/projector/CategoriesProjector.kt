@@ -22,9 +22,6 @@ import org.hnau.commons.app.projector.uikit.state.NullableStateContent
 import org.hnau.commons.app.projector.uikit.state.TransitionSpec
 import org.hnau.commons.app.projector.utils.Icon
 import hnau.pinfin.model.CategoriesModel
-import hnau.pinfin.projector.resources.Res
-import hnau.pinfin.projector.resources.categories
-import hnau.pinfin.projector.resources.there_are_no_categories
 import hnau.pinfin.projector.utils.BackButtonWidth
 import hnau.pinfin.projector.utils.CategoryContent
 import org.hnau.commons.gen.pipe.annotations.Pipe

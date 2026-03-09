@@ -33,10 +33,10 @@ import hnau.pinfin.model.budget.tab
 import hnau.pinfin.projector.budget.analytics.AnalyticsProjector
 import hnau.pinfin.projector.budget.config.BudgetConfigProjector
 import hnau.pinfin.projector.budget.transactions.TransactionsProjector
-import hnau.pinfin.projector.resources.Res
-import hnau.pinfin.projector.resources.analytics
-import hnau.pinfin.projector.resources.config
-import hnau.pinfin.projector.resources.transactions
+import hnau.pinfin.projector.Res
+import hnau.pinfin.projector.analytics
+import hnau.pinfin.projector.config
+import hnau.pinfin.projector.transactions
 import org.hnau.commons.gen.pipe.annotations.Pipe
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.StateFlow

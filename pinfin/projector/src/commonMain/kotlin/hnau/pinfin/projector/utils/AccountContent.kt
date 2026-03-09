@@ -4,8 +4,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Shape
 import hnau.pinfin.model.utils.budget.state.AccountInfo
-import hnau.pinfin.projector.resources.Res
-import hnau.pinfin.projector.resources.account
+import hnau.pinfin.projector.Res
+import hnau.pinfin.projector.account
 import org.jetbrains.compose.resources.stringResource
 
 @Composable

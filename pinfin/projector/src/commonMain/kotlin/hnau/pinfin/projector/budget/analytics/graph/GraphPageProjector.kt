@@ -35,10 +35,10 @@ import hnau.pinfin.data.Hue
 import hnau.pinfin.model.budget.analytics.tab.graph.GraphPageModel
 import hnau.pinfin.model.utils.analytics.AnalyticsPage
 import hnau.pinfin.model.utils.model
-import hnau.pinfin.projector.resources.Res
-import hnau.pinfin.projector.resources.credits
-import hnau.pinfin.projector.resources.debits
-import hnau.pinfin.projector.resources.total
+import hnau.pinfin.projector.Res
+import hnau.pinfin.projector.credits
+import hnau.pinfin.projector.debits
+import hnau.pinfin.projector.total
 import hnau.pinfin.projector.utils.AccountContent
 import hnau.pinfin.projector.utils.AmountContent
 import hnau.pinfin.projector.utils.CategoryContent

@@ -39,8 +39,8 @@ import org.hnau.commons.kotlin.coroutines.flow.state.mapState
 import org.hnau.commons.kotlin.coroutines.flow.state.mapWithScope
 import hnau.pinfin.model.transaction.pageable.RecordsModel
 import hnau.pinfin.model.transaction.utils.RecordId
-import hnau.pinfin.projector.resources.Res
-import hnau.pinfin.projector.resources.records
+import hnau.pinfin.projector.Res
+import hnau.pinfin.projector.records
 import hnau.pinfin.projector.transaction.utils.PartDefaults
 import hnau.pinfin.projector.transaction.utils.createPagesTransitionSpec
 import hnau.pinfin.projector.utils.Label

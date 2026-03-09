@@ -31,8 +31,8 @@ import org.hnau.commons.app.projector.utils.Icon
 import org.hnau.commons.app.projector.utils.collectAsTextFieldValueMutableAccessor
 import org.hnau.commons.app.projector.utils.horizontalDisplayPadding
 import hnau.pinfin.model.transaction.utils.ChooseOrCreateModel
-import hnau.pinfin.projector.resources.Res
-import hnau.pinfin.projector.resources.search_create
+import hnau.pinfin.projector.Res
+import hnau.pinfin.projector.search_create
 import hnau.pinfin.projector.utils.LabelDefaults
 import kotlinx.coroutines.flow.StateFlow
 import org.jetbrains.compose.resources.stringResource

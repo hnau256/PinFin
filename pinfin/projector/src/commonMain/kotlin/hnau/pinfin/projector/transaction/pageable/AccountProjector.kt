@@ -6,10 +6,10 @@ import androidx.compose.ui.Modifier
 import hnau.pinfin.model.transaction.pageable.AccountModel
 import hnau.pinfin.model.transaction.utils.ChooseOrCreateModel
 import hnau.pinfin.model.utils.budget.state.AccountInfo
-import hnau.pinfin.projector.resources.Res
-import hnau.pinfin.projector.resources.accounts_not_found
-import hnau.pinfin.projector.resources.create_new_account
-import hnau.pinfin.projector.resources.there_are_no_accounts
+import hnau.pinfin.projector.Res
+import hnau.pinfin.projector.accounts_not_found
+import hnau.pinfin.projector.create_new_account
+import hnau.pinfin.projector.there_are_no_accounts
 import hnau.pinfin.projector.transaction.utils.ChooseOrCreateMessages
 import hnau.pinfin.projector.transaction.utils.ChooseOrCreateProjector
 import hnau.pinfin.projector.utils.AccountContent

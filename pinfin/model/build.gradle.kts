@@ -8,6 +8,7 @@ plugins {
 kotlin {
     sourceSets {
         commonMain {
+            kotlin.srcDir("build/generated/ksp/metadata/commonMain/kotlin")
             dependencies {
                 implementation(libs.hnau.model)
                 implementation(project(":pinfin:data"))
@@ -21,6 +22,10 @@ kotlin {
                 implementation(libs.enumvalues.annotations)
                 implementation(libs.bignum)
             }
+        }
+
+        androidMain {
+            kotlin.srcDir("build/generated/ksp/metadata/androidMain/kotlin")
         }
     }
 }

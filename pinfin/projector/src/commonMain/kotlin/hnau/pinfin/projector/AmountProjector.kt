@@ -20,8 +20,6 @@ import org.hnau.commons.kotlin.coroutines.flow.state.mutable.toMutableStateFlowA
 import org.hnau.commons.kotlin.ifNull
 import org.hnau.commons.kotlin.mapper.Mapper
 import hnau.pinfin.model.AmountModel
-import hnau.pinfin.projector.resources.Res
-import hnau.pinfin.projector.resources.amount
 import hnau.pinfin.projector.utils.formatter.AmountFormatter
 import org.hnau.commons.gen.pipe.annotations.Pipe
 import kotlinx.coroutines.CoroutineScope

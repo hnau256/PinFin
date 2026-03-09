@@ -36,10 +36,10 @@ import org.hnau.commons.kotlin.coroutines.flow.state.mapWithScope
 import org.hnau.commons.kotlin.foldNullable
 import hnau.pinfin.model.transaction.pageable.RecordModel
 import hnau.pinfin.model.utils.budget.state.CategoryInfo
-import hnau.pinfin.projector.resources.Res
-import hnau.pinfin.projector.resources.categories_not_found
-import hnau.pinfin.projector.resources.create_new_category
-import hnau.pinfin.projector.resources.there_are_no_categories
+import hnau.pinfin.projector.Res
+import hnau.pinfin.projector.categories_not_found
+import hnau.pinfin.projector.create_new_category
+import hnau.pinfin.projector.there_are_no_categories
 import hnau.pinfin.projector.transaction.utils.ChooseOrCreateMessages
 import hnau.pinfin.projector.transaction.utils.ChooseOrCreateProjector
 import hnau.pinfin.projector.transaction.utils.createPagesTransitionSpec

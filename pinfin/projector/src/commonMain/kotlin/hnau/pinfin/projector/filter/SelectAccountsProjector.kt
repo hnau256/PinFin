@@ -13,8 +13,8 @@ import org.hnau.commons.kotlin.foldBoolean
 import org.hnau.commons.kotlin.foldNullable
 import hnau.pinfin.model.filter.pageable.SelectAccountsModel
 import hnau.pinfin.model.utils.budget.state.AccountInfo
-import hnau.pinfin.projector.resources.Res
-import hnau.pinfin.projector.resources.accounts
+import hnau.pinfin.projector.Res
+import hnau.pinfin.projector.accounts
 import hnau.pinfin.projector.utils.AccountContent
 import hnau.pinfin.projector.utils.Label
 import org.jetbrains.compose.resources.stringResource

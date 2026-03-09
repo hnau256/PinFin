@@ -31,8 +31,8 @@ import org.hnau.commons.app.projector.utils.collectAsTextFieldValueMutableAccess
 import org.hnau.commons.app.projector.utils.horizontalDisplayPadding
 import org.hnau.commons.kotlin.foldBoolean
 import hnau.pinfin.model.transaction.pageable.CommentModel
-import hnau.pinfin.projector.resources.Res
-import hnau.pinfin.projector.resources.comment
+import hnau.pinfin.projector.Res
+import hnau.pinfin.projector.comment
 import hnau.pinfin.projector.transaction.utils.PartDefaults
 import hnau.pinfin.projector.utils.Label
 import hnau.pinfin.projector.utils.LabelDefaults

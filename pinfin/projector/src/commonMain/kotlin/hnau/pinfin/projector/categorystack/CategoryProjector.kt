@@ -27,11 +27,11 @@ import org.hnau.commons.app.projector.uikit.TopBarTitle
 import org.hnau.commons.app.projector.utils.Icon
 import org.hnau.commons.kotlin.ifNull
 import hnau.pinfin.model.categorystack.CategoryModel
-import hnau.pinfin.projector.resources.Res
-import hnau.pinfin.projector.resources.category_settings
-import hnau.pinfin.projector.resources.hue
-import hnau.pinfin.projector.resources.icon
-import hnau.pinfin.projector.resources.name
+import hnau.pinfin.projector.Res
+import hnau.pinfin.projector.category_settings
+import hnau.pinfin.projector.hue
+import hnau.pinfin.projector.icon
+import hnau.pinfin.projector.name
 import hnau.pinfin.projector.utils.BackButtonWidth
 import hnau.pinfin.projector.utils.HueSlider
 import hnau.pinfin.projector.utils.image

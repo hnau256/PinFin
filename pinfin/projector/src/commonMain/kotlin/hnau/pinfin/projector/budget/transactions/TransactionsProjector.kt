@@ -35,9 +35,9 @@ import org.hnau.commons.app.projector.utils.plus
 import org.hnau.commons.kotlin.foldBoolean
 import hnau.pinfin.model.TransactionsModel
 import hnau.pinfin.projector.filter.FilterProjector
-import hnau.pinfin.projector.resources.Res
-import hnau.pinfin.projector.resources.add_transaction
-import hnau.pinfin.projector.resources.no_transactions
+import hnau.pinfin.projector.Res
+import hnau.pinfin.projector.add_transaction
+import hnau.pinfin.projector.no_transactions
 import hnau.pinfin.projector.utils.BackButtonWidth
 import hnau.pinfin.projector.utils.formatter.AmountFormatter
 import hnau.pinfin.projector.utils.formatter.datetime.DateTimeFormatter

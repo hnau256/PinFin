@@ -48,13 +48,13 @@ import org.hnau.commons.app.projector.utils.Icon
 import org.hnau.commons.kotlin.foldNullable
 import org.hnau.commons.kotlin.ifFalse
 import hnau.pinfin.model.budget.config.BudgetConfigModel
-import hnau.pinfin.projector.resources.Res
-import hnau.pinfin.projector.resources.budget_name
-import hnau.pinfin.projector.resources.categories
-import hnau.pinfin.projector.resources.no
-import hnau.pinfin.projector.resources.remove_budget
-import hnau.pinfin.projector.resources.to_budgets_list
-import hnau.pinfin.projector.resources.yes
+import hnau.pinfin.projector.Res
+import hnau.pinfin.projector.budget_name
+import hnau.pinfin.projector.categories
+import hnau.pinfin.projector.no
+import hnau.pinfin.projector.remove_budget
+import hnau.pinfin.projector.to_budgets_list
+import hnau.pinfin.projector.yes
 import org.jetbrains.compose.resources.StringResource
 import org.jetbrains.compose.resources.stringResource
 
