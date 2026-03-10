@@ -47,10 +47,5 @@ dependencies {
     implementation(project(":pinfin:model"))
     implementation(project(":pinfin:data"))
     implementation(project(":pinfin:projector"))
-    implementation(libs.kotlin.datetime)
-    implementation(libs.kotlin.serialization.core)
-    implementation(libs.pipe.annotations)
-    implementation(libs.sealup.annotations)
-    implementation(libs.enumvalues.annotations)
     implementation(libs.bignum)
 }
