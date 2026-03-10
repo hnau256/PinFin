@@ -10,18 +10,11 @@ pluginManagement {
 }
 
 plugins {
-    id("org.hnau.settings") version "1.1.17"
+    id("org.hnau.settings") version "1.2.0"
 }
 
-dependencyResolutionManagement {
-    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
-    repositories {
-        google()
-        mavenLocal()
-        mavenCentral()
-        maven("https://maven.pkg.jetbrains.space/public/p/compose/dev")
-        gradlePluginPortal()
-    }
+hnau {
+    groupId = "org.hnau.pinfin"
 }
 
 fun collectSubproject(
