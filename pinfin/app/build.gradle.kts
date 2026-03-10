@@ -8,8 +8,8 @@ kotlin {
     sourceSets {
         commonMain {
             dependencies {
-                implementation(libs.hnau.projector)
-                implementation(libs.hnau.model)
+                implementation(hnau.commons.app.projector)
+                implementation(hnau.commons.app.model)
                 implementation(project(":pinfin:model"))
                 implementation(project(":pinfin:data"))
                 implementation(project(":pinfin:projector"))

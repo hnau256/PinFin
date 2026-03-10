@@ -7,8 +7,8 @@ kotlin {
     sourceSets {
         commonMain {
             dependencies {
-                implementation(libs.hnau.projector)
-                implementation(libs.hnau.model)
+                implementation(hnau.commons.app.projector)
+                implementation(hnau.commons.app.model)
                 implementation(libs.hnau.dynamiccolor)
                 implementation(project(":pinfin:model"))
                 implementation(project(":pinfin:data"))

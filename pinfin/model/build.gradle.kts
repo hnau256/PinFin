@@ -8,7 +8,7 @@ kotlin {
     sourceSets {
         commonMain {
             dependencies {
-                implementation(libs.hnau.model)
+                implementation(hnau.commons.app.model)
                 implementation(project(":pinfin:data"))
                 implementation(libs.kotlin.io)
                 implementation(libs.ktor.network)
