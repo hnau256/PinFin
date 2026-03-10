@@ -1,6 +1,6 @@
 plugins {
-    id("com.google.devtools.ksp")
-    id("org.hnau.ui")
+    id(hnau.plugins.ksp.get().pluginId)
+    id(hnau.plugins.hnau.ui.get().pluginId)
 }
 
 kotlin {

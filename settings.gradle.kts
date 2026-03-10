@@ -10,7 +10,7 @@ pluginManagement {
 }
 
 plugins {
-    id("org.hnau.settings") version "1.1.16"
+    id("org.hnau.settings") version "1.1.17"
 }
 
 dependencyResolutionManagement {

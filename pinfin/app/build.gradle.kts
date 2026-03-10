@@ -1,7 +1,7 @@
 plugins {
-    id("org.jetbrains.kotlin.plugin.serialization")
-    id("com.google.devtools.ksp")
-    id("org.hnau.ui")
+    id(hnau.plugins.kotlin.serialization.get().pluginId)
+    id(hnau.plugins.ksp.get().pluginId)
+    id(hnau.plugins.hnau.ui.get().pluginId)
 }
 
 kotlin {

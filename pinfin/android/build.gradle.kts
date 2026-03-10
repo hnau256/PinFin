@@ -1,6 +1,6 @@
 plugins {
-    id("com.google.devtools.ksp")
-    id("org.hnau.androidapp")
+    id(hnau.plugins.ksp.get().pluginId)
+    id(hnau.plugins.hnau.androidapp.get().pluginId)
 }
 
 android {
