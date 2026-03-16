@@ -19,7 +19,7 @@ class GraphPagesModel(
     dependencies: Dependencies,
     skeleton: Skeleton,
     private val pages: NonEmptyList<AnalyticsPage>,
-    pageConfig: AnalyticsPageConfig,
+    config: AnalyticsPageConfig,
 ) {
 
     @Pipe
@@ -66,7 +66,7 @@ class GraphPagesModel(
                 ),
                 skeleton = pageSkeleton,
                 page = page,
-                config = pageConfig,
+                config = config,
             )
             IndexedValue(index, model)
         }

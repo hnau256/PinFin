@@ -2,10 +2,7 @@ package org.hnau.pinfin.model.budget.analytics.tab.graph.configured
 
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.datetime.DatePeriod
-import kotlinx.datetime.LocalDate
 import kotlinx.datetime.TimeZone
-import kotlinx.datetime.toLocalDateTime
 import kotlinx.datetime.todayIn
 import kotlinx.serialization.Serializable
 import org.hnau.commons.app.model.goback.GoBackHandler
@@ -23,9 +20,6 @@ import org.hnau.commons.kotlin.toAccessor
 import org.hnau.pinfin.model.utils.analytics.AnalyticsEntry
 import org.hnau.pinfin.model.utils.analytics.AnalyticsPagesProvider
 import org.hnau.pinfin.model.utils.analytics.config.AnalyticsConfig
-import org.hnau.pinfin.model.utils.analytics.config.AnalyticsPageConfig
-import org.hnau.pinfin.model.utils.analytics.config.AnalyticsSplitConfig
-import org.hnau.pinfin.model.utils.analytics.config.AnalyticsViewConfig
 import org.hnau.pinfin.model.utils.analytics.toAnalyticsEntries
 import org.hnau.pinfin.model.utils.budget.repository.BudgetRepository
 import org.hnau.pinfin.model.utils.budget.state.TransactionInfo
@@ -94,7 +88,7 @@ class GraphConfiguredModel(
                     )
                     .getOrInit { GraphPagesModel.Skeleton() },
                 pages = pages,
-                pageConfig = config.page,
+                config = config.page,
             )
         }
 
