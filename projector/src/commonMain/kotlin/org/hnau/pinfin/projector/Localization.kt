@@ -81,6 +81,12 @@ data class Localization(
     val credits: String,
     val debits: String,
     val total: String,
+    val month: String,
+    val year: String,
+    val day: String,
+    val inclusivePeriod: String,
+    val sumFor: (period: String) -> String,
+    val avgFor: (period: String, subperiod: String) -> String,
 ) {
 
     companion object {
@@ -163,6 +169,12 @@ data class Localization(
             credits = "Доходы",
             debits = "Расходы",
             total = "Всего",
+            month = "месяц",
+            year = "год",
+            day = "день",
+            inclusivePeriod = "весь период",
+            sumFor = { period -> "Сумма за $period" },
+            avgFor = { period, subperiod -> "Среднее в $subperiod за $period" },
         )
     }
 }
