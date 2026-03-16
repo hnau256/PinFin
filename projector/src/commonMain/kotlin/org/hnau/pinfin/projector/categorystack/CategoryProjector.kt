@@ -19,26 +19,21 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
+import kotlinx.coroutines.CoroutineScope
 import org.hnau.commons.app.projector.uikit.FullScreen
 import org.hnau.commons.app.projector.uikit.TextInput
 import org.hnau.commons.app.projector.uikit.TopBar
 import org.hnau.commons.app.projector.uikit.TopBarAction
 import org.hnau.commons.app.projector.uikit.TopBarTitle
 import org.hnau.commons.app.projector.utils.Icon
+import org.hnau.commons.gen.pipe.annotations.Pipe
 import org.hnau.commons.kotlin.ifNull
 import org.hnau.pinfin.model.categorystack.CategoryModel
-import org.hnau.pinfin.projector.Res
-import org.hnau.pinfin.projector.category_settings
-import org.hnau.pinfin.projector.hue
-import org.hnau.pinfin.projector.icon
-import org.hnau.pinfin.projector.name
+import org.hnau.pinfin.projector.Localization
 import org.hnau.pinfin.projector.utils.BackButtonWidth
 import org.hnau.pinfin.projector.utils.HueSlider
 import org.hnau.pinfin.projector.utils.image
-import org.hnau.commons.gen.pipe.annotations.Pipe
-import kotlinx.coroutines.CoroutineScope
-import org.hnau.pinfin.projector.Localization
-import org.jetbrains.compose.resources.stringResource
+
 
 class CategoryProjector(
     scope: CoroutineScope,

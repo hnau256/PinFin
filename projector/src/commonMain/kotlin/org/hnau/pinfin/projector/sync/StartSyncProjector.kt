@@ -36,9 +36,6 @@ import org.hnau.commons.app.projector.utils.verticalDisplayPadding
 import org.hnau.commons.gen.pipe.annotations.Pipe
 import org.hnau.pinfin.model.sync.start.StartSyncModel
 import org.hnau.pinfin.projector.Localization
-import org.hnau.pinfin.projector.budgets_sync
-import org.hnau.pinfin.projector.open_client
-import org.hnau.pinfin.projector.start_server
 import org.hnau.pinfin.projector.utils.BackButtonWidth
 import androidx.compose.material3.Button as MaterialButton
 

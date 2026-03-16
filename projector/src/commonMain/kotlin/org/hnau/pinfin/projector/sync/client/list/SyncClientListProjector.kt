@@ -13,6 +13,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import arrow.core.NonEmptyList
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.StateFlow
 import org.hnau.commons.app.projector.uikit.ErrorPanel
 import org.hnau.commons.app.projector.uikit.FullScreen
 import org.hnau.commons.app.projector.uikit.TopBar
@@ -22,22 +24,14 @@ import org.hnau.commons.app.projector.uikit.state.TransitionSpec
 import org.hnau.commons.app.projector.uikit.utils.Dimens
 import org.hnau.commons.app.projector.utils.horizontalDisplayPadding
 import org.hnau.commons.app.projector.utils.verticalDisplayPadding
+import org.hnau.commons.gen.pipe.annotations.Pipe
 import org.hnau.commons.kotlin.Loadable
 import org.hnau.commons.kotlin.coroutines.flow.state.mapReusable
 import org.hnau.commons.kotlin.map
 import org.hnau.pinfin.data.BudgetId
 import org.hnau.pinfin.model.sync.client.list.SyncClientListModel
-import org.hnau.pinfin.projector.Res
-import org.hnau.pinfin.projector.budgets_to_synchronization
-import org.hnau.pinfin.projector.error_while_loading_budgets_list_from_server
-import org.hnau.pinfin.projector.there_is_no_budgets_for_synchronization
-import org.hnau.pinfin.projector.try_again
-import org.hnau.pinfin.projector.utils.BackButtonWidth
-import org.hnau.commons.gen.pipe.annotations.Pipe
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.flow.StateFlow
 import org.hnau.pinfin.projector.Localization
-import org.jetbrains.compose.resources.stringResource
+import org.hnau.pinfin.projector.utils.BackButtonWidth
 import kotlin.uuid.ExperimentalUuidApi
 
 class SyncClientListProjector(

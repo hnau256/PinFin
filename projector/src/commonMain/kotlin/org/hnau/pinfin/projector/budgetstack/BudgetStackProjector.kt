@@ -4,8 +4,11 @@ import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.runtime.Composable
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.StateFlow
 import org.hnau.commons.app.projector.stack.Content
 import org.hnau.commons.app.projector.stack.StackProjectorTail
+import org.hnau.commons.gen.pipe.annotations.Pipe
 import org.hnau.commons.gen.sealup.annotations.SealUp
 import org.hnau.commons.gen.sealup.annotations.Variant
 import org.hnau.pinfin.model.budgetstack.BudgetStackElementModel
@@ -17,9 +20,6 @@ import org.hnau.pinfin.projector.budget.BudgetProjector
 import org.hnau.pinfin.projector.budget.transactions.TransactionsProjector
 import org.hnau.pinfin.projector.categorystack.CategoryStackProjector
 import org.hnau.pinfin.projector.transaction.TransactionProjector
-import org.hnau.commons.gen.pipe.annotations.Pipe
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.flow.StateFlow
 
 class BudgetStackProjector(
     private val scope: CoroutineScope,

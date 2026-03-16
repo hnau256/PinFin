@@ -16,11 +16,11 @@ import androidx.compose.ui.Modifier
 import org.hnau.commons.app.projector.uikit.utils.Dimens
 import org.hnau.commons.app.projector.utils.horizontalDisplayPadding
 import org.hnau.commons.app.projector.utils.verticalDisplayPadding
+import org.hnau.commons.gen.pipe.annotations.Pipe
 import org.hnau.pinfin.model.transaction.TransactionModel
 import org.hnau.pinfin.projector.transaction.pageable.CommentProjector
 import org.hnau.pinfin.projector.transaction.pageable.DateProjector
 import org.hnau.pinfin.projector.transaction.pageable.TimeProjector
-import org.hnau.commons.gen.pipe.annotations.Pipe
 
 class InfoProjector(
     private val model: TransactionModel,

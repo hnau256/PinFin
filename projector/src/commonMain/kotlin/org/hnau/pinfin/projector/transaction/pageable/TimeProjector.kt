@@ -17,11 +17,11 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import org.hnau.commons.app.projector.uikit.ItemsRow
 import org.hnau.commons.app.projector.utils.Icon
+import org.hnau.commons.gen.pipe.annotations.Pipe
 import org.hnau.pinfin.model.transaction.pageable.TimeModel
 import org.hnau.pinfin.projector.transaction.utils.PartDefaults
 import org.hnau.pinfin.projector.utils.Label
 import org.hnau.pinfin.projector.utils.formatter.datetime.DateTimeFormatter
-import org.hnau.commons.gen.pipe.annotations.Pipe
 
 class TimeProjector(
     private val model: TimeModel,

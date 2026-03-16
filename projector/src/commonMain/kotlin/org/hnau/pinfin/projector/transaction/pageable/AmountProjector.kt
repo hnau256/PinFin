@@ -17,9 +17,13 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import org.hnau.commons.app.projector.utils.Icon
 import org.hnau.commons.app.projector.utils.copy
 import org.hnau.commons.app.projector.utils.horizontalDisplayPadding
+import org.hnau.commons.gen.pipe.annotations.Pipe
 import org.hnau.commons.kotlin.foldNullable
 import org.hnau.pinfin.model.transaction.pageable.AmountModel
 import org.hnau.pinfin.projector.AmountProjector
@@ -27,10 +31,6 @@ import org.hnau.pinfin.projector.transaction.utils.PartDefaults
 import org.hnau.pinfin.projector.utils.Label
 import org.hnau.pinfin.projector.utils.UIConstants
 import org.hnau.pinfin.projector.utils.formatter.AmountFormatter
-import org.hnau.commons.gen.pipe.annotations.Pipe
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 
 class AmountProjector(
     private val model: AmountModel,

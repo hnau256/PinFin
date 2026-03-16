@@ -8,12 +8,12 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import org.hnau.commons.app.projector.utils.Icon
+import org.hnau.commons.gen.pipe.annotations.Pipe
 import org.hnau.pinfin.model.transaction.pageable.AmountWithDirectionModel
 import org.hnau.pinfin.projector.transaction.utils.PartDefaults
 import org.hnau.pinfin.projector.utils.Label
 import org.hnau.pinfin.projector.utils.SwitchHueToAmountDirection
 import org.hnau.pinfin.projector.utils.icon
-import org.hnau.commons.gen.pipe.annotations.Pipe
 
 class AmountWithDirectionProjector(
     private val model: AmountWithDirectionModel,

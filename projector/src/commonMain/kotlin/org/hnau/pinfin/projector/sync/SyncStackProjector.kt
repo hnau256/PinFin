@@ -1,16 +1,16 @@
 package org.hnau.pinfin.projector.sync
 
 import androidx.compose.runtime.Composable
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.StateFlow
 import org.hnau.commons.app.projector.stack.Content
 import org.hnau.commons.app.projector.stack.StackProjectorTail
+import org.hnau.commons.gen.pipe.annotations.Pipe
 import org.hnau.commons.gen.sealup.annotations.SealUp
 import org.hnau.commons.gen.sealup.annotations.Variant
 import org.hnau.pinfin.model.sync.SyncStackModel
 import org.hnau.pinfin.model.sync.fold
 import org.hnau.pinfin.projector.sync.client.SyncClientStackProjector
-import org.hnau.commons.gen.pipe.annotations.Pipe
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.flow.StateFlow
 
 class SyncStackProjector(
     scope: CoroutineScope,

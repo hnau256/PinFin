@@ -22,6 +22,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.datetime.LocalDateRange
 import org.hnau.commons.app.projector.uikit.state.StateContent
 import org.hnau.commons.app.projector.uikit.utils.Dimens
 import org.hnau.commons.app.projector.utils.Icon
@@ -32,15 +35,12 @@ import org.hnau.commons.app.projector.utils.getTransitionSpecForSlide
 import org.hnau.commons.app.projector.utils.horizontalDisplayPadding
 import org.hnau.commons.app.projector.utils.plus
 import org.hnau.commons.app.projector.utils.rememberLet
+import org.hnau.commons.gen.pipe.annotations.Pipe
 import org.hnau.commons.kotlin.KeyValue
 import org.hnau.commons.kotlin.coroutines.flow.state.mapState
 import org.hnau.commons.kotlin.map
 import org.hnau.pinfin.model.budget.analytics.tab.graph.configured.GraphPagesModel
 import org.hnau.pinfin.projector.utils.formatter.datetime.DateTimeFormatter
-import org.hnau.commons.gen.pipe.annotations.Pipe
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.datetime.LocalDateRange
 import kotlin.time.Duration.Companion.seconds
 
 class GraphPagesProjector(

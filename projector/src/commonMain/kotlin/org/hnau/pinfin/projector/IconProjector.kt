@@ -37,7 +37,6 @@ import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import arrow.core.NonEmptyList
-import kotlinx.coroutines.CoroutineScope
 import org.hnau.commons.app.projector.uikit.ErrorPanel
 import org.hnau.commons.app.projector.uikit.FullScreen
 import org.hnau.commons.app.projector.uikit.TextInput

@@ -50,12 +50,7 @@ import org.hnau.commons.kotlin.foldNullable
 import org.hnau.commons.kotlin.ifFalse
 import org.hnau.pinfin.model.budget.config.BudgetConfigModel
 import org.hnau.pinfin.projector.Localization
-import org.hnau.pinfin.projector.Res
-import org.hnau.pinfin.projector.categories
-import org.hnau.pinfin.projector.remove_budget
-import org.hnau.pinfin.projector.to_budgets_list
-import org.jetbrains.compose.resources.StringResource
-import org.jetbrains.compose.resources.stringResource
+
 
 class BudgetConfigProjector(
     private val model: BudgetConfigModel,
@@ -83,18 +78,21 @@ class BudgetConfigProjector(
             modifier = Modifier.fillMaxSize(),
         ) {
             button(
-                titleRes = Res.string.to_budgets_list,
+                id = "NoBudgets",
+                title = dependencies.localization.toBudgetsList,
                 onClick = model::openBudgetsList,
                 icon = Icons.AutoMirrored.Filled.MenuOpen,
             )
             name()
             button(
-                titleRes = Res.string.remove_budget,
+                id = "RemoveBudget",
+                title = dependencies.localization.removeBudget,
                 onClick = model::removeClick,
                 icon = Icons.Filled.Delete,
             )
             button(
-                titleRes = Res.string.categories,
+                id = "Categories",
+                title = dependencies.localization.categories,
                 onClick = model::openCategories,
                 icon = Icons.Filled.Interests,
             )
@@ -226,17 +224,18 @@ class BudgetConfigProjector(
     }
 
     private fun LazyListScope.button(
+        id: String,
         icon: ImageVector,
-        titleRes: StringResource,
+        title: String,
         onClick: () -> Unit,
     ) {
         item(
-            key = "button_${titleRes.key}",
+            key = "button_$id",
         ) {
             ListItem(
                 leadingContent = { Icon(icon = icon) },
                 modifier = Modifier.clickable(onClick = onClick),
-                headlineContent = { Text(stringResource(titleRes)) },
+                headlineContent = { Text(title) },
                 trailingContent = { Icon(Icons.Filled.ChevronRight) }
             )
         }

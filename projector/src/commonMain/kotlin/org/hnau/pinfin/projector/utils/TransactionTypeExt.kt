@@ -2,16 +2,13 @@ package org.hnau.pinfin.projector.utils
 
 import androidx.compose.runtime.Composable
 import org.hnau.pinfin.data.TransactionType
-import org.hnau.pinfin.projector.Res
-import org.hnau.pinfin.projector.entry
-import org.hnau.pinfin.projector.transfer
-import org.jetbrains.compose.resources.stringResource
+import org.hnau.pinfin.projector.Localization
 
-val TransactionType.title: String
-    @Composable
-    get() = stringResource(
-        when (this) {
-            TransactionType.Entry -> Res.string.entry
-            TransactionType.Transfer -> Res.string.transfer
-        }
-    )
+
+@Composable
+fun TransactionType.title(
+    localization: Localization,
+): String = when (this) {
+    TransactionType.Entry -> localization.entry
+    TransactionType.Transfer -> localization.transfer
+}

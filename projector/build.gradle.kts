@@ -19,7 +19,3 @@ kotlin {
         }
     }
 }
-
-compose.resources {
-    packageOfResClass = "org.hnau.pinfin.projector"
-}

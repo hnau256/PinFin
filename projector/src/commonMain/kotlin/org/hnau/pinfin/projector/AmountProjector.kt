@@ -12,20 +12,20 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import org.hnau.commons.app.model.EditingString
 import org.hnau.commons.app.model.toEditingString
 import org.hnau.commons.app.projector.uikit.TextInput
+import org.hnau.commons.gen.pipe.annotations.Pipe
 import org.hnau.commons.kotlin.coroutines.flow.state.mutable.mapMutableState
 import org.hnau.commons.kotlin.coroutines.flow.state.mutable.toMutableStateFlowAsInitial
 import org.hnau.commons.kotlin.ifNull
 import org.hnau.commons.kotlin.mapper.Mapper
 import org.hnau.pinfin.model.AmountModel
 import org.hnau.pinfin.projector.utils.formatter.AmountFormatter
-import org.hnau.commons.gen.pipe.annotations.Pipe
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import org.jetbrains.compose.resources.stringResource
+
 
 class AmountProjector(
     private val scope: CoroutineScope,

@@ -5,17 +5,17 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.StateFlow
 import org.hnau.commons.app.projector.uikit.state.StateContent
 import org.hnau.commons.app.projector.utils.SlideOrientation
+import org.hnau.commons.gen.pipe.annotations.Pipe
 import org.hnau.commons.kotlin.coroutines.flow.state.mapWithScope
 import org.hnau.pinfin.model.transaction.TransactionModel
 import org.hnau.pinfin.projector.transaction.pageable.CommentProjector
 import org.hnau.pinfin.projector.transaction.pageable.DateProjector
 import org.hnau.pinfin.projector.transaction.pageable.TimeProjector
 import org.hnau.pinfin.projector.transaction.utils.createPagesTransitionSpec
-import org.hnau.commons.gen.pipe.annotations.Pipe
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.flow.StateFlow
 
 class PageProjector(
     scope: CoroutineScope,

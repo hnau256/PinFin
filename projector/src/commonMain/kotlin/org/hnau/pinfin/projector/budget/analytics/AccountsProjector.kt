@@ -17,16 +17,14 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import org.hnau.commons.app.projector.uikit.utils.Dimens
 import org.hnau.commons.app.projector.utils.toLazyListState
+import org.hnau.commons.gen.pipe.annotations.Pipe
 import org.hnau.pinfin.model.budget.analytics.tab.AccountsModel
 import org.hnau.pinfin.model.utils.budget.state.AccountInfo
-import org.hnau.pinfin.projector.Res
-import org.hnau.pinfin.projector.accounts
+import org.hnau.pinfin.projector.Localization
 import org.hnau.pinfin.projector.utils.AccountContent
 import org.hnau.pinfin.projector.utils.AmountContent
 import org.hnau.pinfin.projector.utils.formatter.AmountFormatter
-import org.hnau.commons.gen.pipe.annotations.Pipe
-import org.hnau.pinfin.projector.Localization
-import org.jetbrains.compose.resources.stringResource
+
 
 class AccountsProjector(
     private val model: AccountsModel,

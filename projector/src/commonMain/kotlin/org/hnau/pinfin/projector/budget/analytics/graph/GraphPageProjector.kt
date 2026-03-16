@@ -28,6 +28,7 @@ import org.hnau.commons.app.projector.utils.horizontalDisplayPadding
 import org.hnau.commons.app.projector.utils.plus
 import org.hnau.commons.app.projector.utils.toLazyListState
 import org.hnau.commons.app.projector.utils.verticalDisplayPadding
+import org.hnau.commons.gen.pipe.annotations.Pipe
 import org.hnau.commons.kotlin.foldNullable
 import org.hnau.pinfin.data.Amount
 import org.hnau.pinfin.data.AmountDirection
@@ -35,17 +36,12 @@ import org.hnau.pinfin.data.Hue
 import org.hnau.pinfin.model.budget.analytics.tab.graph.configured.GraphPageModel
 import org.hnau.pinfin.model.utils.analytics.AnalyticsPage
 import org.hnau.pinfin.model.utils.model
-import org.hnau.pinfin.projector.Res
-import org.hnau.pinfin.projector.credits
-import org.hnau.pinfin.projector.debits
-import org.hnau.pinfin.projector.total
+import org.hnau.pinfin.projector.Localization
 import org.hnau.pinfin.projector.utils.AccountContent
 import org.hnau.pinfin.projector.utils.AmountContent
 import org.hnau.pinfin.projector.utils.CategoryContent
 import org.hnau.pinfin.projector.utils.formatter.AmountFormatter
-import org.hnau.commons.gen.pipe.annotations.Pipe
-import org.hnau.pinfin.projector.Localization
-import org.jetbrains.compose.resources.stringResource
+
 
 class GraphPageProjector(
     private val model: GraphPageModel,
@@ -152,12 +148,10 @@ class GraphPageProjector(
         header(
             key = "${keyPrefix}_header",
             title = {
-                stringResource(
-                    when (direction) {
-                        AmountDirection.Credit -> Res.string.credits
-                        AmountDirection.Debit -> Res.string.debits
-                    }
-                )
+                when (direction) {
+                    AmountDirection.Credit -> dependencies.localization.credits
+                    AmountDirection.Debit -> dependencies.localization.debits
+                }
             },
             amount = half.sum.withDirection(direction),
         )

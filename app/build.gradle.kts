@@ -13,7 +13,6 @@ kotlin {
                 implementation(project(":model"))
                 implementation(project(":data"))
                 implementation(project(":projector"))
-                implementation(compose.components.resources)
                 implementation(libs.bignum)
             }
         }
@@ -24,8 +23,4 @@ compose.desktop {
     application {
         mainClass = "org.hnau.pinfin.app.DesktopAppKt"
     }
-}
-
-compose.resources {
-    packageOfResClass = "hnau.pinfin.app"
 }

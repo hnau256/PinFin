@@ -7,27 +7,28 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import kotlinx.collections.immutable.toImmutableList
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.StateFlow
 import org.hnau.commons.app.projector.uikit.Tabs
 import org.hnau.commons.app.projector.uikit.state.StateContent
 import org.hnau.commons.app.projector.uikit.state.TransitionSpec
 import org.hnau.commons.app.projector.utils.SlideOrientation
+import org.hnau.commons.gen.pipe.annotations.Pipe
 import org.hnau.commons.kotlin.coroutines.flow.state.mapWithScope
 import org.hnau.pinfin.data.TransactionType
 import org.hnau.pinfin.model.transaction.TransactionModel
 import org.hnau.pinfin.model.transaction.pageable.TypeModel
+import org.hnau.pinfin.projector.Localization
 import org.hnau.pinfin.projector.transaction.pageable.EntryProjector
 import org.hnau.pinfin.projector.transaction.pageable.TransferProjector
 import org.hnau.pinfin.projector.transaction.utils.createPagesTransitionSpec
 import org.hnau.pinfin.projector.utils.title
-import org.hnau.commons.gen.pipe.annotations.Pipe
-import kotlinx.collections.immutable.toImmutableList
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.flow.StateFlow
 
 class TypeProjector(
     scope: CoroutineScope,
     private val model: TransactionModel,
-    dependencies: Dependencies,
+    private val dependencies: Dependencies,
 ) {
 
     sealed interface Type {
@@ -99,6 +100,8 @@ class TypeProjector(
 
     @Pipe
     interface Dependencies {
+
+        val localization: Localization
 
 
         fun entry(): EntryProjector.Dependencies
@@ -229,7 +232,9 @@ class TypeProjector(
             onSelectedChanged = { model.type.variant.value = it },
         ) { type ->
             Text(
-                text = type.title,
+                text = type.title(
+                    localization = dependencies.localization,
+                ),
             )
         }
     }

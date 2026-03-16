@@ -3,7 +3,6 @@ package org.hnau.pinfin.projector.budget.analytics
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -15,18 +14,19 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.Dp
+import kotlinx.collections.immutable.toImmutableList
+import kotlinx.coroutines.CoroutineScope
 import org.hnau.commons.app.projector.uikit.Tabs
 import org.hnau.commons.app.projector.utils.Overcompose
 import org.hnau.commons.app.projector.utils.rememberPagerState
+import org.hnau.commons.gen.pipe.annotations.Pipe
 import org.hnau.commons.gen.sealup.annotations.SealUp
 import org.hnau.commons.gen.sealup.annotations.Variant
 import org.hnau.pinfin.model.budget.analytics.AnalyticsModel
 import org.hnau.pinfin.model.budget.analytics.tab.AnalyticsTab
 import org.hnau.pinfin.model.budget.analytics.tab.AnalyticsTabValues
+import org.hnau.pinfin.projector.Localization
 import org.hnau.pinfin.projector.budget.analytics.graph.GraphProjector
-import org.hnau.commons.gen.pipe.annotations.Pipe
-import kotlinx.collections.immutable.toImmutableList
-import kotlinx.coroutines.CoroutineScope
 
 @OptIn(ExperimentalMaterial3Api::class)
 class AnalyticsProjector(
@@ -37,6 +37,8 @@ class AnalyticsProjector(
 
     @Pipe
     interface Dependencies {
+
+        val localization: Localization
 
         fun accounts(): AccountsProjector.Dependencies
 
@@ -98,7 +100,9 @@ class AnalyticsProjector(
                         onSelectedChanged = { model.selectedTab.value = it },
                     ) { tab ->
                         Text(
-                            text = tab.title,
+                            text = tab.title(
+                                localization = dependencies.localization,
+                            ),
                         )
                     }
                 }

@@ -17,11 +17,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.util.fastForEach
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.StateFlow
 import org.hnau.commons.app.projector.uikit.state.StateContent
 import org.hnau.commons.app.projector.utils.Icon
 import org.hnau.commons.app.projector.utils.Overcompose
 import org.hnau.commons.app.projector.utils.SlideOrientation
 import org.hnau.commons.app.projector.utils.getTransitionSpecForSlide
+import org.hnau.commons.gen.pipe.annotations.Pipe
 import org.hnau.commons.gen.sealup.annotations.SealUp
 import org.hnau.commons.gen.sealup.annotations.Variant
 import org.hnau.commons.kotlin.coroutines.flow.state.mapState
@@ -30,17 +33,11 @@ import org.hnau.pinfin.model.budget.BudgetPageModel
 import org.hnau.pinfin.model.budget.BudgetTab
 import org.hnau.pinfin.model.budget.fold
 import org.hnau.pinfin.model.budget.tab
+import org.hnau.pinfin.projector.Localization
 import org.hnau.pinfin.projector.budget.analytics.AnalyticsProjector
 import org.hnau.pinfin.projector.budget.config.BudgetConfigProjector
 import org.hnau.pinfin.projector.budget.transactions.TransactionsProjector
-import org.hnau.pinfin.projector.Res
-import org.hnau.pinfin.projector.analytics
-import org.hnau.pinfin.projector.config
-import org.hnau.pinfin.projector.transactions
-import org.hnau.commons.gen.pipe.annotations.Pipe
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.flow.StateFlow
-import org.jetbrains.compose.resources.stringResource
+
 
 class BudgetProjector(
     scope: CoroutineScope,
@@ -50,6 +47,8 @@ class BudgetProjector(
 
     @Pipe
     interface Dependencies {
+
+        val localization: Localization
 
         fun transactions(): TransactionsProjector.Dependencies
 
@@ -173,12 +172,9 @@ class BudgetProjector(
 
     private val BudgetTab.title: String
         @Composable
-        get() = stringResource(
-            when (this) {
-                BudgetTab.Transactions -> Res.string.transactions
-                BudgetTab.Analytics -> Res.string.analytics
-                BudgetTab.Config -> Res.string.config
-            }
-        )
-
+        get() = when (this) {
+            BudgetTab.Transactions -> dependencies.localization.transactions
+            BudgetTab.Analytics -> dependencies.localization.analytics
+            BudgetTab.Config -> dependencies.localization.config
+        }
 }

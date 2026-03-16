@@ -26,6 +26,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.StateFlow
 import org.hnau.commons.app.projector.uikit.ItemsRow
 import org.hnau.commons.app.projector.uikit.state.StateContent
 import org.hnau.commons.app.projector.uikit.utils.Dimens
@@ -33,22 +35,18 @@ import org.hnau.commons.app.projector.utils.Icon
 import org.hnau.commons.app.projector.utils.SlideOrientation
 import org.hnau.commons.app.projector.utils.copy
 import org.hnau.commons.app.projector.utils.plus
+import org.hnau.commons.gen.pipe.annotations.Pipe
 import org.hnau.commons.kotlin.ZipList
 import org.hnau.commons.kotlin.coroutines.flow.state.mapReusable
 import org.hnau.commons.kotlin.coroutines.flow.state.mapState
 import org.hnau.commons.kotlin.coroutines.flow.state.mapWithScope
 import org.hnau.pinfin.model.transaction.pageable.RecordsModel
 import org.hnau.pinfin.model.transaction.utils.RecordId
-import org.hnau.pinfin.projector.Res
-import org.hnau.pinfin.projector.records
+import org.hnau.pinfin.projector.Localization
 import org.hnau.pinfin.projector.transaction.utils.PartDefaults
 import org.hnau.pinfin.projector.transaction.utils.createPagesTransitionSpec
 import org.hnau.pinfin.projector.utils.Label
-import org.hnau.commons.gen.pipe.annotations.Pipe
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.flow.StateFlow
-import org.hnau.pinfin.projector.Localization
-import org.jetbrains.compose.resources.stringResource
+
 
 class RecordsProjector(
     scope: CoroutineScope,

@@ -1,17 +1,17 @@
 package org.hnau.pinfin.projector.categorystack
 
 import androidx.compose.runtime.Composable
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.StateFlow
 import org.hnau.commons.app.projector.stack.Content
 import org.hnau.commons.app.projector.stack.StackProjectorTail
+import org.hnau.commons.gen.pipe.annotations.Pipe
 import org.hnau.commons.gen.sealup.annotations.SealUp
 import org.hnau.commons.gen.sealup.annotations.Variant
 import org.hnau.pinfin.model.categorystack.CategoryStackElementModel
 import org.hnau.pinfin.model.categorystack.CategoryStackModel
 import org.hnau.pinfin.model.categorystack.fold
 import org.hnau.pinfin.projector.IconProjector
-import org.hnau.commons.gen.pipe.annotations.Pipe
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.flow.StateFlow
 
 class CategoryStackProjector(
     private val scope: CoroutineScope,

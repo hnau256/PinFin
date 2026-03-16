@@ -18,6 +18,8 @@ import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.util.fastForEach
 import arrow.core.nonEmptySetOf
 import arrow.core.toNonEmptyListOrNull
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.toLocalDateTime
 import org.hnau.commons.app.projector.uikit.table.Table
 import org.hnau.commons.app.projector.uikit.table.TableOrientation
 import org.hnau.commons.app.projector.uikit.utils.Dimens
@@ -30,9 +32,6 @@ import org.hnau.pinfin.projector.utils.AmountContent
 import org.hnau.pinfin.projector.utils.ArrowDirection
 import org.hnau.pinfin.projector.utils.ArrowIcon
 import org.hnau.pinfin.projector.utils.CategoryContent
-import kotlinx.datetime.TimeZone
-import kotlinx.datetime.toLocalDateTime
-import org.hnau.pinfin.projector.Localization
 
 @Composable
 fun TransactionInfo.Content(

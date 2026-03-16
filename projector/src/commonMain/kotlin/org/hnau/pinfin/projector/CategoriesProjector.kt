@@ -21,12 +21,11 @@ import org.hnau.commons.app.projector.uikit.TopBarTitle
 import org.hnau.commons.app.projector.uikit.state.NullableStateContent
 import org.hnau.commons.app.projector.uikit.state.TransitionSpec
 import org.hnau.commons.app.projector.utils.Icon
+import org.hnau.commons.gen.pipe.annotations.Pipe
 import org.hnau.pinfin.model.CategoriesModel
 import org.hnau.pinfin.projector.utils.BackButtonWidth
 import org.hnau.pinfin.projector.utils.CategoryContent
-import org.hnau.commons.gen.pipe.annotations.Pipe
-import kotlinx.coroutines.CoroutineScope
-import org.jetbrains.compose.resources.stringResource
+
 
 class CategoriesProjector(
     private val model: CategoriesModel,

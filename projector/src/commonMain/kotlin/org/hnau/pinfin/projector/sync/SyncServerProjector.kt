@@ -24,14 +24,7 @@ import org.hnau.commons.app.projector.uikit.utils.Dimens
 import org.hnau.commons.gen.pipe.annotations.Pipe
 import org.hnau.pinfin.model.sync.server.SyncServerModel
 import org.hnau.pinfin.projector.Localization
-import org.hnau.pinfin.projector.addresses_to_connect
-import org.hnau.pinfin.projector.no
-import org.hnau.pinfin.projector.stop
-import org.hnau.pinfin.projector.stop_sync_server
-import org.hnau.pinfin.projector.sync_server
-import org.hnau.pinfin.projector.sync_server_is_active
 import org.hnau.pinfin.projector.utils.BackButtonWidth
-import org.hnau.pinfin.projector.yes
 
 class SyncServerProjector(
     private val model: SyncServerModel,

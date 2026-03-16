@@ -4,14 +4,14 @@ import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import kotlinx.coroutines.CoroutineScope
 import org.hnau.commons.app.projector.uikit.backbutton.BackButtonProjector
+import org.hnau.commons.gen.pipe.annotations.Pipe
 import org.hnau.pinfin.model.RootModel
 import org.hnau.pinfin.projector.utils.BackButtonWidth
 import org.hnau.pinfin.projector.utils.formatter.AmountFormatter
 import org.hnau.pinfin.projector.utils.formatter.datetime.DateTimeFormatter
 import org.hnau.pinfin.projector.utils.formatter.datetime.JavaDateTimeFormatter
-import org.hnau.commons.gen.pipe.annotations.Pipe
-import kotlinx.coroutines.CoroutineScope
 
 class RootProjector(
     private val scope: CoroutineScope,
