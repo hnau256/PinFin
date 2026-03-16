@@ -36,6 +36,7 @@ import org.hnau.pinfin.projector.utils.BackButtonWidth
 import org.hnau.commons.gen.pipe.annotations.Pipe
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.StateFlow
+import org.hnau.pinfin.projector.Localization
 import org.jetbrains.compose.resources.stringResource
 import kotlin.uuid.ExperimentalUuidApi
 
@@ -49,6 +50,8 @@ class SyncClientListProjector(
     interface Dependencies {
 
         val backButtonWidth: BackButtonWidth
+
+        val localization: Localization
     }
 
     private val items: StateFlow<Loadable<Result<NonEmptyList<Pair<BudgetId, SyncClientListItemProjector>>?>>> =
@@ -78,7 +81,7 @@ class SyncClientListProjector(
                 TopBar(
                     modifier = Modifier.padding(contentPadding),
                 ) {
-                    TopBarTitle { Text(stringResource(Res.string.budgets_to_synchronization)) }
+                    TopBarTitle { Text(dependencies.localization.budgetsToSynchronization) }
                 }
             },
         ) { contentPadding ->
@@ -120,7 +123,7 @@ class SyncClientListProjector(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(contentPadding),
-            title = { Text(stringResource(Res.string.there_is_no_budgets_for_synchronization)) },
+            title = { Text(dependencies.localization.thereIsNoBudgetsForSynchronization) },
         )
     }
 
@@ -132,11 +135,11 @@ class SyncClientListProjector(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(contentPadding),
-            title = { Text(stringResource(Res.string.error_while_loading_budgets_list_from_server)) },
+            title = { Text(dependencies.localization.errorWhileLoadingBudgetsListFromServer) },
             button = {
                 Button(
                     onClick = model::reload,
-                    content = { Text(stringResource(Res.string.try_again)) },
+                    content = { Text(dependencies.localization.tryAgain) },
                 )
             },
         )

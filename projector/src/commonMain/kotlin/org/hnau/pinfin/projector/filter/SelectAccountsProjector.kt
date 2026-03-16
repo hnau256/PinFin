@@ -9,23 +9,36 @@ import androidx.compose.runtime.remember
 import arrow.core.NonEmptyList
 import org.hnau.commons.app.projector.uikit.row.ChipsFlowRow
 import org.hnau.commons.app.projector.utils.collectAsMutableAccessor
+import org.hnau.commons.gen.pipe.annotations.Pipe
 import org.hnau.commons.kotlin.foldBoolean
 import org.hnau.commons.kotlin.foldNullable
 import org.hnau.pinfin.model.filter.pageable.SelectAccountsModel
 import org.hnau.pinfin.model.utils.budget.state.AccountInfo
-import org.hnau.pinfin.projector.Res
-import org.hnau.pinfin.projector.accounts
+import org.hnau.pinfin.projector.Localization
 import org.hnau.pinfin.projector.utils.AccountContent
 import org.hnau.pinfin.projector.utils.Label
-import org.jetbrains.compose.resources.stringResource
 
 class SelectAccountsProjector(
     private val model: SelectAccountsModel,
+    private val dependencies: Dependencies,
 ) {
+
+    @Pipe
+    interface Dependencies {
+
+        val localization: Localization
+    }
 
     class Page(
         private val model: SelectAccountsModel.Page,
+        private val dependencies: Dependencies,
     ) {
+
+        @Pipe
+        interface Dependencies {
+
+            val localization: Localization
+        }
 
         @Composable
         fun Content() {
@@ -38,6 +51,7 @@ class SelectAccountsProjector(
                     info = item.info,
                     selected = selected,
                     onClick = { selected = !selected },
+                    localization = dependencies.localization,
                 )
             }
         }
@@ -57,7 +71,7 @@ class SelectAccountsProjector(
         ) {
             Text(
                 selectedAccounts.foldNullable(
-                    ifNull = { stringResource(Res.string.accounts) },
+                    ifNull = { (dependencies.localization.accounts) },
                     ifNotNull = { accounts ->
                         remember(accounts) {
                             listOfNotNull(

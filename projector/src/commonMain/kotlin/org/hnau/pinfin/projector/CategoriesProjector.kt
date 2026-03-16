@@ -29,7 +29,6 @@ import kotlinx.coroutines.CoroutineScope
 import org.jetbrains.compose.resources.stringResource
 
 class CategoriesProjector(
-    scope: CoroutineScope,
     private val model: CategoriesModel,
     private val dependencies: Dependencies,
 ) {
@@ -38,6 +37,8 @@ class CategoriesProjector(
     interface Dependencies {
 
         val backButtonWidth: BackButtonWidth
+
+        val localization: Localization
     }
 
 
@@ -51,7 +52,7 @@ class CategoriesProjector(
                     modifier = Modifier.padding(contentPadding),
                 ) {
                     TopBarTitle {
-                        Text(stringResource(Res.string.categories))
+                        Text((dependencies.localization.categories))
                     }
                 }
             },
@@ -70,7 +71,7 @@ class CategoriesProjector(
                                 .padding(contentPadding),
                             title = {
                                 Text(
-                                    text = stringResource(Res.string.there_are_no_categories)
+                                    text = dependencies.localization.thereAreNoCategories,
                                 )
                             }
                         )
@@ -91,6 +92,7 @@ class CategoriesProjector(
                                     headlineContent = {
                                         CategoryContent(
                                             info = category.info,
+                                            localization = dependencies.localization,
                                         )
                                     },
                                     trailingContent = { Icon(Icons.Filled.ChevronRight) },

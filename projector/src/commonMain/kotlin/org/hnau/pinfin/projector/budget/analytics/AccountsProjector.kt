@@ -25,6 +25,7 @@ import org.hnau.pinfin.projector.utils.AccountContent
 import org.hnau.pinfin.projector.utils.AmountContent
 import org.hnau.pinfin.projector.utils.formatter.AmountFormatter
 import org.hnau.commons.gen.pipe.annotations.Pipe
+import org.hnau.pinfin.projector.Localization
 import org.jetbrains.compose.resources.stringResource
 
 class AccountsProjector(
@@ -36,6 +37,8 @@ class AccountsProjector(
     interface Dependencies {
 
         val amountFormatter: AmountFormatter
+
+        val localization: Localization
     }
 
     @OptIn(ExperimentalFoundationApi::class)
@@ -57,7 +60,7 @@ class AccountsProjector(
                     key = "accounts",
                 ) {
                     Title(
-                        text = stringResource(Res.string.accounts)
+                        text = (dependencies.localization.accounts)
                     )
                 }
                 items(
@@ -80,6 +83,7 @@ class AccountsProjector(
             headlineContent = {
                 AccountContent(
                     info = info,
+                    localization = dependencies.localization,
                 )
             },
             trailingContent = {

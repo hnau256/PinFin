@@ -7,21 +7,21 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import org.hnau.commons.app.projector.uikit.AlertDialogContent
+import org.hnau.commons.gen.pipe.annotations.Pipe
 import org.hnau.commons.kotlin.foldNullable
 import org.hnau.pinfin.model.transaction.TransactionModel
-import org.hnau.pinfin.projector.Res
-import org.hnau.pinfin.projector.close
-import org.hnau.pinfin.projector.no
-import org.hnau.pinfin.projector.not_save
-import org.hnau.pinfin.projector.remove_transaction
-import org.hnau.pinfin.projector.save
-import org.hnau.pinfin.projector.save_changes
-import org.hnau.pinfin.projector.yes
-import org.jetbrains.compose.resources.stringResource
+import org.hnau.pinfin.projector.Localization
 
 class DialogsProjector(
     private val model: TransactionModel,
+    private val dependencies: Dependencies,
 ) {
+
+    @Pipe
+    interface Dependencies {
+
+        val localization: Localization
+    }
 
 
     @Composable
@@ -42,23 +42,23 @@ class DialogsProjector(
                     onDismissRequest = info.close,
                 ) {
                     AlertDialogContent(
-                        title = { Text(stringResource(Res.string.save_changes)) },
+                        title = { Text((dependencies.localization.saveChanges)) },
                         buttons = {
                             TextButton(
                                 onClick = info.cancelChanges,
-                                content = { Text(stringResource(Res.string.not_save)) },
+                                content = { Text((dependencies.localization.notSave)) },
                             )
                             info.saveIfPossible.foldNullable(
                                 ifNull = {
                                     TextButton(
                                         onClick = info.close,
-                                        content = { Text(stringResource(Res.string.close)) },
+                                        content = { Text((dependencies.localization.close)) },
                                     )
                                 },
                                 ifNotNull = { save ->
                                     TextButton(
                                         onClick = save,
-                                        content = { Text(stringResource(Res.string.save)) },
+                                        content = { Text((dependencies.localization.save)) },
                                     )
                                 }
                             )
@@ -80,17 +80,17 @@ class DialogsProjector(
                     onDismissRequest = info.close,
                 ) {
                     AlertDialogContent(
-                        title = { Text(stringResource(Res.string.remove_transaction)) },
+                        title = { Text((dependencies.localization.removeTransaction)) },
                         dismissButton = {
                             TextButton(
                                 onClick = info.close,
-                                content = { Text(stringResource(Res.string.no)) },
+                                content = { Text((dependencies.localization.no)) },
                             )
                         },
                         confirmButton = {
                             TextButton(
                                 onClick = info.remove,
-                                content = { Text(stringResource(Res.string.yes)) },
+                                content = { Text((dependencies.localization.yes)) },
                             )
                         }
                     )

@@ -6,6 +6,7 @@ import org.hnau.pinfin.model.RootModel
 import org.hnau.pinfin.projector.RootProjector
 import org.hnau.pinfin.projector.impl
 import kotlinx.coroutines.CoroutineScope
+import org.hnau.pinfin.projector.Localization
 
 fun createAppProjector(
     scope: CoroutineScope,
@@ -17,7 +18,9 @@ fun createAppProjector(
         RootProjector(
             scope = scope,
             model = model,
-            dependencies = RootProjector.Dependencies.impl(),
+            dependencies = RootProjector.Dependencies.impl(
+                localization = Localization.default,
+            ),
         )
     },
     content = { rootProjector ->

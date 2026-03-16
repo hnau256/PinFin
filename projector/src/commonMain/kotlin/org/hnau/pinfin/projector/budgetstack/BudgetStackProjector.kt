@@ -115,7 +115,6 @@ class BudgetStackProjector(
                     },
                     ifCategories = { categoriesModel ->
                         PageProjector.categories(
-                            scope = scope,
                             model = categoriesModel,
                             dependencies = dependencies.categories(),
                         )

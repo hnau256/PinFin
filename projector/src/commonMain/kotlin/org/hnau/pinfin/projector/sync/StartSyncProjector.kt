@@ -18,6 +18,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import kotlinx.coroutines.flow.StateFlow
 import org.hnau.commons.app.projector.uikit.FullScreen
 import org.hnau.commons.app.projector.uikit.TextInput
 import org.hnau.commons.app.projector.uikit.TopBar
@@ -32,22 +33,16 @@ import org.hnau.commons.app.projector.uikit.utils.Dimens
 import org.hnau.commons.app.projector.utils.horizontalDisplayPadding
 import org.hnau.commons.app.projector.utils.plus
 import org.hnau.commons.app.projector.utils.verticalDisplayPadding
+import org.hnau.commons.gen.pipe.annotations.Pipe
 import org.hnau.pinfin.model.sync.start.StartSyncModel
-import org.hnau.pinfin.projector.Res
-import org.hnau.pinfin.projector.address
+import org.hnau.pinfin.projector.Localization
 import org.hnau.pinfin.projector.budgets_sync
 import org.hnau.pinfin.projector.open_client
-import org.hnau.pinfin.projector.port
 import org.hnau.pinfin.projector.start_server
 import org.hnau.pinfin.projector.utils.BackButtonWidth
-import org.hnau.commons.gen.pipe.annotations.Pipe
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.flow.StateFlow
-import org.jetbrains.compose.resources.stringResource
 import androidx.compose.material3.Button as MaterialButton
 
 class StartSyncProjector(
-    scope: CoroutineScope,
     private val model: StartSyncModel,
     private val dependencies: Dependencies,
 ) {
@@ -56,6 +51,8 @@ class StartSyncProjector(
     interface Dependencies {
 
         val backButtonWidth: BackButtonWidth
+
+        val localization: Localization
     }
 
     @OptIn(ExperimentalMaterial3Api::class)
@@ -67,7 +64,7 @@ class StartSyncProjector(
                 TopBar(
                     modifier = Modifier.padding(contentPadding),
                 ) {
-                    TopBarTitle { Text(stringResource(Res.string.budgets_sync)) }
+                    TopBarTitle { Text(dependencies.localization.budgetsSync) }
                 }
             },
         ) { contentPadding ->
@@ -101,13 +98,13 @@ class StartSyncProjector(
             modifier = Modifier.fillMaxWidth(),
         ) {
             PortInput(
-                
+
                 onDone = { model.startServer.value?.invoke() },
             )
             Button(
-                
+
                 onClick = model.startServer,
-                title = { stringResource(Res.string.start_server) },
+                title = { dependencies.localization.startServer },
             )
         }
     }
@@ -119,12 +116,12 @@ class StartSyncProjector(
             modifier = Modifier.fillMaxWidth(),
         ) {
             Input(
-                
-                title = { stringResource(Res.string.address) },
+
+                title = { (dependencies.localization.address) },
             ) {
                 Cell(
-                    
-                ) {modifier ->
+
+                ) { modifier ->
                     TextInput(
                         modifier = modifier,
                         maxLines = 1,
@@ -145,13 +142,13 @@ class StartSyncProjector(
                 }
             }
             PortInput(
-                
+
                 onDone = { model.openClient.value?.invoke() },
             )
             Button(
-                
+
                 onClick = model.openClient,
-                title = { stringResource(Res.string.open_client) },
+                title = { dependencies.localization.openClient },
             )
         }
     }
@@ -179,10 +176,9 @@ class StartSyncProjector(
         title: @Composable () -> String,
         input: @Composable TableScope.() -> Unit,
     ) {
-        Subtable(
-        ) {
+        Subtable {
             CellBox(
-                
+
                 configModifier = { modifier -> modifier.width(96.dp) },
             ) {
                 Text(
@@ -201,10 +197,10 @@ class StartSyncProjector(
         onDone: () -> Unit,
     ) {
         Input(
-            title = { stringResource(Res.string.port) },
+            title = { (dependencies.localization.port) },
         ) {
             Cell(
-                
+
             ) { modifier ->
                 TextInput(
                     maxLines = 1,

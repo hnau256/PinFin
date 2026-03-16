@@ -21,22 +21,19 @@ import org.hnau.commons.app.projector.uikit.FullScreen
 import org.hnau.commons.app.projector.uikit.TopBar
 import org.hnau.commons.app.projector.uikit.TopBarTitle
 import org.hnau.commons.app.projector.uikit.utils.Dimens
+import org.hnau.commons.gen.pipe.annotations.Pipe
 import org.hnau.pinfin.model.sync.server.SyncServerModel
-import org.hnau.pinfin.projector.Res
+import org.hnau.pinfin.projector.Localization
 import org.hnau.pinfin.projector.addresses_to_connect
 import org.hnau.pinfin.projector.no
 import org.hnau.pinfin.projector.stop
 import org.hnau.pinfin.projector.stop_sync_server
 import org.hnau.pinfin.projector.sync_server
 import org.hnau.pinfin.projector.sync_server_is_active
-import org.hnau.pinfin.projector.yes
 import org.hnau.pinfin.projector.utils.BackButtonWidth
-import org.hnau.commons.gen.pipe.annotations.Pipe
-import kotlinx.coroutines.CoroutineScope
-import org.jetbrains.compose.resources.stringResource
+import org.hnau.pinfin.projector.yes
 
 class SyncServerProjector(
-    scope: CoroutineScope,
     private val model: SyncServerModel,
     private val dependencies: Dependencies,
 ) {
@@ -45,6 +42,8 @@ class SyncServerProjector(
     interface Dependencies {
 
         val backButtonWidth: BackButtonWidth
+
+        val localization: Localization
     }
 
     @OptIn(ExperimentalMaterial3Api::class)
@@ -56,7 +55,7 @@ class SyncServerProjector(
                 TopBar(
                     modifier = Modifier.padding(contentPadding),
                 ) {
-                    TopBarTitle { Text(stringResource(Res.string.sync_server)) }
+                    TopBarTitle { Text(dependencies.localization.syncServer) }
                 }
             },
         ) { contentPadding ->
@@ -67,13 +66,11 @@ class SyncServerProjector(
                         horizontalAlignment = Alignment.CenterHorizontally,
                     ) {
                         CircularProgressIndicator()
-                        Text(
-                            text = stringResource(Res.string.sync_server_is_active),
-                        )
+                        Text(text = (dependencies.localization.syncServerIsActive))
                         Text(
                             text = model.addresses.joinToString(
                                 separator = "\n",
-                                prefix = stringResource(Res.string.addresses_to_connect) + ":\n",
+                                prefix = dependencies.localization.addressesToConnect + ":\n",
                             ),
                             style = MaterialTheme.typography.bodyMedium,
                         )
@@ -83,7 +80,7 @@ class SyncServerProjector(
                     Button(
                         onClick = model::stopServer,
                     ) {
-                        Text(stringResource(Res.string.stop))
+                        Text((dependencies.localization.stop))
                     }
                 })
         }
@@ -101,17 +98,17 @@ class SyncServerProjector(
             onDismissRequest = model::cancelStopServerDialog
         ) {
             AlertDialogContent(
-                title = { Text(stringResource(Res.string.stop_sync_server)) },
+                title = { Text(dependencies.localization.stopSyncServer) },
                 confirmButton = {
                     TextButton(
                         onClick = model::confirmStopServerDialog,
-                        content = { Text(stringResource(Res.string.yes)) },
+                        content = { Text((dependencies.localization.yes)) },
                     )
                 },
                 dismissButton = {
                     TextButton(
                         onClick = model::cancelStopServerDialog,
-                        content = { Text(stringResource(Res.string.no)) },
+                        content = { Text((dependencies.localization.no)) },
                     )
                 }
             )

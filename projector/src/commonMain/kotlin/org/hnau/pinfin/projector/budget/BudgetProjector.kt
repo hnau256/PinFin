@@ -54,6 +54,8 @@ class BudgetProjector(
         fun transactions(): TransactionsProjector.Dependencies
 
         fun analytics(): AnalyticsProjector.Dependencies
+
+        fun config(): BudgetConfigProjector.Dependencies
     }
     
     @SealUp(
@@ -111,6 +113,7 @@ class BudgetProjector(
                     ifConfig = { budgetModel ->
                         PageProjector.config(
                             model = budgetModel,
+                            dependencies = dependencies.config(),
                         )
                     }
                 )

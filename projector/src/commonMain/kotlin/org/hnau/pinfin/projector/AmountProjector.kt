@@ -37,6 +37,8 @@ class AmountProjector(
     interface Dependencies {
 
         val amountFormatter: AmountFormatter
+
+        val localization: Localization
     }
 
     private val input: MutableStateFlow<EditingString> = model
@@ -83,7 +85,7 @@ class AmountProjector(
             keyboardActions = currentOnImeAction
                 ?.let { action -> KeyboardActions { action() } }
                 ?: KeyboardActions(),
-            label = { Text(stringResource(Res.string.amount)) },
+            label = { Text(dependencies.localization.amount) },
             isError = model.error.collectAsState().value,
             shape = shape,
         )

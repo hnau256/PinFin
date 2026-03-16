@@ -37,6 +37,7 @@ import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import arrow.core.NonEmptyList
+import kotlinx.coroutines.CoroutineScope
 import org.hnau.commons.app.projector.uikit.ErrorPanel
 import org.hnau.commons.app.projector.uikit.FullScreen
 import org.hnau.commons.app.projector.uikit.TextInput
@@ -54,6 +55,7 @@ import org.hnau.commons.app.projector.utils.horizontalDisplayPadding
 import org.hnau.commons.app.projector.utils.map
 import org.hnau.commons.app.projector.utils.plus
 import org.hnau.commons.app.projector.utils.verticalDisplayPadding
+import org.hnau.commons.gen.pipe.annotations.Pipe
 import org.hnau.commons.kotlin.Loading
 import org.hnau.commons.kotlin.Ready
 import org.hnau.commons.kotlin.foldBoolean
@@ -65,12 +67,8 @@ import org.hnau.pinfin.model.utils.icons.title
 import org.hnau.pinfin.projector.utils.BackButtonWidth
 import org.hnau.pinfin.projector.utils.colors
 import org.hnau.pinfin.projector.utils.image
-import org.hnau.commons.gen.pipe.annotations.Pipe
-import kotlinx.coroutines.CoroutineScope
-import org.jetbrains.compose.resources.stringResource
 
 class IconProjector(
-    scope: CoroutineScope,
     private val model: IconModel,
     private val dependencies: Dependencies,
 ) {
@@ -79,6 +77,8 @@ class IconProjector(
     interface Dependencies {
 
         val backButtonWidth: BackButtonWidth
+
+        val localization: Localization
     }
 
     @OptIn(ExperimentalMaterial3Api::class)
@@ -90,7 +90,7 @@ class IconProjector(
                 TopBar(
                     modifier = Modifier.padding(contentPadding),
                 ) {
-                    TopBarTitle { Text(stringResource(Res.string.select_icon)) }
+                    TopBarTitle { Text(dependencies.localization.selectIcon) }
                 }
             },
         ) { contentPadding ->
@@ -157,7 +157,7 @@ class IconProjector(
                         .foldNullable(
                             ifNull = {
                                 ErrorPanel(
-                                    title = { Text(stringResource(Res.string.no_icons_found)) }
+                                    title = { Text(dependencies.localization.noIconsFound) }
                                 )
                             },
                             ifNotNull = { icons ->
@@ -283,7 +283,7 @@ class IconProjector(
         TextInput(
             maxLines = 1,
             value = model.query,
-            placeholder = { Text(stringResource(Res.string.search)) },
+            placeholder = { Text((dependencies.localization.search)) },
             modifier = modifier
                 .padding(contentPadding)
                 .padding(

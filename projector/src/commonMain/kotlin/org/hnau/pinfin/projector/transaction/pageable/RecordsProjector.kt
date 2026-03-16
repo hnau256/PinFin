@@ -47,12 +47,20 @@ import org.hnau.pinfin.projector.utils.Label
 import org.hnau.commons.gen.pipe.annotations.Pipe
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.StateFlow
+import org.hnau.pinfin.projector.Localization
 import org.jetbrains.compose.resources.stringResource
 
 class RecordsProjector(
     scope: CoroutineScope,
     private val model: RecordsModel,
+    private val dependencies: Dependencies,
 ) {
+
+    @Pipe
+    interface Dependencies {
+
+        val localization: Localization
+    }
 
     class Page(
         scope: CoroutineScope,
@@ -221,7 +229,7 @@ class RecordsProjector(
         ) {
             ItemsRow {
                 Text(
-                    text = stringResource(Res.string.records),
+                    text = dependencies.localization.records,
                     maxLines = 1,
                 )
                 Box(

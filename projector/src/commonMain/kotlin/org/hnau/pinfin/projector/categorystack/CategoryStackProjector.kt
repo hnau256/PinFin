@@ -65,7 +65,6 @@ class CategoryStackProjector(
                     },
                     ifIcon = { iconModel ->
                         PageProjector.icon(
-                            scope = scope,
                             model = iconModel,
                             dependencies = dependencies.icon(),
                         )

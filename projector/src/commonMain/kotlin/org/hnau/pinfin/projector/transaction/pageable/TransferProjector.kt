@@ -30,6 +30,8 @@ class TransferProjector(
     interface Dependencies {
 
         fun amount(): AmountProjector.Dependencies
+
+        fun account(): AccountProjector.Dependencies
     }
 
     class Page(
@@ -42,6 +44,8 @@ class TransferProjector(
         interface Dependencies {
 
             fun amount(): AmountProjector.Page.Dependencies
+
+            fun accountCompanion(): AccountProjector.Companion.Dependencies
         }
 
         sealed interface PageType {
@@ -56,6 +60,7 @@ class TransferProjector(
 
             data class From(
                 val projector: ChooseOrCreateProjector<AccountInfo>,
+                private val dependencies: Dependencies,
             ) : PageType {
                 override val key: Int
                     get() = 0
@@ -67,13 +72,16 @@ class TransferProjector(
                 ) {
                     projector.Content(
                         modifier = modifier.padding(contentPadding),
-                        messages = AccountProjector.chooseMessages,
+                        messages = AccountProjector.chooseMessages(
+                            dependencies = dependencies.accountCompanion(),
+                        ),
                     )
                 }
             }
 
             data class To(
                 val projector: ChooseOrCreateProjector<AccountInfo>,
+                private val dependencies: Dependencies,
             ) : PageType {
                 override val key: Int
                     get() = 1
@@ -85,7 +93,9 @@ class TransferProjector(
                 ) {
                     projector.Content(
                         modifier = modifier.padding(contentPadding),
-                        messages = AccountProjector.chooseMessages,
+                        messages = AccountProjector.chooseMessages(
+                            dependencies = dependencies.accountCompanion(),
+                        ),
                     )
                 }
             }
@@ -124,13 +134,17 @@ class TransferProjector(
                     is TransferModel.PageType.From -> PageType.From(
                         projector = AccountProjector.createPage(
                             model = type.model,
-                        )
+                            dependencies = dependencies.accountCompanion(),
+                        ),
+                        dependencies = dependencies,
                     )
 
                     is TransferModel.PageType.To -> PageType.To(
                         projector = AccountProjector.createPage(
                             model = type.model,
-                        )
+                            dependencies = dependencies.accountCompanion(),
+                        ),
+                        dependencies = dependencies,
                     )
                 }
             }
@@ -162,10 +176,12 @@ class TransferProjector(
 
     private val from = AccountProjector(
         model = model.from,
+        dependencies = dependencies.account(),
     )
 
     private val to = AccountProjector(
         model = model.to,
+        dependencies = dependencies.account(),
     )
 
     private val amount = AmountProjector(

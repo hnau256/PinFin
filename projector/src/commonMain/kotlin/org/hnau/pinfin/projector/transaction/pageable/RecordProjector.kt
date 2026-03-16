@@ -24,6 +24,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.StateFlow
 import org.hnau.commons.app.projector.uikit.ItemsRow
 import org.hnau.commons.app.projector.uikit.state.NullableStateContent
 import org.hnau.commons.app.projector.uikit.state.StateContent
@@ -32,14 +34,12 @@ import org.hnau.commons.app.projector.uikit.utils.Dimens
 import org.hnau.commons.app.projector.utils.Icon
 import org.hnau.commons.app.projector.utils.SlideOrientation
 import org.hnau.commons.app.projector.utils.copy
+import org.hnau.commons.gen.pipe.annotations.Pipe
 import org.hnau.commons.kotlin.coroutines.flow.state.mapWithScope
 import org.hnau.commons.kotlin.foldNullable
 import org.hnau.pinfin.model.transaction.pageable.RecordModel
 import org.hnau.pinfin.model.utils.budget.state.CategoryInfo
-import org.hnau.pinfin.projector.Res
-import org.hnau.pinfin.projector.categories_not_found
-import org.hnau.pinfin.projector.create_new_category
-import org.hnau.pinfin.projector.there_are_no_categories
+import org.hnau.pinfin.projector.Localization
 import org.hnau.pinfin.projector.transaction.utils.ChooseOrCreateMessages
 import org.hnau.pinfin.projector.transaction.utils.ChooseOrCreateProjector
 import org.hnau.pinfin.projector.transaction.utils.createPagesTransitionSpec
@@ -48,10 +48,6 @@ import org.hnau.pinfin.projector.utils.Label
 import org.hnau.pinfin.projector.utils.UIConstants
 import org.hnau.pinfin.projector.utils.ViewMode
 import org.hnau.pinfin.projector.utils.formatter.AmountFormatter
-import org.hnau.commons.gen.pipe.annotations.Pipe
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.flow.StateFlow
-import org.jetbrains.compose.resources.stringResource
 
 class RecordProjector(
     private val model: RecordModel,
@@ -63,22 +59,31 @@ class RecordProjector(
 
         val amountFormatter: AmountFormatter
 
+        val localization: Localization
+
         fun amount(): AmountWithDirectionProjector.Dependencies
     }
 
     class Page(
         scope: CoroutineScope,
         private val model: RecordModel.Page,
-        dependencies: Dependencies,
+        private val dependencies: Dependencies,
     ) {
 
         @Pipe
         interface Dependencies {
 
+            val localization: Localization
+
             fun amountPage(): AmountProjector.Page.Dependencies
 
             fun amount(): AmountWithDirectionProjector.Dependencies
 
+            fun comment(): CommentProjector.Dependencies
+
+            fun categoryCompanion(): CategoryProjector.Companion.Dependencies
+
+            fun category(): CategoryProjector.Dependencies
         }
 
         sealed interface PageType {
@@ -89,6 +94,7 @@ class RecordProjector(
             fun Content(
                 modifier: Modifier,
                 contentPadding: PaddingValues,
+                localization: Localization,
             )
 
             data class Comment(
@@ -101,6 +107,7 @@ class RecordProjector(
                 override fun Content(
                     modifier: Modifier,
                     contentPadding: PaddingValues,
+                    localization: Localization,
                 ) {
                     projector.Content(
                         modifier = modifier,
@@ -119,13 +126,14 @@ class RecordProjector(
                 override fun Content(
                     modifier: Modifier,
                     contentPadding: PaddingValues,
+                    localization: Localization,
                 ) {
                     projector.Content(
                         modifier = modifier.padding(contentPadding),
                         messages = ChooseOrCreateMessages(
-                            createNew = stringResource(Res.string.create_new_category),
-                            notFound = stringResource(Res.string.categories_not_found),
-                            noVariants = stringResource(Res.string.there_are_no_categories),
+                            createNew = localization.createNewCategory,
+                            notFound = localization.categoriesNotFound,
+                            noVariants = localization.thereAreNoCategories,
                         )
                     )
                 }
@@ -141,6 +149,7 @@ class RecordProjector(
                 override fun Content(
                     modifier: Modifier,
                     contentPadding: PaddingValues,
+                    localization: Localization,
                 ) {
                     projector.Content(
                         modifier = modifier,
@@ -165,6 +174,7 @@ class RecordProjector(
                     is RecordModel.PageType.Category -> PageType.Category(
                         projector = CategoryProjector.createPage(
                             model = type.model,
+                            dependencies = dependencies.categoryCompanion(),
                         )
                     )
 
@@ -196,16 +206,19 @@ class RecordProjector(
                     type.Content(
                         modifier = Modifier.fillMaxSize(),
                         contentPadding = contentPadding,
+                        localization = dependencies.localization,
                     )
                 }
         }
 
         private val comment = CommentProjector(
             model = model.comment,
+            dependencies = dependencies.comment(),
         )
 
         private val category = CategoryProjector(
             model = model.category,
+            dependencies = dependencies.category(),
         )
 
         private val amount = AmountWithDirectionProjector(
@@ -331,6 +344,7 @@ class RecordProjector(
                         onClick = onClick,
                         selected = selected,
                         viewMode = ViewMode.Icon,
+                        localization = dependencies.localization,
                     ) { category ->
                         ItemsRow {
                             category()

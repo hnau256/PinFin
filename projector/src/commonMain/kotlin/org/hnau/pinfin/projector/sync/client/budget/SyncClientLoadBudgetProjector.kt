@@ -10,26 +10,23 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.StateFlow
 import org.hnau.commons.app.projector.uikit.AlertDialogContent
 import org.hnau.commons.app.projector.uikit.FullScreen
 import org.hnau.commons.app.projector.uikit.TopBar
 import org.hnau.commons.app.projector.uikit.TopBarTitle
 import org.hnau.commons.app.projector.uikit.state.LoadableContent
 import org.hnau.commons.app.projector.uikit.state.TransitionSpec
+import org.hnau.commons.gen.pipe.annotations.Pipe
 import org.hnau.commons.kotlin.Loadable
 import org.hnau.commons.kotlin.coroutines.flow.state.mapState
 import org.hnau.commons.kotlin.map
 import org.hnau.pinfin.model.sync.client.budget.SyncClientLoadBudgetModel
-import org.hnau.pinfin.projector.Res
+import org.hnau.pinfin.projector.Localization
 import org.hnau.pinfin.projector.budget_sync
-import org.hnau.pinfin.projector.no
 import org.hnau.pinfin.projector.stop_sync
-import org.hnau.pinfin.projector.yes
 import org.hnau.pinfin.projector.utils.BackButtonWidth
-import org.hnau.commons.gen.pipe.annotations.Pipe
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.flow.StateFlow
-import org.jetbrains.compose.resources.stringResource
 
 class SyncClientLoadBudgetProjector(
     scope: CoroutineScope,
@@ -41,6 +38,10 @@ class SyncClientLoadBudgetProjector(
     interface Dependencies {
 
         val backButtonWidth: BackButtonWidth
+
+        val localization: Localization
+
+        fun syncClient(): SyncClientBudgetProjector.Dependencies
     }
 
     private val state: StateFlow<Loadable<SyncClientBudgetProjector>> = model
@@ -49,6 +50,7 @@ class SyncClientLoadBudgetProjector(
             stateOrLoading.map { state ->
                 SyncClientBudgetProjector(
                     model = state,
+                    dependencies = dependencies.syncClient(),
                 )
             }
         }
@@ -63,7 +65,7 @@ class SyncClientLoadBudgetProjector(
                 TopBar(
                     modifier = Modifier.padding(contentPadding),
                 ) {
-                    TopBarTitle { Text(stringResource(Res.string.budget_sync)) }
+                    TopBarTitle { Text(dependencies.localization.budgetSync) }
                 }
             },
         ) { contentPadding ->
@@ -94,17 +96,17 @@ class SyncClientLoadBudgetProjector(
             onDismissRequest = model::stopSyncCancel
         ) {
             AlertDialogContent(
-                title = { Text(stringResource(Res.string.stop_sync)) },
+                title = { Text(dependencies.localization.stopSync) },
                 confirmButton = {
                     TextButton(
                         onClick = model::stopSyncConfirm,
-                        content = { Text(stringResource(Res.string.yes)) },
+                        content = { Text((dependencies.localization.yes)) },
                     )
                 },
                 dismissButton = {
                     TextButton(
                         onClick = model::stopSyncCancel,
-                        content = { Text(stringResource(Res.string.no)) },
+                        content = { Text((dependencies.localization.no)) },
                     )
                 }
             )

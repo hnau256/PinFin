@@ -45,22 +45,28 @@ import org.hnau.commons.app.projector.uikit.progressindicator.InProgress
 import org.hnau.commons.app.projector.uikit.state.StateContent
 import org.hnau.commons.app.projector.uikit.state.TransitionSpec
 import org.hnau.commons.app.projector.utils.Icon
+import org.hnau.commons.gen.pipe.annotations.Pipe
 import org.hnau.commons.kotlin.foldNullable
 import org.hnau.commons.kotlin.ifFalse
 import org.hnau.pinfin.model.budget.config.BudgetConfigModel
+import org.hnau.pinfin.projector.Localization
 import org.hnau.pinfin.projector.Res
-import org.hnau.pinfin.projector.budget_name
 import org.hnau.pinfin.projector.categories
-import org.hnau.pinfin.projector.no
 import org.hnau.pinfin.projector.remove_budget
 import org.hnau.pinfin.projector.to_budgets_list
-import org.hnau.pinfin.projector.yes
 import org.jetbrains.compose.resources.StringResource
 import org.jetbrains.compose.resources.stringResource
 
 class BudgetConfigProjector(
     private val model: BudgetConfigModel,
+    private val dependencies: Dependencies,
 ) {
+
+    @Pipe
+    interface Dependencies {
+
+        val localization: Localization
+    }
 
 
     @Composable
@@ -105,17 +111,17 @@ class BudgetConfigProjector(
             onDismissRequest = model::removeCancel
         ) {
             AlertDialogContent(
-                title = { Text(stringResource(Res.string.remove_budget)) },
+                title = { Text(dependencies.localization.removeBudget) },
                 confirmButton = {
                     TextButton(
                         onClick = model::removeConfirm,
-                        content = { Text(stringResource(Res.string.yes)) },
+                        content = { Text(dependencies.localization.yes) },
                     )
                 },
                 dismissButton = {
                     TextButton(
                         onClick = model::removeCancel,
-                        content = { Text(stringResource(Res.string.no)) },
+                        content = { Text(dependencies.localization.no) },
                     )
                 }
             )
@@ -127,7 +133,7 @@ class BudgetConfigProjector(
         name: BudgetConfigModel.NameOrEdit.Name,
     ) {
         ListItem(
-            overlineContent = { Text(stringResource(Res.string.budget_name)) },
+            overlineContent = { Text(dependencies.localization.budgetName) },
             headlineContent = { Text(name.name) },
             trailingContent = {
                 IconButton(

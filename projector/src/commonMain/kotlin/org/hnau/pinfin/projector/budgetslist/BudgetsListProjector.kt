@@ -22,6 +22,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import arrow.core.NonEmptyList
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.StateFlow
 import org.hnau.commons.app.projector.uikit.ErrorPanel
 import org.hnau.commons.app.projector.uikit.FullScreen
 import org.hnau.commons.app.projector.uikit.TopBar
@@ -35,20 +37,11 @@ import org.hnau.commons.app.projector.utils.Icon
 import org.hnau.commons.app.projector.utils.horizontalDisplayPadding
 import org.hnau.commons.app.projector.utils.plus
 import org.hnau.commons.app.projector.utils.verticalDisplayPadding
+import org.hnau.commons.gen.pipe.annotations.Pipe
 import org.hnau.commons.kotlin.coroutines.flow.state.mapReusable
 import org.hnau.pinfin.model.budgetslist.BudgetsListModel
-import org.hnau.pinfin.projector.Res
-import org.hnau.pinfin.projector.add
-import org.hnau.pinfin.projector.budgets
-import org.hnau.pinfin.projector.budgets_sync
-import org.hnau.pinfin.projector.create_demo_budget
-import org.hnau.pinfin.projector.create_new_budget
-import org.hnau.pinfin.projector.no_budgets
+import org.hnau.pinfin.projector.Localization
 import org.hnau.pinfin.projector.utils.BackButtonWidth
-import org.hnau.commons.gen.pipe.annotations.Pipe
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.flow.StateFlow
-import org.jetbrains.compose.resources.stringResource
 
 class BudgetsListProjector(
     scope: CoroutineScope,
@@ -60,6 +53,8 @@ class BudgetsListProjector(
     interface Dependencies {
 
         val backButtonWidth: BackButtonWidth
+
+        val localization: Localization
     }
 
     private val items: StateFlow<NonEmptyList<BudgetItemProjector>?> = model
@@ -84,7 +79,7 @@ class BudgetsListProjector(
                     modifier = Modifier.padding(contentPadding),
                 ) {
                     TopBarTitle {
-                        Text(stringResource(Res.string.budgets))
+                        Text((dependencies.localization.budgets))
                     }
                     TopBarAction(
                         onClick = model::openSync,
@@ -98,7 +93,7 @@ class BudgetsListProjector(
                 transitionSpec = TransitionSpec.crossfade(),
                 nullContent = {
                     ErrorPanel(
-                        title = { Text(stringResource(Res.string.no_budgets)) },
+                        title = { Text(dependencies.localization.noBudgets) },
                         button = {
                             Column(
                                 verticalArrangement = Arrangement.spacedBy(Dimens.smallSeparation),
@@ -107,17 +102,17 @@ class BudgetsListProjector(
                                 Button(
                                     onClick = model::createNewBudget,
                                 ) {
-                                    Text(stringResource(Res.string.create_new_budget))
+                                    Text(dependencies.localization.createNewBudget)
                                 }
                                 OutlinedButton(
                                     onClick = model::openSync,
                                 ) {
-                                    Text(stringResource(Res.string.budgets_sync))
+                                    Text(dependencies.localization.budgetsSync)
                                 }
                                 OutlinedButton(
                                     onClick = model::createDemoBudget,
                                 ) {
-                                    Text(stringResource(Res.string.create_demo_budget))
+                                    Text(dependencies.localization.createDemoBudget)
                                 }
                             }
                         })
@@ -144,7 +139,7 @@ class BudgetsListProjector(
                         ExtendedFloatingActionButton(
                             onClick = model::createNewBudget,
                             icon = { Icon(Icons.Filled.Add) },
-                            text = { Text(stringResource(Res.string.add)) },
+                            text = { Text((dependencies.localization.add)) },
                         )
                     }
                 }

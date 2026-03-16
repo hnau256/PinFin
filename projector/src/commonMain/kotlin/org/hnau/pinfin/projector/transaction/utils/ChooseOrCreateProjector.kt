@@ -22,6 +22,7 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.KeyboardCapitalization
+import kotlinx.coroutines.flow.StateFlow
 import org.hnau.commons.app.projector.uikit.row.ChipsFlowRow
 import org.hnau.commons.app.projector.uikit.state.NullableStateContent
 import org.hnau.commons.app.projector.uikit.state.StateContent
@@ -30,21 +31,26 @@ import org.hnau.commons.app.projector.uikit.utils.Dimens
 import org.hnau.commons.app.projector.utils.Icon
 import org.hnau.commons.app.projector.utils.collectAsTextFieldValueMutableAccessor
 import org.hnau.commons.app.projector.utils.horizontalDisplayPadding
+import org.hnau.commons.gen.pipe.annotations.Pipe
 import org.hnau.pinfin.model.transaction.utils.ChooseOrCreateModel
-import org.hnau.pinfin.projector.Res
-import org.hnau.pinfin.projector.search_create
+import org.hnau.pinfin.projector.Localization
 import org.hnau.pinfin.projector.utils.LabelDefaults
-import kotlinx.coroutines.flow.StateFlow
-import org.jetbrains.compose.resources.stringResource
 
 class ChooseOrCreateProjector<T : Comparable<T>>(
     private val model: ChooseOrCreateModel<T>,
+    private val dependencies: Dependencies,
     private val itemContent: @Composable (
         value: T,
         isSelected: StateFlow<Boolean>,
         onClick: () -> Unit,
     ) -> Unit,
 ) {
+
+    @Pipe
+    interface Dependencies {
+
+        val localization: Localization
+    }
 
     @Composable
     private fun ChooseOrCreateModel.State.Item<T>.Content() {
@@ -197,7 +203,7 @@ class ChooseOrCreateProjector<T : Comparable<T>>(
             value = query,
             onValueChange = { query = it },
             maxLines = 1,
-            placeholder = { Text(stringResource(Res.string.search_create)) },
+            placeholder = { Text(dependencies.localization.searchCreate) },
             keyboardOptions = KeyboardOptions(
                 capitalization = KeyboardCapitalization.Sentences,
             )

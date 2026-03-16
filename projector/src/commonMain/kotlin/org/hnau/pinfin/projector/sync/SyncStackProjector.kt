@@ -63,7 +63,6 @@ class SyncStackProjector(
                 model.fold(
                     ifStart = { startModel ->
                         PageProjector.start(
-                            scope = scope,
                             model = startModel,
                             dependencies = dependencies.start(),
                         )
@@ -77,7 +76,6 @@ class SyncStackProjector(
                     },
                     ifServer ={ serverModel ->
                         PageProjector.server(
-                            scope = scope,
                             model = serverModel,
                             dependencies = dependencies.server(),
                         )

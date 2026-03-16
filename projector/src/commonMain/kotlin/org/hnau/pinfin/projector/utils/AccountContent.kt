@@ -4,13 +4,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Shape
 import org.hnau.pinfin.model.utils.budget.state.AccountInfo
-import org.hnau.pinfin.projector.Res
-import org.hnau.pinfin.projector.account
-import org.jetbrains.compose.resources.stringResource
+import org.hnau.pinfin.projector.Localization
 
 @Composable
 fun AccountContent(
     info: AccountInfo?,
+    localization: Localization,
     modifier: Modifier = Modifier,
     selected: Boolean = false,
     shape: Shape = LabelDefaults.shape,
@@ -29,6 +28,6 @@ fun AccountContent(
         extractHue = AccountInfo::hue,
         extractIcon = { info -> info.icon?.image },
         extractTitle = AccountInfo::title,
-        entityTypeName = stringResource(Res.string.account),
+        entityTypeName = localization.account,
     )
 }

@@ -4,13 +4,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Shape
 import org.hnau.pinfin.model.utils.budget.state.CategoryInfo
-import org.hnau.pinfin.projector.Res
-import org.hnau.pinfin.projector.category
-import org.jetbrains.compose.resources.stringResource
+import org.hnau.pinfin.projector.Localization
 
 @Composable
 fun CategoryContent(
     info: CategoryInfo?,
+    localization: Localization,
     modifier: Modifier = Modifier,
     selected: Boolean = false,
     shape: Shape = LabelDefaults.shape,
@@ -29,6 +28,6 @@ fun CategoryContent(
         extractHue = CategoryInfo::hue,
         extractIcon = { info -> info.icon?.image },
         extractTitle = CategoryInfo::title,
-        entityTypeName = stringResource(Res.string.category),
+        entityTypeName = localization.category,
     )
 }

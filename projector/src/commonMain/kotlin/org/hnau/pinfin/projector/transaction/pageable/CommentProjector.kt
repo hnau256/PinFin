@@ -29,18 +29,24 @@ import org.hnau.commons.app.projector.uikit.state.TransitionSpec
 import org.hnau.commons.app.projector.uikit.utils.Dimens
 import org.hnau.commons.app.projector.utils.collectAsTextFieldValueMutableAccessor
 import org.hnau.commons.app.projector.utils.horizontalDisplayPadding
+import org.hnau.commons.gen.pipe.annotations.Pipe
 import org.hnau.commons.kotlin.foldBoolean
 import org.hnau.pinfin.model.transaction.pageable.CommentModel
-import org.hnau.pinfin.projector.Res
-import org.hnau.pinfin.projector.comment
+import org.hnau.pinfin.projector.Localization
 import org.hnau.pinfin.projector.transaction.utils.PartDefaults
 import org.hnau.pinfin.projector.utils.Label
 import org.hnau.pinfin.projector.utils.LabelDefaults
-import org.jetbrains.compose.resources.stringResource
 
 class CommentProjector(
     private val model: CommentModel,
+    private val dependencies: Dependencies,
 ) {
+
+    @Pipe
+    interface Dependencies {
+
+        val localization: Localization
+    }
 
     class Page(
         private val model: CommentModel.Page,
@@ -113,7 +119,7 @@ class CommentProjector(
                     value = newValue
                 }
             },
-            placeholder = { Text(stringResource(Res.string.comment)) },
+            placeholder = { Text(dependencies.localization.comment) },
             keyboardOptions = KeyboardOptions(
                 capitalization = KeyboardCapitalization.Sentences,
                 imeAction = ImeAction.Next,

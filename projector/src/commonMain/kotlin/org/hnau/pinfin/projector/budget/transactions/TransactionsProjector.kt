@@ -43,6 +43,7 @@ import org.hnau.pinfin.projector.utils.formatter.AmountFormatter
 import org.hnau.pinfin.projector.utils.formatter.datetime.DateTimeFormatter
 import org.hnau.commons.gen.pipe.annotations.Pipe
 import kotlinx.coroutines.CoroutineScope
+import org.hnau.pinfin.projector.Localization
 import org.jetbrains.compose.resources.stringResource
 import kotlin.uuid.ExperimentalUuidApi
 
@@ -60,6 +61,8 @@ class TransactionsProjector(
         val amountFormatter: AmountFormatter
 
         val backButtonWidth: BackButtonWidth
+
+        val localization: Localization
 
         fun filter(): FilterProjector.Dependencies
     }
@@ -123,13 +126,13 @@ class TransactionsProjector(
                 nullContent = {
                     ErrorPanel(
                         title = {
-                            Text(stringResource(Res.string.no_transactions))
+                            Text(dependencies.localization.noTransactions)
                         },
                         button = {
                             Button(
                                 onClick = model::onAddTransactionClick,
                             ) {
-                                Text(stringResource(Res.string.add_transaction))
+                                Text(dependencies.localization.addTransaction)
                             }
                         }
                     )

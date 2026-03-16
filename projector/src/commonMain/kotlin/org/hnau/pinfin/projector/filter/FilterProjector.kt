@@ -51,11 +51,20 @@ class FilterProjector(
     interface Dependencies {
 
         val backButtonWidth: BackButtonWidth
+
+        fun selectCategories(): SelectCategoriesProjector.Dependencies
+
+        fun selectAccounts(): SelectAccountsProjector.Dependencies
+
+        fun selectCategoriesPage(): SelectCategoriesProjector.Page.Dependencies
+
+        fun selectAccountsPage(): SelectAccountsProjector.Page.Dependencies
     }
 
     class Config(
         scope: CoroutineScope,
         model: FilterModel.Config,
+        dependencies: Dependencies,
     ) {
 
         sealed interface Page {
@@ -94,10 +103,12 @@ class FilterProjector(
 
         private val categories = SelectCategoriesProjector(
             model = model.categories,
+            dependencies = dependencies.selectCategories(),
         )
 
         private val accounts = SelectAccountsProjector(
             model = model.accounts,
+            dependencies = dependencies.selectAccounts(),
         )
 
         private val page: StateFlow<Pair<FilterModel.Tab, Page>> = model
@@ -107,12 +118,14 @@ class FilterProjector(
                     is FilterModel.Config.Type.Categories -> Page.Categories(
                         SelectCategoriesProjector.Page(
                             model = type.model,
+                            dependencies = dependencies.selectCategoriesPage(),
                         )
                     )
 
                     is FilterModel.Config.Type.Accounts -> Page.Accounts(
                         SelectAccountsProjector.Page(
                             model = type.model,
+                            dependencies = dependencies.selectAccountsPage(),
                         )
                     )
                 }
@@ -169,6 +182,7 @@ class FilterProjector(
                 Config(
                     scope = scope,
                     model = config,
+                    dependencies = dependencies,
                 )
             }
         }

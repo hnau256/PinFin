@@ -37,6 +37,7 @@ import org.hnau.pinfin.projector.utils.HueSlider
 import org.hnau.pinfin.projector.utils.image
 import org.hnau.commons.gen.pipe.annotations.Pipe
 import kotlinx.coroutines.CoroutineScope
+import org.hnau.pinfin.projector.Localization
 import org.jetbrains.compose.resources.stringResource
 
 class CategoryProjector(
@@ -49,6 +50,8 @@ class CategoryProjector(
     interface Dependencies {
 
         val backButtonWidth: BackButtonWidth
+
+        val localization: Localization
     }
 
     @OptIn(ExperimentalMaterial3Api::class)
@@ -60,7 +63,7 @@ class CategoryProjector(
                 TopBar(
                     modifier = Modifier.padding(contentPadding),
                 ) {
-                    TopBarTitle { Text(stringResource(Res.string.category_settings)) }
+                    TopBarTitle { Text(dependencies.localization.categorySettings) }
                     SaveAction()
                 }
             },
@@ -76,7 +79,7 @@ class CategoryProjector(
                     ListItem(
                         modifier = Modifier.fillMaxWidth(),
                         overlineContent = {
-                            Text(stringResource(Res.string.name))
+                            Text((dependencies.localization.name))
                         },
                         headlineContent = {
                             val focusRequester = remember { FocusRequester() }
@@ -97,7 +100,7 @@ class CategoryProjector(
                     ListItem(
                         modifier = Modifier.fillMaxWidth(),
                         overlineContent = {
-                            Text(stringResource(Res.string.hue))
+                            Text((dependencies.localization.hue))
                         },
                         headlineContent = {
                             HueSlider(
@@ -116,7 +119,7 @@ class CategoryProjector(
                             .fillMaxWidth()
                             .clickable { model.chooseIcon() },
                         headlineContent = {
-                            Text(stringResource(Res.string.icon))
+                            Text((dependencies.localization.icon))
                         },
                         trailingContent = {
                             Icon(

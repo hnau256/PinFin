@@ -1,5 +1,8 @@
 package org.hnau.pinfin.projector
 
+import androidx.compose.runtime.Immutable
+
+@Immutable
 data class Localization(
     val appName: String,
     val comment: String,

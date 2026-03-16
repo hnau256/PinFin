@@ -13,21 +13,22 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.StateFlow
 import org.hnau.commons.app.projector.uikit.state.StateContent
 import org.hnau.commons.app.projector.uikit.utils.Dimens
 import org.hnau.commons.app.projector.utils.Icon
 import org.hnau.commons.app.projector.utils.SlideOrientation
+import org.hnau.commons.gen.pipe.annotations.Pipe
 import org.hnau.commons.kotlin.coroutines.flow.state.mapWithScope
 import org.hnau.pinfin.model.transaction.pageable.EntryModel
 import org.hnau.pinfin.model.utils.budget.state.AccountInfo
+import org.hnau.pinfin.projector.Localization
 import org.hnau.pinfin.projector.transaction.utils.ChooseOrCreateProjector
 import org.hnau.pinfin.projector.transaction.utils.createPagesTransitionSpec
 import org.hnau.pinfin.projector.utils.ArrowDirection
 import org.hnau.pinfin.projector.utils.ArrowIcon
 import org.hnau.pinfin.projector.utils.formatter.AmountFormatter
-import org.hnau.commons.gen.pipe.annotations.Pipe
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.flow.StateFlow
 
 class EntryProjector(
     scope: CoroutineScope,
@@ -39,18 +40,28 @@ class EntryProjector(
     interface Dependencies {
 
         val amountFormatter: AmountFormatter
+
+        val localization: Localization
+
+        fun account(): AccountProjector.Dependencies
+
+        fun records(): RecordsProjector.Dependencies
     }
 
     class Page(
         scope: CoroutineScope,
         model: EntryModel.Page,
-        dependencies: Dependencies,
+        private val dependencies: Dependencies,
     ) {
 
         @Pipe
         interface Dependencies {
 
             fun records(): RecordsProjector.Page.Dependencies
+
+            fun accountProjectorCompanion(): AccountProjector.Companion.Dependencies
+
+            val localization: Localization
         }
 
         sealed interface PageType {
@@ -61,6 +72,7 @@ class EntryProjector(
             fun Content(
                 modifier: Modifier,
                 contentPadding: PaddingValues,
+                dependencies: Dependencies,
             )
 
             data class Records(
@@ -73,6 +85,7 @@ class EntryProjector(
                 override fun Content(
                     modifier: Modifier,
                     contentPadding: PaddingValues,
+                    dependencies: Dependencies,
                 ) {
                     projector.Content(
                         modifier = modifier,
@@ -91,10 +104,13 @@ class EntryProjector(
                 override fun Content(
                     modifier: Modifier,
                     contentPadding: PaddingValues,
+                    dependencies: Dependencies,
                 ) {
                     projector.Content(
                         modifier = modifier.padding(contentPadding),
-                        messages = AccountProjector.chooseMessages,
+                        messages = AccountProjector.chooseMessages(
+                            dependencies = dependencies.accountProjectorCompanion(),
+                        ),
                     )
                 }
             }
@@ -115,6 +131,7 @@ class EntryProjector(
                     is EntryModel.PageType.Account -> PageType.Account(
                         projector = AccountProjector.createPage(
                             model = type.model,
+                            dependencies = dependencies.accountProjectorCompanion(),
                         )
                     )
                 }
@@ -140,6 +157,7 @@ class EntryProjector(
                     type.Content(
                         modifier = Modifier.fillMaxSize(),
                         contentPadding = contentPadding,
+                        dependencies = dependencies,
                     )
                 }
         }
@@ -148,10 +166,12 @@ class EntryProjector(
     private val records = RecordsProjector(
         scope = scope,
         model = model.records,
+        dependencies = dependencies.records(),
     )
 
     private val account = AccountProjector(
         model = model.account,
+        dependencies = dependencies.account(),
     )
 
     @Composable

@@ -9,23 +9,36 @@ import androidx.compose.runtime.remember
 import arrow.core.NonEmptyList
 import org.hnau.commons.app.projector.uikit.row.ChipsFlowRow
 import org.hnau.commons.app.projector.utils.collectAsMutableAccessor
+import org.hnau.commons.gen.pipe.annotations.Pipe
 import org.hnau.commons.kotlin.foldBoolean
 import org.hnau.commons.kotlin.foldNullable
 import org.hnau.pinfin.model.filter.pageable.SelectCategoriesModel
 import org.hnau.pinfin.model.utils.budget.state.CategoryInfo
-import org.hnau.pinfin.projector.Res
-import org.hnau.pinfin.projector.categories
+import org.hnau.pinfin.projector.Localization
 import org.hnau.pinfin.projector.utils.CategoryContent
 import org.hnau.pinfin.projector.utils.Label
-import org.jetbrains.compose.resources.stringResource
 
 class SelectCategoriesProjector(
     private val model: SelectCategoriesModel,
+    private val dependencies: Dependencies,
 ) {
+
+    @Pipe
+    interface Dependencies {
+
+        val localization: Localization
+    }
 
     class Page(
         private val model: SelectCategoriesModel.Page,
+        private val dependencies: Dependencies,
     ) {
+
+        @Pipe
+        interface Dependencies {
+
+            val localization: Localization
+        }
 
         @Composable
         fun Content() {
@@ -38,6 +51,7 @@ class SelectCategoriesProjector(
                     info = item.info,
                     selected = selected,
                     onClick = { selected = !selected },
+                    localization = dependencies.localization,
                 )
             }
         }
@@ -57,7 +71,7 @@ class SelectCategoriesProjector(
         ) {
             Text(
                 selectedCategories.foldNullable(
-                    ifNull = { stringResource(Res.string.categories) },
+                    ifNull = { (dependencies.localization.categories) },
                     ifNotNull = { categories ->
                         remember(categories) {
                             listOfNotNull(

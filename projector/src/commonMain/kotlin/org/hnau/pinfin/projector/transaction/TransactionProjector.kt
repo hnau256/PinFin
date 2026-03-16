@@ -41,6 +41,8 @@ class TransactionProjector(
 
         fun page(): PageProjector.Dependencies
 
+        fun dialogs(): DialogsProjector.Dependencies
+
         val backButtonWidth: BackButtonWidth
     }
 
@@ -65,6 +67,7 @@ class TransactionProjector(
 
     private val dialogs = DialogsProjector(
         model = model,
+        dependencies = dependencies.dialogs(),
     )
 
     private val topBarActions = TopBarActionsProjector(

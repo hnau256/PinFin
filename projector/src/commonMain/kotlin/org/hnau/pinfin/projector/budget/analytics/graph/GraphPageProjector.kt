@@ -44,6 +44,7 @@ import org.hnau.pinfin.projector.utils.AmountContent
 import org.hnau.pinfin.projector.utils.CategoryContent
 import org.hnau.pinfin.projector.utils.formatter.AmountFormatter
 import org.hnau.commons.gen.pipe.annotations.Pipe
+import org.hnau.pinfin.projector.Localization
 import org.jetbrains.compose.resources.stringResource
 
 class GraphPageProjector(
@@ -55,6 +56,8 @@ class GraphPageProjector(
     interface Dependencies {
 
         val amountFormatter: AmountFormatter
+
+        val localization: Localization
     }
 
     @Composable
@@ -94,7 +97,7 @@ class GraphPageProjector(
             state.total?.let { total ->
                 header(
                     key = "total_header",
-                    title = { stringResource(Res.string.total) },
+                    title = { (dependencies.localization.total) },
                     amount = total,
                 )
             }
@@ -193,6 +196,7 @@ class GraphPageProjector(
             ) {
                 AccountContent(
                     info = key.account,
+                    localization = dependencies.localization,
                 )
             }
 
@@ -204,6 +208,7 @@ class GraphPageProjector(
                 title = {
                     CategoryContent(
                         info = key.category,
+                        localization = dependencies.localization,
                     )
                 }
             )

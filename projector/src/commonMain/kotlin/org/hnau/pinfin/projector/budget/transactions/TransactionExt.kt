@@ -32,6 +32,7 @@ import org.hnau.pinfin.projector.utils.ArrowIcon
 import org.hnau.pinfin.projector.utils.CategoryContent
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
+import org.hnau.pinfin.projector.Localization
 
 @Composable
 fun TransactionInfo.Content(
@@ -90,6 +91,7 @@ fun TransactionInfo.CellContent(
 
                 is TransactionInfo.Type.Transfer -> TransferContent(
                     transfer = type,
+                    dependencies = dependencies,
                 )
             }
             CommentContent()
@@ -177,6 +179,7 @@ private fun EntryContent(
             categories.fastForEach { categoryInfo ->
                 CategoryContent(
                     info = categoryInfo,
+                    localization = dependencies.localization,
                 )
             }
         }
@@ -186,6 +189,7 @@ private fun EntryContent(
         )
         AccountContent(
             info = entry.account,
+            localization = dependencies.localization,
         )
     }
 }
@@ -193,12 +197,14 @@ private fun EntryContent(
 @Composable
 private fun TransferContent(
     transfer: TransactionInfo.Type.Transfer,
+    dependencies: TransactionsProjector.Dependencies,
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
     ) {
         AccountContent(
             info = transfer.from,
+            localization = dependencies.localization,
         )
         Icon(
             modifier = Modifier.padding(
@@ -208,6 +214,7 @@ private fun TransferContent(
         )
         AccountContent(
             info = transfer.to,
+            localization = dependencies.localization,
         )
     }
 }
