@@ -106,7 +106,11 @@ class GraphModel(
                         dependencies = dependencies.configured(),
                         configure = {
                             updateState(
-                                StateSkeleton.configure()
+                                StateSkeleton.configure(
+                                    configure = GraphConfigureModel.Skeleton.create(
+                                        initialConfig = skeleton.config.value,
+                                    )
+                                )
                             )
                         },
                         configStateFlow = skeleton.config,
@@ -117,12 +121,21 @@ class GraphModel(
                         scope = scope,
                         skeleton = configure,
                         dependencies = dependencies.configure(),
-                        updateConfig = skeleton.config::value::set,
-                        config = skeleton.config,
+                        onReady = { newConfig ->
+                            skeleton.config.value = newConfig
+                            switchToConfigured()
+                        },
+                        onCancel = ::switchToConfigured,
                     )
                 },
             )
         }
+
+    private fun switchToConfigured() {
+        updateState(
+            StateSkeleton.configured(),
+        )
+    }
 
     private fun updateState(
         newState: GraphStateSkeleton,
@@ -144,13 +157,7 @@ class GraphModel(
                         .mapState(scope) { state ->
                             state.fold(
                                 ifConfigured = { null },
-                                ifConfigure = {
-                                    {
-                                        updateState(
-                                            StateSkeleton.configured(),
-                                        )
-                                    }
-                                }
+                                ifConfigure = { ::switchToConfigured },
                             )
                         }
                 },

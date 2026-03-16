@@ -1,7 +1,6 @@
 package org.hnau.pinfin.model.budget.analytics.tab.graph.configure
 
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.serialization.Serializable
 import org.hnau.commons.app.model.goback.GoBackHandler
 import org.hnau.commons.app.model.goback.NeverGoBackHandler
@@ -12,15 +11,25 @@ class GraphConfigureModel(
     scope: CoroutineScope,
     dependencies: Dependencies,
     skeleton: Skeleton,
-    val config: StateFlow<AnalyticsConfig>,
-    updateConfig: (AnalyticsConfig) -> Unit,
+    onReady: (AnalyticsConfig) -> Unit,
+    onCancel: () -> Unit,
 ) {
 
     @Pipe
     interface Dependencies
 
     @Serializable
-    /*data*/ class Skeleton
+    /*data*/ class Skeleton(
+
+    ) {
+        companion object {
+
+            fun create(
+                initialConfig: AnalyticsConfig,
+            ): Skeleton = TODO()
+        }
+
+    }
 
     val goBackHandler: GoBackHandler
         get() = NeverGoBackHandler
