@@ -81,17 +81,9 @@ class GraphModel(
     @Pipe
     interface Dependencies {
 
-        @Pipe
-        interface WithConfig {
+        fun configured(): GraphConfiguredModel.Dependencies
 
-            fun configured(): GraphConfiguredModel.Dependencies
-
-            fun configure(): GraphConfigureModel.Dependencies
-        }
-
-        fun withConfig(
-            config: StateFlow<AnalyticsConfig>,
-        ): WithConfig
+        fun configure(): GraphConfigureModel.Dependencies
     }
 
     @Serializable
@@ -103,9 +95,6 @@ class GraphModel(
             StateSkeleton.configured().toMutableStateFlowAsInitial(),
     )
 
-    private val dependenciesWithConfig = dependencies
-        .withConfig(skeleton.config)
-
     val state: StateFlow<GraphStateModel> = skeleton
         .state
         .mapWithScope(scope) { scope, state ->
@@ -114,20 +103,22 @@ class GraphModel(
                     State.configured(
                         scope = scope,
                         skeleton = configured,
-                        dependencies = dependenciesWithConfig.configured(),
-                        config = {
+                        dependencies = dependencies.configured(),
+                        configure = {
                             updateState(
                                 StateSkeleton.configure()
                             )
-                        }
+                        },
+                        config = skeleton.config,
                     )
                 },
                 ifConfigure = { configure ->
                     State.configure(
                         scope = scope,
                         skeleton = configure,
-                        dependencies = dependenciesWithConfig.configure(),
+                        dependencies = dependencies.configure(),
                         updateConfig = skeleton.config::value::set,
+                        config = skeleton.config,
                     )
                 },
             )

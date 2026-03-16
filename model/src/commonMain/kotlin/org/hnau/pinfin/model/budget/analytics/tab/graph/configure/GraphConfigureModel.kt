@@ -12,14 +12,12 @@ class GraphConfigureModel(
     scope: CoroutineScope,
     dependencies: Dependencies,
     skeleton: Skeleton,
+    val config: StateFlow<AnalyticsConfig>,
     updateConfig: (AnalyticsConfig) -> Unit,
 ) {
 
     @Pipe
-    sealed interface Dependencies {
-
-        val config: StateFlow<AnalyticsConfig>
-    }
+    interface Dependencies
 
     @Serializable
     /*data*/ class Skeleton

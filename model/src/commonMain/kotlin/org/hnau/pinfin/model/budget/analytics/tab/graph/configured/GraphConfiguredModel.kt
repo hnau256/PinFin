@@ -36,13 +36,12 @@ class GraphConfiguredModel(
     scope: CoroutineScope,
     dependencies: Dependencies,
     skeleton: Skeleton,
-    val config: () -> Unit,
+    val config: StateFlow<AnalyticsConfig>,
+    val configure: () -> Unit,
 ) {
 
     @Pipe
     interface Dependencies {
-
-        val config: StateFlow<AnalyticsConfig>
 
         val budgetRepository: BudgetRepository
 
@@ -59,7 +58,7 @@ class GraphConfiguredModel(
     val pages: StateFlow<Loadable<Delayed<GraphPagesModel>>> = combineState(
         scope = scope,
         first = dependencies.budgetRepository.state,
-        second = dependencies.config,
+        second = config,
     ) { state, config ->
         state to config
     }
