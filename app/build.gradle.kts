@@ -22,7 +22,7 @@ kotlin {
 
 compose.desktop {
     application {
-        mainClass = "hnau.pinfin.app.DesktopAppKt"
+        mainClass = "org.hnau.pinfin.app.DesktopAppKt"
     }
 }
 

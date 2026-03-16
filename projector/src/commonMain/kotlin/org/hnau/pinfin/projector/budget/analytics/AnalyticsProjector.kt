@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
@@ -88,7 +89,7 @@ class AnalyticsProjector(
             top = {
                 Box(
                     modifier = Modifier
-                        .statusBarsPadding(),
+                        .systemBarsPadding(),
                     contentAlignment = Alignment.Center,
                 ) {
                     Tabs(

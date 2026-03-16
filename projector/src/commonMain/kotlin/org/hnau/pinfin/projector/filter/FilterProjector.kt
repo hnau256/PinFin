@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
@@ -176,7 +177,7 @@ class FilterProjector(
     fun ContentAsTopBar() {
         Column(
             modifier = Modifier
-                .statusBarsPadding()
+                .systemBarsPadding()
                 .fillMaxWidth(),
         ) {
             Row(
