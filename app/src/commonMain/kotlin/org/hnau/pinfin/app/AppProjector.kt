@@ -1,12 +1,12 @@
 package org.hnau.pinfin.app
 
+import kotlinx.coroutines.CoroutineScope
 import org.hnau.commons.app.model.app.AppModel
 import org.hnau.commons.app.projector.app.AppProjector
 import org.hnau.pinfin.model.RootModel
+import org.hnau.pinfin.projector.Localization
 import org.hnau.pinfin.projector.RootProjector
 import org.hnau.pinfin.projector.impl
-import kotlinx.coroutines.CoroutineScope
-import org.hnau.pinfin.projector.Localization
 
 fun createAppProjector(
     scope: CoroutineScope,

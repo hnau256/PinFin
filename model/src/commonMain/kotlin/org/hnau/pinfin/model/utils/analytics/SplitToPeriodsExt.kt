@@ -3,12 +3,12 @@ package org.hnau.pinfin.model.utils.analytics
 import arrow.core.NonEmptyList
 import arrow.core.nonEmptyListOf
 import arrow.core.toNonEmptyListOrNull
-import org.hnau.commons.kotlin.foldNullable
 import kotlinx.datetime.DatePeriod
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalDateRange
 import kotlinx.datetime.minus
 import kotlinx.datetime.plus
+import org.hnau.commons.kotlin.foldNullable
 
 inline fun <T> NonEmptyList<T>.splitToPeriods(
     customStartOfOneOfPeriods: LocalDate?,

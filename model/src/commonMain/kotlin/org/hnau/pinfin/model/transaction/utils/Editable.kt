@@ -3,11 +3,11 @@ package org.hnau.pinfin.model.transaction.utils
 import arrow.core.None
 import arrow.core.Option
 import arrow.core.Some
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.StateFlow
 import org.hnau.commons.kotlin.coroutines.flow.state.flatMapWithScope
 import org.hnau.commons.kotlin.coroutines.flow.state.mapState
 import org.hnau.commons.kotlin.coroutines.flow.state.mutable.toMutableStateFlowAsInitial
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.flow.StateFlow
 
 internal sealed interface Editable<out T> {
 

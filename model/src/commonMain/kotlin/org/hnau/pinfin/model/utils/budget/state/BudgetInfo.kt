@@ -1,8 +1,8 @@
 package org.hnau.pinfin.model.utils.budget.state
 
+import kotlinx.serialization.Serializable
 import org.hnau.pinfin.data.BudgetConfig
 import org.hnau.pinfin.data.BudgetId
-import kotlinx.serialization.Serializable
 import kotlin.uuid.ExperimentalUuidApi
 
 @Serializable

@@ -5,8 +5,12 @@
 package org.hnau.pinfin.model.sync.client.list
 
 import arrow.core.Ior
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.serialization.UseSerializers
 import org.hnau.commons.app.model.goback.GoBackHandler
 import org.hnau.commons.app.model.goback.NeverGoBackHandler
+import org.hnau.commons.gen.pipe.annotations.Pipe
 import org.hnau.commons.kotlin.coroutines.flow.state.mutable.toMutableStateFlowAsInitial
 import org.hnau.commons.kotlin.serialization.MutableStateFlowSerializer
 import org.hnau.pinfin.data.BudgetId
@@ -14,10 +18,6 @@ import org.hnau.pinfin.model.sync.client.BudgetSyncOpener
 import org.hnau.pinfin.model.utils.budget.repository.BudgetRepository
 import org.hnau.pinfin.model.utils.budget.state.BudgetInfo
 import org.hnau.pinfin.model.utils.toBudgetInfoStateFlow
-import org.hnau.commons.gen.pipe.annotations.Pipe
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.serialization.UseSerializers
 
 class SyncClientListItemModel(
     scope: CoroutineScope,

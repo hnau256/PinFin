@@ -1,11 +1,11 @@
 package org.hnau.pinfin.model.sync.utils
 
-import org.hnau.commons.kotlin.mapper.Mapper
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.builtins.serializer
+import org.hnau.commons.kotlin.mapper.Mapper
 
 sealed interface ApiResponse<out T> {
 

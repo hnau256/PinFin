@@ -6,6 +6,17 @@ package org.hnau.pinfin.model
 
 import arrow.core.NonEmptyList
 import arrow.core.toNonEmptyListOrNull
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.withContext
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.UseSerializers
 import org.hnau.commons.app.model.EditingString
 import org.hnau.commons.app.model.goback.GoBackHandler
 import org.hnau.commons.app.model.toEditingString
@@ -23,17 +34,6 @@ import org.hnau.pinfin.model.utils.icons.IconVariant
 import org.hnau.pinfin.model.utils.icons.category
 import org.hnau.pinfin.model.utils.icons.tags
 import org.hnau.pinfin.model.utils.icons.weight
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.stateIn
-import kotlinx.coroutines.flow.update
-import kotlinx.coroutines.withContext
-import kotlinx.serialization.Serializable
-import kotlinx.serialization.UseSerializers
 
 class IconModel(
     scope: CoroutineScope,

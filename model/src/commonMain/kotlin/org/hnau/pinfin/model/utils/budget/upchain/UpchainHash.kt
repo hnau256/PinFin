@@ -1,14 +1,14 @@
 package org.hnau.pinfin.model.utils.budget.upchain
 
+import io.ktor.utils.io.charsets.Charsets
+import io.ktor.utils.io.core.toByteArray
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.builtins.serializer
 import org.hnau.commons.kotlin.castOrNull
 import org.hnau.commons.kotlin.mapper.Mapper
 import org.hnau.commons.kotlin.mapper.plus
 import org.hnau.commons.kotlin.mapper.stringAsBase64ByteArray
 import org.hnau.commons.kotlin.serialization.MappingKSerializer
-import io.ktor.utils.io.charsets.Charsets
-import io.ktor.utils.io.core.toByteArray
-import kotlinx.serialization.Serializable
-import kotlinx.serialization.builtins.serializer
 
 @Serializable(UpchainHash.Serializer::class)
 class UpchainHash private constructor(

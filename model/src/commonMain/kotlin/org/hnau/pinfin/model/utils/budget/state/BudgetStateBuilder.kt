@@ -1,5 +1,7 @@
 package org.hnau.pinfin.model.utils.budget.state
 
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import org.hnau.commons.kotlin.castOrNull
 import org.hnau.pinfin.data.AccountConfig
 import org.hnau.pinfin.data.AccountId
@@ -18,8 +20,6 @@ import org.hnau.pinfin.model.utils.budget.upchain.UpchainHash
 import org.hnau.pinfin.model.utils.budget.upchain.Update
 import org.hnau.pinfin.model.utils.budget.upchain.calcNext
 import org.hnau.pinfin.model.utils.budget.upchain.utils.getUpdatesAfterHashIfPossible
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
 
 data class BudgetStateBuilder(
     private val hash: UpchainHash?,

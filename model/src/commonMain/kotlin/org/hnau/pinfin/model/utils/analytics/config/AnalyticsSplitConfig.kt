@@ -6,13 +6,13 @@ package org.hnau.pinfin.model.utils.analytics.config
 
 import arrow.core.NonEmptySet
 import arrow.core.serialization.NonEmptySetSerializer
-import org.hnau.pinfin.data.AccountId
-import org.hnau.pinfin.data.CategoryId
 import kotlinx.datetime.DatePeriod
 import kotlinx.datetime.LocalDate
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.UseSerializers
+import org.hnau.pinfin.data.AccountId
+import org.hnau.pinfin.data.CategoryId
 
 @Serializable
 data class AnalyticsSplitConfig(

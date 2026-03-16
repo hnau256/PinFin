@@ -9,7 +9,15 @@ import arrow.core.NonEmptyList
 import arrow.core.nonEmptyListOf
 import arrow.core.serialization.NonEmptyListSerializer
 import arrow.core.toNonEmptyListOrNull
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.UseSerializers
 import org.hnau.commons.app.model.goback.GoBackHandler
+import org.hnau.commons.gen.pipe.annotations.Pipe
 import org.hnau.commons.kotlin.ZipList
 import org.hnau.commons.kotlin.coroutines.flow.state.combineState
 import org.hnau.commons.kotlin.coroutines.flow.state.combineStateWith
@@ -30,14 +38,6 @@ import org.hnau.pinfin.model.transaction.utils.map
 import org.hnau.pinfin.model.transaction.utils.remove
 import org.hnau.pinfin.model.utils.budget.state.CategoryInfo
 import org.hnau.pinfin.model.utils.budget.state.TransactionInfo
-import org.hnau.commons.gen.pipe.annotations.Pipe
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.update
-import kotlinx.serialization.Serializable
-import kotlinx.serialization.UseSerializers
 
 class RecordsModel(
     scope: CoroutineScope,

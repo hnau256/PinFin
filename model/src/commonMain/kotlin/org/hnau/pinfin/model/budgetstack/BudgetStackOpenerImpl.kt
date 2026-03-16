@@ -1,5 +1,6 @@
 package org.hnau.pinfin.model.budgetstack
 
+import kotlinx.coroutines.flow.MutableStateFlow
 import org.hnau.commons.app.model.stack.NonEmptyStack
 import org.hnau.commons.app.model.stack.push
 import org.hnau.pinfin.data.TransactionType
@@ -7,7 +8,6 @@ import org.hnau.pinfin.model.transaction.TransactionModel
 import org.hnau.pinfin.model.utils.budget.state.AccountInfo
 import org.hnau.pinfin.model.utils.budget.state.CategoryInfo
 import org.hnau.pinfin.model.utils.budget.state.TransactionInfo
-import kotlinx.coroutines.flow.MutableStateFlow
 
 class BudgetStackOpenerImpl(
     private val stack: MutableStateFlow<NonEmptyStack<BudgetStackElementSkeleton>>,

@@ -6,14 +6,14 @@ package org.hnau.pinfin.model.utils.analytics
 
 import arrow.core.NonEmptySet
 import arrow.core.serialization.NonEmptySetSerializer
-import org.hnau.pinfin.data.AccountId
-import org.hnau.pinfin.data.CategoryId
-import org.hnau.pinfin.model.utils.budget.state.AccountInfo
-import org.hnau.pinfin.model.utils.budget.state.CategoryInfo
 import kotlinx.datetime.LocalDateRange
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.UseSerializers
+import org.hnau.pinfin.data.AccountId
+import org.hnau.pinfin.data.CategoryId
+import org.hnau.pinfin.model.utils.budget.state.AccountInfo
+import org.hnau.pinfin.model.utils.budget.state.CategoryInfo
 
 data class AnalyticsPage(
     val period: LocalDateRange,

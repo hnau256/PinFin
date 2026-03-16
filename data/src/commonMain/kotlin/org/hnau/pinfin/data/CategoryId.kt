@@ -1,7 +1,7 @@
 package org.hnau.pinfin.data
 
-import org.hnau.commons.kotlin.mapper.Mapper
 import kotlinx.serialization.Serializable
+import org.hnau.commons.kotlin.mapper.Mapper
 import kotlin.jvm.JvmInline
 
 @Serializable

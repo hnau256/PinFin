@@ -1,14 +1,14 @@
 package org.hnau.pinfin.model.sync.utils
 
+import kotlinx.serialization.KSerializer
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.builtins.serializer
 import org.hnau.pinfin.data.BudgetId
 import org.hnau.pinfin.model.utils.budget.state.BudgetInfo
 import org.hnau.pinfin.model.utils.budget.upchain.Upchain
 import org.hnau.pinfin.model.utils.budget.upchain.UpchainHash
 import org.hnau.pinfin.model.utils.budget.upchain.Update
-import kotlinx.serialization.KSerializer
-import kotlinx.serialization.SerialName
-import kotlinx.serialization.Serializable
-import kotlinx.serialization.builtins.serializer
 
 @Serializable
 sealed interface SyncHandle<O> {

@@ -4,6 +4,11 @@
 
 package org.hnau.pinfin.model.sync
 
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.UseSerializers
 import org.hnau.commons.app.model.goback.GoBackHandler
 import org.hnau.commons.app.model.stack.NonEmptyStack
 import org.hnau.commons.app.model.stack.SkeletonWithModel
@@ -12,6 +17,7 @@ import org.hnau.commons.app.model.stack.modelsOnly
 import org.hnau.commons.app.model.stack.push
 import org.hnau.commons.app.model.stack.tryDropLast
 import org.hnau.commons.app.model.stack.withModels
+import org.hnau.commons.gen.pipe.annotations.Pipe
 import org.hnau.commons.gen.sealup.annotations.SealUp
 import org.hnau.commons.gen.sealup.annotations.Variant
 import org.hnau.commons.kotlin.coroutines.flow.state.mutable.toMutableStateFlowAsInitial
@@ -19,12 +25,6 @@ import org.hnau.commons.kotlin.serialization.MutableStateFlowSerializer
 import org.hnau.pinfin.model.sync.client.SyncClientStackModel
 import org.hnau.pinfin.model.sync.server.SyncServerModel
 import org.hnau.pinfin.model.sync.start.StartSyncModel
-import org.hnau.commons.gen.pipe.annotations.Pipe
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.serialization.Serializable
-import kotlinx.serialization.UseSerializers
 
 class SyncStackModel(
     scope: CoroutineScope,

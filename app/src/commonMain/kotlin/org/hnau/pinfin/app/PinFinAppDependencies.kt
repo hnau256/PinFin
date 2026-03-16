@@ -1,8 +1,8 @@
 package org.hnau.pinfin.app
 
+import org.hnau.commons.gen.pipe.annotations.Pipe
 import org.hnau.pinfin.model.sync.server.InetAddressesProvider
 import org.hnau.pinfin.model.utils.budget.upchain.Sha256
-import org.hnau.commons.gen.pipe.annotations.Pipe
 
 @Pipe
 interface PinFinAppDependencies {

@@ -2,12 +2,12 @@ package org.hnau.pinfin.model.utils.analytics
 
 import arrow.core.NonEmptyList
 import arrow.core.nonEmptyListOf
-import org.hnau.commons.kotlin.foldBoolean
 import kotlinx.datetime.DatePeriod
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalDateRange
 import kotlinx.datetime.minus
 import kotlinx.datetime.plus
+import org.hnau.commons.kotlin.foldBoolean
 
 
 internal fun LocalDateRange.splitToPeriods(

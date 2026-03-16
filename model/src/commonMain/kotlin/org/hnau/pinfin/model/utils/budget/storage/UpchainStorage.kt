@@ -1,7 +1,7 @@
 package org.hnau.pinfin.model.utils.budget.storage
 
-import org.hnau.pinfin.model.utils.budget.upchain.Upchain
 import kotlinx.coroutines.flow.StateFlow
+import org.hnau.pinfin.model.utils.budget.upchain.Upchain
 
 interface UpchainStorage {
 

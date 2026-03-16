@@ -1,12 +1,12 @@
 package org.hnau.pinfin.model
 
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.serialization.Serializable
 import org.hnau.commons.app.model.goback.GoBackHandler
+import org.hnau.commons.gen.pipe.annotations.Pipe
 import org.hnau.commons.kotlin.getOrInit
 import org.hnau.commons.kotlin.toAccessor
 import org.hnau.pinfin.model.loadbudgets.LoadBudgetsModel
-import org.hnau.commons.gen.pipe.annotations.Pipe
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.serialization.Serializable
 
 class RootModel(
     scope: CoroutineScope,

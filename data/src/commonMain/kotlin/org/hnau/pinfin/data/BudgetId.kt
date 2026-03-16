@@ -1,10 +1,10 @@
 package org.hnau.pinfin.data
 
+import kotlinx.serialization.Serializable
 import org.hnau.commons.kotlin.mapper.Mapper
 import org.hnau.commons.kotlin.mapper.plus
 import org.hnau.commons.kotlin.mapper.stringToUuid
 import org.hnau.commons.kotlin.serialization.UuidSerializer
-import kotlinx.serialization.Serializable
 import kotlin.jvm.JvmInline
 import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid

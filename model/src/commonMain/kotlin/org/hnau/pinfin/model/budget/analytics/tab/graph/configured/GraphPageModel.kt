@@ -7,7 +7,14 @@ package org.hnau.pinfin.model.budget.analytics.tab.graph.configured
 import arrow.core.NonEmptyList
 import arrow.core.toNonEmptyListOrNull
 import arrow.core.toNonEmptyListOrThrow
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.datetime.LocalDateRange
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.UseSerializers
 import org.hnau.commons.app.model.ListScrollState
+import org.hnau.commons.gen.pipe.annotations.Pipe
 import org.hnau.commons.kotlin.KeyValue
 import org.hnau.commons.kotlin.Loadable
 import org.hnau.commons.kotlin.LoadableStateFlow
@@ -19,19 +26,12 @@ import org.hnau.pinfin.data.Amount
 import org.hnau.pinfin.data.AmountDirection
 import org.hnau.pinfin.data.AmountDirectionValues
 import org.hnau.pinfin.data.sum
+import org.hnau.pinfin.model.budget.analytics.tab.graph.TransactionsOpener
 import org.hnau.pinfin.model.filter.Filters
 import org.hnau.pinfin.model.utils.analytics.AnalyticsEntry
 import org.hnau.pinfin.model.utils.analytics.AnalyticsPage
 import org.hnau.pinfin.model.utils.analytics.config.AnalyticsPageConfig
 import org.hnau.pinfin.model.utils.analytics.splitToPeriods
-import org.hnau.commons.gen.pipe.annotations.Pipe
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.datetime.LocalDateRange
-import kotlinx.serialization.Serializable
-import kotlinx.serialization.UseSerializers
-import org.hnau.pinfin.model.budget.analytics.tab.graph.TransactionsOpener
 
 class GraphPageModel(
     scope: CoroutineScope,

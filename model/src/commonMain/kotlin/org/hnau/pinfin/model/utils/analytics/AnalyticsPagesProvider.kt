@@ -4,16 +4,16 @@ import arrow.core.NonEmptyList
 import arrow.core.nonEmptyListOf
 import arrow.core.nonEmptySetOf
 import arrow.core.toNonEmptyListOrNull
-import org.hnau.commons.kotlin.foldNullable
-import org.hnau.commons.kotlin.map
-import org.hnau.pinfin.model.utils.analytics.config.AnalyticsSplitConfig
-import org.hnau.pinfin.model.utils.budget.state.BudgetState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalDateRange
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
+import org.hnau.commons.kotlin.foldNullable
+import org.hnau.commons.kotlin.map
+import org.hnau.pinfin.model.utils.analytics.config.AnalyticsSplitConfig
+import org.hnau.pinfin.model.utils.budget.state.BudgetState
 
 data class AnalyticsPagesProvider(
     private val config: AnalyticsSplitConfig,

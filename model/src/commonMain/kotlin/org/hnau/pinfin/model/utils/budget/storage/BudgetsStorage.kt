@@ -1,9 +1,9 @@
 package org.hnau.pinfin.model.utils.budget.storage
 
-import org.hnau.pinfin.data.BudgetId
-import org.hnau.pinfin.model.utils.budget.repository.BudgetRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.StateFlow
+import org.hnau.pinfin.data.BudgetId
+import org.hnau.pinfin.model.utils.budget.repository.BudgetRepository
 
 interface BudgetsStorage {
 

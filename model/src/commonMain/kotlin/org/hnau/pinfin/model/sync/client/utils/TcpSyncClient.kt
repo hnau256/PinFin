@@ -1,14 +1,6 @@
 package org.hnau.pinfin.model.sync.client.utils
 
 import arrow.core.flatMap
-import org.hnau.pinfin.model.sync.utils.ApiResponse
-import org.hnau.pinfin.model.sync.utils.ServerAddress
-import org.hnau.pinfin.model.sync.utils.ServerPort
-import org.hnau.pinfin.model.sync.utils.SyncApi
-import org.hnau.pinfin.model.sync.utils.SyncConstants
-import org.hnau.pinfin.model.sync.utils.SyncHandle
-import org.hnau.pinfin.model.sync.utils.readSizeWithBytes
-import org.hnau.pinfin.model.sync.utils.writeSizeWithBytes
 import io.ktor.network.selector.SelectorManager
 import io.ktor.network.sockets.InetSocketAddress
 import io.ktor.network.sockets.aSocket
@@ -18,6 +10,14 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.ExperimentalSerializationApi
+import org.hnau.pinfin.model.sync.utils.ApiResponse
+import org.hnau.pinfin.model.sync.utils.ServerAddress
+import org.hnau.pinfin.model.sync.utils.ServerPort
+import org.hnau.pinfin.model.sync.utils.SyncApi
+import org.hnau.pinfin.model.sync.utils.SyncConstants
+import org.hnau.pinfin.model.sync.utils.SyncHandle
+import org.hnau.pinfin.model.sync.utils.readSizeWithBytes
+import org.hnau.pinfin.model.sync.utils.writeSizeWithBytes
 
 class TcpSyncClient(
     private val address: ServerAddress,

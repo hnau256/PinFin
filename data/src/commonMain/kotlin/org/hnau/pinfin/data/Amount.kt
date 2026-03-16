@@ -1,12 +1,12 @@
 package org.hnau.pinfin.data
 
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.builtins.serializer
 import org.hnau.commons.kotlin.KeyValue
 import org.hnau.commons.kotlin.mapper.Mapper
 import org.hnau.commons.kotlin.mapper.plus
 import org.hnau.commons.kotlin.mapper.stringToInt
 import org.hnau.commons.kotlin.serialization.MappingKSerializer
-import kotlinx.serialization.Serializable
-import kotlinx.serialization.builtins.serializer
 import kotlin.jvm.JvmInline
 
 @JvmInline

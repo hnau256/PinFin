@@ -1,12 +1,12 @@
 package org.hnau.pinfin.model.filter
 
 import arrow.core.NonEmptySet
-import org.hnau.pinfin.data.AccountId
-import org.hnau.pinfin.data.CategoryId
-import org.hnau.pinfin.model.utils.budget.state.TransactionInfo
 import kotlinx.datetime.LocalDateRange
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
+import org.hnau.pinfin.data.AccountId
+import org.hnau.pinfin.data.CategoryId
+import org.hnau.pinfin.model.utils.budget.state.TransactionInfo
 
 internal fun Filters.check(
     transaction: TransactionInfo,

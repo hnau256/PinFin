@@ -1,11 +1,11 @@
 package org.hnau.pinfin.model.utils.budget.state
 
+import kotlinx.serialization.Serializable
 import org.hnau.pinfin.data.CategoryConfig
 import org.hnau.pinfin.data.CategoryId
 import org.hnau.pinfin.data.Hue
 import org.hnau.pinfin.model.utils.icons.IconVariant
 import org.hnau.pinfin.model.utils.icons.variant
-import kotlinx.serialization.Serializable
 import org.hnau.commons.app.model.utils.Hue as ModelHue
 
 @Serializable

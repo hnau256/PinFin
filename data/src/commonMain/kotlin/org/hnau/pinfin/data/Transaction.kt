@@ -2,13 +2,13 @@ package org.hnau.pinfin.data
 
 import arrow.core.NonEmptyList
 import arrow.core.serialization.NonEmptyListSerializer
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 import org.hnau.commons.kotlin.mapper.Mapper
 import org.hnau.commons.kotlin.mapper.plus
 import org.hnau.commons.kotlin.mapper.stringToUuid
 import org.hnau.commons.kotlin.serialization.UuidSerializer
 import org.hnau.pinfin.data.utils.InstantSerializer
-import kotlinx.serialization.SerialName
-import kotlinx.serialization.Serializable
 import kotlin.jvm.JvmInline
 import kotlin.time.Instant
 import kotlin.uuid.ExperimentalUuidApi

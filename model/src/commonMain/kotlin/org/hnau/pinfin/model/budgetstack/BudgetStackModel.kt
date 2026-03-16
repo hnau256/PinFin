@@ -4,6 +4,11 @@
 
 package org.hnau.pinfin.model.budgetstack
 
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.UseSerializers
 import org.hnau.commons.app.model.goback.GoBackHandler
 import org.hnau.commons.app.model.stack.NonEmptyStack
 import org.hnau.commons.app.model.stack.SkeletonWithModel
@@ -12,6 +17,7 @@ import org.hnau.commons.app.model.stack.modelsOnly
 import org.hnau.commons.app.model.stack.push
 import org.hnau.commons.app.model.stack.tryDropLast
 import org.hnau.commons.app.model.stack.withModels
+import org.hnau.commons.gen.pipe.annotations.Pipe
 import org.hnau.commons.gen.sealup.annotations.SealUp
 import org.hnau.commons.gen.sealup.annotations.Variant
 import org.hnau.commons.kotlin.serialization.MutableStateFlowSerializer
@@ -23,12 +29,6 @@ import org.hnau.pinfin.model.budget.analytics.tab.graph.TransactionsOpener
 import org.hnau.pinfin.model.categorystack.CategoryStackModel
 import org.hnau.pinfin.model.transaction.TransactionModel
 import org.hnau.pinfin.model.utils.budget.repository.BudgetRepository
-import org.hnau.commons.gen.pipe.annotations.Pipe
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.serialization.Serializable
-import kotlinx.serialization.UseSerializers
 
 class BudgetStackModel(
     private val scope: CoroutineScope,

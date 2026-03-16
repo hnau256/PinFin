@@ -13,10 +13,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
 import androidx.compose.ui.window.rememberWindowState
-import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.runBlocking
 import org.hnau.commons.app.model.app.DesktopApp
 import org.hnau.commons.app.model.theme.ThemeBrightness
-import kotlinx.coroutines.runBlocking
 
 @OptIn(InternalComposeApi::class, InternalComposeUiApi::class)
 fun main() = runBlocking {

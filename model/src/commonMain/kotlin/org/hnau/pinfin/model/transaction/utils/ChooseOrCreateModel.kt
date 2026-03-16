@@ -7,9 +7,15 @@ package org.hnau.pinfin.model.transaction.utils
 import arrow.core.NonEmptyList
 import arrow.core.Option
 import arrow.core.toNonEmptyListOrNull
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.UseSerializers
 import org.hnau.commons.app.model.EditingString
 import org.hnau.commons.app.model.goback.GoBackHandler
 import org.hnau.commons.app.model.toEditingString
+import org.hnau.commons.gen.pipe.annotations.Pipe
 import org.hnau.commons.kotlin.coroutines.flow.state.combineStateWith
 import org.hnau.commons.kotlin.coroutines.flow.state.mapState
 import org.hnau.commons.kotlin.coroutines.flow.state.mutable.toMutableStateFlowAsInitial
@@ -20,12 +26,6 @@ import org.hnau.commons.kotlin.mapper.Mapper
 import org.hnau.commons.kotlin.serialization.MutableStateFlowSerializer
 import org.hnau.pinfin.model.utils.budget.repository.BudgetRepository
 import org.hnau.pinfin.model.utils.budget.state.BudgetState
-import org.hnau.commons.gen.pipe.annotations.Pipe
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.serialization.Serializable
-import kotlinx.serialization.UseSerializers
 
 class ChooseOrCreateModel<T : Comparable<T>>(
     scope: CoroutineScope,

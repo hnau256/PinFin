@@ -4,9 +4,16 @@
 
 package org.hnau.pinfin.model.budget.config
 
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.launch
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.UseSerializers
 import org.hnau.commons.app.model.EditingString
 import org.hnau.commons.app.model.goback.GoBackHandler
 import org.hnau.commons.app.model.toEditingString
+import org.hnau.commons.gen.pipe.annotations.Pipe
 import org.hnau.commons.kotlin.coroutines.InProgressRegistry
 import org.hnau.commons.kotlin.coroutines.actionOrNullIfExecuting
 import org.hnau.commons.kotlin.coroutines.flow.state.flatMapWithScope
@@ -18,13 +25,6 @@ import org.hnau.pinfin.data.BudgetConfig
 import org.hnau.pinfin.model.budgetstack.BudgetStackOpener
 import org.hnau.pinfin.model.manage.BudgetsListOpener
 import org.hnau.pinfin.model.utils.budget.repository.BudgetRepository
-import org.hnau.commons.gen.pipe.annotations.Pipe
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.launch
-import kotlinx.serialization.Serializable
-import kotlinx.serialization.UseSerializers
 
 class BudgetConfigModel(
     private val scope: CoroutineScope,

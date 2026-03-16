@@ -5,11 +5,16 @@
 package org.hnau.pinfin.model.manage
 
 import arrow.core.identity
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.UseSerializers
 import org.hnau.commons.app.model.goback.GoBackHandler
 import org.hnau.commons.app.model.preferences.Preference
 import org.hnau.commons.app.model.preferences.Preferences
 import org.hnau.commons.app.model.preferences.map
 import org.hnau.commons.app.model.preferences.withDefault
+import org.hnau.commons.gen.pipe.annotations.Pipe
 import org.hnau.commons.gen.sealup.annotations.SealUp
 import org.hnau.commons.gen.sealup.annotations.Variant
 import org.hnau.commons.kotlin.castOrNull
@@ -32,11 +37,6 @@ import org.hnau.pinfin.model.budgetsstack.BudgetsStackModel
 import org.hnau.pinfin.model.budgetstack.BudgetStackModel
 import org.hnau.pinfin.model.utils.budget.repository.BudgetRepository
 import org.hnau.pinfin.model.utils.budget.storage.BudgetsStorage
-import org.hnau.commons.gen.pipe.annotations.Pipe
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.serialization.Serializable
-import kotlinx.serialization.UseSerializers
 import kotlin.uuid.ExperimentalUuidApi
 
 class ManageModel(

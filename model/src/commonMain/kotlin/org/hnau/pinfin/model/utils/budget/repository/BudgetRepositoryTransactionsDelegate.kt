@@ -1,9 +1,9 @@
 package org.hnau.pinfin.model.utils.budget.repository
 
+import kotlinx.coroutines.flow.StateFlow
 import org.hnau.pinfin.data.Transaction
 import org.hnau.pinfin.data.UpdateType
 import org.hnau.pinfin.model.utils.budget.state.BudgetState
-import kotlinx.coroutines.flow.StateFlow
 
 class BudgetRepositoryTransactionsDelegate(
     state: StateFlow<BudgetState>,

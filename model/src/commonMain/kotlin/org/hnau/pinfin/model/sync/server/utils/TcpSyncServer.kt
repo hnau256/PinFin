@@ -1,12 +1,5 @@
 package org.hnau.pinfin.model.sync.server.utils
 
-import org.hnau.pinfin.model.sync.utils.ApiResponse
-import org.hnau.pinfin.model.sync.utils.ServerPort
-import org.hnau.pinfin.model.sync.utils.SyncApi
-import org.hnau.pinfin.model.sync.utils.SyncConstants
-import org.hnau.pinfin.model.sync.utils.SyncHandle
-import org.hnau.pinfin.model.sync.utils.readSizeWithBytes
-import org.hnau.pinfin.model.sync.utils.writeSizeWithBytes
 import io.ktor.network.selector.SelectorManager
 import io.ktor.network.sockets.ServerSocket
 import io.ktor.network.sockets.aSocket
@@ -20,6 +13,13 @@ import kotlinx.coroutines.awaitCancellation
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.ExperimentalSerializationApi
+import org.hnau.pinfin.model.sync.utils.ApiResponse
+import org.hnau.pinfin.model.sync.utils.ServerPort
+import org.hnau.pinfin.model.sync.utils.SyncApi
+import org.hnau.pinfin.model.sync.utils.SyncConstants
+import org.hnau.pinfin.model.sync.utils.SyncHandle
+import org.hnau.pinfin.model.sync.utils.readSizeWithBytes
+import org.hnau.pinfin.model.sync.utils.writeSizeWithBytes
 
 suspend fun tcpSyncServer(
     port: ServerPort,

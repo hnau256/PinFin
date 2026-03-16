@@ -1,9 +1,9 @@
 package org.hnau.pinfin.model.utils.budget.storage
 
-import org.hnau.pinfin.data.BudgetId
-import org.hnau.pinfin.model.utils.budget.repository.BudgetRepository
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.mapNotNull
+import org.hnau.pinfin.data.BudgetId
+import org.hnau.pinfin.model.utils.budget.repository.BudgetRepository
 
 suspend fun BudgetsStorage.createNewBudgetIfNotExistsAndGet(
     id: BudgetId,

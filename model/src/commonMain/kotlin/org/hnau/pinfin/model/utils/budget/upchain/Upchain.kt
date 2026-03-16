@@ -1,7 +1,7 @@
 package org.hnau.pinfin.model.utils.budget.upchain
 
-import org.hnau.commons.kotlin.castOrNull
 import kotlinx.serialization.Serializable
+import org.hnau.commons.kotlin.castOrNull
 
 class Upchain private constructor(
     val items: List<Item>,
