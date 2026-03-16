@@ -15,8 +15,8 @@ class GraphConfigFlowModel(
     scope: CoroutineScope,
     dependencies: Dependencies,
     skeleton: Skeleton,
-    val configStateFlow: StateFlow<AnalyticsConfig>,
-    val configure: () -> Unit,
+    configStateFlow: StateFlow<AnalyticsConfig>,
+    private val configure: () -> Unit,
 ) {
 
     @Pipe
@@ -37,6 +37,7 @@ class GraphConfigFlowModel(
                 skeleton = skeleton::config.toAccessor().getOrInit { GraphConfigModel.Skeleton() },
                 dependencies = dependencies.config(),
                 config = config,
+                configure = configure,
             )
         }
 

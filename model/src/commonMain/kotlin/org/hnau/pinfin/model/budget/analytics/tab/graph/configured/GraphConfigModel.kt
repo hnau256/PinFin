@@ -33,6 +33,7 @@ class GraphConfigModel(
     dependencies: Dependencies,
     skeleton: Skeleton,
     val config: AnalyticsConfig,
+    val configure: () -> Unit,
 ) {
 
     @Pipe
