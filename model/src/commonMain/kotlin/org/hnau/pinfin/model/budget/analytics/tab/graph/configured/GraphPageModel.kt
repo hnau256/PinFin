@@ -2,7 +2,7 @@
     MutableStateFlowSerializer::class,
 )
 
-package org.hnau.pinfin.model.budget.analytics.tab.graph
+package org.hnau.pinfin.model.budget.analytics.tab.graph.configured
 
 import arrow.core.NonEmptyList
 import arrow.core.toNonEmptyListOrNull
@@ -31,6 +31,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.datetime.LocalDateRange
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.UseSerializers
+import org.hnau.pinfin.model.budget.analytics.tab.graph.TransactionsOpener
 
 class GraphPageModel(
     scope: CoroutineScope,

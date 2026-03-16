@@ -4,101 +4,171 @@
 
 package org.hnau.pinfin.model.budget.analytics.tab.graph
 
-import org.hnau.commons.kotlin.Loadable
-import org.hnau.commons.kotlin.coroutines.Delayed
-import org.hnau.commons.kotlin.coroutines.flow.state.scopedInState
-import org.hnau.commons.kotlin.coroutines.mapStateDelayed
-import org.hnau.commons.kotlin.getOrInit
-import org.hnau.commons.kotlin.map
-import org.hnau.commons.kotlin.mapper.Mapper
-import org.hnau.commons.kotlin.serialization.MutableStateFlowSerializer
-import org.hnau.commons.kotlin.toAccessor
-import org.hnau.pinfin.model.utils.analytics.AnalyticsEntry
-import org.hnau.pinfin.model.utils.analytics.AnalyticsPagesProvider
-import org.hnau.pinfin.model.utils.analytics.config.AnalyticsConfig
-import org.hnau.pinfin.model.utils.analytics.config.AnalyticsPageConfig
-import org.hnau.pinfin.model.utils.analytics.config.AnalyticsSplitConfig
-import org.hnau.pinfin.model.utils.analytics.config.AnalyticsViewConfig
-import org.hnau.pinfin.model.utils.analytics.toAnalyticsEntries
-import org.hnau.pinfin.model.utils.budget.repository.BudgetRepository
-import org.hnau.pinfin.model.utils.budget.state.TransactionInfo
-import org.hnau.pinfin.model.utils.budget.upchain.UpchainHash
-import org.hnau.commons.gen.pipe.annotations.Pipe
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.datetime.DatePeriod
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
-import kotlinx.datetime.todayIn
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.UseSerializers
+import org.hnau.commons.app.model.goback.GoBackHandler
+import org.hnau.commons.gen.pipe.annotations.Pipe
+import org.hnau.commons.gen.sealup.annotations.SealUp
+import org.hnau.commons.gen.sealup.annotations.Variant
+import org.hnau.commons.kotlin.coroutines.flow.state.flatMapState
+import org.hnau.commons.kotlin.coroutines.flow.state.mapState
+import org.hnau.commons.kotlin.coroutines.flow.state.mapWithScope
+import org.hnau.commons.kotlin.coroutines.flow.state.mutable.toMutableStateFlowAsInitial
+import org.hnau.commons.kotlin.foldNullable
+import org.hnau.commons.kotlin.serialization.MutableStateFlowSerializer
+import org.hnau.pinfin.model.budget.analytics.tab.graph.configure.GraphConfigureModel
+import org.hnau.pinfin.model.budget.analytics.tab.graph.configured.GraphConfiguredModel
+import org.hnau.pinfin.model.utils.analytics.config.AnalyticsConfig
+import org.hnau.pinfin.model.utils.analytics.config.AnalyticsPageConfig
+import org.hnau.pinfin.model.utils.analytics.config.AnalyticsSplitConfig
+import org.hnau.pinfin.model.utils.analytics.config.AnalyticsViewConfig
 import kotlin.time.Clock
 
 class GraphModel(
     scope: CoroutineScope,
     dependencies: Dependencies,
-    skeleton: Skeleton,
+    private val skeleton: Skeleton,
 ) {
+
+    @SealUp(
+        variants = [
+            Variant(
+                type = GraphConfiguredModel::class,
+                identifier = "configured",
+            ),
+            Variant(
+                type = GraphConfigureModel::class,
+                identifier = "configure",
+            ),
+        ],
+        wrappedValuePropertyName = "model",
+        sealedInterfaceName = "GraphStateModel",
+    )
+    interface State {
+
+        val goBackHandler: GoBackHandler
+
+        companion object
+    }
+
+    @SealUp(
+        variants = [
+            Variant(
+                type = GraphConfiguredModel.Skeleton::class,
+                identifier = "configured",
+            ),
+            Variant(
+                type = GraphConfigureModel.Skeleton::class,
+                identifier = "configure",
+            ),
+        ],
+        wrappedValuePropertyName = "skeleton",
+        sealedInterfaceName = "GraphStateSkeleton",
+        serializable = true,
+    )
+    interface StateSkeleton {
+
+        companion object
+    }
 
     @Pipe
     interface Dependencies {
 
-        val budgetRepository: BudgetRepository
+        @Pipe
+        interface WithConfig {
 
-        fun pages(
-            analyticsEntries: List<AnalyticsEntry>,
-        ): GraphPagesModel.Dependencies
+            fun configured(): GraphConfiguredModel.Dependencies
+
+            fun configure(): GraphConfigureModel.Dependencies
+        }
+
+        fun withConfig(
+            config: StateFlow<AnalyticsConfig>,
+        ): WithConfig
     }
 
     @Serializable
     data class Skeleton(
-        var pages: Pair<UpchainHash?, GraphPagesModel.Skeleton>? = null,
+        val config: MutableStateFlow<AnalyticsConfig> =
+            defaultConfig.toMutableStateFlowAsInitial(),
+
+        val state: MutableStateFlow<GraphStateSkeleton> =
+            StateSkeleton.configured().toMutableStateFlowAsInitial(),
     )
 
-    private val pagesProvider = AnalyticsPagesProvider(
-        config = config.split,
-    )
+    private val dependenciesWithConfig = dependencies
+        .withConfig(skeleton.config)
 
-    val pages: StateFlow<Loadable<Delayed<GraphPagesModel>>> = dependencies
-        .budgetRepository
+    val state: StateFlow<GraphStateModel> = skeleton
         .state
-        .scopedInState(scope)
-        .mapStateDelayed(scope) { (scope, state) ->
-            val pages = pagesProvider.generatePages(
-                state = state,
-                today = Clock.System.todayIn(TimeZone.currentSystemDefault()),
-            )
-            GraphPagesModel(
-                scope = scope,
-                dependencies = dependencies.pages(
-                    analyticsEntries = state
-                        .transactions
-                        .flatMap(TransactionInfo::toAnalyticsEntries),
-                ),
-                skeleton = skeleton::pages
-                    .toAccessor()
-                    .map(
-                        Mapper(
-                            direct = { hashWithPagesSkeletonOrNull ->
-                                hashWithPagesSkeletonOrNull?.let { (hash, pagesSkeleton) ->
-                                    pagesSkeleton.takeIf { hash == state.hash }
-                                }
-                            },
-                            reverse = { skeletonOrNull ->
-                                skeletonOrNull?.let { skeleton -> state.hash to skeleton }
-                            }
-                        )
+        .mapWithScope(scope) { scope, state ->
+            state.fold(
+                ifConfigured = { configured ->
+                    State.configured(
+                        scope = scope,
+                        skeleton = configured,
+                        dependencies = dependenciesWithConfig.configured(),
+                        config = {
+                            updateState(
+                                StateSkeleton.configure()
+                            )
+                        }
                     )
-                    .getOrInit { GraphPagesModel.Skeleton() },
-                pages = pages,
-                pageConfig = config.page,
+                },
+                ifConfigure = { configure ->
+                    State.configure(
+                        scope = scope,
+                        skeleton = configure,
+                        dependencies = dependenciesWithConfig.configure(),
+                        updateConfig = skeleton.config::value::set,
+                    )
+                },
+            )
+        }
+
+    private fun updateState(
+        newState: GraphStateSkeleton,
+    ) {
+        skeleton.state.value = newState
+    }
+
+    val goBackHandler: GoBackHandler = state
+        .flatMapState(
+            scope = scope,
+            transform = GraphStateModel::goBackHandler,
+        )
+        .flatMapState(scope) { goBackOrNull: (() -> Unit)? ->
+            goBackOrNull.foldNullable(
+                ifNotNull = { it.toMutableStateFlowAsInitial() },
+                ifNull = {
+                    skeleton
+                        .state
+                        .mapState(scope) { state ->
+                            state.fold(
+                                ifConfigured = { null },
+                                ifConfigure = {
+                                    {
+                                        updateState(
+                                            StateSkeleton.configured(),
+                                        )
+                                    }
+                                }
+                            )
+                        }
+                },
             )
         }
 
     companion object {
 
-        private val config: AnalyticsConfig = AnalyticsConfig(
+        private val defaultConfig: AnalyticsConfig = AnalyticsConfig(
             split = AnalyticsSplitConfig(
                 period = AnalyticsSplitConfig.Period.Fixed(
                     duration = DatePeriod(months = 1),

@@ -5,15 +5,18 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
-import org.hnau.commons.app.projector.uikit.state.LoadableContent
-import org.hnau.commons.app.projector.uikit.state.TransitionSpec
-import org.hnau.commons.kotlin.Loadable
-import org.hnau.commons.kotlin.coroutines.flow.state.mapWithScope
-import org.hnau.commons.kotlin.map
-import org.hnau.pinfin.model.budget.analytics.tab.graph.GraphModel
-import org.hnau.commons.gen.pipe.annotations.Pipe
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.StateFlow
+import org.hnau.commons.app.projector.uikit.state.StateContent
+import org.hnau.commons.app.projector.uikit.state.TransitionSpec
+import org.hnau.commons.gen.pipe.annotations.Pipe
+import org.hnau.commons.gen.sealup.annotations.SealUp
+import org.hnau.commons.gen.sealup.annotations.Variant
+import org.hnau.commons.kotlin.coroutines.flow.state.mapWithScope
+import org.hnau.pinfin.model.budget.analytics.tab.graph.GraphModel
+import org.hnau.pinfin.model.budget.analytics.tab.graph.fold
+import org.hnau.pinfin.projector.budget.analytics.graph.configure.GraphConfigureProjector
+import org.hnau.pinfin.projector.budget.analytics.graph.configured.GraphConfiguredProjector
 
 class GraphProjector(
     scope: CoroutineScope,
@@ -21,37 +24,73 @@ class GraphProjector(
     dependencies: Dependencies,
 ) {
 
+    @SealUp(
+        variants = [
+            Variant(
+                type = GraphConfiguredProjector::class,
+                identifier = "configured",
+            ),
+            Variant(
+                type = GraphConfigureProjector::class,
+                identifier = "configure",
+            ),
+        ],
+        wrappedValuePropertyName = "projector",
+        sealedInterfaceName = "GraphStateProjector",
+    )
+    interface State {
+
+        @Composable
+        fun Content(
+            contentPadding: PaddingValues,
+        )
+
+        companion object
+    }
+
     @Pipe
     interface Dependencies {
 
-        fun pages(): GraphPagesProjector.Dependencies
+        fun configured(): GraphConfiguredProjector.Dependencies
+
+        fun configure(): GraphConfigureProjector.Dependencies
     }
 
-    private val pages: StateFlow<Loadable<GraphPagesProjector>> =
-        model.pages.mapWithScope(scope) { scope, pagesOrLoading ->
-            pagesOrLoading.map { (_, pages) -> //TODO handle delayed
-                GraphPagesProjector(
-                    scope = scope,
-                    model = pages,
-                    dependencies = dependencies.pages(),
-                )
-            }
+    private val state: StateFlow<GraphStateProjector> = model
+        .state
+        .mapWithScope(scope) { scope, state ->
+            state.fold(
+                ifConfigured = { model ->
+                    State.configured(
+                        scope = scope,
+                        model = model,
+                        dependencies = dependencies.configured(),
+                    )
+                },
+                ifConfigure = { model ->
+                    State.configure(
+                        scope = scope,
+                        model = model,
+                        dependencies = dependencies.configure(),
+                    )
+                }
+            )
         }
 
     @Composable
     fun Content(
         contentPadding: PaddingValues,
     ) {
-        pages
+        state
             .collectAsState()
             .value
-            .LoadableContent(
+            .StateContent(
                 modifier = Modifier.fillMaxSize(),
-                transitionSpec = TransitionSpec.crossfade(),
-            ) { pages ->
-                pages.Content(
-                    contentPadding = contentPadding,
-                )
+                label = "configuredOrConfigure",
+                contentKey = {it.ordinal},
+                transitionSpec = TransitionSpec.both(),
+            ) {state ->
+                state.Content(contentPadding)
             }
     }
 }

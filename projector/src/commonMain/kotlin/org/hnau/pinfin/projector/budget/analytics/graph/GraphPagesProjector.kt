@@ -35,7 +35,7 @@ import org.hnau.commons.app.projector.utils.rememberLet
 import org.hnau.commons.kotlin.KeyValue
 import org.hnau.commons.kotlin.coroutines.flow.state.mapState
 import org.hnau.commons.kotlin.map
-import org.hnau.pinfin.model.budget.analytics.tab.graph.GraphPagesModel
+import org.hnau.pinfin.model.budget.analytics.tab.graph.configured.GraphPagesModel
 import org.hnau.pinfin.projector.utils.formatter.datetime.DateTimeFormatter
 import org.hnau.commons.gen.pipe.annotations.Pipe
 import kotlinx.coroutines.CoroutineScope

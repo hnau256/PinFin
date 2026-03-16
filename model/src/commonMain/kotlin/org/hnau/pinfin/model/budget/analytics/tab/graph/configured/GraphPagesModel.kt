@@ -1,4 +1,4 @@
-package org.hnau.pinfin.model.budget.analytics.tab.graph
+package org.hnau.pinfin.model.budget.analytics.tab.graph.configured
 
 import arrow.core.NonEmptyList
 import org.hnau.commons.kotlin.coroutines.flow.state.mapState

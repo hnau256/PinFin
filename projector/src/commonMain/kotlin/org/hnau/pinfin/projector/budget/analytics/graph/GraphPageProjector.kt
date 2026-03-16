@@ -32,7 +32,7 @@ import org.hnau.commons.kotlin.foldNullable
 import org.hnau.pinfin.data.Amount
 import org.hnau.pinfin.data.AmountDirection
 import org.hnau.pinfin.data.Hue
-import org.hnau.pinfin.model.budget.analytics.tab.graph.GraphPageModel
+import org.hnau.pinfin.model.budget.analytics.tab.graph.configured.GraphPageModel
 import org.hnau.pinfin.model.utils.analytics.AnalyticsPage
 import org.hnau.pinfin.model.utils.model
 import org.hnau.pinfin.projector.Res
