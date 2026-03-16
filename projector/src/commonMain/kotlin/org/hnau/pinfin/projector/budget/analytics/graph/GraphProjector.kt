@@ -16,7 +16,7 @@ import org.hnau.commons.kotlin.coroutines.flow.state.mapWithScope
 import org.hnau.pinfin.model.budget.analytics.tab.graph.GraphModel
 import org.hnau.pinfin.model.budget.analytics.tab.graph.fold
 import org.hnau.pinfin.projector.budget.analytics.graph.configure.GraphConfigureProjector
-import org.hnau.pinfin.projector.budget.analytics.graph.configured.GraphConfiguredProjector
+import org.hnau.pinfin.projector.budget.analytics.graph.configured.GraphConfigFlowProjector
 
 class GraphProjector(
     scope: CoroutineScope,
@@ -27,7 +27,7 @@ class GraphProjector(
     @SealUp(
         variants = [
             Variant(
-                type = GraphConfiguredProjector::class,
+                type = GraphConfigFlowProjector::class,
                 identifier = "configured",
             ),
             Variant(
@@ -51,7 +51,7 @@ class GraphProjector(
     @Pipe
     interface Dependencies {
 
-        fun configured(): GraphConfiguredProjector.Dependencies
+        fun configured(): GraphConfigFlowProjector.Dependencies
 
         fun configure(): GraphConfigureProjector.Dependencies
     }

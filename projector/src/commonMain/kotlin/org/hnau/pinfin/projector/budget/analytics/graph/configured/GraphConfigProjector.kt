@@ -13,12 +13,11 @@ import org.hnau.commons.gen.pipe.annotations.Pipe
 import org.hnau.commons.kotlin.Loadable
 import org.hnau.commons.kotlin.coroutines.flow.state.mapWithScope
 import org.hnau.commons.kotlin.map
-import org.hnau.pinfin.model.budget.analytics.tab.graph.configured.GraphConfiguredModel
-import org.hnau.pinfin.projector.budget.analytics.graph.GraphPagesProjector
+import org.hnau.pinfin.model.budget.analytics.tab.graph.configured.GraphConfigModel
 
-class GraphConfiguredProjector(
+class GraphConfigProjector(
     scope: CoroutineScope,
-    model: GraphConfiguredModel,
+    private val model: GraphConfigModel,
     dependencies: Dependencies,
 ) {
 
@@ -27,6 +26,9 @@ class GraphConfiguredProjector(
 
         fun pages(): GraphPagesProjector.Dependencies
     }
+
+    val key: String
+        get() = model.key
 
     private val pages: StateFlow<Loadable<GraphPagesProjector>> =
         model.pages.mapWithScope(scope) { scope, pagesOrLoading ->

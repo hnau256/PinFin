@@ -24,7 +24,7 @@ import org.hnau.commons.kotlin.coroutines.flow.state.mutable.toMutableStateFlowA
 import org.hnau.commons.kotlin.foldNullable
 import org.hnau.commons.kotlin.serialization.MutableStateFlowSerializer
 import org.hnau.pinfin.model.budget.analytics.tab.graph.configure.GraphConfigureModel
-import org.hnau.pinfin.model.budget.analytics.tab.graph.configured.GraphConfiguredModel
+import org.hnau.pinfin.model.budget.analytics.tab.graph.configured.GraphConfigFlowModel
 import org.hnau.pinfin.model.utils.analytics.config.AnalyticsConfig
 import org.hnau.pinfin.model.utils.analytics.config.AnalyticsPageConfig
 import org.hnau.pinfin.model.utils.analytics.config.AnalyticsSplitConfig
@@ -40,7 +40,7 @@ class GraphModel(
     @SealUp(
         variants = [
             Variant(
-                type = GraphConfiguredModel::class,
+                type = GraphConfigFlowModel::class,
                 identifier = "configured",
             ),
             Variant(
@@ -61,7 +61,7 @@ class GraphModel(
     @SealUp(
         variants = [
             Variant(
-                type = GraphConfiguredModel.Skeleton::class,
+                type = GraphConfigFlowModel.Skeleton::class,
                 identifier = "configured",
             ),
             Variant(
@@ -81,7 +81,7 @@ class GraphModel(
     @Pipe
     interface Dependencies {
 
-        fun configured(): GraphConfiguredModel.Dependencies
+        fun configured(): GraphConfigFlowModel.Dependencies
 
         fun configure(): GraphConfigureModel.Dependencies
     }
@@ -109,7 +109,7 @@ class GraphModel(
                                 StateSkeleton.configure()
                             )
                         },
-                        config = skeleton.config,
+                        configStateFlow = skeleton.config,
                     )
                 },
                 ifConfigure = { configure ->

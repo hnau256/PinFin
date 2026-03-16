@@ -5,14 +5,16 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.todayIn
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.json.Json
 import org.hnau.commons.app.model.goback.GoBackHandler
-import org.hnau.commons.app.model.goback.NeverGoBackHandler
 import org.hnau.commons.gen.pipe.annotations.Pipe
 import org.hnau.commons.kotlin.Loadable
 import org.hnau.commons.kotlin.coroutines.Delayed
-import org.hnau.commons.kotlin.coroutines.flow.state.combineState
+import org.hnau.commons.kotlin.coroutines.flow.state.flatMapState
+import org.hnau.commons.kotlin.coroutines.flow.state.mutable.toMutableStateFlowAsInitial
 import org.hnau.commons.kotlin.coroutines.flow.state.scopedInState
 import org.hnau.commons.kotlin.coroutines.mapStateDelayed
+import org.hnau.commons.kotlin.fold
 import org.hnau.commons.kotlin.getOrInit
 import org.hnau.commons.kotlin.map
 import org.hnau.commons.kotlin.mapper.Mapper
@@ -26,12 +28,11 @@ import org.hnau.pinfin.model.utils.budget.state.TransactionInfo
 import org.hnau.pinfin.model.utils.budget.upchain.UpchainHash
 import kotlin.time.Clock
 
-class GraphConfiguredModel(
+class GraphConfigModel(
     scope: CoroutineScope,
     dependencies: Dependencies,
     skeleton: Skeleton,
-    val config: StateFlow<AnalyticsConfig>,
-    val configure: () -> Unit,
+    val config: AnalyticsConfig,
 ) {
 
     @Pipe
@@ -49,16 +50,11 @@ class GraphConfiguredModel(
         var pages: Pair<UpchainHash?, GraphPagesModel.Skeleton>? = null,
     )
 
-    val pages: StateFlow<Loadable<Delayed<GraphPagesModel>>> = combineState(
-        scope = scope,
-        first = dependencies.budgetRepository.state,
-        second = config,
-    ) { state, config ->
-        state to config
-    }
+    val pages: StateFlow<Loadable<Delayed<GraphPagesModel>>> = dependencies
+        .budgetRepository
+        .state
         .scopedInState(scope)
-        .mapStateDelayed(scope) { (scope, stateWithConfig) ->
-            val (state, config) = stateWithConfig
+        .mapStateDelayed(scope) { (scope, state) ->
             val pages = AnalyticsPagesProvider(
                 config = config.split,
             ).generatePages(
@@ -92,6 +88,18 @@ class GraphConfiguredModel(
             )
         }
 
-    val goBackHandler: GoBackHandler
-        get() = NeverGoBackHandler
+
+    val key: String = Json.encodeToString(
+        serializer = AnalyticsConfig.serializer(),
+        value = config,
+    )
+
+    val goBackHandler: GoBackHandler = pages.flatMapState(scope) { pagesOrLoading ->
+        pagesOrLoading.fold(
+            ifLoading = { null.toMutableStateFlowAsInitial() },
+            ifReady = { delayedPages ->
+                delayedPages.value.goBackHandler
+            }
+        )
+    }
 }

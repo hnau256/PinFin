@@ -1,6 +1,12 @@
 package org.hnau.pinfin.model.budget.analytics.tab.graph.configured
 
 import arrow.core.NonEmptyList
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.serialization.Serializable
+import org.hnau.commons.app.model.goback.GoBackHandler
+import org.hnau.commons.gen.pipe.annotations.Pipe
 import org.hnau.commons.kotlin.coroutines.flow.state.mapState
 import org.hnau.commons.kotlin.coroutines.flow.state.mapWithScope
 import org.hnau.commons.kotlin.coroutines.flow.state.mutable.toMutableStateFlowAsInitial
@@ -8,11 +14,6 @@ import org.hnau.commons.kotlin.ifNull
 import org.hnau.pinfin.model.utils.analytics.AnalyticsEntry
 import org.hnau.pinfin.model.utils.analytics.AnalyticsPage
 import org.hnau.pinfin.model.utils.analytics.config.AnalyticsPageConfig
-import org.hnau.commons.gen.pipe.annotations.Pipe
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.serialization.Serializable
 
 class GraphPagesModel(
     scope: CoroutineScope,
@@ -92,4 +93,12 @@ class GraphPagesModel(
         skeleton = skeleton,
         offset = 1,
     )
+
+    val goBackHandler: GoBackHandler = skeleton
+        .index
+        .mapState(scope) { indexOrNull ->
+            indexOrNull?.let {
+                { skeleton.index.value = null }
+            }
+        }
 }

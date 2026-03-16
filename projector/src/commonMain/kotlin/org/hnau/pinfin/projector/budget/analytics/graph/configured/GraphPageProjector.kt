@@ -1,4 +1,4 @@
-package org.hnau.pinfin.projector.budget.analytics.graph
+package org.hnau.pinfin.projector.budget.analytics.graph.configured
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
