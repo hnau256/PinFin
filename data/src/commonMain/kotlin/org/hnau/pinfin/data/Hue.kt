@@ -1,0 +1,10 @@
+package org.hnau.pinfin.data
+
+import kotlinx.serialization.Serializable
+import kotlin.jvm.JvmInline
+
+@Serializable
+@JvmInline
+value class Hue(
+    val degrees: Int,
+)

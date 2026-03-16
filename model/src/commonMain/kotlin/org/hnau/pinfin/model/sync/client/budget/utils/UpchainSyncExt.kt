@@ -1,0 +1,76 @@
+package org.hnau.pinfin.model.sync.client.budget.utils
+
+import arrow.core.raise.result
+import org.hnau.pinfin.data.BudgetId
+import org.hnau.pinfin.model.sync.client.utils.TcpSyncClient
+import org.hnau.pinfin.model.sync.utils.SyncHandle
+import org.hnau.pinfin.model.utils.budget.upchain.Upchain
+import org.hnau.pinfin.model.utils.budget.upchain.UpchainHash
+import org.hnau.pinfin.model.utils.budget.upchain.Update
+import org.hnau.pinfin.model.utils.budget.upchain.utils.UpchainSyncConstants
+
+suspend fun Upchain.syncWithRemote(
+    budgetId: BudgetId,
+    remote: TcpSyncClient,
+): Result<Upchain> = result {
+
+    var remoteHasMoreUpdates = true
+    var minReceivedRemoteHash: UpchainHash? = null
+    val remoteUpdatesBuffer: MutableList<Upchain.Item> = mutableListOf()
+
+    var remotePeek: UpchainHash? = null
+    val updatesToPush: MutableList<Update> = mutableListOf()
+
+    suspend fun flushUpdates(): Result<Unit> {
+        if (updatesToPush.isEmpty()) {
+            return Result.success(Unit)
+        }
+        return remote
+            .handle(
+                SyncHandle.AppendUpdates(
+                    budgetId = budgetId,
+                    peekHashToCheck = remotePeek,
+                    updates = updatesToPush,
+                )
+            )
+            .map { }
+            .onSuccess {
+                updatesToPush.clear()
+            }
+    }
+
+    val result = merge(
+        getNextMaxToMinOtherItem = {
+            if (remoteUpdatesBuffer.isEmpty()) {
+                if (remoteHasMoreUpdates) {
+                    val getUpdatesResult = remote
+                        .handle(
+                            SyncHandle.GetMaxToMinUpdates(
+                                budgetId = budgetId,
+                                before = minReceivedRemoteHash,
+                            )
+                        )
+                        .bind()
+                    val updates = getUpdatesResult.updates
+                    minReceivedRemoteHash = updates.lastOrNull()?.hash
+                    remoteUpdatesBuffer.addAll(updates)
+                    remoteHasMoreUpdates = getUpdatesResult.hasMoreUpdates
+                }
+            }
+            remoteUpdatesBuffer.removeFirstOrNull()
+        },
+        addUpdateToOther = { update, previousPeek ->
+            if (updatesToPush.isEmpty()) {
+                remotePeek = previousPeek
+            }
+            updatesToPush += update
+            if (updatesToPush.size >= UpchainSyncConstants.updatesToSendPortionSize) {
+                flushUpdates().bind()
+            }
+        },
+    )
+
+    flushUpdates().bind()
+
+    result
+}

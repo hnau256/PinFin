@@ -1,0 +1,100 @@
+package org.hnau.pinfin.projector.transaction.delegates
+
+import androidx.compose.material3.BasicAlertDialog
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import org.hnau.commons.app.projector.uikit.AlertDialogContent
+import org.hnau.commons.kotlin.foldNullable
+import org.hnau.pinfin.model.transaction.TransactionModel
+import org.hnau.pinfin.projector.Res
+import org.hnau.pinfin.projector.close
+import org.hnau.pinfin.projector.no
+import org.hnau.pinfin.projector.not_save
+import org.hnau.pinfin.projector.remove_transaction
+import org.hnau.pinfin.projector.save
+import org.hnau.pinfin.projector.save_changes
+import org.hnau.pinfin.projector.yes
+import org.jetbrains.compose.resources.stringResource
+
+class DialogsProjector(
+    private val model: TransactionModel,
+) {
+
+
+    @Composable
+    fun Content() {
+        Cancel()
+        Remove()
+    }
+
+    @OptIn(ExperimentalMaterial3Api::class)
+    @Composable
+    private fun Cancel() {
+        model
+            .cancelDialogInfo
+            .collectAsState()
+            .value
+            ?.let { info ->
+                BasicAlertDialog(
+                    onDismissRequest = info.close,
+                ) {
+                    AlertDialogContent(
+                        title = { Text(stringResource(Res.string.save_changes)) },
+                        buttons = {
+                            TextButton(
+                                onClick = info.cancelChanges,
+                                content = { Text(stringResource(Res.string.not_save)) },
+                            )
+                            info.saveIfPossible.foldNullable(
+                                ifNull = {
+                                    TextButton(
+                                        onClick = info.close,
+                                        content = { Text(stringResource(Res.string.close)) },
+                                    )
+                                },
+                                ifNotNull = { save ->
+                                    TextButton(
+                                        onClick = save,
+                                        content = { Text(stringResource(Res.string.save)) },
+                                    )
+                                }
+                            )
+                        }
+                    )
+                }
+            }
+    }
+
+    @OptIn(ExperimentalMaterial3Api::class)
+    @Composable
+    private fun Remove() {
+        model
+            .removeDialogInfo
+            .collectAsState()
+            .value
+            ?.let { info ->
+                BasicAlertDialog(
+                    onDismissRequest = info.close,
+                ) {
+                    AlertDialogContent(
+                        title = { Text(stringResource(Res.string.remove_transaction)) },
+                        dismissButton = {
+                            TextButton(
+                                onClick = info.close,
+                                content = { Text(stringResource(Res.string.no)) },
+                            )
+                        },
+                        confirmButton = {
+                            TextButton(
+                                onClick = info.remove,
+                                content = { Text(stringResource(Res.string.yes)) },
+                            )
+                        }
+                    )
+                }
+            }
+    }
+}
