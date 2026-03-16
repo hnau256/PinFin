@@ -8,12 +8,18 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.lifecycle.lifecycleScope
-import org.hnau.commons.app.model.app.AppViewModel
-import org.hnau.pinfin.model.RootModel
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
+import org.hnau.commons.app.model.app.AppViewModel
+import org.hnau.pinfin.app.JvmInetAddressesProvider
+import org.hnau.pinfin.app.JvmSha256
+import org.hnau.pinfin.app.PinFinAppDependencies
+import org.hnau.pinfin.app.createAppProjector
+import org.hnau.pinfin.app.createPinFinAppSeed
+import org.hnau.pinfin.app.impl
+import org.hnau.pinfin.model.RootModel
 
 class AppActivity : ComponentActivity() {
 
