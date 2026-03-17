@@ -34,6 +34,7 @@ import org.hnau.commons.app.projector.uikit.utils.Dimens
 import org.hnau.commons.app.projector.utils.Icon
 import org.hnau.commons.app.projector.utils.SlideOrientation
 import org.hnau.commons.app.projector.utils.copy
+import org.hnau.commons.app.projector.utils.getTransitionSpecForSlideByCompare
 import org.hnau.commons.app.projector.utils.plus
 import org.hnau.commons.gen.pipe.annotations.Pipe
 import org.hnau.commons.kotlin.ZipList
@@ -44,7 +45,6 @@ import org.hnau.pinfin.model.transaction.pageable.RecordsModel
 import org.hnau.pinfin.model.transaction.utils.RecordId
 import org.hnau.pinfin.projector.Localization
 import org.hnau.pinfin.projector.transaction.utils.PartDefaults
-import org.hnau.pinfin.projector.transaction.utils.createPagesTransitionSpec
 import org.hnau.pinfin.projector.utils.Label
 
 
@@ -166,9 +166,9 @@ class RecordsProjector(
                     modifier = modifier,
                     label = "SelectedRecord",
                     contentKey = Triple<*, RecordId, *>::second,
-                    transitionSpec = createPagesTransitionSpec(
+                    transitionSpec = getTransitionSpecForSlideByCompare(
                         orientation = SlideOrientation.Horizontal,
-                        extractIndex = Triple<Int, *, *>::first,
+                        extractComparable = Triple<Int, *, *>::first,
                     )
                 ) { (_, _, projector) ->
                     projector.Content(

@@ -34,6 +34,7 @@ import org.hnau.commons.app.projector.uikit.utils.Dimens
 import org.hnau.commons.app.projector.utils.Icon
 import org.hnau.commons.app.projector.utils.SlideOrientation
 import org.hnau.commons.app.projector.utils.copy
+import org.hnau.commons.app.projector.utils.getTransitionSpecForSlideByCompare
 import org.hnau.commons.gen.pipe.annotations.Pipe
 import org.hnau.commons.kotlin.coroutines.flow.state.mapWithScope
 import org.hnau.commons.kotlin.foldNullable
@@ -42,7 +43,6 @@ import org.hnau.pinfin.model.utils.budget.state.CategoryInfo
 import org.hnau.pinfin.projector.Localization
 import org.hnau.pinfin.projector.transaction.utils.ChooseOrCreateMessages
 import org.hnau.pinfin.projector.transaction.utils.ChooseOrCreateProjector
-import org.hnau.pinfin.projector.transaction.utils.createPagesTransitionSpec
 import org.hnau.pinfin.projector.utils.CategoryContent
 import org.hnau.pinfin.projector.utils.Label
 import org.hnau.pinfin.projector.utils.UIConstants
@@ -198,9 +198,9 @@ class RecordProjector(
                     modifier = modifier,
                     label = "TransferPage",
                     contentKey = { it.key },
-                    transitionSpec = createPagesTransitionSpec(
+                    transitionSpec = getTransitionSpecForSlideByCompare(
                         orientation = SlideOrientation.Horizontal,
-                        extractIndex = PageType::key,
+                        extractComparable = PageType::key,
                     )
                 ) { type ->
                     type.Content(

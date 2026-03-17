@@ -31,7 +31,7 @@ import org.hnau.commons.app.projector.utils.Icon
 import org.hnau.commons.app.projector.utils.Overcompose
 import org.hnau.commons.app.projector.utils.SlideOrientation
 import org.hnau.commons.app.projector.utils.copy
-import org.hnau.commons.app.projector.utils.getTransitionSpecForSlide
+import org.hnau.commons.app.projector.utils.getTransitionSpecForSlideByCompare
 import org.hnau.commons.app.projector.utils.horizontalDisplayPadding
 import org.hnau.commons.app.projector.utils.plus
 import org.hnau.commons.app.projector.utils.rememberLet
@@ -114,15 +114,11 @@ class GraphPagesProjector(
                 .map(KeyValue<*, GraphPageProjector>::value)
                 .StateContent(
                     modifier = Modifier.fillMaxSize(),
-                    transitionSpec = getTransitionSpecForSlide(
+                    transitionSpec = getTransitionSpecForSlideByCompare(
                         orientation = SlideOrientation.Horizontal,
                         duration = 0.5.seconds,
-                    ) {
-                        when (targetState.index > initialState.index) {
-                            true -> 1f
-                            false -> -1f
-                        } * 0.25f
-                    },
+                        extractComparable = { period -> period.index },
+                    ),
                     label = "Page",
                     contentKey = IndexedValue<*>::index,
                 ) { (_, page) ->
@@ -145,14 +141,10 @@ class GraphPagesProjector(
         val formatter = dependencies.dateTimeFormatter
         period.StateContent(
             modifier = modifier,
-            transitionSpec = getTransitionSpecForSlide(
+            transitionSpec = getTransitionSpecForSlideByCompare(
                 orientation = SlideOrientation.Horizontal,
-            ) {
-                when (targetState.index > initialState.index) {
-                    true -> 1f
-                    false -> -1f
-                } * 0.5f
-            },
+                extractComparable = { period -> period.index },
+            ),
             label = "Period",
             contentKey = IndexedValue<*>::index,
         ) { (_, period) ->

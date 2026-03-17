@@ -9,13 +9,13 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.StateFlow
 import org.hnau.commons.app.projector.uikit.state.StateContent
 import org.hnau.commons.app.projector.utils.SlideOrientation
+import org.hnau.commons.app.projector.utils.getTransitionSpecForSlideByCompare
 import org.hnau.commons.gen.pipe.annotations.Pipe
 import org.hnau.commons.kotlin.coroutines.flow.state.mapWithScope
 import org.hnau.pinfin.model.transaction.TransactionModel
 import org.hnau.pinfin.projector.transaction.pageable.CommentProjector
 import org.hnau.pinfin.projector.transaction.pageable.DateProjector
 import org.hnau.pinfin.projector.transaction.pageable.TimeProjector
-import org.hnau.pinfin.projector.transaction.utils.createPagesTransitionSpec
 
 class PageProjector(
     scope: CoroutineScope,
@@ -147,9 +147,10 @@ class PageProjector(
                 modifier = modifier,
                 label = "TransactionPage",
                 contentKey = Pair<TransactionModel.Part, *>::first,
-                transitionSpec = createPagesTransitionSpec(
+                transitionSpec = getTransitionSpecForSlideByCompare(
                     orientation = SlideOrientation.Horizontal,
-                ) { it.first.ordinal }
+                    extractComparable = { it.first },
+                )
             ) { (_, page) ->
                 page.Content(
                     modifier = Modifier.fillMaxSize(),

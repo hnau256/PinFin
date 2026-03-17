@@ -16,7 +16,7 @@ import org.hnau.commons.app.projector.uikit.Tabs
 import org.hnau.commons.app.projector.uikit.state.StateContent
 import org.hnau.commons.app.projector.uikit.utils.Dimens
 import org.hnau.commons.app.projector.utils.SlideOrientation
-import org.hnau.commons.app.projector.utils.getTransitionSpecForSlide
+import org.hnau.commons.app.projector.utils.getTransitionSpecForSlideByCompare
 import org.hnau.commons.gen.pipe.annotations.Pipe
 import org.hnau.commons.kotlin.coroutines.flow.state.mapState
 import org.hnau.pinfin.model.budget.analytics.tab.graph.configure.period.operation.ConfigOperationModel
@@ -83,14 +83,10 @@ class ConfigOperationProjector(
                     contentKey = { state ->
                         state.tab.ordinal
                     },
-                    transitionSpec = getTransitionSpecForSlide(
+                    transitionSpec = getTransitionSpecForSlideByCompare(
                         orientation = SlideOrientation.Horizontal,
-                    ) {
-                        when (targetState.tab.ordinal > initialState.tab.ordinal) {
-                            true -> 1f
-                            false -> -1f
-                        } * 0.25f
-                    }
+                        extractComparable = { state -> state.tab },
+                    )
                 ) { state ->
                     state.fold(
                         ifSum = {},

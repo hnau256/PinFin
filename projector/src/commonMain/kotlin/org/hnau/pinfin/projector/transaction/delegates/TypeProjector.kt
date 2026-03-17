@@ -14,6 +14,7 @@ import org.hnau.commons.app.projector.uikit.Tabs
 import org.hnau.commons.app.projector.uikit.state.StateContent
 import org.hnau.commons.app.projector.uikit.state.TransitionSpec
 import org.hnau.commons.app.projector.utils.SlideOrientation
+import org.hnau.commons.app.projector.utils.getTransitionSpecForSlideByCompare
 import org.hnau.commons.gen.pipe.annotations.Pipe
 import org.hnau.commons.kotlin.coroutines.flow.state.mapWithScope
 import org.hnau.pinfin.data.TransactionType
@@ -22,7 +23,6 @@ import org.hnau.pinfin.model.transaction.pageable.TypeModel
 import org.hnau.pinfin.projector.Localization
 import org.hnau.pinfin.projector.transaction.pageable.EntryProjector
 import org.hnau.pinfin.projector.transaction.pageable.TransferProjector
-import org.hnau.pinfin.projector.transaction.utils.createPagesTransitionSpec
 import org.hnau.pinfin.projector.utils.title
 
 class TypeProjector(
@@ -207,11 +207,10 @@ class TypeProjector(
                     modifier = modifier,
                     label = "TransactionPage",
                     contentKey = { it.key },
-                    transitionSpec = createPagesTransitionSpec(
+                    transitionSpec = getTransitionSpecForSlideByCompare(
                         orientation = SlideOrientation.Horizontal,
-                    ) { type ->
-                        type.key.ordinal
-                    }
+                        extractComparable = { page -> page.key },
+                    )
                 ) { type ->
                     type.Content(
                         modifier = Modifier.fillMaxSize(),

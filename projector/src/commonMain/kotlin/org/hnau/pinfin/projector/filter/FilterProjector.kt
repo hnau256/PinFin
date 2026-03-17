@@ -33,11 +33,11 @@ import org.hnau.commons.app.projector.uikit.state.TransitionSpec
 import org.hnau.commons.app.projector.uikit.utils.Dimens
 import org.hnau.commons.app.projector.utils.Icon
 import org.hnau.commons.app.projector.utils.SlideOrientation
+import org.hnau.commons.app.projector.utils.getTransitionSpecForSlideByCompare
 import org.hnau.commons.gen.pipe.annotations.Pipe
 import org.hnau.commons.kotlin.coroutines.flow.state.mapState
 import org.hnau.commons.kotlin.coroutines.flow.state.mapWithScope
 import org.hnau.pinfin.model.filter.FilterModel
-import org.hnau.pinfin.projector.transaction.utils.createPagesTransitionSpec
 import org.hnau.pinfin.projector.utils.BackButtonWidth
 
 class FilterProjector(
@@ -163,7 +163,7 @@ class FilterProjector(
                             horizontal = Dimens.smallSeparation,
                         ),
                         contentKey = Pair<FilterModel.Tab, *>::first,
-                        transitionSpec = createPagesTransitionSpec(
+                        transitionSpec = getTransitionSpecForSlideByCompare(
                             orientation = SlideOrientation.Horizontal,
                         ) { it.first.ordinal },
                         label = "FiltersPage",

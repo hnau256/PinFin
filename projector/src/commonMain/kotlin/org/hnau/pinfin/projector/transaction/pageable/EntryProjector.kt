@@ -19,13 +19,13 @@ import org.hnau.commons.app.projector.uikit.state.StateContent
 import org.hnau.commons.app.projector.uikit.utils.Dimens
 import org.hnau.commons.app.projector.utils.Icon
 import org.hnau.commons.app.projector.utils.SlideOrientation
+import org.hnau.commons.app.projector.utils.getTransitionSpecForSlideByCompare
 import org.hnau.commons.gen.pipe.annotations.Pipe
 import org.hnau.commons.kotlin.coroutines.flow.state.mapWithScope
 import org.hnau.pinfin.model.transaction.pageable.EntryModel
 import org.hnau.pinfin.model.utils.budget.state.AccountInfo
 import org.hnau.pinfin.projector.Localization
 import org.hnau.pinfin.projector.transaction.utils.ChooseOrCreateProjector
-import org.hnau.pinfin.projector.transaction.utils.createPagesTransitionSpec
 import org.hnau.pinfin.projector.utils.ArrowDirection
 import org.hnau.pinfin.projector.utils.ArrowIcon
 import org.hnau.pinfin.projector.utils.formatter.AmountFormatter
@@ -149,9 +149,9 @@ class EntryProjector(
                     modifier = modifier,
                     label = "EntryPage",
                     contentKey = PageType::key,
-                    transitionSpec = createPagesTransitionSpec(
+                    transitionSpec = getTransitionSpecForSlideByCompare(
                         orientation = SlideOrientation.Horizontal,
-                        extractIndex = PageType::key,
+                        extractComparable = PageType::key,
                     )
                 ) { type ->
                     type.Content(

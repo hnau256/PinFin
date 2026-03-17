@@ -12,12 +12,12 @@ import org.hnau.commons.app.projector.uikit.ItemsRow
 import org.hnau.commons.app.projector.uikit.state.StateContent
 import org.hnau.commons.app.projector.utils.Icon
 import org.hnau.commons.app.projector.utils.SlideOrientation
+import org.hnau.commons.app.projector.utils.getTransitionSpecForSlideByCompare
 import org.hnau.commons.gen.pipe.annotations.Pipe
 import org.hnau.commons.kotlin.coroutines.flow.state.mapWithScope
 import org.hnau.pinfin.model.transaction.pageable.TransferModel
 import org.hnau.pinfin.model.utils.budget.state.AccountInfo
 import org.hnau.pinfin.projector.transaction.utils.ChooseOrCreateProjector
-import org.hnau.pinfin.projector.transaction.utils.createPagesTransitionSpec
 import org.hnau.pinfin.projector.utils.ArrowDirection
 import org.hnau.pinfin.projector.utils.ArrowIcon
 
@@ -161,9 +161,9 @@ class TransferProjector(
                     modifier = modifier,
                     label = "TransferPage",
                     contentKey = PageType::key,
-                    transitionSpec = createPagesTransitionSpec(
+                    transitionSpec = getTransitionSpecForSlideByCompare(
                         orientation = SlideOrientation.Horizontal,
-                        extractIndex = PageType::key,
+                        extractComparable = PageType::key,
                     )
                 ) { type ->
                     type.Content(
