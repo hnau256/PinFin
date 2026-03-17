@@ -23,6 +23,7 @@ import org.hnau.pinfin.model.utils.budget.state.AccountInfo
 import org.hnau.pinfin.projector.Localization
 import org.hnau.pinfin.projector.utils.AccountContent
 import org.hnau.pinfin.projector.utils.AmountContent
+import org.hnau.pinfin.projector.utils.ViewMode
 import org.hnau.pinfin.projector.utils.formatter.AmountFormatter
 
 
@@ -82,6 +83,7 @@ class AccountsProjector(
                 AccountContent(
                     info = info,
                     localization = dependencies.localization,
+                    viewMode = ViewMode.Full,
                 )
             },
             trailingContent = {

@@ -343,7 +343,6 @@ class RecordProjector(
                         info = category,
                         onClick = onClick,
                         selected = selected,
-                        viewMode = ViewMode.Icon,
                         localization = dependencies.localization,
                     ) { category ->
                         ItemsRow {

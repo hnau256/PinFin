@@ -11,6 +11,7 @@ import org.hnau.pinfin.projector.Localization
 import org.hnau.pinfin.projector.transaction.utils.ChooseOrCreateMessages
 import org.hnau.pinfin.projector.transaction.utils.ChooseOrCreateProjector
 import org.hnau.pinfin.projector.utils.AccountContent
+import org.hnau.pinfin.projector.utils.ViewMode
 
 class AccountProjector(
     private val model: AccountModel,
@@ -34,6 +35,7 @@ class AccountProjector(
             selected = model.isFocused.collectAsState().value,
             onClick = model.requestFocus,
             localization = dependencies.localization,
+            viewMode = ViewMode.Full,
         )
     }
 
@@ -68,6 +70,7 @@ class AccountProjector(
                 selected = isSelected.collectAsState().value,
                 onClick = onClick,
                 localization = dependencies.localization,
+                viewMode = ViewMode.Full,
             )
         }
     }

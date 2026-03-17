@@ -23,7 +23,7 @@ enum class ViewMode {
     companion object {
 
         val default: ViewMode
-            get() = Full
+            get() = Icon
     }
 }
 

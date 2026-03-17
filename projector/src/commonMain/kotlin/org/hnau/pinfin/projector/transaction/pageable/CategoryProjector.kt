@@ -27,6 +27,7 @@ class CategoryProjector(
     @Composable
     fun Content(
         modifier: Modifier = Modifier,
+        viewMode: ViewMode = ViewMode.Full,
     ) {
         CategoryContent(
             info = model.category.collectAsState().value,
@@ -34,6 +35,7 @@ class CategoryProjector(
             selected = model.isFocused.collectAsState().value,
             onClick = model.requestFocus,
             localization = dependencies.localization,
+            viewMode = viewMode,
         )
     }
 
@@ -42,7 +44,7 @@ class CategoryProjector(
         selected: Boolean,
         onClick: (() -> Unit)?,
         modifier: Modifier = Modifier,
-        viewMode: ViewMode = ViewMode.default,
+        viewMode: ViewMode = ViewMode.Full,
         content: @Composable (inner: @Composable () -> Unit) -> Unit = { inner -> inner() },
     ) {
         CategoryContent(
@@ -78,6 +80,7 @@ class CategoryProjector(
                 selected = isSelected.collectAsState().value,
                 onClick = onClick,
                 localization = dependencies.localization,
+                viewMode = ViewMode.Full,
             )
         }
     }

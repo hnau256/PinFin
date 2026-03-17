@@ -15,6 +15,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.util.fastForEach
 import arrow.core.nonEmptySetOf
 import arrow.core.toNonEmptyListOrNull
@@ -25,6 +26,7 @@ import org.hnau.commons.app.projector.uikit.table.TableOrientation
 import org.hnau.commons.app.projector.uikit.utils.Dimens
 import org.hnau.commons.app.projector.utils.Icon
 import org.hnau.commons.app.projector.utils.horizontalDisplayPadding
+import org.hnau.pinfin.data.AmountDirection
 import org.hnau.pinfin.model.utils.amount
 import org.hnau.pinfin.model.utils.budget.state.TransactionInfo
 import org.hnau.pinfin.projector.utils.AccountContent
@@ -32,6 +34,7 @@ import org.hnau.pinfin.projector.utils.AmountContent
 import org.hnau.pinfin.projector.utils.ArrowDirection
 import org.hnau.pinfin.projector.utils.ArrowIcon
 import org.hnau.pinfin.projector.utils.CategoryContent
+import org.hnau.pinfin.projector.utils.ViewMode
 
 @Composable
 fun TransactionInfo.Content(
@@ -44,9 +47,7 @@ fun TransactionInfo.Content(
             .fillMaxWidth()
             .horizontalDisplayPadding(),
     ) {
-        Cell(
-            
-        ) {
+        Cell {
             CellContent(
                 dependencies = dependencies,
                 onClick = onClick,
@@ -149,6 +150,8 @@ private fun TransactionInfo.CommentContent() {
     Text(
         text = comment,
         style = MaterialTheme.typography.labelMedium,
+        maxLines = 1,
+        overflow = TextOverflow.Ellipsis,
     )
 }
 
@@ -172,24 +175,39 @@ private fun EntryContent(
                 }
                 .toNonEmptyList()
         }
-        Column(
-            verticalArrangement = Arrangement.spacedBy(Dimens.smallSeparation)
-        ) {
-            categories.fastForEach { categoryInfo ->
-                CategoryContent(
-                    info = categoryInfo,
-                    localization = dependencies.localization,
-                )
-            }
-        }
-        Icon(
-            tint = MaterialTheme.colorScheme.onSurface,
-            icon = ArrowIcon[ArrowDirection.Both],
-        )
         AccountContent(
             info = entry.account,
             localization = dependencies.localization,
         )
+        Icon(
+            tint = MaterialTheme.colorScheme.onSurface,
+            icon = ArrowIcon[
+                remember(records) {
+                    val allDirection = records
+                        .map {
+                            it.amount.splitToDirectionAndRaw().key
+                        }
+                        .let { directions ->
+                            directions.tail.fold<AmountDirection, AmountDirection?>(
+                                initial = directions.head,
+                            ) { acc, direction ->
+                                acc?.takeIf { it == direction }
+                            }
+                        }
+                    when (allDirection) {
+                        AmountDirection.Credit -> ArrowDirection.EndToStart
+                        AmountDirection.Debit -> ArrowDirection.StartToEnd
+                        null -> ArrowDirection.Both
+                    }
+                }
+            ],
+        )
+        categories.fastForEach { categoryInfo ->
+            CategoryContent(
+                info = categoryInfo,
+                localization = dependencies.localization,
+                )
+        }
     }
 }
 

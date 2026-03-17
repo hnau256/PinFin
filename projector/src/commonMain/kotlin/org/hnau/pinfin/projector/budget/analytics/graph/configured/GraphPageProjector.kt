@@ -40,6 +40,7 @@ import org.hnau.pinfin.projector.Localization
 import org.hnau.pinfin.projector.utils.AccountContent
 import org.hnau.pinfin.projector.utils.AmountContent
 import org.hnau.pinfin.projector.utils.CategoryContent
+import org.hnau.pinfin.projector.utils.ViewMode
 import org.hnau.pinfin.projector.utils.formatter.AmountFormatter
 
 
@@ -191,6 +192,7 @@ class GraphPageProjector(
                 AccountContent(
                     info = key.account,
                     localization = dependencies.localization,
+                    viewMode = ViewMode.Full,
                 )
             }
 
@@ -203,6 +205,7 @@ class GraphPageProjector(
                     CategoryContent(
                         info = key.category,
                         localization = dependencies.localization,
+                        viewMode = ViewMode.Full,
                     )
                 }
             )
