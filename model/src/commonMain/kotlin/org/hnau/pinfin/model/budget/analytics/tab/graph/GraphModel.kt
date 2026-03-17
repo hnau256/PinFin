@@ -13,6 +13,7 @@ import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.UseSerializers
+import org.hnau.commons.app.model.color.gradient.create
 import org.hnau.commons.app.model.goback.GoBackHandler
 import org.hnau.commons.gen.pipe.annotations.Pipe
 import org.hnau.commons.gen.sealup.annotations.SealUp
@@ -82,8 +83,6 @@ class GraphModel(
     interface Dependencies {
 
         fun configured(): GraphConfigFlowModel.Dependencies
-
-        fun configure(): GraphConfigureModel.Dependencies
     }
 
     @Serializable
@@ -107,8 +106,8 @@ class GraphModel(
                         configure = {
                             updateState(
                                 StateSkeleton.configure(
-                                    configure = GraphConfigureModel.Skeleton.create(
-                                        initialConfig = skeleton.config.value,
+                                    configure = GraphConfigureModel.Skeleton(
+                                        initial = skeleton.config.value,
                                     )
                                 )
                             )
@@ -120,7 +119,6 @@ class GraphModel(
                     State.configure(
                         scope = scope,
                         skeleton = configure,
-                        dependencies = dependencies.configure(),
                         onReady = { newConfig ->
                             skeleton.config.value = newConfig
                             switchToConfigured()

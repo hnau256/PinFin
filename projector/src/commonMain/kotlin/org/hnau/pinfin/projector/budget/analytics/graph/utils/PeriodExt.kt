@@ -35,5 +35,7 @@ internal fun AnalyticsSplitConfig.Period.format(
         localization = localization,
     )
 
-    AnalyticsSplitConfig.Period.Inclusive -> localization.inclusivePeriod
+    AnalyticsSplitConfig.Period.Inclusive -> localization
+        .inclusivePeriod
+        .replaceFirstChar(Char::lowercase)
 }
