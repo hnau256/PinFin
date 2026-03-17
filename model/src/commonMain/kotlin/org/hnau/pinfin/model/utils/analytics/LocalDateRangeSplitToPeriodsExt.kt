@@ -8,12 +8,10 @@ import kotlinx.datetime.LocalDateRange
 import kotlinx.datetime.minus
 import kotlinx.datetime.plus
 
-
 internal fun LocalDateRange.splitToPeriods(
     duration: DatePeriod,
     startOfOneOfPeriods: LocalDate,
 ): NonEmptyList<LocalDateRange> {
-
     var startOfFirstPeriod = startOfOneOfPeriods
     while (startOfFirstPeriod + duration <= start) {
         startOfFirstPeriod += duration
@@ -34,8 +32,11 @@ internal fun LocalDateRange.splitToPeriods(
         startOfFirstPeriod,
         *(tailStarts.toTypedArray()),
     ).map { startOfPeriod ->
-        val endOfPeriod = startOfPeriod + duration - oneDay
-        startOfPeriod..endOfPeriod
+        val endOfPeriod = minOf(
+            startOfPeriod + duration - oneDay,
+            endInclusive,
+        )
+        maxOf(startOfPeriod, start)..endOfPeriod
     }
 }
 

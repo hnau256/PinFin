@@ -119,11 +119,7 @@ data class AnalyticsPagesProvider(
                             .toLocalDateTime(TimeZone.currentSystemDefault())
                             .date
                     }
-                    .let { (minFromTransactions, maxFromTransactions) ->
-                        val min = minOf(minFromTransactions, today)
-                        val max = maxOf(maxFromTransactions, today)
-                        min..max
-                    }
+                    .let { (min, max) -> min..max }
             }
         )
 }
