@@ -33,7 +33,6 @@ data class AnalyticsPagesProvider(
                     is AnalyticsSplitConfig.Period.Fixed -> range.splitToPeriods(
                         duration = period.duration,
                         startOfOneOfPeriods = period.startOfOneOfPeriods,
-                        incremental = period.incremental,
                     )
                 }
 

@@ -115,7 +115,6 @@ class ConfigSplitPeriodModel(
                                                     day = 1,
                                                 )
                                             },
-                                        incremental = false,
                                     ),
                                     changed = tabChanged,
                                 )

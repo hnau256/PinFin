@@ -7,13 +7,11 @@ import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalDateRange
 import kotlinx.datetime.minus
 import kotlinx.datetime.plus
-import org.hnau.commons.kotlin.foldBoolean
 
 
 internal fun LocalDateRange.splitToPeriods(
     duration: DatePeriod,
     startOfOneOfPeriods: LocalDate,
-    incremental: Boolean,
 ): NonEmptyList<LocalDateRange> {
 
     var startOfFirstPeriod = startOfOneOfPeriods
@@ -37,11 +35,7 @@ internal fun LocalDateRange.splitToPeriods(
         *(tailStarts.toTypedArray()),
     ).map { startOfPeriod ->
         val endOfPeriod = startOfPeriod + duration - oneDay
-        val start = incremental.foldBoolean(
-            ifTrue = { startOfFirstPeriod },
-            ifFalse = { startOfPeriod }
-        )
-        start..endOfPeriod
+        startOfPeriod..endOfPeriod
     }
 }
 

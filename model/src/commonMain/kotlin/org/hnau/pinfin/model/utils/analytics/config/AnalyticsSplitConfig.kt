@@ -36,7 +36,6 @@ data class AnalyticsSplitConfig(
         data class Fixed(
             val duration: DatePeriod,
             val startOfOneOfPeriods: LocalDate,
-            val incremental: Boolean,
         ) : Period
     }
 }

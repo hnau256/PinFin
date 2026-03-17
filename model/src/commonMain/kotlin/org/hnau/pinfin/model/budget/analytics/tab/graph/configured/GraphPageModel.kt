@@ -72,7 +72,6 @@ class GraphPageModel(
                 .splitToPeriods(
                     duration = operation.subperiod,
                     startOfOneOfPeriods = page.period.start,
-                    incremental = false,
                 )
 
             AnalyticsPageConfig.Operation.Sum ->

@@ -178,7 +178,6 @@ class GraphModel(
                                 day = 1,
                             )
                         },
-                    incremental = false,
                 ),
                 usedAccounts = null,
                 usedCategories = null,
