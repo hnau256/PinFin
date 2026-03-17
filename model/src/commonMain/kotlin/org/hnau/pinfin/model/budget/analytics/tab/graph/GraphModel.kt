@@ -185,9 +185,6 @@ class GraphModel(
                 groupBy = AnalyticsSplitConfig.GroupBy.Category,
             ),
             page = AnalyticsPageConfig(
-                subPeriod = DatePeriod(
-                    days = 1,
-                ),
                 operation = AnalyticsPageConfig.Operation.Sum,
             ),
             view = AnalyticsViewConfig(

@@ -5,6 +5,7 @@
 package org.hnau.pinfin.model.budget.analytics.tab.graph.configured
 
 import arrow.core.NonEmptyList
+import arrow.core.nonEmptyListOf
 import arrow.core.toNonEmptyListOrNull
 import arrow.core.toNonEmptyListOrThrow
 import kotlinx.coroutines.CoroutineScope
@@ -64,13 +65,19 @@ class GraphPageModel(
     val period: LocalDateRange
         get() = page.period
 
-    private val subperiods: NonEmptyList<LocalDateRange> = page
-        .period
-        .splitToPeriods(
-            duration = config.subPeriod,
-            startOfOneOfPeriods = page.period.start,
-            incremental = false,
-        )
+    private val subperiods: NonEmptyList<LocalDateRange> =
+        when (val operation = config.operation) {
+            is AnalyticsPageConfig.Operation.Average -> page
+                .period
+                .splitToPeriods(
+                    duration = operation.subperiod,
+                    startOfOneOfPeriods = page.period.start,
+                    incremental = false,
+                )
+
+            AnalyticsPageConfig.Operation.Sum ->
+                nonEmptyListOf(page.period)
+        }
 
     data class State(
         val values: AmountDirectionValues<Half?>,
@@ -176,7 +183,7 @@ class GraphPageModel(
                 AnalyticsPageConfig.Operation.Sum -> subperiodsAmounts
                     .sum
 
-                AnalyticsPageConfig.Operation.Average -> subperiodsAmounts
+                is AnalyticsPageConfig.Operation.Average -> subperiodsAmounts
                     .sum
                     .value
                     .toDouble()

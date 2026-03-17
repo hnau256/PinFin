@@ -17,6 +17,7 @@ import org.hnau.commons.app.projector.uikit.utils.Dimens
 import org.hnau.commons.app.projector.utils.Icon
 import org.hnau.commons.gen.pipe.annotations.Pipe
 import org.hnau.pinfin.model.budget.analytics.tab.graph.configure.GraphConfigureModel
+import org.hnau.pinfin.projector.budget.analytics.graph.configure.period.ConfigOperationProjector
 import org.hnau.pinfin.projector.budget.analytics.graph.configure.period.ConfigSplitPeriodProjector
 
 class GraphConfigureProjector(
@@ -29,12 +30,20 @@ class GraphConfigureProjector(
     interface Dependencies {
 
         fun configSpitPeriod(): ConfigSplitPeriodProjector.Dependencies
+
+        fun configOperation(): ConfigOperationProjector.Dependencies
     }
 
     private val splitPeriod = ConfigSplitPeriodProjector(
         scope = scope,
         model = model.period,
         dependencies = dependencies.configSpitPeriod(),
+    )
+
+    private val operation = ConfigOperationProjector(
+        scope = scope,
+        model = model.operation,
+        dependencies = dependencies.configOperation(),
     )
 
     @Composable
@@ -51,6 +60,13 @@ class GraphConfigureProjector(
                     key = "SplitPeriod",
                 ) {
                     splitPeriod.Content(
+                        modifier = Modifier.fillMaxWidth(),
+                    )
+                }
+                item(
+                    key = "Operation",
+                ) {
+                    operation.Content(
                         modifier = Modifier.fillMaxWidth(),
                     )
                 }

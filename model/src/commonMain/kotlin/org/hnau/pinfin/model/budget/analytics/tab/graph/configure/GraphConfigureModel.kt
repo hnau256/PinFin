@@ -7,8 +7,10 @@ import org.hnau.commons.app.model.goback.GoBackHandler
 import org.hnau.commons.app.model.goback.NeverGoBackHandler
 import org.hnau.commons.kotlin.coroutines.flow.state.mapState
 import org.hnau.commons.kotlin.foldBoolean
+import org.hnau.pinfin.model.budget.analytics.tab.graph.configure.period.operation.ConfigOperationModel
 import org.hnau.pinfin.model.budget.analytics.tab.graph.configure.period.split.ConfigSplitPeriodModel
 import org.hnau.pinfin.model.transaction.utils.Editable
+import org.hnau.pinfin.model.transaction.utils.combineEditableWith
 import org.hnau.pinfin.model.transaction.utils.map
 import org.hnau.pinfin.model.utils.analytics.config.AnalyticsConfig
 
@@ -25,6 +27,9 @@ class GraphConfigureModel(
         val period: ConfigSplitPeriodModel.Skeleton = ConfigSplitPeriodModel.Skeleton.create(
             initial = initial.split.period,
         ),
+        val operation: ConfigOperationModel.Skeleton = ConfigOperationModel.Skeleton.create(
+            initial = initial.page.operation,
+        ),
     )
 
     val period = ConfigSplitPeriodModel(
@@ -32,13 +37,27 @@ class GraphConfigureModel(
         skeleton = skeleton.period,
     )
 
+    val operation = ConfigOperationModel(
+        scope = scope,
+        skeleton = skeleton.operation,
+    )
+
     private val editableConfig: StateFlow<Editable<AnalyticsConfig>> = period
         .editablePeriod
-        .mapState(scope) { editablePeriod ->
-            editablePeriod.map { period ->
+        .combineEditableWith(
+            scope = scope,
+            other = operation.editableOperation,
+        ) { period, operation ->
+            period to operation
+        }
+        .mapState(scope) { editablePeriodAndOperation ->
+            editablePeriodAndOperation.map { (period, operation) ->
                 skeleton.initial.copy(
                     split = skeleton.initial.split.copy(
                         period = period,
+                    ),
+                    page = skeleton.initial.page.copy(
+                        operation = operation,
                     )
                 )
             }

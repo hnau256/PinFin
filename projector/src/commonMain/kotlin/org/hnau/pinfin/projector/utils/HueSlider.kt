@@ -21,10 +21,10 @@ import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.flow.MutableStateFlow
 import org.hnau.commons.app.model.theme.ThemeBrightness
 import org.hnau.commons.app.model.theme.ThemeBrightnessValues
+import org.hnau.commons.app.projector.dynamiccolor.hct.Hct
 import org.hnau.commons.app.projector.utils.collectAsMutableAccessor
 import org.hnau.commons.app.projector.utils.theme.DynamicSchemeConfig
 import org.hnau.commons.app.projector.utils.theme.themeBrightness
-import org.hnau.commons.dynamiccolor.hct.Hct
 import org.hnau.pinfin.data.Hue
 import org.hnau.pinfin.model.utils.model
 import org.hnau.commons.app.model.utils.Hue as ModelHue

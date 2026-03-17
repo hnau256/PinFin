@@ -89,6 +89,8 @@ data class Localization(
     val days: String,
     val inclusivePeriod: String,
     val fixedPeriod: String,
+    val sum: String,
+    val average: String,
     val sumFor: (period: String) -> String,
     val avgFor: (period: String, subperiod: String) -> String,
 ) {
@@ -181,6 +183,8 @@ data class Localization(
             days = "дней",
             inclusivePeriod = "Весь период",
             fixedPeriod = "Выбранный период",
+            sum = "Сумма",
+            average = "Среднее",
             sumFor = { period -> "Сумма за $period" },
             avgFor = { period, subperiod -> "Среднее в $subperiod за $period" },
         )

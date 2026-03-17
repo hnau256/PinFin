@@ -24,7 +24,19 @@ class NonNegativeCountModel(
             .toString()
             .toEditingString()
             .toMutableStateFlowAsInitial(),
-    )
+    ) {
+
+        fun getCountOrNull(
+            scope: CoroutineScope,
+        ) = manual
+            .mapState(scope) { manual ->
+                manual
+                    .text
+                    .toIntOrNull()
+                    ?.takeIf { it >= 0 }
+                    .toOption()
+            }
+    }
 
     val manual: MutableStateFlow<EditingString>
         get() = skeleton.manual

@@ -135,16 +135,16 @@ class GraphConfigProjector(
                         localization = dependencies.localization,
                     )
 
-                    when (config.page.operation) {
+                    when (val operation = config.page.operation) {
                         AnalyticsPageConfig.Operation.Sum -> dependencies
                             .localization
                             .sumFor(period)
 
-                        AnalyticsPageConfig.Operation.Average -> dependencies
+                        is AnalyticsPageConfig.Operation.Average -> dependencies
                             .localization
                             .avgFor(
                                 period,
-                                config.page.subPeriod.format(
+                                operation.subperiod.format(
                                     localization = dependencies.localization,
                                 )
                             )
