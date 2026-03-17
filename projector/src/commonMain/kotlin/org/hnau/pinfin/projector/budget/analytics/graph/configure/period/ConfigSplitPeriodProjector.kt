@@ -14,6 +14,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.StateFlow
 import org.hnau.commons.app.projector.uikit.Tabs
 import org.hnau.commons.app.projector.uikit.state.StateContent
+import org.hnau.commons.app.projector.uikit.state.TransitionSpec
 import org.hnau.commons.app.projector.uikit.utils.Dimens
 import org.hnau.commons.app.projector.utils.SlideOrientation
 import org.hnau.commons.app.projector.utils.getTransitionSpecForSlideByCompare
@@ -81,10 +82,7 @@ class ConfigSplitPeriodProjector(
                         .fillMaxWidth(),
                     label = "SplitPeriodSelectedTab",
                     contentKey = { state -> state.tab.ordinal },
-                    transitionSpec = getTransitionSpecForSlideByCompare(
-                        orientation = SlideOrientation.Horizontal,
-                        extractComparable = { state -> state.tab },
-                    )
+                    transitionSpec = TransitionSpec.vertical(),
                 ) { state ->
                     state.fold(
                         ifInclusive = {},
