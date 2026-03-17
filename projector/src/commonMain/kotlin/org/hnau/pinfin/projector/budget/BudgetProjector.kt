@@ -1,8 +1,10 @@
 package org.hnau.pinfin.projector.budget
 
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.navigationBarsPadding
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.List
 import androidx.compose.material.icons.filled.QueryStats
@@ -56,7 +58,7 @@ class BudgetProjector(
 
         fun config(): BudgetConfigProjector.Dependencies
     }
-    
+
     @SealUp(
         variants = [
             Variant(
@@ -79,7 +81,7 @@ class BudgetProjector(
 
         @Composable
         fun Content(
-            bottomInset: Dp,
+            contentPadding: PaddingValues,
         )
 
         companion object
@@ -121,14 +123,18 @@ class BudgetProjector(
         }
 
     @Composable
-    fun Content() {
+    fun Content(
+        contentPadding: PaddingValues,
+    ) {
         val tabWithProjector by projector.collectAsState()
         Overcompose(
+            contentPadding = contentPadding,
             modifier = Modifier.fillMaxSize(),
-            bottom = {
+            bottom = { contentPadding ->
                 NavigationBar(
                     modifier = Modifier
-                        .fillMaxWidth(),
+                        .fillMaxWidth()
+                        .padding(contentPadding),
                 ) {
                     val selectedTab = tabWithProjector.first
                     BudgetTab.entries.fastForEach { tab ->
@@ -148,12 +154,12 @@ class BudgetProjector(
                 contentKey = { (tab) -> tab },
                 transitionSpec = getTransitionSpecForSlideByCompare(
                     orientation = SlideOrientation.Horizontal,
-                    extractComparable = { (tab) -> tab},
+                    extractComparable = { (tab) -> tab },
                 ),
                 label = "BudgetPage",
             ) { (_, projector) ->
                 projector.Content(
-                    bottomInset = contentPadding.calculateBottomPadding(),
+                    contentPadding = contentPadding,
                 )
             }
         }

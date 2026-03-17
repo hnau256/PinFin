@@ -1,6 +1,7 @@
 package org.hnau.pinfin.projector.accountstack
 
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -52,8 +53,11 @@ class AccountProjector(
 
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
-    fun Content() {
+    fun Content(
+        contentPadding: PaddingValues,
+    ) {
         FullScreen(
+            contentPadding = contentPadding,
             backButtonWidth = dependencies.backButtonWidth.width,
             top = { contentPadding ->
                 TopBar(

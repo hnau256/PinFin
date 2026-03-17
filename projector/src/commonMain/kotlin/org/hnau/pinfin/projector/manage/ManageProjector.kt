@@ -1,5 +1,6 @@
 package org.hnau.pinfin.projector.manage
 
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -51,7 +52,9 @@ class ManageProjector(
     interface StateProjector {
 
         @Composable
-        fun Content()
+        fun Content(
+            contentPadding: PaddingValues,
+        )
 
         companion object
     }
@@ -78,7 +81,9 @@ class ManageProjector(
         }
 
     @Composable
-    fun Content() {
+    fun Content(
+        contentPadding: PaddingValues,
+    ) {
         state
             .collectAsState()
             .value
@@ -88,7 +93,9 @@ class ManageProjector(
                 transitionSpec = TransitionSpec.crossfade(),
                 contentKey = ManageElementProjector::ordinal,
             ) { elementProjector ->
-                elementProjector.Content()
+                elementProjector.Content(
+                    contentPadding = contentPadding,
+                )
             }
     }
 }

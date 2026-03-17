@@ -1,6 +1,7 @@
 package org.hnau.pinfin.projector
 
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -25,6 +26,7 @@ import org.hnau.commons.gen.pipe.annotations.Pipe
 import org.hnau.pinfin.model.CategoriesModel
 import org.hnau.pinfin.projector.utils.BackButtonWidth
 import org.hnau.pinfin.projector.utils.CategoryContent
+import org.hnau.pinfin.projector.utils.ViewMode
 
 
 class CategoriesProjector(
@@ -43,8 +45,11 @@ class CategoriesProjector(
 
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
-    fun Content() {
+    fun Content(
+        contentPadding: PaddingValues,
+    ) {
         FullScreen(
+            contentPadding = contentPadding,
             backButtonWidth = dependencies.backButtonWidth.width,
             top = { contentPadding ->
                 TopBar(
@@ -92,6 +97,7 @@ class CategoriesProjector(
                                         CategoryContent(
                                             info = category.info,
                                             localization = dependencies.localization,
+                                            viewMode = ViewMode.Full,
                                         )
                                     },
                                     trailingContent = { Icon(Icons.Filled.ChevronRight) },

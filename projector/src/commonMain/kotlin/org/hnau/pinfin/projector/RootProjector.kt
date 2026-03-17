@@ -1,5 +1,6 @@
 package org.hnau.pinfin.projector
 
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
@@ -52,13 +53,19 @@ class RootProjector(
     )
 
     @Composable
-    fun Content() {
+    fun Content(
+        contentPadding: PaddingValues
+    ) {
         CompositionLocalProvider(
             LocalContentColor provides MaterialTheme.colorScheme.onBackground,
             //LocalDensity provides Density(LocalDensity.current.density * 1.1f),
         ) {
-            loadBudgets.Content()
-            backButton.Content()
+            loadBudgets.Content(
+                contentPadding = contentPadding,
+            )
+            backButton.Content(
+                contentPadding = contentPadding,
+            )
             //bubblesHolder.Content()
         }
     }

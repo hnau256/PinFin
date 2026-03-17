@@ -1,5 +1,6 @@
 package org.hnau.pinfin.projector
 
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -40,7 +41,9 @@ class LoadBudgetsProjector(
         }
 
     @Composable
-    fun Content() {
+    fun Content(
+        contentPadding: PaddingValues,
+    ) {
         budgetsSackProjector
             .collectAsState()
             .value
@@ -48,7 +51,9 @@ class LoadBudgetsProjector(
                 modifier = Modifier.fillMaxSize(),
                 transitionSpec = TransitionSpec.horizontal(),
             ) { budgetsStackProjector ->
-                budgetsStackProjector.Content()
+                budgetsStackProjector.Content(
+                    contentPadding = contentPadding,
+                )
             }
     }
 }

@@ -54,8 +54,11 @@ class StartSyncProjector(
 
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
-    fun Content() {
+    fun Content(
+        contentPadding: PaddingValues,
+    ) {
         FullScreen(
+            contentPadding = contentPadding,
             backButtonWidth = dependencies.backButtonWidth.width,
             top = { contentPadding ->
                 TopBar(

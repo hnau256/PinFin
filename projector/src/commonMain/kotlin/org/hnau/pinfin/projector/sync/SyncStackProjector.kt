@@ -1,5 +1,6 @@
 package org.hnau.pinfin.projector.sync
 
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.runtime.Composable
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.StateFlow
@@ -49,7 +50,9 @@ class SyncStackProjector(
     interface PageProjector {
 
         @Composable
-        fun Content()
+        fun Content(
+            contentPadding: PaddingValues,
+        )
 
         companion object
     }
@@ -74,7 +77,7 @@ class SyncStackProjector(
                             dependencies = dependencies.client(),
                         )
                     },
-                    ifServer ={ serverModel ->
+                    ifServer = { serverModel ->
                         PageProjector.server(
                             model = serverModel,
                             dependencies = dependencies.server(),
@@ -85,9 +88,13 @@ class SyncStackProjector(
         )
 
     @Composable
-    fun Content() {
+    fun Content(
+        contentPadding: PaddingValues,
+    ) {
         tail.Content { elementProjector ->
-            elementProjector.Content()
+            elementProjector.Content(
+                contentPadding = contentPadding,
+            )
         }
     }
 }

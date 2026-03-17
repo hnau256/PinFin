@@ -1,5 +1,6 @@
 package org.hnau.pinfin.app
 
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.InternalComposeApi
 import androidx.compose.runtime.remember
@@ -16,6 +17,7 @@ import androidx.compose.ui.window.rememberWindowState
 import kotlinx.coroutines.runBlocking
 import org.hnau.commons.app.model.app.DesktopApp
 import org.hnau.commons.app.model.theme.ThemeBrightness
+import org.hnau.commons.app.projector.uikit.utils.Dimens
 
 @OptIn(InternalComposeApi::class, InternalComposeUiApi::class)
 fun main() = runBlocking {
@@ -45,24 +47,15 @@ fun main() = runBlocking {
             //icon = rememberVectorPainter(pinfinIcon.s256),
         ) {
             val density = remember(scale) { Density(scale) }
-            val insets = remember(density) { WindowInsets(density) }
             CompositionLocalProvider(
                 LocalDensity provides density,
-                LocalPlatformWindowInsets provides insets,
             ) {
-                projector.Content()
+                projector.Content(
+                    contentPadding = PaddingValues(
+                        vertical = Dimens.separation,
+                    )
+                )
             }
         }
     }
-}
-
-@OptIn(InternalComposeUiApi::class)
-private class WindowInsets(
-    density: Density,
-) : PlatformWindowInsets {
-
-    override val systemBars: PlatformInsets = density.PlatformInsets(
-        top = 16.dp,
-        bottom = 16.dp,
-    )
 }

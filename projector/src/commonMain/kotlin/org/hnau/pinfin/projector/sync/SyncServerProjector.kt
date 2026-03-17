@@ -2,6 +2,7 @@ package org.hnau.pinfin.projector.sync
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.BasicAlertDialog
 import androidx.compose.material3.Button
@@ -41,8 +42,11 @@ class SyncServerProjector(
 
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
-    fun Content() {
+    fun Content(
+        contentPadding: PaddingValues,
+    ) {
         FullScreen(
+            contentPadding = contentPadding,
             backButtonWidth = dependencies.backButtonWidth.width,
             top = { contentPadding ->
                 TopBar(

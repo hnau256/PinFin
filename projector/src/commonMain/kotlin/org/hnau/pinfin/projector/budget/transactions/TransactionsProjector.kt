@@ -71,21 +71,15 @@ class TransactionsProjector(
 
     @Composable
     fun Content(
-        bottomInset: Dp,
+        contentPadding: PaddingValues,
         showAddButton: Boolean = true,
     ) {
         Overcompose(
-            top = {
-                filter.ContentAsTopBar()
+            contentPadding = contentPadding,
+            top = { contentPadding ->
+                filter.ContentAsTopBar(contentPadding)
             },
-            bottom = {
-                val contentPadding = WindowInsets
-                    .systemBars
-                    .asPaddingValues()
-                    .copy(
-                        top = 0.dp,
-                        bottom = bottomInset,
-                    )
+            bottom = { contentPadding ->
                 Box {
                     showAddButton.foldBoolean(
                         ifTrue = {

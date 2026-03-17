@@ -3,6 +3,7 @@ package org.hnau.pinfin.projector.budget.analytics
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -17,6 +18,7 @@ import androidx.compose.ui.unit.Dp
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.CoroutineScope
 import org.hnau.commons.app.projector.uikit.Tabs
+import org.hnau.commons.app.projector.uikit.utils.Dimens
 import org.hnau.commons.app.projector.utils.Overcompose
 import org.hnau.commons.app.projector.utils.rememberPagerState
 import org.hnau.commons.gen.pipe.annotations.Pipe
@@ -83,15 +85,19 @@ class AnalyticsProjector(
 
     @Composable
     fun Content(
-        bottomInset: Dp,
+        contentPadding: PaddingValues,
     ) {
         val selectedTab by model.selectedTab.collectAsState()
         Overcompose(
+            contentPadding = contentPadding,
             modifier = Modifier.fillMaxSize(),
-            top = {
+            top = { contentPadding ->
                 Box(
                     modifier = Modifier
-                        .systemBarsPadding(),
+                        .padding(contentPadding)
+                        .padding(
+                            bottom = Dimens.separation,
+                        ),
                     contentAlignment = Alignment.Center,
                 ) {
                     Tabs(
@@ -107,16 +113,13 @@ class AnalyticsProjector(
                     }
                 }
             },
-        ) { tabContentPadding ->
+        ) { contentPadding ->
             HorizontalPager(
                 state = rememberPagerState(model.selectedTab),
             ) { i ->
                 val tab = AnalyticsTab.entries[i]
                 tabs[tab].Content(
-                    contentPadding = PaddingValues(
-                        top = tabContentPadding.calculateTopPadding(),
-                        bottom = bottomInset,
-                    )
+                    contentPadding = contentPadding,
                 )
             }
         }

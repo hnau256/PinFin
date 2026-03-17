@@ -1,5 +1,6 @@
 package org.hnau.pinfin.projector.accountstack
 
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.runtime.Composable
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.StateFlow
@@ -44,7 +45,9 @@ class AccountStackProjector(
     interface PageProjector {
 
         @Composable
-        fun Content()
+        fun Content(
+            contentPadding: PaddingValues,
+        )
 
         companion object
     }
@@ -74,9 +77,13 @@ class AccountStackProjector(
         )
 
     @Composable
-    fun Content() {
+    fun Content(
+        contentPadding: PaddingValues,
+    ) {
         tail.Content { elementProjector ->
-            elementProjector.Content()
+            elementProjector.Content(
+                contentPadding = contentPadding,
+            )
         }
     }
 }

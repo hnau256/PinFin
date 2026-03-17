@@ -187,10 +187,12 @@ class FilterProjector(
         }
 
     @Composable
-    fun ContentAsTopBar() {
+    fun ContentAsTopBar(
+        contentPadding: PaddingValues,
+    ) {
         Column(
             modifier = Modifier
-                .systemBarsPadding()
+                .padding(contentPadding)
                 .fillMaxWidth(),
         ) {
             Row(

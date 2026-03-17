@@ -23,7 +23,9 @@ fun createAppProjector(
             ),
         )
     },
-    content = { rootProjector ->
-        rootProjector.Content()
+    content = { rootProjector, contentPadding ->
+        rootProjector.Content(
+            contentPadding = contentPadding,
+        )
     }
 )

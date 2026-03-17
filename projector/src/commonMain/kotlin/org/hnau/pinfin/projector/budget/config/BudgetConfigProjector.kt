@@ -44,7 +44,9 @@ import org.hnau.commons.app.projector.uikit.TopBarDefaults
 import org.hnau.commons.app.projector.uikit.progressindicator.InProgress
 import org.hnau.commons.app.projector.uikit.state.StateContent
 import org.hnau.commons.app.projector.uikit.state.TransitionSpec
+import org.hnau.commons.app.projector.uikit.utils.Dimens
 import org.hnau.commons.app.projector.utils.Icon
+import org.hnau.commons.app.projector.utils.plus
 import org.hnau.commons.gen.pipe.annotations.Pipe
 import org.hnau.commons.kotlin.foldNullable
 import org.hnau.commons.kotlin.ifFalse
@@ -66,14 +68,11 @@ class BudgetConfigProjector(
 
     @Composable
     fun Content(
-        bottomInset: Dp,
+        contentPadding: PaddingValues,
     ) {
-        val topPadding = WindowInsets.statusBars.asPaddingValues().calculateTopPadding() +
-                TopBarDefaults.height
         LazyColumn(
-            contentPadding = PaddingValues(
-                top = topPadding,
-                bottom = bottomInset,
+            contentPadding = contentPadding + PaddingValues(
+                top = TopBarDefaults.height,
             ),
             modifier = Modifier.fillMaxSize(),
         ) {

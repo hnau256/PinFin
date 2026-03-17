@@ -2,6 +2,7 @@ package org.hnau.pinfin.projector.transaction
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -76,8 +77,11 @@ class TransactionProjector(
 
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
-    fun Content() {
+    fun Content(
+        contentPadding: PaddingValues,
+        ) {
         FullScreen(
+            contentPadding = contentPadding,
             backButtonWidth = dependencies.backButtonWidth.width,
             top = { contentPadding ->
                 TopBar(

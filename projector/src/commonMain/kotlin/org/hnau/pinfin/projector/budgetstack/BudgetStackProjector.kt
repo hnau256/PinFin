@@ -1,5 +1,6 @@
 package org.hnau.pinfin.projector.budgetstack
 
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.navigationBars
@@ -131,23 +132,42 @@ class BudgetStackProjector(
         )
 
     @Composable
-    fun Content() {
+    fun Content(
+        contentPadding: PaddingValues,
+    ) {
         tail.Content { elementProjector ->
             elementProjector.fold(
-                ifBudget = { it.Content() },
-                ifTransaction = { it.Content() },
+                ifBudget = {
+                    it.Content(
+                        contentPadding = contentPadding,
+                    )
+                },
+                ifTransaction = {
+                    it.Content(
+                        contentPadding = contentPadding,
+                    )
+                },
                 ifTransactions = {
                     it.Content(
-                        bottomInset = WindowInsets
-                            .navigationBars
-                            .asPaddingValues()
-                            .calculateBottomPadding(),
+                        contentPadding = contentPadding,
                         showAddButton = false,
                     )
                 },
-                ifAccount = { it.Content() },
-                ifCategories = { it.Content() },
-                ifCategory = { it.Content() },
+                ifAccount = {
+                    it.Content(
+                        contentPadding = contentPadding,
+                    )
+                },
+                ifCategories = {
+                    it.Content(
+                        contentPadding = contentPadding,
+                    )
+                },
+                ifCategory = {
+                    it.Content(
+                        contentPadding = contentPadding,
+                    )
+                },
             )
         }
     }
