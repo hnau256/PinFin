@@ -1,11 +1,14 @@
 package org.hnau.pinfin.projector.budget.analytics.graph.configure.period
 
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import org.hnau.commons.app.projector.uikit.utils.Dimens
+import org.hnau.commons.app.projector.utils.horizontalDisplayPadding
 import org.hnau.commons.gen.pipe.annotations.Pipe
 import org.hnau.pinfin.model.budget.analytics.tab.graph.configure.period.ConfigPeriodModel
 import org.hnau.pinfin.model.budget.analytics.tab.graph.configure.period.PeriodPart
@@ -38,16 +41,18 @@ class ConfigPeriodProjector(
     fun Content(
         modifier: Modifier,
     ) {
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(Dimens.separation),
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(Dimens.separation),
             modifier = modifier,
         ) {
             PeriodPart
                 .entries
                 .forEach { part ->
                     parts[part].Content(
-                        modifier = Modifier.weight(1f),
+                        modifier = Modifier.fillMaxWidth().padding(
+                            horizontal = Dimens.horizontalDisplayPadding,
+                        ),
                     )
                 }
         }

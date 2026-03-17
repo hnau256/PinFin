@@ -1,5 +1,6 @@
 package org.hnau.pinfin.projector.budget.analytics.graph.configure
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
@@ -55,6 +56,7 @@ class GraphConfigureProjector(
         ) {
             LazyColumn(
                 contentPadding = contentPadding,
+                verticalArrangement = Arrangement.spacedBy(Dimens.separation),
             ) {
                 item(
                     key = "SplitPeriod",
