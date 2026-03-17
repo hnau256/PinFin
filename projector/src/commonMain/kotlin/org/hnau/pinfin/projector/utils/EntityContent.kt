@@ -9,6 +9,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.style.TextAlign
+import arrow.core.left
 import org.hnau.commons.app.projector.uikit.ItemsRow
 import org.hnau.commons.app.projector.utils.Icon
 import org.hnau.commons.app.projector.utils.SwitchHue
@@ -116,7 +117,7 @@ private fun IconWithTitle(
 
         is IconWithTitleState.TitleAsIcon -> Text(
             modifier = modifier,
-            text = state.titleFirstChar.toString(),
+            text = state.titleFirstChars,
             style = MaterialTheme.typography.titleMedium,
             maxLines = 1,
             textAlign = TextAlign.Center,
@@ -146,7 +147,7 @@ private sealed interface IconWithTitleState {
 
     @Immutable
     data class TitleAsIcon(
-        val titleFirstChar: Char,
+        val titleFirstChars: String,
     ) : IconWithTitleState
 
     @Immutable
@@ -168,7 +169,8 @@ private sealed interface IconWithTitleState {
                 ifNotNull = ::Icon,
                 ifNull = {
                     title
-                        .firstOrNull()
+                        .extractNChars(2)
+                        .takeIf(String::isNotEmpty)
                         .foldNullable(
                             ifNull = { Empty },
                             ifNotNull = ::TitleAsIcon,
@@ -204,3 +206,26 @@ private fun Title(
         style = MaterialTheme.typography.bodyLarge,
     )
 }
+
+private fun String.extractNChars(
+    n: Int,
+): String = this
+    .split(' ')
+    .filter(String::isNotEmpty)
+    .let { words ->
+        words
+            .foldIndexed("" to n) { index, (acc, rem), word ->
+
+                val left = words.size - index
+
+                val limit = (rem + left - 1) / left
+
+                val taken = word
+                    .take(limit)
+                    .replaceFirstChar(Char::uppercaseChar)
+
+                (acc + taken) to (rem - taken.length)
+            }
+            .first
+    }
+

@@ -1,3 +1,0 @@
-sync_server_address:10.11.14.189
-sync_port:26385
-selected_budget:acef868c-6378-4d2b-bd31-6396268a099c

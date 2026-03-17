@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
@@ -34,6 +33,7 @@ import org.hnau.commons.app.projector.uikit.utils.Dimens
 import org.hnau.commons.app.projector.utils.Icon
 import org.hnau.commons.app.projector.utils.SlideOrientation
 import org.hnau.commons.app.projector.utils.getTransitionSpecForSlideByCompare
+import org.hnau.commons.app.projector.utils.horizontalDisplayPadding
 import org.hnau.commons.gen.pipe.annotations.Pipe
 import org.hnau.commons.kotlin.coroutines.flow.state.mapState
 import org.hnau.commons.kotlin.coroutines.flow.state.mapWithScope
@@ -200,9 +200,9 @@ class FilterProjector(
                     .height(TopBarDefaults.height)
                     .fillMaxWidth()
                     .padding(
-                        start = dependencies.backButtonWidth.width,
-                    )
-                    .padding(horizontal = Dimens.smallSeparation),
+                        start = dependencies.backButtonWidth.width + Dimens.smallSeparation,
+                        end = Dimens.horizontalDisplayPadding,
+                    ),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(
                     space = Dimens.smallSeparation,

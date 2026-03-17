@@ -5,6 +5,5 @@ local.properties
 build
 .DS_Store
 storage.json
-pinfin/app/budgets
-pinfin/app/preferences.txt
-finpixconverter/data
+app/budgets
+app/preferences.txt
