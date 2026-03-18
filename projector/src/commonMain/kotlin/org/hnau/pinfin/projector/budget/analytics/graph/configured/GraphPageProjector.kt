@@ -287,9 +287,9 @@ class GraphPageProjector(
                 progress = {
                     max
                         .value
+                        .floatValue(exactRequired = false)
                         .takeIf { max -> max > 0 }
-                        ?.toFloat()
-                        ?.let { max -> value.amount.value.toFloat() / max }
+                        ?.let { max -> value.amount.value.floatValue(exactRequired = false) / max }
                         ?: 0f
                 }
             )

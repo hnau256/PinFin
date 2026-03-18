@@ -368,7 +368,7 @@ object DemoBudget {
                         amount = nextNormalDistributionRandom(
                             item.minAmount,
                             item.maxAmount
-                        ).roundToInt().toInt().let(::Amount),
+                        ).roundToInt().let(Amount.centsMapper.direct),
                         comment = Comment(item.title),
                     )
                 }
@@ -437,7 +437,9 @@ object DemoBudget {
                                 Record(
                                     category = categoryIdSalary,
                                     comment = Comment(""),
-                                    amount = (salary * percentage).toInt().let(::Amount),
+                                    amount = (salary * percentage)
+                                        .toInt()
+                                        .let(Amount.centsMapper.direct),
                                 )
                             ),
                         ),

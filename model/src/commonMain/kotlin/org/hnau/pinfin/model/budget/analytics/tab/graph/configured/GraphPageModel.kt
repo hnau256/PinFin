@@ -185,9 +185,7 @@ class GraphPageModel(
                 is AnalyticsPageConfig.Operation.Average -> subperiodsAmounts
                     .sum
                     .value
-                    .toDouble()
                     .div(subperiodsAmounts.size)
-                    .toInt()
                     .let(::Amount)
             }
         }

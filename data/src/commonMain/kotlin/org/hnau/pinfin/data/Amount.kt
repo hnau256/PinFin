@@ -1,23 +1,24 @@
 package org.hnau.pinfin.data
 
+import com.ionspin.kotlin.bignum.decimal.BigDecimal
+import com.ionspin.kotlin.bignum.decimal.toBigDecimal
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.builtins.serializer
 import org.hnau.commons.kotlin.KeyValue
 import org.hnau.commons.kotlin.mapper.Mapper
 import org.hnau.commons.kotlin.mapper.plus
-import org.hnau.commons.kotlin.mapper.stringToInt
 import org.hnau.commons.kotlin.serialization.MappingKSerializer
 import kotlin.jvm.JvmInline
 
 @JvmInline
 @Serializable(Amount.Serializer::class)
 value class Amount(
-    val value: Int,
+    val value: BigDecimal,
 ) : Comparable<Amount> {
 
     object Serializer : MappingKSerializer<String, Amount>(
         base = String.serializer(),
-        mapper = Mapper.stringToInt + Mapper(::Amount, Amount::value)
+        mapper = stringMapper,
     )
 
     fun splitToDirectionAndRaw(): KeyValue<AmountDirection, Amount> = when {
@@ -61,8 +62,18 @@ value class Amount(
     companion object {
 
         val zero: Amount = Amount(
-            value = 0,
+            value = BigDecimal.ZERO,
         )
+
+        val centsMapper: Mapper<Int, Amount> = Mapper<Int, BigDecimal>(
+            direct = { it.toBigDecimal().div(100) },
+            reverse = { it.times(100).intValue() }
+        ) + Mapper(::Amount, Amount::value)
+
+        val stringMapper: Mapper<String, Amount> = Mapper(
+            direct = String::toBigDecimal,
+            reverse = BigDecimal::toStringExpanded
+        ) + Mapper(::Amount, Amount::value)
     }
 }
 

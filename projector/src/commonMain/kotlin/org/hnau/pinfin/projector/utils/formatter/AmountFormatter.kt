@@ -28,8 +28,7 @@ interface AmountFormatter {
                 alwaysShowSign: Boolean,
                 alwaysShowCents: Boolean,
             ): String = amount
-                .value
-                .toLong()
+                .let(Amount.centsMapper.reverse)
                 .let { amountInCents ->
                     val absolute = amountInCents.absoluteValue
                     val count = (absolute / factor)
@@ -114,7 +113,7 @@ interface AmountFormatter {
                         false -> absoluteCents
                     }
                 }
-                ?.let(::Amount)
+                ?.let(Amount.centsMapper.direct)
         }
     }
 }
