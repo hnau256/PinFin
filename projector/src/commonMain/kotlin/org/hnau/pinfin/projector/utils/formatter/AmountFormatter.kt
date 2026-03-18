@@ -1,119 +1,83 @@
 package org.hnau.pinfin.projector.utils.formatter
 
+import com.ionspin.kotlin.bignum.decimal.BigDecimal
+import com.ionspin.kotlin.bignum.decimal.RoundingMode
 import org.hnau.commons.kotlin.foldBoolean
-import org.hnau.commons.kotlin.ifNull
+import org.hnau.commons.kotlin.mapFirst
+import org.hnau.commons.kotlin.mapSecond
 import org.hnau.pinfin.data.Amount
-import kotlin.math.absoluteValue
+import org.hnau.pinfin.data.AmountDirection
 
 interface AmountFormatter {
-
     fun format(
         amount: Amount,
         alwaysShowSign: Boolean = false,
         alwaysShowCents: Boolean = true,
     ): String
 
-    fun parse(
-        input: String,
-    ): Amount?
+    fun parse(input: String): Amount?
 
     companion object {
+        val test: AmountFormatter =
+            object : AmountFormatter {
+                private val decimalLength = 2
 
-        val test: AmountFormatter = object : AmountFormatter {
+                override fun format(
+                    amount: Amount,
+                    alwaysShowSign: Boolean,
+                    alwaysShowCents: Boolean,
+                ): String {
 
-            private val factor = 100
-
-            override fun format(
-                amount: Amount,
-                alwaysShowSign: Boolean,
-                alwaysShowCents: Boolean,
-            ): String = amount
-                .let(Amount.centsMapper.reverse)
-                .let { amountInCents ->
-                    val absolute = amountInCents.absoluteValue
-                    val count = (absolute / factor)
-                        .toString()
-                        .reversed()
-                        .windowed(
-                            size = 3,
-                            step = 3,
-                            partialWindows = true,
-                        )
-                        .joinToString(
-                            separator = '\u00A0'.toString(),
-                        )
-                        .reversed()
-                    val cents = (absolute % factor)
-                        .toString()
-                        .padStart(2, '0')
-                    listOf(count, cents)
-                        .joinToString(
-                            separator = "."
-                        )
-                        .let { full ->
-                            alwaysShowCents.foldBoolean(
-                                ifTrue = { full },
-                                ifFalse = {
-                                    full
-                                        .dropLastWhile { char -> char == '0' }
-                                        .removeSuffix(".")
-                                }
-                            )
-                        }
-                        .let { absoluteString ->
-                            (amountInCents < 0).foldBoolean(
-                                ifTrue = { "-$absoluteString" },
-                                ifFalse = { absoluteString }
-                            )
-                        }
-                }
-                .let { raw ->
-                    alwaysShowSign.foldBoolean(
-                        ifFalse = { raw },
-                        ifTrue = {
-                            raw
-                                .firstOrNull()
-                                ?.isDigit()
-                                .ifNull { true }
-                                .foldBoolean(
-                                    ifFalse = { raw },
-                                    ifTrue = { "+$raw" }
+                    val (direction, absolute) = amount
+                        .splitToDirectionAndRaw()
+                        .map { amount ->
+                            amount
+                                .value
+                                .roundToDigitPositionAfterDecimalPoint(
+                                    digitPosition = decimalLength.toLong(),
+                                    roundingMode = RoundingMode.ROUND_HALF_AWAY_FROM_ZERO,
                                 )
-                        },
-                    )
-                }
+                        }
 
-            override fun parse(
-                input: String,
-            ): Amount? = input
-                .filterNot(Char::isWhitespace)
-                .removePrefix("-")
-                .split(".")
-                .takeIf { it.size in 1..2 }
-                ?.let { parts ->
-                    val count = parts
-                        .firstOrNull()
-                        .ifNull { "0" }
-                        .toLongOrNull()
-                        ?: return@let null
-                    val cents = parts
-                        .getOrNull(1)
-                        .ifNull { "00" }
-                        .takeIf { it.length in 1..2 }
-                        ?.padEnd(2, '0')
-                        ?.toIntOrNull()
-                        ?: return@let null
-                    count * factor + cents
-                }
-                ?.takeIf { it >= 0 }
-                ?.toInt()
-                ?.let { absoluteCents ->
-                    when (input.startsWith('-')) {
-                        true -> -absoluteCents
-                        false -> absoluteCents
+                    val absoluteString = absolute
+                        .toStringExpanded()
+                        .split('.')
+                        .let { parts -> parts[0] to parts.getOrNull(1) }
+                        .mapFirst { integerStr ->
+                            integerStr
+                                .reversed()
+                                .windowed(
+                                    size = 3,
+                                    step = 3,
+                                    partialWindows = true,
+                                )
+                                .joinToString(separator = '\u00A0'.toString())
+                                .reversed()
+                        }
+                        .mapSecond { fractionStr ->
+                            fractionStr
+                                .orEmpty()
+                                .padEnd(decimalLength, '0')
+                                .takeIf { alwaysShowCents || it.any { c -> c != '0' } }
+                        }
+                        .toList()
+                        .filterNotNull()
+                        .joinToString(".")
+
+                    return when (direction) {
+                        AmountDirection.Debit -> "-${absoluteString}"
+                        AmountDirection.Credit -> alwaysShowSign.foldBoolean(
+                            ifTrue = { "+${absoluteString}" },
+                            ifFalse = { absoluteString }
+                        )
                     }
                 }
-                ?.let(Amount.centsMapper.direct)
-        }
+
+                override fun parse(input: String): Amount? =
+                    input
+                        .filterNot(Char::isWhitespace)
+                        .let { runCatching { BigDecimal.parseString(it) }.getOrNull() }
+                        ?.let(::Amount)
+            }
     }
 }
