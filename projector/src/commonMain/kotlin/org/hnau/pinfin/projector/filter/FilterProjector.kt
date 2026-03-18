@@ -243,7 +243,7 @@ class FilterProjector(
                             .padding(
                                 start = Dimens.separation,
                                 end = Dimens.separation,
-                                top = Dimens.smallSeparation,
+                                top = Dimens.separation,
                             ),
                     ) {
                         config.Content()

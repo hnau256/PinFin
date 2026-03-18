@@ -7,6 +7,9 @@ import androidx.activity.OnBackPressedCallback
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.asPaddingValues
+import androidx.compose.foundation.layout.systemBars
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -47,7 +50,10 @@ class AppActivity : ComponentActivity() {
             model = viewModel.appModel,
         )
         setContent {
-            projector.Content()
+            val systemBarsPadding = WindowInsets.systemBars.asPaddingValues()
+            projector.Content(
+                contentPadding = systemBarsPadding,
+            )
         }
     }
 
