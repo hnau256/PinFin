@@ -7,35 +7,45 @@ fun Expression.serialize(): String = serializeNode(parent = null, isRightChild =
 private fun Expression.serializeNode(
     parent: Expression.BinaryOperation.Type?,
     isRightChild: Boolean,
-): String =
-    when (this) {
-        is Expression.Value -> value.toPlainString()
+): String = when (this) {
+    is Expression.Value -> value.toPlainString()
 
-        is Expression.UnaryOperation -> "-${
-            argument
-                .serializeNode(parent = null, isRightChild = false)
-                .let {
-                    (argument is Expression.BinaryOperation).foldBoolean(
-                        ifTrue = { "($it)" },
-                        ifFalse = { it },
-                    )
-                }
-        }"
+    is Expression.UnaryOperation -> "-${
+        argument
+            .serializeNode(parent = null, isRightChild = false)
+            .let {
+                (argument is Expression.BinaryOperation).foldBoolean(
+                    ifTrue = { "($it)" },
+                    ifFalse = { it },
+                )
+            }
+    }"
 
-        is Expression.BinaryOperation -> {
-            val left = argument1.serializeNode(parent = type, isRightChild = false)
-            val right = argument2.serializeNode(parent = type, isRightChild = true)
-            val expr = "$left${type.symbol}$right"
-            needsParens(
-                ownType = type,
-                parent = parent,
-                isRightChild = isRightChild
-            ).foldBoolean(
-                ifTrue = { "($expr)" },
-                ifFalse = { expr }
-            )
-        }
+    is Expression.BinaryOperation -> {
+        val left = argument1.serializeChild(parent = type, isRightChild = false)
+        val right = argument2.serializeChild(parent = type, isRightChild = true)
+        val expr = "$left${type.symbol}$right"
+        needsParens(
+            ownType = type,
+            parent = parent,
+            isRightChild = isRightChild,
+        ).foldBoolean(
+            ifTrue = { "($expr)" },
+            ifFalse = { expr },
+        )
     }
+}
+
+private fun Expression.serializeChild(
+    parent: Expression.BinaryOperation.Type,
+    isRightChild: Boolean,
+): String {
+    val serialized = serializeNode(parent = parent, isRightChild = isRightChild)
+    return (this is Expression.UnaryOperation).foldBoolean(
+        ifTrue = { "($serialized)" },
+        ifFalse = { serialized },
+    )
+}
 
 private fun needsParens(
     ownType: Expression.BinaryOperation.Type,
