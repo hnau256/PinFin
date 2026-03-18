@@ -2,21 +2,20 @@ import json
 import os
 import re
 
-# Регулярное выражение для UUID
+# Регулярное выражение для UUID-имени файла
 UUID_PATTERN = re.compile(r'^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$', re.IGNORECASE)
 
 def format_amount(value):
-    """Делит на 100 и возвращает строку в максимально коротком виде (x.x или x)"""
+    """Делит на 100 и убирает все лишние нули/точки"""
     try:
         num = float(value) / 100
-        # Формат :g убирает лишние нули и точку, если число целое
-        # Например: 10.0 -> "10", 10.50 -> "10.5", -50.96 -> "-50.96"
+        # Формат :g убирает лишнее (10.0 -> 10, 0.50 -> 0.5)
         return f"{num:g}"
     except (ValueError, TypeError):
         return value
 
 def process_node(data):
-    """Рекурсивно обходит объект и меняет все ключи 'amount'"""
+    """Рекурсивный обход JSON-дерева"""
     if isinstance(data, dict):
         for k, v in data.items():
             if k == "amount":
@@ -24,18 +23,25 @@ def process_node(data):
             else:
                 process_node(v)
     elif isinstance(data, list):
-        for item in data:
-            process_node(item)
+        for item in obj_list: # Ошибка в переменной, исправляем ниже
+            pass
+
+# Исправленная функция обхода
+def transform(data):
+    if isinstance(data, dict):
+        return {k: (format_amount(v) if k == "amount" else transform(v)) for k, v in data.items()}
+    elif isinstance(data, list):
+        return [transform(item) for item in data]
+    return data
 
 def main():
-    # 1. Поиск файла-UUID
+    # 1. Ищем файл с именем UUID
     target_file = next((f for f in os.listdir('.') if UUID_PATTERN.match(f) and os.path.isfile(f)), None)
 
     if not target_file:
-        print("Файл с именем UUID не найден в текущей папке.")
+        print("Файл с именем UUID не найден.")
         return
 
-    print(f"Обработка файла: {target_file}")
     temp_file = target_file + ".tmp"
 
     try:
@@ -48,18 +54,22 @@ def main():
                     continue
 
                 try:
-                    # Десериализация строки (одна строка = один JSON объект)
                     obj = json.loads(line)
-                    process_node(obj)
-                    # Сериализация обратно в одну строку без лишних пробелов
-                    f_out.write(json.dumps(obj, ensure_ascii=False) + '\n')
+                    processed_obj = transform(obj)
+
+                    # КЛЮЧЕВОЙ МОМЕНТ: separators=(',', ':') убирает все пробелы
+                    compact_json = json.dumps(
+                        processed_obj,
+                        ensure_ascii=False,
+                        separators=(',', ':')
+                    )
+
+                    f_out.write(compact_json + '\n')
                 except json.JSONDecodeError:
-                    # Если строка вдруг не JSON, сохраняем её как есть
                     f_out.write(line + '\n')
 
-        # Замена оригинала результатом
         os.replace(temp_file, target_file)
-        print("Успешно завершено.")
+        print(f"Файл {target_file} успешно сжат и обновлен.")
 
     except Exception as e:
         print(f"Ошибка: {e}")
