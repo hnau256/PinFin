@@ -22,6 +22,7 @@ import org.hnau.pinfin.app.PinFinAppDependencies
 import org.hnau.pinfin.app.createAppProjector
 import org.hnau.pinfin.app.createPinFinAppSeed
 import org.hnau.pinfin.app.impl
+import org.hnau.pinfin.data.Currency
 import org.hnau.pinfin.model.RootModel
 
 class AppActivity : ComponentActivity() {
@@ -33,6 +34,7 @@ class AppActivity : ComponentActivity() {
                 dependencies = PinFinAppDependencies.impl(
                     inetAddressesProvider = JvmInetAddressesProvider,
                     sha256 = JvmSha256,
+                    currency = Currency.default, //TODO
                 )
             ),
         )
