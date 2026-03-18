@@ -1,9 +1,9 @@
 package org.hnau.pinfin.model.utils.budget.state
 
 import arrow.core.NonEmptyList
-import org.hnau.pinfin.data.Amount
 import org.hnau.pinfin.data.Comment
 import org.hnau.pinfin.data.Transaction
+import org.hnau.pinfin.data.expression.AmountExpression
 import kotlin.time.Instant
 
 data class TransactionInfo(
@@ -22,7 +22,7 @@ data class TransactionInfo(
 
             data class Record(
                 val category: CategoryInfo,
-                val amount: Amount,
+                val amount: AmountExpression,
                 val comment: Comment,
             ) {
 
@@ -35,7 +35,7 @@ data class TransactionInfo(
         data class Transfer(
             val from: AccountInfo,
             val to: AccountInfo,
-            val amount: Amount,
+            val amount: AmountExpression,
         ) : Type {
 
             companion object

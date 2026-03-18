@@ -12,23 +12,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import org.hnau.commons.app.model.EditingString
-import org.hnau.commons.app.model.toEditingString
 import org.hnau.commons.app.projector.uikit.TextInput
 import org.hnau.commons.gen.pipe.annotations.Pipe
-import org.hnau.commons.kotlin.coroutines.flow.state.mutable.mapMutableState
 import org.hnau.commons.kotlin.coroutines.flow.state.mutable.toMutableStateFlowAsInitial
-import org.hnau.commons.kotlin.ifNull
-import org.hnau.commons.kotlin.mapper.Mapper
 import org.hnau.pinfin.model.AmountModel
 import org.hnau.pinfin.projector.utils.formatter.AmountFormatter
 
 
 class AmountProjector(
-    private val scope: CoroutineScope,
     private val model: AmountModel,
     private val dependencies: Dependencies,
 ) {
@@ -41,31 +33,6 @@ class AmountProjector(
         val localization: Localization
     }
 
-    private val input: MutableStateFlow<EditingString> = model
-        .state
-        .mapMutableState(
-            scope = scope,
-            mapper = Mapper(
-                direct = { state ->
-                    state
-                        .input
-                        .ifNull {
-                            state
-                                .amount
-                                ?.let(dependencies.amountFormatter::format)
-                                .ifNull { "" }
-                                .toEditingString()
-                        }
-                },
-                reverse = { input ->
-                    AmountModel.State(
-                        input = input,
-                        amount = dependencies.amountFormatter.parse(input.text),
-                    )
-                }
-            )
-        )
-
     @Composable
     fun Content(
         modifier: Modifier = Modifier,
@@ -76,7 +43,7 @@ class AmountProjector(
         val currentOnImeAction by onImeAction.collectAsState()
         TextInput(
             modifier = modifier,
-            value = input,
+            value = model.input,
             keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.Decimal,
                 imeAction = imeAction,

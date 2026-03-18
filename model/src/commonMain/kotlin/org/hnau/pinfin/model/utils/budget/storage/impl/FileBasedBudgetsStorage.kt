@@ -19,10 +19,9 @@ import org.hnau.commons.kotlin.ifNull
 import org.hnau.pinfin.data.BudgetId
 import org.hnau.pinfin.model.utils.budget.repository.BudgetRepository
 import org.hnau.pinfin.model.utils.budget.storage.BudgetsStorage
-import org.hnau.pinfin.model.utils.budget.upchain.Sha256
 
 fun BudgetsStorage.Factory.Companion.files(
-    sha256: Sha256,
+    dependencies: BudgetsStorage.Factory.Dependencies,
     budgetsDir: File,
 ): BudgetsStorage.Factory = BudgetsStorage.Factory { scope ->
 
@@ -35,9 +34,8 @@ fun BudgetsStorage.Factory.Companion.files(
     ) -> BudgetRepository = { id ->
         val file = budgetsDir + id.let(BudgetId.stringMapper.reverse)
         val upchainStorage = FileBasedUpchainStorage.create(
-            scope = scope,
             budgetFile = file,
-            sha256 = sha256,
+            dependencies = dependencies.fileBasedUpchainStorage(),
         )
         BudgetRepository.create(
             scope = scope,
@@ -49,7 +47,7 @@ fun BudgetsStorage.Factory.Companion.files(
                     storages!!.update { it.filter { it.first != id } }
                 }
             },
-            sha256 = sha256,
+            dependencies = dependencies.budgetRepository(),
         )
     }
 

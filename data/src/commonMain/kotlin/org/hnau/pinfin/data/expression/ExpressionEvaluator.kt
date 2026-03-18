@@ -4,31 +4,31 @@ import com.ionspin.kotlin.bignum.decimal.BigDecimal
 import com.ionspin.kotlin.bignum.decimal.DecimalMode
 
 fun Expression.evaluate(
-    divisionMode: DecimalMode,
+    decimalMode: DecimalMode,
 ): BigDecimal = evaluateOrNull(
-    divisionMode = divisionMode,
+    decimalMode = decimalMode,
 )!!
 
 internal fun Expression.evaluateOrNull(
-    divisionMode: DecimalMode?,
+    decimalMode: DecimalMode?,
 ): BigDecimal? = when (this) {
     is Expression.Value -> value
     is Expression.UnaryOperation -> {
-        val right = argument.evaluateOrNull(divisionMode = divisionMode) ?: return null
+        val right = argument.evaluateOrNull(decimalMode = decimalMode) ?: return null
         when (type) {
             Expression.UnaryOperation.Type.Minus -> right.negate()
         }
     }
 
     is Expression.BinaryOperation -> {
-        val left = argument1.evaluateOrNull(divisionMode = divisionMode) ?: return null
-        val right = argument2.evaluateOrNull(divisionMode = divisionMode) ?: return null
+        val left = argument1.evaluateOrNull(decimalMode = decimalMode) ?: return null
+        val right = argument2.evaluateOrNull(decimalMode = decimalMode) ?: return null
         when (type) {
             Expression.BinaryOperation.Type.Plus -> left + right
             Expression.BinaryOperation.Type.Minus -> left - right
             Expression.BinaryOperation.Type.Times -> left * right
             Expression.BinaryOperation.Type.Divide -> {
-                if (right.isZero()) null else left.divide(right, divisionMode)
+                if (right.isZero()) null else left.divide(right, decimalMode)
             }
         }
     }

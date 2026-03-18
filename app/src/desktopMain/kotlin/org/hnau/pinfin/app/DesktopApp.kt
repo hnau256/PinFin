@@ -18,6 +18,7 @@ import kotlinx.coroutines.runBlocking
 import org.hnau.commons.app.model.app.DesktopApp
 import org.hnau.commons.app.model.theme.ThemeBrightness
 import org.hnau.commons.app.projector.uikit.utils.Dimens
+import org.hnau.pinfin.data.Currency
 
 @OptIn(InternalComposeApi::class, InternalComposeUiApi::class)
 fun main() = runBlocking {
@@ -28,6 +29,7 @@ fun main() = runBlocking {
             dependencies = PinFinAppDependencies.impl(
                 inetAddressesProvider = JvmInetAddressesProvider,
                 sha256 = JvmSha256,
+                currency = Currency.default, //TODO
             )
         ),
     )

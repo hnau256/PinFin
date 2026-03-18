@@ -19,6 +19,8 @@ import org.hnau.pinfin.data.Comment
 import org.hnau.pinfin.data.Record
 import org.hnau.pinfin.data.Transaction
 import org.hnau.pinfin.data.UpdateType
+import org.hnau.pinfin.data.expression.AmountExpression
+import org.hnau.pinfin.data.expression.Expression
 import org.hnau.pinfin.model.utils.budget.state.updateTypeMapper
 import org.hnau.pinfin.model.utils.budget.upchain.Update
 import kotlin.math.roundToInt
@@ -368,7 +370,10 @@ object DemoBudget {
                         amount = nextNormalDistributionRandom(
                             item.minAmount,
                             item.maxAmount
-                        ).roundToInt().let(Amount.centsMapper.direct),
+                        )
+                            .roundToInt()
+                            .let(Amount.centsMapper.direct)
+                            .let { AmountExpression(Expression.Value(it.value)) },
                         comment = Comment(item.title),
                     )
                 }
@@ -439,7 +444,8 @@ object DemoBudget {
                                     comment = Comment(""),
                                     amount = (salary * percentage)
                                         .toInt()
-                                        .let(Amount.centsMapper.direct),
+                                        .let(Amount.centsMapper.direct)
+                                        .let { AmountExpression(Expression.Value(it.value)) },
                                 )
                             ),
                         ),

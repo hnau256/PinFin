@@ -24,8 +24,9 @@ import org.hnau.commons.kotlin.coroutines.flow.state.mapState
 import org.hnau.commons.kotlin.coroutines.flow.state.mutable.toMutableStateFlowAsInitial
 import org.hnau.commons.kotlin.foldNullable
 import org.hnau.commons.kotlin.serialization.MutableStateFlowSerializer
-import org.hnau.pinfin.data.Amount
 import org.hnau.pinfin.data.AmountDirection
+import org.hnau.pinfin.data.Currency
+import org.hnau.pinfin.data.expression.AmountExpression
 import org.hnau.pinfin.model.transaction.utils.Editable
 import org.hnau.pinfin.model.transaction.utils.allRecords
 import org.hnau.pinfin.model.transaction.utils.combineEditableWith
@@ -47,7 +48,11 @@ class AmountWithDirectionModel(
     @Pipe
     interface Dependencies {
 
+        val currency: Currency
+
         val budgetRepository: BudgetRepository
+
+        fun amount(): AmountModel.Dependencies
     }
 
     @Serializable
@@ -66,7 +71,7 @@ class AmountWithDirectionModel(
             )
 
             fun createForEdit(
-                amount: Amount,
+                amount: AmountExpression,
             ): Skeleton {
                 val (direction, withoutDirection) = amount.splitToDirectionAndRaw()
                 return Skeleton(
@@ -85,6 +90,7 @@ class AmountWithDirectionModel(
         isFocused = isFocused,
         requestFocus = requestFocus,
         goForward = goForward,
+        dependencies = dependencies.amount(),
     )
 
     fun createPage(): AmountModel.Page =
@@ -110,7 +116,10 @@ class AmountWithDirectionModel(
                             record
                                 .takeIf { it.category == category }
                                 ?.let { categoryRecord ->
-                                    val (direction) = categoryRecord.amount.splitToDirectionAndRaw()
+                                    val (direction) = categoryRecord
+                                        .amount
+                                        .toAmount(dependencies.currency.scale)
+                                        .splitToDirectionAndRaw()
                                     timestamp to direction
                                 }
                         }
@@ -140,7 +149,7 @@ class AmountWithDirectionModel(
         skeleton.manualDirection.value = direction.value.opposite
     }
 
-    internal val amountEditable: StateFlow<Editable<Amount>> = amountModel
+    internal val amountEditable: StateFlow<Editable<AmountExpression>> = amountModel
         .amountEditable
         .combineEditableWith(
             scope = scope,
@@ -153,7 +162,7 @@ class AmountWithDirectionModel(
             amount.withDirection(direction)
         }
 
-    val amount: StateFlow<Amount?> = amountEditable
+    val amount: StateFlow<AmountExpression?> = amountEditable
         .mapState(scope) { it.valueOrNone.getOrNull() }
 
     val goBackHandler: GoBackHandler

@@ -5,6 +5,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.runningFold
 import kotlinx.coroutines.flow.stateIn
+import org.hnau.commons.gen.pipe.annotations.Pipe
 import org.hnau.pinfin.data.BudgetConfig
 import org.hnau.pinfin.data.BudgetId
 import org.hnau.pinfin.data.UpdateType
@@ -13,15 +14,19 @@ import org.hnau.pinfin.model.utils.budget.state.BudgetStateBuilder
 import org.hnau.pinfin.model.utils.budget.state.updateTypeMapper
 import org.hnau.pinfin.model.utils.budget.storage.UpchainStorage
 import org.hnau.pinfin.model.utils.budget.storage.addUpdate
-import org.hnau.pinfin.model.utils.budget.upchain.Sha256
 
 class BudgetRepository(
     scope: CoroutineScope,
     val state: StateFlow<BudgetState>,
     val upchainStorage: UpchainStorage,
-    private val sha256: Sha256,
     val remove: suspend () -> Unit,
 ) {
+
+    @Pipe
+    interface Dependencies {
+
+        fun budgretStateBuilder(): BudgetStateBuilder.Dependencies
+    }
 
     val transactions: BudgetRepositoryTransactionsDelegate = BudgetRepositoryTransactionsDelegate(
         state = state,
@@ -68,12 +73,14 @@ class BudgetRepository(
             scope: CoroutineScope,
             id: BudgetId,
             upchainStorage: UpchainStorage,
-            sha256: Sha256,
+            dependencies: Dependencies,
             remove: suspend () -> Unit,
         ): BudgetRepository {
             val upchainFlow = upchainStorage.upchain
             val initialState = BudgetStateBuilder
-                .empty(sha256)
+                .empty(
+                    dependencies = dependencies.budgretStateBuilder(),
+                )
                 .withNewUpchain(upchainFlow.value)
             val state = upchainFlow
                 .runningFold(
@@ -92,7 +99,6 @@ class BudgetRepository(
                 state = state,
                 upchainStorage = upchainStorage,
                 remove = remove,
-                sha256 = sha256,
             )
         }
     }

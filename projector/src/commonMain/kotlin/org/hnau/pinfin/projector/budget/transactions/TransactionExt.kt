@@ -75,7 +75,6 @@ fun TransactionInfo.CellContent(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(Dimens.smallSeparation),
     ) {
-        val amount = amount
         Column(
             modifier = Modifier.weight(1f),
             verticalArrangement = Arrangement.spacedBy(Dimens.smallSeparation),
@@ -98,7 +97,7 @@ fun TransactionInfo.CellContent(
         }
 
         AmountContent(
-            value = amount,
+            value = amount(dependencies.currency),
             amountFormatter = dependencies.amountFormatter,
         )
     }

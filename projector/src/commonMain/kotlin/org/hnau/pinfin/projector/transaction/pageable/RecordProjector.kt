@@ -36,6 +36,7 @@ import org.hnau.commons.app.projector.uikit.transition.SlideOrientation
 import org.hnau.commons.app.projector.utils.copy
 import org.hnau.commons.app.projector.uikit.transition.getTransitionSpecForSlideByCompare
 import org.hnau.commons.gen.pipe.annotations.Pipe
+import org.hnau.commons.kotlin.coroutines.flow.state.mapState
 import org.hnau.commons.kotlin.coroutines.flow.state.mapWithScope
 import org.hnau.commons.kotlin.foldNullable
 import org.hnau.pinfin.model.transaction.pageable.RecordModel
@@ -161,11 +162,10 @@ class RecordProjector(
 
         private val type: StateFlow<PageType> = model
             .page
-            .mapWithScope(scope) { scope, type ->
+            .mapState(scope) { type ->
                 when (type) {
                     is RecordModel.PageType.Amount -> PageType.Amount(
                         projector = AmountProjector.Page(
-                            scope = scope,
                             dependencies = dependencies.amountPage(),
                             model = type.model,
                         )

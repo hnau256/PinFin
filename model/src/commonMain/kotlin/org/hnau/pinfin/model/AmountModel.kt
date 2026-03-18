@@ -12,10 +12,14 @@ import kotlinx.serialization.UseSerializers
 import org.hnau.commons.app.model.EditingString
 import org.hnau.commons.app.model.goback.GoBackHandler
 import org.hnau.commons.app.model.goback.NeverGoBackHandler
+import org.hnau.commons.app.model.toEditingString
 import org.hnau.commons.kotlin.coroutines.flow.state.mapState
 import org.hnau.commons.kotlin.coroutines.flow.state.mutable.toMutableStateFlowAsInitial
 import org.hnau.commons.kotlin.serialization.MutableStateFlowSerializer
-import org.hnau.pinfin.data.Amount
+import org.hnau.pinfin.data.expression.AmountExpression
+import org.hnau.pinfin.data.expression.Expression
+import org.hnau.pinfin.data.expression.parseOrNull
+import org.hnau.pinfin.data.expression.serialize
 
 class AmountModel(
     private val scope: CoroutineScope,
@@ -24,46 +28,39 @@ class AmountModel(
 
     @Serializable
     data class Skeleton(
-        val state: MutableStateFlow<State>,
+        val input: MutableStateFlow<EditingString>,
     ) {
 
         constructor(
-            amount: Amount,
+            amount: AmountExpression,
         ) : this(
-            state = State(
-                amount = amount,
-                input = null,
-            ).toMutableStateFlowAsInitial()
+            input = amount
+                .expression
+                .serialize()
+                .toEditingString()
+                .toMutableStateFlowAsInitial()
         )
 
         companion object {
 
             val empty: Skeleton
                 get() = Skeleton(
-                    state = State(
-                        amount = null,
-                        input = EditingString(),
-                    ).toMutableStateFlowAsInitial(),
+                    input = EditingString().toMutableStateFlowAsInitial(),
                 )
         }
     }
 
-    @Serializable
-    data class State(
-        val amount: Amount?,
-        val input: EditingString?,
-    )
+    val input: MutableStateFlow<EditingString>
+        get() = skeleton.input
 
-
-    val state: MutableStateFlow<State>
-        get() = skeleton.state
-
-    val amount: StateFlow<Amount?> = skeleton
-        .state
+    val amount: StateFlow<AmountExpression?> = skeleton
+        .input
         .mapState(
             scope = scope,
-        ) { state ->
-            state.amount
+        ) { input ->
+            Expression
+                .parseOrNull(input.text)
+                ?.let(::AmountExpression)
         }
 
     val error: StateFlow<Boolean> = amount.mapState(

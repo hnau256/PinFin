@@ -8,6 +8,7 @@ import org.hnau.commons.kotlin.mapper.Mapper
 import org.hnau.commons.kotlin.mapper.plus
 import org.hnau.commons.kotlin.mapper.stringToUuid
 import org.hnau.commons.kotlin.serialization.UuidSerializer
+import org.hnau.pinfin.data.expression.AmountExpression
 import org.hnau.pinfin.data.utils.InstantSerializer
 import kotlin.jvm.JvmInline
 import kotlin.time.Instant
@@ -76,7 +77,7 @@ data class Transaction(
             val to: AccountId,
 
             @SerialName("amount")
-            val amount: Amount,
+            val amount: AmountExpression,
         ) : Type
     }
 }

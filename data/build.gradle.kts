@@ -9,6 +9,7 @@ kotlin {
         commonMain {
             dependencies {
                 implementation(libs.bignum)
+                implementation(hnau.kotlinx.atomicfu)
             }
         }
     }

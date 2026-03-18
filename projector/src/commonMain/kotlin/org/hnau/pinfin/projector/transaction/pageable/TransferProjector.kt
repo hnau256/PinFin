@@ -14,6 +14,7 @@ import org.hnau.commons.app.projector.utils.Icon
 import org.hnau.commons.app.projector.uikit.transition.SlideOrientation
 import org.hnau.commons.app.projector.uikit.transition.getTransitionSpecForSlideByCompare
 import org.hnau.commons.gen.pipe.annotations.Pipe
+import org.hnau.commons.kotlin.coroutines.flow.state.mapState
 import org.hnau.commons.kotlin.coroutines.flow.state.mapWithScope
 import org.hnau.pinfin.model.transaction.pageable.TransferModel
 import org.hnau.pinfin.model.utils.budget.state.AccountInfo
@@ -121,11 +122,10 @@ class TransferProjector(
 
         private val type: StateFlow<PageType> = model
             .page
-            .mapWithScope(scope) { scope, type ->
+            .mapState(scope) { type ->
                 when (type) {
                     is TransferModel.PageType.Amount -> PageType.Amount(
                         projector = AmountProjector.Page(
-                            scope = scope,
                             model = type.model,
                             dependencies = dependencies.amount(),
                         )

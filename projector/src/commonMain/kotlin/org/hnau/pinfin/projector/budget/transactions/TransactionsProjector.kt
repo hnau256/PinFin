@@ -35,6 +35,7 @@ import org.hnau.commons.app.projector.utils.copy
 import org.hnau.commons.app.projector.utils.plus
 import org.hnau.commons.gen.pipe.annotations.Pipe
 import org.hnau.commons.kotlin.foldBoolean
+import org.hnau.pinfin.data.Currency
 import org.hnau.pinfin.model.TransactionsModel
 import org.hnau.pinfin.projector.Localization
 import org.hnau.pinfin.projector.filter.FilterProjector
@@ -59,6 +60,8 @@ class TransactionsProjector(
         val backButtonWidth: BackButtonWidth
 
         val localization: Localization
+
+        val currency: Currency
 
         fun filter(): FilterProjector.Dependencies
     }

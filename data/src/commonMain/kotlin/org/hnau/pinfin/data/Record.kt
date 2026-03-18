@@ -2,6 +2,7 @@ package org.hnau.pinfin.data
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import org.hnau.pinfin.data.expression.AmountExpression
 
 @Serializable
 data class Record(
@@ -9,7 +10,7 @@ data class Record(
     val category: CategoryId,
 
     @SerialName("amount")
-    val amount: Amount,
+    val amount: AmountExpression,
 
     @SerialName("comment")
     val comment: Comment,

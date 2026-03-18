@@ -11,25 +11,35 @@ import kotlinx.serialization.Serializable
 import kotlinx.serialization.UseSerializers
 import org.hnau.commons.app.model.goback.GoBackHandler
 import org.hnau.commons.app.model.goback.NeverGoBackHandler
+import org.hnau.commons.gen.pipe.annotations.Pipe
 import org.hnau.commons.kotlin.coroutines.flow.state.mapState
 import org.hnau.commons.kotlin.foldNullable
 import org.hnau.commons.kotlin.serialization.MutableStateFlowSerializer
 import org.hnau.pinfin.data.Amount
+import org.hnau.pinfin.data.Currency
+import org.hnau.pinfin.data.expression.AmountExpression
 import org.hnau.pinfin.model.transaction.utils.Editable
 import org.hnau.pinfin.model.transaction.utils.valueOrNone
 import org.hnau.pinfin.model.AmountModel as CommonAmountModel
 
 class AmountModel(
     scope: CoroutineScope,
+    dependencies: Dependencies,
     private val skeleton: Skeleton,
     val isFocused: StateFlow<Boolean>,
     val requestFocus: () -> Unit,
     val goForward: () -> Unit,
 ) {
 
+    @Pipe
+    interface Dependencies {
+
+        val currency: Currency
+    }
+
     @Serializable
     data class Skeleton(
-        val initialAmount: Amount?,
+        val initialAmount: AmountExpression?,
         val delegate: CommonAmountModel.Skeleton = initialAmount.foldNullable(
             ifNull = { CommonAmountModel.Skeleton.empty },
             ifNotNull = { amount ->
@@ -47,7 +57,7 @@ class AmountModel(
             )
 
             fun createForEdit(
-                amount: Amount,
+                amount: AmountExpression,
             ): Skeleton = Skeleton(
                 initialAmount = amount,
             )
@@ -73,14 +83,19 @@ class AmountModel(
         goForward = goForward,
     )
 
-    internal val amountEditable: StateFlow<Editable<Amount>> = Editable.create(
+    internal val amountEditable: StateFlow<Editable<AmountExpression>> = Editable.create(
         scope = scope,
-        valueOrNone = delegate.amount.mapState(scope, Amount?::toOption),
+        valueOrNone = delegate.amount.mapState(scope, AmountExpression?::toOption),
         initialValueOrNone = skeleton.initialAmount.toOption(),
     )
 
     val amount: StateFlow<Amount?> = amountEditable
-        .mapState(scope) { it.valueOrNone.getOrNull() }
+        .mapState(scope) { editableAmountExpression ->
+            editableAmountExpression
+                .valueOrNone
+                .getOrNull()
+                ?.toAmount(dependencies.currency.scale)
+        }
 
     val goBackHandler: GoBackHandler
         get() = NeverGoBackHandler

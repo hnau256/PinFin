@@ -3,18 +3,16 @@ package org.hnau.pinfin.data.expression
 import com.ionspin.kotlin.bignum.decimal.BigDecimal
 
 sealed interface Expression {
-    companion object;
 
-    @ConsistentCopyVisibility
-    data class Value internal constructor(
+    data class Value(
         val value: BigDecimal,
     ) : Expression
 
-    @ConsistentCopyVisibility
-    data class UnaryOperation internal constructor(
+    data class UnaryOperation(
         val argument: Expression,
         val type: Type,
     ) : Expression {
+
         enum class Type { Minus }
     }
 
@@ -24,6 +22,13 @@ sealed interface Expression {
         val argument2: Expression,
         val type: Type,
     ) : Expression {
+
         enum class Type { Minus, Plus, Times, Divide }
+    }
+
+    companion object {
+
+        val zero: Expression =
+            Value(BigDecimal.ZERO)
     }
 }

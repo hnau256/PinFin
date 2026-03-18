@@ -3,6 +3,7 @@ package org.hnau.pinfin.app
 import kotlinx.coroutines.CoroutineScope
 import org.hnau.commons.app.model.app.AppModel
 import org.hnau.commons.app.projector.app.AppProjector
+import org.hnau.pinfin.data.Currency
 import org.hnau.pinfin.model.RootModel
 import org.hnau.pinfin.projector.Localization
 import org.hnau.pinfin.projector.RootProjector
@@ -20,6 +21,7 @@ fun createAppProjector(
             model = model,
             dependencies = RootProjector.Dependencies.impl(
                 localization = Localization.default,
+                currency = Currency.default, //TODO
             ),
         )
     },

@@ -86,6 +86,8 @@ class TransferModel(
     interface Dependencies {
 
         fun account(): AccountModel.Dependencies
+
+        fun amount(): AmountModel.Dependencies
     }
 
     @Serializable
@@ -184,6 +186,7 @@ class TransferModel(
         isFocused = createIsFocused(Part.Amount),
         requestFocus = createRequestFocus(Part.Amount),
         goForward = createGoForward(Part.Amount),
+        dependencies = dependencies.amount(),
     )
 
     class Page(

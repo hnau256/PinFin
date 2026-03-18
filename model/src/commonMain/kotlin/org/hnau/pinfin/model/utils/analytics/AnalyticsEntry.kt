@@ -6,6 +6,7 @@ import kotlinx.datetime.LocalDate
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 import org.hnau.pinfin.data.Amount
+import org.hnau.pinfin.data.Currency
 import org.hnau.pinfin.model.utils.amount
 import org.hnau.pinfin.model.utils.budget.state.AccountInfo
 import org.hnau.pinfin.model.utils.budget.state.CategoryInfo
@@ -18,8 +19,11 @@ data class AnalyticsEntry(
     val date: LocalDate,
 )
 
-fun TransactionInfo.toAnalyticsEntries(): NonEmptyList<AnalyticsEntry> {
+fun TransactionInfo.toAnalyticsEntries(
+    currency: Currency,
+): NonEmptyList<AnalyticsEntry> {
     val date = timestamp.toLocalDateTime(TimeZone.currentSystemDefault()).date
+    val amount = amount(currency)
     return when (type) {
         is TransactionInfo.Type.Transfer -> nonEmptyListOf(
             AnalyticsEntry(
@@ -42,7 +46,7 @@ fun TransactionInfo.toAnalyticsEntries(): NonEmptyList<AnalyticsEntry> {
                 AnalyticsEntry(
                     account = type.account,
                     category = record.category,
-                    amount = record.amount,
+                    amount = record.amount.toAmount(currency.scale),
                     date = date,
                 )
             }

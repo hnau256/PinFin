@@ -54,7 +54,7 @@ private class Parser(
             val right = parseUnary() ?: return null
             if (type == Expression.BinaryOperation.Type.Divide) {
                 val rightIsZero = right
-                    .evaluateOrNull(divisionMode = null)
+                    .evaluateOrNull(decimalMode = null)
                     ?.isZero() == true
                 if (rightIsZero) {
                     return null

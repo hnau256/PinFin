@@ -8,6 +8,7 @@ import org.hnau.commons.app.model.utils.Hue
 import org.hnau.pinfin.model.RootModel
 import org.hnau.pinfin.model.impl
 import org.hnau.pinfin.model.utils.budget.storage.BudgetsStorage
+import org.hnau.pinfin.model.utils.budget.storage.impl
 import org.hnau.pinfin.model.utils.budget.storage.impl.files
 
 fun createPinFinAppSeed(
@@ -27,9 +28,13 @@ fun createPinFinAppSeed(
                 ),
                 budgetsStorageFactory = BudgetsStorage.Factory.files(
                     budgetsDir = appContext.filesDir + "budgets",
-                    sha256 = dependencies.sha256,
+                    dependencies = BudgetsStorage.Factory.Dependencies.impl(
+                        sha256 = dependencies.sha256,
+                        currency = dependencies.currency,
+                    ),
                 ),
                 inetAddressesProvider = dependencies.inetAddressesProvider,
+                currency = dependencies.currency,
             ),
             skeleton = skeleton,
         )

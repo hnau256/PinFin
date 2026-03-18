@@ -17,7 +17,6 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import org.hnau.commons.app.projector.utils.Icon
@@ -44,7 +43,6 @@ class AmountProjector(
     }
 
     class Page(
-        scope: CoroutineScope,
         private val model: AmountModel.Page,
         dependencies: Dependencies,
     ) {
@@ -56,7 +54,6 @@ class AmountProjector(
         }
 
         private val delegate: AmountProjector = AmountProjector(
-            scope = scope,
             dependencies = dependencies.delegate(),
             model = model.delegate,
         )

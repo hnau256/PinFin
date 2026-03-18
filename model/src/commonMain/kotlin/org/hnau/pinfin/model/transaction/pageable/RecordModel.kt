@@ -22,10 +22,13 @@ import org.hnau.commons.kotlin.foldNullable
 import org.hnau.commons.kotlin.serialization.MutableStateFlowSerializer
 import org.hnau.pinfin.data.Amount
 import org.hnau.pinfin.data.Comment
+import org.hnau.pinfin.data.Currency
+import org.hnau.pinfin.data.expression.AmountExpression
 import org.hnau.pinfin.model.transaction.utils.ChooseOrCreateModel
 import org.hnau.pinfin.model.transaction.utils.Editable
 import org.hnau.pinfin.model.transaction.utils.allRecords
 import org.hnau.pinfin.model.transaction.utils.combineEditableWith
+import org.hnau.pinfin.model.transaction.utils.map
 import org.hnau.pinfin.model.transaction.utils.valueOrNone
 import org.hnau.pinfin.model.utils.budget.state.CategoryInfo
 import org.hnau.pinfin.model.utils.budget.state.TransactionInfo
@@ -90,6 +93,8 @@ class RecordModel(
 
     @Pipe
     interface Dependencies {
+
+        val currency: Currency
 
         fun comment(): CommentModel.Dependencies
 
@@ -264,7 +269,7 @@ class RecordModel(
                         amountOrNull
                             .valueOrNone
                             .getOrNull()
-                            ?.let { amount -> categoryOrIncorrect.value to amount }
+                            ?.let { amount -> categoryOrIncorrect.value to amount.toAmount(dependencies.currency.scale) }
                     }
             }
         }
@@ -317,7 +322,16 @@ class RecordModel(
 
     val amountOrZero: StateFlow<Amount> = amount
         .amountEditable
-        .mapState(scope) { it.valueOrNone.getOrElse { Amount.zero } }
+        .mapState(scope) { editableAmountExpression ->
+            editableAmountExpression
+                .map { amountExpression ->
+                    amountExpression.toAmount(
+                        dependencies.currency.scale,
+                    )
+                }
+                .valueOrNone
+                .getOrElse { Amount.zero }
+        }
 
     internal val record: StateFlow<Editable<TransactionInfo.Type.Entry.Record>> = comment
         .commentEditable

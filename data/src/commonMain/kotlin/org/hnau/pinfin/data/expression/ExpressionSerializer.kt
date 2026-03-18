@@ -10,11 +10,16 @@ private fun Expression.serializeNode(
 ): String =
     when (this) {
         is Expression.Value -> value.toPlainString()
+
         is Expression.UnaryOperation -> "-${
-            argument.serializeNode(
-                parent = null,
-                isRightChild = false
-            )
+            argument
+                .serializeNode(parent = null, isRightChild = false)
+                .let {
+                    (argument is Expression.BinaryOperation).foldBoolean(
+                        ifTrue = { "($it)" },
+                        ifFalse = { it },
+                    )
+                }
         }"
 
         is Expression.BinaryOperation -> {

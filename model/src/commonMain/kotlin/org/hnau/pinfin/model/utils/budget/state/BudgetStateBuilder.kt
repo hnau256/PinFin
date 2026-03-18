@@ -1,7 +1,9 @@
 package org.hnau.pinfin.model.utils.budget.state
 
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext
+import org.hnau.commons.gen.pipe.annotations.Pipe
 import org.hnau.commons.kotlin.castOrNull
 import org.hnau.pinfin.data.AccountConfig
 import org.hnau.pinfin.data.AccountId
@@ -10,6 +12,7 @@ import org.hnau.pinfin.data.BudgetConfig
 import org.hnau.pinfin.data.BudgetId
 import org.hnau.pinfin.data.CategoryConfig
 import org.hnau.pinfin.data.CategoryId
+import org.hnau.pinfin.data.Currency
 import org.hnau.pinfin.data.Record
 import org.hnau.pinfin.data.Transaction
 import org.hnau.pinfin.data.UpdateType
@@ -24,11 +27,19 @@ import org.hnau.pinfin.model.utils.budget.upchain.utils.getUpdatesAfterHashIfPos
 data class BudgetStateBuilder(
     private val hash: UpchainHash?,
     private val config: BudgetConfig,
-    private val sha256: Sha256,
+    private val dependencies: Dependencies,
     private val transactions: Map<Transaction.Id, Transaction>,
     private val accountsConfigs: Map<AccountId, AccountConfig>,
     private val categoriesConfigs: Map<CategoryId, CategoryConfig>,
 ) {
+
+    @Pipe
+    interface Dependencies {
+
+        val sha256: Sha256
+
+        val currency: Currency
+    }
 
     override fun equals(
         other: Any?,
@@ -65,13 +76,13 @@ data class BudgetStateBuilder(
         return BudgetStateBuilder(
             hash = hash.calcNext(
                 update = update,
-                sha256 = sha256,
+                sha256 = dependencies.sha256,
             ),
             transactions = transactions,
             accountsConfigs = accountsConfigs,
             categoriesConfigs = categoriesConfigs,
             config = info,
-            sha256 = sha256,
+            dependencies = dependencies,
         )
     }
 
@@ -84,7 +95,7 @@ data class BudgetStateBuilder(
         )
         val (state, updates) = when (additionalUpdates) {
             null -> empty(
-                sha256 = sha256,
+                dependencies = dependencies,
             ) to newUpchain.items.map(Upchain.Item::update)
 
             else -> this@BudgetStateBuilder to additionalUpdates
@@ -119,7 +130,7 @@ data class BudgetStateBuilder(
                 .getOrElse(id) {
                     AccountInfo(
                         id = id,
-                        amount = Amount.Companion.zero,
+                        amount = Amount.zero,
                         config = accountsConfigs[id],
                     )
                 }
@@ -135,7 +146,9 @@ data class BudgetStateBuilder(
                 is Transaction.Type.Entry -> {
                     useAccount(
                         id = type.account,
-                        amountOffset = type.amount,
+                        amountOffset = type.amount(
+                            currency = dependencies.currency,
+                        ),
                     )
                     type.records.forEach { record ->
                         useCategory(
@@ -145,13 +158,14 @@ data class BudgetStateBuilder(
                 }
 
                 is Transaction.Type.Transfer -> {
+                    val amount = type.amount.toAmount(dependencies.currency.scale)
                     useAccount(
                         id = type.from,
-                        amountOffset = -type.amount
+                        amountOffset = -amount
                     )
                     useAccount(
                         id = type.to,
-                        amountOffset = type.amount
+                        amountOffset = amount
                     )
                 }
             }
@@ -181,14 +195,14 @@ data class BudgetStateBuilder(
     companion object {
 
         fun empty(
-            sha256: Sha256,
+            dependencies: Dependencies,
         ): BudgetStateBuilder = BudgetStateBuilder(
             hash = null,
             config = BudgetConfig.empty,
             accountsConfigs = emptyMap(),
             transactions = emptyMap(),
             categoriesConfigs = emptyMap(),
-            sha256 = sha256,
+            dependencies = dependencies
         )
     }
 }
