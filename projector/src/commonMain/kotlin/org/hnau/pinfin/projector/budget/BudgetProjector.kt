@@ -25,6 +25,7 @@ import org.hnau.commons.app.projector.utils.Icon
 import org.hnau.commons.app.projector.utils.Overcompose
 import org.hnau.commons.app.projector.utils.SlideOrientation
 import org.hnau.commons.app.projector.utils.getTransitionSpecForSlideByCompare
+import org.hnau.commons.app.projector.utils.toWindowInsets
 import org.hnau.commons.gen.pipe.annotations.Pipe
 import org.hnau.commons.gen.sealup.annotations.SealUp
 import org.hnau.commons.gen.sealup.annotations.Variant
@@ -131,9 +132,8 @@ class BudgetProjector(
             modifier = Modifier.fillMaxSize(),
             bottom = { contentPadding ->
                 NavigationBar(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(contentPadding),
+                    modifier = Modifier.fillMaxWidth(),
+                    windowInsets = contentPadding.toWindowInsets(),
                 ) {
                     val selectedTab = tabWithProjector.first
                     BudgetTab.entries.fastForEach { tab ->
