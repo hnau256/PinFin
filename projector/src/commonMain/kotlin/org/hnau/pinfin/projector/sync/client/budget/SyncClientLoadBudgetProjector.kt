@@ -18,7 +18,7 @@ import org.hnau.commons.app.projector.uikit.FullScreen
 import org.hnau.commons.app.projector.uikit.TopBar
 import org.hnau.commons.app.projector.uikit.TopBarTitle
 import org.hnau.commons.app.projector.uikit.state.LoadableContent
-import org.hnau.commons.app.projector.uikit.state.TransitionSpec
+import org.hnau.commons.app.projector.uikit.transition.TransitionSpec
 import org.hnau.commons.gen.pipe.annotations.Pipe
 import org.hnau.commons.kotlin.Loadable
 import org.hnau.commons.kotlin.coroutines.flow.state.mapState

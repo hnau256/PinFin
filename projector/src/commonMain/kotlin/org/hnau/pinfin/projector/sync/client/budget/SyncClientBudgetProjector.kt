@@ -10,7 +10,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import org.hnau.commons.app.projector.uikit.ErrorPanel
 import org.hnau.commons.app.projector.uikit.state.LoadableContent
-import org.hnau.commons.app.projector.uikit.state.TransitionSpec
+import org.hnau.commons.app.projector.uikit.transition.TransitionSpec
 import org.hnau.commons.gen.pipe.annotations.Pipe
 import org.hnau.pinfin.model.sync.client.budget.SyncClientBudgetModel
 import org.hnau.pinfin.projector.Localization

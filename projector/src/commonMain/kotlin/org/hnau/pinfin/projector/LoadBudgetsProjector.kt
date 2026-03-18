@@ -8,7 +8,7 @@ import androidx.compose.ui.Modifier
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.StateFlow
 import org.hnau.commons.app.projector.uikit.state.LoadableContent
-import org.hnau.commons.app.projector.uikit.state.TransitionSpec
+import org.hnau.commons.app.projector.uikit.transition.TransitionSpec
 import org.hnau.commons.gen.pipe.annotations.Pipe
 import org.hnau.commons.kotlin.Loadable
 import org.hnau.commons.kotlin.coroutines.flow.state.mapWithScope

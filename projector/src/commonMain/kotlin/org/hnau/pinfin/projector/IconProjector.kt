@@ -47,7 +47,7 @@ import org.hnau.commons.app.projector.uikit.shape.HnauShape
 import org.hnau.commons.app.projector.uikit.shape.create
 import org.hnau.commons.app.projector.uikit.shape.inRow
 import org.hnau.commons.app.projector.uikit.state.StateContent
-import org.hnau.commons.app.projector.uikit.state.TransitionSpec
+import org.hnau.commons.app.projector.uikit.transition.TransitionSpec
 import org.hnau.commons.app.projector.uikit.utils.Dimens
 import org.hnau.commons.app.projector.utils.Icon
 import org.hnau.commons.app.projector.utils.horizontalDisplayPadding

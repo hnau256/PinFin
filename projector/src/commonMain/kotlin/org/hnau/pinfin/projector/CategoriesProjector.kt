@@ -20,7 +20,7 @@ import org.hnau.commons.app.projector.uikit.FullScreen
 import org.hnau.commons.app.projector.uikit.TopBar
 import org.hnau.commons.app.projector.uikit.TopBarTitle
 import org.hnau.commons.app.projector.uikit.state.NullableStateContent
-import org.hnau.commons.app.projector.uikit.state.TransitionSpec
+import org.hnau.commons.app.projector.uikit.transition.TransitionSpec
 import org.hnau.commons.app.projector.utils.Icon
 import org.hnau.commons.gen.pipe.annotations.Pipe
 import org.hnau.pinfin.model.CategoriesModel

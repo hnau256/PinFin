@@ -25,7 +25,7 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import org.hnau.commons.app.projector.uikit.state.LoadableContent
-import org.hnau.commons.app.projector.uikit.state.TransitionSpec
+import org.hnau.commons.app.projector.uikit.transition.TransitionSpec
 import org.hnau.commons.app.projector.uikit.utils.Dimens
 import org.hnau.commons.app.projector.utils.collectAsTextFieldValueMutableAccessor
 import org.hnau.commons.app.projector.utils.horizontalDisplayPadding

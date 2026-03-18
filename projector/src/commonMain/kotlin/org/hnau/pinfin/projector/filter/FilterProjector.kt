@@ -28,11 +28,11 @@ import org.hnau.commons.app.projector.uikit.TopBarAction
 import org.hnau.commons.app.projector.uikit.TopBarDefaults
 import org.hnau.commons.app.projector.uikit.state.NullableStateContent
 import org.hnau.commons.app.projector.uikit.state.StateContent
-import org.hnau.commons.app.projector.uikit.state.TransitionSpec
+import org.hnau.commons.app.projector.uikit.transition.TransitionSpec
 import org.hnau.commons.app.projector.uikit.utils.Dimens
 import org.hnau.commons.app.projector.utils.Icon
-import org.hnau.commons.app.projector.utils.SlideOrientation
-import org.hnau.commons.app.projector.utils.getTransitionSpecForSlideByCompare
+import org.hnau.commons.app.projector.uikit.transition.SlideOrientation
+import org.hnau.commons.app.projector.uikit.transition.getTransitionSpecForSlideByCompare
 import org.hnau.commons.app.projector.utils.horizontalDisplayPadding
 import org.hnau.commons.gen.pipe.annotations.Pipe
 import org.hnau.commons.kotlin.coroutines.flow.state.mapState
@@ -141,7 +141,7 @@ class FilterProjector(
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.spacedBy(Dimens.smallSeparation),
                     contentPadding = PaddingValues(
-                        horizontal = Dimens.smallSeparation,
+                        horizontal = Dimens.separation,
                     ),
                 ) {
                     item(
@@ -160,7 +160,7 @@ class FilterProjector(
                     .value
                     .StateContent(
                         modifier = Modifier.fillMaxWidth().padding(
-                            horizontal = Dimens.smallSeparation,
+                            horizontal = Dimens.separation,
                         ),
                         contentKey = Pair<FilterModel.Tab, *>::first,
                         transitionSpec = getTransitionSpecForSlideByCompare(

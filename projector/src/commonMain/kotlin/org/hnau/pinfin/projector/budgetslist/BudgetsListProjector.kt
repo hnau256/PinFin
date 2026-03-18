@@ -31,7 +31,7 @@ import org.hnau.commons.app.projector.uikit.TopBarAction
 import org.hnau.commons.app.projector.uikit.TopBarTitle
 import org.hnau.commons.app.projector.uikit.progressindicator.InProgress
 import org.hnau.commons.app.projector.uikit.state.NullableStateContent
-import org.hnau.commons.app.projector.uikit.state.TransitionSpec
+import org.hnau.commons.app.projector.uikit.transition.TransitionSpec
 import org.hnau.commons.app.projector.uikit.utils.Dimens
 import org.hnau.commons.app.projector.utils.Icon
 import org.hnau.commons.app.projector.utils.horizontalDisplayPadding

@@ -20,7 +20,7 @@ import org.hnau.commons.app.projector.uikit.FullScreen
 import org.hnau.commons.app.projector.uikit.TopBar
 import org.hnau.commons.app.projector.uikit.TopBarTitle
 import org.hnau.commons.app.projector.uikit.state.LoadableContent
-import org.hnau.commons.app.projector.uikit.state.TransitionSpec
+import org.hnau.commons.app.projector.uikit.transition.TransitionSpec
 import org.hnau.commons.app.projector.uikit.utils.Dimens
 import org.hnau.commons.app.projector.utils.horizontalDisplayPadding
 import org.hnau.commons.app.projector.utils.verticalDisplayPadding
