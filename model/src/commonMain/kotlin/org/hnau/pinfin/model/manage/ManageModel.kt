@@ -7,6 +7,8 @@ package org.hnau.pinfin.model.manage
 import arrow.core.identity
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.mapNotNull
+import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.UseSerializers
 import org.hnau.commons.app.model.goback.GoBackHandler
@@ -23,6 +25,7 @@ import org.hnau.commons.kotlin.coroutines.flow.state.flatMapWithScope
 import org.hnau.commons.kotlin.coroutines.flow.state.mapState
 import org.hnau.commons.kotlin.coroutines.flow.state.mapWithScope
 import org.hnau.commons.kotlin.coroutines.flow.state.mutable.toMutableStateFlowAsInitial
+import org.hnau.commons.kotlin.foldNullable
 import org.hnau.commons.kotlin.getOrInit
 import org.hnau.commons.kotlin.mapper.Mapper
 import org.hnau.commons.kotlin.mapper.nullable
@@ -149,11 +152,10 @@ class ManageModel(
                 repositoriesListList.associate(::identity)
             }
 
-    val state: StateFlow<ManageStateModel> = selectedBudgetPreference
+    private val selectedBudget: StateFlow<BudgetRepository?> = selectedBudgetPreference
         .value
-        .flatMapWithScope(scope) { scope, selectedOrNone ->
-            val selected = selectedOrNone
-            when (selectedOrNone) {
+        .flatMapWithScope(scope) { scope, selected ->
+            when (selected) {
                 null -> null.toMutableStateFlowAsInitial()
                 else -> budgetRepositories.mapState(
                     scope = scope,
@@ -161,41 +163,57 @@ class ManageModel(
                 )
             }
         }
-        .mapWithScope(
-            scope = scope,
-        ) { scope, budgetRepositoryOrNull ->
-            when (budgetRepositoryOrNull) {
-                null -> State.budgetsStack(
-                    scope = scope,
-                    dependencies = dependencies.budgetsStack(
-                        budgetRepositories = budgetRepositories,
-                        budgetOpener = selectedBudgetPreference.update
-                    ),
-                    skeleton = skeleton::stateSkeleton
-                        .toAccessor()
-                        .shrinkType<_, ManageStateSkeleton.BudgetsStack>()
-                        .getOrInit {
-                            StateSkeleton.budgetsStack()
-                        }
-                        .skeleton,
-                )
 
-                else -> State.budgetStack(
-                    scope = scope,
-                    dependencies = dependencies.budget(
-                        budgetRepository = budgetRepositoryOrNull,
-                        budgetsListOpener = { selectedBudgetPreference.update(null) },
-                    ),
-                    skeleton = skeleton::stateSkeleton
-                        .toAccessor()
-                        .shrinkType<_, ManageStateSkeleton.BudgetStack>()
-                        .getOrInit {
-                            StateSkeleton.budgetStack()
-                        }
-                        .skeleton,
-                )
-            }
+    val state: StateFlow<ManageStateModel> = selectedBudget.mapWithScope(
+        scope = scope,
+    ) { scope, budgetRepositoryOrNull ->
+        when (budgetRepositoryOrNull) {
+            null -> State.budgetsStack(
+                scope = scope,
+                dependencies = dependencies.budgetsStack(
+                    budgetRepositories = budgetRepositories,
+                    budgetOpener = selectedBudgetPreference.update
+                ),
+                skeleton = skeleton::stateSkeleton
+                    .toAccessor()
+                    .shrinkType<_, ManageStateSkeleton.BudgetsStack>()
+                    .getOrInit {
+                        StateSkeleton.budgetsStack()
+                    }
+                    .skeleton,
+            )
+
+            else -> State.budgetStack(
+                scope = scope,
+                dependencies = dependencies.budget(
+                    budgetRepository = budgetRepositoryOrNull,
+                    budgetsListOpener = { selectedBudgetPreference.update(null) },
+                ),
+                skeleton = skeleton::stateSkeleton
+                    .toAccessor()
+                    .shrinkType<_, ManageStateSkeleton.BudgetStack>()
+                    .getOrInit {
+                        StateSkeleton.budgetStack()
+                    }
+                    .skeleton,
+            )
         }
+    }
+
+    init {
+        scope.launch {
+            selectedBudget
+                .mapNotNull { selectedBudgetOrNull ->
+                    selectedBudgetOrNull.foldNullable(
+                        ifNull = { },
+                        ifNotNull = { null }
+                    )
+                }
+                .collect {
+                    selectedBudgetPreference.update(null)
+                }
+        }
+    }
 
     val goBackHandler: GoBackHandler = state
         .flatMapState(scope, ManageStateModel::goBackHandler)
