@@ -1,7 +1,19 @@
 plugins {
-    id(hnau.plugins.kotlin.serialization.get().pluginId)
-    id(hnau.plugins.ksp.get().pluginId)
-    id(hnau.plugins.hnau.ui.get().pluginId)
+    id(
+        hnau.plugins.kotlin.serialization
+            .get()
+            .pluginId,
+    )
+    id(
+        hnau.plugins.ksp
+            .get()
+            .pluginId,
+    )
+    id(
+        hnau.plugins.hnau.ui
+            .get()
+            .pluginId,
+    )
 }
 
 kotlin {
@@ -23,4 +35,10 @@ compose.desktop {
     application {
         mainClass = "org.hnau.pinfin.app.DesktopAppKt"
     }
+}
+
+composeCompiler {
+    stabilityConfigurationFiles.add(rootProject.layout.projectDirectory.file("compose_compiler_config.conf"))
+    reportsDestination = layout.buildDirectory.dir("compose_compiler")
+    enableStrongSkippingMode = true
 }

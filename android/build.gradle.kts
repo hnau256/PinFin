@@ -1,8 +1,16 @@
 import java.util.Properties
 
 plugins {
-    id(hnau.plugins.ksp.get().pluginId)
-    id(hnau.plugins.hnau.androidapp.get().pluginId)
+    id(
+        hnau.plugins.ksp
+            .get()
+            .pluginId,
+    )
+    id(
+        hnau.plugins.hnau.androidapp
+            .get()
+            .pluginId,
+    )
 }
 
 android {
@@ -64,4 +72,10 @@ dependencies {
     implementation(project(":data"))
     implementation(project(":projector"))
     implementation(libs.bignum)
+}
+
+composeCompiler {
+    stabilityConfigurationFiles.add(rootProject.layout.projectDirectory.file("compose_compiler_config.conf"))
+    reportsDestination = layout.buildDirectory.dir("compose_compiler")
+    enableStrongSkippingMode = true
 }

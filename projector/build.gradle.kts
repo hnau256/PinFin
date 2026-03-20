@@ -1,6 +1,14 @@
 plugins {
-    id(hnau.plugins.ksp.get().pluginId)
-    id(hnau.plugins.hnau.ui.get().pluginId)
+    id(
+        hnau.plugins.ksp
+            .get()
+            .pluginId,
+    )
+    id(
+        hnau.plugins.hnau.ui
+            .get()
+            .pluginId,
+    )
 }
 
 kotlin {
@@ -16,4 +24,10 @@ kotlin {
             }
         }
     }
+}
+
+composeCompiler {
+    stabilityConfigurationFiles.add(rootProject.layout.projectDirectory.file("compose_compiler_config.conf"))
+    reportsDestination = layout.buildDirectory.dir("compose_compiler")
+    enableStrongSkippingMode = true
 }
