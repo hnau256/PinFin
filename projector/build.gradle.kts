@@ -24,9 +24,3 @@ kotlin {
         }
     }
 }
-
-composeCompiler {
-    stabilityConfigurationFiles.add(rootProject.layout.projectDirectory.file("compose_compiler_config.conf"))
-    reportsDestination = layout.buildDirectory.dir("compose_compiler")
-    enableStrongSkippingMode = true
-}
