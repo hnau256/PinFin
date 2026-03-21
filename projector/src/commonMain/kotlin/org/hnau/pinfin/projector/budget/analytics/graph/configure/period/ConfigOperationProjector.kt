@@ -9,15 +9,12 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.StateFlow
 import org.hnau.commons.app.projector.uikit.Tabs
 import org.hnau.commons.app.projector.uikit.state.StateContent
 import org.hnau.commons.app.projector.uikit.transition.TransitionSpec
 import org.hnau.commons.app.projector.uikit.utils.Dimens
-import org.hnau.commons.app.projector.uikit.transition.SlideOrientation
-import org.hnau.commons.app.projector.uikit.transition.getTransitionSpecForSlideByCompare
 import org.hnau.commons.gen.pipe.annotations.Pipe
 import org.hnau.commons.kotlin.coroutines.flow.state.mapState
 import org.hnau.pinfin.model.budget.analytics.tab.graph.configure.period.operation.ConfigOperationModel
@@ -60,7 +57,7 @@ class ConfigOperationProjector(
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             Tabs(
-                items = remember { ConfigOperationModel.Tab.entries.toImmutableList() },
+                items = remember { ConfigOperationModel.Tab.entries.toList() },
                 selected = model.tab.collectAsState().value,
                 onSelectedChanged = model.tab::value::set,
             ) { tab ->

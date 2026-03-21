@@ -15,7 +15,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.Dp
-import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.CoroutineScope
 import org.hnau.commons.app.projector.uikit.Tabs
 import org.hnau.commons.app.projector.uikit.utils.Dimens
@@ -101,7 +100,7 @@ class AnalyticsProjector(
                     contentAlignment = Alignment.Center,
                 ) {
                     Tabs(
-                        items = remember { AnalyticsTab.entries.toImmutableList() },
+                        items = remember { AnalyticsTab.entries.toList() },
                         selected = selectedTab,
                         onSelectedChanged = { model.selectedTab.value = it },
                     ) { tab ->

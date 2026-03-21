@@ -7,7 +7,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.StateFlow
 import org.hnau.commons.app.projector.uikit.Tabs
@@ -226,7 +225,7 @@ class TypeProjector(
     ) {
         Tabs(
             modifier = modifier,
-            items = remember { TransactionType.entries.toImmutableList() },
+            items = remember { TransactionType.entries.toList() },
             selected = model.type.variant.collectAsState().value,
             onSelectedChanged = { model.type.variant.value = it },
         ) { type ->

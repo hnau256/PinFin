@@ -19,7 +19,6 @@ kotlin {
                 implementation(hnau.commons.app.model)
                 implementation(project(":model"))
                 implementation(project(":data"))
-                implementation(libs.kotlin.immutable)
                 implementation(libs.bignum)
             }
         }

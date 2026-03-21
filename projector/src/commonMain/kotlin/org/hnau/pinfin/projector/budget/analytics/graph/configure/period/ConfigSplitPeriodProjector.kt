@@ -9,7 +9,6 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.StateFlow
 import org.hnau.commons.app.projector.uikit.Tabs
@@ -60,7 +59,7 @@ class ConfigSplitPeriodProjector(
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             Tabs(
-                items = remember { ConfigSplitPeriodModel.Tab.entries.toImmutableList() },
+                items = remember { ConfigSplitPeriodModel.Tab.entries.toList() },
                 selected = model.tab.collectAsState().value,
                 onSelectedChanged = model.tab::value::set,
             ) { tab ->
