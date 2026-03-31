@@ -7,7 +7,8 @@
         android:label="@string/pinfin"
         android:icon="@drawable/ic_launcher"
         android:theme="@style/Theme.pinfin"
-        android:enableOnBackInvokedCallback="true">
+        android:enableOnBackInvokedCallback="true"
+        android:name="org.hnau.pinfin.android.App">
 
         <activity
             android:name="org.hnau.pinfin.android.AppActivity"

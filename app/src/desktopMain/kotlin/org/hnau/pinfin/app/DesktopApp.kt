@@ -6,14 +6,13 @@ import androidx.compose.runtime.InternalComposeApi
 import androidx.compose.runtime.remember
 import androidx.compose.ui.InternalComposeUiApi
 import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.platform.LocalPlatformWindowInsets
-import androidx.compose.ui.platform.PlatformInsets
-import androidx.compose.ui.platform.PlatformWindowInsets
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
 import androidx.compose.ui.window.rememberWindowState
+import co.touchlab.kermit.Logger
+import co.touchlab.kermit.platformLogWriter
 import kotlinx.coroutines.runBlocking
 import org.hnau.commons.app.model.app.DesktopApp
 import org.hnau.commons.app.model.theme.ThemeBrightness
@@ -22,6 +21,9 @@ import org.hnau.pinfin.data.Currency
 
 @OptIn(InternalComposeApi::class, InternalComposeUiApi::class)
 fun main() = runBlocking {
+
+    Logger.setLogWriters(platformLogWriter())
+
     val app = DesktopApp(
         scope = this,
         seed = createPinFinAppSeed(
