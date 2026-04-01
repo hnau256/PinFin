@@ -1,16 +1,8 @@
 import java.util.Properties
 
 plugins {
-    id(
-        hnau.plugins.ksp
-            .get()
-            .pluginId,
-    )
-    id(
-        hnau.plugins.hnau.androidapp
-            .get()
-            .pluginId,
-    )
+    id(hnau.plugins.ksp.get().pluginId)
+    id(hnau.plugins.hnau.jvmAndroidApp.get().pluginId)
 }
 
 android {

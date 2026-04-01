@@ -1,14 +1,6 @@
 plugins {
-    id(
-        hnau.plugins.ksp
-            .get()
-            .pluginId,
-    )
-    id(
-        hnau.plugins.hnau.ui
-            .get()
-            .pluginId,
-    )
+    id(hnau.plugins.ksp.get().pluginId)
+    id(hnau.plugins.hnau.kmpAndroidWithCompose.get().pluginId)
 }
 
 kotlin {

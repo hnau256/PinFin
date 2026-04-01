@@ -15,6 +15,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
+import org.hnau.commons.app.model.app.AppModel
 import org.hnau.commons.app.model.app.AppViewModel
 import org.hnau.pinfin.app.JvmInetAddressesProvider
 import org.hnau.pinfin.app.JvmSha256

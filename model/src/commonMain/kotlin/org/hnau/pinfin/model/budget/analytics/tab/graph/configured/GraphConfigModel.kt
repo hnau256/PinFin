@@ -25,7 +25,6 @@ import org.hnau.pinfin.model.utils.analytics.AnalyticsPagesProvider
 import org.hnau.pinfin.model.utils.analytics.config.AnalyticsConfig
 import org.hnau.pinfin.model.utils.analytics.toAnalyticsEntries
 import org.hnau.pinfin.model.utils.budget.repository.BudgetRepository
-import org.hnau.pinfin.model.utils.budget.state.TransactionInfo
 import org.hnau.pinfin.model.utils.budget.upchain.UpchainHash
 import kotlin.time.Clock
 

@@ -29,7 +29,7 @@ class TcpSyncClient(
         request: I,
     ): Result<O> = runCatching {
         val requestBytes = withContext(Dispatchers.Default) {
-            SyncConstants.cbor.encodeToByteArray(SyncHandle.Companion.serializer, request)
+            SyncConstants.cbor.encodeToByteArray(SyncHandle.serializer, request)
         }
         val responseBytes = withContext(Dispatchers.IO) {
 
