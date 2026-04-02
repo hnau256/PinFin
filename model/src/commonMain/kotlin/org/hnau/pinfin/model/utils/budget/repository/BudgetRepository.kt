@@ -12,13 +12,13 @@ import org.hnau.pinfin.data.UpdateType
 import org.hnau.pinfin.model.utils.budget.state.BudgetState
 import org.hnau.pinfin.model.utils.budget.state.BudgetStateBuilder
 import org.hnau.pinfin.model.utils.budget.state.updateTypeMapper
-import org.hnau.pinfin.model.utils.budget.storage.UpchainStorage
-import org.hnau.pinfin.model.utils.budget.storage.addUpdate
+import org.hnau.upchain.core.repository.upchain.UpchainRepository
+import org.hnau.upchain.core.repository.upchain.addUpdate
 
 class BudgetRepository(
     scope: CoroutineScope,
     val state: StateFlow<BudgetState>,
-    val upchainStorage: UpchainStorage,
+    val upchainRepository: UpchainRepository,
     val remove: suspend () -> Unit,
 ) {
 
@@ -62,7 +62,7 @@ class BudgetRepository(
     private suspend fun applyUpdate(
         update: UpdateType,
     ) {
-        upchainStorage.addUpdate(
+        upchainRepository.addUpdate(
             UpdateType.updateTypeMapper.reverse(update)
         )
     }
@@ -72,11 +72,11 @@ class BudgetRepository(
         suspend fun create(
             scope: CoroutineScope,
             id: BudgetId,
-            upchainStorage: UpchainStorage,
+            upchainRepository: UpchainRepository,
             dependencies: Dependencies,
             remove: suspend () -> Unit,
         ): BudgetRepository {
-            val upchainFlow = upchainStorage.upchain
+            val upchainFlow = upchainRepository.upchain
             val initialState = BudgetStateBuilder
                 .empty(
                     dependencies = dependencies.budgretStateBuilder(),
@@ -97,7 +97,7 @@ class BudgetRepository(
             return BudgetRepository(
                 scope = scope,
                 state = state,
-                upchainStorage = upchainStorage,
+                upchainRepository = upchainRepository,
                 remove = remove,
             )
         }

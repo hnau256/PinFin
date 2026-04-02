@@ -12,8 +12,8 @@ import org.hnau.commons.kotlin.coroutines.InProgressRegistry
 import org.hnau.pinfin.data.BudgetId
 import org.hnau.pinfin.model.utils.budget.repository.DemoBudget
 import org.hnau.pinfin.model.utils.budget.storage.BudgetsStorage
-import org.hnau.pinfin.model.utils.budget.storage.addUpdates
 import org.hnau.pinfin.model.utils.budget.storage.createNewBudgetIfNotExistsAndGet
+import org.hnau.upchain.core.repository.upchain.addUpdates
 
 class NoBudgetsModel(
     private val scope: CoroutineScope,
@@ -53,7 +53,7 @@ class NoBudgetsModel(
                 dependencies
                     .budgetsStorage
                     .createNewBudgetIfNotExistsAndGet(DemoBudget.id)
-                    .upchainStorage
+                    .upchainRepository
                     .addUpdates(updates)
             }
         }

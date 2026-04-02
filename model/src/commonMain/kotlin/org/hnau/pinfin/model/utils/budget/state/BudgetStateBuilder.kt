@@ -1,7 +1,6 @@
 package org.hnau.pinfin.model.utils.budget.state
 
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext
 import org.hnau.commons.gen.pipe.annotations.Pipe
 import org.hnau.commons.kotlin.castOrNull
@@ -17,12 +16,11 @@ import org.hnau.pinfin.data.Record
 import org.hnau.pinfin.data.Transaction
 import org.hnau.pinfin.data.UpdateType
 import org.hnau.pinfin.model.utils.amount
-import org.hnau.pinfin.model.utils.budget.upchain.Sha256
-import org.hnau.pinfin.model.utils.budget.upchain.Upchain
-import org.hnau.pinfin.model.utils.budget.upchain.UpchainHash
-import org.hnau.pinfin.model.utils.budget.upchain.Update
-import org.hnau.pinfin.model.utils.budget.upchain.calcNext
-import org.hnau.pinfin.model.utils.budget.upchain.utils.getUpdatesAfterHashIfPossible
+import org.hnau.upchain.core.Upchain
+import org.hnau.upchain.core.UpchainHash
+import org.hnau.upchain.core.Update
+import org.hnau.upchain.core.calcNext
+import org.hnau.upchain.core.getUpdatesAfterHashIfPossible
 
 data class BudgetStateBuilder(
     private val hash: UpchainHash?,
@@ -35,8 +33,6 @@ data class BudgetStateBuilder(
 
     @Pipe
     interface Dependencies {
-
-        val sha256: Sha256
 
         val currency: Currency
     }
@@ -76,7 +72,6 @@ data class BudgetStateBuilder(
         return BudgetStateBuilder(
             hash = hash.calcNext(
                 update = update,
-                sha256 = dependencies.sha256,
             ),
             transactions = transactions,
             accountsConfigs = accountsConfigs,

@@ -1,6 +1,6 @@
 package org.hnau.pinfin.model.utils.budget.state
 
-import org.hnau.pinfin.model.utils.budget.upchain.UpchainHash
+import org.hnau.upchain.core.UpchainHash
 
 data class BudgetState(
     val hash: UpchainHash?,

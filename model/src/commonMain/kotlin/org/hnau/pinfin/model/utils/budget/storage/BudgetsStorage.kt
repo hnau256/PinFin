@@ -6,7 +6,6 @@ import org.hnau.commons.gen.pipe.annotations.Pipe
 import org.hnau.commons.kotlin.KeyValue
 import org.hnau.pinfin.data.BudgetId
 import org.hnau.pinfin.model.utils.budget.repository.BudgetRepository
-import org.hnau.pinfin.model.utils.budget.storage.impl.FileBasedUpchainStorage
 
 interface BudgetsStorage {
 
@@ -22,8 +21,6 @@ interface BudgetsStorage {
         interface Dependencies {
 
             fun budgetRepository(): BudgetRepository.Dependencies
-
-            fun fileBasedUpchainStorage(): FileBasedUpchainStorage.Dependencies
 
             companion object
         }

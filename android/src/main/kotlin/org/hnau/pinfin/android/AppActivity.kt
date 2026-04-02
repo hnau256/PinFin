@@ -17,7 +17,6 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import org.hnau.commons.app.model.app.AppModel
 import org.hnau.commons.app.model.app.AppViewModel
-import org.hnau.pinfin.app.JvmSha256
 import org.hnau.pinfin.app.PinFinAppDependencies
 import org.hnau.pinfin.app.createAppProjector
 import org.hnau.pinfin.app.createPinFinAppSeed
@@ -32,7 +31,6 @@ class AppActivity : ComponentActivity() {
             context = applicationContext,
             seed = createPinFinAppSeed(
                 dependencies = PinFinAppDependencies.impl(
-                    sha256 = JvmSha256,
                     currency = Currency.default, //TODO
                 )
             ),

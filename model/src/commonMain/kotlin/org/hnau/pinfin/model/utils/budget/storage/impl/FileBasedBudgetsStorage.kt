@@ -1,93 +1,61 @@
 package org.hnau.pinfin.model.utils.budget.storage.impl
 
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.IO
 import kotlinx.coroutines.async
-import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.update
-import kotlinx.coroutines.sync.Mutex
-import kotlinx.coroutines.sync.withLock
-import kotlinx.coroutines.withContext
-import org.hnau.commons.app.model.file.File
-import org.hnau.commons.app.model.file.delete
-import org.hnau.commons.app.model.file.exists
-import org.hnau.commons.app.model.file.list
-import org.hnau.commons.app.model.file.plus
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
 import org.hnau.commons.kotlin.KeyValue
-import org.hnau.commons.kotlin.coroutines.flow.state.mutable.toMutableStateFlowAsInitial
-import org.hnau.commons.kotlin.ifNull
+import org.hnau.commons.kotlin.coroutines.flow.state.mapListReusable
 import org.hnau.pinfin.data.BudgetId
 import org.hnau.pinfin.model.utils.budget.repository.BudgetRepository
 import org.hnau.pinfin.model.utils.budget.storage.BudgetsStorage
+import org.hnau.pinfin.model.utils.budget.upchainUIdMapper
+import org.hnau.upchain.core.repository.file.upchains.fileBased
+import org.hnau.upchain.core.repository.upchains.UpchainsRepository
 
 fun BudgetsStorage.Factory.Companion.files(
     dependencies: BudgetsStorage.Factory.Dependencies,
-    budgetsDir: File,
+    budgetsDir: String,
 ): BudgetsStorage.Factory = BudgetsStorage.Factory { scope ->
 
-    val accessStoragesMutex = Mutex()
+    val upchains = UpchainsRepository.fileBased(
+        dir = budgetsDir,
+    )
 
-    var storages: MutableStateFlow<List<KeyValue<BudgetId, BudgetRepository>>>? = null
-
-    val createBudgetRepository: suspend (
-        id: BudgetId,
-    ) -> BudgetRepository = { id ->
-        val file = budgetsDir + id.let(BudgetId.stringMapper.reverse)
-        val upchainStorage = FileBasedUpchainStorage.create(
-            budgetFile = file,
-            dependencies = dependencies.fileBasedUpchainStorage(),
-        )
-        BudgetRepository.create(
+    val deferredStorages = upchains
+        .upchains
+        .mapListReusable(
             scope = scope,
-            id = id,
-            upchainStorage = upchainStorage,
-            remove = {
-                file.delete()
-                accessStoragesMutex.withLock {
-                    storages!!.update { storagesList ->
-                        storagesList.filter { it.key != id }
-                    }
+            extractKey = UpchainsRepository.Item::id,
+            transform = { scope, item ->
+                val id = item.id.let(BudgetId.upchainUIdMapper.direct)
+                scope.async {
+                    val repository = BudgetRepository.create(
+                        scope = scope,
+                        id = id,
+                        upchainRepository = item.repository,
+                        dependencies = dependencies.budgetRepository(),
+                        remove = item.remove,
+                    )
+                    KeyValue(id, repository)
                 }
-            },
-            dependencies = dependencies.budgetRepository(),
+            }
         )
-    }
-
-    storages = withContext(Dispatchers.IO) {
-        budgetsDir
-            .takeIf(File::exists)
-            ?.list()
-            .ifNull { emptyList() }
-            .map { budgetFile ->
-                val id: BudgetId = BudgetId.stringMapper.direct(budgetFile.path.name)
-                val budgetRepository = scope.async { createBudgetRepository(id) }
-                id to budgetRepository
-            }
-            .map { (id, budgetRepository) ->
-                val budgetRepository = budgetRepository.await()
-                KeyValue(id, budgetRepository)
-            }
-            .toMutableStateFlowAsInitial()
-    }
+        .map { listOfDeferred -> listOfDeferred.awaitAll() }
+        .stateIn(scope)
 
     object : BudgetsStorage {
 
         override val list: StateFlow<List<KeyValue<BudgetId, BudgetRepository>>>
-            get() = storages
+            get() = deferredStorages
 
         override suspend fun createNewBudgetIfNotExists(
             id: BudgetId,
         ) {
-            accessStoragesMutex.withLock {
-                if (storages.value.any { it.key == id }) {
-                    return@withLock
-                }
-                val budgetRepository = createBudgetRepository(id)
-                storages.update { currentStorages ->
-                    currentStorages + KeyValue(id, budgetRepository)
-                }
-            }
+            upchains.createUpchain(
+                id = id.let(BudgetId.upchainUIdMapper.reverse)
+            )
         }
     }
 }

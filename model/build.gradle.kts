@@ -12,7 +12,8 @@ kotlin {
                 implementation(hnau.kotlinx.serialization.cbor)
                 implementation(hnau.kotlinx.serialization.json)
                 implementation(libs.bignum)
-                implementation(libs.kotlin.io)
+                implementation(libs.upchain.core)
+                implementation(hnau.kotlinx.io)
                 implementation(libs.ktor.network)
                 implementation(project(":data"))
             }

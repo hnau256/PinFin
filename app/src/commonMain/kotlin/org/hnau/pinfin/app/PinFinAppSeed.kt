@@ -1,6 +1,7 @@
 package org.hnau.pinfin.app
 
 import org.hnau.commons.app.model.app.AppSeed
+import org.hnau.commons.app.model.file.absolutePath
 import org.hnau.commons.app.model.file.plus
 import org.hnau.commons.app.model.preferences.impl.FileBasedPreferences
 import org.hnau.commons.app.model.theme.ThemeBrightness
@@ -27,9 +28,8 @@ fun createPinFinAppSeed(
                     preferencesFile = appContext.filesDir + "preferences.txt",
                 ),
                 budgetsStorageFactory = BudgetsStorage.Factory.files(
-                    budgetsDir = appContext.filesDir + "budgets",
+                    budgetsDir = (appContext.filesDir + "budgets").absolutePath,
                     dependencies = BudgetsStorage.Factory.Dependencies.impl(
-                        sha256 = dependencies.sha256,
                         currency = dependencies.currency,
                     ),
                 ),

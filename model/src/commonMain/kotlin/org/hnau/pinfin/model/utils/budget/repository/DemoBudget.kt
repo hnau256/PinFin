@@ -22,7 +22,7 @@ import org.hnau.pinfin.data.UpdateType
 import org.hnau.pinfin.data.expression.AmountExpression
 import org.hnau.pinfin.data.expression.Expression
 import org.hnau.pinfin.model.utils.budget.state.updateTypeMapper
-import org.hnau.pinfin.model.utils.budget.upchain.Update
+import org.hnau.upchain.core.Update
 import kotlin.math.roundToInt
 import kotlin.random.Random
 import kotlin.time.Clock
@@ -81,7 +81,7 @@ object DemoBudget {
     )
 
     val updates: List<Update>
-        get() = buildList<Transaction> {
+        get() = buildList {
             val end = Clock.System.now()
             val start = end.minus((6 * 365).days)
             addAll(createSalaryTransactions(start, end))

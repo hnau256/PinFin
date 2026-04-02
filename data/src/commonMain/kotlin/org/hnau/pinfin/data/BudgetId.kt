@@ -34,6 +34,6 @@ value class BudgetId(
         )
 
         val stringMapper: Mapper<String, BudgetId> =
-            Mapper.Companion.stringToUuid + UuidMapper
+            Mapper.stringToUuid + UuidMapper
     }
 }
