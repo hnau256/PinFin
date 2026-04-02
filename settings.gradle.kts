@@ -10,9 +10,5 @@ pluginManagement {
 }
 
 plugins {
-    id("org.hnau.plugin.settings") version "1.10.0"
-}
-
-hnau {
-    groupId = "org.hnau.pinfin"
+    id("org.hnau.plugin.settings") version "1.11.0"
 }
