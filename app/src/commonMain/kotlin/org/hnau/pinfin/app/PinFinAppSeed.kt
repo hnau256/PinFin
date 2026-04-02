@@ -33,7 +33,6 @@ fun createPinFinAppSeed(
                         currency = dependencies.currency,
                     ),
                 ),
-                inetAddressesProvider = dependencies.inetAddressesProvider,
                 currency = dependencies.currency,
             ),
             skeleton = skeleton,

@@ -10,7 +10,9 @@ suspend fun BudgetsStorage.createNewBudgetIfNotExistsAndGet(
 ): BudgetRepository {
     createNewBudgetIfNotExists(id)
     return list
-        .mapNotNull { it.firstOrNull { it.first == id } }
+        .mapNotNull { currentList ->
+            currentList.firstOrNull { it.key == id }
+        }
         .first()
-        .second
+        .value
 }

@@ -29,7 +29,6 @@ fun main() = runBlocking {
         seed = createPinFinAppSeed(
             defaultBrightness = ThemeBrightness.Dark,
             dependencies = PinFinAppDependencies.impl(
-                inetAddressesProvider = JvmInetAddressesProvider,
                 sha256 = JvmSha256,
                 currency = Currency.default, //TODO
             )

@@ -14,6 +14,7 @@ import org.hnau.commons.app.model.file.delete
 import org.hnau.commons.app.model.file.exists
 import org.hnau.commons.app.model.file.list
 import org.hnau.commons.app.model.file.plus
+import org.hnau.commons.kotlin.KeyValue
 import org.hnau.commons.kotlin.coroutines.flow.state.mutable.toMutableStateFlowAsInitial
 import org.hnau.commons.kotlin.ifNull
 import org.hnau.pinfin.data.BudgetId
@@ -27,7 +28,7 @@ fun BudgetsStorage.Factory.Companion.files(
 
     val accessStoragesMutex = Mutex()
 
-    var storages: MutableStateFlow<List<Pair<BudgetId, BudgetRepository>>>? = null
+    var storages: MutableStateFlow<List<KeyValue<BudgetId, BudgetRepository>>>? = null
 
     val createBudgetRepository: suspend (
         id: BudgetId,
@@ -44,7 +45,9 @@ fun BudgetsStorage.Factory.Companion.files(
             remove = {
                 file.delete()
                 accessStoragesMutex.withLock {
-                    storages!!.update { it.filter { it.first != id } }
+                    storages!!.update { storagesList ->
+                        storagesList.filter { it.key != id }
+                    }
                 }
             },
             dependencies = dependencies.budgetRepository(),
@@ -63,26 +66,26 @@ fun BudgetsStorage.Factory.Companion.files(
             }
             .map { (id, budgetRepository) ->
                 val budgetRepository = budgetRepository.await()
-                id to budgetRepository
+                KeyValue(id, budgetRepository)
             }
             .toMutableStateFlowAsInitial()
     }
 
     object : BudgetsStorage {
 
-        override val list: StateFlow<List<Pair<BudgetId, BudgetRepository>>>
+        override val list: StateFlow<List<KeyValue<BudgetId, BudgetRepository>>>
             get() = storages
 
         override suspend fun createNewBudgetIfNotExists(
             id: BudgetId,
         ) {
             accessStoragesMutex.withLock {
-                if (storages.value.any { it.first == id }) {
+                if (storages.value.any { it.key == id }) {
                     return@withLock
                 }
                 val budgetRepository = createBudgetRepository(id)
                 storages.update { currentStorages ->
-                    currentStorages + (id to budgetRepository)
+                    currentStorages + KeyValue(id, budgetRepository)
                 }
             }
         }
