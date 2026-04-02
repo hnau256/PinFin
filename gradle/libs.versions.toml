@@ -1,6 +1,6 @@
 [versions]
 ktor = "3.4.2"
-upchain = "1.3.0"
+upchain = "1.4.0"
 
 [libraries]
 ktor-network = { module = "io.ktor:ktor-network", version.ref = "ktor" }
