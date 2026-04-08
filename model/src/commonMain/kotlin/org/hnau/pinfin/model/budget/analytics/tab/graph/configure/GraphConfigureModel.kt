@@ -9,8 +9,8 @@ import org.hnau.commons.kotlin.coroutines.flow.state.mapState
 import org.hnau.commons.kotlin.foldBoolean
 import org.hnau.pinfin.model.budget.analytics.tab.graph.configure.period.operation.ConfigOperationModel
 import org.hnau.pinfin.model.budget.analytics.tab.graph.configure.period.split.ConfigSplitPeriodModel
-import org.hnau.pinfin.model.transaction.utils.Editable
-import org.hnau.pinfin.model.transaction.utils.combineEditableWith
+import org.hnau.commons.app.model.utils.Editable
+import org.hnau.commons.app.model.utils.combineEditableWith
 import org.hnau.pinfin.model.transaction.utils.map
 import org.hnau.pinfin.model.utils.analytics.config.AnalyticsConfig
 

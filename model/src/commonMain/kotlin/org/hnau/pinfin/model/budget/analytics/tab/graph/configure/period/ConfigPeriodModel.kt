@@ -4,8 +4,8 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.datetime.DatePeriod
 import kotlinx.serialization.Serializable
-import org.hnau.pinfin.model.transaction.utils.Editable
-import org.hnau.pinfin.model.transaction.utils.combineEditableWith
+import org.hnau.commons.app.model.utils.Editable
+import org.hnau.commons.app.model.utils.combineEditableWith
 
 class ConfigPeriodModel(
     scope: CoroutineScope,

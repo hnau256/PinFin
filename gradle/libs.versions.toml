@@ -1,8 +1,8 @@
 [versions]
 ktor = "3.4.2"
-upchain = "1.4.0"
+upchain = "1.5.0"
 
 [libraries]
 ktor-network = { module = "io.ktor:ktor-network", version.ref = "ktor" }
 bignum = { module = "com.ionspin.kotlin:bignum", version = "0.3.10" }
-upchain-core = { module = "org.hnau.upchain:upchain-core", version.ref = "upchain" }
+upchain-sync-client-http = { module = "org.hnau.upchain:upchain-sync-client-http", version.ref = "upchain" }

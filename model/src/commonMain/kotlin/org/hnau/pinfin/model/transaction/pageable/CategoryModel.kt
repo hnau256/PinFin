@@ -32,7 +32,7 @@ import org.hnau.commons.kotlin.toAccessor
 import org.hnau.pinfin.data.CategoryId
 import org.hnau.pinfin.data.Comment
 import org.hnau.pinfin.model.transaction.utils.ChooseOrCreateModel
-import org.hnau.pinfin.model.transaction.utils.Editable
+import org.hnau.commons.app.model.utils.Editable
 import org.hnau.pinfin.model.transaction.utils.allRecords
 import org.hnau.pinfin.model.transaction.utils.valueOrNone
 import org.hnau.pinfin.model.utils.budget.repository.BudgetRepository

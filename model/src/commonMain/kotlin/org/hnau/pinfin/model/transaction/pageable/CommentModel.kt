@@ -21,7 +21,7 @@ import org.hnau.commons.kotlin.coroutines.flow.state.mapState
 import org.hnau.commons.kotlin.coroutines.flow.state.mutable.toMutableStateFlowAsInitial
 import org.hnau.commons.kotlin.serialization.MutableStateFlowSerializer
 import org.hnau.pinfin.data.Comment
-import org.hnau.pinfin.model.transaction.utils.Editable
+import org.hnau.commons.app.model.utils.Editable
 import org.hnau.pinfin.model.utils.budget.repository.BudgetRepository
 import org.hnau.pinfin.model.utils.budget.state.BudgetState
 import org.hnau.pinfin.model.utils.resolveSuggests

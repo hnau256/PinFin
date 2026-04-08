@@ -21,7 +21,7 @@ import org.hnau.commons.kotlin.coroutines.flow.state.mutable.toMutableStateFlowA
 import org.hnau.commons.kotlin.mapper.Mapper
 import org.hnau.commons.kotlin.serialization.MutableStateFlowSerializer
 import org.hnau.pinfin.data.TransactionType
-import org.hnau.pinfin.model.transaction.utils.Editable
+import org.hnau.commons.app.model.utils.Editable
 import org.hnau.pinfin.model.utils.budget.state.TransactionInfo
 
 class TypeModel(

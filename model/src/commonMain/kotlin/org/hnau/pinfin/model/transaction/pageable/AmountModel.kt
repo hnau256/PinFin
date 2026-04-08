@@ -18,7 +18,7 @@ import org.hnau.commons.kotlin.serialization.MutableStateFlowSerializer
 import org.hnau.pinfin.data.Amount
 import org.hnau.pinfin.data.Currency
 import org.hnau.pinfin.data.expression.AmountExpression
-import org.hnau.pinfin.model.transaction.utils.Editable
+import org.hnau.commons.app.model.utils.Editable
 import org.hnau.pinfin.model.transaction.utils.valueOrNone
 import org.hnau.pinfin.model.AmountModel as CommonAmountModel
 

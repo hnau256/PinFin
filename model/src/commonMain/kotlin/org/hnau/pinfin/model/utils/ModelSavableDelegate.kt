@@ -1,23 +1,27 @@
+@file:UseSerializers(
+    MutableStateFlowSerializer::class,
+    OptionSerializer::class,
+)
+
 package org.hnau.pinfin.model.utils
 
 import arrow.core.None
 import arrow.core.Option
+import arrow.core.serialization.OptionSerializer
 import arrow.core.some
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.UseSerializers
 import org.hnau.commons.app.model.goback.GoBackHandler
-import org.hnau.commons.app.model.goback.withFallback
 import org.hnau.commons.app.model.utils.Editable
 import org.hnau.commons.kotlin.coroutines.InProgressRegistry
 import org.hnau.commons.kotlin.coroutines.actionOrNullIfExecuting
-import org.hnau.commons.kotlin.coroutines.flow.state.flatMapWithScope
 import org.hnau.commons.kotlin.coroutines.flow.state.mapState
 import org.hnau.commons.kotlin.coroutines.flow.state.mapWithScope
-import org.hnau.commons.kotlin.coroutines.flow.state.mutable.toMutableStateFlowAsInitial
 import org.hnau.commons.kotlin.foldBoolean
-import org.hnau.commons.kotlin.foldNullable
+import org.hnau.commons.kotlin.serialization.MutableStateFlowSerializer
 
 @Deprecated("Move to commons-app-model")
 class ModelSavableDelegate<T>(
@@ -29,21 +33,27 @@ class ModelSavableDelegate<T>(
     private val save: suspend (T) -> Unit,
 ) {
 
+    private val blockBackDelegate: ModelBlockBackDelegate<Option<T>> = ModelBlockBackDelegate(
+        scope = scope,
+        skeleton = skeleton.blockBack,
+        modelGoBackHandler = modelGoBackHandler,
+        blockReason = result.mapState(scope) { editable ->
+            when (editable) {
+                Editable.Incorrect -> None.some()
+                is Editable.Value<T> -> editable
+                    .changed
+                    .foldBoolean(
+                        ifTrue = { editable.value.some().some() },
+                        ifFalse = { None }
+                    )
+            }
+        }
+    )
+
     @Serializable
     data class Skeleton<T>(
-        val dialog: MutableStateFlow<DialogState<T>> =
-            DialogState.None.toMutableStateFlowAsInitial()
-    ) {
-
-        sealed interface DialogState<out T> {
-
-            data object None : DialogState<Nothing>
-
-            data class Visible<out T>(
-                val valueToSave: Option<T>,
-            ) : DialogState<T>
-        }
-    }
+        val blockBack: ModelBlockBackDelegate.Skeleton<Option<T>> = ModelBlockBackDelegate.Skeleton()
+    )
 
     private val inProgressRegistry = InProgressRegistry(scope)
 
@@ -84,16 +94,15 @@ class ModelSavableDelegate<T>(
         val saveAndExitIfPossible: (StateFlow<(() -> Unit)?>)?
     )
 
-    val dialog: StateFlow<ExitWithoutSavingDialog?> = skeleton
+    val dialog: StateFlow<ExitWithoutSavingDialog?> = blockBackDelegate
         .dialog
-        .mapWithScope(scope) { scope, dialog ->
-            when (dialog) {
-                Skeleton.DialogState.None -> null
-                is Skeleton.DialogState.Visible<T> -> ExitWithoutSavingDialog(
-                    returnToEditing = { skeleton.dialog.value = Skeleton.DialogState.None },
+        .mapState(scope) { dialogOrNull ->
+            dialogOrNull?.let { dialog ->
+                ExitWithoutSavingDialog(
+                    returnToEditing = dialog.close,
                     exitWithoutSaving = close,
                     saveAndExitIfPossible = dialog
-                        .valueToSave
+                        .blockReason
                         .map { value ->
                             saveAndCloseFlow(
                                 scope = scope,
@@ -105,45 +114,6 @@ class ModelSavableDelegate<T>(
             }
         }
 
-    private fun createShowDialogIfNecessaryGoBackHandler(
-        scope: CoroutineScope,
-    ): GoBackHandler = result.mapState(scope) { result ->
-        when (result) {
-            Editable.Incorrect -> {
-                {
-                    skeleton.dialog.value = Skeleton.DialogState.Visible(
-                        valueToSave = None,
-                    )
-                }
-            }
-
-            is Editable.Value<T> -> result.changed.foldBoolean(
-                ifFalse = { null },
-                ifTrue = {
-                    {
-                        skeleton.dialog.value =
-                            Skeleton.DialogState.Visible(
-                                valueToSave = result.value.some(),
-                            )
-                    }
-                }
-            )
-        }
-    }
-
-    val goBackHandler: GoBackHandler = dialog.flatMapWithScope(
-        scope = scope,
-    ) { scope, dialogOrNull ->
-        dialogOrNull.foldNullable(
-            ifNotNull = {
-                { skeleton.dialog.value = Skeleton.DialogState.None }.toMutableStateFlowAsInitial()
-            },
-            ifNull = {
-                modelGoBackHandler.withFallback(
-                    scope = scope,
-                    createFallback = ::createShowDialogIfNecessaryGoBackHandler,
-                )
-            },
-        )
-    }
+    val goBackHandler: GoBackHandler
+        get() = blockBackDelegate.goBackHandler
 }

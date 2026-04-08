@@ -18,8 +18,8 @@ import org.hnau.commons.kotlin.getOrInit
 import org.hnau.commons.kotlin.serialization.MutableStateFlowSerializer
 import org.hnau.commons.kotlin.toAccessor
 import org.hnau.pinfin.model.budget.analytics.tab.graph.configure.period.ConfigPeriodModel
-import org.hnau.pinfin.model.transaction.utils.Editable
-import org.hnau.pinfin.model.transaction.utils.flatMap
+import org.hnau.commons.app.model.utils.Editable
+import org.hnau.commons.app.model.utils.flatMap
 import org.hnau.pinfin.model.utils.analytics.config.AnalyticsPageConfig
 
 class ConfigOperationModel(

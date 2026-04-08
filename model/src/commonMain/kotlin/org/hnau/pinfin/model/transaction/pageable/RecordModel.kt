@@ -25,9 +25,9 @@ import org.hnau.pinfin.data.Comment
 import org.hnau.pinfin.data.Currency
 import org.hnau.pinfin.data.expression.AmountExpression
 import org.hnau.pinfin.model.transaction.utils.ChooseOrCreateModel
-import org.hnau.pinfin.model.transaction.utils.Editable
+import org.hnau.commons.app.model.utils.Editable
 import org.hnau.pinfin.model.transaction.utils.allRecords
-import org.hnau.pinfin.model.transaction.utils.combineEditableWith
+import org.hnau.commons.app.model.utils.combineEditableWith
 import org.hnau.pinfin.model.transaction.utils.map
 import org.hnau.pinfin.model.transaction.utils.valueOrNone
 import org.hnau.pinfin.model.utils.budget.state.CategoryInfo

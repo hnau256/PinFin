@@ -30,8 +30,8 @@ import org.hnau.pinfin.model.transaction.pageable.CommentModel
 import org.hnau.pinfin.model.transaction.pageable.DateModel
 import org.hnau.pinfin.model.transaction.pageable.TimeModel
 import org.hnau.pinfin.model.transaction.pageable.TypeModel
-import org.hnau.pinfin.model.transaction.utils.Editable
-import org.hnau.pinfin.model.transaction.utils.combineEditableWith
+import org.hnau.commons.app.model.utils.Editable
+import org.hnau.commons.app.model.utils.combineEditableWith
 import org.hnau.pinfin.model.transaction.utils.toTransactionType
 import org.hnau.pinfin.model.utils.budget.repository.BudgetRepository
 import org.hnau.pinfin.model.utils.budget.state.TransactionInfo
@@ -122,7 +122,7 @@ class TransactionModel(
         val closeWithoutSavingDialogIsVisible: MutableStateFlow<Boolean> =
             false.toMutableStateFlowAsInitial(),
         val removeDialogIsVisible: MutableStateFlow<Boolean> =
-            false.toMutableStateFlowAsInitial(),
+            false.toMutableStateFlowAsInitial(), //TODO Use ModelSavableDelegate
     ) {
 
         companion object {

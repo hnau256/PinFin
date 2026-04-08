@@ -21,8 +21,8 @@ import org.hnau.commons.kotlin.foldNullable
 import org.hnau.commons.kotlin.serialization.MutableStateFlowSerializer
 import org.hnau.pinfin.data.Amount
 import org.hnau.pinfin.model.transaction.utils.ChooseOrCreateModel
-import org.hnau.pinfin.model.transaction.utils.Editable
-import org.hnau.pinfin.model.transaction.utils.combineEditableWith
+import org.hnau.commons.app.model.utils.Editable
+import org.hnau.commons.app.model.utils.combineEditableWith
 import org.hnau.pinfin.model.utils.budget.state.AccountInfo
 import org.hnau.pinfin.model.utils.budget.state.TransactionInfo
 
