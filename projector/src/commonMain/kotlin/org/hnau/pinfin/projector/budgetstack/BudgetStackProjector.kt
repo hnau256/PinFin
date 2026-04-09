@@ -1,9 +1,6 @@
 package org.hnau.pinfin.projector.budgetstack
 
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.asPaddingValues
-import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.runtime.Composable
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.StateFlow
@@ -20,6 +17,7 @@ import org.hnau.pinfin.projector.accountstack.AccountStackProjector
 import org.hnau.pinfin.projector.budget.BudgetProjector
 import org.hnau.pinfin.projector.budget.transactions.TransactionsProjector
 import org.hnau.pinfin.projector.categorystack.CategoryStackProjector
+import org.hnau.pinfin.projector.sync.BudgetSyncStackProjector
 import org.hnau.pinfin.projector.transaction.TransactionProjector
 
 class BudgetStackProjector(
@@ -42,6 +40,8 @@ class BudgetStackProjector(
         fun categories(): CategoriesProjector.Dependencies
 
         fun category(): CategoryStackProjector.Dependencies
+
+        fun sync(): BudgetSyncStackProjector.Dependencies
     }
 
     @SealUp(
@@ -70,11 +70,20 @@ class BudgetStackProjector(
                 type = CategoryStackProjector::class,
                 identifier = "category",
             ),
+            Variant(
+                type = BudgetSyncStackProjector::class,
+                identifier = "sync",
+            ),
         ],
         wrappedValuePropertyName = "projector",
         sealedInterfaceName = "BudgetStackElementProjector",
     )
-    interface PageProjector {
+    interface Element {
+
+        @Composable
+        fun Content(
+            contentPadding: PaddingValues,
+        )
 
         companion object
     }
@@ -87,46 +96,53 @@ class BudgetStackProjector(
             createProjector = { scope, model ->
                 model.fold(
                     ifBudget = { budgetModel ->
-                        PageProjector.budget(
+                        Element.budget(
                             scope = scope,
                             model = budgetModel,
                             dependencies = dependencies.budget(),
                         )
                     },
                     ifTransaction = { transactionModel ->
-                        PageProjector.transaction(
+                        Element.transaction(
                             scope = scope,
                             model = transactionModel,
                             dependencies = dependencies.transaction(),
                         )
                     },
                     ifTransactions = { transactionsModel ->
-                        PageProjector.transactions(
+                        Element.transactions(
                             scope = scope,
                             model = transactionsModel,
                             dependencies = dependencies.transactions(),
                         )
                     },
                     ifAccount = { accountModel ->
-                        PageProjector.account(
+                        Element.account(
                             scope = scope,
                             model = accountModel,
                             dependencies = dependencies.account(),
                         )
                     },
                     ifCategories = { categoriesModel ->
-                        PageProjector.categories(
+                        Element.categories(
                             model = categoriesModel,
                             dependencies = dependencies.categories(),
                         )
                     },
                     ifCategory = { categoryModel ->
-                        PageProjector.category(
+                        Element.category(
                             scope = scope,
                             model = categoryModel,
                             dependencies = dependencies.category(),
                         )
                     },
+                    ifSync = { syncModel ->
+                        Element.sync(
+                            scope = scope,
+                            model = syncModel,
+                            dependencies = dependencies.sync(),
+                        )
+                    }
                 )
             }
         )
@@ -136,38 +152,8 @@ class BudgetStackProjector(
         contentPadding: PaddingValues,
     ) {
         tail.Content { elementProjector ->
-            elementProjector.fold(
-                ifBudget = {
-                    it.Content(
-                        contentPadding = contentPadding,
-                    )
-                },
-                ifTransaction = {
-                    it.Content(
-                        contentPadding = contentPadding,
-                    )
-                },
-                ifTransactions = {
-                    it.Content(
-                        contentPadding = contentPadding,
-                        showAddButton = false,
-                    )
-                },
-                ifAccount = {
-                    it.Content(
-                        contentPadding = contentPadding,
-                    )
-                },
-                ifCategories = {
-                    it.Content(
-                        contentPadding = contentPadding,
-                    )
-                },
-                ifCategory = {
-                    it.Content(
-                        contentPadding = contentPadding,
-                    )
-                },
+            elementProjector.Content(
+                contentPadding = contentPadding,
             )
         }
     }

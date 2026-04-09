@@ -56,6 +56,12 @@ class BudgetConfigModel(
             .openCategories()
     }
 
+    fun openSync() {
+        dependencies
+            .budgetStackOpener
+            .openSyncConfig()
+    }
+
     val removeDialogVisible: MutableStateFlow<Boolean>
         get() = skeleton.removeDialogVisible
 

@@ -21,7 +21,7 @@ import org.hnau.commons.kotlin.coroutines.flow.state.mutable.toMutableStateFlowA
 import org.hnau.commons.kotlin.ifNull
 import org.hnau.commons.kotlin.serialization.MutableStateFlowSerializer
 import org.hnau.commons.app.model.utils.Editable
-import org.hnau.pinfin.model.transaction.utils.map
+import org.hnau.commons.app.model.utils.map
 import kotlin.time.Clock
 
 class TimeModel(

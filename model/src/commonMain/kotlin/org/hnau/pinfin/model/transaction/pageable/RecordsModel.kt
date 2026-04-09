@@ -34,7 +34,7 @@ import org.hnau.pinfin.data.Amount
 import org.hnau.commons.app.model.utils.Editable
 import org.hnau.pinfin.model.transaction.utils.RecordId
 import org.hnau.commons.app.model.utils.combineEditableWith
-import org.hnau.pinfin.model.transaction.utils.map
+import org.hnau.commons.app.model.utils.map
 import org.hnau.pinfin.model.transaction.utils.remove
 import org.hnau.pinfin.model.utils.budget.state.CategoryInfo
 import org.hnau.pinfin.model.utils.budget.state.TransactionInfo

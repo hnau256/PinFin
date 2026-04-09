@@ -27,6 +27,7 @@ import org.hnau.pinfin.model.accountstack.AccountStackModel
 import org.hnau.pinfin.model.budget.BudgetModel
 import org.hnau.pinfin.model.budget.analytics.tab.graph.TransactionsOpener
 import org.hnau.pinfin.model.categorystack.CategoryStackModel
+import org.hnau.pinfin.model.sync.BudgetSyncStackModel
 import org.hnau.pinfin.model.transaction.TransactionModel
 import org.hnau.pinfin.model.utils.budget.repository.BudgetRepository
 
@@ -48,6 +49,8 @@ class BudgetStackModel(
         fun account(): AccountStackModel.Dependencies
 
         fun category(): CategoryStackModel.Dependencies
+
+        fun sync(): BudgetSyncStackModel.Dependencies
 
         @Pipe
         interface WithOpeners {
@@ -95,6 +98,10 @@ class BudgetStackModel(
                 type = CategoryStackModel::class,
                 identifier = "category",
             ),
+            Variant(
+                type = BudgetSyncStackModel::class,
+                identifier = "sync",
+            ),
         ],
         wrappedValuePropertyName = "model",
         sealedInterfaceName = "BudgetStackElementModel",
@@ -131,6 +138,10 @@ class BudgetStackModel(
             Variant(
                 type = CategoryStackModel.Skeleton::class,
                 identifier = "category",
+            ),
+            Variant(
+                type = BudgetSyncStackModel.Skeleton::class,
+                identifier = "sync",
             ),
         ],
         wrappedValuePropertyName = "skeleton",
@@ -218,6 +229,13 @@ class BudgetStackModel(
                 onReady = { this@BudgetStackModel.skeleton.stack.tryDropLast() },
             )
         },
+        ifSync = { syncSkeleton ->
+            Element.sync(
+                scope = scope,
+                skeleton = syncSkeleton,
+                dependencies = dependencies.sync(),
+            )
+        }
     )
 
     val stack: StateFlow<NonEmptyStack<BudgetStackElementModel>> =

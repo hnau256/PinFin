@@ -8,14 +8,14 @@ kotlin {
     sourceSets {
         commonMain {
             dependencies {
-                implementation(hnau.commons.app.model)
+                api(hnau.commons.app.model)
+                api(libs.bignum)
+                api(libs.upchain.sync.client.http)
+                api(project(":data"))
+                implementation(hnau.kotlinx.io)
                 implementation(hnau.kotlinx.serialization.cbor)
                 implementation(hnau.kotlinx.serialization.json)
-                implementation(libs.bignum)
-                implementation(libs.upchain.sync.client.http)
-                implementation(hnau.kotlinx.io)
                 implementation(libs.ktor.network)
-                implementation(project(":data"))
             }
         }
     }

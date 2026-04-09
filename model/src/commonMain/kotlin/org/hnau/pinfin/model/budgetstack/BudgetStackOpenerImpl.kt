@@ -55,7 +55,7 @@ class BudgetStackOpenerImpl(
 
     override fun openCategories() {
         open(
-            BudgetStackModel.ElementSkeleton.categories(Unit)
+            BudgetStackModel.ElementSkeleton.categories
         )
     }
 
@@ -66,6 +66,12 @@ class BudgetStackOpenerImpl(
             BudgetStackModel.ElementSkeleton.category(
                 info = info,
             )
+        )
+    }
+
+    override fun openSyncConfig() {
+        open(
+            BudgetStackModel.ElementSkeleton.sync()
         )
     }
 }

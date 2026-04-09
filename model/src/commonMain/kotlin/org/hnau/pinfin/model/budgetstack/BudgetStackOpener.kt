@@ -24,4 +24,6 @@ interface BudgetStackOpener {
     fun openCategory(
         info: CategoryInfo,
     )
+
+    fun openSyncConfig()
 }

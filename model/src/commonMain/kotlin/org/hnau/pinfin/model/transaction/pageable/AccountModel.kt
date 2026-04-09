@@ -32,7 +32,7 @@ import org.hnau.pinfin.data.AccountId
 import org.hnau.pinfin.data.Amount
 import org.hnau.pinfin.model.transaction.utils.ChooseOrCreateModel
 import org.hnau.commons.app.model.utils.Editable
-import org.hnau.pinfin.model.transaction.utils.valueOrNone
+import org.hnau.commons.app.model.utils.valueOrNone
 import org.hnau.pinfin.model.utils.budget.repository.BudgetRepository
 import org.hnau.pinfin.model.utils.budget.state.AccountInfo
 import org.hnau.pinfin.model.utils.budget.state.BudgetState

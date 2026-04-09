@@ -57,6 +57,7 @@ class ManageModel(
         val budgetsStorage: BudgetsStorage
 
         fun budget(
+            id: BudgetId,
             budgetRepository: BudgetRepository,
             budgetsListOpener: BudgetsListOpener,
         ): BudgetStackModel.Dependencies
@@ -161,6 +162,7 @@ class ManageModel(
                 State.budgetStack(
                     scope = scope,
                     dependencies = dependencies.budget(
+                        id = budgetId,
                         budgetRepository = budgetRepository,
                         budgetsListOpener = { selectedBudgetPreference.update(null) },
                     ),

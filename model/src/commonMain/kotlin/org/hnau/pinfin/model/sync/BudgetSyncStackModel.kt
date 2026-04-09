@@ -38,9 +38,7 @@ class BudgetSyncStackModel(
     data class Skeleton(
         val stack: MutableStateFlow<NonEmptyStack<BudgetSyncStackElementSkeleton>> = MutableStateFlow(
             NonEmptyStack(
-                ElementSkeleton.config(
-                    config = BudgetSyncConfigModel.Skeleton.createForNew(),
-                )
+                ElementSkeleton.main,
             )
         ),
     )
