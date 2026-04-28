@@ -16,7 +16,6 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import org.hnau.commons.app.model.app.AppFilesDirProvider
-import org.hnau.commons.app.model.app.AppModel
 import org.hnau.commons.app.model.app.AppViewModel
 import org.hnau.commons.app.model.app.getForAndroid
 import org.hnau.commons.app.model.theme.palette.SystemPalettes
