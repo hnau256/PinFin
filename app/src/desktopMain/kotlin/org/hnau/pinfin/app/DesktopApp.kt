@@ -14,8 +14,10 @@ import androidx.compose.ui.window.rememberWindowState
 import co.touchlab.kermit.Logger
 import co.touchlab.kermit.platformLogWriter
 import kotlinx.coroutines.runBlocking
+import org.hnau.commons.app.model.app.AppFilesDirProvider
 import org.hnau.commons.app.model.app.DesktopApp
 import org.hnau.commons.app.model.theme.ThemeBrightness
+import org.hnau.commons.app.model.theme.palette.SystemPalettes
 import org.hnau.commons.app.projector.uikit.utils.Dimens
 import org.hnau.pinfin.data.Currency
 
@@ -27,15 +29,16 @@ fun main() = runBlocking {
     val app = DesktopApp(
         scope = this,
         seed = createPinFinAppSeed(
-            defaultBrightness = ThemeBrightness.Dark,
             dependencies = PinFinAppDependencies.impl(
                 currency = Currency.default, //TODO
-            )
+            ),
+            appFilesDirProvider = AppFilesDirProvider(),
         ),
     )
     val projector = createAppProjector(
         scope = this,
         model = app,
+        createSystemPalettes = { SystemPalettes.None },
     )
     application {
         val scale = 2f
