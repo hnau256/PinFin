@@ -14,8 +14,10 @@ import org.hnau.commons.app.model.EditingString
 import org.hnau.commons.app.model.goback.GoBackHandler
 import org.hnau.commons.app.model.toEditingString
 import org.hnau.commons.gen.pipe.annotations.Pipe
+import org.hnau.commons.kotlin.coroutines.ActionOrElse
+import org.hnau.commons.kotlin.coroutines.CancelOrInProgress
 import org.hnau.commons.kotlin.coroutines.InProgressRegistry
-import org.hnau.commons.kotlin.coroutines.actionOrNullIfExecuting
+import org.hnau.commons.kotlin.coroutines.actionOrCancelIfExecuting
 import org.hnau.commons.kotlin.coroutines.flow.state.flatMapWithScope
 import org.hnau.commons.kotlin.coroutines.flow.state.mapState
 import org.hnau.commons.kotlin.coroutines.flow.state.mutable.toMutableStateFlowAsInitial
@@ -108,7 +110,7 @@ class BudgetConfigModel(
 
         data class Edit(
             val input: MutableStateFlow<EditingString>,
-            val save: StateFlow<(() -> Unit)?>,
+            val save: StateFlow<ActionOrElse<Unit, CancelOrInProgress.Cancel>>,
             val cancel: () -> Unit,
         ) : NameOrEdit
     }
@@ -143,7 +145,7 @@ class BudgetConfigModel(
                     NameOrEdit
                         .Edit(
                             input = nameEditStringState,
-                            save = actionOrNullIfExecuting(scope) {
+                            save = actionOrCancelIfExecuting(scope) {
                                 inProgressRegistry.executeRegistered {
                                     dependencies
                                         .repository

@@ -31,7 +31,7 @@ import org.hnau.commons.app.projector.uikit.state.StateContent
 import org.hnau.commons.app.projector.uikit.transition.TransitionSpec
 import org.hnau.commons.app.projector.uikit.utils.Dimens
 import org.hnau.commons.app.projector.utils.Icon
-import org.hnau.commons.app.projector.uikit.transition.SlideOrientation
+import org.hnau.commons.app.projector.utils.Orientation
 import org.hnau.commons.app.projector.uikit.transition.getTransitionSpecForSlideByCompare
 import org.hnau.commons.app.projector.utils.horizontalDisplayPadding
 import org.hnau.commons.gen.pipe.annotations.Pipe
@@ -164,7 +164,7 @@ class FilterProjector(
                         ),
                         contentKey = Pair<FilterModel.Tab, *>::first,
                         transitionSpec = getTransitionSpecForSlideByCompare(
-                            orientation = SlideOrientation.Horizontal,
+                            orientation = Orientation.Horizontal,
                         ) { it.first.ordinal },
                         label = "FiltersPage",
                     ) { (_, type) ->

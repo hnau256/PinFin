@@ -22,9 +22,9 @@ import arrow.core.toNonEmptyListOrNull
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 import org.hnau.commons.app.projector.uikit.table.Table
-import org.hnau.commons.app.projector.uikit.table.TableOrientation
 import org.hnau.commons.app.projector.uikit.utils.Dimens
 import org.hnau.commons.app.projector.utils.Icon
+import org.hnau.commons.app.projector.utils.Orientation
 import org.hnau.commons.app.projector.utils.horizontalDisplayPadding
 import org.hnau.pinfin.data.AmountDirection
 import org.hnau.pinfin.model.utils.amount
@@ -34,7 +34,6 @@ import org.hnau.pinfin.projector.utils.AmountContent
 import org.hnau.pinfin.projector.utils.ArrowDirection
 import org.hnau.pinfin.projector.utils.ArrowIcon
 import org.hnau.pinfin.projector.utils.CategoryContent
-import org.hnau.pinfin.projector.utils.ViewMode
 
 @Composable
 fun TransactionInfo.Content(
@@ -42,7 +41,7 @@ fun TransactionInfo.Content(
     onClick: () -> Unit,
 ) {
     Table(
-        orientation = TableOrientation.Horizontal,
+        orientation = Orientation.Horizontal,
         modifier = Modifier
             .fillMaxWidth()
             .horizontalDisplayPadding(),

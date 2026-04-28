@@ -19,15 +19,14 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.flow.MutableStateFlow
+import org.hnau.commons.app.model.color.dynamic.hct.Hct
 import org.hnau.commons.app.model.theme.ThemeBrightness
 import org.hnau.commons.app.model.theme.ThemeBrightnessValues
-import org.hnau.commons.app.projector.dynamiccolor.hct.Hct
 import org.hnau.commons.app.projector.utils.collectAsMutableAccessor
-import org.hnau.commons.app.projector.utils.theme.DynamicSchemeConfig
 import org.hnau.commons.app.projector.utils.theme.themeBrightness
 import org.hnau.pinfin.data.Hue
 import org.hnau.pinfin.model.utils.model
-import org.hnau.commons.app.model.utils.Hue as ModelHue
+import org.hnau.commons.app.model.theme.color.Hue as ModelHue
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -95,15 +94,6 @@ fun HueSlider(
     )
 }
 
-
-private val dynamicColorsConfig = DynamicSchemeConfig(
-    tone = ThemeBrightnessValues(
-        light = 40.0,
-        dark = 60.0,
-    ),
-    chroma = 100.0,
-)
-
 private fun calcColor(
     brightness: ThemeBrightness,
     hue: ModelHue,
@@ -111,8 +101,11 @@ private fun calcColor(
     return Hct
         .from(
             /* hue = */ hue.degrees.toDouble(),
-            /* chroma = */ dynamicColorsConfig.chroma,
-            /* tone = */ dynamicColorsConfig.tone[brightness],
+            /* chroma = */ 100.0,
+            /* tone = */ ThemeBrightnessValues(
+                light = 40.0,
+                dark = 60.0,
+            )[brightness],
         )
         .toInt()
         .let(::Color)
@@ -120,7 +113,7 @@ private fun calcColor(
 
 private val rainbowBrushes: ThemeBrightnessValues<Brush> = run {
     val pointsCount = 360
-    ThemeBrightnessValues { brightness ->
+    ThemeBrightnessValues.create { brightness ->
         Brush.horizontalGradient(
             colors = (0 until pointsCount).map { i ->
                 calcColor(

@@ -23,8 +23,8 @@ import kotlinx.coroutines.flow.StateFlow
 import org.hnau.commons.app.projector.uikit.state.StateContent
 import org.hnau.commons.app.projector.utils.Icon
 import org.hnau.commons.app.projector.utils.Overcompose
-import org.hnau.commons.app.projector.uikit.transition.SlideOrientation
 import org.hnau.commons.app.projector.uikit.transition.getTransitionSpecForSlideByCompare
+import org.hnau.commons.app.projector.utils.Orientation
 import org.hnau.commons.app.projector.utils.toWindowInsets
 import org.hnau.commons.gen.pipe.annotations.Pipe
 import org.hnau.commons.gen.sealup.annotations.SealUp
@@ -152,7 +152,7 @@ class BudgetProjector(
                 modifier = Modifier.fillMaxSize(),
                 contentKey = { (tab) -> tab },
                 transitionSpec = getTransitionSpecForSlideByCompare(
-                    orientation = SlideOrientation.Horizontal,
+                    orientation = Orientation.Horizontal,
                     extractComparable = { (tab) -> tab },
                 ),
                 label = "BudgetPage",

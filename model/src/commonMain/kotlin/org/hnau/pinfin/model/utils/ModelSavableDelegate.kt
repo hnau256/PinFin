@@ -16,7 +16,9 @@ import kotlinx.serialization.Serializable
 import kotlinx.serialization.UseSerializers
 import org.hnau.commons.app.model.goback.GoBackHandler
 import org.hnau.commons.app.model.utils.Editable
-import org.hnau.commons.kotlin.coroutines.actionOrNullIfExecuting
+import org.hnau.commons.kotlin.coroutines.ActionOrElse
+import org.hnau.commons.kotlin.coroutines.CancelOrInProgress
+import org.hnau.commons.kotlin.coroutines.actionOrCancelIfExecuting
 import org.hnau.commons.kotlin.coroutines.flow.state.mapState
 import org.hnau.commons.kotlin.coroutines.flow.state.mapWithScope
 import org.hnau.commons.kotlin.foldBoolean
@@ -57,19 +59,25 @@ class ModelSavableDelegate<T>(
     private fun saveAndCloseFlow(
         scope: CoroutineScope,
         value: T,
-    ): StateFlow<(() -> Unit)?> = actionOrNullIfExecuting(
+    ): StateFlow<ActionOrElse<Unit, CancelOrInProgress.Cancel>> = actionOrCancelIfExecuting(
         scope = scope,
     ) {
         save(value)
         close()
     }
 
-    val saveOrInactive: StateFlow<StateFlow<(() -> Unit)?>?> = result
+    val saveOrInactive: StateFlow<StateFlow<ActionOrElse<Unit, CancelOrInProgress.Cancel>>?> = result
         .mapWithScope(scope) { scope, result ->
             when (result) {
                 Editable.Incorrect -> null
                 is Editable.Value<T> -> result.changed.foldBoolean(
-                    ifFalse = { MutableStateFlow(close) },
+                    ifFalse = {
+                        MutableStateFlow(
+                            ActionOrElse.Action(
+                                action = { _: Unit -> close() },
+                            )
+                        )
+                    },
                     ifTrue = {
                         saveAndCloseFlow(
                             scope = scope,
@@ -83,7 +91,7 @@ class ModelSavableDelegate<T>(
     data class ExitWithoutSavingDialog(
         val returnToEditing: () -> Unit,
         val exitWithoutSaving: () -> Unit,
-        val saveAndExitIfPossible: (StateFlow<(() -> Unit)?>)?
+        val saveAndExitIfPossible: StateFlow<ActionOrElse<Unit, CancelOrInProgress.Cancel>>?
     )
 
     val dialog: StateFlow<ExitWithoutSavingDialog?> = blockBackDelegate

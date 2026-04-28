@@ -32,7 +32,7 @@ import org.hnau.commons.app.projector.uikit.ItemsRow
 import org.hnau.commons.app.projector.uikit.state.StateContent
 import org.hnau.commons.app.projector.uikit.utils.Dimens
 import org.hnau.commons.app.projector.utils.Icon
-import org.hnau.commons.app.projector.uikit.transition.SlideOrientation
+import org.hnau.commons.app.projector.utils.Orientation
 import org.hnau.commons.app.projector.utils.copy
 import org.hnau.commons.app.projector.uikit.transition.getTransitionSpecForSlideByCompare
 import org.hnau.commons.app.projector.utils.plus
@@ -167,7 +167,7 @@ class RecordsProjector(
                     label = "SelectedRecord",
                     contentKey = Triple<*, RecordId, *>::second,
                     transitionSpec = getTransitionSpecForSlideByCompare(
-                        orientation = SlideOrientation.Horizontal,
+                        orientation = Orientation.Horizontal,
                         extractComparable = Triple<Int, *, *>::first,
                     )
                 ) { (_, _, projector) ->

@@ -18,7 +18,7 @@ import kotlinx.coroutines.flow.StateFlow
 import org.hnau.commons.app.projector.uikit.state.StateContent
 import org.hnau.commons.app.projector.uikit.utils.Dimens
 import org.hnau.commons.app.projector.utils.Icon
-import org.hnau.commons.app.projector.uikit.transition.SlideOrientation
+import org.hnau.commons.app.projector.utils.Orientation
 import org.hnau.commons.app.projector.uikit.transition.getTransitionSpecForSlideByCompare
 import org.hnau.commons.gen.pipe.annotations.Pipe
 import org.hnau.commons.kotlin.coroutines.flow.state.mapWithScope
@@ -150,7 +150,7 @@ class EntryProjector(
                     label = "EntryPage",
                     contentKey = PageType::key,
                     transitionSpec = getTransitionSpecForSlideByCompare(
-                        orientation = SlideOrientation.Horizontal,
+                        orientation = Orientation.Horizontal,
                         extractComparable = PageType::key,
                     )
                 ) { type ->

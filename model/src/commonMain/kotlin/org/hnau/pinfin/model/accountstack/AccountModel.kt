@@ -9,7 +9,9 @@ import org.hnau.commons.app.model.goback.GoBackHandler
 import org.hnau.commons.app.model.goback.NeverGoBackHandler
 import org.hnau.commons.app.model.toEditingString
 import org.hnau.commons.gen.pipe.annotations.Pipe
-import org.hnau.commons.kotlin.coroutines.actionOrNullIfExecuting
+import org.hnau.commons.kotlin.coroutines.ActionOrElse
+import org.hnau.commons.kotlin.coroutines.CancelOrInProgress
+import org.hnau.commons.kotlin.coroutines.actionOrCancelIfExecuting
 import org.hnau.commons.kotlin.coroutines.flow.state.combineStateWith
 import org.hnau.commons.kotlin.coroutines.flow.state.mapState
 import org.hnau.commons.kotlin.coroutines.flow.state.mapWithScope
@@ -102,10 +104,10 @@ class AccountModel(
             }
         }
 
-    val save: StateFlow<StateFlow<(() -> Unit)?>?> = config
+    val save: StateFlow<StateFlow<ActionOrElse<Unit, CancelOrInProgress.Cancel>>?> = config
         .mapWithScope(scope) { scope, configOrNull ->
             configOrNull?.let { config ->
-                actionOrNullIfExecuting(scope) {
+                actionOrCancelIfExecuting(scope) {
                     dependencies
                         .budgetRepository
                         .accounts

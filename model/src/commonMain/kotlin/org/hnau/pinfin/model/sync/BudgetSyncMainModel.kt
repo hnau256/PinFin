@@ -9,7 +9,9 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.serialization.UseSerializers
 import org.hnau.commons.app.model.goback.GoBackHandler
 import org.hnau.commons.app.model.goback.NeverGoBackHandler
-import org.hnau.commons.kotlin.coroutines.actionOrNullIfExecuting
+import org.hnau.commons.kotlin.coroutines.ActionOrElse
+import org.hnau.commons.kotlin.coroutines.CancelOrInProgress
+import org.hnau.commons.kotlin.coroutines.actionOrCancelIfExecuting
 import org.hnau.commons.kotlin.coroutines.flow.state.Stickable
 import org.hnau.commons.kotlin.coroutines.flow.state.stateFlowOfNotNull
 import org.hnau.commons.kotlin.coroutines.flow.state.stick
@@ -25,9 +27,9 @@ class BudgetSyncMainModel(
 
     val config: StateFlow<StateFlow<SyncConfig>?> = config.stickNotNull(scope)
 
-    val removeConfig: StateFlow<(() -> Unit)?> = actionOrNullIfExecuting(
+    val removeConfig: StateFlow<ActionOrElse<Unit, CancelOrInProgress.Cancel>> = actionOrCancelIfExecuting(
         scope = scope,
-        action = removeConfig,
+        operation = removeConfig,
     )
 
     val goBackHandler: GoBackHandler

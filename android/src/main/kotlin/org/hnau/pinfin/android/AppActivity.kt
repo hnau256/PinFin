@@ -15,8 +15,11 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
+import org.hnau.commons.app.model.app.AppFilesDirProvider
 import org.hnau.commons.app.model.app.AppModel
 import org.hnau.commons.app.model.app.AppViewModel
+import org.hnau.commons.app.model.app.getForAndroid
+import org.hnau.commons.app.model.theme.palette.SystemPalettes
 import org.hnau.pinfin.app.PinFinAppDependencies
 import org.hnau.pinfin.app.createAppProjector
 import org.hnau.pinfin.app.createPinFinAppSeed
@@ -32,6 +35,9 @@ class AppActivity : ComponentActivity() {
             seed = createPinFinAppSeed(
                 dependencies = PinFinAppDependencies.impl(
                     currency = Currency.default, //TODO
+                ),
+                appFilesDirProvider = AppFilesDirProvider(
+                    context = this,
                 )
             ),
         )
@@ -47,6 +53,9 @@ class AppActivity : ComponentActivity() {
         val projector = createAppProjector(
             scope = lifecycleScope,
             model = viewModel.appModel,
+            createSystemPalettes = SystemPalettes.getForAndroid(
+                context = this,
+            ),
         )
         setContent {
             val systemBarsPadding = WindowInsets.systemBars.asPaddingValues()

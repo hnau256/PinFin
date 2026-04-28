@@ -19,6 +19,7 @@ import org.hnau.commons.app.projector.uikit.TextInput
 import org.hnau.commons.app.projector.uikit.TopBar
 import org.hnau.commons.app.projector.uikit.TopBarAction
 import org.hnau.commons.app.projector.uikit.TopBarTitle
+import org.hnau.commons.app.projector.uikit.onClick
 import org.hnau.commons.app.projector.uikit.utils.Dimens
 import org.hnau.commons.app.projector.utils.Icon
 import org.hnau.commons.gen.pipe.annotations.Pipe
@@ -59,6 +60,7 @@ class BudgetSyncConfigProjector(
                             .value
                             ?.collectAsState()
                             ?.value
+                            ?.onClick
                     ) {
                         Icon(
                             Icons.Default.Save

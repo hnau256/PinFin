@@ -7,7 +7,7 @@ import org.hnau.pinfin.data.Amount
 import org.hnau.pinfin.data.Hue
 import org.hnau.pinfin.model.utils.icons.IconVariant
 import org.hnau.pinfin.model.utils.icons.variant
-import org.hnau.commons.app.model.utils.Hue as ModelHue
+import org.hnau.commons.app.model.theme.color.Hue as ModelHue
 
 @Serializable
 data class AccountInfo(

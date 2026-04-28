@@ -38,6 +38,7 @@ import androidx.compose.ui.text.input.KeyboardCapitalization
 import org.hnau.commons.app.projector.uikit.AlertDialogContent
 import org.hnau.commons.app.projector.uikit.TextInput
 import org.hnau.commons.app.projector.uikit.TopBarDefaults
+import org.hnau.commons.app.projector.uikit.onClick
 import org.hnau.commons.app.projector.uikit.progressindicator.InProgress
 import org.hnau.commons.app.projector.uikit.state.StateContent
 import org.hnau.commons.app.projector.uikit.transition.TransitionSpec
@@ -156,7 +157,7 @@ class BudgetConfigProjector(
                     maxLines = 1,
                     modifier = Modifier.fillMaxWidth().focusRequester(focusRequester),
                     value = edit.input,
-                    keyboardActions = KeyboardActions { edit.save.value?.invoke() },
+                    keyboardActions = KeyboardActions { edit.save.value.onClick?.invoke() },
                     keyboardOptions = KeyboardOptions(
                         imeAction = ImeAction.Done,
                         capitalization = KeyboardCapitalization.Sentences,
@@ -177,6 +178,7 @@ class BudgetConfigProjector(
                     .save
                     .collectAsState()
                     .value
+                    .onClick
                     .StateContent(
                         transitionSpec = TransitionSpec.crossfade(),
                         label = "SaveBudgetNameOrSaving",

@@ -27,6 +27,7 @@ import kotlinx.coroutines.flow.StateFlow
 import org.hnau.commons.app.projector.uikit.FullScreen
 import org.hnau.commons.app.projector.uikit.TopBar
 import org.hnau.commons.app.projector.uikit.TopBarTitle
+import org.hnau.commons.app.projector.uikit.onClick
 import org.hnau.commons.app.projector.uikit.state.StateContent
 import org.hnau.commons.app.projector.uikit.transition.TransitionSpec
 import org.hnau.commons.app.projector.uikit.utils.Dimens
@@ -153,7 +154,7 @@ class BudgetSyncMainProjector(
                 verticalAlignment = Alignment.CenterVertically,
             ) {
 
-                val remove = model.removeConfig.collectAsState().value
+                val remove = model.removeConfig.collectAsState().value.onClick
                 OutlinedButton(
                     onClick = { remove?.invoke() },
                     enabled = remove != null,

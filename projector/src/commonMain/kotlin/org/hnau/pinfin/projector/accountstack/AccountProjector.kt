@@ -27,6 +27,7 @@ import org.hnau.commons.app.projector.uikit.TextInput
 import org.hnau.commons.app.projector.uikit.TopBar
 import org.hnau.commons.app.projector.uikit.TopBarAction
 import org.hnau.commons.app.projector.uikit.TopBarTitle
+import org.hnau.commons.app.projector.uikit.onClick
 import org.hnau.commons.app.projector.utils.Icon
 import org.hnau.commons.app.projector.utils.collectAsMutableAccessor
 import org.hnau.commons.gen.pipe.annotations.Pipe
@@ -159,7 +160,7 @@ class AccountProjector(
     @Composable
     private fun SaveAction() {
         val saveFlow by model.save.collectAsState()
-        val save = saveFlow?.collectAsState()?.value
+        val save = saveFlow?.collectAsState()?.value?.onClick
         val isSaving = saveFlow != null && save == null
         TopBarAction(
             onClick = save,

@@ -32,7 +32,7 @@ import org.hnau.commons.app.projector.uikit.state.StateContent
 import org.hnau.commons.app.projector.uikit.transition.TransitionSpec
 import org.hnau.commons.app.projector.uikit.utils.Dimens
 import org.hnau.commons.app.projector.utils.Icon
-import org.hnau.commons.app.projector.uikit.transition.SlideOrientation
+import org.hnau.commons.app.projector.utils.Orientation
 import org.hnau.commons.app.projector.utils.copy
 import org.hnau.commons.app.projector.uikit.transition.getTransitionSpecForSlideByCompare
 import org.hnau.commons.gen.pipe.annotations.Pipe
@@ -199,7 +199,7 @@ class RecordProjector(
                     label = "TransferPage",
                     contentKey = { it.key },
                     transitionSpec = getTransitionSpecForSlideByCompare(
-                        orientation = SlideOrientation.Horizontal,
+                        orientation = Orientation.Horizontal,
                         extractComparable = PageType::key,
                     )
                 ) { type ->
