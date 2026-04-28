@@ -16,7 +16,6 @@ import kotlinx.serialization.Serializable
 import kotlinx.serialization.UseSerializers
 import org.hnau.commons.app.model.goback.GoBackHandler
 import org.hnau.commons.app.model.utils.Editable
-import org.hnau.commons.kotlin.coroutines.InProgressRegistry
 import org.hnau.commons.kotlin.coroutines.actionOrNullIfExecuting
 import org.hnau.commons.kotlin.coroutines.flow.state.mapState
 import org.hnau.commons.kotlin.coroutines.flow.state.mapWithScope
@@ -55,21 +54,14 @@ class ModelSavableDelegate<T>(
         val blockBack: ModelBlockBackDelegate.Skeleton<Option<T>> = ModelBlockBackDelegate.Skeleton()
     )
 
-    private val inProgressRegistry = InProgressRegistry(scope)
-
-    val inProgress: StateFlow<Boolean>
-        get() = inProgressRegistry.inProgress
-
     private fun saveAndCloseFlow(
         scope: CoroutineScope,
         value: T,
     ): StateFlow<(() -> Unit)?> = actionOrNullIfExecuting(
         scope = scope,
     ) {
-        inProgressRegistry.executeRegistered {
-            save(value)
-            close()
-        }
+        save(value)
+        close()
     }
 
     val saveOrInactive: StateFlow<StateFlow<(() -> Unit)?>?> = result
