@@ -8,7 +8,7 @@ kotlin {
     sourceSets {
         commonMain {
             dependencies {
-                implementation(libs.bignum)
+                implementation(libs.bignum) //TODO use from bom
                 implementation(hnau.kotlinx.atomicfu)
             }
         }

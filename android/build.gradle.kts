@@ -65,5 +65,5 @@ dependencies {
     implementation(project(":model"))
     implementation(project(":data"))
     implementation(project(":projector"))
-    implementation(libs.bignum)
+    implementation(libs.bignum) //TODO use from bom
 }
