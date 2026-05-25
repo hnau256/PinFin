@@ -9,7 +9,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.style.TextAlign
-import arrow.core.left
 import org.hnau.commons.app.projector.uikit.ItemsRow
 import org.hnau.commons.app.projector.utils.Icon
 import org.hnau.commons.app.projector.utils.SwitchHue

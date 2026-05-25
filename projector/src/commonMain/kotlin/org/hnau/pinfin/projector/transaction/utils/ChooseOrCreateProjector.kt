@@ -121,7 +121,10 @@ class ChooseOrCreateProjector<T : Comparable<T>>(
                         ChooseOrCreateModel.State.Filtered.AllAreExcluded -> 2
                     }
                 },
-                transitionSpec = TransitionSpec.vertical(),
+                transitionSpec = TransitionSpec.remember(
+                        showAlignment = Alignment.BottomCenter,
+                        hideAlignment = Alignment.TopCenter,
+                    ),
             ) { filteredLocal ->
                 when (filteredLocal) {
                     ChooseOrCreateModel.State.Filtered.NothingToFilter -> Message(
@@ -169,7 +172,10 @@ class ChooseOrCreateProjector<T : Comparable<T>>(
         newOrNull
             .NullableStateContent(
                 modifier = modifier,
-                transitionSpec = TransitionSpec.vertical(),
+                transitionSpec = TransitionSpec.remember(
+                        showAlignment = Alignment.BottomCenter,
+                        hideAlignment = Alignment.TopCenter,
+                    ),
             ) { new ->
                 Column(
                     verticalArrangement = Arrangement.spacedBy(Dimens.smallSeparation),

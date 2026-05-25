@@ -1,11 +1,14 @@
 package org.hnau.pinfin.app
 
+import androidx.compose.runtime.CompositionLocalProvider
 import kotlinx.coroutines.CoroutineScope
 import org.hnau.commons.app.model.app.AppModel
 import org.hnau.commons.app.model.theme.ThemeBrightness
 import org.hnau.commons.app.model.theme.color.Hue
 import org.hnau.commons.app.model.theme.palette.SystemPalettes
 import org.hnau.commons.app.projector.app.AppProjector
+import org.hnau.commons.app.projector.fractal.context.FContext
+import org.hnau.commons.app.projector.fractal.context.LocalFContext
 import org.hnau.pinfin.data.Currency
 import org.hnau.pinfin.model.RootModel
 import org.hnau.pinfin.projector.Localization
@@ -31,9 +34,15 @@ fun createAppProjector(
     },
     createSystemPalettes = createSystemPalettes,
     fallbackHue = Hue(240),
-    content = { rootProjector, contentPadding ->
-        rootProjector.Content(
-            contentPadding = contentPadding,
-        )
+    content = { rootProjector, contentPadding, palettes ->
+        CompositionLocalProvider(
+            LocalFContext provides FContext(
+                palettes = palettes,
+            )
+        ) {
+            rootProjector.Content(
+                contentPadding = contentPadding,
+            )
+        }
     }
 )

@@ -37,8 +37,8 @@ import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import arrow.core.NonEmptyList
+import org.hnau.commons.app.projector.fractal.SScreen
 import org.hnau.commons.app.projector.uikit.ErrorPanel
-import org.hnau.commons.app.projector.uikit.FullScreen
 import org.hnau.commons.app.projector.uikit.TextInput
 import org.hnau.commons.app.projector.uikit.TopBar
 import org.hnau.commons.app.projector.uikit.TopBarTitle
@@ -63,7 +63,6 @@ import org.hnau.pinfin.model.IconModel
 import org.hnau.pinfin.model.utils.icons.IconCategory
 import org.hnau.pinfin.model.utils.icons.IconVariant
 import org.hnau.pinfin.model.utils.icons.title
-import org.hnau.pinfin.projector.utils.BackButtonWidth
 import org.hnau.pinfin.projector.utils.colors
 import org.hnau.pinfin.projector.utils.image
 
@@ -75,7 +74,6 @@ class IconProjector(
     @Pipe
     interface Dependencies {
 
-        val backButtonWidth: BackButtonWidth
 
         val localization: Localization
     }
@@ -85,10 +83,9 @@ class IconProjector(
     fun Content(
         contentPadding: PaddingValues,
     ) {
-        FullScreen(
+        SScreen(
             contentPadding = contentPadding,
-            backButtonWidth = dependencies.backButtonWidth.width,
-            top = { contentPadding ->
+            title = {
                 TopBar(
                     modifier = Modifier.padding(contentPadding),
                 ) {

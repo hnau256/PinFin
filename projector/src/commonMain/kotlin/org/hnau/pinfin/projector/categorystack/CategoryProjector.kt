@@ -21,7 +21,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import kotlinx.coroutines.CoroutineScope
-import org.hnau.commons.app.projector.uikit.FullScreen
+import org.hnau.commons.app.projector.fractal.SScreen
 import org.hnau.commons.app.projector.uikit.TextInput
 import org.hnau.commons.app.projector.uikit.TopBar
 import org.hnau.commons.app.projector.uikit.TopBarAction
@@ -32,7 +32,6 @@ import org.hnau.commons.gen.pipe.annotations.Pipe
 import org.hnau.commons.kotlin.ifNull
 import org.hnau.pinfin.model.categorystack.CategoryModel
 import org.hnau.pinfin.projector.Localization
-import org.hnau.pinfin.projector.utils.BackButtonWidth
 import org.hnau.pinfin.projector.utils.HueSlider
 import org.hnau.pinfin.projector.utils.image
 
@@ -46,7 +45,6 @@ class CategoryProjector(
     @Pipe
     interface Dependencies {
 
-        val backButtonWidth: BackButtonWidth
 
         val localization: Localization
     }
@@ -56,10 +54,9 @@ class CategoryProjector(
     fun Content(
         contentPadding: PaddingValues,
     ) {
-        FullScreen(
+        SScreen(
             contentPadding = contentPadding,
-            backButtonWidth = dependencies.backButtonWidth.width,
-            top = { contentPadding ->
+            title = {
                 TopBar(
                     modifier = Modifier.padding(contentPadding),
                 ) {

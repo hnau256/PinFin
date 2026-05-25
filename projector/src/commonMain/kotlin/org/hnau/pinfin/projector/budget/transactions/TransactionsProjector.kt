@@ -3,11 +3,8 @@ package org.hnau.pinfin.projector.budget.transactions
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.systemBars
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
@@ -21,8 +18,6 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.CoroutineScope
 import org.hnau.commons.app.projector.uikit.ErrorPanel
 import org.hnau.commons.app.projector.uikit.state.LoadableContent
@@ -31,7 +26,6 @@ import org.hnau.commons.app.projector.uikit.transition.TransitionSpec
 import org.hnau.commons.app.projector.uikit.utils.Dimens
 import org.hnau.commons.app.projector.utils.Icon
 import org.hnau.commons.app.projector.utils.Overcompose
-import org.hnau.commons.app.projector.utils.copy
 import org.hnau.commons.app.projector.utils.plus
 import org.hnau.commons.gen.pipe.annotations.Pipe
 import org.hnau.commons.kotlin.foldBoolean
@@ -39,7 +33,6 @@ import org.hnau.pinfin.data.Currency
 import org.hnau.pinfin.model.TransactionsModel
 import org.hnau.pinfin.projector.Localization
 import org.hnau.pinfin.projector.filter.FilterProjector
-import org.hnau.pinfin.projector.utils.BackButtonWidth
 import org.hnau.pinfin.projector.utils.formatter.AmountFormatter
 import org.hnau.pinfin.projector.utils.formatter.datetime.DateTimeFormatter
 import kotlin.uuid.ExperimentalUuidApi
@@ -57,7 +50,6 @@ class TransactionsProjector(
 
         val amountFormatter: AmountFormatter
 
-        val backButtonWidth: BackButtonWidth
 
         val localization: Localization
 

@@ -16,7 +16,6 @@ import co.touchlab.kermit.platformLogWriter
 import kotlinx.coroutines.runBlocking
 import org.hnau.commons.app.model.app.AppFilesDirProvider
 import org.hnau.commons.app.model.app.DesktopApp
-import org.hnau.commons.app.model.theme.ThemeBrightness
 import org.hnau.commons.app.model.theme.palette.SystemPalettes
 import org.hnau.commons.app.projector.uikit.utils.Dimens
 import org.hnau.pinfin.data.Currency

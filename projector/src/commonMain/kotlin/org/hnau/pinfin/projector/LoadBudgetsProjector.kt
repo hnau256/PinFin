@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.StateFlow
@@ -49,7 +50,10 @@ class LoadBudgetsProjector(
             .value
             .LoadableContent(
                 modifier = Modifier.fillMaxSize(),
-                transitionSpec = TransitionSpec.horizontal(),
+                transitionSpec = TransitionSpec.remember(
+                        showAlignment = Alignment.CenterEnd,
+                        hideAlignment = Alignment.CenterStart
+                    ),
             ) { budgetsStackProjector ->
                 budgetsStackProjector.Content(
                     contentPadding = contentPadding,

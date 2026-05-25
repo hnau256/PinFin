@@ -13,10 +13,10 @@ import kotlinx.serialization.Serializable
 import kotlinx.serialization.UseSerializers
 import org.hnau.commons.app.model.EditingString
 import org.hnau.commons.app.model.toEditingString
+import org.hnau.commons.app.model.utils.Editable
 import org.hnau.commons.kotlin.coroutines.flow.state.mapState
 import org.hnau.commons.kotlin.coroutines.flow.state.mutable.toMutableStateFlowAsInitial
 import org.hnau.commons.kotlin.serialization.MutableStateFlowSerializer
-import org.hnau.commons.app.model.utils.Editable
 
 class NonNegativeCountModel(
     private val scope: CoroutineScope,

@@ -15,8 +15,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
+import org.hnau.commons.app.projector.fractal.SScreen
 import org.hnau.commons.app.projector.uikit.ErrorPanel
-import org.hnau.commons.app.projector.uikit.FullScreen
 import org.hnau.commons.app.projector.uikit.TopBar
 import org.hnau.commons.app.projector.uikit.TopBarTitle
 import org.hnau.commons.app.projector.uikit.state.NullableStateContent
@@ -24,7 +24,6 @@ import org.hnau.commons.app.projector.uikit.transition.TransitionSpec
 import org.hnau.commons.app.projector.utils.Icon
 import org.hnau.commons.gen.pipe.annotations.Pipe
 import org.hnau.pinfin.model.CategoriesModel
-import org.hnau.pinfin.projector.utils.BackButtonWidth
 import org.hnau.pinfin.projector.utils.CategoryContent
 import org.hnau.pinfin.projector.utils.ViewMode
 
@@ -37,7 +36,6 @@ class CategoriesProjector(
     @Pipe
     interface Dependencies {
 
-        val backButtonWidth: BackButtonWidth
 
         val localization: Localization
     }
@@ -48,10 +46,9 @@ class CategoriesProjector(
     fun Content(
         contentPadding: PaddingValues,
     ) {
-        FullScreen(
+        SScreen(
             contentPadding = contentPadding,
-            backButtonWidth = dependencies.backButtonWidth.width,
-            top = { contentPadding ->
+            title = { 
                 TopBar(
                     modifier = Modifier.padding(contentPadding),
                 ) {

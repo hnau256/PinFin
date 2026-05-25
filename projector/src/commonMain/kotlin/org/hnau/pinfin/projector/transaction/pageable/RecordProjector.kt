@@ -30,14 +30,13 @@ import org.hnau.commons.app.projector.uikit.ItemsRow
 import org.hnau.commons.app.projector.uikit.state.NullableStateContent
 import org.hnau.commons.app.projector.uikit.state.StateContent
 import org.hnau.commons.app.projector.uikit.transition.TransitionSpec
+import org.hnau.commons.app.projector.uikit.transition.getTransitionSpecForSlideByCompare
 import org.hnau.commons.app.projector.uikit.utils.Dimens
 import org.hnau.commons.app.projector.utils.Icon
 import org.hnau.commons.app.projector.utils.Orientation
 import org.hnau.commons.app.projector.utils.copy
-import org.hnau.commons.app.projector.uikit.transition.getTransitionSpecForSlideByCompare
 import org.hnau.commons.gen.pipe.annotations.Pipe
 import org.hnau.commons.kotlin.coroutines.flow.state.mapState
-import org.hnau.commons.kotlin.coroutines.flow.state.mapWithScope
 import org.hnau.commons.kotlin.foldNullable
 import org.hnau.pinfin.model.transaction.pageable.RecordModel
 import org.hnau.pinfin.model.utils.budget.state.CategoryInfo
@@ -47,7 +46,6 @@ import org.hnau.pinfin.projector.transaction.utils.ChooseOrCreateProjector
 import org.hnau.pinfin.projector.utils.CategoryContent
 import org.hnau.pinfin.projector.utils.Label
 import org.hnau.pinfin.projector.utils.UIConstants
-import org.hnau.pinfin.projector.utils.ViewMode
 import org.hnau.pinfin.projector.utils.formatter.AmountFormatter
 
 class RecordProjector(
@@ -258,7 +256,10 @@ class RecordProjector(
                             .value
                             .NullableStateContent(
                                 modifier = Modifier.fillMaxHeight(),
-                                transitionSpec = TransitionSpec.horizontal(),
+                                transitionSpec = TransitionSpec.remember(
+                        showAlignment = Alignment.CenterEnd,
+                        hideAlignment = Alignment.CenterStart
+                    ),
                             ) { remove ->
                                 IconButton(
                                     onClick = remove,

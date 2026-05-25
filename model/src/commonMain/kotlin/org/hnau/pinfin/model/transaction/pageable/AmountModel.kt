@@ -11,6 +11,8 @@ import kotlinx.serialization.Serializable
 import kotlinx.serialization.UseSerializers
 import org.hnau.commons.app.model.goback.GoBackHandler
 import org.hnau.commons.app.model.goback.NeverGoBackHandler
+import org.hnau.commons.app.model.utils.Editable
+import org.hnau.commons.app.model.utils.valueOrNone
 import org.hnau.commons.gen.pipe.annotations.Pipe
 import org.hnau.commons.kotlin.coroutines.flow.state.mapState
 import org.hnau.commons.kotlin.foldNullable
@@ -18,8 +20,6 @@ import org.hnau.commons.kotlin.serialization.MutableStateFlowSerializer
 import org.hnau.pinfin.data.Amount
 import org.hnau.pinfin.data.Currency
 import org.hnau.pinfin.data.expression.AmountExpression
-import org.hnau.commons.app.model.utils.Editable
-import org.hnau.commons.app.model.utils.valueOrNone
 import org.hnau.pinfin.model.AmountModel as CommonAmountModel
 
 class AmountModel(

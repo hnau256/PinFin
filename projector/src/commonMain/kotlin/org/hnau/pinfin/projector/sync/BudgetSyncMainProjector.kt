@@ -24,7 +24,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.util.fastForEach
 import kotlinx.coroutines.flow.StateFlow
-import org.hnau.commons.app.projector.uikit.FullScreen
+import org.hnau.commons.app.projector.fractal.SScreen
 import org.hnau.commons.app.projector.uikit.TopBar
 import org.hnau.commons.app.projector.uikit.TopBarTitle
 import org.hnau.commons.app.projector.uikit.onClick
@@ -38,7 +38,6 @@ import org.hnau.commons.kotlin.foldNullable
 import org.hnau.pinfin.model.sync.BudgetSyncMainModel
 import org.hnau.pinfin.model.sync.SyncConfig
 import org.hnau.pinfin.projector.Localization
-import org.hnau.pinfin.projector.utils.BackButtonWidth
 
 class BudgetSyncMainProjector(
     private val model: BudgetSyncMainModel,
@@ -50,17 +49,15 @@ class BudgetSyncMainProjector(
 
         val localization: Localization
 
-        val backButtonWidth: BackButtonWidth
     }
 
     @Composable
     fun Content(
         contentPadding: PaddingValues,
     ) {
-        FullScreen(
+        SScreen(
             contentPadding = contentPadding,
-            backButtonWidth = dependencies.backButtonWidth.width,
-            top = { contentPadding ->
+            title = {
                 TopBar(
                     modifier = Modifier.padding(contentPadding),
                 ) {
@@ -104,7 +101,10 @@ class BudgetSyncMainProjector(
                     modifier = Modifier.fillMaxWidth(),
                     label = "Configs",
                     contentKey = { it != null },
-                    transitionSpec = TransitionSpec.horizontal(),
+                    transitionSpec = TransitionSpec.remember(
+                        showAlignment = Alignment.CenterEnd,
+                        hideAlignment = Alignment.CenterStart
+                    ),
                 ) { configsOrNull ->
                     configsOrNull.foldNullable(
                         ifNull = { NoConfig() },
@@ -139,7 +139,10 @@ class BudgetSyncMainProjector(
                     modifier = Modifier.fillMaxWidth(),
                     label = "Config",
                     contentKey = { it },
-                    transitionSpec = TransitionSpec.horizontal(),
+                    transitionSpec = TransitionSpec.remember(
+                        showAlignment = Alignment.CenterEnd,
+                        hideAlignment = Alignment.CenterStart
+                    ),
                 ) { config ->
                     Config(
                         config = config,

@@ -22,6 +22,7 @@ import arrow.core.toNonEmptyListOrNull
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 import org.hnau.commons.app.projector.uikit.table.Table
+import org.hnau.commons.app.projector.uikit.table.rememberCellShape
 import org.hnau.commons.app.projector.uikit.utils.Dimens
 import org.hnau.commons.app.projector.utils.Icon
 import org.hnau.commons.app.projector.utils.Orientation
@@ -46,11 +47,12 @@ fun TransactionInfo.Content(
             .fillMaxWidth()
             .horizontalDisplayPadding(),
     ) {
-        Cell {
+        Cell { modifier ->
             CellContent(
+                modifier = modifier,
                 dependencies = dependencies,
                 onClick = onClick,
-                shape = shape,
+                shape = rememberCellShape(),
             )
         }
     }
@@ -58,12 +60,13 @@ fun TransactionInfo.Content(
 
 @Composable
 fun TransactionInfo.CellContent(
+    modifier: Modifier = Modifier,
     shape: Shape,
     dependencies: TransactionsProjector.Dependencies,
     onClick: () -> Unit,
 ) {
     Row(
-        modifier = Modifier
+        modifier = modifier
             .clip(shape)
             .background(MaterialTheme.colorScheme.surfaceContainer)
             .clickable(onClick = onClick)

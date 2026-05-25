@@ -26,19 +26,19 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.StateFlow
 import org.hnau.commons.app.projector.uikit.TopBarAction
 import org.hnau.commons.app.projector.uikit.TopBarDefaults
+import org.hnau.commons.app.projector.uikit.backbutton.LocalBackButtonWidth
 import org.hnau.commons.app.projector.uikit.state.NullableStateContent
 import org.hnau.commons.app.projector.uikit.state.StateContent
 import org.hnau.commons.app.projector.uikit.transition.TransitionSpec
+import org.hnau.commons.app.projector.uikit.transition.getTransitionSpecForSlideByCompare
 import org.hnau.commons.app.projector.uikit.utils.Dimens
 import org.hnau.commons.app.projector.utils.Icon
 import org.hnau.commons.app.projector.utils.Orientation
-import org.hnau.commons.app.projector.uikit.transition.getTransitionSpecForSlideByCompare
 import org.hnau.commons.app.projector.utils.horizontalDisplayPadding
 import org.hnau.commons.gen.pipe.annotations.Pipe
 import org.hnau.commons.kotlin.coroutines.flow.state.mapState
 import org.hnau.commons.kotlin.coroutines.flow.state.mapWithScope
 import org.hnau.pinfin.model.filter.FilterModel
-import org.hnau.pinfin.projector.utils.BackButtonWidth
 
 class FilterProjector(
     scope: CoroutineScope,
@@ -49,7 +49,6 @@ class FilterProjector(
     @Pipe
     interface Dependencies {
 
-        val backButtonWidth: BackButtonWidth
 
         fun selectCategories(): SelectCategoriesProjector.Dependencies
 
@@ -200,7 +199,7 @@ class FilterProjector(
                     .height(TopBarDefaults.height)
                     .fillMaxWidth()
                     .padding(
-                        start = dependencies.backButtonWidth.width + Dimens.smallSeparation,
+                        start =  LocalBackButtonWidth.current + Dimens.smallSeparation,
                         end = Dimens.horizontalDisplayPadding,
                     ),
                 verticalAlignment = Alignment.CenterVertically,
@@ -235,7 +234,10 @@ class FilterProjector(
                 .value
                 .NullableStateContent(
                     modifier = Modifier.fillMaxWidth(),
-                    transitionSpec = TransitionSpec.vertical(),
+                    transitionSpec = TransitionSpec.remember(
+                        showAlignment = Alignment.BottomCenter,
+                        hideAlignment = Alignment.TopCenter,
+                    ),
                 ) { config ->
                     Card(
                         modifier = Modifier

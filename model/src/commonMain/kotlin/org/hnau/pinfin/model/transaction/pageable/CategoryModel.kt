@@ -20,6 +20,8 @@ import kotlinx.serialization.Serializable
 import kotlinx.serialization.UseSerializers
 import org.hnau.commons.app.model.goback.GoBackHandler
 import org.hnau.commons.app.model.goback.NeverGoBackHandler
+import org.hnau.commons.app.model.utils.Editable
+import org.hnau.commons.app.model.utils.valueOrNone
 import org.hnau.commons.gen.pipe.annotations.Pipe
 import org.hnau.commons.kotlin.coroutines.flow.state.combineStateWith
 import org.hnau.commons.kotlin.coroutines.flow.state.flatMapWithScope
@@ -32,9 +34,7 @@ import org.hnau.commons.kotlin.toAccessor
 import org.hnau.pinfin.data.CategoryId
 import org.hnau.pinfin.data.Comment
 import org.hnau.pinfin.model.transaction.utils.ChooseOrCreateModel
-import org.hnau.commons.app.model.utils.Editable
 import org.hnau.pinfin.model.transaction.utils.allRecords
-import org.hnau.commons.app.model.utils.valueOrNone
 import org.hnau.pinfin.model.utils.budget.repository.BudgetRepository
 import org.hnau.pinfin.model.utils.budget.state.BudgetState
 import org.hnau.pinfin.model.utils.budget.state.CategoryInfo

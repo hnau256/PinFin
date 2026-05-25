@@ -88,7 +88,7 @@ class GraphProjector(
                 modifier = Modifier.fillMaxSize(),
                 label = "configuredOrConfigure",
                 contentKey = {it.ordinal},
-                transitionSpec = TransitionSpec.both(),
+                transitionSpec = TransitionSpec.rememberCrossfade(),
             ) {state ->
                 state.Content(contentPadding)
             }

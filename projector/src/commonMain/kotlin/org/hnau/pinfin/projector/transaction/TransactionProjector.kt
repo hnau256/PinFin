@@ -6,13 +6,12 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.CoroutineScope
-import org.hnau.commons.app.projector.uikit.FullScreen
+import org.hnau.commons.app.projector.fractal.SScreen
 import org.hnau.commons.app.projector.uikit.TopBar
 import org.hnau.commons.app.projector.uikit.utils.Dimens
 import org.hnau.commons.app.projector.utils.copy
@@ -23,7 +22,6 @@ import org.hnau.pinfin.projector.transaction.delegates.InfoProjector
 import org.hnau.pinfin.projector.transaction.delegates.PageProjector
 import org.hnau.pinfin.projector.transaction.delegates.TopBarActionsProjector
 import org.hnau.pinfin.projector.transaction.delegates.TypeProjector
-import org.hnau.pinfin.projector.utils.BackButtonWidth
 
 class TransactionProjector(
     scope: CoroutineScope,
@@ -44,7 +42,6 @@ class TransactionProjector(
 
         fun dialogs(): DialogsProjector.Dependencies
 
-        val backButtonWidth: BackButtonWidth
     }
 
     private val type = TypeProjector(
@@ -80,12 +77,11 @@ class TransactionProjector(
     fun Content(
         contentPadding: PaddingValues,
         ) {
-        FullScreen(
+        SScreen(
             contentPadding = contentPadding,
-            backButtonWidth = dependencies.backButtonWidth.width,
-            top = { contentPadding ->
+            title = {
                 TopBar(
-                    modifier = Modifier.padding(contentPadding),
+                   modifier = Modifier,
                 ) {
                     type.HeaderContent()
                     Spacer(Modifier.weight(1f))

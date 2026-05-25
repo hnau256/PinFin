@@ -17,6 +17,9 @@ import kotlinx.coroutines.flow.update
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.UseSerializers
 import org.hnau.commons.app.model.goback.GoBackHandler
+import org.hnau.commons.app.model.utils.Editable
+import org.hnau.commons.app.model.utils.combineEditableWith
+import org.hnau.commons.app.model.utils.map
 import org.hnau.commons.gen.pipe.annotations.Pipe
 import org.hnau.commons.kotlin.ZipList
 import org.hnau.commons.kotlin.coroutines.flow.state.combineState
@@ -31,10 +34,7 @@ import org.hnau.commons.kotlin.foldNullable
 import org.hnau.commons.kotlin.serialization.MutableStateFlowSerializer
 import org.hnau.commons.kotlin.toZipListOrNull
 import org.hnau.pinfin.data.Amount
-import org.hnau.commons.app.model.utils.Editable
 import org.hnau.pinfin.model.transaction.utils.RecordId
-import org.hnau.commons.app.model.utils.combineEditableWith
-import org.hnau.commons.app.model.utils.map
 import org.hnau.pinfin.model.transaction.utils.remove
 import org.hnau.pinfin.model.utils.budget.state.CategoryInfo
 import org.hnau.pinfin.model.utils.budget.state.TransactionInfo
