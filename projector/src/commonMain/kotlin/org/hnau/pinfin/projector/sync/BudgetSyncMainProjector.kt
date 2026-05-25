@@ -25,8 +25,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.util.fastForEach
 import kotlinx.coroutines.flow.StateFlow
 import org.hnau.commons.app.projector.fractal.SScreen
-import org.hnau.commons.app.projector.uikit.TopBar
-import org.hnau.commons.app.projector.uikit.TopBarTitle
+import org.hnau.commons.app.projector.fractal.SText
 import org.hnau.commons.app.projector.uikit.onClick
 import org.hnau.commons.app.projector.uikit.state.StateContent
 import org.hnau.commons.app.projector.uikit.transition.TransitionSpec
@@ -57,13 +56,7 @@ class BudgetSyncMainProjector(
     ) {
         SScreen(
             contentPadding = contentPadding,
-            title = {
-                TopBar(
-                    modifier = Modifier.padding(contentPadding),
-                ) {
-                    TopBarTitle { Text(dependencies.localization.synchronization) }
-                }
-            },
+            title = { SText(dependencies.localization.synchronization) },
         ) { contentPadding ->
             ContentMain(
                 contentPadding = contentPadding,

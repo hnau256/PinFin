@@ -12,8 +12,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import org.hnau.commons.app.projector.fractal.SScreen
-import org.hnau.commons.app.projector.uikit.TopBar
-import org.hnau.commons.app.projector.uikit.TopBarTitle
+import org.hnau.commons.app.projector.fractal.SText
 import org.hnau.commons.app.projector.uikit.progressindicator.InProgress
 import org.hnau.commons.app.projector.uikit.utils.Dimens
 import org.hnau.commons.gen.pipe.annotations.Pipe
@@ -37,15 +36,7 @@ class NoBudgetsProjector(
     ) {
         SScreen(
             contentPadding = contentPadding,
-            title = {
-                TopBar(
-                    modifier = Modifier.padding(contentPadding),
-                ) {
-                    TopBarTitle {
-                        Text((dependencies.localization.budgets))
-                    }
-                }
-            },
+            title = { SText((dependencies.localization.budgets)) },
         ) { contentPadding ->
             Column(
                 modifier = Modifier

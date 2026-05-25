@@ -18,6 +18,9 @@ import org.hnau.commons.app.model.goback.GoBackHandler
 import org.hnau.commons.app.model.utils.Editable
 import org.hnau.commons.app.model.utils.combineEditableWith
 import org.hnau.commons.gen.pipe.annotations.Pipe
+import org.hnau.commons.kotlin.coroutines.ActionOrElse
+import org.hnau.commons.kotlin.coroutines.CancelOrInProgress
+import org.hnau.commons.kotlin.coroutines.actionOrCancelIfExecuting
 import org.hnau.commons.kotlin.coroutines.flow.state.flatMapWithScope
 import org.hnau.commons.kotlin.coroutines.flow.state.mapState
 import org.hnau.commons.kotlin.coroutines.flow.state.mapWithScope
@@ -266,7 +269,7 @@ class TransactionModel(
         data object NoChanges : State
 
         data class HasChanges(
-            val saveIfCorrect: (() -> Unit)?,
+            val saveIfCorrect: (suspend () -> Unit)?,
             val closeWithoutSavingDialogInfo: CloseWithoutSavingDialogInfo?,
         ) : State {
 
@@ -279,7 +282,7 @@ class TransactionModel(
 
     private fun createHasChangesState(
         scope: CoroutineScope,
-        save: (() -> Unit)?
+        save: (suspend () -> Unit)?
     ): StateFlow<State.HasChanges> = skeleton
         .closeWithoutSavingDialogIsVisible
         .mapState(scope) { closeWithoutSavingDialogIsVisible ->
@@ -343,13 +346,11 @@ class TransactionModel(
                             createHasChangesState(
                                 scope = scope,
                                 save = {
-                                    scope.launch {
-                                        dependencies.budgetRepository.transactions.addOrUpdate(
-                                            id = skeleton.id,
-                                            transaction = transactionOrIncorrect.value,
-                                        )
-                                        onReady()
-                                    }
+                                    dependencies.budgetRepository.transactions.addOrUpdate(
+                                        id = skeleton.id,
+                                        transaction = transactionOrIncorrect.value,
+                                    )
+                                    onReady()
                                 }
                             )
                         }
@@ -357,17 +358,25 @@ class TransactionModel(
             }
         }
 
-    val saveOrDisabled: StateFlow<(() -> Unit)?> = state.mapState(scope) { state ->
-        when (state) {
-            State.NoChanges -> onReady
+    val saveOrDisabled: StateFlow<ActionOrElse<Unit, CancelOrInProgress.Cancel>?> = state.flatMapWithScope(scope) { scope, state ->
+        val action: (suspend () -> Unit) = when (state) {
+            State.NoChanges -> {
+                { onReady }
+            }
+
             is State.HasChanges -> state.saveIfCorrect
-        }
+        } ?: return@flatMapWithScope null.toMutableStateFlowAsInitial()
+        actionOrCancelIfExecuting(
+            scope = scope,
+            operation = action,
+        )
     }
+
 
     data class CancelDialogInfo(
         val close: () -> Unit,
         val cancelChanges: () -> Unit,
-        val saveIfPossible: (() -> Unit)?,
+        val saveIfPossible: (suspend () -> Unit)?,
     )
 
     val cancelDialogInfo: StateFlow<CancelDialogInfo?> = state

@@ -9,25 +9,22 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Image
 import androidx.compose.material.icons.filled.Save
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import kotlinx.coroutines.CoroutineScope
 import org.hnau.commons.app.projector.fractal.SScreen
+import org.hnau.commons.app.projector.fractal.SText
 import org.hnau.commons.app.projector.uikit.TextInput
-import org.hnau.commons.app.projector.uikit.TopBar
-import org.hnau.commons.app.projector.uikit.TopBarAction
-import org.hnau.commons.app.projector.uikit.TopBarTitle
-import org.hnau.commons.app.projector.uikit.onClick
+import org.hnau.commons.app.projector.utils.Drawable
 import org.hnau.commons.app.projector.utils.Icon
+import org.hnau.commons.app.projector.utils.TitleOrIcon
 import org.hnau.commons.gen.pipe.annotations.Pipe
 import org.hnau.commons.kotlin.ifNull
 import org.hnau.pinfin.model.categorystack.CategoryModel
@@ -56,13 +53,18 @@ class CategoryProjector(
     ) {
         SScreen(
             contentPadding = contentPadding,
-            title = {
-                TopBar(
-                    modifier = Modifier.padding(contentPadding),
-                ) {
-                    TopBarTitle { Text(dependencies.localization.categorySettings) }
-                    SaveAction()
-                }
+            title = { SText(dependencies.localization.categorySettings) },
+            actions = {
+                model
+                    .save
+                    .collectAsState()
+                    .value
+                    ?.let { save ->
+                        Action(
+                            actionOrElseOrDisabled = save.collectAsState().value,
+                            titleOrIcon = TitleOrIcon.Icon(Drawable.Vector(Icons.Default.Save))
+                        )
+                    }
             },
         ) { contentPadding ->
             LazyColumn(
@@ -130,21 +132,6 @@ class CategoryProjector(
                         }
                     )
                 }
-            }
-        }
-    }
-
-    @Composable
-    private fun SaveAction() {
-        val saveFlow by model.save.collectAsState()
-        val save = saveFlow?.collectAsState()?.value?.onClick
-        val isSaving = saveFlow != null && save == null
-        TopBarAction(
-            onClick = save,
-        ) {
-            when (isSaving) {
-                true -> CircularProgressIndicator()
-                false -> Icon(Icons.Filled.Save)
             }
         }
     }

@@ -38,10 +38,9 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import arrow.core.NonEmptyList
 import org.hnau.commons.app.projector.fractal.SScreen
+import org.hnau.commons.app.projector.fractal.SText
 import org.hnau.commons.app.projector.uikit.ErrorPanel
 import org.hnau.commons.app.projector.uikit.TextInput
-import org.hnau.commons.app.projector.uikit.TopBar
-import org.hnau.commons.app.projector.uikit.TopBarTitle
 import org.hnau.commons.app.projector.uikit.progressindicator.ProgressIndicatorInBox
 import org.hnau.commons.app.projector.uikit.shape.HnauShape
 import org.hnau.commons.app.projector.uikit.shape.create
@@ -85,13 +84,7 @@ class IconProjector(
     ) {
         SScreen(
             contentPadding = contentPadding,
-            title = {
-                TopBar(
-                    modifier = Modifier.padding(contentPadding),
-                ) {
-                    TopBarTitle { Text(dependencies.localization.selectIcon) }
-                }
-            },
+            title = { SText(dependencies.localization.selectIcon) },
         ) { contentPadding ->
             Column(
                 modifier = Modifier.fillMaxSize(),

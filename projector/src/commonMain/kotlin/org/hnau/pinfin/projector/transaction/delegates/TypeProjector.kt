@@ -2,14 +2,11 @@ package org.hnau.pinfin.projector.transaction.delegates
 
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.StateFlow
-import org.hnau.commons.app.projector.uikit.Tabs
 import org.hnau.commons.app.projector.uikit.state.StateContent
 import org.hnau.commons.app.projector.uikit.transition.TransitionSpec
 import org.hnau.commons.app.projector.uikit.transition.getTransitionSpecForSlideByCompare
@@ -22,7 +19,6 @@ import org.hnau.pinfin.model.transaction.pageable.TypeModel
 import org.hnau.pinfin.projector.Localization
 import org.hnau.pinfin.projector.transaction.pageable.EntryProjector
 import org.hnau.pinfin.projector.transaction.pageable.TransferProjector
-import org.hnau.pinfin.projector.utils.title
 
 class TypeProjector(
     scope: CoroutineScope,
@@ -223,7 +219,8 @@ class TypeProjector(
     fun HeaderContent(
         modifier: Modifier = Modifier,
     ) {
-        Tabs(
+        //TODO use Tabs without SubcomposeLayout
+        /*Tabs(
             modifier = modifier,
             items = remember { TransactionType.entries.toList() },
             selected = model.type.variant.collectAsState().value,
@@ -234,7 +231,7 @@ class TypeProjector(
                     localization = dependencies.localization,
                 ),
             )
-        }
+        }*/
     }
 
     private val type: StateFlow<Type> = model

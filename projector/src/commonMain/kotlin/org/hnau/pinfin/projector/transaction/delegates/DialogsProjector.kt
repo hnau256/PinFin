@@ -6,6 +6,8 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import org.hnau.commons.app.projector.uikit.AlertDialogContent
 import org.hnau.commons.gen.pipe.annotations.Pipe
 import org.hnau.commons.kotlin.foldNullable
@@ -57,7 +59,9 @@ class DialogsProjector(
                                 },
                                 ifNotNull = { save ->
                                     TextButton(
-                                        onClick = save,
+                                        onClick = {
+                                            GlobalScope.launch { save() } //TODO use Dialog from hnau.commons
+                                        },
                                         content = { Text((dependencies.localization.save)) },
                                     )
                                 }

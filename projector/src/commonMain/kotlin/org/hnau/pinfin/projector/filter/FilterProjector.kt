@@ -192,6 +192,7 @@ class FilterProjector(
         Column(
             modifier = Modifier
                 .padding(contentPadding)
+                .padding(top = TopBarDefaults.separationTop)
                 .fillMaxWidth(),
         ) {
             Row(

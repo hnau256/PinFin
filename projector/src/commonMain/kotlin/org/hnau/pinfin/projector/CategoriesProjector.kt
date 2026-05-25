@@ -16,9 +16,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import org.hnau.commons.app.projector.fractal.SScreen
+import org.hnau.commons.app.projector.fractal.SText
 import org.hnau.commons.app.projector.uikit.ErrorPanel
-import org.hnau.commons.app.projector.uikit.TopBar
-import org.hnau.commons.app.projector.uikit.TopBarTitle
 import org.hnau.commons.app.projector.uikit.state.NullableStateContent
 import org.hnau.commons.app.projector.uikit.transition.TransitionSpec
 import org.hnau.commons.app.projector.utils.Icon
@@ -48,15 +47,7 @@ class CategoriesProjector(
     ) {
         SScreen(
             contentPadding = contentPadding,
-            title = { 
-                TopBar(
-                    modifier = Modifier.padding(contentPadding),
-                ) {
-                    TopBarTitle {
-                        Text((dependencies.localization.categories))
-                    }
-                }
-            },
+            title = { SText((dependencies.localization.categories)) },
         ) { contentPadding ->
             model
                 .categories

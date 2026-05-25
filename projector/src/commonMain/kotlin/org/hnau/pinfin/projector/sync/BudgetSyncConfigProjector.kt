@@ -15,13 +15,11 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
 import org.hnau.commons.app.projector.fractal.SScreen
+import org.hnau.commons.app.projector.fractal.SText
 import org.hnau.commons.app.projector.uikit.TextInput
-import org.hnau.commons.app.projector.uikit.TopBar
-import org.hnau.commons.app.projector.uikit.TopBarAction
-import org.hnau.commons.app.projector.uikit.TopBarTitle
-import org.hnau.commons.app.projector.uikit.onClick
 import org.hnau.commons.app.projector.uikit.utils.Dimens
-import org.hnau.commons.app.projector.utils.Icon
+import org.hnau.commons.app.projector.utils.Drawable
+import org.hnau.commons.app.projector.utils.TitleOrIcon
 import org.hnau.commons.gen.pipe.annotations.Pipe
 import org.hnau.pinfin.model.sync.BudgetSyncConfigModel
 import org.hnau.pinfin.projector.Localization
@@ -44,27 +42,20 @@ class BudgetSyncConfigProjector(
     ) {
         SScreen(
             contentPadding = contentPadding,
-            title = {
-                TopBar(
-                    modifier = Modifier.padding(contentPadding),
-                ) {
-                    TopBarTitle { Text(dependencies.localization.synchronizationSettings) }
-                    TopBarAction(
-                        onClick = model
-                            .savableDelegate
-                            .saveOrInactive
-                            .collectAsState()
-                            .value
-                            ?.collectAsState()
-                            ?.value
-                            ?.onClick
-                    ) {
-                        Icon(
-                            Icons.Default.Save
+            title = { SText(dependencies.localization.synchronizationSettings) },
+            actions = {
+                model
+                    .savableDelegate
+                    .saveOrInactive
+                    .collectAsState()
+                    .value
+                    ?.let { save ->
+                        Action(
+                            actionOrElseOrDisabled = save.collectAsState().value,
+                            titleOrIcon = TitleOrIcon.Icon(Drawable.Vector(Icons.Default.Save))
                         )
                     }
-                }
-            },
+            }
         ) { contentPadding ->
             ContentMain(
                 contentPadding = contentPadding,

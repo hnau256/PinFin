@@ -3,7 +3,6 @@ package org.hnau.pinfin.projector.transaction
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -12,7 +11,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.CoroutineScope
 import org.hnau.commons.app.projector.fractal.SScreen
-import org.hnau.commons.app.projector.uikit.TopBar
 import org.hnau.commons.app.projector.uikit.utils.Dimens
 import org.hnau.commons.app.projector.utils.copy
 import org.hnau.commons.gen.pipe.annotations.Pipe
@@ -76,18 +74,11 @@ class TransactionProjector(
     @Composable
     fun Content(
         contentPadding: PaddingValues,
-        ) {
+    ) {
         SScreen(
             contentPadding = contentPadding,
-            title = {
-                TopBar(
-                   modifier = Modifier,
-                ) {
-                    type.HeaderContent()
-                    Spacer(Modifier.weight(1f))
-                    topBarActions.Content()
-                }
-            },
+            title = { type.HeaderContent() },
+            actions = { with(topBarActions) { Content() } },
         ) { contentPadding ->
             Column(
                 modifier = Modifier.fillMaxSize(),
