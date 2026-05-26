@@ -56,7 +56,7 @@ class BudgetSyncStackProjector(
             scope = scope,
             modelsStack = model.stack,
             extractKey = BudgetSyncStackElementModel::ordinal,
-            createProjector = { _, model ->
+            createProjector = { scope, model ->
                 model.fold(
                     ifMain = { mainModel ->
                         Element.main(
@@ -66,6 +66,7 @@ class BudgetSyncStackProjector(
                     },
                     ifConfig = { configModel ->
                         Element.config(
+                            scope = scope,
                             model = configModel,
                             dependencies = dependencies.config(),
                         )

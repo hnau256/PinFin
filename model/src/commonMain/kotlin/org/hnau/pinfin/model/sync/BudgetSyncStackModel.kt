@@ -129,7 +129,7 @@ class BudgetSyncStackModel(
                         ElementSkeleton.config(
                             configPreference.value.value.foldNullable(
                                 ifNull = BudgetSyncConfigModel.Skeleton::createForNew,
-                                ifNotNull = BudgetSyncConfigModel.Skeleton::createForConfig
+                                ifNotNull = BudgetSyncConfigModel.Skeleton::createForEdit
                             )
                         )
                     )
