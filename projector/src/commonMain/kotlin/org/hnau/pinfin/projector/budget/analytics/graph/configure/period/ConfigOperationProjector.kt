@@ -11,6 +11,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.StateFlow
+import org.hnau.commons.app.projector.fractal.STabs
+import org.hnau.commons.app.projector.fractal.SText
 import org.hnau.commons.app.projector.uikit.Tabs
 import org.hnau.commons.app.projector.uikit.state.StateContent
 import org.hnau.commons.app.projector.uikit.transition.TransitionSpec
@@ -56,12 +58,12 @@ class ConfigOperationProjector(
             modifier = modifier,
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            Tabs(
+            STabs(
                 items = remember { ConfigOperationModel.Tab.entries.toList() },
-                selected = model.tab.collectAsState().value,
-                onSelectedChanged = model.tab::value::set,
+                selection = model.tab.collectAsState().value,
+                onClick = model.tab::value::set,
             ) { tab ->
-                Text(
+                SText(
                     when (tab) {
                         ConfigOperationModel.Tab.Sum ->
                             dependencies.localization.sum

@@ -4,9 +4,12 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.StateFlow
+import org.hnau.commons.app.projector.fractal.STabs
+import org.hnau.commons.app.projector.fractal.SText
 import org.hnau.commons.app.projector.uikit.state.StateContent
 import org.hnau.commons.app.projector.uikit.transition.TransitionSpec
 import org.hnau.commons.app.projector.uikit.transition.getTransitionSpecForSlideByCompare
@@ -19,6 +22,7 @@ import org.hnau.pinfin.model.transaction.pageable.TypeModel
 import org.hnau.pinfin.projector.Localization
 import org.hnau.pinfin.projector.transaction.pageable.EntryProjector
 import org.hnau.pinfin.projector.transaction.pageable.TransferProjector
+import org.hnau.pinfin.projector.utils.title
 
 class TypeProjector(
     scope: CoroutineScope,
@@ -219,19 +223,18 @@ class TypeProjector(
     fun HeaderContent(
         modifier: Modifier = Modifier,
     ) {
-        //TODO use Tabs without SubcomposeLayout
-        /*Tabs(
+        STabs(
             modifier = modifier,
             items = remember { TransactionType.entries.toList() },
-            selected = model.type.variant.collectAsState().value,
-            onSelectedChanged = { model.type.variant.value = it },
+            selection = model.type.variant.collectAsState().value,
+            onClick = { model.type.variant.value = it },
         ) { type ->
-            Text(
+            SText(
                 text = type.title(
                     localization = dependencies.localization,
                 ),
             )
-        }*/
+        }
     }
 
     private val type: StateFlow<Type> = model

@@ -10,5 +10,5 @@ pluginManagement {
 }
 
 plugins {
-    id("org.hnau.plugin.settings") version "1.20.1"
+    id("org.hnau.plugin.settings") version "1.20.2"
 }

@@ -3,6 +3,7 @@ package org.hnau.pinfin.projector.budget.analytics
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -14,9 +15,13 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import kotlinx.coroutines.CoroutineScope
+import org.hnau.commons.app.projector.fractal.STabs
+import org.hnau.commons.app.projector.fractal.SText
 import org.hnau.commons.app.projector.uikit.Tabs
+import org.hnau.commons.app.projector.uikit.TopBarDefaults
 import org.hnau.commons.app.projector.uikit.utils.Dimens
 import org.hnau.commons.app.projector.utils.Overcompose
+import org.hnau.commons.app.projector.utils.plus
 import org.hnau.commons.app.projector.utils.rememberPagerState
 import org.hnau.commons.gen.pipe.annotations.Pipe
 import org.hnau.commons.gen.sealup.annotations.SealUp
@@ -86,7 +91,7 @@ class AnalyticsProjector(
     ) {
         val selectedTab by model.selectedTab.collectAsState()
         Overcompose(
-            contentPadding = contentPadding,
+            contentPadding = contentPadding + PaddingValues(top = TopBarDefaults.separationTop),
             modifier = Modifier.fillMaxSize(),
             top = { contentPadding ->
                 Box(
@@ -94,15 +99,16 @@ class AnalyticsProjector(
                         .padding(contentPadding)
                         .padding(
                             bottom = Dimens.separation,
-                        ),
+                        )
+                        .height(TopBarDefaults.height),
                     contentAlignment = Alignment.Center,
                 ) {
-                    Tabs(
+                    STabs(
                         items = remember { AnalyticsTab.entries.toList() },
-                        selected = selectedTab,
-                        onSelectedChanged = { model.selectedTab.value = it },
+                        selection = selectedTab,
+                        onClick = { model.selectedTab.value = it },
                     ) { tab ->
-                        Text(
+                        SText(
                             text = tab.title(
                                 localization = dependencies.localization,
                             ),

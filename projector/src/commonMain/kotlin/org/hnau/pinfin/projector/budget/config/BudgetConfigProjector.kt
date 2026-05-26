@@ -70,7 +70,7 @@ class BudgetConfigProjector(
     ) {
         LazyColumn(
             contentPadding = contentPadding + PaddingValues(
-                top = TopBarDefaults.height,
+                top = TopBarDefaults.height + TopBarDefaults.separationTop,
             ),
             modifier = Modifier.fillMaxSize(),
         ) {

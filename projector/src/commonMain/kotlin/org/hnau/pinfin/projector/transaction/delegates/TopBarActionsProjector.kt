@@ -2,9 +2,11 @@ package org.hnau.pinfin.projector.transaction.delegates
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.Save
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import org.hnau.commons.app.projector.fractal.STableActionsScope
+import org.hnau.commons.app.projector.fractal.utils.Mood
 import org.hnau.commons.app.projector.utils.Drawable
 import org.hnau.commons.app.projector.utils.TitleOrIcon
 import org.hnau.commons.kotlin.coroutines.ActionOrElse
@@ -18,20 +20,21 @@ class TopBarActionsProjector(
 
     @Composable
     fun STableActionsScope.Content() {
-        model
-            .remove
-            ?.let { remove ->
-                Action(
-                    actionOrElseOrDisabled = ActionOrElse.instant(remove),
-                    titleOrIcon = TitleOrIcon.Icon(Drawable.Vector(Icons.Default.Delete))
-                )
-            }
         Action(
             actionOrElseOrDisabled = model
                 .saveOrDisabled
                 .collectAsState()
                 .value,
-            titleOrIcon = TitleOrIcon.Icon(Drawable.Vector(Icons.Default.Delete))
+            titleOrIcon = TitleOrIcon.Icon(Drawable.Vector(Icons.Default.Save))
         )
+        model
+            .remove
+            ?.let { remove ->
+                Action(
+                    actionOrElseOrDisabled = ActionOrElse.instant(remove),
+                    titleOrIcon = TitleOrIcon.Icon(Drawable.Vector(Icons.Default.Delete)),
+                    mood = Mood.Error,
+                )
+            }
     }
 }
