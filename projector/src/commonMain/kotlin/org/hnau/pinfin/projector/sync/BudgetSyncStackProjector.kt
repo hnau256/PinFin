@@ -60,6 +60,7 @@ class BudgetSyncStackProjector(
                 model.fold(
                     ifMain = { mainModel ->
                         Element.main(
+                            scope = scope,
                             model = mainModel,
                             dependencies = dependencies.main(),
                         )

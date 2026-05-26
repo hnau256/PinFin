@@ -45,33 +45,17 @@ class BudgetSyncConfigModel(
 
         companion object {
 
-            private fun create(
-                useValueAsInitial: Boolean,
-                scheme: HttpScheme,
-                host: ServerHost,
+            fun create(
+                config: SyncConfig,
             ): Skeleton = Skeleton(
                 scheme = schemeInputFactory.createSkeleton(
-                    value = scheme,
-                    useValueAsInitial = useValueAsInitial,
+                    value = config.scheme,
+                    useValueAsInitial = true,
                 ),
                 host = hostInputFactory.createSkeleton(
-                    value = host,
-                    useValueAsInitial = useValueAsInitial,
+                    value = config.host,
+                    useValueAsInitial = true,
                 ),
-            )
-
-            fun createForNew(): Skeleton = create(
-                useValueAsInitial = false,
-                scheme = HttpScheme.default,
-                host = ServerHost.createOrNull("upchain.hnau.org")!!,
-            )
-
-            fun createForEdit(
-                config: SyncConfig,
-            ): Skeleton = create(
-                useValueAsInitial = true,
-                scheme = config.scheme,
-                host = config.host,
             )
         }
     }

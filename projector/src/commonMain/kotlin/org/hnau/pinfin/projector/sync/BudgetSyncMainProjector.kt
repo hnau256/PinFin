@@ -1,44 +1,52 @@
 package org.hnau.pinfin.projector.sync
 
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Delete
-import androidx.compose.material.icons.filled.Settings
-import androidx.compose.material3.Button
-import androidx.compose.material3.Card
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedButton
-import androidx.compose.material3.Text
+import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material.icons.filled.Sync
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.util.fastForEach
+import androidx.compose.ui.unit.dp
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.StateFlow
+import org.hnau.commons.app.projector.fractal.SActions
+import org.hnau.commons.app.projector.fractal.SCellBox
+import org.hnau.commons.app.projector.fractal.SContentWithActions
+import org.hnau.commons.app.projector.fractal.SElements
+import org.hnau.commons.app.projector.fractal.SMainWithAdditional
 import org.hnau.commons.app.projector.fractal.SScreen
+import org.hnau.commons.app.projector.fractal.STable
+import org.hnau.commons.app.projector.fractal.STabs
 import org.hnau.commons.app.projector.fractal.SText
-import org.hnau.commons.app.projector.uikit.onClick
-import org.hnau.commons.app.projector.uikit.state.StateContent
-import org.hnau.commons.app.projector.uikit.transition.TransitionSpec
-import org.hnau.commons.app.projector.uikit.utils.Dimens
-import org.hnau.commons.app.projector.utils.Icon
-import org.hnau.commons.app.projector.utils.horizontalDisplayPadding
+import org.hnau.commons.app.projector.fractal.STitleOrIcon
+import org.hnau.commons.app.projector.fractal.context.UpdateFContext
+import org.hnau.commons.app.projector.fractal.size.SizeType
+import org.hnau.commons.app.projector.fractal.utils.Mood
+import org.hnau.commons.app.projector.fractal.utils.Saturation
+import org.hnau.commons.app.projector.uikit.line.weight
+import org.hnau.commons.app.projector.uikit.table.Subtable
+import org.hnau.commons.app.projector.utils.Drawable
+import org.hnau.commons.app.projector.utils.Orientation
+import org.hnau.commons.app.projector.utils.TitleOrIcon
 import org.hnau.commons.gen.pipe.annotations.Pipe
-import org.hnau.commons.kotlin.foldNullable
+import org.hnau.commons.kotlin.KeyValue
+import org.hnau.commons.kotlin.coroutines.ActionOrElse
+import org.hnau.commons.kotlin.coroutines.flow.state.mapState
+import org.hnau.commons.kotlin.coroutines.instant
 import org.hnau.pinfin.model.sync.BudgetSyncMainModel
-import org.hnau.pinfin.model.sync.SyncConfig
 import org.hnau.pinfin.projector.Localization
 
 class BudgetSyncMainProjector(
+    scope: CoroutineScope,
     private val model: BudgetSyncMainModel,
     private val dependencies: Dependencies,
 ) {
@@ -50,6 +58,21 @@ class BudgetSyncMainProjector(
 
     }
 
+    private val configItems: StateFlow<List<KeyValue<TitleOrIcon.Both, String>>> = model
+        .config
+        .mapState(scope) { config ->
+            listOf(
+                SyncUICommons.createSchemeTitleWithIcon(
+                    localization = dependencies.localization,
+                ) to config.scheme.title,
+                SyncUICommons.createHostTitleWithIcon(
+                    localization = dependencies.localization,
+                ) to config.host.host,
+            ).map { (title, value) ->
+                KeyValue(title, value)
+            }
+        }
+
     @Composable
     fun Content(
         contentPadding: PaddingValues,
@@ -58,176 +81,86 @@ class BudgetSyncMainProjector(
             contentPadding = contentPadding,
             title = { SText(dependencies.localization.synchronization) },
         ) { contentPadding ->
-            ContentMain(
-                contentPadding = contentPadding,
-            )
-        }
-    }
-
-    @Composable
-    private fun ContentMain(
-        contentPadding: PaddingValues,
-    ) {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(contentPadding)
-                .padding(vertical = Dimens.separation),
-            verticalArrangement = Arrangement.spacedBy(Dimens.separation),
-        ) {
-            ConfigCard()
-        }
-    }
-
-    @Composable
-    private fun ConfigCard() {
-        Card(
-            modifier = Modifier.fillMaxWidth().padding(
-                horizontal = Dimens.horizontalDisplayPadding,
-            ),
-        ) {
-            model
-                .config
-                .collectAsState()
-                .value
-                .StateContent(
-                    modifier = Modifier.fillMaxWidth(),
-                    label = "Configs",
-                    contentKey = { it != null },
-                    transitionSpec = TransitionSpec.remember(
-                        showAlignment = Alignment.CenterEnd,
-                        hideAlignment = Alignment.CenterStart
-                    ),
-                ) { configsOrNull ->
-                    configsOrNull.foldNullable(
-                        ifNull = { NoConfig() },
-                        ifNotNull = { configs ->
-                            Configs(
-                                configs = configs,
-                            )
+            SContentWithActions(
+                modifier = Modifier.padding(contentPadding),
+                content = {
+                    SMainWithAdditional(
+                        main = { Box {} },
+                        additional = {
+                            SElements {
+                                STable(
+                                    orientation = Orientation.Vertical,
+                                ) {
+                                    SCellBox(
+                                        contentAlignment = Alignment.CenterStart,
+                                    ) {
+                                        UpdateFContext(
+                                            saturation = Saturation.Active,
+                                        ) {
+                                            SText(
+                                                text = dependencies.localization.config,
+                                            )
+                                        }
+                                    }
+                                    Subtable {
+                                        val rowHeight = 56.dp
+                                        val rows = configItems
+                                            .collectAsState()
+                                            .value
+                                        Subtable {
+                                            rows.forEach { (titleOrIcon) ->
+                                                SCellBox(
+                                                    modifier = Modifier.height(rowHeight),
+                                                    contentAlignment = Alignment.CenterStart,
+                                                ) {
+                                                    STitleOrIcon(
+                                                        titleOrIcon = titleOrIcon,
+                                                    )
+                                                }
+                                            }
+                                        }
+                                        Subtable(
+                                            modifier = Modifier.weight(1f),
+                                        ) {
+                                            rows.forEach { (_, value) ->
+                                                SCellBox(
+                                                    modifier = Modifier.height(rowHeight),
+                                                    contentAlignment = Alignment.CenterEnd,
+                                                ) {
+                                                    UpdateFContext(
+                                                        saturation = Saturation.Active,
+                                                    ) {
+                                                        SText(value)
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                    SActions {
+                                        Action(
+                                            actionOrElseOrDisabled = ActionOrElse.instant(model.openConfig),
+                                            titleOrIcon = TitleOrIcon.Both(
+                                                title = dependencies.localization.edit,
+                                                icon = Drawable.Vector(Icons.Default.Edit),
+                                            ),
+                                            mood = Mood.Secondary,
+                                        )
+                                    }
+                                }
+                            }
                         }
                     )
+                },
+                actions = {
+                    Action(
+                        actionOrElseOrDisabled = model.sync.collectAsState().value,
+                        titleOrIcon = TitleOrIcon.Both(
+                            title = dependencies.localization.synchronization,
+                            icon = Drawable.Vector(Icons.Default.Sync),
+                        ),
+                    )
                 }
-        }
-    }
-
-    @Composable
-    private fun Configs(
-        configs: StateFlow<SyncConfig>,
-    ) {
-        Column(
-            verticalArrangement = Arrangement.spacedBy(Dimens.smallSeparation),
-            modifier = Modifier.fillMaxWidth(),
-        ) {
-            Text(
-                text = dependencies.localization.synchronizationSettings,
-                style = MaterialTheme.typography.bodyLarge,
-                maxLines = 1,
-                modifier = Modifier.fillMaxWidth(),
             )
-            configs
-                .collectAsState()
-                .value
-                .StateContent(
-                    modifier = Modifier.fillMaxWidth(),
-                    label = "Config",
-                    contentKey = { it },
-                    transitionSpec = TransitionSpec.remember(
-                        showAlignment = Alignment.CenterEnd,
-                        hideAlignment = Alignment.CenterStart
-                    ),
-                ) { config ->
-                    Config(
-                        config = config,
-                    )
-                }
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(
-                    space = Dimens.smallSeparation,
-                    alignment = Alignment.End,
-                ),
-                verticalAlignment = Alignment.CenterVertically,
-            ) {
-
-                val remove = model.removeConfig.collectAsState().value.onClick
-                OutlinedButton(
-                    onClick = { remove?.invoke() },
-                    enabled = remove != null,
-                ) {
-                    Icon(Icons.Default.Delete)
-                }
-
-                Button(
-                    onClick = model.openConfig,
-                ) {
-                    Icon(Icons.Default.Settings)
-                    Text(dependencies.localization.doConfig)
-                }
-            }
-        }
-    }
-
-    @Composable
-    private fun Config(
-        config: SyncConfig,
-    ) {
-        Column(
-            modifier = Modifier.fillMaxWidth(),
-            verticalArrangement = Arrangement.spacedBy(Dimens.smallSeparation),
-        ) {
-            val items = remember(config) {
-                with(dependencies.localization) {
-                    listOf(
-                        serverHost to config.host.host,
-                        httpScheme to config.scheme.name,
-                    )
-                }
-            }
-            items.fastForEach { (title, value) ->
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(Dimens.smallSeparation),
-                ) {
-                    Text(
-                        text = "$title:",
-                        style = MaterialTheme.typography.bodyMedium,
-                        maxLines = 1,
-                    )
-                    Text(
-                        text = value,
-                        style = MaterialTheme.typography.bodyMedium,
-                        maxLines = 1,
-                    )
-                }
-            }
-        }
-    }
-
-    @Composable
-    private fun NoConfig() {
-        Column(
-            modifier = Modifier.fillMaxWidth().padding(
-                horizontal = Dimens.separation,
-                vertical = Dimens.smallSeparation,
-            ),
-            verticalArrangement = Arrangement.spacedBy(Dimens.smallSeparation),
-            horizontalAlignment = Alignment.CenterHorizontally,
-        ) {
-            Text(
-                modifier = Modifier.fillMaxWidth(),
-                text = dependencies.localization.synchronizationSettingsNotExists,
-                style = MaterialTheme.typography.titleMedium,
-                color = MaterialTheme.colorScheme.error,
-                textAlign = TextAlign.Start,
-            )
-            Button(
-                onClick = model.openConfig,
-            ) {
-                Icon(Icons.Default.Add)
-                Text(dependencies.localization.create)
-            }
         }
     }
 }

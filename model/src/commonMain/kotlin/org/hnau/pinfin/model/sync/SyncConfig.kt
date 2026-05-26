@@ -8,4 +8,13 @@ import org.hnau.upchain.sync.http.HttpScheme
 data class SyncConfig(
     val scheme: HttpScheme,
     val host: ServerHost,
-)
+) {
+
+    companion object {
+
+        val default = SyncConfig(
+            scheme = HttpScheme.default,
+            host = ServerHost.createOrNull("upchain.hnau.org")!!,
+        )
+    }
+}

@@ -9,6 +9,7 @@ import org.hnau.commons.app.model.goback.GoBackHandler
 import org.hnau.commons.app.model.preferences.Preference
 import org.hnau.commons.app.model.preferences.Preferences
 import org.hnau.commons.app.model.preferences.mapOption
+import org.hnau.commons.app.model.preferences.withDefault
 import org.hnau.commons.app.model.stack.NonEmptyStack
 import org.hnau.commons.app.model.stack.SkeletonWithModel
 import org.hnau.commons.app.model.stack.goBackHandler
@@ -19,11 +20,8 @@ import org.hnau.commons.app.model.stack.withModels
 import org.hnau.commons.gen.pipe.annotations.Pipe
 import org.hnau.commons.gen.sealup.annotations.SealUp
 import org.hnau.commons.gen.sealup.annotations.Variant
-import org.hnau.commons.kotlin.foldNullable
 import org.hnau.commons.kotlin.mapper.Mapper
 import org.hnau.commons.kotlin.mapper.option
-import org.hnau.commons.kotlin.mapper.optionToNullable
-import org.hnau.commons.kotlin.mapper.plus
 import org.hnau.commons.kotlin.mapper.toMapper
 import org.hnau.pinfin.data.BudgetId
 
@@ -93,13 +91,17 @@ class BudgetSyncStackModel(
     }
 
 
-    private val configPreference: Preference<SyncConfig?> = dependencies
+    private val configPreference: Preference<SyncConfig> = dependencies
         .preferences["budget_${dependencies.id.let(BudgetId.stringMapper.reverse)}_sync"]
         .mapOption(
             scope = scope,
             mapper = Json
                 .toMapper(SyncConfig.serializer())
-                .let(Mapper.Companion::option) + Mapper.optionToNullable(),
+                .let(Mapper.Companion::option),
+        )
+        .withDefault(
+            scope = scope,
+            default = { SyncConfig.default },
         )
 
     private val stackWithModels: StateFlow<NonEmptyStack<SkeletonWithModel<BudgetSyncStackElementSkeleton, BudgetSyncStackElementModel>>> =
@@ -123,13 +125,11 @@ class BudgetSyncStackModel(
             Element.main(
                 scope = scope,
                 config = configPreference.value,
-                removeConfig = { configPreference.update(null) },
                 openConfig = {
                     skeleton.stack.push(
                         ElementSkeleton.config(
-                            configPreference.value.value.foldNullable(
-                                ifNull = BudgetSyncConfigModel.Skeleton::createForNew,
-                                ifNotNull = BudgetSyncConfigModel.Skeleton::createForEdit
+                            BudgetSyncConfigModel.Skeleton.create(
+                                config = configPreference.value.value,
                             )
                         )
                     )

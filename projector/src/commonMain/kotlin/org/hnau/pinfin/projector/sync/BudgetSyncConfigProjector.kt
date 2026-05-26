@@ -44,26 +44,40 @@ class BudgetSyncConfigProjector(
 
     private val scheme: InputProjector = model
         .scheme
-        .toInputProjectorPrototype { scheme -> SText(scheme.name) }
-        .createInputProjector(
-            scope = scope,
-            title = dependencies.localization.httpScheme,
-            icon = Drawable.Vector(Icons.Default.Security),
-        )
+        .toInputProjectorPrototype { scheme ->
+            SText(
+                text = scheme.title,
+            )
+        }
+        .run {
+            val titleWithIcon = SyncUICommons.createSchemeTitleWithIcon(
+                localization = dependencies.localization,
+            )
+            createInputProjector(
+                scope = scope,
+                title = titleWithIcon.title,
+                icon = titleWithIcon.icon,
+            )
+        }
 
     private val host: InputProjector = model
         .host
         .toInputProjectorPrototype(
             imeAction = ImeAction.Done,
         )
-        .createInputProjector(
-            scope = scope,
-            title = dependencies.localization.httpScheme,
-            icon = Drawable.Vector(Icons.Default.Cloud),
-        ) { _, _ ->
-            dependencies
-                .localization
-                .hostIsIncorrect
+        .run {
+            val titleWithIcon = SyncUICommons.createHostTitleWithIcon(
+                localization = dependencies.localization,
+            )
+            createInputProjector(
+                scope = scope,
+                title = titleWithIcon.title,
+                icon = titleWithIcon.icon,
+            ) { _, _ ->
+                dependencies
+                    .localization
+                    .hostIsIncorrect
+            }
         }
 
     private val savableDelegate: ProjectorSavableDelegate<SyncConfig> = ProjectorSavableDelegate(
