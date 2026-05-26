@@ -138,7 +138,11 @@ class BudgetSyncMainProjector(
                                     }
                                     SActions {
                                         Action(
-                                            actionOrElseOrDisabled = ActionOrElse.instant(model.openConfig),
+                                            actionOrElseOrDisabled = model
+                                                .openConfig
+                                                .collectAsState()
+                                                .value
+                                                ?.let(ActionOrElse.Companion::instant),
                                             titleOrIcon = TitleOrIcon.Both(
                                                 title = dependencies.localization.edit,
                                                 icon = Drawable.Vector(Icons.Default.Edit),

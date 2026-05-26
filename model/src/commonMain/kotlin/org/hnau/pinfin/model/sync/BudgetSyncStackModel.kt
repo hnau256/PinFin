@@ -28,7 +28,7 @@ import org.hnau.pinfin.data.BudgetId
 class BudgetSyncStackModel(
     scope: CoroutineScope,
     private val skeleton: Skeleton,
-    dependencies: Dependencies,
+    private val dependencies: Dependencies,
 ) {
 
 
@@ -47,6 +47,8 @@ class BudgetSyncStackModel(
         val id: BudgetId
 
         val preferences: Preferences
+
+        fun main(): BudgetSyncMainModel.Dependencies
     }
 
     @SealUp(
@@ -124,6 +126,7 @@ class BudgetSyncStackModel(
         ifMain = {
             Element.main(
                 scope = scope,
+                dependencies = dependencies.main(),
                 config = configPreference.value,
                 openConfig = {
                     skeleton.stack.push(
