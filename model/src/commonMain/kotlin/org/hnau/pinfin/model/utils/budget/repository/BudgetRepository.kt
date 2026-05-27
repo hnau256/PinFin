@@ -10,8 +10,10 @@ import org.hnau.pinfin.data.BudgetConfig
 import org.hnau.pinfin.data.BudgetId
 import org.hnau.pinfin.data.UpdateType
 import org.hnau.pinfin.model.utils.budget.state.BudgetState
-import org.hnau.pinfin.model.utils.budget.state.BudgetStateBuilder
+import org.hnau.pinfin.model.utils.budget.state.BudgetStatePrototype
+import org.hnau.pinfin.model.utils.budget.state.toBudgetState
 import org.hnau.pinfin.model.utils.budget.state.updateTypeMapper
+import org.hnau.pinfin.model.utils.budget.state.withNewUpchain
 import org.hnau.upchain.core.repository.upchain.UpchainRepository
 import org.hnau.upchain.core.repository.upchain.addUpdate
 
@@ -70,7 +72,7 @@ class BudgetRepository(
             remove: suspend () -> Unit,
         ): BudgetRepository {
             val upchainFlow = upchainRepository.upchain
-            val initialState = BudgetStateBuilder
+            val initialState = BudgetStatePrototype
                 .empty
                 .withNewUpchain(upchainFlow.value)
             val state = upchainFlow
@@ -79,8 +81,8 @@ class BudgetRepository(
                 ) { acc, upchain ->
                     acc.withNewUpchain(upchain)
                 }
-                .map { budgetStateBuilder ->
-                    budgetStateBuilder.toBudgetState(
+                .map { budgetStatePrototype ->
+                    budgetStatePrototype.toBudgetState(
                         id = id,
                     )
                 }
