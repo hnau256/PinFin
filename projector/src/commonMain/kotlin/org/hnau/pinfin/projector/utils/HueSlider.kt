@@ -24,8 +24,9 @@ import org.hnau.commons.app.model.theme.ThemeBrightness
 import org.hnau.commons.app.model.theme.ThemeBrightnessValues
 import org.hnau.commons.app.projector.utils.collectAsMutableAccessor
 import org.hnau.commons.app.projector.utils.theme.themeBrightness
+import org.hnau.commons.kotlin.mapper.Mapper
 import org.hnau.pinfin.data.Hue
-import org.hnau.pinfin.model.utils.model
+import org.hnau.pinfin.model.utils.modelHueToHue
 import org.hnau.commons.app.model.theme.color.Hue as ModelHue
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -63,7 +64,7 @@ fun HueSlider(
                         .background(
                             color = calcColor(
                                 brightness = brightness,
-                                hue = current.model,
+                                hue = current.let(Mapper.modelHueToHue.reverse),
                             ),
                             shape = CircleShape,
                         )
@@ -102,7 +103,8 @@ private fun calcColor(
         .from(
             /* hue = */ hue.degrees.toDouble(),
             /* chroma = */ 100.0,
-            /* tone = */ ThemeBrightnessValues(
+            /* tone = */
+            ThemeBrightnessValues(
                 light = 40.0,
                 dark = 60.0,
             )[brightness],

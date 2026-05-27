@@ -30,12 +30,13 @@ import org.hnau.commons.app.projector.utils.toLazyListState
 import org.hnau.commons.app.projector.utils.verticalDisplayPadding
 import org.hnau.commons.gen.pipe.annotations.Pipe
 import org.hnau.commons.kotlin.foldNullable
+import org.hnau.commons.kotlin.mapper.Mapper
 import org.hnau.pinfin.data.Amount
 import org.hnau.pinfin.data.AmountDirection
 import org.hnau.pinfin.data.Hue
 import org.hnau.pinfin.model.budget.analytics.tab.graph.configured.GraphPageModel
 import org.hnau.pinfin.model.utils.analytics.AnalyticsPage
-import org.hnau.pinfin.model.utils.model
+import org.hnau.pinfin.model.utils.modelHueToHue
 import org.hnau.pinfin.projector.Localization
 import org.hnau.pinfin.projector.utils.AccountContent
 import org.hnau.pinfin.projector.utils.AmountContent
@@ -239,7 +240,7 @@ class GraphPageProjector(
             },
             ifNotNull = { hueNotNull ->
                 SwitchHue(
-                    hue = hueNotNull.model,
+                    hue = hueNotNull.let(Mapper.modelHueToHue.reverse),
                 ) {
                     Item(
                         value = value,

@@ -11,10 +11,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.TextStyle
 import org.hnau.commons.app.projector.utils.SwitchHue
+import org.hnau.commons.kotlin.mapper.Mapper
 import org.hnau.pinfin.data.Amount
 import org.hnau.pinfin.data.AmountDirection
 import org.hnau.pinfin.data.Hue
-import org.hnau.pinfin.model.utils.model
+import org.hnau.pinfin.model.utils.modelHueToHue
 import org.hnau.pinfin.projector.utils.formatter.AmountFormatter
 
 val AmountDirection.icon: ImageVector
@@ -35,7 +36,7 @@ fun SwitchHueToAmountDirection(
     content: @Composable () -> Unit,
 ) {
     SwitchHue(
-        hue = amountDirection.hue.model,
+        hue = amountDirection.hue.let(Mapper.modelHueToHue.reverse),
         content = content,
     )
 }

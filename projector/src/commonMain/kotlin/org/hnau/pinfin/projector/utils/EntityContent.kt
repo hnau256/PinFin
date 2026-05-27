@@ -13,8 +13,9 @@ import org.hnau.commons.app.projector.uikit.ItemsRow
 import org.hnau.commons.app.projector.utils.Icon
 import org.hnau.commons.app.projector.utils.SwitchHue
 import org.hnau.commons.kotlin.foldNullable
+import org.hnau.commons.kotlin.mapper.Mapper
 import org.hnau.pinfin.data.Hue
-import org.hnau.pinfin.model.utils.model
+import org.hnau.pinfin.model.utils.modelHueToHue
 
 
 enum class ViewMode {
@@ -63,7 +64,7 @@ fun <T : Any> EntityContent(
         },
         ifNotNull = { existingEntity ->
             SwitchHue(
-                hue = extractHue(existingEntity).model,
+                hue = extractHue(existingEntity).let(Mapper.modelHueToHue.reverse),
             ) {
                 Label(
                     modifier = modifier,
