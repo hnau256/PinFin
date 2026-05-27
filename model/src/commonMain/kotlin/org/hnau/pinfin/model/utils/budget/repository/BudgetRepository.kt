@@ -5,15 +5,14 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.runningFold
 import kotlinx.coroutines.flow.stateIn
-import org.hnau.commons.gen.pipe.annotations.Pipe
 import org.hnau.pinfin.data.BudgetConfig
 import org.hnau.pinfin.data.BudgetId
 import org.hnau.pinfin.data.UpdateType
 import org.hnau.pinfin.model.utils.budget.state.BudgetState
-import org.hnau.pinfin.model.utils.budget.state.BudgetStatePrototype
-import org.hnau.pinfin.model.utils.budget.state.toBudgetState
+import org.hnau.pinfin.model.utils.budget.state.prototype.BudgetStatePrototype
+import org.hnau.pinfin.model.utils.budget.state.prototype.toBudgetState
 import org.hnau.pinfin.model.utils.budget.state.updateTypeMapper
-import org.hnau.pinfin.model.utils.budget.state.withNewUpchain
+import org.hnau.pinfin.model.utils.budget.state.prototype.withNewUpchain
 import org.hnau.upchain.core.repository.upchain.UpchainRepository
 import org.hnau.upchain.core.repository.upchain.addUpdate
 

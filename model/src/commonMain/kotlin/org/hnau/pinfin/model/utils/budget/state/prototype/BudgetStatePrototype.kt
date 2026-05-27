@@ -1,4 +1,4 @@
-package org.hnau.pinfin.model.utils.budget.state
+package org.hnau.pinfin.model.utils.budget.state.prototype
 
 import org.hnau.commons.kotlin.castOrNull
 import org.hnau.pinfin.data.AccountConfig

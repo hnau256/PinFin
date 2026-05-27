@@ -1,4 +1,4 @@
-package org.hnau.pinfin.model.utils.budget.state
+package org.hnau.pinfin.model.utils.budget.state.prototype
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext

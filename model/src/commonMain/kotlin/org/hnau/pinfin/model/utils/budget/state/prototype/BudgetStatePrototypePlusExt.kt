@@ -1,8 +1,9 @@
-package org.hnau.pinfin.model.utils.budget.state
+package org.hnau.pinfin.model.utils.budget.state.prototype
 
 import org.hnau.pinfin.data.AccountConfig
 import org.hnau.pinfin.data.CategoryConfig
 import org.hnau.pinfin.data.UpdateType
+import org.hnau.pinfin.model.utils.budget.state.updateTypeMapper
 import org.hnau.upchain.core.Update
 import org.hnau.upchain.core.calcNext
 

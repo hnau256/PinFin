@@ -1,4 +1,4 @@
-package org.hnau.pinfin.model.utils.budget.state
+package org.hnau.pinfin.model.utils.budget.state.prototype
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -10,12 +10,17 @@ import org.hnau.pinfin.data.CategoryId
 import org.hnau.pinfin.data.Record
 import org.hnau.pinfin.data.Transaction
 import org.hnau.pinfin.model.utils.amount
+import org.hnau.pinfin.model.utils.budget.state.AccountInfo
+import org.hnau.pinfin.model.utils.budget.state.BudgetInfo
+import org.hnau.pinfin.model.utils.budget.state.BudgetState
+import org.hnau.pinfin.model.utils.budget.state.CategoryInfo
+import org.hnau.pinfin.model.utils.budget.state.TransactionInfo
 
 suspend fun BudgetStatePrototype.toBudgetState(
     id: BudgetId,
 ): BudgetState = withContext(Dispatchers.Default) {
 
-    val info = BudgetInfo.create(
+    val info = BudgetInfo.Companion.create(
         id = id,
         config = config,
     )
@@ -82,7 +87,7 @@ suspend fun BudgetStatePrototype.toBudgetState(
     }
 
     BudgetState(
-        hash = hash,
+        prototype = this@toBudgetState,
         transactions = transactions
             .map { (id, transaction) ->
                 val transaction = TransactionInfo.fromTransaction(
