@@ -6,8 +6,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.List
+import androidx.compose.material.icons.filled.Build
 import androidx.compose.material.icons.filled.QueryStats
-import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Text
@@ -36,7 +36,7 @@ import org.hnau.pinfin.model.budget.fold
 import org.hnau.pinfin.model.budget.tab
 import org.hnau.pinfin.projector.Localization
 import org.hnau.pinfin.projector.budget.analytics.AnalyticsProjector
-import org.hnau.pinfin.projector.budget.config.BudgetConfigProjector
+import org.hnau.pinfin.projector.budget.manage.BudgetManageProjector
 import org.hnau.pinfin.projector.budget.transactions.TransactionsProjector
 
 
@@ -55,7 +55,7 @@ class BudgetProjector(
 
         fun analytics(): AnalyticsProjector.Dependencies
 
-        fun config(): BudgetConfigProjector.Dependencies
+        fun manage(): BudgetManageProjector.Dependencies
     }
 
     @SealUp(
@@ -69,8 +69,8 @@ class BudgetProjector(
                 identifier = "analytics",
             ),
             Variant(
-                type = BudgetConfigProjector::class,
-                identifier = "config",
+                type = BudgetManageProjector::class,
+                identifier = "manage",
             ),
         ],
         wrappedValuePropertyName = "projector",
@@ -110,10 +110,10 @@ class BudgetProjector(
                             dependencies = dependencies.analytics(),
                         )
                     },
-                    ifConfig = { budgetModel ->
-                        PageProjector.config(
+                    ifManage = { budgetModel ->
+                        PageProjector.manage(
                             model = budgetModel,
-                            dependencies = dependencies.config(),
+                            dependencies = dependencies.manage(),
                         )
                     }
                 )
@@ -167,7 +167,7 @@ class BudgetProjector(
         get() = when (this) {
             BudgetTab.Transactions -> Icons.AutoMirrored.Filled.List
             BudgetTab.Analytics -> Icons.Filled.QueryStats
-            BudgetTab.Config -> Icons.Filled.Settings
+            BudgetTab.Manage -> Icons.Filled.Build
         }
 
     private val BudgetTab.title: String
@@ -175,6 +175,6 @@ class BudgetProjector(
         get() = when (this) {
             BudgetTab.Transactions -> dependencies.localization.transactions
             BudgetTab.Analytics -> dependencies.localization.analytics
-            BudgetTab.Config -> dependencies.localization.config
+            BudgetTab.Manage -> dependencies.localization.manage
         }
 }

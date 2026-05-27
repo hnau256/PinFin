@@ -2,7 +2,7 @@
     MutableStateFlowSerializer::class,
 )
 
-package org.hnau.pinfin.model.budget.config
+package org.hnau.pinfin.model.budget.manage
 
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -28,7 +28,7 @@ import org.hnau.pinfin.model.budgetstack.BudgetStackOpener
 import org.hnau.pinfin.model.manage.BudgetsListOpener
 import org.hnau.pinfin.model.utils.budget.repository.BudgetRepository
 
-class BudgetConfigModel(
+class BudgetManageModel(
     private val scope: CoroutineScope,
     private val dependencies: Dependencies,
     private val skeleton: Skeleton,

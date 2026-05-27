@@ -20,7 +20,7 @@ import org.hnau.commons.kotlin.ifNull
 import org.hnau.commons.kotlin.serialization.MutableStateFlowSerializer
 import org.hnau.pinfin.model.TransactionsModel
 import org.hnau.pinfin.model.budget.analytics.AnalyticsModel
-import org.hnau.pinfin.model.budget.config.BudgetConfigModel
+import org.hnau.pinfin.model.budget.manage.BudgetManageModel
 import org.hnau.pinfin.model.filter.FilterModel
 
 class BudgetModel(
@@ -36,7 +36,7 @@ class BudgetModel(
 
         fun analytics(): AnalyticsModel.Dependencies
 
-        fun config(): BudgetConfigModel.Dependencies
+        fun manage(): BudgetManageModel.Dependencies
     }
 
     @Serializable
@@ -57,8 +57,8 @@ class BudgetModel(
                 identifier = "analytics",
             ),
             Variant(
-                type = BudgetConfigModel::class,
-                identifier = "config",
+                type = BudgetManageModel::class,
+                identifier = "manage",
             ),
         ],
         wrappedValuePropertyName = "model",
@@ -82,8 +82,8 @@ class BudgetModel(
                 identifier = "analytics",
             ),
             Variant(
-                type = BudgetConfigModel.Skeleton::class,
-                identifier = "config",
+                type = BudgetManageModel.Skeleton::class,
+                identifier = "manage",
             ),
         ],
         wrappedValuePropertyName = "skeleton",
@@ -101,7 +101,7 @@ class BudgetModel(
         get() = fold(
             ifTransactions = { BudgetTab.Transactions },
             ifAnalytics = { BudgetTab.Analytics },
-            ifConfig = { BudgetTab.Config },
+            ifManage = { BudgetTab.Manage },
         )
 
     private fun getModel(
@@ -115,7 +115,7 @@ class BudgetModel(
                 when (tab) {
                     BudgetTab.Transactions -> PageSkeleton.transactions(FilterModel.Skeleton.create())
                     BudgetTab.Analytics -> PageSkeleton.analytics()
-                    BudgetTab.Config -> PageSkeleton.config()
+                    BudgetTab.Manage -> PageSkeleton.manage()
                 }.also(skeleton.pages::add)
             }
 
@@ -139,11 +139,11 @@ class BudgetModel(
                         )
                     },
 
-                    ifConfig = { configSkeleton ->
-                        Page.config(
+                    ifManage = { configSkeleton ->
+                        Page.manage(
                             scope = scope,
                             skeleton = configSkeleton,
-                            dependencies = dependencies.config(),
+                            dependencies = dependencies.manage(),
                         )
                     },
                 ).also(tabsCache::add)
@@ -182,5 +182,5 @@ val BudgetPageModel.tab: BudgetTab
     get() = fold(
         ifTransactions = { BudgetTab.Transactions },
         ifAnalytics = { BudgetTab.Analytics },
-        ifConfig = { BudgetTab.Config },
+        ifManage = { BudgetTab.Manage },
     )

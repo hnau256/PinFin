@@ -1,4 +1,4 @@
-package org.hnau.pinfin.projector.budget.config
+package org.hnau.pinfin.projector.budget.manage
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.PaddingValues
@@ -48,12 +48,12 @@ import org.hnau.commons.app.projector.utils.plus
 import org.hnau.commons.gen.pipe.annotations.Pipe
 import org.hnau.commons.kotlin.foldNullable
 import org.hnau.commons.kotlin.ifFalse
-import org.hnau.pinfin.model.budget.config.BudgetConfigModel
+import org.hnau.pinfin.model.budget.manage.BudgetManageModel
 import org.hnau.pinfin.projector.Localization
 
 
-class BudgetConfigProjector(
-    private val model: BudgetConfigModel,
+class BudgetManageProjector(
+    private val model: BudgetManageModel,
     private val dependencies: Dependencies,
 ) {
 
@@ -131,7 +131,7 @@ class BudgetConfigProjector(
 
     @Composable
     private fun Name(
-        name: BudgetConfigModel.NameOrEdit.Name,
+        name: BudgetManageModel.NameOrEdit.Name,
     ) {
         ListItem(
             overlineContent = { Text(dependencies.localization.budgetName) },
@@ -149,7 +149,7 @@ class BudgetConfigProjector(
 
     @Composable
     private fun Edit(
-        edit: BudgetConfigModel.NameOrEdit.Edit,
+        edit: BudgetManageModel.NameOrEdit.Edit,
     ) {
         ListItem(
             headlineContent = {
@@ -217,14 +217,14 @@ class BudgetConfigProjector(
                     label = "BudgetNameOrEdit",
                     contentKey = {
                         when (it) {
-                            is BudgetConfigModel.NameOrEdit.Name -> 0
-                            is BudgetConfigModel.NameOrEdit.Edit -> 1
+                            is BudgetManageModel.NameOrEdit.Name -> 0
+                            is BudgetManageModel.NameOrEdit.Edit -> 1
                         }
                     },
                 ) { nameOrEdit ->
                     when (nameOrEdit) {
-                        is BudgetConfigModel.NameOrEdit.Name -> Name(nameOrEdit)
-                        is BudgetConfigModel.NameOrEdit.Edit -> Edit(nameOrEdit)
+                        is BudgetManageModel.NameOrEdit.Name -> Name(nameOrEdit)
+                        is BudgetManageModel.NameOrEdit.Edit -> Edit(nameOrEdit)
                     }
                 }
         }

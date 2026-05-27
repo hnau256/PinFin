@@ -92,7 +92,7 @@ class BudgetSyncMainProjector(
                                             saturation = Saturation.Active,
                                         ) {
                                             SText(
-                                                text = dependencies.localization.config,
+                                                text = dependencies.localization.manage,
                                             )
                                         }
                                     }
