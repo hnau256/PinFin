@@ -9,10 +9,6 @@ import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Sync
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -25,11 +21,9 @@ import org.hnau.commons.app.projector.fractal.SElements
 import org.hnau.commons.app.projector.fractal.SMainWithAdditional
 import org.hnau.commons.app.projector.fractal.SScreen
 import org.hnau.commons.app.projector.fractal.STable
-import org.hnau.commons.app.projector.fractal.STabs
 import org.hnau.commons.app.projector.fractal.SText
 import org.hnau.commons.app.projector.fractal.STitleOrIcon
 import org.hnau.commons.app.projector.fractal.context.UpdateFContext
-import org.hnau.commons.app.projector.fractal.size.SizeType
 import org.hnau.commons.app.projector.fractal.utils.Mood
 import org.hnau.commons.app.projector.fractal.utils.Saturation
 import org.hnau.commons.app.projector.uikit.line.weight

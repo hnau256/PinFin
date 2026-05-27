@@ -10,8 +10,10 @@ import arrow.core.NonEmptyList
 import org.hnau.commons.app.projector.uikit.row.ChipsFlowRow
 import org.hnau.commons.app.projector.utils.collectAsMutableAccessor
 import org.hnau.commons.gen.pipe.annotations.Pipe
+import org.hnau.commons.kotlin.KeyValue
 import org.hnau.commons.kotlin.foldBoolean
 import org.hnau.commons.kotlin.foldNullable
+import org.hnau.pinfin.data.CategoryId
 import org.hnau.pinfin.model.filter.pageable.SelectCategoriesModel
 import org.hnau.pinfin.model.utils.budget.state.CategoryInfo
 import org.hnau.pinfin.projector.Localization
@@ -59,7 +61,7 @@ class SelectCategoriesProjector(
 
     @Composable
     fun Content() {
-        val selectedCategories: NonEmptyList<CategoryInfo>? by model.selectedCategories.collectAsState()
+        val selectedCategories: NonEmptyList<KeyValue<CategoryId, CategoryInfo>>? by model.selectedCategories.collectAsState()
         val hasSelectedCategories: Boolean = selectedCategories != null
         Label(
             selected = model.isFocused.collectAsState().value,
@@ -77,7 +79,9 @@ class SelectCategoriesProjector(
                             listOfNotNull(
                                 categories
                                     .take(maxCount)
-                                    .joinToString(transform = CategoryInfo::title),
+                                    .joinToString { idWithCategory ->
+                                        idWithCategory.value.title
+                                    },
                                 categories
                                     .drop(maxCount)
                                     .size

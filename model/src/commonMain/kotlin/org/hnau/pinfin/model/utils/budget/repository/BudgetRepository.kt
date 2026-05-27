@@ -11,8 +11,8 @@ import org.hnau.pinfin.data.UpdateType
 import org.hnau.pinfin.model.utils.budget.state.BudgetState
 import org.hnau.pinfin.model.utils.budget.state.prototype.BudgetStatePrototype
 import org.hnau.pinfin.model.utils.budget.state.prototype.toBudgetState
-import org.hnau.pinfin.model.utils.budget.state.updateTypeMapper
 import org.hnau.pinfin.model.utils.budget.state.prototype.withNewUpchain
+import org.hnau.pinfin.model.utils.budget.state.updateTypeMapper
 import org.hnau.upchain.core.repository.upchain.UpchainRepository
 import org.hnau.upchain.core.repository.upchain.addUpdate
 
@@ -34,8 +34,6 @@ class BudgetRepository(
     )
 
     val accounts: BudgetRepositoryAccountsDelegate = BudgetRepositoryAccountsDelegate(
-        scope = scope,
-        state = state,
         addUpdate = ::applyUpdate,
     )
 

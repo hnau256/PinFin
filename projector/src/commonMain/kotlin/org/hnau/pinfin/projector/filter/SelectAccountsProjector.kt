@@ -10,8 +10,10 @@ import arrow.core.NonEmptyList
 import org.hnau.commons.app.projector.uikit.row.ChipsFlowRow
 import org.hnau.commons.app.projector.utils.collectAsMutableAccessor
 import org.hnau.commons.gen.pipe.annotations.Pipe
+import org.hnau.commons.kotlin.KeyValue
 import org.hnau.commons.kotlin.foldBoolean
 import org.hnau.commons.kotlin.foldNullable
+import org.hnau.pinfin.data.AccountId
 import org.hnau.pinfin.model.filter.pageable.SelectAccountsModel
 import org.hnau.pinfin.model.utils.budget.state.AccountInfo
 import org.hnau.pinfin.projector.Localization
@@ -59,7 +61,7 @@ class SelectAccountsProjector(
 
     @Composable
     fun Content() {
-        val selectedAccounts: NonEmptyList<AccountInfo>? by model.selectedAccounts.collectAsState()
+        val selectedAccounts: NonEmptyList<KeyValue<AccountId, AccountInfo>>? by model.selectedAccounts.collectAsState()
         val hasSelectedAccounts: Boolean = selectedAccounts != null
         Label(
             selected = model.isFocused.collectAsState().value,
@@ -77,7 +79,9 @@ class SelectAccountsProjector(
                             listOfNotNull(
                                 accounts
                                     .take(maxCount)
-                                    .joinToString(transform = AccountInfo::title),
+                                    .joinToString { idWithAccount ->
+                                        idWithAccount.value.title
+                                    },
                                 accounts
                                     .drop(maxCount)
                                     .size

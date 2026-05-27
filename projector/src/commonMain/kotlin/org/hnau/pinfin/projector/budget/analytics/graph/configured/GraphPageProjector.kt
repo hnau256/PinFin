@@ -161,8 +161,8 @@ class GraphPageProjector(
             items = half.values,
             key = {
                 when (val key = it.key) {
-                    is AnalyticsPage.Item.Key.Account -> "${keyPrefix}_account_${key.account.id.id}"
-                    is AnalyticsPage.Item.Key.Category -> "${keyPrefix}_category_${key.category?.id?.id}"
+                    is AnalyticsPage.Item.Key.Account -> "${keyPrefix}_account_${key.idWithAccount.key.id}"
+                    is AnalyticsPage.Item.Key.Category -> "${keyPrefix}_category_${key.idWithCategory?.key?.id}"
                     null -> "${keyPrefix}_null"
                 }
             }
@@ -185,26 +185,26 @@ class GraphPageProjector(
     ) {
         when (key) {
             is AnalyticsPage.Item.Key.Account -> Item(
-                hue = key.account.hue,
+                hue = key.idWithAccount.value.hue,
                 value = value,
                 direction = direction,
                 max = max,
             ) {
                 AccountContent(
-                    info = key.account,
+                    info = key.idWithAccount.value,
                     localization = dependencies.localization,
                     viewMode = ViewMode.Full,
                 )
             }
 
             is AnalyticsPage.Item.Key.Category -> Item(
-                hue = key.category?.hue,
+                hue = key.idWithCategory?.value?.hue,
                 value = value,
                 direction = direction,
                 max = max,
                 title = {
                     CategoryContent(
-                        info = key.category,
+                        info = key.idWithCategory?.value,
                         localization = dependencies.localization,
                         viewMode = ViewMode.Full,
                     )

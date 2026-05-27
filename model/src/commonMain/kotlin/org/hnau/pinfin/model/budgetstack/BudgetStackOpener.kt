@@ -1,5 +1,7 @@
 package org.hnau.pinfin.model.budgetstack
 
+import org.hnau.pinfin.data.AccountId
+import org.hnau.pinfin.data.CategoryId
 import org.hnau.pinfin.data.Transaction
 import org.hnau.pinfin.data.TransactionType
 import org.hnau.pinfin.model.utils.budget.state.AccountInfo
@@ -18,12 +20,14 @@ interface BudgetStackOpener {
     )
 
     fun openConfigAccount(
+        id: AccountId,
         info: AccountInfo,
     )
 
     fun openCategories()
 
     fun openCategory(
+        id: CategoryId,
         info: CategoryInfo,
     )
 

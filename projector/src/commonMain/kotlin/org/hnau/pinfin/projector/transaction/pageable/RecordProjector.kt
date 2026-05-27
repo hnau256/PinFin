@@ -36,8 +36,10 @@ import org.hnau.commons.app.projector.utils.Icon
 import org.hnau.commons.app.projector.utils.Orientation
 import org.hnau.commons.app.projector.utils.copy
 import org.hnau.commons.gen.pipe.annotations.Pipe
+import org.hnau.commons.kotlin.KeyValue
 import org.hnau.commons.kotlin.coroutines.flow.state.mapState
 import org.hnau.commons.kotlin.foldNullable
+import org.hnau.pinfin.data.CategoryId
 import org.hnau.pinfin.model.transaction.pageable.RecordModel
 import org.hnau.pinfin.model.utils.budget.state.CategoryInfo
 import org.hnau.pinfin.projector.Localization
@@ -116,7 +118,7 @@ class RecordProjector(
             }
 
             data class Category(
-                val projector: ChooseOrCreateProjector<CategoryInfo>,
+                val projector: ChooseOrCreateProjector<KeyValue<CategoryId, CategoryInfo>>,
             ) : PageType {
                 override val key: Int
                     get() = 1
@@ -341,7 +343,7 @@ class RecordProjector(
                 ifNotNull = { (category, amount) ->
                     CategoryContent(
                         modifier = modifier,
-                        info = category,
+                        info = category.value,
                         onClick = onClick,
                         selected = selected,
                         localization = dependencies.localization,

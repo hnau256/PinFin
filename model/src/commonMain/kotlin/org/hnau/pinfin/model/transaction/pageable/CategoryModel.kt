@@ -23,6 +23,7 @@ import org.hnau.commons.app.model.goback.NeverGoBackHandler
 import org.hnau.commons.app.model.utils.Editable
 import org.hnau.commons.app.model.utils.valueOrNone
 import org.hnau.commons.gen.pipe.annotations.Pipe
+import org.hnau.commons.kotlin.KeyValue
 import org.hnau.commons.kotlin.coroutines.flow.state.combineStateWith
 import org.hnau.commons.kotlin.coroutines.flow.state.flatMapWithScope
 import org.hnau.commons.kotlin.coroutines.flow.state.mapState
@@ -61,55 +62,64 @@ class CategoryModel(
     @Serializable
     data class Skeleton(
         var chooseOrCreate: ChooseOrCreateModel.Skeleton? = null,
-        val initialCategory: CategoryInfo?,
-        val manualCategory: MutableStateFlow<CategoryInfo?> =
-            initialCategory.toMutableStateFlowAsInitial(),
+        val initialIdWithCategory: KeyValue<CategoryId, CategoryInfo>?,
+        val manualIdWithCategory: MutableStateFlow<KeyValue<CategoryId, CategoryInfo>?> =
+            initialIdWithCategory.toMutableStateFlowAsInitial(),
     ) {
 
         companion object {
 
             fun createForNew(): Skeleton = Skeleton(
-                initialCategory = null,
+                initialIdWithCategory = null,
             )
 
             fun createForEdit(
-                category: CategoryInfo,
+                idWithCategory: KeyValue<CategoryId, CategoryInfo>,
             ): Skeleton = Skeleton(
-                initialCategory = category,
+                initialIdWithCategory = idWithCategory,
             )
         }
     }
 
     fun createPage(
         scope: CoroutineScope,
-        usedCategories: StateFlow<Set<CategoryInfo>>,
-    ): ChooseOrCreateModel<CategoryInfo> = ChooseOrCreateModel(
-        scope = scope,
-        dependencies = dependencies.chooseOrCreate(),
-        skeleton = skeleton::chooseOrCreate
-            .toAccessor()
-            .getOrInit { ChooseOrCreateModel.Skeleton() },
-        extractItemsFromState = BudgetState::categories,
-        additionalItems = usedCategories,
-        itemTextMapper = Mapper(
-            direct = CategoryInfo::title,
-            reverse = { title ->
-                CategoryInfo(
-                    id = CategoryId(title),
-                    config = null,
-                )
+        usedCategories: StateFlow<List<KeyValue<CategoryId, CategoryInfo>>>,
+    ): ChooseOrCreateModel<KeyValue<CategoryId, CategoryInfo>> =
+        ChooseOrCreateModel<KeyValue<CategoryId, CategoryInfo>>(
+            scope = scope,
+            comparator = compareBy { it.value },
+            dependencies = dependencies.chooseOrCreate(),
+            skeleton = skeleton::chooseOrCreate
+                .toAccessor()
+                .getOrInit { ChooseOrCreateModel.Skeleton() },
+            extractItemsFromState = BudgetState::categories,
+            additionalItems = usedCategories,
+            itemTextMapper = Mapper(
+                direct = { it.value.title },
+                reverse = { title ->
+                    val id = CategoryId(title)
+                    KeyValue(
+                        key = id,
+                        value = CategoryInfo(
+                            id = id,
+                            config = null,
+                        )
+                    )
+                }
+            ),
+            selected = categoryEditable.mapState(
+                scope = scope,
+                transform = Editable<KeyValue<CategoryId, CategoryInfo>>::valueOrNone,
+            ),
+            onReady = { selected ->
+                skeleton.manualIdWithCategory.value = selected
+                goForward()
             }
-        ),
-        selected = categoryEditable.mapState(scope, Editable<CategoryInfo>::valueOrNone),
-        onReady = { selected ->
-            skeleton.manualCategory.value = selected
-            goForward()
-        }
-    )
+        )
 
     private fun getCategoryBasedOnComment(
         scope: CoroutineScope,
-    ): StateFlow<Option<CategoryInfo>> = dependencies
+    ): StateFlow<Option<KeyValue<CategoryId, CategoryInfo>>> = dependencies
         .budgetRepository
         .state
         .combineStateWith(
@@ -136,7 +146,7 @@ class CategoryModel(
                                         )
                                     }
                                     ?.let { recordWithSameComment ->
-                                        timestamp to recordWithSameComment.category
+                                        timestamp to recordWithSameComment.idWithCategory
                                     }
                             }
                             .maxByOrNull(Pair<Instant, *>::first)
@@ -151,22 +161,23 @@ class CategoryModel(
             initialValue = None,
         )
 
-    internal val categoryEditable: StateFlow<Editable<CategoryInfo>> = Editable.create(
-        scope = scope,
-        valueOrNone = skeleton
-            .manualCategory
-            .flatMapWithScope(scope) { scope, manualOrNull ->
-                manualOrNull
-                    .toOption()
-                    .fold(
-                        ifSome = { Some(it).toMutableStateFlowAsInitial() },
-                        ifEmpty = { getCategoryBasedOnComment(scope) },
-                    )
-            },
-        initialValueOrNone = skeleton.initialCategory.toOption(),
-    )
+    internal val categoryEditable: StateFlow<Editable<KeyValue<CategoryId, CategoryInfo>>> =
+        Editable.create(
+            scope = scope,
+            valueOrNone = skeleton
+                .manualIdWithCategory
+                .flatMapWithScope(scope) { scope, manualOrNull ->
+                    manualOrNull
+                        .toOption()
+                        .fold(
+                            ifSome = { Some(it).toMutableStateFlowAsInitial() },
+                            ifEmpty = { getCategoryBasedOnComment(scope) },
+                        )
+                },
+            initialValueOrNone = skeleton.initialIdWithCategory.toOption(),
+        )
 
-    val category: StateFlow<CategoryInfo?> = categoryEditable
+    val category: StateFlow<KeyValue<CategoryId, CategoryInfo>?> = categoryEditable
         .mapState(scope) { it.valueOrNone.getOrNull() }
 
     val goBackHandler: GoBackHandler

@@ -75,7 +75,7 @@ class CategoriesProjector(
                         ) {
                             items(
                                 items = categories,
-                                key = { it.info.id.id },
+                                key = { it.idWithCategory.key.id },
                             ) { category ->
                                 ListItem(
                                     modifier = Modifier
@@ -83,7 +83,7 @@ class CategoriesProjector(
                                         .clickable(onClick = category.onClick),
                                     headlineContent = {
                                         CategoryContent(
-                                            info = category.info,
+                                            info = category.idWithCategory.value,
                                             localization = dependencies.localization,
                                             viewMode = ViewMode.Full,
                                         )

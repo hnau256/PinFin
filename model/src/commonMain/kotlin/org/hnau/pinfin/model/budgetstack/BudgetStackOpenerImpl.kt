@@ -3,6 +3,8 @@ package org.hnau.pinfin.model.budgetstack
 import kotlinx.coroutines.flow.MutableStateFlow
 import org.hnau.commons.app.model.stack.NonEmptyStack
 import org.hnau.commons.app.model.stack.push
+import org.hnau.pinfin.data.AccountId
+import org.hnau.pinfin.data.CategoryId
 import org.hnau.pinfin.data.Transaction
 import org.hnau.pinfin.data.TransactionType
 import org.hnau.pinfin.model.transaction.TransactionModel
@@ -47,10 +49,12 @@ class BudgetStackOpenerImpl(
     }
 
     override fun openConfigAccount(
+        id: AccountId,
         info: AccountInfo,
     ) {
         open(
             BudgetStackModel.ElementSkeleton.account(
+                id = id,
                 info = info,
             )
         )
@@ -63,10 +67,12 @@ class BudgetStackOpenerImpl(
     }
 
     override fun openCategory(
+        id: CategoryId,
         info: CategoryInfo,
     ) {
         open(
             BudgetStackModel.ElementSkeleton.category(
+                id = id,
                 info = info,
             )
         )

@@ -10,6 +10,7 @@ import kotlinx.datetime.LocalDateRange
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.UseSerializers
+import org.hnau.commons.kotlin.KeyValue
 import org.hnau.pinfin.data.AccountId
 import org.hnau.pinfin.data.CategoryId
 import org.hnau.pinfin.model.utils.budget.state.AccountInfo
@@ -32,13 +33,13 @@ data class AnalyticsPage(
             @Serializable
             @SerialName("category")
             data class Category(
-                val category: CategoryInfo?,
+                val idWithCategory: KeyValue<CategoryId, CategoryInfo>?,
             ): Key
 
             @Serializable
             @SerialName("account")
             data class Account(
-                val account: AccountInfo,
+                val idWithAccount: KeyValue<AccountId, AccountInfo>,
             ): Key
         }
 

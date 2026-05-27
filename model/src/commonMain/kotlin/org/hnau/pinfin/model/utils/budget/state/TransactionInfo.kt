@@ -1,8 +1,10 @@
 package org.hnau.pinfin.model.utils.budget.state
 
 import arrow.core.NonEmptyList
+import org.hnau.commons.kotlin.KeyValue
+import org.hnau.pinfin.data.AccountId
+import org.hnau.pinfin.data.CategoryId
 import org.hnau.pinfin.data.Comment
-import org.hnau.pinfin.data.Transaction
 import org.hnau.pinfin.data.expression.AmountExpression
 import kotlin.time.Instant
 
@@ -15,12 +17,12 @@ data class TransactionInfo(
     sealed interface Type {
 
         data class Entry(
-            val account: AccountInfo,
+            val idWithAccount: KeyValue<AccountId,  AccountInfo>,
             val records: NonEmptyList<Record>,
         ) : Type {
 
             data class Record(
-                val category: CategoryInfo,
+                val idWithCategory: KeyValue<CategoryId,  CategoryInfo>,
                 val amount: AmountExpression,
                 val comment: Comment,
             ) {
@@ -32,8 +34,8 @@ data class TransactionInfo(
         }
 
         data class Transfer(
-            val from: AccountInfo,
-            val to: AccountInfo,
+            val from: KeyValue<AccountId,  AccountInfo>,
+            val to: KeyValue<AccountId,  AccountInfo>,
             val amount: AmountExpression,
         ) : Type {
 

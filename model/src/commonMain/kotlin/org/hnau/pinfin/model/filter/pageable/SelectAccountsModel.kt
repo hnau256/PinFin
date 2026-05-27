@@ -16,6 +16,7 @@ import kotlinx.serialization.UseSerializers
 import org.hnau.commons.app.model.goback.GoBackHandler
 import org.hnau.commons.app.model.goback.NeverGoBackHandler
 import org.hnau.commons.gen.pipe.annotations.Pipe
+import org.hnau.commons.kotlin.KeyValue
 import org.hnau.commons.kotlin.coroutines.flow.state.combineStateWith
 import org.hnau.commons.kotlin.coroutines.flow.state.flatMapWithScope
 import org.hnau.commons.kotlin.coroutines.flow.state.mapState
@@ -68,6 +69,7 @@ class SelectAccountsModel(
     ) {
 
         data class Account(
+            val id: AccountId,
             val info: AccountInfo,
             val selected: MutableStateFlow<Boolean>,
         )
@@ -82,8 +84,8 @@ class SelectAccountsModel(
         .mapWithScope(scope) { scope, state ->
             state
                 .accounts
-                .map { info ->
-                    val id = info.id
+                .map { idWithAccount ->
+                    val id = idWithAccount.key
 
                     val updateIds: (Set<AccountId>, Boolean) -> Set<AccountId> =
                         { selectedIds, selected ->
@@ -94,7 +96,8 @@ class SelectAccountsModel(
                         }
 
                     Page.Account(
-                        info = info,
+                        id = idWithAccount.key,
+                        info = idWithAccount.value,
                         selected = skeleton
                             .selectedAccounts
                             .mapMutableState(
@@ -117,13 +120,18 @@ class SelectAccountsModel(
                 }
         }
 
-    val selectedAccounts: StateFlow<NonEmptyList<AccountInfo>?> = accounts
+    val selectedAccounts: StateFlow<NonEmptyList<KeyValue<AccountId, AccountInfo>>?> = accounts
         .mapWithScope(scope) { scope, accounts ->
             accounts.map { account ->
                 account
                     .selected
                     .mapState(scope) { selected ->
-                        selected.ifTrue { account.info }
+                        selected.ifTrue {
+                            KeyValue(
+                                key = account.id,
+                                value = account.info,
+                            )
+                        }
                     }
             }
         }
@@ -136,7 +144,7 @@ class SelectAccountsModel(
                     initial = accounts
                         .firstOrNull()
                         .foldNullable(
-                            ifNull = { emptySet<AccountInfo>().toMutableStateFlowAsInitial() },
+                            ifNull = { emptySet<KeyValue<AccountId, AccountInfo>>().toMutableStateFlowAsInitial() },
                             ifNotNull = { first ->
                                 first.mapState(scope) { setOfNotNull(it) }
                             }
@@ -156,7 +164,7 @@ class SelectAccountsModel(
                 .mapState(scope) { accounts ->
                     accounts
                         .toList()
-                        .sorted()
+                        .sortedBy(KeyValue<*, AccountInfo>::value)
                         .toNonEmptyListOrNull()
                 }
         }
@@ -164,7 +172,7 @@ class SelectAccountsModel(
     val selectedAccountsIds: StateFlow<NonEmptySet<AccountId>?> = selectedAccounts
         .mapState(scope) { accounts ->
             accounts
-                ?.map { account -> account.id }
+                ?.map { idWithAccount -> idWithAccount.key }
                 ?.toNonEmptySet()
         }
 

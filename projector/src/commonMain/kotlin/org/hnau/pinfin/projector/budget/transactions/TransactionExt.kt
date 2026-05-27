@@ -170,14 +170,14 @@ private fun EntryContent(
             records
                 .tail
                 .fold(
-                    initial = nonEmptySetOf(records.head.category),
+                    initial = nonEmptySetOf(records.head.idWithCategory),
                 ) { acc, record ->
-                    acc + record.category
+                    acc + record.idWithCategory
                 }
                 .toNonEmptyList()
         }
         AccountContent(
-            info = entry.account,
+            info = entry.idWithAccount.value,
             localization = dependencies.localization,
         )
         Icon(
@@ -203,11 +203,11 @@ private fun EntryContent(
                 }
             ],
         )
-        categories.fastForEach { categoryInfo ->
+        categories.fastForEach { idWithCategory ->
             CategoryContent(
-                info = categoryInfo,
+                info = idWithCategory.value,
                 localization = dependencies.localization,
-                )
+            )
         }
     }
 }
@@ -221,7 +221,7 @@ private fun TransferContent(
         verticalAlignment = Alignment.CenterVertically,
     ) {
         AccountContent(
-            info = transfer.from,
+            info = transfer.from.value,
             localization = dependencies.localization,
         )
         Icon(
@@ -231,7 +231,7 @@ private fun TransferContent(
             icon = ArrowIcon[ArrowDirection.StartToEnd],
         )
         AccountContent(
-            info = transfer.to,
+            info = transfer.to.value,
             localization = dependencies.localization,
         )
     }

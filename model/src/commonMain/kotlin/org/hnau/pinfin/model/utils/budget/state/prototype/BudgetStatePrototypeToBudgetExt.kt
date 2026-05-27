@@ -98,8 +98,8 @@ suspend fun BudgetStatePrototype.toBudgetState(
                 KeyValue(id, transaction)
             }
             .sortedBy { it.value.timestamp },
-        categories = categories.values.toList(),
-        accounts = accounts.values.toList(),
+        categories = categories.map { (key, value) -> KeyValue(key, value) },
+        accounts = accounts.map { (key, value) -> KeyValue(key, value) },
         info = info,
     )
 }
@@ -140,7 +140,10 @@ private fun TransactionInfo.Type.Entry.Companion.fromEntry(
     categories: Map<CategoryId, CategoryInfo>,
     accounts: Map<AccountId, AccountInfo>,
 ): TransactionInfo.Type.Entry = TransactionInfo.Type.Entry(
-    account = accounts.getValue(entry.account),
+    idWithAccount = KeyValue(
+        key = entry.account,
+        value = accounts.getValue(entry.account),
+    ),
     records = entry
         .records
         .map { record ->
@@ -155,7 +158,10 @@ private fun TransactionInfo.Type.Entry.Record.Companion.fromRecord(
     record: Record,
     categories: Map<CategoryId, CategoryInfo>,
 ): TransactionInfo.Type.Entry.Record = TransactionInfo.Type.Entry.Record(
-    category = categories.getValue(record.category),
+    idWithCategory = KeyValue(
+        key = record.category,
+        value = categories.getValue(record.category),
+    ),
     amount = record.amount,
     comment = record.comment,
 )
@@ -164,7 +170,13 @@ private fun TransactionInfo.Type.Transfer.Companion.fromTransfer(
     transfer: Transaction.Type.Transfer,
     accounts: Map<AccountId, AccountInfo>,
 ): TransactionInfo.Type.Transfer = TransactionInfo.Type.Transfer(
-    from = accounts.getValue(transfer.from),
-    to = accounts.getValue(transfer.to),
+    from = KeyValue(
+        key = transfer.from,
+        value = accounts.getValue(transfer.from),
+    ),
+    to = KeyValue(
+        key = transfer.to,
+        value = accounts.getValue(transfer.to),
+    ),
     amount = transfer.amount,
 )

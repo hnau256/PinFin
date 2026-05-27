@@ -3,7 +3,6 @@ package org.hnau.pinfin.projector.budget.analytics.graph.configure.period
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
@@ -13,7 +12,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.StateFlow
 import org.hnau.commons.app.projector.fractal.STabs
 import org.hnau.commons.app.projector.fractal.SText
-import org.hnau.commons.app.projector.uikit.Tabs
 import org.hnau.commons.app.projector.uikit.state.StateContent
 import org.hnau.commons.app.projector.uikit.transition.TransitionSpec
 import org.hnau.commons.app.projector.uikit.utils.Dimens

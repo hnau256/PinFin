@@ -27,9 +27,10 @@ import org.hnau.commons.kotlin.serialization.MutableStateFlowSerializer
 import org.hnau.pinfin.model.utils.budget.repository.BudgetRepository
 import org.hnau.pinfin.model.utils.budget.state.BudgetState
 
-class ChooseOrCreateModel<T : Comparable<T>>(
+class ChooseOrCreateModel<T>(
     scope: CoroutineScope,
     dependencies: Dependencies,
+    comparator: Comparator<T>,
     private val skeleton: Skeleton,
     extractItemsFromState: (BudgetState) -> List<T>,
     additionalItems: StateFlow<Iterable<T>>,
@@ -95,7 +96,7 @@ class ChooseOrCreateModel<T : Comparable<T>>(
         ) { stateItems, additionalItems ->
             (stateItems + additionalItems)
                 .distinct()
-                .sorted()
+                .sortedWith(comparator)
         }
         .scopedInState(scope)
         .combineStateWith(

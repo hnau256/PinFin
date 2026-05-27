@@ -3,9 +3,7 @@ package org.hnau.pinfin.projector.sync
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Cloud
 import androidx.compose.material.icons.filled.Save
-import androidx.compose.material.icons.filled.Security
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier

@@ -12,7 +12,6 @@ import org.hnau.commons.app.model.theme.color.Hue as ModelHue
 
 @Serializable
 data class CategoryInfo(
-    val id: CategoryId,
     val title: String,
     val hue: Hue,
     val icon: IconVariant?,
@@ -22,7 +21,6 @@ data class CategoryInfo(
         id: CategoryId,
         config: CategoryConfig?,
     ) : this(
-        id = id,
         title = config?.title ?: id.id,
         hue = config?.hue ?: ModelHue
             .calcDefault(id.id.hashCode())

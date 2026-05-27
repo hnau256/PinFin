@@ -4,6 +4,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import org.hnau.commons.gen.pipe.annotations.Pipe
+import org.hnau.commons.kotlin.KeyValue
+import org.hnau.pinfin.data.AccountId
 import org.hnau.pinfin.model.transaction.pageable.AccountModel
 import org.hnau.pinfin.model.transaction.utils.ChooseOrCreateModel
 import org.hnau.pinfin.model.utils.budget.state.AccountInfo
@@ -30,7 +32,7 @@ class AccountProjector(
         modifier: Modifier = Modifier,
     ) {
         AccountContent(
-            info = model.account.collectAsState().value,
+            info = model.idWithAccount.collectAsState().value?.value,
             modifier = modifier,
             selected = model.isFocused.collectAsState().value,
             onClick = model.requestFocus,
@@ -59,14 +61,14 @@ class AccountProjector(
             )
 
         fun createPage(
-            model: ChooseOrCreateModel<AccountInfo>,
+            model: ChooseOrCreateModel<KeyValue<AccountId, AccountInfo>>,
             dependencies: Dependencies
-        ): ChooseOrCreateProjector<AccountInfo> = ChooseOrCreateProjector(
+        ): ChooseOrCreateProjector<KeyValue<AccountId, AccountInfo>> = ChooseOrCreateProjector(
             model = model,
             dependencies = dependencies.chooseOrCreate(),
-        ) { account, isSelected, onClick ->
+        ) { idWithAccount, isSelected, onClick ->
             AccountContent(
-                info = account,
+                info = idWithAccount.value,
                 selected = isSelected.collectAsState().value,
                 onClick = onClick,
                 localization = dependencies.localization,

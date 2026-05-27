@@ -219,12 +219,12 @@ class GraphPageModel(
     ): Boolean {
 
         val categories = constraints.categories
-        if (categories != null && category?.id !in categories) {
+        if (categories != null && idWithCategory?.key !in categories) {
             return false
         }
 
         val accounts = constraints.accounts
-        if (accounts != null && account.id !in accounts) {
+        if (accounts != null && idWithAccount.key !in accounts) {
             return false
         }
         return true

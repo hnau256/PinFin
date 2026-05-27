@@ -5,7 +5,10 @@ import arrow.core.nonEmptyListOf
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
+import org.hnau.commons.kotlin.KeyValue
+import org.hnau.pinfin.data.AccountId
 import org.hnau.pinfin.data.Amount
+import org.hnau.pinfin.data.CategoryId
 import org.hnau.pinfin.data.Currency
 import org.hnau.pinfin.model.utils.amount
 import org.hnau.pinfin.model.utils.budget.state.AccountInfo
@@ -13,8 +16,8 @@ import org.hnau.pinfin.model.utils.budget.state.CategoryInfo
 import org.hnau.pinfin.model.utils.budget.state.TransactionInfo
 
 data class AnalyticsEntry(
-    val account: AccountInfo,
-    val category: CategoryInfo?,
+    val idWithAccount: KeyValue<AccountId,  AccountInfo>,
+    val idWithCategory: KeyValue<CategoryId,  CategoryInfo>?,
     val amount: Amount,
     val date: LocalDate,
 )
@@ -27,14 +30,14 @@ fun TransactionInfo.toAnalyticsEntries(
     return when (type) {
         is TransactionInfo.Type.Transfer -> nonEmptyListOf(
             AnalyticsEntry(
-                account = type.from,
-                category = null,
+                idWithAccount = type.from,
+                idWithCategory = null,
                 amount = -amount,
                 date = date,
             ),
             AnalyticsEntry(
-                account = type.to,
-                category = null,
+                idWithAccount = type.to,
+                idWithCategory = null,
                 amount = amount,
                 date = date,
             )
@@ -44,8 +47,8 @@ fun TransactionInfo.toAnalyticsEntries(
             .records
             .map { record ->
                 AnalyticsEntry(
-                    account = type.account,
-                    category = record.category,
+                    idWithAccount = type.idWithAccount,
+                    idWithCategory = record.idWithCategory,
                     amount = record.amount.toAmount(currency.scale),
                     date = date,
                 )

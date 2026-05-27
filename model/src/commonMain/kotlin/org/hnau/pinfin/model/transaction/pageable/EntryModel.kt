@@ -13,6 +13,7 @@ import org.hnau.commons.app.model.goback.GoBackHandler
 import org.hnau.commons.app.model.utils.Editable
 import org.hnau.commons.app.model.utils.combineEditableWith
 import org.hnau.commons.gen.pipe.annotations.Pipe
+import org.hnau.commons.kotlin.KeyValue
 import org.hnau.commons.kotlin.coroutines.flow.state.flatMapState
 import org.hnau.commons.kotlin.coroutines.flow.state.flatMapWithScope
 import org.hnau.commons.kotlin.coroutines.flow.state.mapState
@@ -21,6 +22,7 @@ import org.hnau.commons.kotlin.coroutines.flow.state.mutable.toMutableStateFlowA
 import org.hnau.commons.kotlin.foldBoolean
 import org.hnau.commons.kotlin.foldNullable
 import org.hnau.commons.kotlin.serialization.MutableStateFlowSerializer
+import org.hnau.pinfin.data.AccountId
 import org.hnau.pinfin.data.Amount
 import org.hnau.pinfin.model.transaction.utils.ChooseOrCreateModel
 import org.hnau.pinfin.model.utils.budget.state.AccountInfo
@@ -53,7 +55,7 @@ class EntryModel(
         val goBackHandler: GoBackHandler
 
         data class Account(
-            val model: ChooseOrCreateModel<AccountInfo>,
+            val model: ChooseOrCreateModel<KeyValue<AccountId, AccountInfo>>,
         ) : PageType {
             override val key: Int
                 get() = 0
@@ -99,7 +101,7 @@ class EntryModel(
                 entry: TransactionInfo.Type.Entry,
             ): Skeleton = Skeleton(
                 account = AccountModel.Skeleton.createForEdit(
-                    account = entry.account,
+                    idWithAccount = entry.idWithAccount,
                 ),
                 records = RecordsModel.Skeleton.createForEdit(
                     records = entry.records,
@@ -205,7 +207,7 @@ class EntryModel(
         ) { records, account ->
             TransactionInfo.Type.Entry(
                 records = records,
-                account = account,
+                idWithAccount = account,
             )
         }
 

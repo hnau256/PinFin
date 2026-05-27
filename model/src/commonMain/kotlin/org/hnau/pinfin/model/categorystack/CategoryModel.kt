@@ -17,6 +17,7 @@ import org.hnau.commons.kotlin.coroutines.flow.state.mapState
 import org.hnau.commons.kotlin.coroutines.flow.state.mapWithScope
 import org.hnau.commons.kotlin.coroutines.flow.state.mutable.toMutableStateFlowAsInitial
 import org.hnau.pinfin.data.CategoryConfig
+import org.hnau.pinfin.data.CategoryId
 import org.hnau.pinfin.data.Hue
 import org.hnau.pinfin.model.utils.budget.repository.BudgetRepository
 import org.hnau.pinfin.model.utils.budget.state.CategoryInfo
@@ -25,6 +26,7 @@ import org.hnau.pinfin.model.utils.icons.icon
 
 class CategoryModel(
     scope: CoroutineScope,
+    private val id: CategoryId,
     private val info: CategoryInfo,
     val icon: StateFlow<IconVariant?>,
     private val dependencies: Dependencies,
@@ -99,7 +101,7 @@ class CategoryModel(
                         .budgetRepository
                         .categories
                         .addConfig(
-                            id = info.id,
+                            id = id,
                             config = config,
                         )
                     onReady()

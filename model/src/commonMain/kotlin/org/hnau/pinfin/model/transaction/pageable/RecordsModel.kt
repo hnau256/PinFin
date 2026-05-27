@@ -21,6 +21,7 @@ import org.hnau.commons.app.model.utils.Editable
 import org.hnau.commons.app.model.utils.combineEditableWith
 import org.hnau.commons.app.model.utils.map
 import org.hnau.commons.gen.pipe.annotations.Pipe
+import org.hnau.commons.kotlin.KeyValue
 import org.hnau.commons.kotlin.ZipList
 import org.hnau.commons.kotlin.coroutines.flow.state.combineState
 import org.hnau.commons.kotlin.coroutines.flow.state.combineStateWith
@@ -34,6 +35,7 @@ import org.hnau.commons.kotlin.foldNullable
 import org.hnau.commons.kotlin.serialization.MutableStateFlowSerializer
 import org.hnau.commons.kotlin.toZipListOrNull
 import org.hnau.pinfin.data.Amount
+import org.hnau.pinfin.data.CategoryId
 import org.hnau.pinfin.model.transaction.utils.RecordId
 import org.hnau.pinfin.model.transaction.utils.remove
 import org.hnau.pinfin.model.utils.budget.state.CategoryInfo
@@ -186,10 +188,10 @@ class RecordsModel(
                 }
         }
 
-    private val usedCategories: StateFlow<Set<CategoryInfo>> = items
+    private val usedCategories: StateFlow<List<KeyValue<CategoryId, CategoryInfo>>> = items
         .flatMapWithScope(scope) { scope, items ->
             items.fold(
-                initial = MutableStateFlow(emptySet<CategoryInfo>()).asStateFlow(),
+                initial = MutableStateFlow(emptyList<KeyValue<CategoryId, CategoryInfo>>()).asStateFlow(),
             ) { acc, item ->
                 combineState(
                     scope = scope,
@@ -198,7 +200,7 @@ class RecordsModel(
                 ) { acc, categoryOrIncorrect ->
                     when (categoryOrIncorrect) {
                         Editable.Incorrect -> acc
-                        is Editable.Value<CategoryInfo> -> acc + categoryOrIncorrect.value
+                        is Editable.Value -> acc + categoryOrIncorrect.value
                     }
                 }
             }

@@ -28,7 +28,7 @@ private fun NonEmptySet<CategoryId?>?.checkCategories(
         is TransactionInfo.Type.Entry -> type
             .records
             .any { record ->
-                record.category.id in set
+                record.idWithCategory.key in set
             }
 
         is TransactionInfo.Type.Transfer -> null in set
@@ -44,10 +44,10 @@ private fun NonEmptySet<AccountId>?.checkAccounts(
     val set = toSet()
     return when (val type = transaction.type) {
         is TransactionInfo.Type.Entry ->
-            type.account.id in set
+            type.idWithAccount.key in set
 
         is TransactionInfo.Type.Transfer ->
-            type.from.id in set || type.to.id in set
+            type.from.key in set || type.to.key in set
     }
 }
 

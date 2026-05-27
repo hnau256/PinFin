@@ -50,7 +50,7 @@ data class AnalyticsPagesProvider(
                                         ifNull = { allAccounts },
                                         ifNotNull = { usedAccounts ->
                                             allAccounts.filter { account ->
-                                                account.id in usedAccounts
+                                                account.key in usedAccounts
                                             }
                                         }
                                     )
@@ -59,7 +59,7 @@ data class AnalyticsPagesProvider(
                                             key = AnalyticsPage.Item.Key.Account(account),
                                             constraints = AnalyticsPage.Item.Constraints(
                                                 categories = config.usedCategories,
-                                                accounts = nonEmptySetOf(account.id),
+                                                accounts = nonEmptySetOf(account.key),
                                             ),
                                         )
                                     }
@@ -73,7 +73,7 @@ data class AnalyticsPagesProvider(
                                         ifNull = { allCategoriesWithNull },
                                         ifNotNull = { usedCategories ->
                                             allCategoriesWithNull.filter { categoryOrNull ->
-                                                categoryOrNull?.id in usedCategories
+                                                categoryOrNull?.key in usedCategories
                                             }
                                         }
                                     )
@@ -81,7 +81,7 @@ data class AnalyticsPagesProvider(
                                         AnalyticsPage.Item(
                                             key = AnalyticsPage.Item.Key.Category(categoryOrNull),
                                             constraints = AnalyticsPage.Item.Constraints(
-                                                categories = nonEmptySetOf(categoryOrNull?.id),
+                                                categories = nonEmptySetOf(categoryOrNull?.key),
                                                 accounts = config.usedAccounts,
                                             )
                                         )

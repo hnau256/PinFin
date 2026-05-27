@@ -36,7 +36,7 @@ import org.hnau.pinfin.model.transaction.utils.ChooseOrCreateModel
 import org.hnau.pinfin.projector.Localization
 import org.hnau.pinfin.projector.utils.LabelDefaults
 
-class ChooseOrCreateProjector<T : Comparable<T>>(
+class ChooseOrCreateProjector<T>(
     private val model: ChooseOrCreateModel<T>,
     private val dependencies: Dependencies,
     private val itemContent: @Composable (

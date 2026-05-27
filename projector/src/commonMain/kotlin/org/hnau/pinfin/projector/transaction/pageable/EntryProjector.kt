@@ -21,7 +21,9 @@ import org.hnau.commons.app.projector.uikit.utils.Dimens
 import org.hnau.commons.app.projector.utils.Icon
 import org.hnau.commons.app.projector.utils.Orientation
 import org.hnau.commons.gen.pipe.annotations.Pipe
+import org.hnau.commons.kotlin.KeyValue
 import org.hnau.commons.kotlin.coroutines.flow.state.mapWithScope
+import org.hnau.pinfin.data.AccountId
 import org.hnau.pinfin.model.transaction.pageable.EntryModel
 import org.hnau.pinfin.model.utils.budget.state.AccountInfo
 import org.hnau.pinfin.projector.Localization
@@ -95,7 +97,7 @@ class EntryProjector(
             }
 
             data class Account(
-                val projector: ChooseOrCreateProjector<AccountInfo>,
+                val projector: ChooseOrCreateProjector<KeyValue<AccountId, AccountInfo>>,
             ) : PageType {
                 override val key: Int
                     get() = 1

@@ -22,6 +22,7 @@ import org.hnau.commons.app.model.goback.NeverGoBackHandler
 import org.hnau.commons.app.model.utils.Editable
 import org.hnau.commons.app.model.utils.valueOrNone
 import org.hnau.commons.gen.pipe.annotations.Pipe
+import org.hnau.commons.kotlin.KeyValue
 import org.hnau.commons.kotlin.coroutines.flow.state.flatMapWithScope
 import org.hnau.commons.kotlin.coroutines.flow.state.mapState
 import org.hnau.commons.kotlin.coroutines.flow.state.mutable.toMutableStateFlowAsInitial
@@ -58,21 +59,21 @@ class AccountModel(
 
     @Serializable
     data class Skeleton(
-        val initialAccount: AccountInfo?,
+        val initialIdWithAccount: KeyValue<AccountId, AccountInfo>?,
         var chooseOrCreate: ChooseOrCreateModel.Skeleton? = null,
-        val manualAccount: MutableStateFlow<AccountInfo?> = initialAccount.toMutableStateFlowAsInitial(),
+        val manualIdWithAccount: MutableStateFlow<KeyValue<AccountId, AccountInfo>?> = initialIdWithAccount.toMutableStateFlowAsInitial(),
     ) {
 
         companion object {
 
             fun createForNew(): Skeleton = Skeleton(
-                initialAccount = null,
+                initialIdWithAccount = null,
             )
 
             fun createForEdit(
-                account: AccountInfo,
+                idWithAccount: KeyValue<AccountId, AccountInfo>,
             ): Skeleton = Skeleton(
-                initialAccount = account,
+                initialIdWithAccount = idWithAccount,
             )
         }
     }
@@ -80,7 +81,7 @@ class AccountModel(
 
     private fun resolveMostPopularAccount(
         scope: CoroutineScope,
-    ): StateFlow<Option<AccountInfo>> = dependencies
+    ): StateFlow<Option<KeyValue<AccountId, AccountInfo>>> = dependencies
         .budgetRepository
         .state
         .map { state ->
@@ -92,7 +93,7 @@ class AccountModel(
                 .take(16)
                 .map { idWithTransaction ->
                     when (val type = idWithTransaction.value.type) {
-                        is TransactionInfo.Type.Entry -> type.account
+                        is TransactionInfo.Type.Entry -> type.idWithAccount
                         is TransactionInfo.Type.Transfer -> type.from
                     }
                 }
@@ -107,32 +108,33 @@ class AccountModel(
             initialValue = None,
         )
 
-    internal val accountEditable: StateFlow<Editable<AccountInfo>> = Editable.create(
-        scope = scope,
-        valueOrNone = skeleton
-            .manualAccount
-            .flatMapWithScope(scope) { scope, manualAccountOrNull ->
-                manualAccountOrNull
-                    .toOption()
-                    .fold(
-                        ifSome = { Some(it).toMutableStateFlowAsInitial() },
-                        ifEmpty = {
-                            useMostPopularAccountAsDefault.foldBoolean(
-                                ifFalse = { None.toMutableStateFlowAsInitial() },
-                                ifTrue = { resolveMostPopularAccount(scope) },
-                            )
-                        }
-                    )
-            },
-        initialValueOrNone = skeleton.initialAccount.toOption(),
-    )
+    internal val accountEditable: StateFlow<Editable<KeyValue<AccountId, AccountInfo>>> =
+        Editable.create(
+            scope = scope,
+            valueOrNone = skeleton
+                .manualIdWithAccount
+                .flatMapWithScope(scope) { scope, manualAccountOrNull ->
+                    manualAccountOrNull
+                        .toOption()
+                        .fold(
+                            ifSome = { Some(it).toMutableStateFlowAsInitial() },
+                            ifEmpty = {
+                                useMostPopularAccountAsDefault.foldBoolean(
+                                    ifFalse = { None.toMutableStateFlowAsInitial() },
+                                    ifTrue = { resolveMostPopularAccount(scope) },
+                                )
+                            }
+                        )
+                },
+            initialValueOrNone = skeleton.initialIdWithAccount.toOption(),
+        )
 
-    val account: StateFlow<AccountInfo?> = accountEditable
+    val idWithAccount: StateFlow<KeyValue<AccountId, AccountInfo>?> = accountEditable
         .mapState(scope) { it.valueOrNone.getOrNull() }
 
     fun createPage(
         scope: CoroutineScope,
-    ): ChooseOrCreateModel<AccountInfo> = ChooseOrCreateModel(
+    ): ChooseOrCreateModel<KeyValue<AccountId, AccountInfo>> = ChooseOrCreateModel(
         scope = scope,
         dependencies = dependencies.chooseOrCreate(),
         skeleton = skeleton::chooseOrCreate
@@ -141,20 +143,26 @@ class AccountModel(
         extractItemsFromState = BudgetState::visibleAccounts,
         additionalItems = accountEditable.mapState(scope) { listOfNotNull(it.valueOrNone.getOrNull()) },
         itemTextMapper = Mapper(
-            direct = AccountInfo::title,
+            direct = { it.value.title },
             reverse = { title ->
-                AccountInfo(
-                    id = AccountId(title),
+                val id = AccountId(title)
+                val accountInfo = AccountInfo(
+                    id = id,
                     config = null,
                     amount = Amount.zero,
                 )
+                KeyValue(id, accountInfo)
             }
         ),
-        selected = accountEditable.mapState(scope, Editable<AccountInfo>::valueOrNone),
+        selected = accountEditable.mapState(
+            scope,
+            Editable<KeyValue<AccountId, AccountInfo>>::valueOrNone
+        ),
         onReady = { selected ->
-            skeleton.manualAccount.value = selected
+            skeleton.manualIdWithAccount.value = selected
             goForward()
-        }
+        },
+        comparator = compareBy(KeyValue<*, AccountInfo>::value),
     )
 
     val goBackHandler: GoBackHandler

@@ -17,6 +17,7 @@ import org.hnau.commons.app.model.utils.combineEditableWith
 import org.hnau.commons.app.model.utils.map
 import org.hnau.commons.app.model.utils.valueOrNone
 import org.hnau.commons.gen.pipe.annotations.Pipe
+import org.hnau.commons.kotlin.KeyValue
 import org.hnau.commons.kotlin.coroutines.flow.state.flatMapState
 import org.hnau.commons.kotlin.coroutines.flow.state.flatMapWithScope
 import org.hnau.commons.kotlin.coroutines.flow.state.mapState
@@ -25,6 +26,7 @@ import org.hnau.commons.kotlin.coroutines.flow.state.mutable.toMutableStateFlowA
 import org.hnau.commons.kotlin.foldNullable
 import org.hnau.commons.kotlin.serialization.MutableStateFlowSerializer
 import org.hnau.pinfin.data.Amount
+import org.hnau.pinfin.data.CategoryId
 import org.hnau.pinfin.data.Comment
 import org.hnau.pinfin.data.Currency
 import org.hnau.pinfin.model.transaction.utils.ChooseOrCreateModel
@@ -70,7 +72,7 @@ class RecordModel(
         }
 
         data class Category(
-            val model: ChooseOrCreateModel<CategoryInfo>,
+            val model: ChooseOrCreateModel<KeyValue<CategoryId, CategoryInfo>>,
         ) : PageType {
             override val key: Int
                 get() = 1
@@ -145,7 +147,7 @@ class RecordModel(
                     comment = record.comment,
                 ),
                 category = CategoryModel.Skeleton.createForEdit(
-                    category = record.category,
+                    idWithCategory = record.idWithCategory,
                 ),
                 amount = AmountWithDirectionModel.Skeleton.createForEdit(
                     amount = record.amount,
@@ -154,7 +156,7 @@ class RecordModel(
         }
     }
 
-    private val selectedCategoryWrapper: MutableStateFlow<StateFlow<CategoryInfo?>> =
+    private val selectedCategoryWrapper: MutableStateFlow<StateFlow<KeyValue<CategoryId, CategoryInfo>?>> =
         null.toMutableStateFlowAsInitial().toMutableStateFlowAsInitial()
 
     private val part: StateFlow<Part> = skeleton
@@ -257,12 +259,12 @@ class RecordModel(
         goForward = createGoForward(Part.Amount),
     )
 
-    val categoryWithAmount: StateFlow<Pair<CategoryInfo, Amount>?> = category
+    val categoryWithAmount: StateFlow<Pair<KeyValue<CategoryId, CategoryInfo>, Amount>?> = category
         .categoryEditable
         .flatMapWithScope(scope) { scope, categoryOrIncorrect ->
             when (categoryOrIncorrect) {
                 Editable.Incorrect -> null.toMutableStateFlowAsInitial()
-                is Editable.Value<CategoryInfo> -> amount
+                is Editable.Value<KeyValue<CategoryId, CategoryInfo>> -> amount
                     .amountEditable
                     .mapState(scope) { amountOrNull ->
                         amountOrNull
@@ -288,7 +290,7 @@ class RecordModel(
 
     fun createPage(
         scope: CoroutineScope,
-        usedCategories: StateFlow<Set<CategoryInfo>>,
+        usedCategories: StateFlow<List<KeyValue<CategoryId, CategoryInfo>>>,
     ): Page = Page(
         scope = scope,
         remove = remove,
@@ -346,7 +348,7 @@ class RecordModel(
             TransactionInfo.Type.Entry.Record(
                 amount = amount,
                 comment = comment,
-                category = category,
+                idWithCategory = category,
             )
         }
 

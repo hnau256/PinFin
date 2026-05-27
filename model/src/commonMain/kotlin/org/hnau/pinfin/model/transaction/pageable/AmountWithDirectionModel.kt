@@ -21,6 +21,7 @@ import org.hnau.commons.app.model.utils.Editable
 import org.hnau.commons.app.model.utils.combineEditableWith
 import org.hnau.commons.app.model.utils.valueOrNone
 import org.hnau.commons.gen.pipe.annotations.Pipe
+import org.hnau.commons.kotlin.KeyValue
 import org.hnau.commons.kotlin.coroutines.flow.state.combineStateWith
 import org.hnau.commons.kotlin.coroutines.flow.state.flatMapWithScope
 import org.hnau.commons.kotlin.coroutines.flow.state.mapState
@@ -28,6 +29,7 @@ import org.hnau.commons.kotlin.coroutines.flow.state.mutable.toMutableStateFlowA
 import org.hnau.commons.kotlin.foldNullable
 import org.hnau.commons.kotlin.serialization.MutableStateFlowSerializer
 import org.hnau.pinfin.data.AmountDirection
+import org.hnau.pinfin.data.CategoryId
 import org.hnau.pinfin.data.Currency
 import org.hnau.pinfin.data.expression.AmountExpression
 import org.hnau.pinfin.model.transaction.utils.allRecords
@@ -39,7 +41,7 @@ class AmountWithDirectionModel(
     scope: CoroutineScope,
     private val dependencies: Dependencies,
     private val skeleton: Skeleton,
-    private val category: StateFlow<CategoryInfo?>,
+    private val category: StateFlow<KeyValue<CategoryId, CategoryInfo>?>,
     val isFocused: StateFlow<Boolean>,
     val requestFocus: () -> Unit,
     val goForward: () -> Unit,
@@ -114,7 +116,7 @@ class AmountWithDirectionModel(
                         .allRecords
                         .mapNotNull { (timestamp, record) ->
                             record
-                                .takeIf { it.category == category }
+                                .takeIf { it.idWithCategory == category }
                                 ?.let { categoryRecord ->
                                     val (direction) = categoryRecord
                                         .amount

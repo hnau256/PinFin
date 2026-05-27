@@ -18,6 +18,8 @@ import androidx.compose.ui.Modifier
 import org.hnau.commons.app.projector.uikit.utils.Dimens
 import org.hnau.commons.app.projector.utils.toLazyListState
 import org.hnau.commons.gen.pipe.annotations.Pipe
+import org.hnau.commons.kotlin.KeyValue
+import org.hnau.pinfin.data.AccountId
 import org.hnau.pinfin.model.budget.analytics.tab.AccountsModel
 import org.hnau.pinfin.model.utils.budget.state.AccountInfo
 import org.hnau.pinfin.projector.Localization
@@ -64,10 +66,10 @@ class AccountsProjector(
                 }
                 items(
                     items = accounts,
-                    key = { "account_" + it.id.id },
+                    key = { "account_" + it.key.id },
                 ) { info ->
                     Account(
-                        info = info,
+                        idWithAccount = info,
                     )
                 }
             }
@@ -76,25 +78,25 @@ class AccountsProjector(
 
     @Composable
     private fun Account(
-        info: AccountInfo,
+        idWithAccount: KeyValue<AccountId,  AccountInfo>,
     ) {
         ListItem(
             headlineContent = {
                 AccountContent(
-                    info = info,
+                    info = idWithAccount.value,
                     localization = dependencies.localization,
                     viewMode = ViewMode.Full,
                 )
             },
             trailingContent = {
                 AmountContent(
-                    value = info.amount,
+                    value = idWithAccount.value.amount,
                     amountFormatter = dependencies.amountFormatter,
                 )
             },
             modifier = Modifier
                 .fillMaxWidth()
-                .clickable { model.onAccountClick(info) },
+                .clickable { model.onAccountClick(idWithAccount) },
         )
     }
 

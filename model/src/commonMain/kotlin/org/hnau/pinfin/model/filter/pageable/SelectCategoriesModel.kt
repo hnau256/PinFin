@@ -16,6 +16,7 @@ import kotlinx.serialization.UseSerializers
 import org.hnau.commons.app.model.goback.GoBackHandler
 import org.hnau.commons.app.model.goback.NeverGoBackHandler
 import org.hnau.commons.gen.pipe.annotations.Pipe
+import org.hnau.commons.kotlin.KeyValue
 import org.hnau.commons.kotlin.coroutines.flow.state.combineStateWith
 import org.hnau.commons.kotlin.coroutines.flow.state.flatMapWithScope
 import org.hnau.commons.kotlin.coroutines.flow.state.mapState
@@ -68,6 +69,7 @@ class SelectCategoriesModel(
     ) {
 
         data class Category(
+            val id: CategoryId,
             val info: CategoryInfo,
             val selected: MutableStateFlow<Boolean>,
         )
@@ -83,7 +85,7 @@ class SelectCategoriesModel(
             state
                 .categories
                 .map { info ->
-                    val id = info.id
+                    val id = info.key
 
                     val updateIds: (Set<CategoryId?>, Boolean) -> Set<CategoryId?> =
                         { selectedIds, selected ->
@@ -94,7 +96,8 @@ class SelectCategoriesModel(
                         }
 
                     Page.Category(
-                        info = info,
+                        id = info.key,
+                        info = info.value,
                         selected = skeleton
                             .selectedCategories
                             .mapMutableState(
@@ -117,54 +120,60 @@ class SelectCategoriesModel(
                 }
         }
 
-    val selectedCategories: StateFlow<NonEmptyList<CategoryInfo>?> = categories
-        .mapWithScope(scope) { scope, categories ->
-            categories.map { category ->
-                category
-                    .selected
-                    .mapState(scope) { selected ->
-                        selected.ifTrue { category.info }
-                    }
-            }
-        }
-        .flatMapWithScope(
-            scope = scope,
-        ) { scope, categories ->
-            categories
-                .drop(1)
-                .fold(
-                    initial = categories
-                        .firstOrNull()
-                        .foldNullable(
-                            ifNull = { emptySet<CategoryInfo>().toMutableStateFlowAsInitial() },
-                            ifNotNull = { first ->
-                                first.mapState(scope) { setOfNotNull(it) }
+    val selectedCategories: StateFlow<NonEmptyList<KeyValue<CategoryId, CategoryInfo>>?> =
+        categories
+            .mapWithScope(scope) { scope, categories ->
+                categories.map { category ->
+                    category
+                        .selected
+                        .mapState(scope) { selected ->
+                            selected.ifTrue {
+                                KeyValue(
+                                    key = category.id,
+                                    value = category.info,
+                                )
                             }
-                        ),
-                ) { acc, categoryOrNull ->
-                    acc
-                        .combineStateWith(
-                            scope = scope,
-                            other = categoryOrNull,
-                        ) { acc, categoryOrNull ->
-                            categoryOrNull.foldNullable(
-                                ifNull = { acc },
-                                ifNotNull = { acc + it }
-                            )
                         }
                 }
-                .mapState(scope) { categories ->
-                    categories
-                        .toList()
-                        .sorted()
-                        .toNonEmptyListOrNull()
-                }
-        }
+            }
+            .flatMapWithScope(
+                scope = scope,
+            ) { scope, categories ->
+                categories
+                    .drop(1)
+                    .fold(
+                        initial = categories
+                            .firstOrNull()
+                            .foldNullable(
+                                ifNull = { emptyList<KeyValue<CategoryId, CategoryInfo>>().toMutableStateFlowAsInitial() },
+                                ifNotNull = { first ->
+                                    first.mapState(scope) { setOfNotNull(it) }
+                                }
+                            ),
+                    ) { acc, categoryOrNull ->
+                        acc
+                            .combineStateWith(
+                                scope = scope,
+                                other = categoryOrNull,
+                            ) { acc, categoryOrNull ->
+                                categoryOrNull.foldNullable(
+                                    ifNull = { acc },
+                                    ifNotNull = { acc + it }
+                                )
+                            }
+                    }
+                    .mapState(scope) { categories ->
+                        categories
+                            .toList()
+                            .sortedBy { it.value }
+                            .toNonEmptyListOrNull()
+                    }
+            }
 
     val selectedCategoriesIds: StateFlow<NonEmptySet<CategoryId?>?> = selectedCategories
         .mapState(scope) { categories ->
             categories
-                ?.map { category -> category.id }
+                ?.map { category -> category.key }
                 ?.toNonEmptySet()
         }
 

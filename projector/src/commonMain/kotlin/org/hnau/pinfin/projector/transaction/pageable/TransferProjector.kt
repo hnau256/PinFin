@@ -14,7 +14,9 @@ import org.hnau.commons.app.projector.uikit.transition.getTransitionSpecForSlide
 import org.hnau.commons.app.projector.utils.Icon
 import org.hnau.commons.app.projector.utils.Orientation
 import org.hnau.commons.gen.pipe.annotations.Pipe
+import org.hnau.commons.kotlin.KeyValue
 import org.hnau.commons.kotlin.coroutines.flow.state.mapState
+import org.hnau.pinfin.data.AccountId
 import org.hnau.pinfin.model.transaction.pageable.TransferModel
 import org.hnau.pinfin.model.utils.budget.state.AccountInfo
 import org.hnau.pinfin.projector.transaction.utils.ChooseOrCreateProjector
@@ -59,7 +61,7 @@ class TransferProjector(
             )
 
             data class From(
-                val projector: ChooseOrCreateProjector<AccountInfo>,
+                val projector: ChooseOrCreateProjector<KeyValue<AccountId, AccountInfo>>,
                 private val dependencies: Dependencies,
             ) : PageType {
                 override val key: Int
@@ -80,7 +82,7 @@ class TransferProjector(
             }
 
             data class To(
-                val projector: ChooseOrCreateProjector<AccountInfo>,
+                val projector: ChooseOrCreateProjector<KeyValue<AccountId, AccountInfo>>,
                 private val dependencies: Dependencies,
             ) : PageType {
                 override val key: Int

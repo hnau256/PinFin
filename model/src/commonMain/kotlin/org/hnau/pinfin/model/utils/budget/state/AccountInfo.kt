@@ -13,7 +13,6 @@ import org.hnau.commons.app.model.theme.color.Hue as ModelHue
 
 @Serializable
 data class AccountInfo(
-    val id: AccountId,
     val amount: Amount,
     val title: String,
     val hideIfAmountIsZero: Boolean,
@@ -26,7 +25,6 @@ data class AccountInfo(
         amount: Amount,
         config: AccountConfig?,
     ) : this(
-        id = id,
         amount = amount,
         title = config?.title ?: id.id,
         hideIfAmountIsZero = config?.hideIfAmountIsZero == true,

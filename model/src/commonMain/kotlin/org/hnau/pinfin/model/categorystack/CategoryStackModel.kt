@@ -22,6 +22,7 @@ import org.hnau.commons.gen.sealup.annotations.SealUp
 import org.hnau.commons.gen.sealup.annotations.Variant
 import org.hnau.commons.kotlin.coroutines.flow.state.mutable.toMutableStateFlowAsInitial
 import org.hnau.commons.kotlin.serialization.MutableStateFlowSerializer
+import org.hnau.pinfin.data.CategoryId
 import org.hnau.pinfin.model.IconModel
 import org.hnau.pinfin.model.utils.budget.state.CategoryInfo
 import org.hnau.pinfin.model.utils.icons.IconVariant
@@ -35,6 +36,7 @@ class CategoryStackModel(
 
     @Serializable
     data class Skeleton(
+        val id: CategoryId,
         val info: CategoryInfo,
         val icon: MutableStateFlow<IconVariant?> = info.icon.toMutableStateFlowAsInitial(),
         val stack: MutableStateFlow<NonEmptyStack<CategoryStackElementSkeleton>> = NonEmptyStack(
@@ -114,6 +116,7 @@ class CategoryStackModel(
                 skeleton = infoSkeleton,
                 dependencies = dependencies.info(),
                 onReady = onReady,
+                id = this@CategoryStackModel.skeleton.id,
                 info = this@CategoryStackModel.skeleton.info,
                 icon = this@CategoryStackModel.skeleton.icon,
                 chooseIcon = {
