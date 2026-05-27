@@ -136,11 +136,16 @@ class TransactionsProjector(
                         ) {
                             items(
                                 items = items,
-                                key = { it.id.id },
-                            ) { info ->
-                                info.Content(
+                                key = { it.key.id },
+                            ) { idWithTransaction ->
+                                idWithTransaction.value.Content(
                                     dependencies = dependencies,
-                                    onClick = { model.onEditTransactionClick(info) },
+                                    onClick = {
+                                        model.onEditTransactionClick(
+                                            idWithTransaction.key,
+                                            idWithTransaction.value,
+                                        )
+                                    },
                                 )
                             }
                         }

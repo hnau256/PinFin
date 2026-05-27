@@ -113,8 +113,9 @@ data class AnalyticsPagesProvider(
             ifNull = { today..today },
             ifNotNull = { transactions ->
                 (transactions.first() to transactions.last())
-                    .map { transaction ->
-                        transaction
+                    .map { idWithTransaction ->
+                        idWithTransaction
+                            .value
                             .timestamp
                             .toLocalDateTime(TimeZone.currentSystemDefault())
                             .date

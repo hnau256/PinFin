@@ -3,6 +3,7 @@ package org.hnau.pinfin.model.budgetstack
 import kotlinx.coroutines.flow.MutableStateFlow
 import org.hnau.commons.app.model.stack.NonEmptyStack
 import org.hnau.commons.app.model.stack.push
+import org.hnau.pinfin.data.Transaction
 import org.hnau.pinfin.data.TransactionType
 import org.hnau.pinfin.model.transaction.TransactionModel
 import org.hnau.pinfin.model.utils.budget.state.AccountInfo
@@ -32,11 +33,13 @@ class BudgetStackOpenerImpl(
     }
 
     override fun openEditTransaction(
+        id: Transaction.Id,
         info: TransactionInfo,
     ) {
         open(
             BudgetStackModel.ElementSkeleton.transaction(
                 transaction = TransactionModel.Skeleton.createForEdit(
+                    id = id,
                     transaction = info,
                 )
             )

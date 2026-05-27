@@ -1,5 +1,6 @@
 package org.hnau.pinfin.model.budgetstack
 
+import org.hnau.pinfin.data.Transaction
 import org.hnau.pinfin.data.TransactionType
 import org.hnau.pinfin.model.utils.budget.state.AccountInfo
 import org.hnau.pinfin.model.utils.budget.state.CategoryInfo
@@ -12,6 +13,7 @@ interface BudgetStackOpener {
     )
 
     fun openEditTransaction(
+        id: Transaction.Id,
         info: TransactionInfo,
     )
 

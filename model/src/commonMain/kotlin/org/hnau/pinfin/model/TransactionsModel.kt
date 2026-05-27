@@ -7,11 +7,13 @@ import kotlinx.coroutines.withContext
 import kotlinx.serialization.Serializable
 import org.hnau.commons.app.model.goback.GoBackHandler
 import org.hnau.commons.gen.pipe.annotations.Pipe
+import org.hnau.commons.kotlin.KeyValue
 import org.hnau.commons.kotlin.Loadable
 import org.hnau.commons.kotlin.coroutines.Delayed
 import org.hnau.commons.kotlin.coroutines.flow.state.combineState
 import org.hnau.commons.kotlin.coroutines.flow.state.mapState
 import org.hnau.commons.kotlin.coroutines.mapStateDelayed
+import org.hnau.pinfin.data.Transaction
 import org.hnau.pinfin.data.TransactionType
 import org.hnau.pinfin.model.budgetstack.BudgetStackOpener
 import org.hnau.pinfin.model.filter.FilterModel
@@ -67,10 +69,10 @@ class TransactionsModel(
             )
     }
 
-    val onEditTransactionClick: (TransactionInfo) -> Unit
+    val onEditTransactionClick: (Transaction.Id, TransactionInfo) -> Unit
         get() = dependencies.budgetStackOpener::openEditTransaction
 
-    val transactions: StateFlow<Loadable<Delayed<List<TransactionInfo>>>> = combineState(
+    val transactions: StateFlow<Loadable<Delayed<List<KeyValue<Transaction.Id, TransactionInfo>>>>> = combineState(
         scope = scope,
         first = dependencies
             .budgetRepository
@@ -80,8 +82,8 @@ class TransactionsModel(
         combine = ::Pair,
     ).mapStateDelayed(scope) { (transactions, filters) ->
         withContext(Dispatchers.Default) {
-            transactions.filter { transaction ->
-                filters.check(transaction)
+            transactions.filter { idWithTransaction ->
+                filters.check(idWithTransaction.value)
             }
         }
     }

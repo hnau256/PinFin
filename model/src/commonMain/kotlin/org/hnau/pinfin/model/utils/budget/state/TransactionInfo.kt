@@ -7,7 +7,6 @@ import org.hnau.pinfin.data.expression.AmountExpression
 import kotlin.time.Instant
 
 data class TransactionInfo(
-    val id: Transaction.Id,
     val timestamp: Instant,
     val comment: Comment,
     val type: Type,

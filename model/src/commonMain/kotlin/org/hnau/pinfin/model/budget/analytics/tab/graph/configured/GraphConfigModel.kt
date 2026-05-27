@@ -69,8 +69,8 @@ class GraphConfigModel(
                 dependencies = dependencies.pages(
                     analyticsEntries = state
                         .transactions
-                        .flatMap { transaction ->
-                            transaction.toAnalyticsEntries(
+                        .flatMap { idWithTransaction ->
+                            idWithTransaction.value.toAnalyticsEntries(
                                 currency = dependencies.currency,
                             )
                         },

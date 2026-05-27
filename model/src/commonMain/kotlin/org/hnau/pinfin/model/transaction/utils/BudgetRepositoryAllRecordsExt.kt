@@ -7,12 +7,12 @@ import kotlin.time.Instant
 val BudgetState.allRecords: List<Pair<Instant, TransactionInfo.Type.Entry.Record>>
     get() = this
         .transactions
-        .flatMap { transaction ->
-            when (val type = transaction.type) {
+        .flatMap { idWithTransaction ->
+            when (val type = idWithTransaction.value.type) {
                 is TransactionInfo.Type.Entry -> type
                     .records
                     .toList()
-                    .map { record -> transaction.timestamp to record }
+                    .map { record -> idWithTransaction.value.timestamp to record }
 
                 is TransactionInfo.Type.Transfer -> emptyList()
             }

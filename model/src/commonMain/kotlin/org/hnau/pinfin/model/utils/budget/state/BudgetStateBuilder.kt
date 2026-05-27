@@ -3,6 +3,7 @@ package org.hnau.pinfin.model.utils.budget.state
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.hnau.commons.gen.pipe.annotations.Pipe
+import org.hnau.commons.kotlin.KeyValue
 import org.hnau.commons.kotlin.castOrNull
 import org.hnau.pinfin.data.AccountConfig
 import org.hnau.pinfin.data.AccountId
@@ -170,14 +171,14 @@ data class BudgetStateBuilder(
             hash = hash,
             transactions = transactions
                 .map { (id, transaction) ->
-                    TransactionInfo.fromTransaction(
-                        id = id,
+                    val transaction = TransactionInfo.fromTransaction(
                         transaction = transaction,
                         categories = categories,
                         accounts = accounts,
                     )
+                    KeyValue(id, transaction)
                 }
-                .sortedBy(TransactionInfo::timestamp),
+                .sortedBy{it.value.timestamp},
             categories = categories.values.toList(),
             accounts = accounts.values.toList(),
             info = BudgetInfo.create(
@@ -204,12 +205,10 @@ data class BudgetStateBuilder(
 
 
 private fun TransactionInfo.Companion.fromTransaction(
-    id: Transaction.Id,
     transaction: Transaction,
     categories: Map<CategoryId, CategoryInfo>,
     accounts: Map<AccountId, AccountInfo>,
 ): TransactionInfo = TransactionInfo(
-    id = id,
     timestamp = transaction.timestamp,
     comment = transaction.comment,
     type = TransactionInfo.Type.fromType(

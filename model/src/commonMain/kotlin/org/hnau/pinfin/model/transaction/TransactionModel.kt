@@ -143,13 +143,14 @@ class TransactionModel(
             )
 
             fun createForEdit(
+                id: Transaction.Id,
                 transaction: TransactionInfo,
             ): Skeleton {
                 val timestamp = transaction
                     .timestamp
                     .toLocalDateTime(TimeZone.currentSystemDefault())
                 return Skeleton(
-                    id = transaction.id,
+                    id = id,
                     type = TypeModel.Skeleton.createForEdit(
                         type = transaction.type,
                     ),
@@ -226,11 +227,16 @@ class TransactionModel(
         isFocused = isPartFocused(Part.Comment),
         requestFocus = createRequestFocus(Part.Comment),
         extractSuggests = { state ->
-            state.transactions.mapNotNull { transaction ->
-                transaction
+            state.transactions.mapNotNull { idWithTransaction ->
+                idWithTransaction
+                    .value
                     .comment
-                    .takeIf { comment -> comment.text.isNotEmpty() }
-                    ?.let { comment -> comment to transaction.timestamp }
+                    .takeIf { comment ->
+                        comment.text.isNotEmpty()
+                    }
+                    ?.let { comment ->
+                        comment to idWithTransaction.value.timestamp
+                    }
             }
         },
         goForward = createGoForward(Part.Comment),
@@ -358,19 +364,20 @@ class TransactionModel(
             }
         }
 
-    val saveOrDisabled: StateFlow<ActionOrElse<Unit, CancelOrInProgress.Cancel>?> = state.flatMapWithScope(scope) { scope, state ->
-        val action: (suspend () -> Unit) = when (state) {
-            State.NoChanges -> {
-                { onReady }
-            }
+    val saveOrDisabled: StateFlow<ActionOrElse<Unit, CancelOrInProgress.Cancel>?> =
+        state.flatMapWithScope(scope) { scope, state ->
+            val action: (suspend () -> Unit) = when (state) {
+                State.NoChanges -> {
+                    { onReady }
+                }
 
-            is State.HasChanges -> state.saveIfCorrect
-        } ?: return@flatMapWithScope null.toMutableStateFlowAsInitial()
-        actionOrCancelIfExecuting(
-            scope = scope,
-            operation = action,
-        )
-    }
+                is State.HasChanges -> state.saveIfCorrect
+            } ?: return@flatMapWithScope null.toMutableStateFlowAsInitial()
+            actionOrCancelIfExecuting(
+                scope = scope,
+                operation = action,
+            )
+        }
 
 
     data class CancelDialogInfo(

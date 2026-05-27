@@ -86,10 +86,12 @@ class AccountModel(
         .map { state ->
             state
                 .transactions
-                .sortedByDescending { it.timestamp }
+                .sortedByDescending { idWithTransaction ->
+                    idWithTransaction.value.timestamp
+                }
                 .take(16)
-                .map { transaction ->
-                    when (val type = transaction.type) {
+                .map { idWithTransaction ->
+                    when (val type = idWithTransaction.value.type) {
                         is TransactionInfo.Type.Entry -> type.account
                         is TransactionInfo.Type.Transfer -> type.from
                     }
