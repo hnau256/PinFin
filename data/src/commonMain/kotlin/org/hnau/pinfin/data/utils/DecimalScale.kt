@@ -2,8 +2,10 @@ package org.hnau.pinfin.data.utils
 
 import com.ionspin.kotlin.bignum.decimal.DecimalMode
 import com.ionspin.kotlin.bignum.decimal.RoundingMode
+import kotlinx.serialization.Serializable
 import kotlin.jvm.JvmInline
 
+@Serializable
 @JvmInline
 value class DecimalScale(
     val scale: Long,

@@ -2,7 +2,6 @@ package org.hnau.pinfin.model.utils.budget.state
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import org.hnau.commons.gen.pipe.annotations.Pipe
 import org.hnau.commons.kotlin.KeyValue
 import org.hnau.commons.kotlin.castOrNull
 import org.hnau.pinfin.data.AccountConfig
@@ -12,7 +11,6 @@ import org.hnau.pinfin.data.BudgetConfig
 import org.hnau.pinfin.data.BudgetId
 import org.hnau.pinfin.data.CategoryConfig
 import org.hnau.pinfin.data.CategoryId
-import org.hnau.pinfin.data.Currency
 import org.hnau.pinfin.data.Record
 import org.hnau.pinfin.data.Transaction
 import org.hnau.pinfin.data.UpdateType
@@ -26,17 +24,10 @@ import org.hnau.upchain.core.getUpdatesAfterHashIfPossible
 data class BudgetStateBuilder(
     private val hash: UpchainHash?,
     private val config: BudgetConfig,
-    private val dependencies: Dependencies,
     private val transactions: Map<Transaction.Id, Transaction>,
     private val accountsConfigs: Map<AccountId, AccountConfig>,
     private val categoriesConfigs: Map<CategoryId, CategoryConfig>,
 ) {
-
-    @Pipe
-    interface Dependencies {
-
-        val currency: Currency
-    }
 
     override fun equals(
         other: Any?,
@@ -78,7 +69,6 @@ data class BudgetStateBuilder(
             accountsConfigs = accountsConfigs,
             categoriesConfigs = categoriesConfigs,
             config = info,
-            dependencies = dependencies,
         )
     }
 
@@ -90,9 +80,7 @@ data class BudgetStateBuilder(
             hash = hash,
         )
         val (state, updates) = when (additionalUpdates) {
-            null -> empty(
-                dependencies = dependencies,
-            ) to newUpchain.items.map(Upchain.Item::update)
+            null -> empty to newUpchain.items.map(Upchain.Item::update)
 
             else -> this@BudgetStateBuilder to additionalUpdates
         }
@@ -105,6 +93,11 @@ data class BudgetStateBuilder(
     suspend fun toBudgetState(
         id: BudgetId,
     ): BudgetState = withContext(Dispatchers.Default) {
+
+        val info = BudgetInfo.create(
+            id = id,
+            config = config,
+        )
 
         val categories: MutableMap<CategoryId, CategoryInfo> = mutableMapOf()
         val accounts: MutableMap<AccountId, AccountInfo> = mutableMapOf()
@@ -143,7 +136,7 @@ data class BudgetStateBuilder(
                     useAccount(
                         id = type.account,
                         amountOffset = type.amount(
-                            currency = dependencies.currency,
+                            currency = info.currency,
                         ),
                     )
                     type.records.forEach { record ->
@@ -154,7 +147,7 @@ data class BudgetStateBuilder(
                 }
 
                 is Transaction.Type.Transfer -> {
-                    val amount = type.amount.toAmount(dependencies.currency.scale)
+                    val amount = type.amount.toAmount(info.currency.scale)
                     useAccount(
                         id = type.from,
                         amountOffset = -amount
@@ -178,27 +171,21 @@ data class BudgetStateBuilder(
                     )
                     KeyValue(id, transaction)
                 }
-                .sortedBy{it.value.timestamp},
+                .sortedBy { it.value.timestamp },
             categories = categories.values.toList(),
             accounts = accounts.values.toList(),
-            info = BudgetInfo.create(
-                id = id,
-                config = config,
-            )
+            info = info,
         )
     }
 
     companion object {
 
-        fun empty(
-            dependencies: Dependencies,
-        ): BudgetStateBuilder = BudgetStateBuilder(
+        val empty: BudgetStateBuilder = BudgetStateBuilder(
             hash = null,
             config = BudgetConfig.empty,
             accountsConfigs = emptyMap(),
             transactions = emptyMap(),
             categoriesConfigs = emptyMap(),
-            dependencies = dependencies
         )
     }
 }

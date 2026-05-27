@@ -22,12 +22,6 @@ class BudgetRepository(
     val remove: suspend () -> Unit,
 ) {
 
-    @Pipe
-    interface Dependencies {
-
-        fun budgretStateBuilder(): BudgetStateBuilder.Dependencies
-    }
-
     val transactions: BudgetRepositoryTransactionsDelegate = BudgetRepositoryTransactionsDelegate(
         state = state,
         addUpdate = ::applyUpdate,
@@ -73,14 +67,11 @@ class BudgetRepository(
             scope: CoroutineScope,
             id: BudgetId,
             upchainRepository: UpchainRepository,
-            dependencies: Dependencies,
             remove: suspend () -> Unit,
         ): BudgetRepository {
             val upchainFlow = upchainRepository.upchain
             val initialState = BudgetStateBuilder
-                .empty(
-                    dependencies = dependencies.budgretStateBuilder(),
-                )
+                .empty
                 .withNewUpchain(upchainFlow.value)
             val state = upchainFlow
                 .runningFold(

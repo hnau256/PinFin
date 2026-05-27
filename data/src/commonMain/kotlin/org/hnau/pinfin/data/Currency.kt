@@ -1,7 +1,9 @@
 package org.hnau.pinfin.data
 
+import kotlinx.serialization.Serializable
 import org.hnau.pinfin.data.utils.DecimalScale
 
+@Serializable
 data class Currency(
     val scale: DecimalScale,
 ) {

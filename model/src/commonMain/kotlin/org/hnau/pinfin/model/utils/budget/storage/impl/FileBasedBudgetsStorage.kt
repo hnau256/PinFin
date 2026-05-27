@@ -15,7 +15,6 @@ import org.hnau.upchain.core.repository.file.upchains.fileBased
 import org.hnau.upchain.core.repository.upchains.UpchainsRepository
 
 fun BudgetsStorage.Factory.Companion.files(
-    dependencies: BudgetsStorage.Factory.Dependencies,
     budgetsDir: String,
 ): BudgetsStorage.Factory = BudgetsStorage.Factory { scope ->
 
@@ -35,7 +34,6 @@ fun BudgetsStorage.Factory.Companion.files(
                         scope = scope,
                         id = id,
                         upchainRepository = item.repository,
-                        dependencies = dependencies.budgetRepository(),
                         remove = item.remove,
                     )
                     KeyValue(id, repository)
