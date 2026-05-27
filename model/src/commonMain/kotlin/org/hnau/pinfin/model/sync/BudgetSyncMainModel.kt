@@ -5,6 +5,7 @@
 package org.hnau.pinfin.model.sync
 
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.serialization.UseSerializers
@@ -13,6 +14,7 @@ import org.hnau.commons.app.model.goback.NeverGoBackHandler
 import org.hnau.commons.gen.pipe.annotations.Pipe
 import org.hnau.commons.kotlin.coroutines.ActionOrElse
 import org.hnau.commons.kotlin.coroutines.actionOrCancelIfExecuting
+import org.hnau.commons.kotlin.coroutines.createChild
 import org.hnau.commons.kotlin.coroutines.flow.state.mapState
 import org.hnau.commons.kotlin.serialization.MutableStateFlowSerializer
 import org.hnau.pinfin.data.BudgetId
@@ -39,8 +41,9 @@ class BudgetSyncMainModel(
     val sync = actionOrCancelIfExecuting(scope) {
         val config = config.value
         coroutineScope {
+            val clientScope = createChild()
             val client = HttpSyncClient(
-                scope = this,
+                scope = clientScope,
                 scheme = config.scheme,
                 host = config.host,
             )
@@ -51,6 +54,7 @@ class BudgetSyncMainModel(
                     id = dependencies.id.id.let(::UpchainId),
                     api = client,
                 )
+            clientScope.cancel()
         }
     }
 
