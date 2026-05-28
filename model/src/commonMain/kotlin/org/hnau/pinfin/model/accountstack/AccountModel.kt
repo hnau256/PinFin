@@ -1,3 +1,7 @@
+@file:UseSerializers(
+    MutableStateFlowSerializer::class,
+)
+
 package org.hnau.pinfin.model.accountstack
 
 import kotlinx.coroutines.CoroutineScope
@@ -16,11 +20,13 @@ import org.hnau.commons.kotlin.coroutines.flow.state.combineStateWith
 import org.hnau.commons.kotlin.coroutines.flow.state.mapState
 import org.hnau.commons.kotlin.coroutines.flow.state.mapWithScope
 import org.hnau.commons.kotlin.coroutines.flow.state.mutable.toMutableStateFlowAsInitial
+import kotlinx.serialization.UseSerializers
 import org.hnau.pinfin.data.AccountConfig
 import org.hnau.pinfin.data.AccountId
 import org.hnau.pinfin.data.Hue
 import org.hnau.pinfin.model.utils.budget.repository.BudgetRepository
 import org.hnau.pinfin.model.utils.budget.state.AccountInfo
+import org.hnau.commons.kotlin.serialization.MutableStateFlowSerializer
 import org.hnau.pinfin.model.utils.icons.IconVariant
 import org.hnau.pinfin.model.utils.icons.icon
 
