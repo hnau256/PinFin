@@ -7,6 +7,7 @@ import org.hnau.pinfin.data.CategoryConfig
 import org.hnau.pinfin.data.CategoryId
 import org.hnau.pinfin.data.Hue
 import org.hnau.pinfin.model.utils.icons.IconVariant
+import org.hnau.pinfin.model.utils.icons.icon
 import org.hnau.pinfin.model.utils.icons.variant
 import org.hnau.pinfin.model.utils.modelHueToHue
 import org.hnau.commons.app.model.theme.color.Hue as ModelHue
@@ -27,10 +28,18 @@ data class CategoryInfo(
 
     operator fun plus(
         config: CategoryConfig,
-    ) = CategoryInfo(
+    ): CategoryInfo = CategoryInfo(
         title = config.title ?: title,
         hue = config.hue ?: hue,
         icon = config.icon?.variant ?: icon,
+    )
+
+    operator fun minus(
+        other: CategoryInfo,
+    ): CategoryConfig = CategoryConfig(
+        title = title.takeIf { it != other.title },
+        hue = hue.takeIf { it != other.hue },
+        icon = icon.takeIf { it != other.icon }?.icon,
     )
 
     companion object {

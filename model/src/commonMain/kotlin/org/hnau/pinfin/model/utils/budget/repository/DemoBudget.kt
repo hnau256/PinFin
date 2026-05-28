@@ -16,6 +16,7 @@ import org.hnau.pinfin.data.BudgetConfig
 import org.hnau.pinfin.data.BudgetId
 import org.hnau.pinfin.data.CategoryId
 import org.hnau.pinfin.data.Comment
+import org.hnau.pinfin.data.Currency
 import org.hnau.pinfin.data.Record
 import org.hnau.pinfin.data.Transaction
 import org.hnau.pinfin.data.UpdateType
@@ -95,6 +96,8 @@ object DemoBudget {
                         UpdateType.Config(
                             BudgetConfig(
                                 title = "Demo бюджет",
+                                currency = null,
+                                sync = BudgetConfig.Sync.empty,
                             )
                         )
                     )

@@ -8,7 +8,6 @@ import kotlinx.coroutines.flow.stateIn
 import org.hnau.pinfin.data.BudgetConfig
 import org.hnau.pinfin.data.BudgetId
 import org.hnau.pinfin.data.UpdateType
-import org.hnau.pinfin.model.utils.budget.state.BudgetInfo
 import org.hnau.pinfin.model.utils.budget.state.BudgetState
 import org.hnau.pinfin.model.utils.budget.state.prototype.BudgetStatePrototype
 import org.hnau.pinfin.model.utils.budget.state.prototype.toBudgetState
@@ -18,7 +17,6 @@ import org.hnau.upchain.core.repository.upchain.UpchainRepository
 import org.hnau.upchain.core.repository.upchain.addUpdate
 
 class BudgetRepository(
-    scope: CoroutineScope,
     val state: StateFlow<BudgetState>,
     val upchainRepository: UpchainRepository,
     val remove: suspend () -> Unit,
@@ -35,6 +33,7 @@ class BudgetRepository(
     )
 
     val accounts: BudgetRepositoryAccountsDelegate = BudgetRepositoryAccountsDelegate(
+        state = state,
         addUpdate = ::applyUpdate,
     )
 
@@ -43,12 +42,13 @@ class BudgetRepository(
     ) {
         val info = state.value.info
         val newInfo = info + config
-        if (info == newInfo) {
+        val delta = newInfo - info
+        if (delta == BudgetConfig.empty) {
             return
         }
         applyUpdate(
             update = UpdateType.Config(
-                config = config,
+                config = delta,
             )
         )
     }
@@ -86,7 +86,6 @@ class BudgetRepository(
                 }
                 .stateIn(scope)
             return BudgetRepository(
-                scope = scope,
                 state = state,
                 upchainRepository = upchainRepository,
                 remove = remove,

@@ -6,17 +6,17 @@ import org.hnau.upchain.sync.http.HttpScheme
 
 @Serializable
 data class BudgetConfig(
-    val title: String? = null,
-    val currency: Currency? = null,
-    val sync: Sync = Sync.empty,
+    val title: String?,
+    val currency: Currency?,
+    val sync: Sync,
 ) {
 
     @Serializable
     data class Sync(
-        val scheme: HttpScheme? = null,
-        val host: ServerHost? = null,
-        val onLaunch: Boolean? = null,
-        val onUpdate: Boolean? = null,
+        val scheme: HttpScheme?,
+        val host: ServerHost?,
+        val onLaunch: Boolean?,
+        val onUpdate: Boolean?,
     ) {
 
         operator fun plus(
@@ -30,7 +30,12 @@ data class BudgetConfig(
 
         companion object {
 
-            val empty = Sync()
+            val empty = Sync(
+                scheme = null,
+                host = null,
+                onLaunch = null,
+                onUpdate = null,
+            )
         }
     }
 
@@ -45,7 +50,11 @@ data class BudgetConfig(
 
     companion object {
 
-        val empty = BudgetConfig()
+        val empty = BudgetConfig(
+            title = null,
+            currency = null,
+            sync = Sync.empty,
+        )
     }
 }
 

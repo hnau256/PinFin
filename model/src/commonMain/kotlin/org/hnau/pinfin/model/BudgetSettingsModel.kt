@@ -210,6 +210,8 @@ class BudgetSettingsModel(
                         sync = BudgetConfig.Sync(
                             scheme = budgetInfo.sync.scheme,
                             host = budgetInfo.sync.host,
+                            onLaunch = budgetInfo.sync.onLaunch,
+                            onUpdate = budgetInfo.sync.onUpdate,
                         )
                     )
                 )

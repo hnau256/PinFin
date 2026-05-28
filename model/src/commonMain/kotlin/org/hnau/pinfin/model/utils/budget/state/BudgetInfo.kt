@@ -32,6 +32,15 @@ data class BudgetInfo(
             onUpdate = config.onUpdate ?: onUpdate,
         )
 
+        operator fun minus(
+            other: Sync,
+        ): BudgetConfig.Sync = BudgetConfig.Sync(
+            scheme = scheme.takeIf { it != other.scheme },
+            host = host.takeIf { it != other.host },
+            onLaunch = onLaunch.takeIf { it != other.onLaunch },
+            onUpdate = onUpdate.takeIf { it != other.onUpdate },
+        )
+
         companion object {
 
             fun create(
@@ -53,6 +62,14 @@ data class BudgetInfo(
         title = config.title ?: title,
         currency = config.currency ?: currency,
         sync = sync + config.sync,
+    )
+
+    operator fun minus(
+        other: BudgetInfo,
+    ): BudgetConfig = BudgetConfig(
+        title = title.takeIf { it != other.title },
+        currency = currency.takeIf { it != other.currency },
+        sync = sync - other.sync,
     )
 
     companion object {

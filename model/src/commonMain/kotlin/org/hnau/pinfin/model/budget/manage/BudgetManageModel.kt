@@ -12,18 +12,11 @@ import kotlinx.serialization.Serializable
 import kotlinx.serialization.UseSerializers
 import org.hnau.commons.app.model.EditingString
 import org.hnau.commons.app.model.goback.GoBackHandler
-import org.hnau.commons.app.model.toEditingString
+import org.hnau.commons.app.model.goback.NeverGoBackHandler
 import org.hnau.commons.gen.pipe.annotations.Pipe
-import org.hnau.commons.kotlin.coroutines.ActionOrElse
-import org.hnau.commons.kotlin.coroutines.CancelOrInProgress
 import org.hnau.commons.kotlin.coroutines.InProgressRegistry
-import org.hnau.commons.kotlin.coroutines.actionOrCancelIfExecuting
-import org.hnau.commons.kotlin.coroutines.flow.state.flatMapWithScope
-import org.hnau.commons.kotlin.coroutines.flow.state.mapState
 import org.hnau.commons.kotlin.coroutines.flow.state.mutable.toMutableStateFlowAsInitial
-import org.hnau.commons.kotlin.foldNullable
 import org.hnau.commons.kotlin.serialization.MutableStateFlowSerializer
-import org.hnau.pinfin.data.BudgetConfig
 import org.hnau.pinfin.data.BudgetId
 import org.hnau.pinfin.model.budgetstack.BudgetStackOpener
 import org.hnau.pinfin.model.manage.BudgetsListOpener
@@ -104,73 +97,6 @@ class BudgetManageModel(
         }
     }
 
-    sealed interface NameOrEdit {
-
-        data class Name(
-            val name: String,
-            val edit: () -> Unit,
-        ) : NameOrEdit
-
-        data class Edit(
-            val input: MutableStateFlow<EditingString>,
-            val save: StateFlow<ActionOrElse<Unit, CancelOrInProgress.Cancel>>,
-            val cancel: () -> Unit,
-        ) : NameOrEdit
-    }
-
-    val nameOrEdit: StateFlow<NameOrEdit> = skeleton
-        .editName
-        .flatMapWithScope(scope) { scope, editNameSkeletonOrNull ->
-            editNameSkeletonOrNull.foldNullable(
-                ifNull = {
-                    dependencies
-                        .repository
-                        .state
-                        .mapState(scope) {
-                            NameOrEdit.Name(
-                                name = it.info.title,
-                                edit = {
-                                    skeleton.editName.value = dependencies
-                                        .repository
-                                        .state
-                                        .value
-                                        .info
-                                        .title
-                                        .toEditingString()
-                                        .toMutableStateFlowAsInitial()
-                                }
-                            )
-                        }
-
-                },
-                ifNotNull = { nameEditStringState ->
-                    val cancel = { skeleton.editName.value = null }
-                    NameOrEdit
-                        .Edit(
-                            input = nameEditStringState,
-                            save = actionOrCancelIfExecuting(scope) {
-                                inProgressRegistry.executeRegistered {
-                                    dependencies
-                                        .repository
-                                        .config(
-                                            config = BudgetConfig(
-                                                title = nameEditStringState.value.text.trim()
-                                            )
-                                        )
-                                    cancel()
-                                }
-                            },
-                            cancel = cancel,
-                        )
-                        .toMutableStateFlowAsInitial()
-                }
-            )
-        }
-
-    val goBackHandler: GoBackHandler = nameOrEdit.mapState(scope) { nameOrEditModel ->
-        when (nameOrEditModel) {
-            is NameOrEdit.Edit -> nameOrEditModel.cancel
-            is NameOrEdit.Name -> null
-        }
-    }
+    val goBackHandler: GoBackHandler
+        get() = NeverGoBackHandler
 }

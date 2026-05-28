@@ -81,7 +81,6 @@ class BudgetManageProjector(
                 onClick = model::openBudgetsList,
                 icon = Icons.AutoMirrored.Filled.MenuOpen,
             )
-            name()
             button(
                 id = "RemoveBudget",
                 title = dependencies.localization.removeBudget,
@@ -127,107 +126,6 @@ class BudgetManageProjector(
                     )
                 }
             )
-        }
-    }
-
-    @Composable
-    private fun Name(
-        name: BudgetManageModel.NameOrEdit.Name,
-    ) {
-        ListItem(
-            overlineContent = { Text(dependencies.localization.budgetName) },
-            headlineContent = { Text(name.name) },
-            trailingContent = {
-                IconButton(
-                    onClick = name.edit,
-                ) {
-                    Icon(Icons.Filled.Edit)
-                }
-            },
-            leadingContent = { Icon(Icons.Filled.Badge) },
-        )
-    }
-
-    @Composable
-    private fun Edit(
-        edit: BudgetManageModel.NameOrEdit.Edit,
-    ) {
-        ListItem(
-            headlineContent = {
-                val focusRequester = remember { FocusRequester() }
-                TextInput(
-                    maxLines = 1,
-                    modifier = Modifier.fillMaxWidth().focusRequester(focusRequester),
-                    value = edit.input,
-                    keyboardActions = KeyboardActions { edit.save.value.onClick?.invoke() },
-                    keyboardOptions = KeyboardOptions(
-                        imeAction = ImeAction.Done,
-                        capitalization = KeyboardCapitalization.Sentences,
-                    )
-                )
-                LaunchedEffect(Unit) { focusRequester.requestFocus() }
-            },
-            leadingContent = {
-                IconButton(
-                    onClick = edit.cancel,
-                ) {
-                    Icon(Icons.Filled.Clear)
-                }
-            },
-            trailingContent = {
-
-                edit
-                    .save
-                    .collectAsState()
-                    .value
-                    .onClick
-                    .StateContent(
-                        transitionSpec = TransitionSpec.crossfade(),
-                        label = "SaveBudgetNameOrSaving",
-                        contentKey = { it != null },
-                    ) { saveOrNull ->
-                        saveOrNull.foldNullable(
-                            ifNull = { CircularProgressIndicator() },
-                            ifNotNull = { save ->
-                                IconButton(
-                                    onClick = save,
-                                ) {
-                                    Icon(Icons.Filled.Done)
-                                }
-                            }
-                        )
-                    }
-            },
-        )
-    }
-
-    private fun LazyListScope.name() {
-        item(
-            key = "name",
-        ) {
-            model
-                .nameOrEdit
-                .collectAsState()
-                .value
-                .StateContent(
-                    modifier = Modifier.fillMaxWidth(),
-                    transitionSpec = TransitionSpec.remember(
-                        showAlignment = Alignment.BottomCenter,
-                        hideAlignment = Alignment.TopCenter,
-                    ),
-                    label = "BudgetNameOrEdit",
-                    contentKey = {
-                        when (it) {
-                            is BudgetManageModel.NameOrEdit.Name -> 0
-                            is BudgetManageModel.NameOrEdit.Edit -> 1
-                        }
-                    },
-                ) { nameOrEdit ->
-                    when (nameOrEdit) {
-                        is BudgetManageModel.NameOrEdit.Name -> Name(nameOrEdit)
-                        is BudgetManageModel.NameOrEdit.Edit -> Edit(nameOrEdit)
-                    }
-                }
         }
     }
 

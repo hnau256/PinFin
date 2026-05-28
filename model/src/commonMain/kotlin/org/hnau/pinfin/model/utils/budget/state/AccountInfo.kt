@@ -6,9 +6,9 @@ import org.hnau.commons.kotlin.mapper.Mapper
 import org.hnau.pinfin.data.AccountConfig
 import org.hnau.pinfin.data.AccountId
 import org.hnau.pinfin.data.Amount
-import org.hnau.pinfin.data.CategoryConfig
 import org.hnau.pinfin.data.Hue
 import org.hnau.pinfin.model.utils.icons.IconVariant
+import org.hnau.pinfin.model.utils.icons.icon
 import org.hnau.pinfin.model.utils.icons.variant
 import org.hnau.pinfin.model.utils.modelHueToHue
 import org.hnau.commons.app.model.theme.color.Hue as ModelHue
@@ -39,6 +39,15 @@ data class AccountInfo(
         hideIfAmountIsZero = config.hideIfAmountIsZero ?: hideIfAmountIsZero,
         hue = config.hue ?: hue,
         icon = config.icon?.variant ?: icon,
+    )
+
+    operator fun minus(
+        other: AccountInfo,
+    ): AccountConfig = AccountConfig(
+        title = title.takeIf { it != other.title },
+        hideIfAmountIsZero = hideIfAmountIsZero.takeIf { it != other.hideIfAmountIsZero },
+        hue = hue.takeIf { it != other.hue },
+        icon = icon.takeIf { it != other.icon }?.icon,
     )
 
     companion object {
