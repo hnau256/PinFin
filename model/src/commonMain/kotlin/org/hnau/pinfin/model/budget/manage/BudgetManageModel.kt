@@ -61,10 +61,10 @@ class BudgetManageModel(
             .openCategories()
     }
 
-    fun openConfig() {
+    fun openSettings() {
         dependencies
             .budgetStackOpener
-            .openConfig()
+            .openSettings()
     }
 
     val removeDialogVisible: MutableStateFlow<Boolean>

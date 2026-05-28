@@ -24,7 +24,7 @@ interface BudgetStackOpener {
         info: AccountInfo,
     )
 
-    fun openConfig()
+    fun openSettings()
 
     fun openCategories()
 

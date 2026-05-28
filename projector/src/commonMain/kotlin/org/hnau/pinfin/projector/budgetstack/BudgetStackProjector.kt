@@ -41,7 +41,7 @@ class BudgetStackProjector(
 
         fun category(): CategoryStackProjector.Dependencies
 
-        fun config(): BudgetSettingsProjector.Dependencies
+        fun settings(): BudgetSettingsProjector.Dependencies
     }
 
     @SealUp(
@@ -72,7 +72,7 @@ class BudgetStackProjector(
             ),
             Variant(
                 type = BudgetSettingsProjector::class,
-                identifier = "config",
+                identifier = "settings",
             ),
         ],
         wrappedValuePropertyName = "projector",
@@ -136,11 +136,11 @@ class BudgetStackProjector(
                             dependencies = dependencies.category(),
                         )
                     },
-                    ifConfig = { syncModel ->
-                        Element.config(
+                    ifSettings = { settingsModel ->
+                        Element.settings(
                             scope = scope,
-                            model = syncModel,
-                            dependencies = dependencies.config(),
+                            model = settingsModel,
+                            dependencies = dependencies.settings(),
                         )
                     }
                 )

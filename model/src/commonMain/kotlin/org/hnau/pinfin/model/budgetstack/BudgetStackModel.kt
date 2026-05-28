@@ -50,7 +50,7 @@ class BudgetStackModel(
 
         fun category(): CategoryStackModel.Dependencies
 
-        fun config(): BudgetSettingsModel.Dependencies
+        fun settings(): BudgetSettingsModel.Dependencies
 
         fun opener(): BudgetStackOpenerImpl.Dependencies
 
@@ -102,7 +102,7 @@ class BudgetStackModel(
             ),
             Variant(
                 type = BudgetSettingsModel::class,
-                identifier = "config",
+                identifier = "settings",
             ),
         ],
         wrappedValuePropertyName = "model",
@@ -143,7 +143,7 @@ class BudgetStackModel(
             ),
             Variant(
                 type = BudgetSettingsModel.Skeleton::class,
-                identifier = "config",
+                identifier = "settings",
             ),
         ],
         wrappedValuePropertyName = "skeleton",
@@ -232,11 +232,11 @@ class BudgetStackModel(
                 onReady = { this@BudgetStackModel.skeleton.stack.tryDropLast() },
             )
         },
-        ifConfig = { configSkeleton ->
-            Element.config(
+        ifSettings = { settingsSkeleton ->
+            Element.settings(
                 scope = scope,
-                skeleton = configSkeleton,
-                dependencies = dependencies.config(),
+                skeleton = settingsSkeleton,
+                dependencies = dependencies.settings(),
                 close = { this@BudgetStackModel.skeleton.stack.tryDropLast() },
             )
         },

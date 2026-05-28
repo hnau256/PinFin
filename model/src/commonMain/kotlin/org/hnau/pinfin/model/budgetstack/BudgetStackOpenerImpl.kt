@@ -70,9 +70,9 @@ class BudgetStackOpenerImpl(
         )
     }
 
-    override fun openConfig() {
+    override fun openSettings() {
         open(
-            BudgetStackModel.ElementSkeleton.config(
+            BudgetStackModel.ElementSkeleton.settings(
                 BudgetSettingsModel.Skeleton.create(
                     info = dependencies
                         .budgetRepository

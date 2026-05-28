@@ -17,6 +17,7 @@ import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Done
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Interests
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.Sync
 import androidx.compose.material3.BasicAlertDialog
 import androidx.compose.material3.CircularProgressIndicator
@@ -94,10 +95,10 @@ class BudgetManageProjector(
                 icon = Icons.Filled.Interests,
             )
             button(
-                id = "Config",
+                id = "Settings",
                 title = dependencies.localization.settings,
-                onClick = model::openConfig,
-                icon = Icons.Filled.Sync,
+                onClick = model::openSettings,
+                icon = Icons.Filled.Settings,
             )
         }
         RemoveDialog()
