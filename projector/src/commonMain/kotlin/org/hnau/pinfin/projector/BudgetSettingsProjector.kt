@@ -1,4 +1,4 @@
-package org.hnau.pinfin.projector.budgetsettings
+package org.hnau.pinfin.projector
 
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
@@ -30,9 +30,8 @@ import org.hnau.commons.app.projector.utils.Orientation
 import org.hnau.commons.app.projector.utils.ProjectorSavableDelegate
 import org.hnau.commons.app.projector.utils.TitleOrIcon
 import org.hnau.commons.gen.pipe.annotations.Pipe
-import org.hnau.pinfin.model.bidgetsettings.BudgetSettingsModel
+import org.hnau.pinfin.model.BudgetSettingsModel
 import org.hnau.pinfin.model.utils.budget.state.BudgetInfo
-import org.hnau.pinfin.projector.Localization
 
 class BudgetSettingsProjector(
     private val scope: CoroutineScope,
@@ -50,8 +49,8 @@ class BudgetSettingsProjector(
     private val mainTitle: InputProjector = model
         .mainTitle
         .toInputProjectorPrototype(
-            keyboardType = KeyboardType.Text,
-            imeAction = ImeAction.Next,
+            keyboardType = KeyboardType.Companion.Text,
+            imeAction = ImeAction.Companion.Next,
         )
         .createInputProjector(
             scope = scope,
@@ -64,8 +63,8 @@ class BudgetSettingsProjector(
     private val mainMantissaLength: InputProjector = model
         .mainMantissaLength
         .toInputProjectorPrototype(
-            keyboardType = KeyboardType.Number,
-            imeAction = ImeAction.Next,
+            keyboardType = KeyboardType.Companion.Number,
+            imeAction = ImeAction.Companion.Next,
         )
         .createInputProjector(
             scope = scope,
@@ -91,8 +90,8 @@ class BudgetSettingsProjector(
     private val syncHost: InputProjector = model
         .syncHost
         .toInputProjectorPrototype(
-            keyboardType = KeyboardType.Uri,
-            imeAction = ImeAction.Done,
+            keyboardType = KeyboardType.Companion.Uri,
+            imeAction = ImeAction.Companion.Done,
         )
         .createInputProjector(
             scope = scope,
@@ -127,14 +126,14 @@ class BudgetSettingsProjector(
             title = { SText(dependencies.localization.budgetConfig) },
         ) { contentPadding ->
             SContentWithActions(
-                modifier = Modifier.padding(contentPadding),
+                modifier = Modifier.Companion.padding(contentPadding),
                 content = {
                     SElements {
                         STable(
                             orientation = Orientation.Vertical,
                         ) {
                             SCellBox(
-                                contentAlignment = Alignment.CenterStart,
+                                contentAlignment = Alignment.Companion.CenterStart,
                             ) {
                                 SText(dependencies.localization.budgetConfigMain)
                             }
@@ -145,7 +144,7 @@ class BudgetSettingsProjector(
                             orientation = Orientation.Vertical,
                         ) {
                             SCellBox(
-                                contentAlignment = Alignment.CenterStart,
+                                contentAlignment = Alignment.Companion.CenterStart,
                             ) {
                                 SText(dependencies.localization.budgetConfigSync)
                             }

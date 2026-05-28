@@ -1,4 +1,4 @@
-package org.hnau.pinfin.model.loadbudgets
+package org.hnau.pinfin.model
 
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.async

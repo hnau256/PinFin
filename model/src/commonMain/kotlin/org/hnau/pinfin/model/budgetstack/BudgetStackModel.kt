@@ -24,7 +24,7 @@ import org.hnau.commons.kotlin.serialization.MutableStateFlowSerializer
 import org.hnau.pinfin.model.CategoriesModel
 import org.hnau.pinfin.model.TransactionsModel
 import org.hnau.pinfin.model.accountstack.AccountStackModel
-import org.hnau.pinfin.model.bidgetsettings.BudgetSettingsModel
+import org.hnau.pinfin.model.BudgetSettingsModel
 import org.hnau.pinfin.model.budget.BudgetModel
 import org.hnau.pinfin.model.budget.analytics.tab.graph.TransactionsOpener
 import org.hnau.pinfin.model.categorystack.CategoryStackModel

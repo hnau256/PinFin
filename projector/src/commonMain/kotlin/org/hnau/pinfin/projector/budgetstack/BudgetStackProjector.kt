@@ -16,7 +16,7 @@ import org.hnau.pinfin.projector.CategoriesProjector
 import org.hnau.pinfin.projector.accountstack.AccountStackProjector
 import org.hnau.pinfin.projector.budget.BudgetProjector
 import org.hnau.pinfin.projector.budget.transactions.TransactionsProjector
-import org.hnau.pinfin.projector.budgetsettings.BudgetSettingsProjector
+import org.hnau.pinfin.projector.BudgetSettingsProjector
 import org.hnau.pinfin.projector.categorystack.CategoryStackProjector
 import org.hnau.pinfin.projector.transaction.TransactionProjector
 

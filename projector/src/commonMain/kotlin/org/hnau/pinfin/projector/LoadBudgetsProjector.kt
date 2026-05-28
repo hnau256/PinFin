@@ -14,7 +14,7 @@ import org.hnau.commons.gen.pipe.annotations.Pipe
 import org.hnau.commons.kotlin.Loadable
 import org.hnau.commons.kotlin.coroutines.flow.state.mapWithScope
 import org.hnau.commons.kotlin.map
-import org.hnau.pinfin.model.loadbudgets.LoadBudgetsModel
+import org.hnau.pinfin.model.LoadBudgetsModel
 import org.hnau.pinfin.projector.manage.ManageProjector
 
 class LoadBudgetsProjector(

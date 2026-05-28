@@ -1,4 +1,4 @@
-package org.hnau.pinfin.model.bidgetsettings
+package org.hnau.pinfin.model
 
 import arrow.core.left
 import arrow.core.right
@@ -184,7 +184,7 @@ class BudgetSettingsModel(
 
         private val mainTitleInputFactory: InputModelFactory<String, String, Unit, InputType.Edit> =
             InputType.Edit.toInputModelFactory(
-                ParsingMapper.createValidator { string ->
+                ParsingMapper.Companion.createValidator { string ->
                     string
                         .takeIf(String::isNotEmpty)
                         .foldNullable(
@@ -222,7 +222,7 @@ class BudgetSettingsModel(
                 ParsingMapper(
                     encode = ServerHost::host,
                     parse = { input ->
-                        ServerHost
+                        ServerHost.Companion
                             .createOrNull(input)
                             .foldNullable(
                                 ifNull = { Unit.left() },
