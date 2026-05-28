@@ -100,9 +100,8 @@ class CategoryModel(
                     val id = CategoryId(title)
                     KeyValue(
                         key = id,
-                        value = CategoryInfo(
+                        value = CategoryInfo.createDefault(
                             id = id,
-                            config = null,
                         )
                     )
                 }

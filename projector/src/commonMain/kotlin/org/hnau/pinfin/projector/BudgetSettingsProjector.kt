@@ -2,10 +2,15 @@ package org.hnau.pinfin.projector
 
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.Label
+import androidx.compose.material.icons.automirrored.filled.PlaylistAdd
 import androidx.compose.material.icons.filled.Cloud
 import androidx.compose.material.icons.filled.ExposureZero
+import androidx.compose.material.icons.filled.PlaylistAdd
+import androidx.compose.material.icons.filled.RocketLaunch
 import androidx.compose.material.icons.filled.Save
 import androidx.compose.material.icons.filled.Security
 import androidx.compose.runtime.Composable
@@ -49,8 +54,8 @@ class BudgetSettingsProjector(
     private val mainTitle: InputProjector = model
         .mainTitle
         .toInputProjectorPrototype(
-            keyboardType = KeyboardType.Companion.Text,
-            imeAction = ImeAction.Companion.Next,
+            keyboardType = KeyboardType.Text,
+            imeAction = ImeAction.Next,
         )
         .createInputProjector(
             scope = scope,
@@ -63,8 +68,8 @@ class BudgetSettingsProjector(
     private val mainMantissaLength: InputProjector = model
         .mainMantissaLength
         .toInputProjectorPrototype(
-            keyboardType = KeyboardType.Companion.Number,
-            imeAction = ImeAction.Companion.Next,
+            keyboardType = KeyboardType.Number,
+            imeAction = ImeAction.Next,
         )
         .createInputProjector(
             scope = scope,
@@ -90,8 +95,8 @@ class BudgetSettingsProjector(
     private val syncHost: InputProjector = model
         .syncHost
         .toInputProjectorPrototype(
-            keyboardType = KeyboardType.Companion.Uri,
-            imeAction = ImeAction.Companion.Done,
+            keyboardType = KeyboardType.Uri,
+            imeAction = ImeAction.Done,
         )
         .createInputProjector(
             scope = scope,
@@ -100,6 +105,24 @@ class BudgetSettingsProjector(
         ) { _, _ ->
             dependencies.localization.hostIsIncorrect
         }
+
+    private val syncOnLaunch: InputProjector = model
+        .syncOnLaunch
+        .toInputProjectorPrototype()
+        .createInputProjector(
+            scope = scope,
+            title = dependencies.localization.syncOnLaunch,
+            icon = Drawable.Vector(Icons.Default.RocketLaunch),
+        )
+
+    private val syncOnUpdate: InputProjector = model
+        .syncOnUpdate
+        .toInputProjectorPrototype()
+        .createInputProjector(
+            scope = scope,
+            title = dependencies.localization.syncOnUpdate,
+            icon = Drawable.Vector(Icons.AutoMirrored.Filled.PlaylistAdd),
+        )
 
     private val savableDelegate: ProjectorSavableDelegate<BudgetInfo> = ProjectorSavableDelegate(
         scope = scope,
@@ -126,14 +149,17 @@ class BudgetSettingsProjector(
             title = { SText(dependencies.localization.budgetConfig) },
         ) { contentPadding ->
             SContentWithActions(
-                modifier = Modifier.Companion.padding(contentPadding),
+                modifier = Modifier.padding(contentPadding),
                 content = {
-                    SElements {
+                    SElements (
+                        /*modifier = Modifier
+                            .verticalScroll(rememberScrollState())*/
+                    ){
                         STable(
                             orientation = Orientation.Vertical,
                         ) {
                             SCellBox(
-                                contentAlignment = Alignment.Companion.CenterStart,
+                                contentAlignment = Alignment.CenterStart,
                             ) {
                                 SText(dependencies.localization.budgetConfigMain)
                             }
@@ -144,12 +170,14 @@ class BudgetSettingsProjector(
                             orientation = Orientation.Vertical,
                         ) {
                             SCellBox(
-                                contentAlignment = Alignment.Companion.CenterStart,
+                                contentAlignment = Alignment.CenterStart,
                             ) {
                                 SText(dependencies.localization.budgetConfigSync)
                             }
                             with(syncScheme) { Content() }
                             with(syncHost) { Content() }
+                            with(syncOnLaunch) { Content() }
+                            with(syncOnUpdate) { Content() }
                         }
                     }
 

@@ -1,10 +1,12 @@
 package org.hnau.pinfin.model.utils.budget.state
 
 import kotlinx.serialization.Serializable
+import org.hnau.commons.kotlin.foldNullable
 import org.hnau.commons.kotlin.mapper.Mapper
 import org.hnau.pinfin.data.AccountConfig
 import org.hnau.pinfin.data.AccountId
 import org.hnau.pinfin.data.Amount
+import org.hnau.pinfin.data.CategoryConfig
 import org.hnau.pinfin.data.Hue
 import org.hnau.pinfin.model.utils.icons.IconVariant
 import org.hnau.pinfin.model.utils.icons.variant
@@ -20,20 +22,6 @@ data class AccountInfo(
     val icon: IconVariant?,
 ) : Comparable<AccountInfo> {
 
-    constructor(
-        id: AccountId,
-        amount: Amount,
-        config: AccountConfig?,
-    ) : this(
-        amount = amount,
-        title = config?.title ?: id.id,
-        hideIfAmountIsZero = config?.hideIfAmountIsZero == true,
-        hue = config?.hue ?: ModelHue
-            .calcDefault(id.id.hashCode())
-            .let(Mapper.modelHueToHue.direct),
-        icon = config?.icon?.variant,
-    )
-
     val visible: Boolean
         get() = !hideIfAmountIsZero || amount != Amount.zero
 
@@ -42,4 +30,44 @@ data class AccountInfo(
     ): Int = title.compareTo(
         other = other.title,
     )
+
+    operator fun plus(
+        config: AccountConfig,
+    ): AccountInfo = AccountInfo(
+        amount = amount,
+        title = config.title ?: title,
+        hideIfAmountIsZero = config.hideIfAmountIsZero ?: hideIfAmountIsZero,
+        hue = config.hue ?: hue,
+        icon = config.icon?.variant ?: icon,
+    )
+
+    companion object {
+
+        fun create(
+            id: AccountId,
+            config: AccountConfig?,
+            amount: Amount,
+        ): AccountInfo = createDefault(
+            id = id,
+            amount = amount,
+        ).let { default ->
+            config.foldNullable(
+                ifNull = { default },
+                ifNotNull = { configNotNull -> default + configNotNull },
+            )
+        }
+
+        fun createDefault(
+            id: AccountId,
+            amount: Amount,
+        ): AccountInfo = AccountInfo(
+            amount = amount,
+            title = id.id,
+            hideIfAmountIsZero = true,
+            hue = ModelHue
+                .calcDefault(id.id.hashCode())
+                .let(Mapper.modelHueToHue.direct),
+            icon = null,
+        )
+    }
 }

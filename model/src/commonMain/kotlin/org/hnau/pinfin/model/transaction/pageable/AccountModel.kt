@@ -146,9 +146,8 @@ class AccountModel(
             direct = { it.value.title },
             reverse = { title ->
                 val id = AccountId(title)
-                val accountInfo = AccountInfo(
+                val accountInfo = AccountInfo.createDefault(
                     id = id,
-                    config = null,
                     amount = Amount.zero,
                 )
                 KeyValue(id, accountInfo)

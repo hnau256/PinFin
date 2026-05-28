@@ -31,7 +31,7 @@ suspend fun BudgetStatePrototype.toBudgetState(
     fun useCategory(
         id: CategoryId,
     ) {
-        categories[id] = CategoryInfo(
+        categories[id] = CategoryInfo.create(
             id = id,
             config = categoriesConfigs[id],
         )
@@ -43,7 +43,7 @@ suspend fun BudgetStatePrototype.toBudgetState(
     ) {
         accounts[id] = accounts
             .getOrElse(id) {
-                AccountInfo(
+                AccountInfo.create(
                     id = id,
                     amount = Amount.zero,
                     config = accountsConfigs[id],

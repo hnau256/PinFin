@@ -1,6 +1,7 @@
 package org.hnau.pinfin.model
 
 import arrow.core.left
+import arrow.core.plus
 import arrow.core.right
 import arrow.core.toNonEmptyListOrThrow
 import kotlinx.coroutines.CoroutineScope
@@ -75,6 +76,8 @@ class BudgetSettingsModel(
         data class Sync(
             val scheme: InputSkeleton<HttpScheme, HttpScheme>,
             val host: InputSkeleton<String, ServerHost>,
+            val onLaunch: InputSkeleton<Boolean, Boolean>,
+            val onUpdate: InputSkeleton<Boolean, Boolean>,
         ) {
 
             companion object {
@@ -88,6 +91,14 @@ class BudgetSettingsModel(
                     ),
                     host = syncHostInputFactory.createSkeleton(
                         value = info.host,
+                        useValueAsInitial = true,
+                    ),
+                    onLaunch = syncOnLaunchInputFactory.createSkeleton(
+                        value = info.onLaunch,
+                        useValueAsInitial = true,
+                    ),
+                    onUpdate = syncOnUpdateInputFactory.createSkeleton(
+                        value = info.onUpdate,
                         useValueAsInitial = true,
                     ),
                 )
@@ -133,6 +144,18 @@ class BudgetSettingsModel(
             skeleton = skeleton.sync.host,
         )
 
+    val syncOnLaunch: InputModel<Boolean, Boolean, Nothing, InputType.Flag> =
+        syncOnLaunchInputFactory.createModel(
+            scope = scope,
+            skeleton = skeleton.sync.onLaunch,
+        )
+
+    val syncOnUpdate: InputModel<Boolean, Boolean, Nothing, InputType.Flag> =
+        syncOnUpdateInputFactory.createModel(
+            scope = scope,
+            skeleton = skeleton.sync.onUpdate,
+        )
+
     val savableDelegate: ModelSavableDelegate<BudgetInfo> = ModelSavableDelegate(
         scope = scope,
         result = mainTitle.editable
@@ -147,8 +170,24 @@ class BudgetSettingsModel(
                     .combineEditableWith(
                         scope = scope,
                         other = syncHost.editable,
-                        combine = BudgetInfo::Sync,
+                        combine = ::Pair,
                     )
+                    .combineEditableWith(
+                        scope = scope,
+                        other = syncOnLaunch.editable,
+                        combine = { a, b -> a + b },
+                    )
+                    .combineEditableWith(
+                        scope = scope,
+                        other = syncOnUpdate.editable,
+                    ) { (scheme, host, syncOnLaunch), syncOnUpdate ->
+                        BudgetInfo.Sync(
+                            scheme = scheme,
+                            host = host,
+                            onLaunch = syncOnLaunch,
+                            onUpdate = syncOnUpdate,
+                        )
+                    }
             ) { (title, mantissaLength), sync ->
                 BudgetInfo(
                     title = title,
@@ -222,7 +261,7 @@ class BudgetSettingsModel(
                 ParsingMapper(
                     encode = ServerHost::host,
                     parse = { input ->
-                        ServerHost.Companion
+                        ServerHost
                             .createOrNull(input)
                             .foldNullable(
                                 ifNull = { Unit.left() },
@@ -231,5 +270,11 @@ class BudgetSettingsModel(
                     }
                 )
             )
+
+        private val syncOnLaunchInputFactory: InputModelFactory<Boolean, Boolean, Nothing, InputType.Flag> =
+            InputType.Flag.toInputModelFactory()
+
+        private val syncOnUpdateInputFactory: InputModelFactory<Boolean, Boolean, Nothing, InputType.Flag> =
+            InputType.Flag.toInputModelFactory()
     }
 }

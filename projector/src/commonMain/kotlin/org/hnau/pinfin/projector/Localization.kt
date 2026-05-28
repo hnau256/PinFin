@@ -86,6 +86,8 @@ data class Localization(
     val budgetConfigIsNotSaved: String = "Настройки бюджета не сохранены",
     val serverHost: String = "Адрес",
     val hostIsIncorrect: String = "Некорректный адрес",
+    val syncOnLaunch: String = "Синхронизировать при запуске",
+    val syncOnUpdate: String = "Синхронизировать при изменении",
     val httpScheme: String = "Протокол",
     val doConfig: String = "Настроить",
     val budgetConfigMain: String = "Основные",

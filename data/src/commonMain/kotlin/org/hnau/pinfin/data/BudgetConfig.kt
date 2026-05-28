@@ -15,6 +15,8 @@ data class BudgetConfig(
     data class Sync(
         val scheme: HttpScheme? = null,
         val host: ServerHost? = null,
+        val onLaunch: Boolean? = null,
+        val onUpdate: Boolean? = null,
     ) {
 
         operator fun plus(
@@ -22,6 +24,8 @@ data class BudgetConfig(
         ): Sync = Sync(
             scheme = other.scheme ?: scheme,
             host = other.host ?: host,
+            onLaunch = other.onLaunch ?: onLaunch,
+            onUpdate = other.onUpdate ?: onUpdate,
         )
 
         companion object {
