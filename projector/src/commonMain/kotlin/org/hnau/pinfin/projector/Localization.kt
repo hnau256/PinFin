@@ -1,10 +1,12 @@
 package org.hnau.pinfin.projector
 
 import androidx.compose.runtime.Immutable
+import org.hnau.pinfin.model.utils.budget.repository.DemoBudgetLocalization
 
 @Immutable
 data class Localization(
     val appName: String = "PinFin",
+    val demoBudgetLocalization: DemoBudgetLocalization = DemoBudgetLocalization.ru,
     val comment: String = "Название",
     val entry: String = "Транзакция",
     val transaction: String = "Транзакция",
