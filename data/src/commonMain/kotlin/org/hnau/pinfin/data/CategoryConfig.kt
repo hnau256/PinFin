@@ -4,9 +4,9 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class CategoryConfig(
-    val title: String?,
-    val hue: Hue?,
-    val icon: Icon?,
+    val title: String? = null,
+    val hue: Hue? = null,
+    val icon: Icon? = null,
 ) {
 
     operator fun plus(
@@ -19,11 +19,7 @@ data class CategoryConfig(
 
     companion object {
 
-        val empty = CategoryConfig(
-            title = null,
-            hue = null,
-            icon = null,
-        )
+        val empty = CategoryConfig()
     }
 }
 

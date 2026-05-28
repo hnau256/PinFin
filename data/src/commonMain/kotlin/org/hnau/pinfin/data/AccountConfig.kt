@@ -4,10 +4,10 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class AccountConfig(
-    val title: String?,
-    val hue: Hue?,
-    val hideIfAmountIsZero: Boolean?,
-    val icon: Icon?,
+    val title: String? = null,
+    val hue: Hue? = null,
+    val hideIfAmountIsZero: Boolean? = null,
+    val icon: Icon? = null,
 ) {
 
     operator fun plus(
@@ -21,11 +21,6 @@ data class AccountConfig(
 
     companion object {
 
-        val empty = AccountConfig(
-            title = null,
-            hue = null,
-            hideIfAmountIsZero = null,
-            icon = null
-        )
+        val empty = AccountConfig()
     }
 }
