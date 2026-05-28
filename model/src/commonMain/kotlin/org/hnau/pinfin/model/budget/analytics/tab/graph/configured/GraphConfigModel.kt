@@ -19,7 +19,6 @@ import org.hnau.commons.kotlin.getOrInit
 import org.hnau.commons.kotlin.map
 import org.hnau.commons.kotlin.mapper.Mapper
 import org.hnau.commons.kotlin.toAccessor
-import org.hnau.pinfin.data.Currency
 import org.hnau.pinfin.model.utils.analytics.AnalyticsEntry
 import org.hnau.pinfin.model.utils.analytics.AnalyticsPagesProvider
 import org.hnau.pinfin.model.utils.analytics.config.AnalyticsConfig
@@ -38,8 +37,6 @@ class GraphConfigModel(
 
     @Pipe
     interface Dependencies {
-
-        val currency: Currency
 
         val budgetRepository: BudgetRepository
 
@@ -71,7 +68,7 @@ class GraphConfigModel(
                         .transactions
                         .flatMap { idWithTransaction ->
                             idWithTransaction.value.toAnalyticsEntries(
-                                currency = dependencies.currency,
+                                currency = state.info.currency,
                             )
                         },
                 ),

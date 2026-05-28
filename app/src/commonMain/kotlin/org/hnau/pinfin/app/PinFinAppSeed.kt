@@ -27,7 +27,6 @@ fun createPinFinAppSeed(
                 budgetsStorageFactory = BudgetsStorage.Factory.files(
                     budgetsDir = (appFilesDir + "budgets").absolutePath,
                 ),
-                currency = dependencies.currency,
             ),
             skeleton = skeleton,
         )

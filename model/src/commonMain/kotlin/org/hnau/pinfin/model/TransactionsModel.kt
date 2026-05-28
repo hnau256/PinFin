@@ -13,6 +13,7 @@ import org.hnau.commons.kotlin.coroutines.Delayed
 import org.hnau.commons.kotlin.coroutines.flow.state.combineState
 import org.hnau.commons.kotlin.coroutines.flow.state.mapState
 import org.hnau.commons.kotlin.coroutines.mapStateDelayed
+import org.hnau.pinfin.data.Currency
 import org.hnau.pinfin.data.Transaction
 import org.hnau.pinfin.data.TransactionType
 import org.hnau.pinfin.model.budgetstack.BudgetStackOpener
@@ -27,6 +28,11 @@ class TransactionsModel(
     private val skeleton: Skeleton,
     private val dependencies: Dependencies,
 ) {
+
+    val currency: StateFlow<Currency> = dependencies
+        .budgetRepository
+        .state
+        .mapState(scope) { it.info.currency }
 
     @Pipe
     interface Dependencies {

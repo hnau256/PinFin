@@ -28,6 +28,7 @@ import org.hnau.commons.app.projector.utils.Icon
 import org.hnau.commons.app.projector.utils.Orientation
 import org.hnau.commons.app.projector.utils.horizontalDisplayPadding
 import org.hnau.pinfin.data.AmountDirection
+import org.hnau.pinfin.data.Currency
 import org.hnau.pinfin.model.utils.amount
 import org.hnau.pinfin.model.utils.budget.state.TransactionInfo
 import org.hnau.pinfin.projector.utils.AccountContent
@@ -39,6 +40,7 @@ import org.hnau.pinfin.projector.utils.CategoryContent
 @Composable
 fun TransactionInfo.Content(
     dependencies: TransactionsProjector.Dependencies,
+    currency: Currency,
     onClick: () -> Unit,
 ) {
     Table(
@@ -51,6 +53,7 @@ fun TransactionInfo.Content(
             CellContent(
                 modifier = modifier,
                 dependencies = dependencies,
+                currency = currency,
                 onClick = onClick,
                 shape = rememberCellShape(),
             )
@@ -63,6 +66,7 @@ fun TransactionInfo.CellContent(
     modifier: Modifier = Modifier,
     shape: Shape,
     dependencies: TransactionsProjector.Dependencies,
+    currency: Currency,
     onClick: () -> Unit,
 ) {
     Row(
@@ -99,7 +103,7 @@ fun TransactionInfo.CellContent(
         }
 
         AmountContent(
-            value = amount(dependencies.currency),
+            value = amount(currency),
             amountFormatter = dependencies.amountFormatter,
         )
     }

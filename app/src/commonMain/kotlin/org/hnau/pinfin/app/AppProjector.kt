@@ -9,7 +9,6 @@ import org.hnau.commons.app.model.theme.palette.SystemPalettes
 import org.hnau.commons.app.projector.app.AppProjector
 import org.hnau.commons.app.projector.fractal.context.FContext
 import org.hnau.commons.app.projector.fractal.context.LocalFContext
-import org.hnau.pinfin.data.Currency
 import org.hnau.pinfin.model.RootModel
 import org.hnau.pinfin.projector.Localization
 import org.hnau.pinfin.projector.RootProjector
@@ -28,7 +27,6 @@ fun createAppProjector(
             model = model,
             dependencies = RootProjector.Dependencies.impl(
                 localization = Localization.default,
-                currency = Currency.default, //TODO
             ),
         )
     },

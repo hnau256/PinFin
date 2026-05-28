@@ -18,7 +18,6 @@ import org.hnau.commons.app.model.app.AppFilesDirProvider
 import org.hnau.commons.app.model.app.DesktopApp
 import org.hnau.commons.app.model.theme.palette.SystemPalettes
 import org.hnau.commons.app.projector.uikit.utils.Dimens
-import org.hnau.pinfin.data.Currency
 
 @OptIn(InternalComposeApi::class, InternalComposeUiApi::class)
 fun main() = runBlocking {
@@ -28,9 +27,7 @@ fun main() = runBlocking {
     val app = DesktopApp(
         scope = this,
         seed = createPinFinAppSeed(
-            dependencies = PinFinAppDependencies.impl(
-                currency = Currency.default, //TODO
-            ),
+            dependencies = PinFinAppDependencies.impl(),
             appFilesDirProvider = AppFilesDirProvider(),
         ),
     )

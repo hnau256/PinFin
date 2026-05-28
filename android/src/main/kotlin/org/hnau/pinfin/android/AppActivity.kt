@@ -23,7 +23,6 @@ import org.hnau.pinfin.app.PinFinAppDependencies
 import org.hnau.pinfin.app.createAppProjector
 import org.hnau.pinfin.app.createPinFinAppSeed
 import org.hnau.pinfin.app.impl
-import org.hnau.pinfin.data.Currency
 import org.hnau.pinfin.model.RootModel
 
 class AppActivity : ComponentActivity() {
@@ -32,9 +31,7 @@ class AppActivity : ComponentActivity() {
         AppViewModel.factory(
             context = applicationContext,
             seed = createPinFinAppSeed(
-                dependencies = PinFinAppDependencies.impl(
-                    currency = Currency.default, //TODO
-                ),
+                dependencies = PinFinAppDependencies.impl(),
                 appFilesDirProvider = AppFilesDirProvider(
                     context = this,
                 )

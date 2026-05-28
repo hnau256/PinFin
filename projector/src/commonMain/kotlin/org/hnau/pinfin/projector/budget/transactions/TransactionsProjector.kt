@@ -15,6 +15,7 @@ import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -29,7 +30,6 @@ import org.hnau.commons.app.projector.utils.Overcompose
 import org.hnau.commons.app.projector.utils.plus
 import org.hnau.commons.gen.pipe.annotations.Pipe
 import org.hnau.commons.kotlin.foldBoolean
-import org.hnau.pinfin.data.Currency
 import org.hnau.pinfin.model.TransactionsModel
 import org.hnau.pinfin.projector.Localization
 import org.hnau.pinfin.projector.filter.FilterProjector
@@ -52,8 +52,6 @@ class TransactionsProjector(
 
 
         val localization: Localization
-
-        val currency: Currency
 
         fun filter(): FilterProjector.Dependencies
     }
@@ -138,8 +136,10 @@ class TransactionsProjector(
                                 items = items,
                                 key = { it.key.id },
                             ) { idWithTransaction ->
+                                val currency by model.currency.collectAsState()
                                 idWithTransaction.value.Content(
                                     dependencies = dependencies,
+                                    currency = currency,
                                     onClick = {
                                         model.onEditTransactionClick(
                                             idWithTransaction.key,

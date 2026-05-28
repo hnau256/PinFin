@@ -30,7 +30,6 @@ import org.hnau.commons.kotlin.foldNullable
 import org.hnau.commons.kotlin.serialization.MutableStateFlowSerializer
 import org.hnau.pinfin.data.AmountDirection
 import org.hnau.pinfin.data.CategoryId
-import org.hnau.pinfin.data.Currency
 import org.hnau.pinfin.data.expression.AmountExpression
 import org.hnau.pinfin.model.transaction.utils.allRecords
 import org.hnau.pinfin.model.utils.budget.repository.BudgetRepository
@@ -49,8 +48,6 @@ class AmountWithDirectionModel(
 
     @Pipe
     interface Dependencies {
-
-        val currency: Currency
 
         val budgetRepository: BudgetRepository
 
@@ -111,23 +108,29 @@ class AmountWithDirectionModel(
         }
         .mapLatest { (state, categoryOtNull) ->
             withContext(Dispatchers.Default) {
-                categoryOtNull?.let { category ->
-                    state
-                        .allRecords
-                        .mapNotNull { (timestamp, record) ->
-                            record
-                                .takeIf { it.idWithCategory == category }
-                                ?.let { categoryRecord ->
-                                    val (direction) = categoryRecord
-                                        .amount
-                                        .toAmount(dependencies.currency.scale)
-                                        .splitToDirectionAndRaw()
-                                    timestamp to direction
-                                }
-                        }
-                        .maxByOrNull(Pair<Instant, *>::first)
-                        ?.second
-                }
+                categoryOtNull.foldNullable(
+                    ifNull = { null },
+                    ifNotNull = { category ->
+                        state
+                            .allRecords
+                            .mapNotNull { (timestamp, record) ->
+                                record
+                                    .takeIf { it.idWithCategory == category }
+                                    .foldNullable(
+                                        ifNull = { null },
+                                        ifNotNull = { categoryRecord ->
+                                            val (direction) = categoryRecord
+                                                .amount
+                                                .toAmount(state.info.currency.scale)
+                                                .splitToDirectionAndRaw()
+                                            timestamp to direction
+                                        }
+                                    )
+                            }
+                            .maxByOrNull(Pair<Instant, *>::first)
+                            ?.second
+                    }
+                )
             }
         }
         .stateIn(

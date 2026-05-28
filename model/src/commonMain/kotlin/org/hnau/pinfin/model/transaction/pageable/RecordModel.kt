@@ -4,7 +4,6 @@
 
 package org.hnau.pinfin.model.transaction.pageable
 
-import arrow.core.getOrElse
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -28,9 +27,9 @@ import org.hnau.commons.kotlin.serialization.MutableStateFlowSerializer
 import org.hnau.pinfin.data.Amount
 import org.hnau.pinfin.data.CategoryId
 import org.hnau.pinfin.data.Comment
-import org.hnau.pinfin.data.Currency
 import org.hnau.pinfin.model.transaction.utils.ChooseOrCreateModel
 import org.hnau.pinfin.model.transaction.utils.allRecords
+import org.hnau.pinfin.model.utils.budget.repository.BudgetRepository
 import org.hnau.pinfin.model.utils.budget.state.CategoryInfo
 import org.hnau.pinfin.model.utils.budget.state.TransactionInfo
 
@@ -95,7 +94,7 @@ class RecordModel(
     @Pipe
     interface Dependencies {
 
-        val currency: Currency
+        val budgetRepository: BudgetRepository
 
         fun comment(): CommentModel.Dependencies
 
@@ -266,11 +265,19 @@ class RecordModel(
                 Editable.Incorrect -> null.toMutableStateFlowAsInitial()
                 is Editable.Value<KeyValue<CategoryId, CategoryInfo>> -> amount
                     .amountEditable
-                    .mapState(scope) { amountOrNull ->
+                    .flatMapWithScope(scope) { scope, amountOrNull ->
                         amountOrNull
                             .valueOrNone
                             .getOrNull()
-                            ?.let { amount -> categoryOrIncorrect.value to amount.toAmount(dependencies.currency.scale) }
+                            .foldNullable(
+                                ifNull = { null.toMutableStateFlowAsInitial() },
+                                ifNotNull = { amountExpression ->
+                                    dependencies.budgetRepository.state
+                                        .mapState(scope) { state ->
+                                            categoryOrIncorrect.value to amountExpression.toAmount(state.info.currency.scale)
+                                        }
+                                }
+                            )
                     }
             }
         }
@@ -323,15 +330,19 @@ class RecordModel(
 
     val amountOrZero: StateFlow<Amount> = amount
         .amountEditable
-        .mapState(scope) { editableAmountExpression ->
-            editableAmountExpression
-                .map { amountExpression ->
-                    amountExpression.toAmount(
-                        dependencies.currency.scale,
-                    )
-                }
+        .flatMapWithScope(scope) { scope, editable ->
+            editable
                 .valueOrNone
-                .getOrElse { Amount.zero }
+                .getOrNull()
+                .foldNullable(
+                    ifNull = { Amount.zero.toMutableStateFlowAsInitial() },
+                    ifNotNull = { expression ->
+                        dependencies.budgetRepository.state
+                            .mapState(scope) { state ->
+                                expression.toAmount(state.info.currency.scale)
+                            }
+                    }
+                )
         }
 
     internal val record: StateFlow<Editable<TransactionInfo.Type.Entry.Record>> = comment

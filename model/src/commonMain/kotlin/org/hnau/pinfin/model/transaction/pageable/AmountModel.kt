@@ -14,13 +14,15 @@ import org.hnau.commons.app.model.goback.NeverGoBackHandler
 import org.hnau.commons.app.model.utils.Editable
 import org.hnau.commons.app.model.utils.valueOrNone
 import org.hnau.commons.gen.pipe.annotations.Pipe
+import org.hnau.commons.kotlin.coroutines.flow.state.flatMapWithScope
 import org.hnau.commons.kotlin.coroutines.flow.state.mapState
+import org.hnau.commons.kotlin.coroutines.flow.state.mutable.toMutableStateFlowAsInitial
 import org.hnau.commons.kotlin.foldNullable
 import org.hnau.commons.kotlin.serialization.MutableStateFlowSerializer
 import org.hnau.pinfin.data.Amount
-import org.hnau.pinfin.data.Currency
 import org.hnau.pinfin.data.expression.AmountExpression
 import org.hnau.pinfin.model.AmountModel as CommonAmountModel
+import org.hnau.pinfin.model.utils.budget.repository.BudgetRepository
 
 class AmountModel(
     scope: CoroutineScope,
@@ -34,7 +36,7 @@ class AmountModel(
     @Pipe
     interface Dependencies {
 
-        val currency: Currency
+        val budgetRepository: BudgetRepository
     }
 
     @Serializable
@@ -90,11 +92,19 @@ class AmountModel(
     )
 
     val amount: StateFlow<Amount?> = amountEditable
-        .mapState(scope) { editableAmountExpression ->
-            editableAmountExpression
+        .flatMapWithScope(scope) { scope, editable ->
+            editable
                 .valueOrNone
                 .getOrNull()
-                ?.toAmount(dependencies.currency.scale)
+                .foldNullable(
+                    ifNull = { null.toMutableStateFlowAsInitial() },
+                    ifNotNull = { expression ->
+                        dependencies.budgetRepository.state
+                            .mapState(scope) { state ->
+                                expression.toAmount(state.info.currency.scale)
+                            }
+                    }
+                )
         }
 
     val goBackHandler: GoBackHandler
