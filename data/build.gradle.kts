@@ -8,6 +8,7 @@ kotlin {
     sourceSets {
         commonMain {
             dependencies {
+                api(libs.upchain.sync.client.http)
                 implementation(libs.bignum) //TODO use from bom
                 implementation(hnau.kotlinx.atomicfu)
             }

@@ -60,7 +60,7 @@ class DialogsProjector(
                                 ifNotNull = { save ->
                                     TextButton(
                                         onClick = {
-                                            GlobalScope.launch { save() } //TODO use Dialog from hnau.commons
+                                            GlobalScope.launch { save(this) } //TODO use Dialog from hnau.commons
                                         },
                                         content = { Text((dependencies.localization.save)) },
                                     )

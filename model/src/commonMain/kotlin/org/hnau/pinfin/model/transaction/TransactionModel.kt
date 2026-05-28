@@ -275,7 +275,7 @@ class TransactionModel(
         data object NoChanges : State
 
         data class HasChanges(
-            val saveIfCorrect: (suspend () -> Unit)?,
+            val saveIfCorrect: (suspend (CoroutineScope) -> Unit)?,
             val closeWithoutSavingDialogInfo: CloseWithoutSavingDialogInfo?,
         ) : State {
 
@@ -288,7 +288,7 @@ class TransactionModel(
 
     private fun createHasChangesState(
         scope: CoroutineScope,
-        save: (suspend () -> Unit)?
+        save: (suspend (CoroutineScope) -> Unit)?
     ): StateFlow<State.HasChanges> = skeleton
         .closeWithoutSavingDialogIsVisible
         .mapState(scope) { closeWithoutSavingDialogIsVisible ->
@@ -366,7 +366,7 @@ class TransactionModel(
 
     val saveOrDisabled: StateFlow<ActionOrElse<Unit, CancelOrInProgress.Cancel>?> =
         state.flatMapWithScope(scope) { scope, state ->
-            val action: (suspend () -> Unit) = when (state) {
+            val action: (suspend (CoroutineScope) -> Unit) = when (state) {
                 State.NoChanges -> {
                     { onReady }
                 }
@@ -383,7 +383,7 @@ class TransactionModel(
     data class CancelDialogInfo(
         val close: () -> Unit,
         val cancelChanges: () -> Unit,
-        val saveIfPossible: (suspend () -> Unit)?,
+        val saveIfPossible: (suspend (CoroutineScope) -> Unit)?,
     )
 
     val cancelDialogInfo: StateFlow<CancelDialogInfo?> = state

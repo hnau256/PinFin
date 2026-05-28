@@ -24,6 +24,7 @@ import org.hnau.commons.kotlin.coroutines.flow.state.mutable.toMutableStateFlowA
 import org.hnau.commons.kotlin.foldNullable
 import org.hnau.commons.kotlin.serialization.MutableStateFlowSerializer
 import org.hnau.pinfin.data.BudgetConfig
+import org.hnau.pinfin.data.BudgetId
 import org.hnau.pinfin.model.budgetstack.BudgetStackOpener
 import org.hnau.pinfin.model.manage.BudgetsListOpener
 import org.hnau.pinfin.model.utils.budget.repository.BudgetRepository
@@ -36,6 +37,8 @@ class BudgetManageModel(
 
     @Pipe
     interface Dependencies {
+
+        val id: BudgetId //TODO use in sync
 
         val budgetsListOpener: BudgetsListOpener
 
@@ -58,10 +61,10 @@ class BudgetManageModel(
             .openCategories()
     }
 
-    fun openSync() {
+    fun openConfig() {
         dependencies
             .budgetStackOpener
-            .openSyncConfig()
+            .openConfig()
     }
 
     val removeDialogVisible: MutableStateFlow<Boolean>

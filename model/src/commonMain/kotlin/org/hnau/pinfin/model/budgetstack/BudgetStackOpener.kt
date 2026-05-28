@@ -24,12 +24,12 @@ interface BudgetStackOpener {
         info: AccountInfo,
     )
 
+    fun openConfig()
+
     fun openCategories()
 
     fun openCategory(
         id: CategoryId,
         info: CategoryInfo,
     )
-
-    fun openSyncConfig()
 }

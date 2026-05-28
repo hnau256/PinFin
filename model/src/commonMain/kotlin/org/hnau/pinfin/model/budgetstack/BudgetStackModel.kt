@@ -24,10 +24,10 @@ import org.hnau.commons.kotlin.serialization.MutableStateFlowSerializer
 import org.hnau.pinfin.model.CategoriesModel
 import org.hnau.pinfin.model.TransactionsModel
 import org.hnau.pinfin.model.accountstack.AccountStackModel
+import org.hnau.pinfin.model.bidgetsettings.BudgetSettingsModel
 import org.hnau.pinfin.model.budget.BudgetModel
 import org.hnau.pinfin.model.budget.analytics.tab.graph.TransactionsOpener
 import org.hnau.pinfin.model.categorystack.CategoryStackModel
-import org.hnau.pinfin.model.sync.BudgetSyncStackModel
 import org.hnau.pinfin.model.transaction.TransactionModel
 import org.hnau.pinfin.model.utils.budget.repository.BudgetRepository
 
@@ -50,7 +50,9 @@ class BudgetStackModel(
 
         fun category(): CategoryStackModel.Dependencies
 
-        fun sync(): BudgetSyncStackModel.Dependencies
+        fun config(): BudgetSettingsModel.Dependencies
+
+        fun opener(): BudgetStackOpenerImpl.Dependencies
 
         @Pipe
         interface WithOpeners {
@@ -99,8 +101,8 @@ class BudgetStackModel(
                 identifier = "category",
             ),
             Variant(
-                type = BudgetSyncStackModel::class,
-                identifier = "sync",
+                type = BudgetSettingsModel::class,
+                identifier = "config",
             ),
         ],
         wrappedValuePropertyName = "model",
@@ -140,8 +142,8 @@ class BudgetStackModel(
                 identifier = "category",
             ),
             Variant(
-                type = BudgetSyncStackModel.Skeleton::class,
-                identifier = "sync",
+                type = BudgetSettingsModel.Skeleton::class,
+                identifier = "config",
             ),
         ],
         wrappedValuePropertyName = "skeleton",
@@ -156,6 +158,7 @@ class BudgetStackModel(
     private val dependenciesWithOpeners: Dependencies.WithOpeners = dependencies.withOpener(
         opener = BudgetStackOpenerImpl(
             stack = skeleton.stack,
+            dependencies = dependencies.opener(),
         ),
         transactionsOpener = { filters ->
             skeleton.stack.push(
@@ -229,13 +232,14 @@ class BudgetStackModel(
                 onReady = { this@BudgetStackModel.skeleton.stack.tryDropLast() },
             )
         },
-        ifSync = { syncSkeleton ->
-            Element.sync(
+        ifConfig = { configSkeleton ->
+            Element.config(
                 scope = scope,
-                skeleton = syncSkeleton,
-                dependencies = dependencies.sync(),
+                skeleton = configSkeleton,
+                dependencies = dependencies.config(),
+                close = { this@BudgetStackModel.skeleton.stack.tryDropLast() },
             )
-        }
+        },
     )
 
     val stack: StateFlow<NonEmptyStack<BudgetStackElementModel>> =

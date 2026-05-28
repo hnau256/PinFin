@@ -94,9 +94,9 @@ class BudgetManageProjector(
                 icon = Icons.Filled.Interests,
             )
             button(
-                id = "Sync",
-                title = dependencies.localization.synchronization,
-                onClick = model::openSync,
+                id = "Config",
+                title = dependencies.localization.settings,
+                onClick = model::openConfig,
                 icon = Icons.Filled.Sync,
             )
         }

@@ -8,6 +8,7 @@ import kotlinx.coroutines.flow.stateIn
 import org.hnau.pinfin.data.BudgetConfig
 import org.hnau.pinfin.data.BudgetId
 import org.hnau.pinfin.data.UpdateType
+import org.hnau.pinfin.model.utils.budget.state.BudgetInfo
 import org.hnau.pinfin.model.utils.budget.state.BudgetState
 import org.hnau.pinfin.model.utils.budget.state.prototype.BudgetStatePrototype
 import org.hnau.pinfin.model.utils.budget.state.prototype.toBudgetState
