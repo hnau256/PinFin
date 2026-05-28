@@ -1,4 +1,4 @@
-package org.hnau.pinfin.model.utils.budget.repository
+package org.hnau.pinfin.model.utils.budget.repository.demo
 
 data class DemoBudgetConfig(
     val currencyRate: Double,

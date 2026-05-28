@@ -1,7 +1,7 @@
 package org.hnau.pinfin.projector
 
 import androidx.compose.runtime.Immutable
-import org.hnau.pinfin.model.utils.budget.repository.DemoBudgetLocalization
+import org.hnau.pinfin.model.utils.budget.repository.demo.DemoBudgetLocalization
 
 @Immutable
 data class Localization(

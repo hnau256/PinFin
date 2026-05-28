@@ -1,7 +1,6 @@
-package org.hnau.pinfin.model.utils.budget.repository
+package org.hnau.pinfin.model.utils.budget.repository.demo
 
 import arrow.core.toNonEmptyListOrNull
-import com.ionspin.kotlin.bignum.decimal.BigDecimal
 import com.ionspin.kotlin.bignum.decimal.toBigDecimal
 import kotlinx.datetime.DateTimeUnit
 import kotlinx.datetime.DayOfWeek
@@ -14,23 +13,20 @@ import kotlinx.datetime.toInstant
 import kotlinx.datetime.toLocalDateTime
 import org.hnau.pinfin.data.AccountConfig
 import org.hnau.pinfin.data.AccountId
-import org.hnau.pinfin.data.Amount
 import org.hnau.pinfin.data.BudgetConfig
 import org.hnau.pinfin.data.CategoryConfig
 import org.hnau.pinfin.data.CategoryId
 import org.hnau.pinfin.data.Comment
 import org.hnau.pinfin.data.Hue
-import org.hnau.pinfin.data.Icon
 import org.hnau.pinfin.data.Record
 import org.hnau.pinfin.data.Transaction
 import org.hnau.pinfin.data.UpdateType
 import org.hnau.pinfin.data.expression.AmountExpression
 import org.hnau.pinfin.data.expression.Expression
-import kotlin.math.PI
-import kotlin.math.cos
+import org.hnau.pinfin.model.utils.icons.IconVariant
+import org.hnau.pinfin.model.utils.icons.icon
 import kotlin.math.exp
 import kotlin.math.ln
-import kotlin.math.roundToLong
 import kotlin.math.sqrt
 import kotlin.random.Random
 import kotlin.time.Instant
@@ -494,9 +490,10 @@ class DemoBudgetGenerator(
         category: CategoryId,
         comment: String,
         amountCents: Long,
+        isExpense: Boolean = true,
     ): Record = Record(
         category = category,
-        amount = centsToAmountExpr(amountCents),
+        amount = centsToAmountExpr(if (isExpense) -amountCents else amountCents),
         comment = Comment(comment),
     )
 
@@ -546,7 +543,7 @@ class DemoBudgetGenerator(
                 config = AccountConfig(
                     title = loc.cardAccount,
                     hue = Hue(210),
-                    icon = Icon("credit-card"),
+                    icon = IconVariant.CreditCard.icon,
                 )
             )
         )
@@ -556,26 +553,26 @@ class DemoBudgetGenerator(
                 config = AccountConfig(
                     title = loc.savingsAccount,
                     hue = Hue(130),
-                    icon = Icon("piggy-bank"),
+                    icon = IconVariant.Savings.icon,
                 )
             )
         )
         val categoryConfigs = listOf(
-            catSalary to Pair(Hue(120), "briefcase"),
-            catBonus to Pair(Hue(50), "star"),
-            catTax to Pair(Hue(0), "percent"),
-            catFood to Pair(Hue(35), "shopping-cart"),
-            catHome to Pair(Hue(200), "home"),
-            catClothes to Pair(Hue(280), "shirt"),
-            catLeisure to Pair(Hue(320), "ticket"),
-            catUtilities to Pair(Hue(45), "zap"),
-            catSubscriptions to Pair(Hue(190), "repeat"),
-            catHealth to Pair(Hue(350), "heart"),
-            catTransport to Pair(Hue(25), "bus"),
-            catRent to Pair(Hue(170), "building"),
-            catGifts to Pair(Hue(310), "gift"),
-            catCar to Pair(Hue(15), "car"),
-            catTransfer to Pair(Hue(260), "arrow-right-left"),
+            catSalary to Pair(Hue(120), IconVariant.Work.icon),
+            catBonus to Pair(Hue(50), IconVariant.Star.icon),
+            catTax to Pair(Hue(0), IconVariant.Percent.icon),
+            catFood to Pair(Hue(35), IconVariant.ShoppingCart.icon),
+            catHome to Pair(Hue(200), IconVariant.Home.icon),
+            catClothes to Pair(Hue(280), IconVariant.Checkroom.icon),
+            catLeisure to Pair(Hue(320), IconVariant.ConfirmationNumber.icon),
+            catUtilities to Pair(Hue(45), IconVariant.ElectricBolt.icon),
+            catSubscriptions to Pair(Hue(190), IconVariant.Repeat.icon),
+            catHealth to Pair(Hue(350), IconVariant.Favorite.icon),
+            catTransport to Pair(Hue(25), IconVariant.DirectionsBus.icon),
+            catRent to Pair(Hue(170), IconVariant.Apartment.icon),
+            catGifts to Pair(Hue(310), IconVariant.CardGiftcard.icon),
+            catCar to Pair(Hue(15), IconVariant.DirectionsCar.icon),
+            catTransfer to Pair(Hue(260), IconVariant.SwapHoriz.icon),
         )
         for ((cat, cfg) in categoryConfigs) {
             add(
@@ -584,7 +581,7 @@ class DemoBudgetGenerator(
                     config = CategoryConfig(
                         title = cat.id,
                         hue = cfg.first,
-                        icon = Icon(cfg.second),
+                        icon = cfg.second,
                     ),
                 )
             )
@@ -611,8 +608,8 @@ class DemoBudgetGenerator(
                 val jobEnd = jobStart.plus(jobDurationMonths.toLong(), DateTimeUnit.MONTH)
                 val clampedJobEnd = if (jobEnd > endDate) endDate else jobEnd
 
-                val baseMin = 2500.0 + careerLevel * 200
-                val baseMax = 5000.0 + careerLevel * 400
+                val baseMin = 3000.0 + careerLevel * 200
+                val baseMax = 5500.0 + careerLevel * 400
                 val salary = lastSalary?.let {
                     it * nextBetween(0.85, 1.25)
                 } ?: nextBetween(baseMin, baseMax)
@@ -751,8 +748,9 @@ class DemoBudgetGenerator(
         val endMonth = LocalDate(job.to.year, job.to.month, 1)
         while (payMonth <= endMonth && payMonth < end) {
             val daysInMonth = monthLength(payMonth.year, monthNumber(payMonth.month))
-            var payDay = daysInMonth - nextInt(0, 4)
-            if (payDay < 1) payDay = 1
+            val center = 15.coerceAtMost(daysInMonth)
+            var payDay = center + nextInt(-3, 3)
+            payDay = payDay.coerceIn(1, daysInMonth)
             val paydate = LocalDate(payMonth.year, payMonth.month, payDay)
             if (paydate >= job.from && paydate < job.to) {
                 paydays.add(paydate)
@@ -840,7 +838,7 @@ class DemoBudgetGenerator(
 
         val balance = BalanceTracker()
         val rate = config.currencyRate
-        balance.savings = (3000 * rate).toLong()
+        balance.savings = (5000 * rate).toLong()
 
         var inflationFactor = 1.0
         var lastInflationYear = startDate.year
@@ -902,7 +900,7 @@ class DemoBudgetGenerator(
                     mkEntry(
                         timestamp = dayTimestamp,
                         account = cardAccount,
-                        records = listOf(mkRecord(catSalary, "", salaryCents)),
+                        records = listOf(mkRecord(catSalary, "", salaryCents, isExpense = false)),
                         comment = if (shouldHappen(0.05)) loc.salaryComment else "",
                     )
                 )
@@ -926,7 +924,7 @@ class DemoBudgetGenerator(
                     mkEntry(
                         timestamp = dayTimestamp,
                         account = cardAccount,
-                        records = listOf(mkRecord(catBonus, loc.bonusComment, bonusCents)),
+                        records = listOf(mkRecord(catBonus, loc.bonusComment, bonusCents, isExpense = false)),
                         comment = "",
                     )
                 )
@@ -1004,7 +1002,9 @@ class DemoBudgetGenerator(
                     lp.minCents.toDouble() * inflationFactor,
                     lp.maxCents.toDouble() * inflationFactor,
                 ).toLong()
-                val actual = minOf(balance.savings, amountCents)
+                val savingsFloor = (200.0 * 100 * rate).toLong()
+                val maxSpend = maxOf(balance.savings - savingsFloor, 0L)
+                val actual = minOf(maxSpend, amountCents)
                 if (actual > 0) {
                     balance.savings -= actual
                     transactions.add(
@@ -1102,9 +1102,9 @@ class DemoBudgetGenerator(
             }
 
             if (isDayBeforePayday) {
-                val buffer = (500.0 * 100 * rate * inflationFactor).toLong()
+                val buffer = (700.0 * 100 * rate * inflationFactor).toLong()
                 val transferAmount = maxOf(balance.card - buffer, 0L)
-                if (transferAmount > (50.0 * 100 * rate).toLong()) {
+                if (transferAmount > 0) {
                     balance.card -= transferAmount
                     balance.savings += transferAmount
                     transactions.add(
@@ -1150,10 +1150,10 @@ class DemoBudgetGenerator(
                     }
                     store to prob
                 }
-                val totalWeight = probMap.sumOf { it.second as Double }
+                val totalWeight = probMap.sumOf { it.second }
                 if (totalWeight <= 0.0) continue
 
-                val picked = weightedPick(probMap.map { it.first to (it.second as Double) })
+                val picked = weightedPick(probMap.map { it.first to it.second })
                 val visitTimestamp = randomTimestamp(currentDate, 7, 22)
 
                 when (picked) {
@@ -1183,12 +1183,15 @@ class DemoBudgetGenerator(
                                 transactions.add(
                                     mkEntry(visitTimestamp, cardAccount, records, picked.name)
                                 )
-                            } else if (totalCost > (100.0 * 100 * rate).toLong() &&
-                                balance.savings >= totalCost) {
-                                balance.savings -= totalCost
-                                transactions.add(
-                                    mkEntry(visitTimestamp, savingsAccount, records, picked.name)
-                                )
+                            } else if (totalCost > (100.0 * 100 * rate).toLong()) {
+                                val savingsFloor = (200.0 * 100 * rate).toLong()
+                                val maxSpend = maxOf(balance.savings - savingsFloor, 0L)
+                                if (maxSpend >= totalCost) {
+                                    balance.savings -= totalCost
+                                    transactions.add(
+                                        mkEntry(visitTimestamp, savingsAccount, records, picked.name)
+                                    )
+                                }
                             }
                         }
                     }
