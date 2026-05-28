@@ -16,10 +16,10 @@ import org.hnau.commons.app.projector.fractal.SText
 import org.hnau.commons.app.projector.uikit.progressindicator.InProgress
 import org.hnau.commons.app.projector.uikit.utils.Dimens
 import org.hnau.commons.gen.pipe.annotations.Pipe
-import org.hnau.pinfin.model.NoBudgetsModel
+import org.hnau.pinfin.model.CreateBudgetModel
 
-class NoBudgetsProjector(
-    private val model: NoBudgetsModel,
+class CreateBudgetProjector(
+    private val model: CreateBudgetModel,
     private val dependencies: Dependencies,
 ) {
 

@@ -15,7 +15,7 @@ import org.hnau.pinfin.model.utils.budget.storage.BudgetsStorage
 import org.hnau.pinfin.model.utils.budget.storage.createNewBudgetIfNotExistsAndGet
 import org.hnau.upchain.core.repository.upchain.addUpdates
 
-class NoBudgetsModel(
+class CreateBudgetModel(
     private val scope: CoroutineScope,
     private val dependencies: Dependencies,
 ) {

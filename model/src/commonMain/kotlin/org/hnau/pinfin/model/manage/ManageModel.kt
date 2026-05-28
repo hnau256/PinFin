@@ -37,7 +37,7 @@ import org.hnau.commons.kotlin.serialization.MutableStateFlowSerializer
 import org.hnau.commons.kotlin.toAccessor
 import org.hnau.pinfin.data.BudgetId
 import org.hnau.pinfin.model.IconModel
-import org.hnau.pinfin.model.NoBudgetsModel
+import org.hnau.pinfin.model.CreateBudgetModel
 import org.hnau.pinfin.model.budgetstack.BudgetStackModel
 import org.hnau.pinfin.model.utils.budget.repository.BudgetRepository
 import org.hnau.pinfin.model.utils.budget.storage.BudgetsStorage
@@ -62,7 +62,7 @@ class ManageModel(
             budgetsListOpener: BudgetsListOpener,
         ): BudgetStackModel.Dependencies
 
-        fun noBudgets(): NoBudgetsModel.Dependencies
+        fun createBudget(): CreateBudgetModel.Dependencies
     }
 
     @Serializable
@@ -78,8 +78,8 @@ class ManageModel(
                 identifier = "budgetStack",
             ),
             Variant(
-                type = NoBudgetsModel::class,
-                identifier = "noBudgets",
+                type = CreateBudgetModel::class,
+                identifier = "createBudget",
             ),
         ],
         wrappedValuePropertyName = "model",
@@ -152,9 +152,9 @@ class ManageModel(
         scope = scope,
     ) { scope, budgetIdWithRepositoryOrNull ->
         when (budgetIdWithRepositoryOrNull) {
-            null -> State.noBudgets(
+            null -> State.createBudget(
                 scope = scope,
-                dependencies = dependencies.noBudgets(),
+                dependencies = dependencies.createBudget(),
             )
 
             else -> {

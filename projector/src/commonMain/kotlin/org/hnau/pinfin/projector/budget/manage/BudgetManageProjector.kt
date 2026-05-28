@@ -76,7 +76,7 @@ class BudgetManageProjector(
             modifier = Modifier.fillMaxSize(),
         ) {
             button(
-                id = "NoBudgets",
+                id = "CreateBudget",
                 title = dependencies.localization.toBudgetsList,
                 onClick = model::openBudgetsList,
                 icon = Icons.AutoMirrored.Filled.MenuOpen,
