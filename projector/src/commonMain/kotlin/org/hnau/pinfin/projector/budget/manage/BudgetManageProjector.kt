@@ -1,25 +1,29 @@
 package org.hnau.pinfin.projector.budget.manage
 
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyListScope
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.MenuOpen
 import androidx.compose.material.icons.filled.ChevronRight
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Interests
+import androidx.compose.material.icons.filled.PostAdd
 import androidx.compose.material.icons.filled.Settings
-import androidx.compose.material3.ListItem
-import androidx.compose.material3.Text
+import androidx.compose.material.icons.filled.SwapHoriz
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.vector.ImageVector
 import kotlinx.coroutines.CoroutineScope
+import org.hnau.commons.app.projector.fractal.SCellBox
+import org.hnau.commons.app.projector.fractal.SIcon
+import org.hnau.commons.app.projector.fractal.SItem
+import org.hnau.commons.app.projector.fractal.STable
+import org.hnau.commons.app.projector.fractal.SText
+import org.hnau.commons.app.projector.fractal.context.LocalFContext
+import org.hnau.commons.app.projector.fractal.size.units
 import org.hnau.commons.app.projector.uikit.TopBarDefaults
-import org.hnau.commons.app.projector.utils.Icon
-import org.hnau.commons.app.projector.utils.plus
+import org.hnau.commons.app.projector.utils.Drawable
+import org.hnau.commons.app.projector.utils.Orientation
 import org.hnau.commons.gen.pipe.annotations.Pipe
 import org.hnau.pinfin.model.budget.manage.BudgetManageModel
 import org.hnau.pinfin.projector.Localization
@@ -50,55 +54,94 @@ class BudgetManageProjector(
     fun Content(
         contentPadding: PaddingValues,
     ) {
-        LazyColumn(
-            contentPadding = contentPadding + PaddingValues(
-                top = TopBarDefaults.height + TopBarDefaults.separationTop,
-            ),
-            modifier = Modifier.fillMaxSize(),
-        ) {
-            button(
-                id = "CreateBudget",
-                title = dependencies.localization.toBudgetsList,
-                onClick = model::openBudgetsList,
-                icon = Icons.AutoMirrored.Filled.MenuOpen,
-            )
-            button(
-                id = "RemoveBudget",
-                title = dependencies.localization.removeBudget,
-                onClick = remove::onRemoveClick,
-                icon = Icons.Filled.Delete,
-            )
-            button(
-                id = "Categories",
-                title = dependencies.localization.categories,
-                onClick = model::openCategories,
-                icon = Icons.Filled.Interests,
-            )
-            button(
-                id = "Settings",
-                title = dependencies.localization.settings,
-                onClick = model::openSettings,
-                icon = Icons.Filled.Settings,
-            )
+        Box {
+            STable(
+                orientation = Orientation.Vertical,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(contentPadding)
+                    .padding(LocalFContext.current.distance.units.paddingValues.vertical.medium)
+                    .padding(top = TopBarDefaults.height + TopBarDefaults.separationTop)
+            ) {
+                SCellBox(
+                    onClick = { /*Open create new budget screen*/ },
+                ) {
+                    SItem(
+                        startAccessory = {
+                            SIcon(Drawable.Vector(Icons.Default.PostAdd))
+                        },
+                        endAccessory = {
+                            SIcon(Drawable.Vector(Icons.Default.ChevronRight))
+                        },
+                    ) {
+                        SText(
+                            dependencies.localization.addBudget
+                        )
+                    }
+                }
+                SCellBox(
+                    onClick = { /*Open switch budget screen*/ },
+                ) {
+                    SItem(
+                        startAccessory = {
+                            SIcon(Drawable.Vector(Icons.Default.SwapHoriz))
+                        },
+                        endAccessory = {
+                            SIcon(Drawable.Vector(Icons.Default.ChevronRight))
+                        },
+                    ) {
+                        SText(
+                            dependencies.localization.switchBudget
+                        )
+                    }
+                }
+                SCellBox(
+                    onClick = model::openSettings,
+                ) {
+                    SItem(
+                        startAccessory = {
+                            SIcon(Drawable.Vector(Icons.Default.Settings))
+                        },
+                        endAccessory = {
+                            SIcon(Drawable.Vector(Icons.Default.ChevronRight))
+                        },
+                    ) {
+                        SText(
+                            dependencies.localization.settings
+                        )
+                    }
+                }
+                SCellBox(
+                    onClick = remove::onRemoveClick,
+                ) {
+                    SItem(
+                        startAccessory = {
+                            SIcon(Drawable.Vector(Icons.Default.Delete))
+                        },
+                    ) {
+                        SText(
+                            dependencies.localization.removeBudget
+                        )
+                    }
+                }
+                SCellBox(
+                    onClick = model::openCategories,
+                ) {
+                    SItem(
+                        startAccessory = {
+                            SIcon(Drawable.Vector(Icons.Default.Interests))
+                        },
+                        endAccessory = {
+                            SIcon(Drawable.Vector(Icons.Default.ChevronRight))
+                        },
+                    ) {
+                        SText(
+                            dependencies.localization.categories
+                        )
+                    }
+                }
+            }
         }
         remove.Content()
-    }
-
-    private fun LazyListScope.button(
-        id: String,
-        icon: ImageVector,
-        title: String,
-        onClick: () -> Unit,
-    ) {
-        item(
-            key = "button_$id",
-        ) {
-            ListItem(
-                leadingContent = { Icon(icon = icon) },
-                modifier = Modifier.clickable(onClick = onClick),
-                headlineContent = { Text(title) },
-                trailingContent = { Icon(Icons.Filled.ChevronRight) }
-            )
-        }
     }
 }
