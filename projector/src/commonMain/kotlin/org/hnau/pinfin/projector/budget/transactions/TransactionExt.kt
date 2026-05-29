@@ -49,9 +49,8 @@ fun TransactionInfo.Content(
             .fillMaxWidth()
             .horizontalDisplayPadding(),
     ) {
-        Cell { modifier ->
+        Cell {
             CellContent(
-                modifier = modifier,
                 dependencies = dependencies,
                 currency = currency,
                 onClick = onClick,

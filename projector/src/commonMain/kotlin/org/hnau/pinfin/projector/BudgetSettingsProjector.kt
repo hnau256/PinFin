@@ -152,8 +152,8 @@ class BudgetSettingsProjector(
                 modifier = Modifier.padding(contentPadding),
                 content = {
                     SElements (
-                        /*modifier = Modifier
-                            .verticalScroll(rememberScrollState())*/
+                        modifier = Modifier
+                            .verticalScroll(rememberScrollState()),
                     ){
                         STable(
                             orientation = Orientation.Vertical,

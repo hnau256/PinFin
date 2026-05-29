@@ -112,6 +112,7 @@ class BudgetProjector(
                     },
                     ifManage = { budgetModel ->
                         PageProjector.manage(
+                            scope = scope,
                             model = budgetModel,
                             dependencies = dependencies.manage(),
                         )

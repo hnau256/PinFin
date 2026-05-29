@@ -6,7 +6,6 @@ package org.hnau.pinfin.model.budget.manage
 
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.UseSerializers
@@ -14,7 +13,6 @@ import org.hnau.commons.app.model.EditingString
 import org.hnau.commons.app.model.goback.GoBackHandler
 import org.hnau.commons.app.model.goback.NeverGoBackHandler
 import org.hnau.commons.gen.pipe.annotations.Pipe
-import org.hnau.commons.kotlin.coroutines.InProgressRegistry
 import org.hnau.commons.kotlin.coroutines.flow.state.mutable.toMutableStateFlowAsInitial
 import org.hnau.commons.kotlin.serialization.MutableStateFlowSerializer
 import org.hnau.pinfin.data.BudgetId
@@ -38,14 +36,21 @@ class BudgetManageModel(
         val repository: BudgetRepository
 
         val budgetStackOpener: BudgetStackOpener
+
+        fun remove(): BudgetManageRemoveModel.Dependencies
     }
 
     @Serializable
     data class Skeleton(
         val editName: MutableStateFlow<MutableStateFlow<EditingString>?> =
             null.toMutableStateFlowAsInitial(),
-        val removeDialogVisible: MutableStateFlow<Boolean> =
-            false.toMutableStateFlowAsInitial(),
+        val remove: BudgetManageRemoveModel.Skeleton = BudgetManageRemoveModel.Skeleton()
+    )
+
+    val remove = BudgetManageRemoveModel(
+        scope = scope,
+        skeleton = skeleton.remove,
+        dependencies = dependencies.remove(),
     )
 
     fun openCategories() {
@@ -60,40 +65,9 @@ class BudgetManageModel(
             .openSettings()
     }
 
-    val removeDialogVisible: MutableStateFlow<Boolean>
-        get() = skeleton.removeDialogVisible
-
-    private val inProgressRegistry = InProgressRegistry(
-        scope = scope,
-    )
-
-    val inProgress: StateFlow<Boolean>
-        get() = inProgressRegistry.inProgress
-
-    fun removeClick() {
-        skeleton.removeDialogVisible.value = true
-    }
-
-    fun removeConfirm() {
-        removeCancel()
-        scope.launch {
-            inProgressRegistry.executeRegistered {
-                dependencies
-                    .repository
-                    .remove()
-            }
-        }
-    }
-
-    fun removeCancel() {
-        skeleton.removeDialogVisible.value = false
-    }
-
     fun openBudgetsList() {
         scope.launch {
-            inProgressRegistry.executeRegistered {
-                dependencies.budgetsListOpener.openBudgetsList()
-            }
+            dependencies.budgetsListOpener.openBudgetsList()
         }
     }
 
