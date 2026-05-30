@@ -11,7 +11,9 @@ import androidx.compose.material.icons.filled.ArrowCircleDown
 import androidx.compose.material.icons.filled.ArrowCircleUp
 import androidx.compose.material.icons.filled.ChevronRight
 import androidx.compose.material.icons.filled.Cloud
+import androidx.compose.material.icons.filled.CloudDone
 import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.Error
 import androidx.compose.material.icons.filled.Interests
 import androidx.compose.material.icons.filled.PostAdd
 import androidx.compose.material.icons.filled.Settings
@@ -52,6 +54,7 @@ import org.hnau.commons.kotlin.foldBoolean
 import org.hnau.pinfin.model.budget.manage.BudgetManageModel
 import org.hnau.pinfin.projector.Localization
 import org.hnau.pinfin.projector.utils.formatter.datetime.DateTimeFormatter
+import kotlin.invoke
 
 
 class BudgetManageProjector(
@@ -139,19 +142,6 @@ class BudgetManageProjector(
                     }
                 }
                 SCellBox(
-                    onClick = remove::onRemoveClick,
-                ) {
-                    SItem(
-                        startAccessory = {
-                            SIcon(Drawable.Vector(Icons.Default.Delete))
-                        },
-                    ) {
-                        SText(
-                            dependencies.localization.removeBudget
-                        )
-                    }
-                }
-                SCellBox(
                     onClick = model::openCategories,
                 ) {
                     SItem(
@@ -168,6 +158,19 @@ class BudgetManageProjector(
                     }
                 }
                 Sync()
+                SCellBox(
+                    onClick = remove::onRemoveClick,
+                ) {
+                    SItem(
+                        startAccessory = {
+                            SIcon(Drawable.Vector(Icons.Default.Delete))
+                        },
+                    ) {
+                        SText(
+                            dependencies.localization.removeBudget
+                        )
+                    }
+                }
             }
         }
         remove.Content()
@@ -177,13 +180,13 @@ class BudgetManageProjector(
     private fun TableScope.Sync() {
         val sync = model.sync
 
-        val isError = sync
+        val syncResult = sync
             .lastCurrentSessionResult
             .collectAsState()
-            .value == false
+            .value
 
         UpdateFContext(
-            mood = isError.foldBoolean(
+            mood = (syncResult == false).foldBoolean(
                 ifTrue = { Mood.Error },
                 ifFalse = { Mood.Primary },
             )
@@ -209,7 +212,11 @@ class BudgetManageProjector(
                         startAccessory = {
                             SIcon(
                                 Drawable.Vector(
-                                    Icons.Default.Cloud,
+                                    when (syncResult) {
+                                        true -> Icons.Default.CloudDone
+                                        false -> Icons.Default.Error
+                                        null -> Icons.Default.Cloud
+                                    }
                                 )
                             )
                         },
