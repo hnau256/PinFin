@@ -45,7 +45,6 @@ data class Localization(
     val budgetName: String = "Название бюджета",
     val noBudgets: String = "Бюджеты отсутствуют",
     val addBudget: String = "Добавить бюджет",
-    val lastSynchronization: String = "Последняя синхронизация",
     val switchBudget: String = "Переключить бюджет",
     val createNewBudget: String = "Создать новый бюджет",
     val createDemoBudget: String = "Создать Demo бюджет",

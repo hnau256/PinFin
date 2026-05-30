@@ -226,9 +226,6 @@ class BudgetManageProjector(
                                         dependencies.dateTimeFormatter.formatTime(lastSuccessSync.time),
                                     ).joinToString(
                                         separator = " ",
-                                        prefix = dependencies
-                                            .localization
-                                            .lastSynchronization + " ",
                                     )
                                 }
                                 ?.let { lastSync ->
