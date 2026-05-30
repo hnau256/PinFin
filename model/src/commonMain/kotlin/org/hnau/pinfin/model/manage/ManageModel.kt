@@ -36,9 +36,9 @@ import org.hnau.commons.kotlin.mapper.takeIf
 import org.hnau.commons.kotlin.serialization.MutableStateFlowSerializer
 import org.hnau.commons.kotlin.toAccessor
 import org.hnau.pinfin.data.BudgetId
-import org.hnau.pinfin.model.IconModel
+import org.hnau.pinfin.model.BudgetRootModel
 import org.hnau.pinfin.model.CreateBudgetModel
-import org.hnau.pinfin.model.budgetstack.BudgetStackModel
+import org.hnau.pinfin.model.IconModel
 import org.hnau.pinfin.model.utils.budget.repository.BudgetRepository
 import org.hnau.pinfin.model.utils.budget.storage.BudgetsStorage
 import kotlin.uuid.ExperimentalUuidApi
@@ -60,22 +60,22 @@ class ManageModel(
             id: BudgetId,
             budgetRepository: BudgetRepository,
             budgetsListOpener: BudgetsListOpener,
-        ): BudgetStackModel.Dependencies
+        ): BudgetRootModel.Dependencies
 
         fun createBudget(): CreateBudgetModel.Dependencies
     }
 
     @Serializable
     data class Skeleton(
-        var budgetSkeleton: KeyValue<BudgetId, BudgetStackModel.Skeleton>? = null,
+        var budgetSkeleton: KeyValue<BudgetId, BudgetRootModel.Skeleton>? = null,
         var icon: IconModel.Skeleton? = null,
     )
 
     @SealUp(
         variants = [
             Variant(
-                type = BudgetStackModel::class,
-                identifier = "budgetStack",
+                type = BudgetRootModel::class,
+                identifier = "budget",
             ),
             Variant(
                 type = CreateBudgetModel::class,
@@ -159,7 +159,7 @@ class ManageModel(
 
             else -> {
                 val (budgetId, budgetRepository) = budgetIdWithRepositoryOrNull
-                State.budgetStack(
+                State.budget(
                     scope = scope,
                     dependencies = dependencies.budget(
                         id = budgetId,
@@ -170,7 +170,7 @@ class ManageModel(
                         .toAccessor()
                         .filter { it.key == budgetId }
                         .getOrInit {
-                            val skeleton = BudgetStackModel.Skeleton()
+                            val skeleton = BudgetRootModel.Skeleton()
                             KeyValue(budgetId, skeleton)
                         }
                         .value,

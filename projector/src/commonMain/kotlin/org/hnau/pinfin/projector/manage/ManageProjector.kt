@@ -15,6 +15,7 @@ import org.hnau.commons.gen.sealup.annotations.Variant
 import org.hnau.commons.kotlin.coroutines.flow.state.mapWithScope
 import org.hnau.pinfin.model.manage.ManageModel
 import org.hnau.pinfin.model.manage.fold
+import org.hnau.pinfin.projector.BudgetRootProjector
 import org.hnau.pinfin.projector.IconProjector
 import org.hnau.pinfin.projector.CreateBudgetProjector
 import org.hnau.pinfin.projector.budgetstack.BudgetStackProjector
@@ -30,7 +31,7 @@ class ManageProjector(
 
         fun createBudget(): CreateBudgetProjector.Dependencies
 
-        fun budgetStack(): BudgetStackProjector.Dependencies
+        fun budget(): BudgetRootProjector.Dependencies
 
         fun icon(): IconProjector.Dependencies
     }
@@ -42,8 +43,8 @@ class ManageProjector(
                 identifier = "createBudget",
             ),
             Variant(
-                type = BudgetStackProjector::class,
-                identifier = "budgetStack",
+                type = BudgetRootProjector::class,
+                identifier = "budget",
             ),
         ],
         wrappedValuePropertyName = "projector",
@@ -69,11 +70,11 @@ class ManageProjector(
                         model = createBudgetModel,
                     )
                 },
-                ifBudgetStack = { budgetStackModel ->
-                    StateProjector.budgetStack(
+                ifBudget = { budgetModel ->
+                    StateProjector.budget(
                         scope = scope,
-                        dependencies = dependencies.budgetStack(),
-                        model = budgetStackModel,
+                        dependencies = dependencies.budget(),
+                        model = budgetModel,
                     )
                 },
             )
