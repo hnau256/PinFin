@@ -1,10 +1,13 @@
 package org.hnau.pinfin.model.utils.budget.repository
 
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.runningFold
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.update
+import org.hnau.commons.kotlin.coroutines.flow.state.mutable.toMutableStateFlowAsInitial
 import org.hnau.pinfin.data.BudgetConfig
 import org.hnau.pinfin.data.BudgetId
 import org.hnau.pinfin.data.UpdateType
@@ -14,13 +17,20 @@ import org.hnau.pinfin.model.utils.budget.state.prototype.toBudgetState
 import org.hnau.pinfin.model.utils.budget.state.prototype.withNewUpchain
 import org.hnau.pinfin.model.utils.budget.state.updateTypeMapper
 import org.hnau.upchain.core.repository.upchain.UpchainRepository
-import org.hnau.upchain.core.repository.upchain.addUpdate
+import org.hnau.upchain.core.repository.upchain.addUpdates
 
 class BudgetRepository(
     val state: StateFlow<BudgetState>,
+    @Deprecated ("Use BudgetRepository.applyUpdate instead")
     val upchainRepository: UpchainRepository,
     val remove: suspend () -> Unit,
 ) {
+
+    private val _upchainEditVersion: MutableStateFlow<Int> =
+        0.toMutableStateFlowAsInitial()
+
+    val upchainEditVersion: StateFlow<Int>
+        get() = _upchainEditVersion
 
     val transactions: BudgetRepositoryTransactionsDelegate = BudgetRepositoryTransactionsDelegate(
         state = state,
@@ -53,11 +63,23 @@ class BudgetRepository(
         )
     }
 
-    private suspend fun applyUpdate(
+    suspend fun applyUpdates(
+        updates: List<UpdateType>,
+    ) {
+        @Suppress("DEPRECATION")
+        upchainRepository.addUpdates(
+            updates = updates.map(
+                transform = UpdateType.updateTypeMapper.reverse,
+            )
+        )
+        _upchainEditVersion.update { it + 1 }
+    }
+
+    suspend fun applyUpdate(
         update: UpdateType,
     ) {
-        upchainRepository.addUpdate(
-            UpdateType.updateTypeMapper.reverse(update)
+        applyUpdates(
+            listOf(update)
         )
     }
 

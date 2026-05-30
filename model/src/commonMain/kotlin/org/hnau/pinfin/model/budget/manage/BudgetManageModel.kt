@@ -15,7 +15,7 @@ import org.hnau.commons.app.model.goback.NeverGoBackHandler
 import org.hnau.commons.gen.pipe.annotations.Pipe
 import org.hnau.commons.kotlin.coroutines.flow.state.mutable.toMutableStateFlowAsInitial
 import org.hnau.commons.kotlin.serialization.MutableStateFlowSerializer
-import org.hnau.pinfin.data.BudgetId
+import org.hnau.pinfin.model.BudgetSyncDelegate
 import org.hnau.pinfin.model.budgetstack.BudgetStackOpener
 import org.hnau.pinfin.model.manage.BudgetsListOpener
 import org.hnau.pinfin.model.utils.budget.repository.BudgetRepository
@@ -29,13 +29,13 @@ class BudgetManageModel(
     @Pipe
     interface Dependencies {
 
-        val id: BudgetId //TODO use in sync
-
         val budgetsListOpener: BudgetsListOpener
 
         val repository: BudgetRepository
 
         val budgetStackOpener: BudgetStackOpener
+
+        val sync: BudgetSyncDelegate
 
         fun remove(): BudgetManageRemoveModel.Dependencies
     }
@@ -46,6 +46,9 @@ class BudgetManageModel(
             null.toMutableStateFlowAsInitial(),
         val remove: BudgetManageRemoveModel.Skeleton = BudgetManageRemoveModel.Skeleton()
     )
+
+    val sync: BudgetSyncDelegate
+        get() = dependencies.sync
 
     val remove = BudgetManageRemoveModel(
         scope = scope,

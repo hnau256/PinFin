@@ -47,14 +47,12 @@ class CreateBudgetModel(
         scope.launch {
             inProgressRegistry.executeRegistered {
                 val updates = withContext(Dispatchers.Default) {
-                    DemoBudget
-                        .updates
+                    DemoBudget.updates
                 }
                 dependencies
                     .budgetsStorage
                     .createNewBudgetIfNotExistsAndGet(BudgetId.new())
-                    .upchainRepository
-                    .addUpdates(updates)
+                    .applyUpdates(updates)
             }
         }
     }

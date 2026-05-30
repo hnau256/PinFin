@@ -533,7 +533,10 @@ class DemoBudgetGenerator(
                 config = BudgetConfig(
                     title = loc.budgetTitle,
                     currency = null,
-                    sync = BudgetConfig.Sync.empty,
+                    sync = BudgetConfig.Sync(
+                        onLaunch = false,
+                        onUpdate = false,
+                    ),
                 )
             )
         )

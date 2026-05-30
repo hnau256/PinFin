@@ -15,18 +15,31 @@ class BudgetRootModel(
     @Pipe
     interface Dependencies {
 
-        fun stack(): BudgetStackModel.Dependencies
+        fun sync(): BudgetSyncDelegate.Dependencies
+
+        fun stack(
+            sync: BudgetSyncDelegate,
+        ): BudgetStackModel.Dependencies
     }
 
     @Serializable
     data class Skeleton(
-        val stack: BudgetStackModel.Skeleton = BudgetStackModel.Skeleton()
+        val sync: BudgetSyncDelegate.Skeleton = BudgetSyncDelegate.Skeleton(),
+        val stack: BudgetStackModel.Skeleton = BudgetStackModel.Skeleton(),
+    )
+
+    private val sync = BudgetSyncDelegate(
+        scope = scope,
+        dependencies = dependencies.sync(),
+        skeleton = skeleton.sync,
     )
 
     val stack = BudgetStackModel(
         scope = scope,
         skeleton = skeleton.stack,
-        dependencies = dependencies.stack(),
+        dependencies = dependencies.stack(
+            sync = sync,
+        ),
     )
 
     val goBackHandler: GoBackHandler
