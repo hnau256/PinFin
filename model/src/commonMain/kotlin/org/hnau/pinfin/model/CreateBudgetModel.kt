@@ -5,6 +5,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import kotlinx.serialization.Serializable
 import org.hnau.commons.app.model.goback.GoBackHandler
 import org.hnau.commons.app.model.goback.NeverGoBackHandler
 import org.hnau.commons.gen.pipe.annotations.Pipe
@@ -13,11 +14,11 @@ import org.hnau.pinfin.data.BudgetId
 import org.hnau.pinfin.model.utils.budget.repository.demo.DemoBudget
 import org.hnau.pinfin.model.utils.budget.storage.BudgetsStorage
 import org.hnau.pinfin.model.utils.budget.storage.createNewBudgetIfNotExistsAndGet
-import org.hnau.upchain.core.repository.upchain.addUpdates
 
 class CreateBudgetModel(
     private val scope: CoroutineScope,
     private val dependencies: Dependencies,
+    private val skeleton: Skeleton,
 ) {
 
     @Pipe
@@ -25,6 +26,11 @@ class CreateBudgetModel(
 
         val budgetsStorage: BudgetsStorage
     }
+
+    @Serializable
+    data class Skeleton(
+        val a: Int = 0,
+    )
 
     private val inProgressRegistry = InProgressRegistry(
         scope = scope,

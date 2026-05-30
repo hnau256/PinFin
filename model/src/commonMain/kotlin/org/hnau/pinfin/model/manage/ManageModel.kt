@@ -68,6 +68,7 @@ class ManageModel(
     @Serializable
     data class Skeleton(
         var budgetSkeleton: KeyValue<BudgetId, BudgetRootModel.Skeleton>? = null,
+        var create: CreateBudgetModel.Skeleton? = null,
         var icon: IconModel.Skeleton? = null,
     )
 
@@ -155,6 +156,9 @@ class ManageModel(
             null -> State.createBudget(
                 scope = scope,
                 dependencies = dependencies.createBudget(),
+                skeleton = skeleton::create
+                    .toAccessor()
+                    .getOrInit { CreateBudgetModel.Skeleton() },
             )
 
             else -> {

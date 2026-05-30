@@ -17,6 +17,7 @@ import org.hnau.pinfin.projector.accountstack.AccountStackProjector
 import org.hnau.pinfin.projector.budget.BudgetProjector
 import org.hnau.pinfin.projector.budget.transactions.TransactionsProjector
 import org.hnau.pinfin.projector.BudgetSettingsProjector
+import org.hnau.pinfin.projector.CreateBudgetProjector
 import org.hnau.pinfin.projector.categorystack.CategoryStackProjector
 import org.hnau.pinfin.projector.transaction.TransactionProjector
 
@@ -42,6 +43,8 @@ class BudgetStackProjector(
         fun category(): CategoryStackProjector.Dependencies
 
         fun settings(): BudgetSettingsProjector.Dependencies
+
+        fun create(): CreateBudgetProjector.Dependencies
     }
 
     @SealUp(
@@ -73,6 +76,10 @@ class BudgetStackProjector(
             Variant(
                 type = BudgetSettingsProjector::class,
                 identifier = "settings",
+            ),
+            Variant(
+                type = CreateBudgetProjector::class,
+                identifier = "create",
             ),
         ],
         wrappedValuePropertyName = "projector",
@@ -141,6 +148,12 @@ class BudgetStackProjector(
                             scope = scope,
                             model = settingsModel,
                             dependencies = dependencies.settings(),
+                        )
+                    },
+                    ifCreate = { createModel ->
+                        Element.create(
+                            model = createModel,
+                            dependencies = dependencies.create(),
                         )
                     }
                 )
