@@ -84,6 +84,12 @@ class BudgetStackOpenerImpl(
         )
     }
 
+    override fun openCreateBudget() {
+        open(
+            BudgetStackModel.ElementSkeleton.create()
+        )
+    }
+
     override fun openCategories() {
         open(
             BudgetStackModel.ElementSkeleton.categories

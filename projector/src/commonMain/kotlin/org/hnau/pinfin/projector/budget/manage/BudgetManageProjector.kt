@@ -94,7 +94,7 @@ class BudgetManageProjector(
                     .padding(top = TopBarDefaults.height + TopBarDefaults.separationTop)
             ) {
                 SCellBox(
-                    onClick = { /*Open create new budget screen*/ },
+                    onClick = model::openCreateBudget,
                 ) {
                     SItem(
                         startAccessory = {

@@ -68,10 +68,10 @@ class BudgetManageModel(
             .openSettings()
     }
 
-    fun openBudgetsList() {
-        scope.launch {
-            dependencies.budgetsListOpener.openBudgetsList()
-        }
+    fun openCreateBudget() {
+        dependencies
+            .budgetStackOpener
+            .openCreateBudget()
     }
 
     val goBackHandler: GoBackHandler

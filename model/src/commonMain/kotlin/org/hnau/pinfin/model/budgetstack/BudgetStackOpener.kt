@@ -26,6 +26,8 @@ interface BudgetStackOpener {
 
     fun openSettings()
 
+    fun openCreateBudget()
+
     fun openCategories()
 
     fun openCategory(
