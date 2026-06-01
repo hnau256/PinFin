@@ -5,6 +5,7 @@ import org.hnau.commons.kotlin.foldNullable
 import org.hnau.pinfin.data.BudgetConfig
 import org.hnau.pinfin.data.BudgetId
 import org.hnau.pinfin.data.Currency
+import org.hnau.pinfin.model.utils.budget.default
 import org.hnau.upchain.sync.core.ServerHost
 import org.hnau.upchain.sync.http.HttpScheme
 
@@ -49,7 +50,7 @@ data class BudgetInfo(
 
             val default = Sync(
                 scheme = HttpScheme.default,
-                host = ServerHost.createOrNull("upchain.hnau.org")!!,
+                host = ServerHost.default,
                 onLaunch = true,
                 onUpdate = true,
             )

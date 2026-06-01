@@ -39,6 +39,8 @@ data class Localization(
     val notSave: String = "Не сохранять",
     val accounts: String = "Счета",
     val categories: String = "Категории",
+    val shareBudget: String = "Поделиться бюджетом",
+    val shareBudgetInfo: String = "Вставьте данный код для добавления этого бюджета в приложение другого пользователя",
     val saveChanges: String = "Сохранить изменения?",
     val toBudgetsList: String = "К списку бюджетов",
     val back: String = "Назад",

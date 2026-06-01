@@ -19,6 +19,8 @@ import org.hnau.commons.app.model.app.AppFilesDirProvider
 import org.hnau.commons.app.model.app.AppViewModel
 import org.hnau.commons.app.model.app.getForAndroid
 import org.hnau.commons.app.model.theme.palette.SystemPalettes
+import org.hnau.commons.app.model.utils.ClipboardAccessor
+import org.hnau.commons.app.model.utils.createForAndroid
 import org.hnau.pinfin.app.PinFinAppDependencies
 import org.hnau.pinfin.app.createAppProjector
 import org.hnau.pinfin.app.createPinFinAppSeed
@@ -31,7 +33,11 @@ class AppActivity : ComponentActivity() {
         AppViewModel.factory(
             context = applicationContext,
             seed = createPinFinAppSeed(
-                dependencies = PinFinAppDependencies.impl(),
+                dependencies = PinFinAppDependencies.impl(
+                    clipboardAccessor = ClipboardAccessor.createForAndroid(
+                        context = this,
+                    )
+                ),
                 appFilesDirProvider = AppFilesDirProvider(
                     context = this,
                 )

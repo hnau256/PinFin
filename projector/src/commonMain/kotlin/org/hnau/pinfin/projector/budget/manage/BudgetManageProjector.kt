@@ -71,12 +71,19 @@ class BudgetManageProjector(
         val dateTimeFormatter: DateTimeFormatter
 
         fun remove(): BudgetManageRemoveProjector.Dependencies
+
+        fun share(): BudgetManageShareProjector.Dependencies
     }
 
     private val remove = BudgetManageRemoveProjector(
         scope = scope,
         model = model.remove,
         dependencies = dependencies.remove(),
+    )
+
+    private val share = BudgetManageShareProjector(
+        model = model.share,
+        dependencies = dependencies.share(),
     )
 
 
@@ -158,6 +165,7 @@ class BudgetManageProjector(
                     }
                 }
                 Sync()
+                with(share) { Content() }
                 SCellBox(
                     onClick = remove::onRemoveClick,
                 ) {

@@ -38,13 +38,16 @@ class BudgetManageModel(
         val sync: BudgetSyncDelegate
 
         fun remove(): BudgetManageRemoveModel.Dependencies
+
+        fun share(): BudgetManageShareModel.Dependencies
     }
 
     @Serializable
     data class Skeleton(
         val editName: MutableStateFlow<MutableStateFlow<EditingString>?> =
             null.toMutableStateFlowAsInitial(),
-        val remove: BudgetManageRemoveModel.Skeleton = BudgetManageRemoveModel.Skeleton()
+        val remove: BudgetManageRemoveModel.Skeleton = BudgetManageRemoveModel.Skeleton(),
+        val share: BudgetManageShareModel.Skeleton = BudgetManageShareModel.Skeleton(),
     )
 
     val sync: BudgetSyncDelegate
@@ -54,6 +57,12 @@ class BudgetManageModel(
         scope = scope,
         skeleton = skeleton.remove,
         dependencies = dependencies.remove(),
+    )
+
+    val share = BudgetManageShareModel(
+        scope = scope,
+        skeleton = skeleton.share,
+        dependencies = dependencies.share(),
     )
 
     fun openCategories() {

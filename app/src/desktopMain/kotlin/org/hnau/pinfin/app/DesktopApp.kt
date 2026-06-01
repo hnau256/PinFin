@@ -17,6 +17,8 @@ import kotlinx.coroutines.runBlocking
 import org.hnau.commons.app.model.app.AppFilesDirProvider
 import org.hnau.commons.app.model.app.DesktopApp
 import org.hnau.commons.app.model.theme.palette.SystemPalettes
+import org.hnau.commons.app.model.utils.ClipboardAccessor
+import org.hnau.commons.app.model.utils.createForJvm
 import org.hnau.commons.app.projector.uikit.utils.Dimens
 
 @OptIn(InternalComposeApi::class, InternalComposeUiApi::class)
@@ -27,7 +29,9 @@ fun main() = runBlocking {
     val app = DesktopApp(
         scope = this,
         seed = createPinFinAppSeed(
-            dependencies = PinFinAppDependencies.impl(),
+            dependencies = PinFinAppDependencies.impl(
+                clipboardAccessor = ClipboardAccessor.createForJvm(),
+            ),
             appFilesDirProvider = AppFilesDirProvider(),
         ),
     )
