@@ -33,23 +33,30 @@ class BudgetManageShareProjector(
 
     @Composable
     fun TableScope.Content() {
-        model
+        val state = model
             .state
             .collectAsState()
             .value
-            .StateContent(
-                label = "shareState",
-                contentKey = { it.ordinal },
-                transitionSpec = TransitionSpec.remember(
-                    showAlignment = Alignment.BottomCenter,
-                    hideAlignment = Alignment.TopCenter,
-                )
-            ) { state ->
-                when (state) {
-                    is BudgetManageShareModel.State.Closed -> SCellBox(
-                        actionOrElseOrDisabled = ActionOrElse.instant(state.openAndCopyCode),
-                    ) {
-                        SItem(
+        SCellBox(
+            actionOrElseOrDisabled = when (state) {
+                is BudgetManageShareModel.State.Closed ->
+                    ActionOrElse.instant(state.openAndCopyCode)
+
+                is BudgetManageShareModel.State.Opened ->
+                    ActionOrElse.instant(state.copyCode)
+            }
+        ) {
+            state
+                .StateContent(
+                    label = "shareState",
+                    contentKey = { it.ordinal },
+                    transitionSpec = TransitionSpec.remember(
+                        showAlignment = Alignment.BottomCenter,
+                        hideAlignment = Alignment.TopCenter,
+                    )
+                ) { state ->
+                    when (state) {
+                        is BudgetManageShareModel.State.Closed -> SItem(
                             startAccessory = {
                                 SIcon(Drawable.Vector(Icons.Default.Share))
                             },
@@ -58,12 +65,8 @@ class BudgetManageShareProjector(
                                 dependencies.localization.shareBudget
                             )
                         }
-                    }
 
-                    is BudgetManageShareModel.State.Opened -> SCellBox(
-                        actionOrElseOrDisabled = ActionOrElse.instant(state.copyCode),
-                    ) {
-                        SItem(
+                        is BudgetManageShareModel.State.Opened -> SItem(
                             topAccessory = {
                                 SText(dependencies.localization.shareBudget)
                             },
@@ -81,6 +84,6 @@ class BudgetManageShareProjector(
                         }
                     }
                 }
-            }
+        }
     }
 }
