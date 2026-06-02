@@ -56,13 +56,20 @@ class ManageModel(
 
         val budgetsStorage: BudgetsStorage
 
-        fun budget(
-            id: BudgetId,
-            budgetRepository: BudgetRepository,
-            budgetOpener: BudgetOpener,
-        ): BudgetRootModel.Dependencies
+        @Pipe
+        interface WithOpener {
 
-        fun createBudget(): CreateBudgetModel.Dependencies
+            fun budget(
+                id: BudgetId,
+                budgetRepository: BudgetRepository,
+            ): BudgetRootModel.Dependencies
+
+            fun createBudget(): CreateBudgetModel.Dependencies
+        }
+
+        fun withOpener(
+            budgetOpener: BudgetOpener,
+        ): WithOpener
     }
 
     @Serializable
@@ -149,13 +156,17 @@ class ManageModel(
             )
         }
 
+    private val dependenciesWithOpener = dependencies.withOpener(
+        budgetOpener = selectedBudgetPreference.update,
+    )
+
     val state: StateFlow<ManageStateModel> = selectedBudget.mapWithScope(
         scope = scope,
     ) { scope, budgetIdWithRepositoryOrNull ->
         when (budgetIdWithRepositoryOrNull) {
             null -> State.createBudget(
                 scope = scope,
-                dependencies = dependencies.createBudget(),
+                dependencies = dependenciesWithOpener.createBudget(),
                 skeleton = skeleton::create
                     .toAccessor()
                     .getOrInit { CreateBudgetModel.Skeleton() },
@@ -165,10 +176,9 @@ class ManageModel(
                 val (budgetId, budgetRepository) = budgetIdWithRepositoryOrNull
                 State.budget(
                     scope = scope,
-                    dependencies = dependencies.budget(
+                    dependencies = dependenciesWithOpener.budget(
                         id = budgetId,
                         budgetRepository = budgetRepository,
-                        budgetOpener = selectedBudgetPreference.update,
                     ),
                     skeleton = skeleton::budgetSkeleton
                         .toAccessor()
@@ -186,8 +196,9 @@ class ManageModel(
     init {
         scope.launch {
             selectedBudget
+                .mapState(scope) { it?.key }
                 .collect { selectedBudgetOrNull ->
-                    selectedBudgetPreference.update(selectedBudgetOrNull?.key)
+                    selectedBudgetPreference.update(selectedBudgetOrNull)
                 }
         }
     }

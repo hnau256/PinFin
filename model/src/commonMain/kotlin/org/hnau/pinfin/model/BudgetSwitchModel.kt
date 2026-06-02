@@ -59,7 +59,7 @@ class BudgetSwitchModel(
                             select = actionOrInProgressIfExecuting(scope) {
                                 dependencies
                                     .budgetOpener
-                                    .openBudget(thisId)
+                                    .openBudget(id)
                             }
                         )
                     }
