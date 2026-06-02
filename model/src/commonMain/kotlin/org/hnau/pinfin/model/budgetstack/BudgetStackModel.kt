@@ -25,6 +25,7 @@ import org.hnau.pinfin.model.CategoriesModel
 import org.hnau.pinfin.model.TransactionsModel
 import org.hnau.pinfin.model.accountstack.AccountStackModel
 import org.hnau.pinfin.model.BudgetSettingsModel
+import org.hnau.pinfin.model.BudgetSwitchModel
 import org.hnau.pinfin.model.CreateBudgetModel
 import org.hnau.pinfin.model.budget.BudgetModel
 import org.hnau.pinfin.model.budget.analytics.tab.graph.TransactionsOpener
@@ -56,6 +57,8 @@ class BudgetStackModel(
         fun create(): CreateBudgetModel.Dependencies
 
         fun opener(): BudgetStackOpenerImpl.Dependencies
+
+        fun switch(): BudgetSwitchModel.Dependencies
 
         @Pipe
         interface WithOpeners {
@@ -111,6 +114,10 @@ class BudgetStackModel(
                 type = CreateBudgetModel::class,
                 identifier = "create",
             ),
+            Variant(
+                type = BudgetSwitchModel::class,
+                identifier = "switch",
+            ),
         ],
         wrappedValuePropertyName = "model",
         sealedInterfaceName = "BudgetStackElementModel",
@@ -155,6 +162,10 @@ class BudgetStackModel(
             Variant(
                 type = CreateBudgetModel.Skeleton::class,
                 identifier = "create",
+            ),
+            Variant(
+                type = Unit::class,
+                identifier = "switch",
             ),
         ],
         wrappedValuePropertyName = "skeleton",
@@ -251,11 +262,17 @@ class BudgetStackModel(
                 close = { this@BudgetStackModel.skeleton.stack.tryDropLast() },
             )
         },
-        ifCreate = {createSkeleton ->
+        ifCreate = { createSkeleton ->
             Element.create(
                 scope = scope,
                 skeleton = createSkeleton,
                 dependencies = dependencies.create(),
+            )
+        },
+        ifSwitch = {
+            Element.switch(
+                scope = scope,
+                dependencies = dependencies.switch(),
             )
         }
     )

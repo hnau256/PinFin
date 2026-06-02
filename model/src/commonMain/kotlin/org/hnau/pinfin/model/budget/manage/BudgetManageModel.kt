@@ -17,7 +17,6 @@ import org.hnau.commons.kotlin.coroutines.flow.state.mutable.toMutableStateFlowA
 import org.hnau.commons.kotlin.serialization.MutableStateFlowSerializer
 import org.hnau.pinfin.model.BudgetSyncDelegate
 import org.hnau.pinfin.model.budgetstack.BudgetStackOpener
-import org.hnau.pinfin.model.manage.BudgetsListOpener
 import org.hnau.pinfin.model.utils.budget.repository.BudgetRepository
 
 class BudgetManageModel(
@@ -28,8 +27,6 @@ class BudgetManageModel(
 
     @Pipe
     interface Dependencies {
-
-        val budgetsListOpener: BudgetsListOpener
 
         val repository: BudgetRepository
 
@@ -81,6 +78,12 @@ class BudgetManageModel(
         dependencies
             .budgetStackOpener
             .openCreateBudget()
+    }
+
+    fun openSwitchBudget() {
+        dependencies
+            .budgetStackOpener
+            .openSwitchBudget()
     }
 
     val goBackHandler: GoBackHandler

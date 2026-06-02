@@ -49,7 +49,9 @@ import org.hnau.commons.app.projector.utils.Orientation
 import org.hnau.commons.app.projector.utils.TitleOrIcon
 import org.hnau.commons.gen.pipe.annotations.Pipe
 import org.hnau.commons.kotlin.KeyValue
+import org.hnau.commons.kotlin.coroutines.ActionOrElse
 import org.hnau.commons.kotlin.coroutines.flow.state.combineStateWith
+import org.hnau.commons.kotlin.coroutines.instant
 import org.hnau.commons.kotlin.foldBoolean
 import org.hnau.pinfin.model.budget.manage.BudgetManageModel
 import org.hnau.pinfin.projector.Localization
@@ -101,7 +103,7 @@ class BudgetManageProjector(
                     .padding(top = TopBarDefaults.height + TopBarDefaults.separationTop)
             ) {
                 SCellBox(
-                    onClick = model::openCreateBudget,
+                    actionOrElseOrDisabled = ActionOrElse.instant(model::openCreateBudget),
                 ) {
                     SItem(
                         startAccessory = {
@@ -117,7 +119,7 @@ class BudgetManageProjector(
                     }
                 }
                 SCellBox(
-                    onClick = { /*Open switch budget screen*/ },
+                    actionOrElseOrDisabled = ActionOrElse.instant(model::openSwitchBudget),
                 ) {
                     SItem(
                         startAccessory = {
@@ -133,7 +135,7 @@ class BudgetManageProjector(
                     }
                 }
                 SCellBox(
-                    onClick = model::openSettings,
+                    actionOrElseOrDisabled = ActionOrElse.instant(model::openSettings),
                 ) {
                     SItem(
                         startAccessory = {
@@ -149,7 +151,7 @@ class BudgetManageProjector(
                     }
                 }
                 SCellBox(
-                    onClick = model::openCategories,
+                    actionOrElseOrDisabled = ActionOrElse.instant(model::openCategories),
                 ) {
                     SItem(
                         startAccessory = {
@@ -167,7 +169,7 @@ class BudgetManageProjector(
                 Sync()
                 with(share) { Content() }
                 SCellBox(
-                    onClick = remove::onRemoveClick,
+                    actionOrElseOrDisabled = ActionOrElse.instant(remove::onRemoveClick),
                 ) {
                     SItem(
                         startAccessory = {

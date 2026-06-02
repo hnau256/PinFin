@@ -59,7 +59,7 @@ class ManageModel(
         fun budget(
             id: BudgetId,
             budgetRepository: BudgetRepository,
-            budgetsListOpener: BudgetsListOpener,
+            budgetOpener: BudgetOpener,
         ): BudgetRootModel.Dependencies
 
         fun createBudget(): CreateBudgetModel.Dependencies
@@ -168,7 +168,7 @@ class ManageModel(
                     dependencies = dependencies.budget(
                         id = budgetId,
                         budgetRepository = budgetRepository,
-                        budgetsListOpener = { selectedBudgetPreference.update(null) },
+                        budgetOpener = selectedBudgetPreference.update,
                     ),
                     skeleton = skeleton::budgetSkeleton
                         .toAccessor()

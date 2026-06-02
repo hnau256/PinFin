@@ -15,6 +15,8 @@ import org.hnau.commons.app.projector.uikit.table.TableScope
 import org.hnau.commons.app.projector.uikit.transition.TransitionSpec
 import org.hnau.commons.app.projector.utils.Drawable
 import org.hnau.commons.gen.pipe.annotations.Pipe
+import org.hnau.commons.kotlin.coroutines.ActionOrElse
+import org.hnau.commons.kotlin.coroutines.instant
 import org.hnau.pinfin.model.budget.manage.BudgetManageShareModel
 import org.hnau.pinfin.projector.Localization
 
@@ -45,7 +47,7 @@ class BudgetManageShareProjector(
             ) { state ->
                 when (state) {
                     is BudgetManageShareModel.State.Closed -> SCellBox(
-                        onClick = { state.openAndCopyCode() },
+                        actionOrElseOrDisabled = ActionOrElse.instant(state.openAndCopyCode),
                     ) {
                         SItem(
                             startAccessory = {
@@ -59,7 +61,7 @@ class BudgetManageShareProjector(
                     }
 
                     is BudgetManageShareModel.State.Opened -> SCellBox(
-                        onClick = { state.copyCode() },
+                        actionOrElseOrDisabled = ActionOrElse.instant(state.copyCode),
                     ) {
                         SItem(
                             topAccessory = {
