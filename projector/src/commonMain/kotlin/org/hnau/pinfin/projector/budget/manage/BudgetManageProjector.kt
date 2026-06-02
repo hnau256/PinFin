@@ -2,6 +2,7 @@ package org.hnau.pinfin.projector.budget.manage
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -93,97 +94,117 @@ class BudgetManageProjector(
     fun Content(
         contentPadding: PaddingValues,
     ) {
-        Box {
-            STable(
-                orientation = Orientation.Vertical,
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = TopBarDefaults.height + TopBarDefaults.separationTop),
+        ) {
+            Column(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(contentPadding)
-                    .padding(LocalFContext.current.distance.units.paddingValues.vertical.medium)
-                    .padding(top = TopBarDefaults.height + TopBarDefaults.separationTop)
+                    .padding(LocalFContext.current.distance.units.paddingValues.vertical.medium),
+                verticalArrangement = Arrangement.spacedBy(LocalFContext.current.distance.units.padding.along.medium),
             ) {
-                SCellBox(
-                    actionOrElseOrDisabled = ActionOrElse.instant(model::openCreateBudget),
+
+                STable(
+                    orientation = Orientation.Vertical,
+                    modifier = Modifier.fillMaxWidth(),
                 ) {
-                    SItem(
-                        startAccessory = {
-                            SIcon(Drawable.Vector(Icons.Default.PostAdd))
-                        },
-                        endAccessory = {
-                            SIcon(Drawable.Vector(Icons.Default.ChevronRight))
-                        },
+                    Sync()
+                    with(share) { Content() }
+                }
+
+                STable(
+                    orientation = Orientation.Vertical,
+                    modifier = Modifier.fillMaxWidth(),
+                ) {
+                    SCellBox(
+                        actionOrElseOrDisabled = ActionOrElse.instant(model::openSettings),
                     ) {
-                        SText(
-                            dependencies.localization.addBudget
-                        )
+                        SItem(
+                            startAccessory = {
+                                SIcon(Drawable.Vector(Icons.Default.Settings))
+                            },
+                            endAccessory = {
+                                SIcon(Drawable.Vector(Icons.Default.ChevronRight))
+                            },
+                        ) {
+                            SText(
+                                dependencies.localization.settings
+                            )
+                        }
+                    }
+                    SCellBox(
+                        actionOrElseOrDisabled = ActionOrElse.instant(model::openCategories),
+                    ) {
+                        SItem(
+                            startAccessory = {
+                                SIcon(Drawable.Vector(Icons.Default.Interests))
+                            },
+                            endAccessory = {
+                                SIcon(Drawable.Vector(Icons.Default.ChevronRight))
+                            },
+                        ) {
+                            SText(
+                                dependencies.localization.categories
+                            )
+                        }
                     }
                 }
-                SCellBox(
-                    actionOrElseOrDisabled = ActionOrElse.instant(model::openSwitchBudget),
+                STable(
+                    orientation = Orientation.Vertical,
+                    modifier = Modifier.fillMaxWidth(),
                 ) {
-                    SItem(
-                        startAccessory = {
-                            SIcon(Drawable.Vector(Icons.Default.SwapHoriz))
-                        },
-                        endAccessory = {
-                            SIcon(Drawable.Vector(Icons.Default.ChevronRight))
-                        },
+                    SCellBox(
+                        actionOrElseOrDisabled = ActionOrElse.instant(model::openCreateBudget),
                     ) {
-                        SText(
-                            dependencies.localization.switchBudget
-                        )
+                        SItem(
+                            startAccessory = {
+                                SIcon(Drawable.Vector(Icons.Default.PostAdd))
+                            },
+                            endAccessory = {
+                                SIcon(Drawable.Vector(Icons.Default.ChevronRight))
+                            },
+                        ) {
+                            SText(
+                                dependencies.localization.addBudget
+                            )
+                        }
                     }
-                }
-                SCellBox(
-                    actionOrElseOrDisabled = ActionOrElse.instant(model::openSettings),
-                ) {
-                    SItem(
-                        startAccessory = {
-                            SIcon(Drawable.Vector(Icons.Default.Settings))
-                        },
-                        endAccessory = {
-                            SIcon(Drawable.Vector(Icons.Default.ChevronRight))
-                        },
+                    SCellBox(
+                        actionOrElseOrDisabled = ActionOrElse.instant(model::openSwitchBudget),
                     ) {
-                        SText(
-                            dependencies.localization.settings
-                        )
+                        SItem(
+                            startAccessory = {
+                                SIcon(Drawable.Vector(Icons.Default.SwapHoriz))
+                            },
+                            endAccessory = {
+                                SIcon(Drawable.Vector(Icons.Default.ChevronRight))
+                            },
+                        ) {
+                            SText(
+                                dependencies.localization.switchBudget
+                            )
+                        }
                     }
-                }
-                SCellBox(
-                    actionOrElseOrDisabled = ActionOrElse.instant(model::openCategories),
-                ) {
-                    SItem(
-                        startAccessory = {
-                            SIcon(Drawable.Vector(Icons.Default.Interests))
-                        },
-                        endAccessory = {
-                            SIcon(Drawable.Vector(Icons.Default.ChevronRight))
-                        },
+                    SCellBox(
+                        actionOrElseOrDisabled = ActionOrElse.instant(remove::onRemoveClick),
                     ) {
-                        SText(
-                            dependencies.localization.categories
-                        )
-                    }
-                }
-                Sync()
-                with(share) { Content() }
-                SCellBox(
-                    actionOrElseOrDisabled = ActionOrElse.instant(remove::onRemoveClick),
-                ) {
-                    SItem(
-                        startAccessory = {
-                            SIcon(Drawable.Vector(Icons.Default.Delete))
-                        },
-                    ) {
-                        SText(
-                            dependencies.localization.removeBudget
-                        )
+                        SItem(
+                            startAccessory = {
+                                SIcon(Drawable.Vector(Icons.Default.Delete))
+                            },
+                        ) {
+                            SText(
+                                dependencies.localization.removeBudget
+                            )
+                        }
                     }
                 }
             }
+            remove.Content()
         }
-        remove.Content()
     }
 
     @Composable
