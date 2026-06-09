@@ -25,7 +25,8 @@ import org.hnau.commons.app.projector.fractal.SContentWithActions
 import org.hnau.commons.app.projector.fractal.SElements
 import org.hnau.commons.app.projector.fractal.SPanel
 import org.hnau.commons.app.projector.fractal.SScreen
-import org.hnau.commons.app.projector.fractal.table.STable
+import org.hnau.commons.app.projector.fractal.table.lazy.SLazyTable
+import org.hnau.commons.app.projector.fractal.table.lazy.cell
 import org.hnau.commons.app.projector.fractal.SText
 import org.hnau.commons.app.projector.fractal.input.InputProjector
 import org.hnau.commons.app.projector.fractal.input.createInputProjector
@@ -157,33 +158,33 @@ class BudgetSettingsProjector(
                         modifier = Modifier
                             .verticalScroll(rememberScrollState()),
                     ) {
-                        STable(
+                        SLazyTable(
                             orientation = Orientation.Vertical,
                         ) {
-                            SCell {
+                            cell {
                                 SPanel(
                                     contentAlignment = Alignment.CenterStart,
                                 ) {
                                     SText(dependencies.localization.budgetConfigMain)
                                 }
                             }
-                            SCell { with(mainTitle) { Content() } } 
-                            SCell { with(mainMantissaLength) { Content() } } 
+                            cell { with(mainTitle) { Content() } } 
+                            cell { with(mainMantissaLength) { Content() } } 
                         }
-                        STable(
+                        SLazyTable(
                             orientation = Orientation.Vertical,
                         ) {
-                            SCell {
+                            cell {
                                 SPanel(
                                     contentAlignment = Alignment.CenterStart,
                                 ) {
                                     SText(dependencies.localization.budgetConfigSync)
                                 }
                             }
-                            SCell { with(syncScheme) { Content() } } 
-                            SCell { with(syncHost) { Content() } } 
-                            SCell { with(syncOnLaunch) { Content() } } 
-                            SCell { with(syncOnUpdate) { Content() } } 
+                            cell { with(syncScheme) { Content() } } 
+                            cell { with(syncHost) { Content() } } 
+                            cell { with(syncOnLaunch) { Content() } } 
+                            cell { with(syncOnUpdate) { Content() } } 
                         }
                     }
 

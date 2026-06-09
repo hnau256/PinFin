@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
@@ -21,6 +22,7 @@ import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.SwapHoriz
 import androidx.compose.material.icons.filled.Sync
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -33,21 +35,25 @@ import org.hnau.commons.app.projector.fractal.SButton
 import org.hnau.commons.app.projector.fractal.SIcon
 import org.hnau.commons.app.projector.fractal.SItem
 import org.hnau.commons.app.projector.fractal.SPanel
-import org.hnau.commons.app.projector.fractal.table.STable
+import org.hnau.commons.app.projector.fractal.table.lazy.SLazyTable
 import org.hnau.commons.app.projector.fractal.SText
 import org.hnau.commons.app.projector.fractal.STitleOrIcon
 import org.hnau.commons.app.projector.fractal.context.FContext
 import org.hnau.commons.app.projector.fractal.context.LocalFContext
 import org.hnau.commons.app.projector.fractal.distance.LocalDistance
+import org.hnau.commons.app.projector.fractal.padding.LocalContentPadding
 import org.hnau.commons.app.projector.fractal.size.units
 import org.hnau.commons.app.projector.fractal.table.STableScope
-import org.hnau.commons.app.projector.fractal.table.Subtable
+import org.hnau.commons.app.projector.fractal.table.lazy.SLazyCellScope
+import org.hnau.commons.app.projector.fractal.table.lazy.cell
+import org.hnau.commons.app.projector.fractal.table.lazy.Subtable
 import org.hnau.commons.app.projector.fractal.utils.Mood
 import org.hnau.commons.app.projector.uikit.TopBarDefaults
 import org.hnau.commons.app.projector.uikit.line.weight
 import org.hnau.commons.app.projector.utils.Drawable
 import org.hnau.commons.app.projector.utils.Orientation
 import org.hnau.commons.app.projector.utils.TitleOrIcon
+import org.hnau.commons.app.projector.utils.plus
 import org.hnau.commons.gen.pipe.annotations.Pipe
 import org.hnau.commons.kotlin.KeyValue
 import org.hnau.commons.kotlin.coroutines.ActionOrElse
@@ -95,31 +101,24 @@ class BudgetManageProjector(
         contentPadding: PaddingValues,
     ) {
         Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = TopBarDefaults.height + TopBarDefaults.separationTop),
+            modifier = Modifier.fillMaxSize(),
         ) {
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(contentPadding)
-                    .padding(LocalDistance.current.units.paddingValues.vertical.medium),
-                verticalArrangement = Arrangement.spacedBy(LocalDistance.current.units.padding.along.medium),
+            CompositionLocalProvider(
+                LocalContentPadding provides PaddingValues(
+                    top = TopBarDefaults.height + TopBarDefaults.separationTop,
+                ) +
+                        contentPadding +
+                        LocalDistance.current.units.paddingValues.vertical.medium
             ) {
-
-                STable(
+                SLazyTable(
                     orientation = Orientation.Vertical,
-                    modifier = Modifier.fillMaxWidth(),
                 ) {
-                    Sync()
-                    with(share) { Content() }
-                }
+                    cell(key = "sync") { Sync() }
+                    cell(key = "share") { with(share) { Content() } }
 
-                STable(
-                    orientation = Orientation.Vertical,
-                    modifier = Modifier.fillMaxWidth(),
-                ) {
-                    SCell {
+                    separator()
+
+                    cell(key = "settings") {
                         SPanel(
                             actionOrElseOrDisabled = ActionOrElse.instant(model::openSettings),
                             importanceToActivate = null,
@@ -138,7 +137,7 @@ class BudgetManageProjector(
                             }
                         }
                     }
-                    SCell {
+                    cell(key = "categories") {
                         SPanel(
                             actionOrElseOrDisabled = ActionOrElse.instant(model::openCategories),
                             importanceToActivate = null,
@@ -157,12 +156,10 @@ class BudgetManageProjector(
                             }
                         }
                     }
-                }
-                STable(
-                    orientation = Orientation.Vertical,
-                    modifier = Modifier.fillMaxWidth(),
-                ) {
-                    SCell {
+
+                    separator()
+
+                    cell(key = "create") {
                         SPanel(
                             actionOrElseOrDisabled = ActionOrElse.instant(model::openCreateBudget),
                             importanceToActivate = null,
@@ -181,7 +178,7 @@ class BudgetManageProjector(
                             }
                         }
                     }
-                    SCell {
+                    cell(key = "switch") {
                         SPanel(
                             actionOrElseOrDisabled = ActionOrElse.instant(model::openSwitchBudget),
                             importanceToActivate = null,
@@ -200,7 +197,7 @@ class BudgetManageProjector(
                             }
                         }
                     }
-                    SCell {
+                    cell(key = "remove") {
                         SPanel(
                             actionOrElseOrDisabled = ActionOrElse.instant(remove::onRemoveClick),
                             importanceToActivate = null,
@@ -223,7 +220,7 @@ class BudgetManageProjector(
     }
 
     @Composable
-    private fun STableScope.Sync() {
+    private fun SLazyCellScope.Sync() {
         val sync = model.sync
 
         val syncResult = sync
