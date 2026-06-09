@@ -39,6 +39,7 @@ import androidx.compose.ui.unit.dp
 import arrow.core.NonEmptyList
 import org.hnau.commons.app.projector.fractal.SScreen
 import org.hnau.commons.app.projector.fractal.SText
+import org.hnau.commons.app.projector.fractal.padding.LocalContentPadding
 import org.hnau.commons.app.projector.uikit.ErrorPanel
 import org.hnau.commons.app.projector.uikit.TextInput
 import org.hnau.commons.app.projector.uikit.progressindicator.ProgressIndicatorInBox
@@ -85,7 +86,8 @@ class IconProjector(
         SScreen(
             contentPadding = contentPadding,
             title = { SText(dependencies.localization.selectIcon) },
-        ) { contentPadding ->
+        ) {
+            val contentPadding = LocalContentPadding.current
             Column(
                 modifier = Modifier.fillMaxSize(),
             ) {

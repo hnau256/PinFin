@@ -21,8 +21,8 @@ import arrow.core.nonEmptySetOf
 import arrow.core.toNonEmptyListOrNull
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
-import org.hnau.commons.app.projector.uikit.table.Table
-import org.hnau.commons.app.projector.uikit.table.rememberCellShape
+import org.hnau.commons.app.projector.fractal.table.STable
+import org.hnau.commons.app.projector.fractal.utils.rememberFShape
 import org.hnau.commons.app.projector.uikit.utils.Dimens
 import org.hnau.commons.app.projector.utils.Icon
 import org.hnau.commons.app.projector.utils.Orientation
@@ -43,18 +43,18 @@ fun TransactionInfo.Content(
     currency: Currency,
     onClick: () -> Unit,
 ) {
-    Table(
+    STable(
         orientation = Orientation.Horizontal,
         modifier = Modifier
             .fillMaxWidth()
             .horizontalDisplayPadding(),
     ) {
-        Cell {
+        SCell {
             CellContent(
                 dependencies = dependencies,
                 currency = currency,
                 onClick = onClick,
-                shape = rememberCellShape(),
+                shape = rememberFShape(),
             )
         }
     }

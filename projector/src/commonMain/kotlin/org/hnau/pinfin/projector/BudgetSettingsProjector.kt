@@ -20,11 +20,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import kotlinx.coroutines.CoroutineScope
-import org.hnau.commons.app.projector.fractal.SCellBox
+import org.hnau.commons.app.projector.fractal.SButton
 import org.hnau.commons.app.projector.fractal.SContentWithActions
 import org.hnau.commons.app.projector.fractal.SElements
+import org.hnau.commons.app.projector.fractal.SPanel
 import org.hnau.commons.app.projector.fractal.SScreen
-import org.hnau.commons.app.projector.fractal.STable
+import org.hnau.commons.app.projector.fractal.table.STable
 import org.hnau.commons.app.projector.fractal.SText
 import org.hnau.commons.app.projector.fractal.input.InputProjector
 import org.hnau.commons.app.projector.fractal.input.createInputProjector
@@ -128,11 +129,13 @@ class BudgetSettingsProjector(
         scope = scope,
         model = model.savableDelegate,
         notSaved = {
-            SCellBox {
-                SText(
-                    text = dependencies.localization.budgetConfigIsNotSaved,
-                    type = SizeType.Large,
-                )
+            SCell {
+                SPanel {
+                    SText(
+                        text = dependencies.localization.budgetConfigIsNotSaved,
+                        type = SizeType.Large,
+                    )
+                }
             }
         },
         save = dependencies.localization.save,
@@ -147,43 +150,46 @@ class BudgetSettingsProjector(
         SScreen(
             contentPadding = contentPadding,
             title = { SText(dependencies.localization.budgetConfig) },
-        ) { contentPadding ->
+        ) {
             SContentWithActions(
-                modifier = Modifier.padding(contentPadding),
                 content = {
-                    SElements (
+                    SElements(
                         modifier = Modifier
                             .verticalScroll(rememberScrollState()),
-                    ){
+                    ) {
                         STable(
                             orientation = Orientation.Vertical,
                         ) {
-                            SCellBox(
-                                contentAlignment = Alignment.CenterStart,
-                            ) {
-                                SText(dependencies.localization.budgetConfigMain)
+                            SCell {
+                                SPanel(
+                                    contentAlignment = Alignment.CenterStart,
+                                ) {
+                                    SText(dependencies.localization.budgetConfigMain)
+                                }
                             }
-                            with(mainTitle) { Content() }
-                            with(mainMantissaLength) { Content() }
+                            SCell { with(mainTitle) { Content() } } 
+                            SCell { with(mainMantissaLength) { Content() } } 
                         }
                         STable(
                             orientation = Orientation.Vertical,
                         ) {
-                            SCellBox(
-                                contentAlignment = Alignment.CenterStart,
-                            ) {
-                                SText(dependencies.localization.budgetConfigSync)
+                            SCell {
+                                SPanel(
+                                    contentAlignment = Alignment.CenterStart,
+                                ) {
+                                    SText(dependencies.localization.budgetConfigSync)
+                                }
                             }
-                            with(syncScheme) { Content() }
-                            with(syncHost) { Content() }
-                            with(syncOnLaunch) { Content() }
-                            with(syncOnUpdate) { Content() }
+                            SCell { with(syncScheme) { Content() } } 
+                            SCell { with(syncHost) { Content() } } 
+                            SCell { with(syncOnLaunch) { Content() } } 
+                            SCell { with(syncOnUpdate) { Content() } } 
                         }
                     }
 
                 },
                 actions = {
-                    Action(
+                    SButton(
                         actionOrElseOrDisabled = model
                             .savableDelegate
                             .saveOrInactive

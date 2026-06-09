@@ -6,6 +6,7 @@ import androidx.compose.material.icons.filled.Save
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import org.hnau.commons.app.projector.fractal.STableActionsScope
+import org.hnau.commons.app.projector.fractal.context.FContext
 import org.hnau.commons.app.projector.fractal.utils.Mood
 import org.hnau.commons.app.projector.utils.Drawable
 import org.hnau.commons.app.projector.utils.TitleOrIcon
@@ -30,11 +31,18 @@ class TopBarActionsProjector(
         model
             .remove
             ?.let { remove ->
-                Action(
-                    actionOrElseOrDisabled = ActionOrElse.instant(remove),
-                    titleOrIcon = TitleOrIcon.Icon(Drawable.Vector(Icons.Default.Delete)),
-                    mood = Mood.Error,
-                )
+                FContext(
+                    update = {
+                        copy(
+                            mood = Mood.Error,
+                        )
+                    }
+                ) {
+                    Action(
+                        actionOrElseOrDisabled = ActionOrElse.instant(remove),
+                        titleOrIcon = TitleOrIcon.Icon(Drawable.Vector(Icons.Default.Delete)),
+                    )
+                }
             }
     }
 }

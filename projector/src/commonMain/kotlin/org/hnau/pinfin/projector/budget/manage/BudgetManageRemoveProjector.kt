@@ -6,9 +6,10 @@ import androidx.compose.ui.Modifier
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.StateFlow
 import org.hnau.commons.app.projector.fractal.DialogContentInfo
-import org.hnau.commons.app.projector.fractal.SCellBox
 import org.hnau.commons.app.projector.fractal.SDialog
+import org.hnau.commons.app.projector.fractal.SPanel
 import org.hnau.commons.app.projector.fractal.SText
+import org.hnau.commons.app.projector.fractal.context.FContext
 import org.hnau.commons.app.projector.fractal.size.SizeType
 import org.hnau.commons.app.projector.fractal.utils.Mood
 import org.hnau.commons.app.projector.uikit.line.weight
@@ -42,20 +43,29 @@ class BudgetManageRemoveProjector(
             dialogOrNull?.let { dialog ->
                 DialogContentInfo(
                     content = {
-                        SCellBox {
-                            SText(
-                                text = dependencies.localization.removeBudget,
-                                type = SizeType.Large,
-                            )
+                        SCell {
+                            SPanel {
+                                SText(
+                                    text = dependencies.localization.removeBudget,
+                                    type = SizeType.Large,
+                                )
+                            }
                         }
                     },
                     actions = {
-                        Action(
-                            modifier = Modifier.weight(1f),
-                            actionOrElseOrDisabled = dialog.remove.collectAsState().value,
-                            titleOrIcon = TitleOrIcon.Title(dependencies.localization.yes),
-                            mood = Mood.Error,
-                        )
+                        FContext(
+                            update = {
+                                copy(
+                                    mood = Mood.Error,
+                                )
+                            }
+                        ) {
+                            Action(
+                                modifier = Modifier.weight(1f),
+                                actionOrElseOrDisabled = dialog.remove.collectAsState().value,
+                                titleOrIcon = TitleOrIcon.Title(dependencies.localization.yes),
+                            )
+                        }
                         Action(
                             modifier = Modifier.weight(1f),
                             actionOrElseOrDisabled = ActionOrElse.instant(dialog.cancel),

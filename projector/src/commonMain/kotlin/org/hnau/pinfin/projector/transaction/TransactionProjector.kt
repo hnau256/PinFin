@@ -11,6 +11,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.CoroutineScope
 import org.hnau.commons.app.projector.fractal.SScreen
+import org.hnau.commons.app.projector.fractal.padding.LocalContentPadding
 import org.hnau.commons.app.projector.uikit.utils.Dimens
 import org.hnau.commons.app.projector.utils.copy
 import org.hnau.commons.gen.pipe.annotations.Pipe
@@ -79,7 +80,8 @@ class TransactionProjector(
             contentPadding = contentPadding,
             title = { type.HeaderContent() },
             actions = { with(topBarActions) { Content() } },
-        ) { contentPadding ->
+        ) {
+            val contentPadding = LocalContentPadding.current
             Column(
                 modifier = Modifier.fillMaxSize(),
                 verticalArrangement = Arrangement.spacedBy(Dimens.separation),

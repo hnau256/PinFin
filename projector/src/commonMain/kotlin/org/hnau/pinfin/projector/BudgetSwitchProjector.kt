@@ -11,16 +11,18 @@ import androidx.compose.material.icons.filled.Check
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.util.fastForEach
-import org.hnau.commons.app.projector.fractal.SCellBox
-import org.hnau.commons.app.projector.fractal.SElements
+import arrow.optics.copy
 import org.hnau.commons.app.projector.fractal.SIcon
 import org.hnau.commons.app.projector.fractal.SItem
+import org.hnau.commons.app.projector.fractal.SPanel
 import org.hnau.commons.app.projector.fractal.SScreen
-import org.hnau.commons.app.projector.fractal.STable
 import org.hnau.commons.app.projector.fractal.SText
+import org.hnau.commons.app.projector.fractal.context.FContext
+import org.hnau.commons.app.projector.fractal.table.STable
+import org.hnau.commons.app.projector.fractal.utils.Importance
 import org.hnau.commons.app.projector.fractal.utils.Saturation
+import org.hnau.commons.app.projector.fractal.utils.activateIfNeed
 import org.hnau.commons.app.projector.utils.Drawable
 import org.hnau.commons.app.projector.utils.Orientation
 import org.hnau.commons.gen.pipe.annotations.Pipe
@@ -45,10 +47,9 @@ class BudgetSwitchProjector(
         SScreen(
             contentPadding = contentPadding,
             title = { SText((dependencies.localization.switchBudget)) },
-        ) { contentPadding ->
+        ) {
             Box(
                 modifier = Modifier
-                    .padding(contentPadding)
                     .fillMaxWidth()
                     .verticalScroll(rememberScrollState()),
             ) {
@@ -61,15 +62,17 @@ class BudgetSwitchProjector(
                         .collectAsState()
                         .value
                         .fastForEach { item ->
-                            SCellBox(
-                                actionOrElseOrDisabled = when (val state = item.state) {
-                                    is BudgetSwitchModel.Item.State.NotSelected -> state.select.collectAsState().value
-                                    BudgetSwitchModel.Item.State.Selected -> null
+                            SCell {
+                                SPanel(
+                                    actionOrElseOrDisabled = when (val state = item.state) {
+                                        is BudgetSwitchModel.Item.State.NotSelected -> state.select.collectAsState().value
+                                        BudgetSwitchModel.Item.State.Selected -> null
+                                    }
+                                ) {
+                                    Item(
+                                        item = item,
+                                    )
                                 }
-                            ) {
-                                Item(
-                                    item = item,
-                                )
                             }
                         }
                 }
@@ -85,19 +88,28 @@ class BudgetSwitchProjector(
             is BudgetSwitchModel.Item.State.NotSelected -> false
             BudgetSwitchModel.Item.State.Selected -> true
         }
-        SItem(
-            endAccessory = selected.ifTrue {
-                {
-                    SIcon(
-                        drawable = Drawable.Vector(Icons.Default.Check)
+        FContext(
+            update = {
+                copy(
+                    mood = mood.activateIfNeed(
+                        selected.ifTrue { Importance.default },
                     )
-                }
-            },
-            saturation = Saturation.get(selected),
+                )
+            }
         ) {
-            SText(
-                text = item.title.collectAsState().value,
-            )
+            SItem(
+                endAccessory = selected.ifTrue {
+                    {
+                        SIcon(
+                            drawable = Drawable.Vector(Icons.Default.Check)
+                        )
+                    }
+                },
+            ) {
+                SText(
+                    text = item.title.collectAsState().value,
+                )
+            }
         }
     }
 }

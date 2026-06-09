@@ -6,12 +6,12 @@ import androidx.compose.material.icons.filled.Share
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
-import org.hnau.commons.app.projector.fractal.SCellBox
 import org.hnau.commons.app.projector.fractal.SIcon
 import org.hnau.commons.app.projector.fractal.SItem
+import org.hnau.commons.app.projector.fractal.SPanel
 import org.hnau.commons.app.projector.fractal.SText
+import org.hnau.commons.app.projector.fractal.table.STableScope
 import org.hnau.commons.app.projector.uikit.state.StateContent
-import org.hnau.commons.app.projector.uikit.table.TableScope
 import org.hnau.commons.app.projector.uikit.transition.TransitionSpec
 import org.hnau.commons.app.projector.utils.Drawable
 import org.hnau.commons.gen.pipe.annotations.Pipe
@@ -32,58 +32,61 @@ class BudgetManageShareProjector(
     }
 
     @Composable
-    fun TableScope.Content() {
+    fun STableScope.Content() {
         val state = model
             .state
             .collectAsState()
             .value
-        SCellBox(
-            actionOrElseOrDisabled = when (state) {
-                is BudgetManageShareModel.State.Closed ->
-                    ActionOrElse.instant(state.openAndCopyCode)
+        SCell {
+            SPanel(
+                actionOrElseOrDisabled = when (state) {
+                    is BudgetManageShareModel.State.Closed ->
+                        ActionOrElse.instant(state.openAndCopyCode)
 
-                is BudgetManageShareModel.State.Opened ->
-                    ActionOrElse.instant(state.copyCode)
-            }
-        ) {
-            state
-                .StateContent(
-                    label = "shareState",
-                    contentKey = { it.ordinal },
-                    transitionSpec = TransitionSpec.remember(
-                        showAlignment = Alignment.BottomCenter,
-                        hideAlignment = Alignment.TopCenter,
-                    )
-                ) { state ->
-                    when (state) {
-                        is BudgetManageShareModel.State.Closed -> SItem(
-                            startAccessory = {
-                                SIcon(Drawable.Vector(Icons.Default.Share))
-                            },
-                        ) {
-                            SText(
-                                dependencies.localization.shareBudget
-                            )
-                        }
+                    is BudgetManageShareModel.State.Opened ->
+                        ActionOrElse.instant(state.copyCode)
+                },
+                importanceToActivate = null,
+            ) {
+                state
+                    .StateContent(
+                        label = "shareState",
+                        contentKey = { it.ordinal },
+                        transitionSpec = TransitionSpec.remember(
+                            showAlignment = Alignment.BottomCenter,
+                            hideAlignment = Alignment.TopCenter,
+                        )
+                    ) { state ->
+                        when (state) {
+                            is BudgetManageShareModel.State.Closed -> SItem(
+                                startAccessory = {
+                                    SIcon(Drawable.Vector(Icons.Default.Share))
+                                },
+                            ) {
+                                SText(
+                                    dependencies.localization.shareBudget
+                                )
+                            }
 
-                        is BudgetManageShareModel.State.Opened -> SItem(
-                            topAccessory = {
-                                SText(dependencies.localization.shareBudget)
-                            },
-                            startAccessory = {
-                                SIcon(Drawable.Vector(Icons.Default.Share))
-                            },
-                            endAccessory = {
-                                SIcon(Drawable.Vector(Icons.Default.ContentCopy))
-                            },
-                            bottomAccessory = {
-                                SText(dependencies.localization.shareBudgetInfo)
-                            },
-                        ) {
-                            SText(state.code.collectAsState().value)
+                            is BudgetManageShareModel.State.Opened -> SItem(
+                                topAccessory = {
+                                    SText(dependencies.localization.shareBudget)
+                                },
+                                startAccessory = {
+                                    SIcon(Drawable.Vector(Icons.Default.Share))
+                                },
+                                endAccessory = {
+                                    SIcon(Drawable.Vector(Icons.Default.ContentCopy))
+                                },
+                                bottomAccessory = {
+                                    SText(dependencies.localization.shareBudgetInfo)
+                                },
+                            ) {
+                                SText(state.code.collectAsState().value)
+                            }
                         }
                     }
-                }
+            }
         }
     }
 }

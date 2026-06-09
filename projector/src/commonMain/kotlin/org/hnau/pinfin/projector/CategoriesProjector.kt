@@ -17,6 +17,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import org.hnau.commons.app.projector.fractal.SScreen
 import org.hnau.commons.app.projector.fractal.SText
+import org.hnau.commons.app.projector.fractal.padding.LocalContentPadding
 import org.hnau.commons.app.projector.uikit.ErrorPanel
 import org.hnau.commons.app.projector.uikit.state.NullableStateContent
 import org.hnau.commons.app.projector.uikit.transition.TransitionSpec
@@ -48,7 +49,8 @@ class CategoriesProjector(
         SScreen(
             contentPadding = contentPadding,
             title = { SText((dependencies.localization.categories)) },
-        ) { contentPadding ->
+        ) {
+            val contentPadding = LocalContentPadding.current
             model
                 .categories
                 .collectAsState()

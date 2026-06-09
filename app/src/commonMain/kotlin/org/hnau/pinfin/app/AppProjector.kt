@@ -34,7 +34,7 @@ fun createAppProjector(
     fallbackHue = Hue(240),
     content = { rootProjector, contentPadding, palettes ->
         CompositionLocalProvider(
-            LocalFContext provides FContext(
+            LocalFContext provides FContext.createBase(
                 palettes = palettes,
             )
         ) {

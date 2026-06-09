@@ -21,6 +21,7 @@ import androidx.compose.ui.focus.focusRequester
 import kotlinx.coroutines.CoroutineScope
 import org.hnau.commons.app.projector.fractal.SScreen
 import org.hnau.commons.app.projector.fractal.SText
+import org.hnau.commons.app.projector.fractal.padding.LocalContentPadding
 import org.hnau.commons.app.projector.uikit.TextInput
 import org.hnau.commons.app.projector.utils.Drawable
 import org.hnau.commons.app.projector.utils.Icon
@@ -66,7 +67,8 @@ class CategoryProjector(
                         )
                     }
             },
-        ) { contentPadding ->
+        ) {
+            val contentPadding = LocalContentPadding.current
             LazyColumn(
                 modifier = Modifier
                     .fillMaxSize()

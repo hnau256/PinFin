@@ -13,6 +13,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import org.hnau.commons.app.projector.fractal.SScreen
 import org.hnau.commons.app.projector.fractal.SText
+import org.hnau.commons.app.projector.fractal.padding.LocalContentPadding
 import org.hnau.commons.app.projector.uikit.progressindicator.InProgress
 import org.hnau.commons.app.projector.uikit.utils.Dimens
 import org.hnau.commons.gen.pipe.annotations.Pipe
@@ -37,7 +38,8 @@ class CreateBudgetProjector(
         SScreen(
             contentPadding = contentPadding,
             title = { SText((dependencies.localization.budgets)) },
-        ) { contentPadding ->
+        ) {
+            val contentPadding = LocalContentPadding.current
             Column(
                 modifier = Modifier
                     .fillMaxSize()
