@@ -3,13 +3,14 @@ package org.hnau.pinfin.model
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.Serializable
 import org.hnau.commons.app.model.goback.GoBackHandler
 import org.hnau.commons.app.model.goback.NeverGoBackHandler
 import org.hnau.commons.gen.pipe.annotations.Pipe
-import org.hnau.commons.kotlin.coroutines.InProgressRegistry
+import org.hnau.commons.kotlin.coroutines.ActionOrElse
+import org.hnau.commons.kotlin.coroutines.CancelOrInProgress
+import org.hnau.commons.kotlin.coroutines.actionOrCancelIfExecuting
 import org.hnau.pinfin.data.BudgetId
 import org.hnau.pinfin.model.manage.BudgetOpener
 import org.hnau.pinfin.model.utils.budget.repository.demo.DemoBudget
@@ -35,39 +36,28 @@ class CreateBudgetModel(
         val a: Int = 0,
     )
 
-    private val inProgressRegistry = InProgressRegistry(
+    val createNewBudget: StateFlow<ActionOrElse<Unit, CancelOrInProgress.Cancel>> = actionOrCancelIfExecuting(
         scope = scope,
-    )
-
-    val inProgress: StateFlow<Boolean>
-        get() = inProgressRegistry.inProgress
-
-    fun createNewBudget() {
-        scope.launch {
-            inProgressRegistry.executeRegistered {
-                val id = BudgetId.new()
-                dependencies.budgetsStorage.createNewBudgetIfNotExists(
-                    id = id,
-                )
-                dependencies.budgetOpener.openBudget(
-                    budgetId = id,
-                )
-            }
-        }
+    ) {
+        val id = BudgetId.new()
+        dependencies.budgetsStorage.createNewBudgetIfNotExists(
+            id = id,
+        )
+        dependencies.budgetOpener.openBudget(
+            budgetId = id,
+        )
     }
 
-    fun createDemoBudget() {
-        scope.launch {
-            inProgressRegistry.executeRegistered {
-                val updates = withContext(Dispatchers.Default) {
-                    DemoBudget.updates
-                }
-                dependencies
-                    .budgetsStorage
-                    .createNewBudgetIfNotExistsAndGet(BudgetId.new())
-                    .applyUpdates(updates)
-            }
+    val createDemoBudget: StateFlow<ActionOrElse<Unit, CancelOrInProgress.Cancel>> = actionOrCancelIfExecuting(
+        scope = scope,
+    ) {
+        val updates = withContext(Dispatchers.Default) {
+            DemoBudget.updates
         }
+        dependencies
+            .budgetsStorage
+            .createNewBudgetIfNotExistsAndGet(BudgetId.new())
+            .applyUpdates(updates)
     }
 
     val goBackHandler: GoBackHandler

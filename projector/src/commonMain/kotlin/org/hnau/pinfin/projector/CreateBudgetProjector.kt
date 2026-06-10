@@ -1,21 +1,24 @@
 package org.hnau.pinfin.projector
 
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Button
-import androidx.compose.material3.OutlinedButton
-import androidx.compose.material3.Text
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Science
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
+import org.hnau.commons.app.projector.fractal.SButton
+import org.hnau.commons.app.projector.fractal.SIcon
+import org.hnau.commons.app.projector.fractal.SItem
+import org.hnau.commons.app.projector.fractal.SPanel
 import org.hnau.commons.app.projector.fractal.SScreen
 import org.hnau.commons.app.projector.fractal.SText
-import org.hnau.commons.app.projector.fractal.padding.LocalContentPadding
-import org.hnau.commons.app.projector.uikit.progressindicator.InProgress
-import org.hnau.commons.app.projector.uikit.utils.Dimens
+import org.hnau.commons.app.projector.fractal.table.lazy.SLazyTable
+import org.hnau.commons.app.projector.fractal.table.lazy.cell
+import org.hnau.commons.app.projector.utils.Drawable
+import org.hnau.commons.app.projector.utils.Orientation
+import org.hnau.commons.app.projector.utils.TitleOrIcon
 import org.hnau.commons.gen.pipe.annotations.Pipe
 import org.hnau.pinfin.model.CreateBudgetModel
 
@@ -39,31 +42,36 @@ class CreateBudgetProjector(
             contentPadding = contentPadding,
             title = { SText((dependencies.localization.budgets)) },
         ) {
-            val contentPadding = LocalContentPadding.current
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(contentPadding),
-                verticalArrangement = Arrangement.spacedBy(
-                    space = Dimens.smallSeparation,
-                    alignment = Alignment.CenterVertically,
-                ),
-                horizontalAlignment = Alignment.CenterHorizontally,
+            SLazyTable(
+                orientation = Orientation.Vertical,
             ) {
-                Button(
-                    onClick = model::createNewBudget,
-                ) {
-                    Text(dependencies.localization.createNewBudget)
+                cell(key = "new") {
+                    SPanel(
+                        modifier = Modifier.fillMaxWidth(),
+                        importanceToActivate = null,
+                        actionOrElseOrDisabled = model.createNewBudget.collectAsState().value,
+                    ) {
+                        SItem(
+                            startAccessory = { SIcon(Drawable.Vector(Icons.Default.Add)) }
+                        ) {
+                            SText(dependencies.localization.createNewBudget)
+                        }
+                    }
                 }
-                OutlinedButton(
-                    onClick = model::createDemoBudget,
-                ) {
-                    Text(dependencies.localization.createDemoBudget)
+                cell(key = "demo") {
+                    SPanel(
+                        modifier = Modifier.fillMaxWidth(),
+                        importanceToActivate = null,
+                        actionOrElseOrDisabled = model.createDemoBudget.collectAsState().value,
+                    ) {
+                        SItem(
+                            startAccessory = { SIcon(Drawable.Vector(Icons.Default.Science)) }
+                        ) {
+                            SText(dependencies.localization.createDemoBudget)
+                        }
+                    }
                 }
             }
-            InProgress(
-                inProgress = model.inProgress,
-            )
         }
     }
 }
