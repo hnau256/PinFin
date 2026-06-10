@@ -47,6 +47,7 @@ import org.hnau.commons.app.projector.fractal.table.STableScope
 import org.hnau.commons.app.projector.fractal.table.lazy.SLazyCellScope
 import org.hnau.commons.app.projector.fractal.table.lazy.cell
 import org.hnau.commons.app.projector.fractal.table.lazy.Subtable
+import org.hnau.commons.app.projector.fractal.table.lazy.separator
 import org.hnau.commons.app.projector.fractal.utils.Mood
 import org.hnau.commons.app.projector.uikit.TopBarDefaults
 import org.hnau.commons.app.projector.uikit.line.weight

@@ -28,8 +28,10 @@ import org.hnau.commons.app.projector.fractal.input.InputProjector
 import org.hnau.commons.app.projector.fractal.input.createInputProjector
 import org.hnau.commons.app.projector.fractal.input.type.toInputProjectorPrototype
 import org.hnau.commons.app.projector.fractal.size.SizeType
+import org.hnau.commons.app.projector.fractal.table.STableHeader
 import org.hnau.commons.app.projector.fractal.table.lazy.SLazyTable
 import org.hnau.commons.app.projector.fractal.table.lazy.cell
+import org.hnau.commons.app.projector.fractal.table.lazy.item
 import org.hnau.commons.app.projector.utils.Drawable
 import org.hnau.commons.app.projector.utils.Orientation
 import org.hnau.commons.app.projector.utils.ProjectorSavableDelegate
@@ -155,21 +157,16 @@ class BudgetSettingsProjector(
                     SLazyTable(
                         orientation = Orientation.Vertical,
                     ) {
-                        cell {
-                            SPanel(
-                                contentAlignment = Alignment.CenterStart,
-                            ) {
+                        item {
+                            STableHeader {
                                 SText(dependencies.localization.budgetConfigMain)
                             }
                         }
                         cell { with(mainTitle) { Content() } }
                         cell { with(mainMantissaLength) { Content() } }
 
-                        separator()
-                        cell {
-                            SPanel(
-                                contentAlignment = Alignment.CenterStart,
-                            ) {
+                        item {
+                            STableHeader {
                                 SText(dependencies.localization.budgetConfigSync)
                             }
                         }
