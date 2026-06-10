@@ -1,7 +1,6 @@
 package org.hnau.pinfin.projector
 
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
@@ -9,7 +8,6 @@ import androidx.compose.material.icons.automirrored.filled.Label
 import androidx.compose.material.icons.automirrored.filled.PlaylistAdd
 import androidx.compose.material.icons.filled.Cloud
 import androidx.compose.material.icons.filled.ExposureZero
-import androidx.compose.material.icons.filled.PlaylistAdd
 import androidx.compose.material.icons.filled.RocketLaunch
 import androidx.compose.material.icons.filled.Save
 import androidx.compose.material.icons.filled.Security
@@ -25,13 +23,13 @@ import org.hnau.commons.app.projector.fractal.SContentWithActions
 import org.hnau.commons.app.projector.fractal.SElements
 import org.hnau.commons.app.projector.fractal.SPanel
 import org.hnau.commons.app.projector.fractal.SScreen
-import org.hnau.commons.app.projector.fractal.table.lazy.SLazyTable
-import org.hnau.commons.app.projector.fractal.table.lazy.cell
 import org.hnau.commons.app.projector.fractal.SText
 import org.hnau.commons.app.projector.fractal.input.InputProjector
 import org.hnau.commons.app.projector.fractal.input.createInputProjector
 import org.hnau.commons.app.projector.fractal.input.type.toInputProjectorPrototype
 import org.hnau.commons.app.projector.fractal.size.SizeType
+import org.hnau.commons.app.projector.fractal.table.lazy.SLazyTable
+import org.hnau.commons.app.projector.fractal.table.lazy.cell
 import org.hnau.commons.app.projector.utils.Drawable
 import org.hnau.commons.app.projector.utils.Orientation
 import org.hnau.commons.app.projector.utils.ProjectorSavableDelegate
@@ -154,38 +152,31 @@ class BudgetSettingsProjector(
         ) {
             SContentWithActions(
                 content = {
-                    SElements(
-                        modifier = Modifier
-                            .verticalScroll(rememberScrollState()),
+                    SLazyTable(
+                        orientation = Orientation.Vertical,
                     ) {
-                        SLazyTable(
-                            orientation = Orientation.Vertical,
-                        ) {
-                            cell {
-                                SPanel(
-                                    contentAlignment = Alignment.CenterStart,
-                                ) {
-                                    SText(dependencies.localization.budgetConfigMain)
-                                }
+                        cell {
+                            SPanel(
+                                contentAlignment = Alignment.CenterStart,
+                            ) {
+                                SText(dependencies.localization.budgetConfigMain)
                             }
-                            cell { with(mainTitle) { Content() } } 
-                            cell { with(mainMantissaLength) { Content() } } 
                         }
-                        SLazyTable(
-                            orientation = Orientation.Vertical,
-                        ) {
-                            cell {
-                                SPanel(
-                                    contentAlignment = Alignment.CenterStart,
-                                ) {
-                                    SText(dependencies.localization.budgetConfigSync)
-                                }
+                        cell { with(mainTitle) { Content() } }
+                        cell { with(mainMantissaLength) { Content() } }
+
+                        separator()
+                        cell {
+                            SPanel(
+                                contentAlignment = Alignment.CenterStart,
+                            ) {
+                                SText(dependencies.localization.budgetConfigSync)
                             }
-                            cell { with(syncScheme) { Content() } } 
-                            cell { with(syncHost) { Content() } } 
-                            cell { with(syncOnLaunch) { Content() } } 
-                            cell { with(syncOnUpdate) { Content() } } 
                         }
+                        cell { with(syncScheme) { Content() } }
+                        cell { with(syncHost) { Content() } }
+                        cell { with(syncOnLaunch) { Content() } }
+                        cell { with(syncOnUpdate) { Content() } }
                     }
 
                 },
