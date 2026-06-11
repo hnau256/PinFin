@@ -3,6 +3,7 @@ package org.hnau.pinfin.model.utils.budget.storage
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.StateFlow
 import org.hnau.commons.kotlin.KeyValue
+import org.hnau.pinfin.data.BudgetConfig
 import org.hnau.pinfin.data.BudgetId
 import org.hnau.pinfin.model.utils.budget.repository.BudgetRepository
 import org.hnau.pinfin.model.utils.budget.state.BudgetInfo
@@ -13,7 +14,7 @@ interface BudgetsStorage {
 
     suspend fun createNewBudgetIfNotExists(
         id: BudgetId,
-        customInfo: BudgetInfo? = null,
+        initialConfig: BudgetConfig = BudgetConfig.empty,
     )
 
     fun interface Factory {

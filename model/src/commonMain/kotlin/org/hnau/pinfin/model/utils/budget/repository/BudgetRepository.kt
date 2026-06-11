@@ -90,7 +90,7 @@ class BudgetRepository(
         suspend fun create(
             scope: CoroutineScope,
             id: BudgetId,
-            initialInfo: BudgetInfo?,
+            initialConfig: BudgetConfig,
             upchainRepository: UpchainRepository,
             remove: suspend () -> Unit,
         ): BudgetRepository {
@@ -98,9 +98,7 @@ class BudgetRepository(
             val initialState = BudgetStatePrototype
                 .empty
                 .copy(
-                    config = initialInfo
-                        ?.toConfig()
-                        ?: BudgetConfig.empty,
+                    config = initialConfig,
                 )
                 .withNewUpchain(upchainFlow.value)
             val state = upchainFlow

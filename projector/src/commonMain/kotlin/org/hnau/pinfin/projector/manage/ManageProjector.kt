@@ -65,6 +65,7 @@ class ManageProjector(
             state.fold(
                 ifCreateBudget = { createBudgetModel ->
                     StateProjector.createBudget(
+                        scope = scope,
                         dependencies = dependencies.createBudget(),
                         model = createBudgetModel,
                     )

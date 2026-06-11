@@ -16,6 +16,7 @@ data class ShareCode
 @Deprecated("Use ShareCode.create instead")
 constructor(
     val id: BudgetId,
+    val title: String? = null,
     val scheme: HttpScheme = HttpScheme.default,
     val host: ServerHost = ServerHost.default,
 ) {
@@ -42,6 +43,7 @@ constructor(
             info: BudgetInfo,
         ): ShareCode = ShareCode(
             id = id,
+            title = info.title.takeIf { it != id.id.toString() },
             scheme = info.sync.scheme,
             host = info.sync.host,
         )

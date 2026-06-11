@@ -159,6 +159,7 @@ class BudgetStackProjector(
                     },
                     ifCreate = { createModel ->
                         Element.create(
+                            scope = scope,
                             model = createModel,
                             dependencies = dependencies.create(),
                         )

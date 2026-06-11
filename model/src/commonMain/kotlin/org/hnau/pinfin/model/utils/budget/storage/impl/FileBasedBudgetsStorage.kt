@@ -7,9 +7,9 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import org.hnau.commons.kotlin.KeyValue
 import org.hnau.commons.kotlin.coroutines.flow.state.mapListReusable
+import org.hnau.pinfin.data.BudgetConfig
 import org.hnau.pinfin.data.BudgetId
 import org.hnau.pinfin.model.utils.budget.repository.BudgetRepository
-import org.hnau.pinfin.model.utils.budget.state.BudgetInfo
 import org.hnau.pinfin.model.utils.budget.storage.BudgetsStorage
 import org.hnau.pinfin.model.utils.budget.upchainUIdMapper
 import org.hnau.upchain.core.repository.file.upchains.fileBased
@@ -19,7 +19,7 @@ fun BudgetsStorage.Factory.Companion.files(
     budgetsDir: String,
 ): BudgetsStorage.Factory = BudgetsStorage.Factory { scope ->
 
-    val initialBudgetInfoCache: MutableMap<BudgetId, BudgetInfo> = mutableMapOf()
+    val initialBudgetConfigCache: MutableMap<BudgetId, BudgetConfig> = mutableMapOf()
 
     val upchains = UpchainsRepository.fileBased(
         dir = budgetsDir,
@@ -38,7 +38,7 @@ fun BudgetsStorage.Factory.Companion.files(
                         id = id,
                         upchainRepository = item.repository,
                         remove = item.remove,
-                        initialInfo = initialBudgetInfoCache[id],
+                        initialConfig = initialBudgetConfigCache[id] ?: BudgetConfig.empty,
                     )
                     KeyValue(id, repository)
                 }
@@ -54,9 +54,11 @@ fun BudgetsStorage.Factory.Companion.files(
 
         override suspend fun createNewBudgetIfNotExists(
             id: BudgetId,
-            customInfo: BudgetInfo?,
+            initialConfig: BudgetConfig,
         ) {
-            customInfo?.let { initialBudgetInfoCache[id] = it }
+            initialConfig
+                .takeIf { it != BudgetConfig.empty }
+                ?.let { initialBudgetConfigCache[id] = it }
             upchains.createUpchain(
                 id = id.let(BudgetId.upchainUIdMapper.reverse)
             )
