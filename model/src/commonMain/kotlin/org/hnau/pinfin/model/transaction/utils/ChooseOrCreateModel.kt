@@ -168,7 +168,7 @@ class ChooseOrCreateModel<T>(
                         new = hasAbsolutelySameAsQuery.foldBoolean(
                             ifTrue = { null },
                             ifFalse = {
-                                val item = itemTextMapper.reverse(query)
+                                val item = itemTextMapper.reverse(query.trim())
                                 State.Item(
                                     value = item,
                                     isSelected = false.toMutableStateFlowAsInitial(),

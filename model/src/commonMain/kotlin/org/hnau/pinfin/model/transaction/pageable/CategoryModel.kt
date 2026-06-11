@@ -84,37 +84,36 @@ class CategoryModel(
     fun createPage(
         scope: CoroutineScope,
         usedCategories: StateFlow<List<KeyValue<CategoryId, CategoryInfo>>>,
-    ): ChooseOrCreateModel<KeyValue<CategoryId, CategoryInfo>> =
-        ChooseOrCreateModel<KeyValue<CategoryId, CategoryInfo>>(
-            scope = scope,
-            comparator = compareBy { it.value },
-            dependencies = dependencies.chooseOrCreate(),
-            skeleton = skeleton::chooseOrCreate
-                .toAccessor()
-                .getOrInit { ChooseOrCreateModel.Skeleton() },
-            extractItemsFromState = BudgetState::categories,
-            additionalItems = usedCategories,
-            itemTextMapper = Mapper(
-                direct = { it.value.title },
-                reverse = { title ->
-                    val id = CategoryId(title)
-                    KeyValue(
-                        key = id,
-                        value = CategoryInfo.createDefault(
-                            id = id,
-                        )
+    ): ChooseOrCreateModel<KeyValue<CategoryId, CategoryInfo>> = ChooseOrCreateModel(
+        scope = scope,
+        comparator = compareBy { it.value },
+        dependencies = dependencies.chooseOrCreate(),
+        skeleton = skeleton::chooseOrCreate
+            .toAccessor()
+            .getOrInit { ChooseOrCreateModel.Skeleton() },
+        extractItemsFromState = BudgetState::categories,
+        additionalItems = usedCategories,
+        itemTextMapper = Mapper(
+            direct = { it.value.title },
+            reverse = { title ->
+                val id = CategoryId(title)
+                KeyValue(
+                    key = id,
+                    value = CategoryInfo.createDefault(
+                        id = id,
                     )
-                }
-            ),
-            selected = categoryEditable.mapState(
-                scope = scope,
-                transform = Editable<KeyValue<CategoryId, CategoryInfo>>::valueOrNone,
-            ),
-            onReady = { selected ->
-                skeleton.manualIdWithCategory.value = selected
-                goForward()
+                )
             }
-        )
+        ),
+        selected = categoryEditable.mapState(
+            scope = scope,
+            transform = Editable<KeyValue<CategoryId, CategoryInfo>>::valueOrNone,
+        ),
+        onReady = { selected ->
+            skeleton.manualIdWithCategory.value = selected
+            goForward()
+        }
+    )
 
     private fun getCategoryBasedOnComment(
         scope: CoroutineScope,

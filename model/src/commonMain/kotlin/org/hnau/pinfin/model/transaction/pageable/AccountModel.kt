@@ -145,7 +145,7 @@ class AccountModel(
         itemTextMapper = Mapper(
             direct = { it.value.title },
             reverse = { title ->
-                val id = AccountId(title.trim())
+                val id = AccountId(title)
                 val accountInfo = AccountInfo.createDefault(
                     id = id,
                     amount = Amount.zero,
