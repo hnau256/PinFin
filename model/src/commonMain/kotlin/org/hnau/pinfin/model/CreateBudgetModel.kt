@@ -17,6 +17,7 @@ import org.hnau.commons.app.model.input.factory.createSkeleton
 import org.hnau.commons.app.model.input.factory.toInputModelFactory
 import org.hnau.commons.app.model.input.parser.ParsingMapper
 import org.hnau.commons.app.model.utils.Editable
+import org.hnau.commons.app.model.utils.fold
 import org.hnau.commons.gen.pipe.annotations.Pipe
 import org.hnau.commons.kotlin.coroutines.ActionOrElse
 import org.hnau.commons.kotlin.coroutines.CancelOrInProgress
@@ -65,36 +66,37 @@ class CreateBudgetModel(
             skeleton = skeleton.shareCode,
         )
 
-    val createFromShareCode: StateFlow<ActionOrElse<Unit, CancelOrInProgress.InProgress>?> = shareCode
-        .editable
-        .mapState(scope) { editableShareCode ->
-            when (editableShareCode) {
-                Editable.Incorrect -> null
-                is Editable.Value -> editableShareCode.value
+    val createFromShareCode: StateFlow<ActionOrElse<Unit, CancelOrInProgress.InProgress>?> =
+        shareCode
+            .editable
+            .mapState(scope) { editableShareCode ->
+                editableShareCode.fold(
+                    ifIncorrect = { null },
+                    ifValue = { code, _ -> code }
+                )
             }
-        }
-        .flatMapWithScope(scope) { scope, shareCodeOrNull ->
-            shareCodeOrNull.foldNullable(
-                ifNull = { null.toMutableStateFlowAsInitial() },
-                ifNotNull = { shareCode ->
-                    actionOrInProgressIfExecuting(scope) {
-                        dependencies.budgetsStorage.createNewBudgetIfNotExists(
-                            id = shareCode.id,
-                            initialConfig = BudgetConfig(
-                                title = shareCode.title,
-                                sync = BudgetConfig.Sync(
-                                    scheme = shareCode.scheme,
-                                    host = shareCode.host,
+            .flatMapWithScope(scope) { scope, shareCodeOrNull ->
+                shareCodeOrNull.foldNullable(
+                    ifNull = { null.toMutableStateFlowAsInitial() },
+                    ifNotNull = { shareCode ->
+                        actionOrInProgressIfExecuting(scope) {
+                            dependencies.budgetsStorage.createNewBudgetIfNotExists(
+                                id = shareCode.id,
+                                initialConfig = BudgetConfig(
+                                    title = shareCode.title,
+                                    sync = BudgetConfig.Sync(
+                                        scheme = shareCode.scheme,
+                                        host = shareCode.host,
+                                    )
                                 )
                             )
-                        )
-                        dependencies.budgetOpener.openBudget(
-                            budgetId = shareCode.id,
-                        )
+                            dependencies.budgetOpener.openBudget(
+                                budgetId = shareCode.id,
+                            )
+                        }
                     }
-                }
-            )
-        }
+                )
+            }
 
     val createNewBudget: StateFlow<ActionOrElse<Unit, CancelOrInProgress.Cancel>> =
         actionOrCancelIfExecuting(
