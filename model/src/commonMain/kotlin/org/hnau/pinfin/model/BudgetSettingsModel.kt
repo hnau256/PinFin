@@ -217,6 +217,7 @@ class BudgetSettingsModel(
             InputType.Edit.toInputModelFactory(
                 ParsingMapper.Companion.createValidator { string ->
                     string
+                        .trim()
                         .takeIf(String::isNotEmpty)
                         .foldNullable(
                             ifNull = { Unit.left() },
@@ -231,6 +232,7 @@ class BudgetSettingsModel(
                     encode = { scale -> scale.scale.toString() },
                     parse = { string ->
                         string
+                            .trim()
                             .toLongOrNull()
                             ?.takeIf { it in 0..5 }
                             ?.let(::DecimalScale)
@@ -254,7 +256,7 @@ class BudgetSettingsModel(
                     encode = ServerHost::host,
                     parse = { input ->
                         ServerHost
-                            .createOrNull(input)
+                            .createOrNull(input.trim())
                             .foldNullable(
                                 ifNull = { Unit.left() },
                                 ifNotNull = ServerHost::right,

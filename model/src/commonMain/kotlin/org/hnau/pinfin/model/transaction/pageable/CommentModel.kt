@@ -125,7 +125,12 @@ class CommentModel(
         scope = scope,
         value = skeleton
             .comment
-            .mapState(scope) { it.text.let(::Comment) },
+            .mapState(scope) { editing ->
+                editing
+                    .text
+                    .trim()
+                    .let(::Comment)
+            },
         initialValueOrNone = skeleton.initialComment.toOption(),
     )
 
