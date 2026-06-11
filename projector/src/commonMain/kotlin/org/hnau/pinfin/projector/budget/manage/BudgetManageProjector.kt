@@ -115,7 +115,7 @@ class BudgetManageProjector(
                     orientation = Orientation.Vertical,
                 ) {
                     cell(key = "sync") { Sync() }
-                    cell(key = "share") { with(share) { Content() } }
+                    cell(key = "share") { share.Content() }
 
                     separator()
 

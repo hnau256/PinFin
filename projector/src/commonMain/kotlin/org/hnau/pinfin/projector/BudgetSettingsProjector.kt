@@ -162,18 +162,18 @@ class BudgetSettingsProjector(
                                 SText(dependencies.localization.budgetConfigMain)
                             }
                         }
-                        cell { with(mainTitle) { Content() } }
-                        cell { with(mainMantissaLength) { Content() } }
+                        cell { mainTitle.Content() }
+                        cell { mainMantissaLength.Content() }
 
                         item {
                             STableHeader {
                                 SText(dependencies.localization.budgetConfigSync)
                             }
                         }
-                        cell { with(syncScheme) { Content() } }
-                        cell { with(syncHost) { Content() } }
-                        cell { with(syncOnLaunch) { Content() } }
-                        cell { with(syncOnUpdate) { Content() } }
+                        cell { syncScheme.Content() }
+                        cell { syncHost.Content() }
+                        cell { syncOnLaunch.Content() }
+                        cell { syncOnUpdate.Content() }
                     }
 
                 },

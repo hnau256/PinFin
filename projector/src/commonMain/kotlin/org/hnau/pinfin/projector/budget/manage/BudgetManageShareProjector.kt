@@ -33,12 +33,13 @@ class BudgetManageShareProjector(
     }
 
     @Composable
-    fun SLazyCellScope.Content() {
+    context(scope: SLazyCellScope)
+    fun Content() {
         val state = model
             .state
             .collectAsState()
             .value
-        Subtable {
+        scope.Subtable {
             SCell {
                 SPanel(
                     actionOrElseOrDisabled = when (state) {
