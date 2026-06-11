@@ -89,7 +89,7 @@ class CreateBudgetProjector(
                 cell {
                     SButton(
                         actionOrElseOrDisabled = model.createFromShareCode.collectAsState().value,
-                        titleOrIcon = TitleOrIcon.Title(dependencies.localization.createNewBudget)
+                        titleOrIcon = TitleOrIcon.Title(dependencies.localization.sharedBudgetCreate)
                     )
                 }
                 separator()
