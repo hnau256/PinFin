@@ -12,13 +12,13 @@ import org.hnau.commons.gen.sealup.annotations.Variant
 import org.hnau.pinfin.model.budgetstack.BudgetStackElementModel
 import org.hnau.pinfin.model.budgetstack.BudgetStackModel
 import org.hnau.pinfin.model.budgetstack.fold
+import org.hnau.pinfin.projector.BudgetSettingsProjector
+import org.hnau.pinfin.projector.BudgetSwitchProjector
 import org.hnau.pinfin.projector.CategoriesProjector
+import org.hnau.pinfin.projector.CreateBudgetProjector
 import org.hnau.pinfin.projector.accountstack.AccountStackProjector
 import org.hnau.pinfin.projector.budget.BudgetProjector
 import org.hnau.pinfin.projector.budget.transactions.TransactionsProjector
-import org.hnau.pinfin.projector.BudgetSettingsProjector
-import org.hnau.pinfin.projector.BudgetSwitchProjector
-import org.hnau.pinfin.projector.CreateBudgetProjector
 import org.hnau.pinfin.projector.categorystack.CategoryStackProjector
 import org.hnau.pinfin.projector.transaction.TransactionProjector
 

@@ -20,7 +20,6 @@ import org.hnau.commons.gen.pipe.annotations.Pipe
 import org.hnau.commons.gen.sealup.annotations.SealUp
 import org.hnau.commons.gen.sealup.annotations.Variant
 import org.hnau.commons.kotlin.KeyValue
-import org.hnau.commons.kotlin.castOrNull
 import org.hnau.commons.kotlin.coroutines.flow.state.flatMapState
 import org.hnau.commons.kotlin.coroutines.flow.state.flatMapWithScope
 import org.hnau.commons.kotlin.coroutines.flow.state.mapState
@@ -41,7 +40,6 @@ import org.hnau.pinfin.model.CreateBudgetModel
 import org.hnau.pinfin.model.IconModel
 import org.hnau.pinfin.model.utils.budget.repository.BudgetRepository
 import org.hnau.pinfin.model.utils.budget.storage.BudgetsStorage
-import kotlin.uuid.ExperimentalUuidApi
 
 class ManageModel(
     scope: CoroutineScope,
@@ -112,24 +110,6 @@ class ManageModel(
         .withDefault(
             scope = scope,
         ) { null }
-
-    @OptIn(ExperimentalUuidApi::class)
-    private data class DeferredBudgetRepositoryWrapper(
-        val id: BudgetId,
-        val budgetRepository: BudgetRepository,
-    ) {
-
-        override fun equals(
-            other: Any?,
-        ): Boolean = other
-            ?.castOrNull<DeferredBudgetRepositoryWrapper>()
-            ?.id
-            ?.id
-            ?.takeIf { it == id.id } != null
-
-        override fun hashCode(): Int =
-            id.id.hashCode()
-    }
 
     private val budgetRepositories: StateFlow<NonEmptyList<KeyValue<BudgetId, BudgetRepository>>?> =
         dependencies

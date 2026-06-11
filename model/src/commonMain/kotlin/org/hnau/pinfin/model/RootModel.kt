@@ -6,7 +6,6 @@ import org.hnau.commons.app.model.goback.GoBackHandler
 import org.hnau.commons.gen.pipe.annotations.Pipe
 import org.hnau.commons.kotlin.getOrInit
 import org.hnau.commons.kotlin.toAccessor
-import org.hnau.pinfin.model.LoadBudgetsModel
 
 class RootModel(
     scope: CoroutineScope,

@@ -16,9 +16,8 @@ import org.hnau.commons.kotlin.coroutines.flow.state.mapWithScope
 import org.hnau.pinfin.model.manage.ManageModel
 import org.hnau.pinfin.model.manage.fold
 import org.hnau.pinfin.projector.BudgetRootProjector
-import org.hnau.pinfin.projector.IconProjector
 import org.hnau.pinfin.projector.CreateBudgetProjector
-import org.hnau.pinfin.projector.budgetstack.BudgetStackProjector
+import org.hnau.pinfin.projector.IconProjector
 
 class ManageProjector(
     scope: CoroutineScope,

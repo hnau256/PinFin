@@ -2,12 +2,9 @@ package org.hnau.pinfin.projector.budget.manage
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowCircleDown
 import androidx.compose.material.icons.filled.ArrowCircleUp
@@ -35,18 +32,16 @@ import org.hnau.commons.app.projector.fractal.SButton
 import org.hnau.commons.app.projector.fractal.SIcon
 import org.hnau.commons.app.projector.fractal.SItem
 import org.hnau.commons.app.projector.fractal.SPanel
-import org.hnau.commons.app.projector.fractal.table.lazy.SLazyTable
 import org.hnau.commons.app.projector.fractal.SText
 import org.hnau.commons.app.projector.fractal.STitleOrIcon
 import org.hnau.commons.app.projector.fractal.context.FContext
-import org.hnau.commons.app.projector.fractal.context.LocalFContext
 import org.hnau.commons.app.projector.fractal.distance.LocalDistance
 import org.hnau.commons.app.projector.fractal.padding.LocalContentPadding
 import org.hnau.commons.app.projector.fractal.size.units
-import org.hnau.commons.app.projector.fractal.table.STableScope
 import org.hnau.commons.app.projector.fractal.table.lazy.SLazyCellScope
-import org.hnau.commons.app.projector.fractal.table.lazy.cell
+import org.hnau.commons.app.projector.fractal.table.lazy.SLazyTable
 import org.hnau.commons.app.projector.fractal.table.lazy.Subtable
+import org.hnau.commons.app.projector.fractal.table.lazy.cell
 import org.hnau.commons.app.projector.fractal.table.lazy.separator
 import org.hnau.commons.app.projector.fractal.utils.Mood
 import org.hnau.commons.app.projector.uikit.TopBarDefaults
@@ -58,13 +53,11 @@ import org.hnau.commons.app.projector.utils.plus
 import org.hnau.commons.gen.pipe.annotations.Pipe
 import org.hnau.commons.kotlin.KeyValue
 import org.hnau.commons.kotlin.coroutines.ActionOrElse
-import org.hnau.commons.kotlin.coroutines.flow.state.combineStateWith
 import org.hnau.commons.kotlin.coroutines.instant
 import org.hnau.commons.kotlin.foldBoolean
 import org.hnau.pinfin.model.budget.manage.BudgetManageModel
 import org.hnau.pinfin.projector.Localization
 import org.hnau.pinfin.projector.utils.formatter.datetime.DateTimeFormatter
-import kotlin.invoke
 
 
 class BudgetManageProjector(

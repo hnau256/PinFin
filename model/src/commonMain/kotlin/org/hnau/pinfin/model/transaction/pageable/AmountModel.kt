@@ -21,8 +21,8 @@ import org.hnau.commons.kotlin.foldNullable
 import org.hnau.commons.kotlin.serialization.MutableStateFlowSerializer
 import org.hnau.pinfin.data.Amount
 import org.hnau.pinfin.data.expression.AmountExpression
-import org.hnau.pinfin.model.AmountModel as CommonAmountModel
 import org.hnau.pinfin.model.utils.budget.repository.BudgetRepository
+import org.hnau.pinfin.model.AmountModel as CommonAmountModel
 
 class AmountModel(
     scope: CoroutineScope,
