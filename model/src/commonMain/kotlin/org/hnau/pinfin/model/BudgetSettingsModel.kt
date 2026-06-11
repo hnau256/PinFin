@@ -26,6 +26,7 @@ import org.hnau.pinfin.data.Currency
 import org.hnau.pinfin.data.utils.DecimalScale
 import org.hnau.pinfin.model.utils.budget.repository.BudgetRepository
 import org.hnau.pinfin.model.utils.budget.state.BudgetInfo
+import org.hnau.pinfin.model.utils.budget.state.toConfig
 import org.hnau.upchain.sync.core.ServerHost
 import org.hnau.upchain.sync.http.HttpScheme
 
@@ -203,18 +204,7 @@ class BudgetSettingsModel(
         save = { budgetInfo ->
             dependencies
                 .budgetRepository
-                .config(
-                    BudgetConfig(
-                        title = budgetInfo.title,
-                        currency = budgetInfo.currency,
-                        sync = BudgetConfig.Sync(
-                            scheme = budgetInfo.sync.scheme,
-                            host = budgetInfo.sync.host,
-                            onLaunch = budgetInfo.sync.onLaunch,
-                            onUpdate = budgetInfo.sync.onUpdate,
-                        )
-                    )
-                )
+                .config(budgetInfo.toConfig())
         },
     )
 

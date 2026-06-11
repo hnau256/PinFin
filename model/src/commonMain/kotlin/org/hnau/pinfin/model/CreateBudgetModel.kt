@@ -36,29 +36,33 @@ class CreateBudgetModel(
         val a: Int = 0,
     )
 
-    val createNewBudget: StateFlow<ActionOrElse<Unit, CancelOrInProgress.Cancel>> = actionOrCancelIfExecuting(
-        scope = scope,
-    ) {
-        val id = BudgetId.new()
-        dependencies.budgetsStorage.createNewBudgetIfNotExists(
-            id = id,
-        )
-        dependencies.budgetOpener.openBudget(
-            budgetId = id,
-        )
-    }
-
-    val createDemoBudget: StateFlow<ActionOrElse<Unit, CancelOrInProgress.Cancel>> = actionOrCancelIfExecuting(
-        scope = scope,
-    ) {
-        val updates = withContext(Dispatchers.Default) {
-            DemoBudget.updates
+    val createNewBudget: StateFlow<ActionOrElse<Unit, CancelOrInProgress.Cancel>> =
+        actionOrCancelIfExecuting(
+            scope = scope,
+        ) {
+            val id = BudgetId.new()
+            dependencies.budgetsStorage.createNewBudgetIfNotExists(
+                id = id,
+            )
+            dependencies.budgetOpener.openBudget(
+                budgetId = id,
+            )
         }
-        dependencies
-            .budgetsStorage
-            .createNewBudgetIfNotExistsAndGet(BudgetId.new())
-            .applyUpdates(updates)
-    }
+
+    val createDemoBudget: StateFlow<ActionOrElse<Unit, CancelOrInProgress.Cancel>> =
+        actionOrCancelIfExecuting(
+            scope = scope,
+        ) {
+            val updates = withContext(Dispatchers.Default) {
+                DemoBudget.updates
+            }
+            dependencies
+                .budgetsStorage
+                .createNewBudgetIfNotExistsAndGet(
+                    id = BudgetId.new(),
+                )
+                .applyUpdates(updates)
+        }
 
     val goBackHandler: GoBackHandler
         get() = NeverGoBackHandler
