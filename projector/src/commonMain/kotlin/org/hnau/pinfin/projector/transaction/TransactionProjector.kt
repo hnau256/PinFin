@@ -79,7 +79,7 @@ class TransactionProjector(
         SScreen(
             contentPadding = contentPadding,
             title = { type.HeaderContent() },
-            actions = { with(topBarActions) { Content() } },
+            actions = { topBarActions.Content() },
         ) {
             val contentPadding = LocalContentPadding.current
             Column(

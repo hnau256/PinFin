@@ -20,8 +20,9 @@ class TopBarActionsProjector(
 
 
     @Composable
-    fun STableActionsScope.Content() {
-        Action(
+    context(scope: STableActionsScope)
+    fun Content() {
+        scope.Action(
             actionOrElseOrDisabled = model
                 .saveOrDisabled
                 .collectAsState()
@@ -38,7 +39,7 @@ class TopBarActionsProjector(
                         )
                     }
                 ) {
-                    Action(
+                    scope.Action(
                         actionOrElseOrDisabled = ActionOrElse.instant(remove),
                         titleOrIcon = TitleOrIcon.Icon(Drawable.Vector(Icons.Default.Delete)),
                     )
