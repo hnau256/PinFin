@@ -142,14 +142,15 @@ class ChooseOrCreateModel<T>(
                     )
                 },
                 ifNotNull = { query ->
+                    val trimmedQuery = query.trim()
                     val (filtered, hasAbsolutelySameAsQuery) = items.fold(
                         initial = emptyList<State.Item<T>>() to false
                     ) { (filtered, alreadyHasAbsolutelySameAsQuery), item ->
                         val itemText = itemTextMapper.direct(item).trim()
                         when {
-                            itemText == query -> (filtered + createItem(item)) to true
+                            itemText == trimmedQuery -> (filtered + createItem(item)) to true
                             itemText.contains(
-                                other = query,
+                                other = trimmedQuery,
                                 ignoreCase = true,
                             ) -> (filtered + createItem(item)) to alreadyHasAbsolutelySameAsQuery
 
@@ -168,7 +169,7 @@ class ChooseOrCreateModel<T>(
                         new = hasAbsolutelySameAsQuery.foldBoolean(
                             ifTrue = { null },
                             ifFalse = {
-                                val item = itemTextMapper.reverse(query.trim())
+                                val item = itemTextMapper.reverse(trimmedQuery.trim())
                                 State.Item(
                                     value = item,
                                     isSelected = false.toMutableStateFlowAsInitial(),
