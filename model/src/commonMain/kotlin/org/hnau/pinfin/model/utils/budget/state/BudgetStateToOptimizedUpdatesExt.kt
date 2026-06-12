@@ -3,7 +3,6 @@ package org.hnau.pinfin.model.utils.budget.state
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.hnau.pinfin.data.AccountConfig
-import org.hnau.pinfin.data.BudgetConfig
 import org.hnau.pinfin.data.BudgetId
 import org.hnau.pinfin.data.CategoryConfig
 import org.hnau.pinfin.data.Comment
@@ -22,7 +21,7 @@ suspend fun BudgetState.toOptimizedUpdates(
             )
             .let { defaultInfo ->
                 val newInfo = info.copy(
-                    title = info.title.trim() + " copy",
+                    title = info.title.optimize() + " copy",
                 )
                 listOf(
                     UpdateType.Config(
@@ -43,7 +42,7 @@ suspend fun BudgetState.toOptimizedUpdates(
                     UpdateType.AccountConfig(
                         id = id,
                         config = acountConfig.copy(
-                            title = acountConfig.title?.trim(),
+                            title = acountConfig.title?.optimize(),
                         ),
                     )
                 }
@@ -60,7 +59,7 @@ suspend fun BudgetState.toOptimizedUpdates(
                     UpdateType.CategoryConfig(
                         id = id,
                         config = categoryConfig.copy(
-                            title = categoryConfig.title?.trim(),
+                            title = categoryConfig.title?.optimize(),
                         ),
                     )
                 }
@@ -80,16 +79,22 @@ suspend fun BudgetState.toOptimizedUpdates(
 }
 
 private fun Transaction.trimStrings(): Transaction = copy(
-    comment = Comment(comment.text.trim()),
+    comment = comment.optimize(),
     type = when (val type = type) {
         is Transaction.Type.Entry -> type.copy(
             records = type.records.map { record ->
                 record.copy(
-                    comment = Comment(record.comment.text.trim()),
+                    comment = record.comment.optimize(),
                 )
             },
         )
 
         is Transaction.Type.Transfer -> type
     },
+)
+
+private fun String.optimize(): String = trim()
+
+private fun Comment.optimize(): Comment = Comment(
+    text = text.optimize(),
 )
