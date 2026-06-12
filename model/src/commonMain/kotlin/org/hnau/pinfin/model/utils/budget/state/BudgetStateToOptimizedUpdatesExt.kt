@@ -21,19 +21,14 @@ suspend fun BudgetState.toOptimizedUpdates(
                 config = null,
             )
             .let { defaultInfo ->
-                val config = info - defaultInfo
-                config
-                    .takeIf { it != BudgetConfig.empty }
-                    ?.let { budgetConfig ->
-                        listOf(
-                            UpdateType.Config(
-                                config = budgetConfig.copy(
-                                    title = budgetConfig.title?.trim()
-                                )
-                            )
-                        )
-                    }
-                    ?: emptyList()
+                val newInfo = info.copy(
+                    title = info.title.trim() + " copy",
+                )
+                listOf(
+                    UpdateType.Config(
+                        config = newInfo - defaultInfo,
+                    )
+                )
             },
 
         accounts.mapNotNull { (id, accountInfo) ->
