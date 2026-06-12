@@ -38,11 +38,11 @@ suspend fun BudgetState.toOptimizedUpdates(
             val delta = accountInfo - defaultAccountInfo
             delta
                 .takeIf { it != AccountConfig.empty }
-                ?.let { acountConfig ->
+                ?.let { accountConfig ->
                     UpdateType.AccountConfig(
                         id = id,
-                        config = acountConfig.copy(
-                            title = acountConfig.title?.optimize(),
+                        config = accountConfig.copy(
+                            title = accountConfig.title?.optimize(),
                         ),
                     )
                 }
