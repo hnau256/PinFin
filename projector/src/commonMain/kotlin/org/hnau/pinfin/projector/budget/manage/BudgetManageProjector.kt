@@ -11,6 +11,7 @@ import androidx.compose.material.icons.filled.ArrowCircleUp
 import androidx.compose.material.icons.filled.ChevronRight
 import androidx.compose.material.icons.filled.Cloud
 import androidx.compose.material.icons.filled.CloudDone
+import androidx.compose.material.icons.filled.Compress
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Error
 import androidx.compose.material.icons.filled.Interests
@@ -187,6 +188,22 @@ class BudgetManageProjector(
                             ) {
                                 SText(
                                     dependencies.localization.switchBudget
+                                )
+                            }
+                        }
+                    }
+                    cell(key = "copy_optimized") {
+                        SPanel(
+                            actionOrElseOrDisabled = model.copyOptimized.collectAsState().value,
+                            importanceToActivate = null,
+                        ) {
+                            SItem(
+                                startAccessory = {
+                                    SIcon(Drawable.Vector(Icons.Default.Compress))
+                                },
+                            ) {
+                                SText(
+                                    dependencies.localization.copyOptimized
                                 )
                             }
                         }

@@ -54,6 +54,7 @@ data class Localization(
     val createNewBudget: String = "Создать новый бюджет",
     val createDemoBudget: String = "Создать Demo бюджет",
     val removeBudget: String = "Удалить бюджет",
+    val copyOptimized: String = "Скопировать оптимизированным",
     val removeTransaction: String = "Удалить транзакцию",
     val categoriesNotFound: String = "Категории не найдены",
     val accountsNotFound: String = "Счета не найдены",

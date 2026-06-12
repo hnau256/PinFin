@@ -51,8 +51,8 @@ data class BudgetInfo(
             val default = Sync(
                 scheme = HttpScheme.default,
                 host = ServerHost.default,
-                onLaunch = true,
-                onUpdate = true,
+                onLaunch = false,
+                onUpdate = false,
             )
         }
     }

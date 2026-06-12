@@ -473,11 +473,13 @@ class DemoBudgetGenerator(
                 if (withPsych >= (base * 0.7).toLong() && withPsych <= (base * 1.35).toLong()) withPsych
                 else raw.toLong().coerceAtLeast(1)
             }
+
             is Pricing.Weight -> {
                 val mean = p.meanCents * markup * inflation
                 val std = mean * 0.28
                 nextNormal(mean, std).toLong().coerceAtLeast(1)
             }
+
             is Pricing.Range -> {
                 val min = p.minCents * markup * inflation
                 val max = p.maxCents * markup * inflation
@@ -532,11 +534,6 @@ class DemoBudgetGenerator(
             UpdateType.Config(
                 config = BudgetConfig(
                     title = loc.budgetTitle,
-                    currency = null,
-                    sync = BudgetConfig.Sync(
-                        onLaunch = false,
-                        onUpdate = false,
-                    ),
                 )
             )
         )
@@ -660,30 +657,42 @@ class DemoBudgetGenerator(
 
             val rate = config.currencyRate
 
-            result.add(ScheduledBill(
-                LocalDate(y, m, eDay), catUtilities, loc.electricity,
-                (5000 * rate).toLong(), (6500 * rate).toLong(),
-            ))
-            result.add(ScheduledBill(
-                LocalDate(y, m, wDay), catUtilities, loc.water,
-                (2500 * rate).toLong(), (3000 * rate).toLong(),
-            ))
-            result.add(ScheduledBill(
-                LocalDate(y, m, hDay), catUtilities, loc.heating,
-                (6000 * rate).toLong(), (8400 * rate).toLong(),
-            ))
-            result.add(ScheduledBill(
-                LocalDate(y, m, iDay), catUtilities, loc.internet,
-                (5000 * rate).toLong(), (5500 * rate).toLong(),
-            ))
-            result.add(ScheduledBill(
-                LocalDate(y, m, pDay), catUtilities, loc.phone,
-                (2500 * rate).toLong(), (2750 * rate).toLong(),
-            ))
-            result.add(ScheduledBill(
-                LocalDate(y, m, wasteDay), catUtilities, loc.wasteDisposal,
-                (800 * rate).toLong(), (920 * rate).toLong(),
-            ))
+            result.add(
+                ScheduledBill(
+                    LocalDate(y, m, eDay), catUtilities, loc.electricity,
+                    (5000 * rate).toLong(), (6500 * rate).toLong(),
+                )
+            )
+            result.add(
+                ScheduledBill(
+                    LocalDate(y, m, wDay), catUtilities, loc.water,
+                    (2500 * rate).toLong(), (3000 * rate).toLong(),
+                )
+            )
+            result.add(
+                ScheduledBill(
+                    LocalDate(y, m, hDay), catUtilities, loc.heating,
+                    (6000 * rate).toLong(), (8400 * rate).toLong(),
+                )
+            )
+            result.add(
+                ScheduledBill(
+                    LocalDate(y, m, iDay), catUtilities, loc.internet,
+                    (5000 * rate).toLong(), (5500 * rate).toLong(),
+                )
+            )
+            result.add(
+                ScheduledBill(
+                    LocalDate(y, m, pDay), catUtilities, loc.phone,
+                    (2500 * rate).toLong(), (2750 * rate).toLong(),
+                )
+            )
+            result.add(
+                ScheduledBill(
+                    LocalDate(y, m, wasteDay), catUtilities, loc.wasteDisposal,
+                    (800 * rate).toLong(), (920 * rate).toLong(),
+                )
+            )
 
             date = LocalDate(y + 1, m, 1)
         }
@@ -703,11 +712,13 @@ class DemoBudgetGenerator(
             val rentDay = nextInt(1, 5).coerceAtMost(daysInMonth)
             val rate = config.currencyRate
             val rentDollars = nextBetween(800.0, 2000.0)
-            result.add(ScheduledBill(
-                LocalDate(y, m, rentDay), catRent, loc.rent,
-                (rentDollars * 100 * rate).toLong(),
-                (rentDollars * 105 * rate).toLong(),
-            ))
+            result.add(
+                ScheduledBill(
+                    LocalDate(y, m, rentDay), catRent, loc.rent,
+                    (rentDollars * 100 * rate).toLong(),
+                    (rentDollars * 105 * rate).toLong(),
+                )
+            )
             date = date.plus(1, DateTimeUnit.MONTH)
         }
         return result
@@ -732,10 +743,12 @@ class DemoBudgetGenerator(
             val daysInMonth = monthLength(y, monthNumber(m))
             for ((name, minC, maxC) in subDefs) {
                 val subDay = nextInt(1, 28).coerceAtMost(daysInMonth)
-                result.add(ScheduledBill(
-                    LocalDate(y, m, subDay), catSubscriptions, name,
-                    (minC * rate).toLong(), (maxC * rate).toLong(),
-                ))
+                result.add(
+                    ScheduledBill(
+                        LocalDate(y, m, subDay), catSubscriptions, name,
+                        (minC * rate).toLong(), (maxC * rate).toLong(),
+                    )
+                )
             }
             date = date.plus(1, DateTimeUnit.MONTH)
         }
@@ -825,8 +838,12 @@ class DemoBudgetGenerator(
                 catClothes -> Pair(10000.0, 40000.0)
                 else -> Pair(20000.0, 120000.0)
             }
-            result.add(ScheduledBill(date, category, loc.bigPurchaseComment,
-                (minC * rate).toLong(), (maxC * rate).toLong()))
+            result.add(
+                ScheduledBill(
+                    date, category, loc.bigPurchaseComment,
+                    (minC * rate).toLong(), (maxC * rate).toLong()
+                )
+            )
         }
         return result
     }
@@ -886,7 +903,8 @@ class DemoBudgetGenerator(
             val isDayBeforePayday = nextPayday != null &&
                     currentDate == nextPayday.plus(-1, DateTimeUnit.DAY)
 
-            val inVacation = vacationPeriods.any { currentDate >= it.first && currentDate <= it.second }
+            val inVacation =
+                vacationPeriods.any { currentDate >= it.first && currentDate <= it.second }
 
             val dayTimestamp = randomTimestamp(currentDate, 6, 23)
 
@@ -927,7 +945,14 @@ class DemoBudgetGenerator(
                     mkEntry(
                         timestamp = dayTimestamp,
                         account = cardAccount,
-                        records = listOf(mkRecord(catBonus, loc.bonusComment, bonusCents, isExpense = false)),
+                        records = listOf(
+                            mkRecord(
+                                catBonus,
+                                loc.bonusComment,
+                                bonusCents,
+                                isExpense = false
+                            )
+                        ),
                         comment = "",
                     )
                 )
@@ -940,7 +965,8 @@ class DemoBudgetGenerator(
                     bill.maxCents.toDouble() * inflationFactor,
                 ).toLong()
                 val adjustedCents = if (bill.category == catUtilities &&
-                    (monthNumber in 10..12 || monthNumber in 1..3)) {
+                    (monthNumber in 10..12 || monthNumber in 1..3)
+                ) {
                     (amountCents.toDouble() * nextBetween(1.3, 1.8)).toLong()
                 } else {
                     amountCents
@@ -1128,8 +1154,9 @@ class DemoBudgetGenerator(
             val probVacation = if (inVacation) 0.25 else 0.0
             val probDecember = if (monthNumber == 12) 0.12 else 0.0
 
-            val probMultiplier = (probBase + probWeekend + probEmployed + probVacation + probDecember)
-                .coerceIn(0.4, 2.2)
+            val probMultiplier =
+                (probBase + probWeekend + probEmployed + probVacation + probDecember)
+                    .coerceIn(0.4, 2.2)
             val meanVisits = 2.8 * probMultiplier
             val numVisits = nextPoisson(meanVisits).coerceIn(0, 8)
 
@@ -1141,7 +1168,8 @@ class DemoBudgetGenerator(
                     }
                     if (inVacation) {
                         if (store is StoreDef.SingleAmount &&
-                            (store.categoryId == catLeisure || store.categoryId == catFood)) {
+                            (store.categoryId == catLeisure || store.categoryId == catFood)
+                        ) {
                             prob *= 1.6
                         }
                     }
@@ -1173,7 +1201,8 @@ class DemoBudgetGenerator(
                             val (group, categoryId) = picked.pools[poolIdx]
                             if (group.products.isEmpty()) continue
                             val product = group.products.random(random)
-                            val priceCents = generatePriceCents(product, picked.markup, inflationFactor)
+                            val priceCents =
+                                generatePriceCents(product, picked.markup, inflationFactor)
                             val localPrice = maxOf((priceCents.toDouble() * rate).toLong(), 1L)
                             itemsTotal += localPrice
                             records.add(mkRecord(categoryId, product.name, localPrice))
@@ -1192,12 +1221,18 @@ class DemoBudgetGenerator(
                                 if (maxSpend >= totalCost) {
                                     balance.savings -= totalCost
                                     transactions.add(
-                                        mkEntry(visitTimestamp, savingsAccount, records, picked.name)
+                                        mkEntry(
+                                            visitTimestamp,
+                                            savingsAccount,
+                                            records,
+                                            picked.name
+                                        )
                                     )
                                 }
                             }
                         }
                     }
+
                     is StoreDef.SingleAmount -> {
                         val priceCents = nextBetween(
                             picked.minCents.toDouble() * inflationFactor * rate,
@@ -1215,6 +1250,7 @@ class DemoBudgetGenerator(
                             )
                         }
                     }
+
                     is StoreDef.LargePurchase -> {}
                 }
             }
