@@ -4,6 +4,7 @@ import arrow.core.NonEmptyList
 import arrow.core.serialization.NonEmptyListSerializer
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import org.hnau.commons.gen.fold.annotations.Fold
 import org.hnau.commons.kotlin.mapper.Mapper
 import org.hnau.commons.kotlin.mapper.plus
 import org.hnau.commons.kotlin.mapper.stringToUuid

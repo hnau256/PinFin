@@ -3,18 +3,38 @@ package org.hnau.pinfin.model.utils.budget.state
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.hnau.pinfin.data.AccountConfig
+import org.hnau.pinfin.data.BudgetConfig
+import org.hnau.pinfin.data.BudgetId
 import org.hnau.pinfin.data.CategoryConfig
+import org.hnau.pinfin.data.Comment
 import org.hnau.pinfin.data.Transaction
 import org.hnau.pinfin.data.UpdateType
 import org.hnau.pinfin.model.transaction.utils.toTransactionType
 
-suspend fun BudgetState.toOptimizedUpdates(): List<UpdateType> = withContext(Dispatchers.Default) {
+suspend fun BudgetState.toOptimizedUpdates(
+    sourceId: BudgetId,
+): List<UpdateType> = withContext(Dispatchers.Default) {
     listOf(
-        listOf(
-            UpdateType.Config(
-                config = info.toConfig(),
-            ),
-        ),
+        BudgetInfo
+            .create(
+                id = sourceId,
+                config = null,
+            )
+            .let { defaultInfo ->
+                val config = info - defaultInfo
+                config
+                    .takeIf { it != BudgetConfig.empty }
+                    ?.let { budgetConfig ->
+                        listOf(
+                            UpdateType.Config(
+                                config = budgetConfig.copy(
+                                    title = budgetConfig.title?.trim()
+                                )
+                            )
+                        )
+                    }
+                    ?: emptyList()
+            },
 
         accounts.mapNotNull { (id, accountInfo) ->
             val defaultAccountInfo = AccountInfo.createDefault(
@@ -24,10 +44,12 @@ suspend fun BudgetState.toOptimizedUpdates(): List<UpdateType> = withContext(Dis
             val delta = accountInfo - defaultAccountInfo
             delta
                 .takeIf { it != AccountConfig.empty }
-                ?.let {
+                ?.let { acountConfig ->
                     UpdateType.AccountConfig(
                         id = id,
-                        config = it,
+                        config = acountConfig.copy(
+                            title = acountConfig.title?.trim(),
+                        ),
                     )
                 }
         },
@@ -39,10 +61,12 @@ suspend fun BudgetState.toOptimizedUpdates(): List<UpdateType> = withContext(Dis
             val delta = categoryInfo - defaultCategoryInfo
             delta
                 .takeIf { it != CategoryConfig.empty }
-                ?.let {
+                ?.let { categoryConfig ->
                     UpdateType.CategoryConfig(
                         id = id,
-                        config = it,
+                        config = categoryConfig.copy(
+                            title = categoryConfig.title?.trim(),
+                        ),
                     )
                 }
         },
@@ -54,8 +78,23 @@ suspend fun BudgetState.toOptimizedUpdates(): List<UpdateType> = withContext(Dis
                     timestamp = transactionInfo.timestamp,
                     comment = transactionInfo.comment,
                     type = transactionInfo.type.toTransactionType(),
-                ),
+                ).trimStrings(),
             )
         },
     ).flatten()
 }
+
+private fun Transaction.trimStrings(): Transaction = copy(
+    comment = Comment(comment.text.trim()),
+    type = when (val type = type) {
+        is Transaction.Type.Entry -> type.copy(
+            records = type.records.map { record ->
+                record.copy(
+                    comment = Comment(record.comment.text.trim()),
+                )
+            },
+        )
+
+        is Transaction.Type.Transfer -> type
+    },
+)

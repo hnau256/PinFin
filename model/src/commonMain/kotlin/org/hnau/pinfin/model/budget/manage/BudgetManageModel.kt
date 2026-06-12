@@ -19,13 +19,11 @@ import org.hnau.commons.kotlin.coroutines.actionOrCancelIfExecuting
 import org.hnau.commons.kotlin.coroutines.flow.state.mutable.toMutableStateFlowAsInitial
 import org.hnau.commons.kotlin.serialization.MutableStateFlowSerializer
 import org.hnau.pinfin.data.BudgetId
-import org.hnau.pinfin.data.UpdateType
 import org.hnau.pinfin.model.BudgetSyncDelegate
 import org.hnau.pinfin.model.budgetstack.BudgetStackOpener
 import org.hnau.pinfin.model.manage.BudgetOpener
 import org.hnau.pinfin.model.utils.budget.repository.BudgetRepository
 import org.hnau.pinfin.model.utils.budget.state.toOptimizedUpdates
-import org.hnau.pinfin.model.utils.budget.state.trimStrings
 import org.hnau.pinfin.model.utils.budget.storage.BudgetsStorage
 import org.hnau.pinfin.model.utils.budget.storage.createNewBudgetIfNotExistsAndGet
 
@@ -37,6 +35,8 @@ class BudgetManageModel(
 
     @Pipe
     interface Dependencies {
+
+        val id: BudgetId
 
         val repository: BudgetRepository
 
@@ -109,8 +109,9 @@ class BudgetManageModel(
                 .repository
                 .state
                 .value
-                .toOptimizedUpdates()
-                .map(UpdateType::trimStrings)
+                .toOptimizedUpdates(
+                    sourceId = dependencies.id,
+                )
 
             dependencies
                 .budgetsStorage
