@@ -81,7 +81,6 @@ class ConfigSplitPeriodProjector(
                     contentKey = { state -> state.tab.ordinal },
                     transitionSpec = TransitionSpec.remember(
                         showAlignment = Alignment.BottomCenter,
-                        hideAlignment = Alignment.TopCenter,
                     ),
                 ) { state ->
                     state.fold(

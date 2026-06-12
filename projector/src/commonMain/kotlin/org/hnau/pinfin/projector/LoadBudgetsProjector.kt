@@ -52,7 +52,6 @@ class LoadBudgetsProjector(
                 modifier = Modifier.fillMaxSize(),
                 transitionSpec = TransitionSpec.remember(
                         showAlignment = Alignment.CenterEnd,
-                        hideAlignment = Alignment.CenterStart
                     ),
             ) { budgetsStackProjector ->
                 budgetsStackProjector.Content(

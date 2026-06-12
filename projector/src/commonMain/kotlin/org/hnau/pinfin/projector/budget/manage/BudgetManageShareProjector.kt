@@ -57,7 +57,6 @@ class BudgetManageShareProjector(
                             contentKey = { it.ordinal },
                             transitionSpec = TransitionSpec.remember(
                                 showAlignment = Alignment.BottomCenter,
-                                hideAlignment = Alignment.TopCenter,
                             )
                         ) { state ->
                             when (state) {

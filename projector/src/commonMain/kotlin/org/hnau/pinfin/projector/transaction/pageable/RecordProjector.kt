@@ -259,9 +259,8 @@ class RecordProjector(
                             .NullableStateContent(
                                 modifier = Modifier.fillMaxHeight(),
                                 transitionSpec = TransitionSpec.remember(
-                        showAlignment = Alignment.CenterEnd,
-                        hideAlignment = Alignment.CenterStart
-                    ),
+                                    showAlignment = Alignment.CenterEnd,
+                                ),
                             ) { remove ->
                                 IconButton(
                                     onClick = remove,

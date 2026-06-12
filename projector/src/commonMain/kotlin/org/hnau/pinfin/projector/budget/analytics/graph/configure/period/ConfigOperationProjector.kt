@@ -83,7 +83,6 @@ class ConfigOperationProjector(
                     },
                     transitionSpec = TransitionSpec.remember(
                         showAlignment = Alignment.BottomCenter,
-                        hideAlignment = Alignment.TopCenter,
                     ),
                 ) { state ->
                     state.fold(

@@ -122,9 +122,8 @@ class ChooseOrCreateProjector<T>(
                     }
                 },
                 transitionSpec = TransitionSpec.remember(
-                        showAlignment = Alignment.BottomCenter,
-                        hideAlignment = Alignment.TopCenter,
-                    ),
+                    showAlignment = Alignment.BottomCenter,
+                ),
             ) { filteredLocal ->
                 when (filteredLocal) {
                     ChooseOrCreateModel.State.Filtered.NothingToFilter -> Message(
@@ -173,9 +172,8 @@ class ChooseOrCreateProjector<T>(
             .NullableStateContent(
                 modifier = modifier,
                 transitionSpec = TransitionSpec.remember(
-                        showAlignment = Alignment.BottomCenter,
-                        hideAlignment = Alignment.TopCenter,
-                    ),
+                    showAlignment = Alignment.BottomCenter,
+                ),
             ) { new ->
                 Column(
                     verticalArrangement = Arrangement.spacedBy(Dimens.smallSeparation),

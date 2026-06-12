@@ -237,7 +237,6 @@ class FilterProjector(
                     modifier = Modifier.fillMaxWidth(),
                     transitionSpec = TransitionSpec.remember(
                         showAlignment = Alignment.BottomCenter,
-                        hideAlignment = Alignment.TopCenter,
                     ),
                 ) { config ->
                     Card(
