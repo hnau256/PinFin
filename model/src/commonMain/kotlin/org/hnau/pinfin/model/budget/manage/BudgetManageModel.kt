@@ -1,23 +1,14 @@
-@file:UseSerializers(
-    MutableStateFlowSerializer::class,
-)
-
 package org.hnau.pinfin.model.budget.manage
 
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.UseSerializers
-import org.hnau.commons.app.model.EditingString
 import org.hnau.commons.app.model.goback.GoBackHandler
 import org.hnau.commons.app.model.goback.NeverGoBackHandler
 import org.hnau.commons.gen.pipe.annotations.Pipe
 import org.hnau.commons.kotlin.coroutines.ActionOrElse
 import org.hnau.commons.kotlin.coroutines.CancelOrInProgress
 import org.hnau.commons.kotlin.coroutines.actionOrCancelIfExecuting
-import org.hnau.commons.kotlin.coroutines.flow.state.mutable.toMutableStateFlowAsInitial
-import org.hnau.commons.kotlin.serialization.MutableStateFlowSerializer
 import org.hnau.pinfin.data.BudgetId
 import org.hnau.pinfin.model.BudgetSyncDelegate
 import org.hnau.pinfin.model.budgetstack.BudgetStackOpener
@@ -55,8 +46,6 @@ class BudgetManageModel(
 
     @Serializable
     data class Skeleton(
-        val editName: MutableStateFlow<MutableStateFlow<EditingString>?> =
-            null.toMutableStateFlowAsInitial(),
         val remove: BudgetManageRemoveModel.Skeleton = BudgetManageRemoveModel.Skeleton(),
         val share: BudgetManageShareModel.Skeleton = BudgetManageShareModel.Skeleton(),
     )
