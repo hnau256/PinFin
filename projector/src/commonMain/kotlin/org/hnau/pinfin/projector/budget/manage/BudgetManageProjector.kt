@@ -192,7 +192,7 @@ class BudgetManageProjector(
                             }
                         }
                     }
-                    cell(key = "copy_optimized") {
+                    /*cell(key = "copy_optimized") {
                         SPanel(
                             actionOrElseOrDisabled = model.copyOptimized.collectAsState().value,
                             importanceToActivate = null,
@@ -207,7 +207,7 @@ class BudgetManageProjector(
                                 )
                             }
                         }
-                    }
+                    }*/
                     cell(key = "remove") {
                         SPanel(
                             actionOrElseOrDisabled = ActionOrElse.instant(remove::onRemoveClick),

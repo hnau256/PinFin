@@ -87,6 +87,7 @@ class CreateBudgetModel(
                                     sync = BudgetConfig.Sync(
                                         scheme = shareCode.scheme,
                                         host = shareCode.host,
+                                        onLaunch = true,
                                     )
                                 )
                             )
