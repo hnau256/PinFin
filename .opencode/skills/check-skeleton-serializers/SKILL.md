@@ -24,12 +24,13 @@ Examples: "проверь сериализаторы скелетонов", "che
 
 ## Type → Serializer mapping
 
-| Property type          | Serializer class            | Import |
-|------------------------|-----------------------------|--------|
-| `MutableStateFlow<T>`  | `MutableStateFlowSerializer` | `org.hnau.commons.kotlin.serialization.MutableStateFlowSerializer` |
-| `NonEmptyList<T>`      | `NonEmptyListSerializer`     | `arrow.core.serialization.NonEmptyListSerializer` |
-| `NonEmptySet<T>`       | `NonEmptySetSerializer`      | `arrow.core.serialization.NonEmptySetSerializer` |
-| `Either<L, R>`         | `EitherSerializer`           | `arrow.core.serialization.EitherSerializer` |
+| Property type          | Serializer class             | Import                                                        |
+|------------------------|------------------------------|---------------------------------------------------------------|
+| `MutableStateFlow<T>`  | `MutableStateFlowSerializer`  | `org.hnau.commons.kotlin.serialization.MutableStateFlowSerializer` |
+| `NonEmptyList<T>`      | `NonEmptyListSerializer`      | `arrow.core.serialization.NonEmptyListSerializer`               |
+| `NonEmptySet<T>`       | `NonEmptySetSerializer`       | `arrow.core.serialization.NonEmptySetSerializer`                |
+| `Either<L, R>`         | `EitherSerializer`            | `arrow.core.serialization.EitherSerializer`                     |
+| `Option<T>`             | `OptionSerializer`            | `arrow.core.serialization.OptionSerializer`                     |
 
 Required import for the annotation itself: `import kotlinx.serialization.UseSerializers`.
 
@@ -39,7 +40,8 @@ Required import for the annotation itself: `import kotlinx.serialization.UseSeri
 
 1. Find all `data class Skeleton` definitions under `model/src/commonMain/kotlin/`.
 2. For each Skeleton, inspect **only the property declarations in the class body** (not companion objects, not nested types, not other classes in the file):
-   - Are any of the four types above used directly?
+   - Scan the full property type including generic arguments for any of the five types above.
+   - E.g. `MutableStateFlow<Option<T>>` requires both `MutableStateFlowSerializer` and `OptionSerializer`.
 3. Also inspect the file's `@file:UseSerializers(...)` annotation (if present):
    - Which serializer classes are listed?
 
@@ -47,7 +49,7 @@ Required import for the annotation itself: `import kotlinx.serialization.UseSeri
 
 For each file that HAS a Skeleton:
 
-1. **Determine required serializers** — the set of serializer classes needed based on the Skeleton's own property types.
+1. **Determine required serializers** — the set of serializer classes needed based on the Skeleton's own property types (including type arguments).
 2. **Determine declared serializers** — the set actually listed in `@file:UseSerializers`.
 3. **Diff them:**
    - `required \ declared` = **missing** → must be added
@@ -74,7 +76,8 @@ End with: "X files checked, Y fixed, Z already correct."
 
 ## Key details
 
-- Only `MutableStateFlow`, `NonEmptyList`, `NonEmptySet` and `Either` appearing **directly** as property types in the `data class Skeleton` itself matter. Nested Skeleton references do not count.
+- All five types (`MutableStateFlow`, `NonEmptyList`, `NonEmptySet`, `Either`, `Option`) appearing in the property type **including generic arguments** matter. E.g. `MutableStateFlow<Option<T>>` counts as both.
+- Nested Skeleton references (e.g. `OtherModel.Skeleton`) do **not** count — their serializers are handled by their own files.
 - Trailing commas in the annotation argument list are project convention.
 - Other `@Serializable` classes in the same file (e.g. sealed interfaces, other data classes) are ignored — only the Skeleton is checked.
 - The annotation line is `@file:UseSerializers(` (opening paren on same line), then one serializer per line, then `)`.
