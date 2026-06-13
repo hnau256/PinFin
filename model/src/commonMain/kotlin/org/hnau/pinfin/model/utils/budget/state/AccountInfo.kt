@@ -72,7 +72,7 @@ data class AccountInfo(
         ): AccountInfo = AccountInfo(
             amount = amount,
             title = id.id,
-            hideIfAmountIsZero = true,
+            hideIfAmountIsZero = false,
             hue = ModelHue
                 .calcDefault(id.id.hashCode())
                 .let(Mapper.modelHueToHue.direct),
