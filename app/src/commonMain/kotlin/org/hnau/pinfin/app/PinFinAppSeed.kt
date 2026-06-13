@@ -2,7 +2,9 @@ package org.hnau.pinfin.app
 
 import org.hnau.commons.app.model.app.AppFilesDirProvider
 import org.hnau.commons.app.model.app.AppSeed
+import org.hnau.commons.app.model.file.File
 import org.hnau.commons.app.model.file.absolutePath
+import org.hnau.commons.app.model.file.mkDirs
 import org.hnau.commons.app.model.file.plus
 import org.hnau.commons.app.model.preferences.impl.FileBasedPreferences
 import org.hnau.pinfin.model.RootModel
@@ -25,7 +27,9 @@ fun createPinFinAppSeed(
                     preferencesFile = appFilesDir + "preferences.txt",
                 ),
                 budgetsStorageFactory = BudgetsStorage.Factory.files(
-                    budgetsDir = (appFilesDir + "budgets").absolutePath,
+                    budgetsDir = (appFilesDir + "budgets")
+                        .apply(File::mkDirs)
+                        .absolutePath,
                 ),
                 clipboardAccessor = dependencies.clipboardAccessor,
             ),

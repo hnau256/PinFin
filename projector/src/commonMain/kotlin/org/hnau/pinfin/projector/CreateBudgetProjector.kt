@@ -88,6 +88,7 @@ class CreateBudgetProjector(
                 cell { shareCode.Content() }
                 cell {
                     SButton(
+                        modifier = Modifier.fillMaxWidth(),
                         actionOrElseOrDisabled = model.createFromShareCode.collectAsState().value,
                         titleOrIcon = TitleOrIcon.Title(dependencies.localization.sharedBudgetCreate)
                     )
