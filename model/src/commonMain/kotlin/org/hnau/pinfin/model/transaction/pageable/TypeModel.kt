@@ -1,9 +1,11 @@
 @file:UseSerializers(
     MutableStateFlowSerializer::class,
+    EitherSerializer::class,
 )
 
 package org.hnau.pinfin.model.transaction.pageable
 
+import arrow.core.serialization.EitherSerializer
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow

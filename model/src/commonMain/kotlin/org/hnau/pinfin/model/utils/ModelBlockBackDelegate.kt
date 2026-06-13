@@ -1,11 +1,13 @@
 @file:UseSerializers(
     MutableStateFlowSerializer::class,
+    OptionSerializer::class,
 )
 
 package org.hnau.pinfin.model.utils
 
 import arrow.core.None
 import arrow.core.Option
+import arrow.core.serialization.OptionSerializer
 import arrow.core.some
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow

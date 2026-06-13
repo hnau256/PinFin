@@ -1,11 +1,13 @@
 @file:UseSerializers(
     MutableStateFlowSerializer::class,
+    NonEmptyListSerializer::class,
 )
 
 package org.hnau.pinfin.model.transaction.pageable
 
 import arrow.core.NonEmptyList
 import arrow.core.nonEmptyListOf
+import arrow.core.serialization.NonEmptyListSerializer
 import arrow.core.toNonEmptyListOrNull
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
