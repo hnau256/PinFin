@@ -1,7 +1,3 @@
-@file:UseSerializers(
-    MutableStateFlowSerializer::class,
-)
-
 package org.hnau.pinfin.model.manage
 
 import arrow.core.NonEmptyList
@@ -10,7 +6,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.UseSerializers
 import org.hnau.commons.app.model.goback.GoBackHandler
 import org.hnau.commons.app.model.preferences.Preference
 import org.hnau.commons.app.model.preferences.Preferences
@@ -32,7 +27,6 @@ import org.hnau.commons.kotlin.mapper.Mapper
 import org.hnau.commons.kotlin.mapper.nullable
 import org.hnau.commons.kotlin.mapper.plus
 import org.hnau.commons.kotlin.mapper.takeIf
-import org.hnau.commons.kotlin.serialization.MutableStateFlowSerializer
 import org.hnau.commons.kotlin.toAccessor
 import org.hnau.pinfin.data.BudgetId
 import org.hnau.pinfin.model.BudgetRootModel
