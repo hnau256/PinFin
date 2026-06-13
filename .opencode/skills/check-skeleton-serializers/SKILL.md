@@ -1,6 +1,6 @@
 ---
 name: check-skeleton-serializers
-description: Use ONLY when the user asks to verify or check that all Skeleton classes have correct @file:UseSerializers annotations before a release, or when the user mentions "Skeleton serializer check", "serializer audit", or "предрелизная проверка Skeleton". This skill audits all data class Skeleton definitions across the PinFin model module to ensure any Skeleton containing MutableStateFlow, NonEmptyList, NonEmptySet or Either properties declares the corresponding serializers at file level — and vice versa, removes redundant serializers.
+description: Use when the user asks to audit, verify, check, or fix serializer annotations for Skeleton classes in the PinFin model module. Covers any request about @file:UseSerializers correctness, missing or redundant serializers, skeleton serializer configuration, or pre-release serializer validation — in Russian or English.
 ---
 
 # Check Skeleton Serializers
@@ -16,12 +16,11 @@ silently falls back to `PolymorphicSerializer` for these types — which is
 incorrect and will fail at runtime. The compiler does **not** emit an error
 or warning.
 
-## Trigger phrases
+## When to use
 
-- "проверь Skeleton перед релизом"
-- "check skeleton serializers"
-- "serializer audit"
-- "предрелизная проверка"
+Any request about Skeleton serializers — audit, check, fix, verify, validate.
+Examples: "проверь сериализаторы скелетонов", "check skeleton serializers",
+"serializer audit before release", "предрелизная проверка".
 
 ## Type → Serializer mapping
 
