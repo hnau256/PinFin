@@ -66,7 +66,6 @@ class CommentProjector(
                     modifier = modifier
                         .padding(contentPadding)
                         .fillMaxWidth()
-                        .horizontalDisplayPadding()
                         .imePadding(),
                     transitionSpec = TransitionSpec.crossfade(),
                 ) { suggests ->

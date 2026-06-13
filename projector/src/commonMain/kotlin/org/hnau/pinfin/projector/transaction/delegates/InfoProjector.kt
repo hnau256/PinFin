@@ -65,7 +65,6 @@ class InfoProjector(
         Column(
             modifier = modifier
                 .padding(contentPadding)
-                .horizontalDisplayPadding()
                 .verticalDisplayPadding(),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(Dimens.separation),
