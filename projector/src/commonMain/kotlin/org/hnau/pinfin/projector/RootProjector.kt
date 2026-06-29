@@ -46,7 +46,7 @@ class RootProjector(
 
     @Composable
     fun Content(
-        contentPadding: PaddingValues
+        contentPadding: PaddingValues,
     ) {
         CompositionLocalProvider(
             LocalContentColor provides MaterialTheme.colorScheme.onBackground,

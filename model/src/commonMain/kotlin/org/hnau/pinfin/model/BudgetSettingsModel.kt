@@ -255,8 +255,9 @@ class BudgetSettingsModel(
                 ParsingMapper(
                     encode = ServerHost::host,
                     parse = { input ->
-                        ServerHost
-                            .createOrNull(input.trim())
+                        input
+                            .trim()
+                            .let(ServerHost.Companion::createOrNull)
                             .foldNullable(
                                 ifNull = { Unit.left() },
                                 ifNotNull = ServerHost::right,
