@@ -37,7 +37,7 @@ class BudgetMCPModel(
         }
     }
 
-    private suspend fun launchMCP() {
+    private suspend fun launchMCP(): Nothing {
         TODO()
     }
 }
