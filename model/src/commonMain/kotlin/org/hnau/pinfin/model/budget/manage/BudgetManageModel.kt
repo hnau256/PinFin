@@ -42,12 +42,15 @@ class BudgetManageModel(
         fun remove(): BudgetManageRemoveModel.Dependencies
 
         fun share(): BudgetManageShareModel.Dependencies
+
+        fun mcp(): BudgetMCPModel.Dependencies
     }
 
     @Serializable
     data class Skeleton(
         val remove: BudgetManageRemoveModel.Skeleton = BudgetManageRemoveModel.Skeleton(),
         val share: BudgetManageShareModel.Skeleton = BudgetManageShareModel.Skeleton(),
+        val mcp: BudgetMCPModel.Skeleton = BudgetMCPModel.Skeleton(),
     )
 
     val sync: BudgetSyncDelegate
@@ -57,6 +60,12 @@ class BudgetManageModel(
         scope = scope,
         skeleton = skeleton.remove,
         dependencies = dependencies.remove(),
+    )
+
+    val mcp = BudgetMCPModel(
+        scope = scope,
+        skeleton = skeleton.mcp,
+        dependencies = dependencies.mcp(),
     )
 
     val share = BudgetManageShareModel(

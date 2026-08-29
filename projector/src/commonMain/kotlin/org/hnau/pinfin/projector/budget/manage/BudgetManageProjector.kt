@@ -77,6 +77,8 @@ class BudgetManageProjector(
         fun remove(): BudgetManageRemoveProjector.Dependencies
 
         fun share(): BudgetManageShareProjector.Dependencies
+
+        fun mcp(): BudgetMCPProjector.Dependencies
     }
 
     private val remove = BudgetManageRemoveProjector(
@@ -88,6 +90,11 @@ class BudgetManageProjector(
     private val share = BudgetManageShareProjector(
         model = model.share,
         dependencies = dependencies.share(),
+    )
+
+    private val mcp = BudgetMCPProjector(
+        model = model.mcp,
+        dependencies = dependencies.mcp(),
     )
 
 
@@ -110,6 +117,7 @@ class BudgetManageProjector(
                 ) {
                     cell(key = "sync") { Sync() }
                     cell(key = "share") { share.Content() }
+                    cell(key = "mcp") { mcp.Content() }
 
                     separator()
 
