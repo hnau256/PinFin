@@ -5,9 +5,11 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import arrow.core.toNonEmptyListOrThrow
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.StateFlow
 import org.hnau.commons.app.projector.fractal.STabs
@@ -56,10 +58,13 @@ class ConfigSplitPeriodProjector(
             modifier = modifier,
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
+            val selectedTab by model.tab.collectAsState()
             STabs(
-                items = remember { ConfigSplitPeriodModel.Tab.entries.toList() },
-                selection = model.tab.collectAsState().value,
-                onClick = model.tab::value::set,
+                items = remember {
+                    ConfigSplitPeriodModel.Tab.entries.toList().toNonEmptyListOrThrow()
+                },
+                getSelection = { selectedTab },
+                onSelectionChanged = model.tab::value::set,
             ) { tab ->
                 SText(
                     when (tab) {

@@ -55,7 +55,7 @@ class CreateBudgetProjector(
         .createInputProjector(
             scope = scope,
             title = dependencies.localization.shareBudgetCode,
-            icon = Drawable.Vector(Icons.Default.Share),
+            startAccessory = { SIcon(Drawable.Vector(Icons.Default.Share)) },
         ) { _, _ ->
             dependencies.localization.shareBudgetCodeIncorrect
         }

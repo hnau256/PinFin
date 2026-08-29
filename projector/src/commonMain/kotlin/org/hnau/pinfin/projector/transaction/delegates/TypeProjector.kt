@@ -4,8 +4,10 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import arrow.core.toNonEmptyListOrThrow
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.StateFlow
 import org.hnau.commons.app.projector.fractal.STabs
@@ -223,11 +225,12 @@ class TypeProjector(
     fun HeaderContent(
         modifier: Modifier = Modifier,
     ) {
+        val selectedTab by model.type.variant.collectAsState()
         STabs(
             modifier = modifier,
-            items = remember { TransactionType.entries.toList() },
-            selection = model.type.variant.collectAsState().value,
-            onClick = { model.type.variant.value = it },
+            items = remember { TransactionType.entries.toList().toNonEmptyListOrThrow() },
+            getSelection = { selectedTab },
+            onSelectionChanged = { model.type.variant.value = it },
         ) { type ->
             SText(
                 text = type.title(

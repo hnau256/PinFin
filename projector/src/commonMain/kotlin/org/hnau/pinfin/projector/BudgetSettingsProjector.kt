@@ -16,6 +16,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import kotlinx.coroutines.CoroutineScope
 import org.hnau.commons.app.projector.fractal.SButton
 import org.hnau.commons.app.projector.fractal.SContentWithActions
+import org.hnau.commons.app.projector.fractal.SIcon
 import org.hnau.commons.app.projector.fractal.SPanel
 import org.hnau.commons.app.projector.fractal.SScreen
 import org.hnau.commons.app.projector.fractal.SText
@@ -57,7 +58,7 @@ class BudgetSettingsProjector(
         .createInputProjector(
             scope = scope,
             title = dependencies.localization.name,
-            icon = Drawable.Vector(Icons.AutoMirrored.Filled.Label),
+            startAccessory = { SIcon(Drawable.Vector(Icons.AutoMirrored.Filled.Label)) },
         ) { _, _ ->
             dependencies.localization.nameShouldNotByEmpty
         }
@@ -71,7 +72,7 @@ class BudgetSettingsProjector(
         .createInputProjector(
             scope = scope,
             title = dependencies.localization.mantissaLength,
-            icon = Drawable.Vector(Icons.Default.ExposureZero),
+            startAccessory = { SIcon(Drawable.Vector(Icons.Default.ExposureZero)) },
         ) { _, _ ->
             dependencies.localization.incorrectMantissaLength
         }
@@ -86,7 +87,7 @@ class BudgetSettingsProjector(
         .createInputProjector(
             scope = scope,
             title = dependencies.localization.httpScheme,
-            icon = Drawable.Vector(Icons.Default.Security),
+            startAccessory = { SIcon(Drawable.Vector(Icons.Default.Security)) },
         )
 
     private val syncHost: InputProjector = model
@@ -98,7 +99,7 @@ class BudgetSettingsProjector(
         .createInputProjector(
             scope = scope,
             title = dependencies.localization.serverHost,
-            icon = Drawable.Vector(Icons.Default.Cloud),
+            startAccessory = { SIcon(Drawable.Vector(Icons.Default.Cloud)) },
         ) { _, _ ->
             dependencies.localization.hostIsIncorrect
         }
@@ -109,7 +110,7 @@ class BudgetSettingsProjector(
         .createInputProjector(
             scope = scope,
             title = dependencies.localization.syncOnLaunch,
-            icon = Drawable.Vector(Icons.Default.RocketLaunch),
+            startAccessory = { SIcon(Drawable.Vector(Icons.Default.RocketLaunch)) },
         )
 
     private val syncOnUpdate: InputProjector = model
@@ -118,7 +119,7 @@ class BudgetSettingsProjector(
         .createInputProjector(
             scope = scope,
             title = dependencies.localization.syncOnUpdate,
-            icon = Drawable.Vector(Icons.AutoMirrored.Filled.PlaylistAdd),
+            startAccessory = { SIcon(Drawable.Vector(Icons.AutoMirrored.Filled.PlaylistAdd)) },
         )
 
     private val savableDelegate: ProjectorSavableDelegate<BudgetInfo> = ProjectorSavableDelegate(

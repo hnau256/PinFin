@@ -13,6 +13,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import arrow.core.toNonEmptyListOrThrow
 import kotlinx.coroutines.CoroutineScope
 import org.hnau.commons.app.projector.fractal.STabs
 import org.hnau.commons.app.projector.fractal.SText
@@ -102,9 +103,9 @@ class AnalyticsProjector(
                     contentAlignment = Alignment.Center,
                 ) {
                     STabs(
-                        items = remember { AnalyticsTab.entries.toList() },
-                        selection = selectedTab,
-                        onClick = { model.selectedTab.value = it },
+                        items = remember { AnalyticsTab.entries.toList().toNonEmptyListOrThrow() },
+                        getSelection = { selectedTab },
+                        onSelectionChanged = { model.selectedTab.value = it },
                     ) { tab ->
                         SText(
                             text = tab.title(
