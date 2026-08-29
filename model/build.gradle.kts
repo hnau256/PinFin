@@ -16,6 +16,8 @@ kotlin {
                 implementation(hnau.kotlinx.serialization.cbor)
                 implementation(hnau.kotlinx.serialization.json)
                 implementation(libs.ktor.network)
+                implementation(libs.ktor.server.cio)
+                implementation(libs.mcp.server)
             }
         }
     }
