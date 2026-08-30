@@ -8,6 +8,7 @@ kotlin {
         commonMain {
             dependencies {
                 implementation(hnau.commons.app.projector)
+                implementation(libs.konnection)
                 implementation(project(":model"))
             }
         }

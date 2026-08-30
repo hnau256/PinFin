@@ -63,10 +63,11 @@ class BudgetMCPModel(
     private suspend fun launchMCP(): Nothing {
         val server = scope.embeddedServer(
             factory = CIO,
-            host = "0.0.0.0",
+            host = "::",
             port = MCP_PORT,
         ) {
             mcpStreamableHttp(
+                path = MCP_PATH,
                 enableDnsRebindingProtection = false,
             ) {
                 createMcpServer()
@@ -133,7 +134,8 @@ class BudgetMCPModel(
         }
     }
 
-    private companion object {
+    companion object {
         const val MCP_PORT: Int = 8080
+        const val MCP_PATH: String = "/mcp"
     }
 }
