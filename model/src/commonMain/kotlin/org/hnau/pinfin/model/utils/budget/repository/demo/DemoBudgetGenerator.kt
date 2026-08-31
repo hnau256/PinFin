@@ -18,6 +18,7 @@ import org.hnau.pinfin.data.BudgetConfig
 import org.hnau.pinfin.data.CategoryConfig
 import org.hnau.pinfin.data.CategoryId
 import org.hnau.pinfin.data.Comment
+import org.hnau.pinfin.data.Currency
 import org.hnau.pinfin.data.Hue
 import org.hnau.pinfin.data.Record
 import org.hnau.pinfin.data.Transaction
@@ -501,6 +502,7 @@ class DemoBudgetGenerator(
 
     private fun centsToAmountExpr(cents: Long): AmountExpression {
         val bd = cents.toBigDecimal().div(100.toBigDecimal())
+        @Suppress("DEPRECATION")
         return AmountExpression(Expression.Value(bd))
     }
 

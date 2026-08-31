@@ -37,6 +37,8 @@ class AmountModel(
     interface Dependencies {
 
         val budgetRepository: BudgetRepository
+
+        fun amount(): CommonAmountModel.Dependencies
     }
 
     @Serializable
@@ -69,6 +71,7 @@ class AmountModel(
     private val delegate: CommonAmountModel = CommonAmountModel(
         scope = scope,
         skeleton = skeleton.delegate,
+        dependencies = dependencies.amount(),
     )
 
     class Page(

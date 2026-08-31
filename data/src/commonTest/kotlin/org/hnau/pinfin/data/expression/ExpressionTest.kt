@@ -4,7 +4,10 @@ import com.ionspin.kotlin.bignum.decimal.BigDecimal
 import com.ionspin.kotlin.bignum.decimal.DecimalMode
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertFalse
 import kotlin.test.assertNull
+import kotlin.test.assertTrue
+import org.hnau.pinfin.data.utils.DecimalScale
 
 class ExpressionTest {
     // region parse roundtrip
@@ -202,6 +205,30 @@ class ExpressionTest {
             )
         assertNull(expression.evaluateOrNull(decimalMode = null))
     }
+
+    // endregion
+
+    // region amountExpression isNegative
+
+    @Test
+    fun amountExpressionIsNegativePositive() =
+        assertFalse(AmountExpression.createOrNull("15")!!.isNegative(DecimalScale(2L)))
+
+    @Test
+    fun amountExpressionIsNegativeUnaryMinus() =
+        assertTrue(AmountExpression.createOrNull("-5")!!.isNegative(DecimalScale(2L)))
+
+    @Test
+    fun amountExpressionIsNegativeSubtraction() =
+        assertTrue(AmountExpression.createOrNull("5-6")!!.isNegative(DecimalScale(2L)))
+
+    @Test
+    fun amountExpressionIsNegativeZero() =
+        assertFalse(AmountExpression.createOrNull("0")!!.isNegative(DecimalScale(2L)))
+
+    @Test
+    fun amountExpressionIsNegativeNonTerminatingDivision() =
+        assertFalse(AmountExpression.createOrNull("1/3")!!.isNegative(DecimalScale(2L)))
 
     // endregion
 

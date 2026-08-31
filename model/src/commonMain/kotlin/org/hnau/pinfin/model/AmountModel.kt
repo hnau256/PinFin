@@ -13,18 +13,27 @@ import org.hnau.commons.app.model.EditingString
 import org.hnau.commons.app.model.goback.GoBackHandler
 import org.hnau.commons.app.model.goback.NeverGoBackHandler
 import org.hnau.commons.app.model.toEditingString
+import org.hnau.commons.gen.pipe.annotations.Pipe
+import org.hnau.commons.kotlin.coroutines.flow.state.combineStateWith
+import org.hnau.commons.kotlin.coroutines.flow.state.derivedStateFlowOf
 import org.hnau.commons.kotlin.coroutines.flow.state.mapState
 import org.hnau.commons.kotlin.coroutines.flow.state.mutable.toMutableStateFlowAsInitial
 import org.hnau.commons.kotlin.serialization.MutableStateFlowSerializer
 import org.hnau.pinfin.data.expression.AmountExpression
-import org.hnau.pinfin.data.expression.Expression
-import org.hnau.pinfin.data.expression.parseOrNull
 import org.hnau.pinfin.data.expression.serialize
+import org.hnau.pinfin.model.utils.budget.repository.BudgetRepository
 
 class AmountModel(
     private val scope: CoroutineScope,
     private val skeleton: Skeleton,
+    dependencies: Dependencies,
 ) {
+
+    @Pipe
+    interface Dependencies {
+
+        val budgetRepository: BudgetRepository
+    }
 
     @Serializable
     data class Skeleton(
@@ -55,12 +64,14 @@ class AmountModel(
 
     val amount: StateFlow<AmountExpression?> = skeleton
         .input
-        .mapState(
+        .combineStateWith(
             scope = scope,
-        ) { input ->
-            Expression
-                .parseOrNull(input.text)
-                ?.let(::AmountExpression)
+            other = dependencies.budgetRepository.state.mapState(scope) { it.info.currency },
+        ) { input, currency ->
+            AmountExpression.createOrNull(
+                string = input.text,
+                currency = currency,
+            )
         }
 
     val error: StateFlow<Boolean> = amount.mapState(
