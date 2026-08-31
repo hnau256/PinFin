@@ -12,6 +12,7 @@ import kotlinx.datetime.LocalDateRange
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.UseSerializers
 import org.hnau.commons.app.model.goback.GoBackHandler
+import org.hnau.commons.gen.fold.annotations.Fold
 import org.hnau.commons.gen.pipe.annotations.Pipe
 import org.hnau.commons.kotlin.coroutines.flow.state.combineState
 import org.hnau.commons.kotlin.coroutines.flow.state.mapState
@@ -79,6 +80,7 @@ class FilterModel(
         val accounts: SelectAccountsModel,
     ) {
 
+        @Fold
         sealed interface Type {
 
             data class Categories(

@@ -10,6 +10,7 @@ import kotlinx.datetime.LocalDateRange
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.UseSerializers
+import org.hnau.commons.gen.fold.annotations.Fold
 import org.hnau.commons.kotlin.KeyValue
 import org.hnau.pinfin.data.AccountId
 import org.hnau.pinfin.data.CategoryId
@@ -27,6 +28,7 @@ data class AnalyticsPage(
         val constraints: Constraints,
     ) {
 
+        @Fold
         @Serializable
         sealed interface Key {
 

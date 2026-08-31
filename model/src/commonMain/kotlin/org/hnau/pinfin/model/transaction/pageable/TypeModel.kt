@@ -14,6 +14,7 @@ import kotlinx.serialization.Serializable
 import kotlinx.serialization.UseSerializers
 import org.hnau.commons.app.model.goback.GoBackHandler
 import org.hnau.commons.app.model.utils.Editable
+import org.hnau.commons.gen.fold.annotations.Fold
 import org.hnau.commons.gen.pipe.annotations.Pipe
 import org.hnau.commons.kotlin.coroutines.flow.state.flatMapState
 import org.hnau.commons.kotlin.coroutines.flow.state.mapWithScope
@@ -41,6 +42,7 @@ class TypeModel(
         fun transfer(): TransferModel.Dependencies
     }
 
+    @Fold
     sealed interface Type {
 
         val key: TransactionType
@@ -67,6 +69,7 @@ class TypeModel(
                 get() = model.goBackHandler
         }
 
+        @Fold
         @Serializable
         sealed interface Skeleton {
 
@@ -180,6 +183,7 @@ class TypeModel(
         val page: StateFlow<Type>,
     ) {
 
+        @Fold
         sealed interface Type {
 
             val key: TransactionType

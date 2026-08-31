@@ -52,6 +52,7 @@ data class Transaction(
         }
     }
 
+    @Fold
     @Serializable
     sealed interface Type {
 

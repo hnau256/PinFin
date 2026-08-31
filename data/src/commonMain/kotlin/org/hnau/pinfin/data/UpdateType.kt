@@ -2,10 +2,12 @@ package org.hnau.pinfin.data
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import org.hnau.commons.gen.fold.annotations.Fold
 import org.hnau.pinfin.data.AccountConfig as AccountConfigDTO
 import org.hnau.pinfin.data.CategoryConfig as CategoryConfigDTO
 import org.hnau.pinfin.data.Transaction as TransactionDTO
 
+@Fold
 @Serializable
 sealed interface UpdateType {
 

@@ -12,6 +12,7 @@ import kotlinx.serialization.UseSerializers
 import org.hnau.commons.app.model.goback.GoBackHandler
 import org.hnau.commons.app.model.utils.Editable
 import org.hnau.commons.app.model.utils.combineEditableWith
+import org.hnau.commons.gen.fold.annotations.Fold
 import org.hnau.commons.gen.pipe.annotations.Pipe
 import org.hnau.commons.kotlin.KeyValue
 import org.hnau.commons.kotlin.coroutines.flow.state.flatMapState
@@ -47,6 +48,7 @@ class TransferModel(
         }
     }
 
+    @Fold
     sealed interface PageType {
 
         val key: Int

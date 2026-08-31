@@ -1,7 +1,9 @@
 package org.hnau.pinfin.data.expression
 
 import com.ionspin.kotlin.bignum.decimal.BigDecimal
+import org.hnau.commons.gen.fold.annotations.Fold
 
+@Fold
 sealed interface Expression {
 
     data class Value(

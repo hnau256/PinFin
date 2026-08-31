@@ -4,7 +4,9 @@ import kotlinx.datetime.DatePeriod
 import kotlinx.datetime.LocalDate
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import org.hnau.commons.gen.fold.annotations.Fold
 
+@Fold
 @Serializable
 sealed interface DateRange {
 

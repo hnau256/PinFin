@@ -35,6 +35,7 @@ import org.hnau.commons.app.projector.uikit.utils.Dimens
 import org.hnau.commons.app.projector.utils.Icon
 import org.hnau.commons.app.projector.utils.Orientation
 import org.hnau.commons.app.projector.utils.copy
+import org.hnau.commons.gen.fold.annotations.Fold
 import org.hnau.commons.gen.pipe.annotations.Pipe
 import org.hnau.commons.kotlin.KeyValue
 import org.hnau.commons.kotlin.coroutines.flow.state.mapState
@@ -87,6 +88,7 @@ class RecordProjector(
             fun category(): CategoryProjector.Dependencies
         }
 
+        @Fold
         sealed interface PageType {
 
             val key: Int

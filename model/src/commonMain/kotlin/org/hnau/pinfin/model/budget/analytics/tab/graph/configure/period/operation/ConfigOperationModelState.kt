@@ -3,8 +3,10 @@ package org.hnau.pinfin.model.budget.analytics.tab.graph.configure.period.operat
 import kotlinx.datetime.DatePeriod
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import org.hnau.commons.gen.fold.annotations.Fold
 import org.hnau.pinfin.model.utils.analytics.config.AnalyticsPageConfig
 
+@Fold
 @Serializable
 sealed interface ConfigOperationModelState<out T> {
 
@@ -17,14 +19,6 @@ sealed interface ConfigOperationModelState<out T> {
     data class Average<out T>(
         val subperiod: T,
     ) : ConfigOperationModelState<T>
-}
-
-inline fun <I, O> ConfigOperationModelState<I>.fold(
-    ifSum: () -> O,
-    ifAverage: (I) -> O,
-): O = when (this) {
-    is ConfigOperationModelState.Average -> ifAverage(subperiod)
-    ConfigOperationModelState.Sum -> ifSum()
 }
 
 inline fun <I, O> ConfigOperationModelState<I>.flatMap(

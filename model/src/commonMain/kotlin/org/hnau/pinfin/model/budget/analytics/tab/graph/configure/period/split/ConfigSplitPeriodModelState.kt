@@ -2,7 +2,9 @@ package org.hnau.pinfin.model.budget.analytics.tab.graph.configure.period.split
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import org.hnau.commons.gen.fold.annotations.Fold
 
+@Fold
 @Serializable
 sealed interface ConfigSplitPeriodModelState<out T> {
 
@@ -15,14 +17,6 @@ sealed interface ConfigSplitPeriodModelState<out T> {
     data class Fixed<out T>(
         val period: T,
     ) : ConfigSplitPeriodModelState<T>
-}
-
-inline fun <I, O> ConfigSplitPeriodModelState<I>.fold(
-    ifInclusive: () -> O,
-    ifFixed: (I) -> O,
-): O = when (this) {
-    is ConfigSplitPeriodModelState.Fixed -> ifFixed(period)
-    ConfigSplitPeriodModelState.Inclusive -> ifInclusive()
 }
 
 inline fun <I, O> ConfigSplitPeriodModelState<I>.flatMap(

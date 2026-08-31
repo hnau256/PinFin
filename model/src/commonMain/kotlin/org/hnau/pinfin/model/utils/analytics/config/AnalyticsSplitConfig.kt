@@ -11,6 +11,7 @@ import kotlinx.datetime.LocalDate
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.UseSerializers
+import org.hnau.commons.gen.fold.annotations.Fold
 import org.hnau.pinfin.data.AccountId
 import org.hnau.pinfin.data.CategoryId
 
@@ -24,6 +25,7 @@ data class AnalyticsSplitConfig(
 
     enum class GroupBy { Account, Category }
 
+    @Fold
     @Serializable
     sealed interface Period {
 

@@ -16,6 +16,7 @@ import org.hnau.commons.app.projector.uikit.state.StateContent
 import org.hnau.commons.app.projector.uikit.transition.TransitionSpec
 import org.hnau.commons.app.projector.uikit.transition.getTransitionSpecForSlideByCompare
 import org.hnau.commons.app.projector.utils.Orientation
+import org.hnau.commons.gen.fold.annotations.Fold
 import org.hnau.commons.gen.pipe.annotations.Pipe
 import org.hnau.commons.kotlin.coroutines.flow.state.mapWithScope
 import org.hnau.pinfin.data.TransactionType
@@ -32,6 +33,7 @@ class TypeProjector(
     private val dependencies: Dependencies,
 ) {
 
+    @Fold
     sealed interface Type {
 
         val key: TransactionType
@@ -125,6 +127,7 @@ class TypeProjector(
             fun transfer(): TransferProjector.Page.Dependencies
         }
 
+        @Fold
         sealed interface Type {
 
             val key: TransactionType

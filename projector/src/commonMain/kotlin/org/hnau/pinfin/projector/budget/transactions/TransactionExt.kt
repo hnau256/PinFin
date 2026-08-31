@@ -31,7 +31,6 @@ import org.hnau.commons.kotlin.KeyValue
 import org.hnau.pinfin.data.AmountDirection
 import org.hnau.pinfin.data.Currency
 import org.hnau.pinfin.data.sum
-import org.hnau.pinfin.model.utils.amount
 import org.hnau.pinfin.model.utils.budget.state.TransactionInfo
 import org.hnau.pinfin.model.utils.budget.state.fold
 import org.hnau.pinfin.projector.utils.AccountContent
