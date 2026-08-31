@@ -4,10 +4,9 @@ import com.ionspin.kotlin.bignum.decimal.BigDecimal
 import com.ionspin.kotlin.bignum.decimal.DecimalMode
 import kotlin.test.Test
 import kotlin.test.assertEquals
-import kotlin.test.assertFalse
+import kotlin.test.assertNotNull
 import kotlin.test.assertNull
-import kotlin.test.assertTrue
-import org.hnau.pinfin.data.utils.DecimalScale
+import org.hnau.pinfin.data.Currency
 
 class ExpressionTest {
     // region parse roundtrip
@@ -208,27 +207,36 @@ class ExpressionTest {
 
     // endregion
 
-    // region amountExpression isNegative
+    // region amountExpression createOrNull (non-negative validation)
 
     @Test
-    fun amountExpressionIsNegativePositive() =
-        assertFalse(AmountExpression.createOrNull("15")!!.isNegative(DecimalScale(2L)))
+    fun amountExpressionCreateOrNullPositive() {
+        assertNotNull(
+            AmountExpression.createOrNull("15", Currency.default),
+        )
+    }
 
     @Test
-    fun amountExpressionIsNegativeUnaryMinus() =
-        assertTrue(AmountExpression.createOrNull("-5")!!.isNegative(DecimalScale(2L)))
+    fun amountExpressionCreateOrNullUnaryMinus() =
+        assertNull(AmountExpression.createOrNull("-5", Currency.default))
 
     @Test
-    fun amountExpressionIsNegativeSubtraction() =
-        assertTrue(AmountExpression.createOrNull("5-6")!!.isNegative(DecimalScale(2L)))
+    fun amountExpressionCreateOrNullSubtraction() =
+        assertNull(AmountExpression.createOrNull("5-6", Currency.default))
 
     @Test
-    fun amountExpressionIsNegativeZero() =
-        assertFalse(AmountExpression.createOrNull("0")!!.isNegative(DecimalScale(2L)))
+    fun amountExpressionCreateOrNullZero() {
+        assertNotNull(
+            AmountExpression.createOrNull("0", Currency.default),
+        )
+    }
 
     @Test
-    fun amountExpressionIsNegativeNonTerminatingDivision() =
-        assertFalse(AmountExpression.createOrNull("1/3")!!.isNegative(DecimalScale(2L)))
+    fun amountExpressionCreateOrNullNonTerminatingDivision() {
+        assertNotNull(
+            AmountExpression.createOrNull("1/3", Currency.default),
+        )
+    }
 
     // endregion
 
