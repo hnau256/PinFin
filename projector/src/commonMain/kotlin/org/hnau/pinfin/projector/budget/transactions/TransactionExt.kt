@@ -27,10 +27,13 @@ import org.hnau.commons.app.projector.uikit.utils.Dimens
 import org.hnau.commons.app.projector.utils.Icon
 import org.hnau.commons.app.projector.utils.Orientation
 import org.hnau.commons.app.projector.utils.horizontalDisplayPadding
+import org.hnau.commons.kotlin.KeyValue
 import org.hnau.pinfin.data.AmountDirection
 import org.hnau.pinfin.data.Currency
+import org.hnau.pinfin.data.sum
 import org.hnau.pinfin.model.utils.amount
 import org.hnau.pinfin.model.utils.budget.state.TransactionInfo
+import org.hnau.pinfin.model.utils.budget.state.fold
 import org.hnau.pinfin.projector.utils.AccountContent
 import org.hnau.pinfin.projector.utils.AmountContent
 import org.hnau.pinfin.projector.utils.ArrowDirection
@@ -102,7 +105,23 @@ fun TransactionInfo.CellContent(
         }
 
         AmountContent(
-            value = amount(currency),
+            value = type.fold(
+                ifEntry = { _, records ->
+                    records
+                        .map { record ->
+                            record.directionedAmount.map { expression ->
+                                expression.toAmount(currency.scale)
+                            }
+                        }
+                        .sum()
+                },
+                ifTransfer = { _, _, amount ->
+                    KeyValue(
+                        key = AmountDirection.Credit,
+                        value = amount.toAmount(currency.scale),
+                    )
+                }
+            ),
             amountFormatter = dependencies.amountFormatter,
         )
     }
@@ -189,7 +208,7 @@ private fun EntryContent(
                 remember(records) {
                     val allDirection = records
                         .map {
-                            it.amount.splitToDirectionAndRaw().key
+                            it.idWithCategory.key.direction
                         }
                         .let { directions ->
                             directions.tail.fold<AmountDirection, AmountDirection?>(

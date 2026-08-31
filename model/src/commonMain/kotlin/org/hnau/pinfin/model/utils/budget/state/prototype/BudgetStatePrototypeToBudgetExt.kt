@@ -5,10 +5,12 @@ import kotlinx.coroutines.withContext
 import org.hnau.commons.kotlin.KeyValue
 import org.hnau.pinfin.data.AccountId
 import org.hnau.pinfin.data.Amount
+import org.hnau.pinfin.data.AmountDirection
 import org.hnau.pinfin.data.BudgetId
 import org.hnau.pinfin.data.CategoryId
 import org.hnau.pinfin.data.Record
 import org.hnau.pinfin.data.Transaction
+import org.hnau.pinfin.data.plus
 import org.hnau.pinfin.model.utils.amount
 import org.hnau.pinfin.model.utils.budget.state.AccountInfo
 import org.hnau.pinfin.model.utils.budget.state.BudgetInfo
@@ -39,13 +41,13 @@ suspend fun BudgetStatePrototype.toBudgetState(
 
     fun useAccount(
         id: AccountId,
-        amountOffset: Amount,
+        amountOffset: KeyValue<AmountDirection, Amount>,
     ) {
         accounts[id] = accounts
             .getOrElse(id) {
                 AccountInfo.create(
                     id = id,
-                    amount = Amount.zero,
+                    amount = KeyValue(AmountDirection.Debit, Amount.zero),
                     config = accountsConfigs[id],
                 )
             }
@@ -76,11 +78,11 @@ suspend fun BudgetStatePrototype.toBudgetState(
                 val amount = type.amount.toAmount(info.currency.scale)
                 useAccount(
                     id = type.from,
-                    amountOffset = -amount
+                    amountOffset = KeyValue(AmountDirection.Debit, amount)
                 )
                 useAccount(
                     id = type.to,
-                    amountOffset = amount
+                    amountOffset = KeyValue(AmountDirection.Credit, amount)
                 )
             }
         }

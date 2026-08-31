@@ -34,7 +34,8 @@ class ChooseOrCreateModel<T>(
     private val skeleton: Skeleton,
     extractItemsFromState: (BudgetState) -> List<T>,
     additionalItems: StateFlow<Iterable<T>>,
-    private val itemTextMapper: Mapper<T, String>,
+    private val extractTitle: (T) -> String,
+    private val createNewItemsBasedOnQuery: (String) -> NonEmptyList<T>,
     private val selected: StateFlow<Option<T>>,
     onReady: (T) -> Unit,
 ) {
@@ -56,7 +57,7 @@ class ChooseOrCreateModel<T>(
 
     data class State<out T>(
         val filtered: Filtered<T>,
-        val new: Item<T>?,
+        val new: NonEmptyList<Item<T>>?,
     ) {
 
         sealed interface Filtered<out T> {
@@ -146,7 +147,7 @@ class ChooseOrCreateModel<T>(
                     val (filtered, hasAbsolutelySameAsQuery) = items.fold(
                         initial = emptyList<State.Item<T>>() to false
                     ) { (filtered, alreadyHasAbsolutelySameAsQuery), item ->
-                        val itemText = itemTextMapper.direct(item).trim()
+                        val itemText = extractTitle(item).trim()
                         when {
                             itemText == trimmedQuery -> (filtered + createItem(item)) to true
                             itemText.contains(
@@ -169,12 +170,15 @@ class ChooseOrCreateModel<T>(
                         new = hasAbsolutelySameAsQuery.foldBoolean(
                             ifTrue = { null },
                             ifFalse = {
-                                val item = itemTextMapper.reverse(trimmedQuery.trim())
-                                State.Item(
-                                    value = item,
-                                    isSelected = false.toMutableStateFlowAsInitial(),
-                                    onClick = { onReady(item) },
-                                )
+                                createNewItemsBasedOnQuery(
+                                    trimmedQuery.trim()
+                                ).map {
+                                    State.Item(
+                                        value = it,
+                                        isSelected = false.toMutableStateFlowAsInitial(),
+                                        onClick = { onReady(it) },
+                                    )
+                                }
                             }
                         )
                     )

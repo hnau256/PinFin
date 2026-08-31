@@ -2,6 +2,7 @@ package org.hnau.pinfin.projector.utils.formatter
 
 import com.ionspin.kotlin.bignum.decimal.BigDecimal
 import com.ionspin.kotlin.bignum.decimal.RoundingMode
+import org.hnau.commons.kotlin.KeyValue
 import org.hnau.commons.kotlin.foldBoolean
 import org.hnau.commons.kotlin.mapFirst
 import org.hnau.commons.kotlin.mapSecond
@@ -10,7 +11,7 @@ import org.hnau.pinfin.data.AmountDirection
 
 interface AmountFormatter {
     fun format(
-        amount: Amount,
+        amount: KeyValue<AmountDirection, Amount>,
         alwaysShowSign: Boolean = false,
         alwaysShowCents: Boolean = true,
     ): String
@@ -23,13 +24,12 @@ interface AmountFormatter {
                 private val decimalLength = 2
 
                 override fun format(
-                    amount: Amount,
+                    amount: KeyValue<AmountDirection, Amount>,
                     alwaysShowSign: Boolean,
                     alwaysShowCents: Boolean,
                 ): String {
 
                     val (direction, absolute) = amount
-                        .splitToDirectionAndRaw()
                         .map { amount ->
                             amount
                                 .value

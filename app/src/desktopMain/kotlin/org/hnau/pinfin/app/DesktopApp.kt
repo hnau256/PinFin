@@ -13,6 +13,8 @@ import androidx.compose.ui.window.application
 import androidx.compose.ui.window.rememberWindowState
 import co.touchlab.kermit.Logger
 import co.touchlab.kermit.platformLogWriter
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.runBlocking
 import org.hnau.commons.app.model.app.AppFilesDirProvider
 import org.hnau.commons.app.model.app.DesktopApp
@@ -26,8 +28,9 @@ fun main() = runBlocking {
 
     Logger.setLogWriters(platformLogWriter())
 
+    val appScope = CoroutineScope(SupervisorJob())
     val app = DesktopApp(
-        scope = this,
+        scope = appScope,
         seed = createPinFinAppSeed(
             dependencies = PinFinAppDependencies.impl(
                 clipboardAccessor = ClipboardAccessor.createForJvm(),
@@ -36,7 +39,7 @@ fun main() = runBlocking {
         ),
     )
     val projector = createAppProjector(
-        scope = this,
+        scope = appScope,
         model = app,
         createSystemPalettes = { SystemPalettes.None },
     )

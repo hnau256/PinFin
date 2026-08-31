@@ -32,6 +32,7 @@ import org.hnau.commons.kotlin.getOrInit
 import org.hnau.commons.kotlin.mapper.Mapper
 import org.hnau.commons.kotlin.serialization.MutableStateFlowSerializer
 import org.hnau.commons.kotlin.toAccessor
+import org.hnau.pinfin.data.AmountDirection
 import org.hnau.pinfin.data.CategoryId
 import org.hnau.pinfin.data.Comment
 import org.hnau.pinfin.model.transaction.utils.ChooseOrCreateModel
@@ -93,10 +94,13 @@ class CategoryModel(
             .getOrInit { ChooseOrCreateModel.Skeleton() },
         extractItemsFromState = BudgetState::categories,
         additionalItems = usedCategories,
-        itemTextMapper = Mapper(
-            direct = { it.value.title },
-            reverse = { title ->
-                val id = CategoryId(title)
+        extractTitle = { it.value.title },
+        createNewItemsBasedOnQuery = { title ->
+            AmountDirection.nonEmptyEntries.map { direction ->
+                val id = CategoryId(
+                    direction = direction,
+                    idSuffix = title,
+                )
                 KeyValue(
                     key = id,
                     value = CategoryInfo.createDefault(
@@ -104,7 +108,7 @@ class CategoryModel(
                     )
                 )
             }
-        ),
+        },
         selected = categoryEditable.mapState(
             scope = scope,
             transform = Editable<KeyValue<CategoryId, CategoryInfo>>::valueOrNone,

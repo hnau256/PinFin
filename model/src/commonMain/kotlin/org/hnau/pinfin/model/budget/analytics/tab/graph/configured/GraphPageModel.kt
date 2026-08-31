@@ -99,14 +99,17 @@ class GraphPageModel(
             val sum: Amount = amounts.sum()
         }
 
-        val total: Amount? = AmountDirection
+        val total: KeyValue<AmountDirection, Amount>? = AmountDirection
             .entries
             .mapNotNull { direction ->
-                values[direction]
-                    ?.sum
-                    ?.withDirection(direction)
+                values[direction]?.let { half ->
+                    KeyValue(
+                        key = direction,
+                        value = half.sum,
+                    )
+                }
             }
-            .takeIf { it.size > 1 }
+            .toNonEmptyListOrNull()
             ?.sum()
     }
 
@@ -116,39 +119,43 @@ class GraphPageModel(
         page
             .items
             .mapNotNull { item ->
-                val amount = calcItemAmount(
+                val (direction, amount) = calcItemAmount(
                     operation = config.operation,
                     constraints = item.constraints,
                     entries = dependencies.analyticsEntries,
                 )
-                    .takeIf { it != Amount.zero }
+                    .takeIf { it.value != Amount.zero }
                     ?: return@mapNotNull null
 
                 KeyValue(
                     key = item.key,
-                    value = State.Half.Value(
-                        amount = amount,
-                        filters = Filters(
-                            categories = item.constraints.categories,
-                            accounts = item.constraints.accounts,
-                            period = page.period,
+                    value = KeyValue(
+                        key = direction,
+                        value = State.Half.Value(
+                            amount = amount,
+                            filters = Filters(
+                                categories = item.constraints.categories,
+                                accounts = item.constraints.accounts,
+                                period = page.period,
+                            ),
                         ),
                     ),
                 )
             }
-            .groupByToNonEmpty { (key, value) ->
-                value
-                    .amount
-                    .splitToDirectionAndRaw()
-                    .map { positiveAmount ->
-                        KeyValue(
-                            key = key,
-                            value = State.Half.Value(
-                                amount = positiveAmount,
-                                filters = value.filters,
-                            ),
-                        )
-                    }
+            .groupByToNonEmpty { (key, directionWithValue) ->
+                directionWithValue.map { half ->
+                    half
+                        .amount
+                        .let { positiveAmount ->
+                            KeyValue(
+                                key = key,
+                                value = State.Half.Value(
+                                    amount = positiveAmount,
+                                    filters = half.filters,
+                                ),
+                            )
+                        }
+                }
             }
             .mapValues { (_, values) ->
                 values
@@ -169,7 +176,7 @@ class GraphPageModel(
         operation: AnalyticsPageConfig.Operation,
         constraints: AnalyticsPage.Item.Constraints,
         entries: List<AnalyticsEntry>,
-    ): Amount = subperiods
+    ): KeyValue<AmountDirection, Amount> = subperiods
         .map { subperiod ->
             calcSubperiodAmount(
                 subperiod = subperiod,
@@ -180,13 +187,16 @@ class GraphPageModel(
         .let { subperiodsAmounts ->
             when (operation) {
                 AnalyticsPageConfig.Operation.Sum -> subperiodsAmounts
-                    .sum
+                    .sum()
 
                 is AnalyticsPageConfig.Operation.Average -> subperiodsAmounts
-                    .sum
-                    .value
-                    .div(subperiodsAmounts.size)
-                    .let(::Amount)
+                    .sum()
+                    .map {
+                        it
+                            .value
+                            .div(subperiodsAmounts.size)
+                            .let(::Amount)
+                    }
             }
         }
 
@@ -200,16 +210,21 @@ class GraphPageModel(
         subperiod: LocalDateRange,
         constraints: AnalyticsPage.Item.Constraints,
         entries: List<AnalyticsEntry>,
-    ): Amount = entries
+    ): KeyValue<AmountDirection, Amount> = entries
         .filter { entry -> entry.date in subperiod }
         .filter { entry -> entry.matches(constraints) }
         .toNonEmptyListOrNull()
         .foldNullable(
-            ifNull = { Amount.zero },
+            ifNull = {
+                KeyValue(
+                    AmountDirection.Credit,
+                    Amount.zero,
+                )
+            },
             ifNotNull = { entries ->
                 entries
-                    .map(AnalyticsEntry::amount)
-                    .sum
+                    .map(AnalyticsEntry::directionedAmount)
+                    .sum()
             }
         )
 
@@ -219,7 +234,7 @@ class GraphPageModel(
     ): Boolean {
 
         val categories = constraints.categories
-        if (categories != null && idWithCategory?.key !in categories) {
+        if (categories != null && idWithCategoryOrDirection.getOrNull()?.key !in categories) {
             return false
         }
 

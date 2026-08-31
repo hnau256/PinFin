@@ -23,7 +23,9 @@ import org.hnau.commons.app.projector.utils.Icon
 import org.hnau.commons.app.projector.utils.copy
 import org.hnau.commons.app.projector.utils.horizontalDisplayPadding
 import org.hnau.commons.gen.pipe.annotations.Pipe
+import org.hnau.commons.kotlin.KeyValue
 import org.hnau.commons.kotlin.foldNullable
+import org.hnau.pinfin.data.AmountDirection
 import org.hnau.pinfin.model.transaction.pageable.AmountModel
 import org.hnau.pinfin.projector.AmountProjector
 import org.hnau.pinfin.projector.transaction.utils.PartDefaults
@@ -105,7 +107,7 @@ class AmountProjector(
                     Text(
                         modifier = modifier,
                         text = dependencies.amountFormatter.format(
-                            amount = amount,
+                            amount = KeyValue(AmountDirection.Credit, amount),
                             alwaysShowSign = false,
                             alwaysShowCents = false,
                         ),

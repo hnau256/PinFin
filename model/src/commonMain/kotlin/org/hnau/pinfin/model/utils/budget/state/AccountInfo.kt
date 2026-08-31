@@ -1,11 +1,13 @@
 package org.hnau.pinfin.model.utils.budget.state
 
 import kotlinx.serialization.Serializable
+import org.hnau.commons.kotlin.KeyValue
 import org.hnau.commons.kotlin.foldNullable
 import org.hnau.commons.kotlin.mapper.Mapper
 import org.hnau.pinfin.data.AccountConfig
 import org.hnau.pinfin.data.AccountId
 import org.hnau.pinfin.data.Amount
+import org.hnau.pinfin.data.AmountDirection
 import org.hnau.pinfin.data.Hue
 import org.hnau.pinfin.model.utils.icons.IconVariant
 import org.hnau.pinfin.model.utils.icons.icon
@@ -15,7 +17,7 @@ import org.hnau.commons.app.model.theme.color.Hue as ModelHue
 
 @Serializable
 data class AccountInfo(
-    val amount: Amount,
+    val amount: KeyValue<AmountDirection, Amount>,
     val title: String,
     val hideIfAmountIsZero: Boolean,
     val hue: Hue,
@@ -23,7 +25,7 @@ data class AccountInfo(
 ) : Comparable<AccountInfo> {
 
     val visible: Boolean
-        get() = !hideIfAmountIsZero || amount != Amount.zero
+        get() = !hideIfAmountIsZero || amount.value != Amount.zero
 
     override fun compareTo(
         other: AccountInfo,
@@ -55,7 +57,7 @@ data class AccountInfo(
         fun create(
             id: AccountId,
             config: AccountConfig?,
-            amount: Amount,
+            amount: KeyValue<AmountDirection, Amount>,
         ): AccountInfo = createDefault(
             id = id,
             amount = amount,
@@ -68,7 +70,7 @@ data class AccountInfo(
 
         fun createDefault(
             id: AccountId,
-            amount: Amount,
+            amount: KeyValue<AmountDirection, Amount>,
         ): AccountInfo = AccountInfo(
             amount = amount,
             title = id.id,

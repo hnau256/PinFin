@@ -29,6 +29,7 @@ import org.hnau.commons.app.projector.utils.plus
 import org.hnau.commons.app.projector.utils.toLazyListState
 import org.hnau.commons.app.projector.utils.verticalDisplayPadding
 import org.hnau.commons.gen.pipe.annotations.Pipe
+import org.hnau.commons.kotlin.KeyValue
 import org.hnau.commons.kotlin.foldNullable
 import org.hnau.commons.kotlin.mapper.Mapper
 import org.hnau.pinfin.data.Amount
@@ -112,7 +113,7 @@ class GraphPageProjector(
     private fun LazyListScope.header(
         key: String,
         title: @Composable () -> String,
-        amount: Amount,
+        amount: KeyValue<AmountDirection, Amount>,
     ) {
         stickyHeader(
             key = key,
@@ -155,7 +156,7 @@ class GraphPageProjector(
                     AmountDirection.Debit -> dependencies.localization.debits
                 }
             },
-            amount = half.sum.withDirection(direction),
+            amount = KeyValue(direction, half.sum),
         )
         items(
             items = half.values,
@@ -279,7 +280,7 @@ class GraphPageProjector(
                 title?.invoke()
                 Spacer(Modifier.weight(1f))
                 AmountContent(
-                    value = value.amount.withDirection(direction),
+                    value = KeyValue(direction, value.amount),
                     amountFormatter = dependencies.amountFormatter,
                 )
             }

@@ -13,6 +13,7 @@ import kotlinx.datetime.toInstant
 import kotlinx.datetime.toLocalDateTime
 import org.hnau.pinfin.data.AccountConfig
 import org.hnau.pinfin.data.AccountId
+import org.hnau.pinfin.data.AmountDirection
 import org.hnau.pinfin.data.BudgetConfig
 import org.hnau.pinfin.data.CategoryConfig
 import org.hnau.pinfin.data.CategoryId
@@ -194,21 +195,62 @@ class DemoBudgetGenerator(
     private val cardAccount = AccountId(loc.cardAccount)
     private val savingsAccount = AccountId(loc.savingsAccount)
 
-    private val catSalary = CategoryId(loc.salaryCategory)
-    private val catBonus = CategoryId(loc.bonusCategory)
-    private val catTax = CategoryId(loc.taxCategory)
-    private val catFood = CategoryId(loc.foodCategory)
-    private val catHome = CategoryId(loc.homeCategory)
-    private val catClothes = CategoryId(loc.clothesCategory)
-    private val catLeisure = CategoryId(loc.leisureCategory)
-    private val catUtilities = CategoryId(loc.utilitiesCategory)
-    private val catSubscriptions = CategoryId(loc.subscriptionsCategory)
-    private val catHealth = CategoryId(loc.healthCategory)
-    private val catTransport = CategoryId(loc.transportCategory)
-    private val catRent = CategoryId(loc.rentCategory)
-    private val catGifts = CategoryId(loc.giftsCategory)
-    private val catCar = CategoryId(loc.carCategory)
-    private val catTransfer = CategoryId(loc.transferCategory)
+    private val catSalary = CategoryId(
+        direction = AmountDirection.Debit,
+        idSuffix = loc.salaryCategory
+    )
+    private val catBonus = CategoryId(
+        direction = AmountDirection.Debit,
+        idSuffix = loc.bonusCategory
+    )
+    private val catTax = CategoryId(
+        direction = AmountDirection.Credit,
+        idSuffix = loc.taxCategory
+    )
+    private val catFood = CategoryId(
+        direction = AmountDirection.Credit,
+        idSuffix = loc.foodCategory
+    )
+    private val catHome = CategoryId(
+        direction = AmountDirection.Credit,
+        idSuffix = loc.homeCategory
+    )
+    private val catClothes = CategoryId(
+        direction = AmountDirection.Credit,
+        idSuffix = loc.clothesCategory
+    )
+    private val catLeisure = CategoryId(
+        direction = AmountDirection.Credit,
+        idSuffix = loc.leisureCategory
+    )
+    private val catUtilities = CategoryId(
+        direction = AmountDirection.Credit,
+        idSuffix = loc.utilitiesCategory
+    )
+    private val catSubscriptions = CategoryId(
+        direction = AmountDirection.Credit,
+        idSuffix = loc.subscriptionsCategory
+    )
+    private val catHealth = CategoryId(
+        direction = AmountDirection.Credit,
+        idSuffix = loc.healthCategory
+    )
+    private val catTransport = CategoryId(
+        direction = AmountDirection.Credit,
+        idSuffix = loc.transportCategory
+    )
+    private val catRent = CategoryId(
+        direction = AmountDirection.Credit,
+        idSuffix = loc.rentCategory
+    )
+    private val catGifts = CategoryId(
+        direction = AmountDirection.Credit,
+        idSuffix = loc.giftsCategory
+    )
+    private val catCar = CategoryId(
+        direction = AmountDirection.Credit,
+        idSuffix = loc.carCategory
+    )
 
     private val foodFixed = ProductGroup(
         listOf(
@@ -572,7 +614,6 @@ class DemoBudgetGenerator(
             catRent to Pair(Hue(170), IconVariant.Apartment.icon),
             catGifts to Pair(Hue(310), IconVariant.CardGiftcard.icon),
             catCar to Pair(Hue(15), IconVariant.DirectionsCar.icon),
-            catTransfer to Pair(Hue(260), IconVariant.SwapHoriz.icon),
         )
         for ((cat, cfg) in categoryConfigs) {
             add(

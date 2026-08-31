@@ -8,6 +8,7 @@ import arrow.core.None
 import arrow.core.Option
 import arrow.core.Some
 import arrow.core.identity
+import arrow.core.nonEmptyListOf
 import arrow.core.toOption
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -33,6 +34,7 @@ import org.hnau.commons.kotlin.serialization.MutableStateFlowSerializer
 import org.hnau.commons.kotlin.toAccessor
 import org.hnau.pinfin.data.AccountId
 import org.hnau.pinfin.data.Amount
+import org.hnau.pinfin.data.AmountDirection
 import org.hnau.pinfin.model.transaction.utils.ChooseOrCreateModel
 import org.hnau.pinfin.model.utils.budget.repository.BudgetRepository
 import org.hnau.pinfin.model.utils.budget.state.AccountInfo
@@ -142,17 +144,17 @@ class AccountModel(
             .getOrInit { ChooseOrCreateModel.Skeleton() },
         extractItemsFromState = BudgetState::visibleAccounts,
         additionalItems = accountEditable.mapState(scope) { listOfNotNull(it.valueOrNone.getOrNull()) },
-        itemTextMapper = Mapper(
-            direct = { it.value.title },
-            reverse = { title ->
-                val id = AccountId(title)
-                val accountInfo = AccountInfo.createDefault(
-                    id = id,
-                    amount = Amount.zero,
-                )
-                KeyValue(id, accountInfo)
-            }
-        ),
+        extractTitle = { it.value.title },
+        createNewItemsBasedOnQuery = { title ->
+            val id = AccountId(title)
+            val accountInfo = AccountInfo.createDefault(
+                id = id,
+                amount = KeyValue(AmountDirection.Credit, Amount.zero),
+            )
+            nonEmptyListOf(
+                KeyValue(id, accountInfo),
+            )
+        },
         selected = accountEditable.mapState(
             scope,
             Editable<KeyValue<AccountId, AccountInfo>>::valueOrNone

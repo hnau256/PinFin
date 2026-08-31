@@ -35,7 +35,9 @@ import org.hnau.commons.kotlin.foldNullable
 import org.hnau.commons.kotlin.serialization.MutableStateFlowSerializer
 import org.hnau.commons.kotlin.toZipListOrNull
 import org.hnau.pinfin.data.Amount
+import org.hnau.pinfin.data.AmountDirection
 import org.hnau.pinfin.data.CategoryId
+import org.hnau.pinfin.data.plus
 import org.hnau.pinfin.model.transaction.utils.RecordId
 import org.hnau.pinfin.model.transaction.utils.remove
 import org.hnau.pinfin.model.utils.budget.state.CategoryInfo
@@ -171,12 +173,12 @@ class RecordsModel(
             }
         }
 
-    val amountOrZero: StateFlow<Amount> = items
+    val amountOrZero: StateFlow<KeyValue<AmountDirection, Amount>> = items
         .flatMapWithScope(scope) { scope, items ->
             val nonEmptyItems = items.toNonEmptyList()
             nonEmptyItems
                 .tail
-                .fold<_, StateFlow<Amount>>(
+                .fold<_, StateFlow<KeyValue<AmountDirection, Amount>>>(
                     initial = nonEmptyItems.head.model.amountOrZero,
                 ) { acc, item ->
                     acc.combineStateWith(

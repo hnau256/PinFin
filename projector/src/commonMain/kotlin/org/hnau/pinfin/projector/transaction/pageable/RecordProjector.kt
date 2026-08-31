@@ -62,7 +62,7 @@ class RecordProjector(
 
         val localization: Localization
 
-        fun amount(): AmountWithDirectionProjector.Dependencies
+        fun amount(): AmountProjector.Dependencies
     }
 
     class Page(
@@ -78,7 +78,7 @@ class RecordProjector(
 
             fun amountPage(): AmountProjector.Page.Dependencies
 
-            fun amount(): AmountWithDirectionProjector.Dependencies
+            fun amount(): AmountProjector.Dependencies
 
             fun comment(): CommentProjector.Dependencies
 
@@ -221,7 +221,7 @@ class RecordProjector(
             dependencies = dependencies.category(),
         )
 
-        private val amount = AmountWithDirectionProjector(
+        private val amount = AmountProjector(
             dependencies = dependencies.amount(),
             model = model.amount,
         )
@@ -339,10 +339,10 @@ class RecordProjector(
                         )
                     }
                 },
-                ifNotNull = { (category, amount) ->
+                ifNotNull = { (idWithCategory, amount) ->
                     CategoryContent(
                         modifier = modifier,
-                        info = category.value,
+                        info = idWithCategory.value,
                         onClick = onClick,
                         selected = selected,
                         localization = dependencies.localization,
@@ -353,7 +353,10 @@ class RecordProjector(
                                 text = dependencies
                                     .amountFormatter
                                     .format(
-                                        amount = amount,
+                                        amount = KeyValue(
+                                            key = idWithCategory.key.direction,
+                                            value = amount,
+                                        ),
                                         alwaysShowSign = false,
                                         alwaysShowCents = false,
                                     ),

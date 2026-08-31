@@ -22,6 +22,7 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.KeyboardCapitalization
+import arrow.core.NonEmptyList
 import kotlinx.coroutines.flow.StateFlow
 import org.hnau.commons.app.projector.uikit.row.ChipsFlowRow
 import org.hnau.commons.app.projector.uikit.state.NullableStateContent
@@ -165,7 +166,7 @@ class ChooseOrCreateProjector<T>(
     @Composable
     private fun New(
         messages: ChooseOrCreateMessages,
-        newOrNull: ChooseOrCreateModel.State.Item<T>?,
+        newOrNull: NonEmptyList<ChooseOrCreateModel.State.Item<T>>?,
         modifier: Modifier = Modifier,
     ) {
         newOrNull
@@ -186,7 +187,11 @@ class ChooseOrCreateProjector<T>(
                         color = MaterialTheme.colorScheme.onSurface,
                         style = MaterialTheme.typography.bodyMedium,
                     )
-                    new.Content()
+                    ChipsFlowRow(
+                        all = new,
+                    ) { item ->
+                        item.Content()
+                    }
                 }
             }
     }

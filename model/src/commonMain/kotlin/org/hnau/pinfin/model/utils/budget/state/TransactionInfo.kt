@@ -1,8 +1,10 @@
 package org.hnau.pinfin.model.utils.budget.state
 
 import arrow.core.NonEmptyList
+import org.hnau.commons.gen.fold.annotations.Fold
 import org.hnau.commons.kotlin.KeyValue
 import org.hnau.pinfin.data.AccountId
+import org.hnau.pinfin.data.AmountDirection
 import org.hnau.pinfin.data.CategoryId
 import org.hnau.pinfin.data.Comment
 import org.hnau.pinfin.data.expression.AmountExpression
@@ -14,6 +16,7 @@ data class TransactionInfo(
     val type: Type,
 ) {
 
+    @Fold
     sealed interface Type {
 
         data class Entry(
@@ -26,6 +29,12 @@ data class TransactionInfo(
                 val amount: AmountExpression,
                 val comment: Comment,
             ) {
+
+                val directionedAmount: KeyValue<AmountDirection, AmountExpression>
+                    get() = KeyValue(
+                        key = idWithCategory.key.direction,
+                        value = amount,
+                    )
 
                 companion object
             }

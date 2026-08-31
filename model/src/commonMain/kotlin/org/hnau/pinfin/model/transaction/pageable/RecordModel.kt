@@ -16,6 +16,7 @@ import org.hnau.commons.app.model.utils.combineEditableWith
 import org.hnau.commons.app.model.utils.valueOrNone
 import org.hnau.commons.gen.pipe.annotations.Pipe
 import org.hnau.commons.kotlin.KeyValue
+import org.hnau.commons.kotlin.coroutines.flow.state.combineStateWith
 import org.hnau.commons.kotlin.coroutines.flow.state.flatMapState
 import org.hnau.commons.kotlin.coroutines.flow.state.flatMapWithScope
 import org.hnau.commons.kotlin.coroutines.flow.state.mapState
@@ -24,6 +25,7 @@ import org.hnau.commons.kotlin.coroutines.flow.state.mutable.toMutableStateFlowA
 import org.hnau.commons.kotlin.foldNullable
 import org.hnau.commons.kotlin.serialization.MutableStateFlowSerializer
 import org.hnau.pinfin.data.Amount
+import org.hnau.pinfin.data.AmountDirection
 import org.hnau.pinfin.data.CategoryId
 import org.hnau.pinfin.data.Comment
 import org.hnau.pinfin.model.transaction.utils.ChooseOrCreateModel
@@ -99,7 +101,7 @@ class RecordModel(
 
         fun category(): CategoryModel.Dependencies
 
-        fun amount(): AmountWithDirectionModel.Dependencies
+        fun amount(): AmountModel.Dependencies
     }
 
     @Serializable
@@ -107,7 +109,7 @@ class RecordModel(
         val part: MutableStateFlow<Part> = Part.default.toMutableStateFlowAsInitial(),
         val comment: CommentModel.Skeleton,
         val category: CategoryModel.Skeleton,
-        val amount: AmountWithDirectionModel.Skeleton,
+        val amount: AmountModel.Skeleton,
     ) {
 
         @Serializable
@@ -135,7 +137,7 @@ class RecordModel(
             fun createForNew(): Skeleton = Skeleton(
                 comment = CommentModel.Skeleton.createForNew(),
                 category = CategoryModel.Skeleton.createForNew(),
-                amount = AmountWithDirectionModel.Skeleton.createForNew(),
+                amount = AmountModel.Skeleton.createForNew(),
             )
 
             fun createForEdit(
@@ -147,7 +149,7 @@ class RecordModel(
                 category = CategoryModel.Skeleton.createForEdit(
                     idWithCategory = record.idWithCategory,
                 ),
-                amount = AmountWithDirectionModel.Skeleton.createForEdit(
+                amount = AmountModel.Skeleton.createForEdit(
                     amount = record.amount,
                 ),
             )
@@ -247,13 +249,12 @@ class RecordModel(
             }
     }
 
-    val amount = AmountWithDirectionModel(
+    val amount = AmountModel(
         scope = scope,
         dependencies = dependencies.amount(),
         skeleton = skeleton.amount,
         isFocused = isPartFocused(Part.Amount),
         requestFocus = createRequestFocus(Part.Amount),
-        category = category.categoryEditable.mapState(scope) { it.valueOrNone.getOrNull() },
         goForward = createGoForward(Part.Amount),
     )
 
@@ -273,7 +274,9 @@ class RecordModel(
                                 ifNotNull = { amountExpression ->
                                     dependencies.budgetRepository.state
                                         .mapState(scope) { state ->
-                                            categoryOrIncorrect.value to amountExpression.toAmount(state.info.currency.scale)
+                                            categoryOrIncorrect.value to amountExpression.toAmount(
+                                                state.info.currency.scale
+                                            )
                                         }
                                 }
                             )
@@ -285,7 +288,7 @@ class RecordModel(
         scope: CoroutineScope,
         val comment: CommentModel,
         val category: CategoryModel,
-        val amount: AmountWithDirectionModel,
+        val amount: AmountModel,
         val page: StateFlow<PageType>,
         val remove: StateFlow<(() -> Unit)?>,
     ) {
@@ -327,7 +330,7 @@ class RecordModel(
             },
     )
 
-    val amountOrZero: StateFlow<Amount> = amount
+    val amountOrZero: StateFlow<KeyValue<AmountDirection, Amount>> = amount
         .amountEditable
         .flatMapWithScope(scope) { scope, editable ->
             editable
@@ -342,6 +345,18 @@ class RecordModel(
                             }
                     }
                 )
+        }
+        .combineStateWith(
+            scope = scope,
+            other = category.category,
+        ) { amount, categoryOrNull ->
+            KeyValue(
+                key = categoryOrNull
+                    ?.key
+                    ?.direction
+                    ?: AmountDirection.default,
+                value = amount
+            )
         }
 
     internal val record: StateFlow<Editable<TransactionInfo.Type.Entry.Record>> = comment

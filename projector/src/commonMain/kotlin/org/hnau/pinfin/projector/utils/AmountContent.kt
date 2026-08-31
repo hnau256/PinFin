@@ -11,6 +11,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.TextStyle
 import org.hnau.commons.app.projector.utils.SwitchHue
+import org.hnau.commons.kotlin.KeyValue
 import org.hnau.commons.kotlin.mapper.Mapper
 import org.hnau.pinfin.data.Amount
 import org.hnau.pinfin.data.AmountDirection
@@ -44,12 +45,13 @@ fun SwitchHueToAmountDirection(
 
 @Composable
 fun AmountContent(
-    value: Amount,
+    value: KeyValue<AmountDirection, Amount>,
     amountFormatter: AmountFormatter,
     modifier: Modifier = Modifier,
     style: TextStyle = MaterialTheme.typography.titleLarge,
 ) {
-    if (value == Amount.zero) {
+
+    if (value.value == Amount.zero) {
         AmountContentWithoutHue(
             value = value,
             amountFormatter = amountFormatter,
@@ -59,9 +61,8 @@ fun AmountContent(
         return
     }
 
-    val (direction, _) = value.splitToDirectionAndRaw()
     SwitchHueToAmountDirection(
-        amountDirection = direction,
+        amountDirection = value.key,
     ) {
         AmountContentWithoutHue(
             value = value,
@@ -74,7 +75,7 @@ fun AmountContent(
 
 @Composable
 private fun AmountContentWithoutHue(
-    value: Amount,
+    value: KeyValue<AmountDirection, Amount>,
     amountFormatter: AmountFormatter,
     modifier: Modifier = Modifier,
     style: TextStyle = MaterialTheme.typography.titleLarge,

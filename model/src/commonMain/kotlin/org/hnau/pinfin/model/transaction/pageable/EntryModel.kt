@@ -24,6 +24,7 @@ import org.hnau.commons.kotlin.foldNullable
 import org.hnau.commons.kotlin.serialization.MutableStateFlowSerializer
 import org.hnau.pinfin.data.AccountId
 import org.hnau.pinfin.data.Amount
+import org.hnau.pinfin.data.AmountDirection
 import org.hnau.pinfin.model.transaction.utils.ChooseOrCreateModel
 import org.hnau.pinfin.model.utils.budget.state.AccountInfo
 import org.hnau.pinfin.model.utils.budget.state.TransactionInfo
@@ -211,7 +212,7 @@ class EntryModel(
             )
         }
 
-    val amountOrZero: StateFlow<Amount>
+    val amountOrZero: StateFlow<KeyValue<AmountDirection, Amount>>
         get() = records.amountOrZero
 
     private fun Part.shift(
