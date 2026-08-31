@@ -205,7 +205,7 @@ class GraphPageProjector(
                 max = max,
                 title = {
                     CategoryContent(
-                        info = key.idWithCategory?.value,
+                        info = key.idWithCategory,
                         localization = dependencies.localization,
                         viewMode = ViewMode.Full,
                     )

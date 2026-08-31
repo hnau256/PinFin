@@ -342,7 +342,7 @@ class RecordProjector(
                 ifNotNull = { (idWithCategory, amount) ->
                     CategoryContent(
                         modifier = modifier,
-                        info = idWithCategory.value,
+                        info = idWithCategory,
                         onClick = onClick,
                         selected = selected,
                         localization = dependencies.localization,

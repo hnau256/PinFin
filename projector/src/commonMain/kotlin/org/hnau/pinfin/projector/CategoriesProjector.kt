@@ -85,7 +85,7 @@ class CategoriesProjector(
                                         .clickable(onClick = category.onClick),
                                     headlineContent = {
                                         CategoryContent(
-                                            info = category.idWithCategory.value,
+                                            info = category.idWithCategory,
                                             localization = dependencies.localization,
                                             viewMode = ViewMode.Full,
                                         )

@@ -50,7 +50,7 @@ class SelectCategoriesProjector(
             ) { item ->
                 var selected by item.selected.collectAsMutableAccessor()
                 CategoryContent(
-                    info = item.info,
+                    info = item.run { KeyValue(id, info) },
                     selected = selected,
                     onClick = { selected = !selected },
                     localization = dependencies.localization,

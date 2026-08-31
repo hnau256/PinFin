@@ -32,7 +32,7 @@ class CategoryProjector(
         viewMode: ViewMode = ViewMode.Full,
     ) {
         CategoryContent(
-            info = model.category.collectAsState().value?.value,
+            info = model.category.collectAsState().value,
             modifier = modifier,
             selected = model.isFocused.collectAsState().value,
             onClick = model.requestFocus,
@@ -50,7 +50,7 @@ class CategoryProjector(
         content: @Composable (inner: @Composable () -> Unit) -> Unit = { inner -> inner() },
     ) {
         CategoryContent(
-            info = model.category.collectAsState().value?.value,
+            info = model.category.collectAsState().value,
             modifier = modifier,
             selected = selected,
             onClick = onClick,
@@ -78,7 +78,7 @@ class CategoryProjector(
             dependencies = dependencies.chooseOrCreate(),
         ) { category, isSelected, onClick ->
             CategoryContent(
-                info = category.value,
+                info = category,
                 selected = isSelected.collectAsState().value,
                 onClick = onClick,
                 localization = dependencies.localization,

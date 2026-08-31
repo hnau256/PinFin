@@ -3,12 +3,14 @@ package org.hnau.pinfin.projector.utils
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Shape
+import org.hnau.commons.kotlin.KeyValue
+import org.hnau.pinfin.data.CategoryId
 import org.hnau.pinfin.model.utils.budget.state.CategoryInfo
 import org.hnau.pinfin.projector.Localization
 
 @Composable
 fun CategoryContent(
-    info: CategoryInfo?,
+    info: KeyValue<CategoryId, CategoryInfo>?,
     localization: Localization,
     modifier: Modifier = Modifier,
     selected: Boolean = false,
@@ -25,9 +27,10 @@ fun CategoryContent(
         viewMode = viewMode,
         content = content,
         onClick = onClick,
-        extractHue = CategoryInfo::hue,
-        extractIcon = { info -> info.icon?.image },
-        extractTitle = CategoryInfo::title,
+        extractHue = { info -> info.value.hue },
+        extractIcon = { info -> info.value.icon?.image },
+        extractSuffixIcon = { info -> info.key.direction.icon },
+        extractTitle = { info -> info.value.title },
         entityTypeName = localization.category,
     )
 }

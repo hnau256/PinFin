@@ -227,7 +227,7 @@ private fun EntryContent(
         )
         categories.fastForEach { idWithCategory ->
             CategoryContent(
-                info = idWithCategory.value,
+                info = idWithCategory,
                 localization = dependencies.localization,
             )
         }

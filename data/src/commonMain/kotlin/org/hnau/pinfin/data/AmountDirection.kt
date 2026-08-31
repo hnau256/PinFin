@@ -5,7 +5,9 @@ import arrow.core.toNonEmptyListOrThrow
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import org.hnau.commons.gen.enumvalues.annotations.EnumValues
+import org.hnau.commons.gen.fold.annotations.Fold
 
+@Fold
 @EnumValues
 @Serializable
 enum class AmountDirection {

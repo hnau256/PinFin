@@ -27,6 +27,7 @@ fun AccountContent(
         onClick = onClick,
         extractHue = AccountInfo::hue,
         extractIcon = { info -> info.icon?.image },
+        extractSuffixIcon = { null },
         extractTitle = AccountInfo::title,
         entityTypeName = localization.account,
     )

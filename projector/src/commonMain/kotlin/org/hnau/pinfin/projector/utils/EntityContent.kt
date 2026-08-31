@@ -33,6 +33,7 @@ fun <T : Any> EntityContent(
     entity: T?,
     extractHue: (T) -> Hue,
     extractIcon: (T) -> ImageVector?,
+    extractSuffixIcon: (T) -> ImageVector?,
     extractTitle: (T) -> String,
     entityTypeName: String,
     modifier: Modifier = Modifier,
@@ -57,6 +58,7 @@ fun <T : Any> EntityContent(
                             icon = UIConstants.absentValueIcon,
                             title = entityTypeName,
                             viewMode = viewMode,
+                            suffixIcon = null,
                         )
                     )
                 }
@@ -77,6 +79,7 @@ fun <T : Any> EntityContent(
                             state = IconWithTitleState.remember(
                                 icon = extractIcon(existingEntity),
                                 title = extractTitle(existingEntity),
+                                suffixIcon = extractSuffixIcon(existingEntity),
                                 viewMode = viewMode,
                             )
                         )
@@ -108,6 +111,9 @@ private fun IconWithTitle(
             Title(
                 text = state.title,
             )
+            state
+                .suffixIcon
+                ?.let { Icon(it) }
         }
 
         is IconWithTitleState.Title -> Title(
@@ -132,6 +138,7 @@ private sealed interface IconWithTitleState {
     @Immutable
     data class IconWithTitle(
         val icon: ImageVector,
+        val suffixIcon: ImageVector?,
         val title: String,
     ) : IconWithTitleState
 
@@ -157,12 +164,19 @@ private sealed interface IconWithTitleState {
 
         fun create(
             icon: ImageVector?,
+            suffixIcon: ImageVector?,
             title: String,
             viewMode: ViewMode,
         ): IconWithTitleState = when (viewMode) {
             ViewMode.Full -> icon.foldNullable(
                 ifNull = { Title(title) },
-                ifNotNull = { icon -> IconWithTitle(icon, title) }
+                ifNotNull = { icon ->
+                    IconWithTitle(
+                        icon = icon,
+                        suffixIcon = suffixIcon,
+                        title = title,
+                    )
+                }
             )
 
             ViewMode.Icon -> icon.foldNullable(
@@ -182,11 +196,13 @@ private sealed interface IconWithTitleState {
         @Composable
         fun remember(
             icon: ImageVector?,
+            suffixIcon: ImageVector?,
             title: String,
             viewMode: ViewMode,
-        ): IconWithTitleState = remember(icon, title, viewMode) {
+        ): IconWithTitleState = remember(icon, suffixIcon, title, viewMode) {
             create(
                 icon = icon,
+                suffixIcon = suffixIcon,
                 title = title,
                 viewMode = viewMode,
             )
