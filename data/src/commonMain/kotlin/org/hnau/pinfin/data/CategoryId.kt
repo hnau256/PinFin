@@ -18,6 +18,9 @@ value class CategoryId private constructor(
         id = "${prefixes[direction]}$idSuffix"
     )
 
+    val title: String
+        get() = id.drop(1)
+
     val direction: AmountDirection
         get() = id
             .startsWith(prefixes.debit)

@@ -59,7 +59,7 @@ data class CategoryInfo(
         fun createDefault(
             id: CategoryId,
         ): CategoryInfo = CategoryInfo(
-            title = id.id,
+            title = id.title,
             hue = ModelHue
                 .calcDefault(id.id.hashCode())
                 .let(Mapper.modelHueToHue.direct),

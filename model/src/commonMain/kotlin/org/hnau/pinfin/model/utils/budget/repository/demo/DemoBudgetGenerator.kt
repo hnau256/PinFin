@@ -619,7 +619,7 @@ class DemoBudgetGenerator(
                 UpdateType.CategoryConfig(
                     id = cat,
                     config = CategoryConfig(
-                        title = cat.id,
+                        title = cat.title,
                         hue = cfg.first,
                         icon = cfg.second,
                     ),
