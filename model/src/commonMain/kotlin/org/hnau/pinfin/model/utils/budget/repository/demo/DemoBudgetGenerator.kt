@@ -196,59 +196,59 @@ class DemoBudgetGenerator(
     private val savingsAccount = AccountId(loc.savingsAccount)
 
     private val catSalary = CategoryId(
-        direction = AmountDirection.Debit,
+        direction = AmountDirection.Credit,
         idSuffix = loc.salaryCategory
     )
     private val catBonus = CategoryId(
-        direction = AmountDirection.Debit,
+        direction = AmountDirection.Credit,
         idSuffix = loc.bonusCategory
     )
     private val catTax = CategoryId(
-        direction = AmountDirection.Credit,
+        direction = AmountDirection.Debit,
         idSuffix = loc.taxCategory
     )
     private val catFood = CategoryId(
-        direction = AmountDirection.Credit,
+        direction = AmountDirection.Debit,
         idSuffix = loc.foodCategory
     )
     private val catHome = CategoryId(
-        direction = AmountDirection.Credit,
+        direction = AmountDirection.Debit,
         idSuffix = loc.homeCategory
     )
     private val catClothes = CategoryId(
-        direction = AmountDirection.Credit,
+        direction = AmountDirection.Debit,
         idSuffix = loc.clothesCategory
     )
     private val catLeisure = CategoryId(
-        direction = AmountDirection.Credit,
+        direction = AmountDirection.Debit,
         idSuffix = loc.leisureCategory
     )
     private val catUtilities = CategoryId(
-        direction = AmountDirection.Credit,
+        direction = AmountDirection.Debit,
         idSuffix = loc.utilitiesCategory
     )
     private val catSubscriptions = CategoryId(
-        direction = AmountDirection.Credit,
+        direction = AmountDirection.Debit,
         idSuffix = loc.subscriptionsCategory
     )
     private val catHealth = CategoryId(
-        direction = AmountDirection.Credit,
+        direction = AmountDirection.Debit,
         idSuffix = loc.healthCategory
     )
     private val catTransport = CategoryId(
-        direction = AmountDirection.Credit,
+        direction = AmountDirection.Debit,
         idSuffix = loc.transportCategory
     )
     private val catRent = CategoryId(
-        direction = AmountDirection.Credit,
+        direction = AmountDirection.Debit,
         idSuffix = loc.rentCategory
     )
     private val catGifts = CategoryId(
-        direction = AmountDirection.Credit,
+        direction = AmountDirection.Debit,
         idSuffix = loc.giftsCategory
     )
     private val catCar = CategoryId(
-        direction = AmountDirection.Credit,
+        direction = AmountDirection.Debit,
         idSuffix = loc.carCategory
     )
 
@@ -534,10 +534,9 @@ class DemoBudgetGenerator(
         category: CategoryId,
         comment: String,
         amountCents: Long,
-        isExpense: Boolean = true,
     ): Record = Record(
         category = category,
-        amount = centsToAmountExpr(if (isExpense) -amountCents else amountCents),
+        amount = centsToAmountExpr(amountCents),
         comment = Comment(comment),
     )
 
@@ -962,7 +961,7 @@ class DemoBudgetGenerator(
                     mkEntry(
                         timestamp = dayTimestamp,
                         account = cardAccount,
-                        records = listOf(mkRecord(catSalary, "", salaryCents, isExpense = false)),
+                        records = listOf(mkRecord(catSalary, "", salaryCents)),
                         comment = if (shouldHappen(0.05)) loc.salaryComment else "",
                     )
                 )
@@ -991,7 +990,6 @@ class DemoBudgetGenerator(
                                 catBonus,
                                 loc.bonusComment,
                                 bonusCents,
-                                isExpense = false
                             )
                         ),
                         comment = "",
