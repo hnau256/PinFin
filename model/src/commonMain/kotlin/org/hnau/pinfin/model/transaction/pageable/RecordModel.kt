@@ -166,18 +166,20 @@ class RecordModel(
     private val part: StateFlow<Part> = skeleton
         .part
         .flatMapWithScope(scope) { scope, part ->
-            when (part) {
-                is Skeleton.Part.Simple -> part.part.toMutableStateFlowAsInitial()
-                Skeleton.Part.AfterComment -> selectedCategoryWrapper
-                    .flatMapWithScope(scope) { scope, category ->
-                        category.mapState(scope) { categoryOrNull ->
-                            categoryOrNull.foldNullable(
-                                ifNull = { Part.Category },
-                                ifNotNull = { Part.Amount },
-                            )
+            part.fold(
+                ifSimple = { part -> part.toMutableStateFlowAsInitial() },
+                ifAfterComment = {
+                    selectedCategoryWrapper
+                        .flatMapWithScope(scope) { scope, category ->
+                            category.mapState(scope) { categoryOrNull ->
+                                categoryOrNull.foldNullable(
+                                    ifNull = { Part.Category },
+                                    ifNotNull = { Part.Amount },
+                                )
+                            }
                         }
-                    }
-            }
+                },
+            )
         }
 
     private fun switchToPart(
@@ -312,25 +314,28 @@ class RecordModel(
         amount = amount,
         page = part
             .mapWithScope(scope) { scope, part ->
-                when (part) {
-
-                    Part.Comment -> PageType.Comment(
-                        model = comment.createPage(
-                            scope = scope,
-                        ),
-                    )
-
-                    Part.Category -> PageType.Category(
-                        model = category.createPage(
-                            scope = scope,
-                            usedCategories = usedCategories,
-                        ),
-                    )
-
-                    Part.Amount -> PageType.Amount(
-                        model = amount.createPage(),
-                    )
-                }
+                part.fold(
+                    ifComment = {
+                        PageType.Comment(
+                            model = comment.createPage(
+                                scope = scope,
+                            ),
+                        )
+                    },
+                    ifCategory = {
+                        PageType.Category(
+                            model = category.createPage(
+                                scope = scope,
+                                usedCategories = usedCategories,
+                            ),
+                        )
+                    },
+                    ifAmount = {
+                        PageType.Amount(
+                            model = amount.createPage(),
+                        )
+                    },
+                )
             },
     )
 
@@ -388,11 +393,11 @@ class RecordModel(
         .getOrNull(ordinal + offset)
 
     val goBackHandler: GoBackHandler = part.flatMapWithScope(scope) { scope, part ->
-        when (part) {
-            Part.Comment -> comment.goBackHandler
-            Part.Category -> category.goBackHandler
-            Part.Amount -> amount.goBackHandler
-        }.mapState(scope) { partGoBackOrNull ->
+        part.fold(
+            ifComment = { comment.goBackHandler },
+            ifCategory = { category.goBackHandler },
+            ifAmount = { amount.goBackHandler },
+        ).mapState(scope) { partGoBackOrNull ->
             partGoBackOrNull ?: part
                 .shift(-1)
                 ?.let { previousPart ->

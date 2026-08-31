@@ -32,6 +32,7 @@ import org.hnau.pinfin.model.filter.Filters
 import org.hnau.pinfin.model.utils.analytics.AnalyticsEntry
 import org.hnau.pinfin.model.utils.analytics.AnalyticsPage
 import org.hnau.pinfin.model.utils.analytics.config.AnalyticsPageConfig
+import org.hnau.pinfin.model.utils.analytics.config.fold
 import org.hnau.pinfin.model.utils.analytics.splitToPeriods
 
 class GraphPageModel(
@@ -66,17 +67,19 @@ class GraphPageModel(
         get() = page.period
 
     private val subperiods: NonEmptyList<LocalDateRange> =
-        when (val operation = config.operation) {
-            is AnalyticsPageConfig.Operation.Average -> page
-                .period
-                .splitToPeriods(
-                    duration = operation.subperiod,
-                    startOfOneOfPeriods = page.period.start,
-                )
-
-            AnalyticsPageConfig.Operation.Sum ->
+        config.operation.fold(
+            ifAverage = { subperiod ->
+                page
+                    .period
+                    .splitToPeriods(
+                        duration = subperiod,
+                        startOfOneOfPeriods = page.period.start,
+                    )
+            },
+            ifSum = {
                 nonEmptyListOf(page.period)
-        }
+            },
+        )
 
     data class State(
         val values: AmountDirectionValues<Half?>,
@@ -185,19 +188,22 @@ class GraphPageModel(
             )
         }
         .let { subperiodsAmounts ->
-            when (operation) {
-                AnalyticsPageConfig.Operation.Sum -> subperiodsAmounts
-                    .sum()
-
-                is AnalyticsPageConfig.Operation.Average -> subperiodsAmounts
-                    .sum()
-                    .map {
-                        it
-                            .value
-                            .div(subperiodsAmounts.size)
-                            .let(::Amount)
-                    }
-            }
+            operation.fold(
+                ifSum = {
+                    subperiodsAmounts
+                        .sum()
+                },
+                ifAverage = { _ ->
+                    subperiodsAmounts
+                        .sum()
+                        .map {
+                            it
+                                .value
+                                .div(subperiodsAmounts.size)
+                                .let(::Amount)
+                        }
+                },
+            )
         }
 
     private val NonEmptyList<Amount>.sum: Amount

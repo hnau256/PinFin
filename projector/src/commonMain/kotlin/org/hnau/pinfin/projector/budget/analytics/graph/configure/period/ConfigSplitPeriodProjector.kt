@@ -67,13 +67,14 @@ class ConfigSplitPeriodProjector(
                 onSelectionChanged = model.tab::value::set,
             ) { tab ->
                 SText(
-                    when (tab) {
-                        ConfigSplitPeriodModel.Tab.Inclusive ->
+                    tab.fold(
+                        ifInclusive = {
                             dependencies.localization.inclusivePeriod
-
-                        ConfigSplitPeriodModel.Tab.Fixed ->
+                        },
+                        ifFixed = {
                             dependencies.localization.fixedPeriod
-                    }
+                        },
+                    )
                 )
             }
             state

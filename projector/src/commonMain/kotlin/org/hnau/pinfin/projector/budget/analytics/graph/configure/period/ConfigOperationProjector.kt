@@ -67,13 +67,14 @@ class ConfigOperationProjector(
                 onSelectionChanged = model.tab::value::set,
             ) { tab ->
                 SText(
-                    when (tab) {
-                        ConfigOperationModel.Tab.Sum ->
+                    tab.fold(
+                        ifSum = {
                             dependencies.localization.sum
-
-                        ConfigOperationModel.Tab.Average ->
+                        },
+                        ifAverage = {
                             dependencies.localization.average
-                    }
+                        },
+                    )
                 )
             }
             state

@@ -31,8 +31,8 @@ data class TransactionTypeValues<out T>(
 
     operator fun get(
         type: TransactionType,
-    ): T = when (type) {
-        TransactionType.Entry -> entry
-        TransactionType.Transfer -> transfer
-    }
+    ): T = type.fold(
+        ifEntry = { entry },
+        ifTransfer = { transfer },
+    )
 }

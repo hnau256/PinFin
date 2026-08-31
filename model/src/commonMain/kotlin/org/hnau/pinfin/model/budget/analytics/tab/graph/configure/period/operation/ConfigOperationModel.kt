@@ -22,6 +22,7 @@ import org.hnau.commons.kotlin.serialization.MutableStateFlowSerializer
 import org.hnau.commons.kotlin.toAccessor
 import org.hnau.pinfin.model.budget.analytics.tab.graph.configure.period.ConfigPeriodModel
 import org.hnau.pinfin.model.utils.analytics.config.AnalyticsPageConfig
+import org.hnau.pinfin.model.utils.analytics.config.fold
 
 class ConfigOperationModel(
     scope: CoroutineScope,
@@ -42,19 +43,22 @@ class ConfigOperationModel(
 
             fun create(
                 initial: AnalyticsPageConfig.Operation,
-            ): Skeleton = when (initial) {
-                AnalyticsPageConfig.Operation.Sum -> Skeleton(
-                    initialTab = Tab.Sum,
-                    averageSubperiod = null,
-                )
-
-                is AnalyticsPageConfig.Operation.Average -> Skeleton(
-                    initialTab = Tab.Average,
-                    averageSubperiod = ConfigPeriodModel.Skeleton.create(
-                        initial = initial.subperiod,
-                    ),
-                )
-            }
+            ): Skeleton = initial.fold(
+                ifSum = {
+                    Skeleton(
+                        initialTab = Tab.Sum,
+                        averageSubperiod = null,
+                    )
+                },
+                ifAverage = { subperiod ->
+                    Skeleton(
+                        initialTab = Tab.Average,
+                        averageSubperiod = ConfigPeriodModel.Skeleton.create(
+                            initial = subperiod,
+                        ),
+                    )
+                },
+            )
         }
     }
 
@@ -64,23 +68,27 @@ class ConfigOperationModel(
     val state: StateFlow<ConfigOperationModelState<ConfigPeriodModel>> = skeleton
         .tab
         .mapWithScope(scope) { scope, tab ->
-            when (tab) {
-                Tab.Sum -> ConfigOperationModelState.Sum
-                Tab.Average -> ConfigOperationModelState.Average(
-                    subperiod = ConfigPeriodModel(
-                        scope = scope,
-                        skeleton = skeleton::averageSubperiod
-                            .toAccessor()
-                            .getOrInit {
-                                ConfigPeriodModel.Skeleton.create(
-                                    DatePeriod(
-                                        months = 1,
+            tab.fold(
+                ifSum = {
+                    ConfigOperationModelState.Sum
+                },
+                ifAverage = {
+                    ConfigOperationModelState.Average(
+                        subperiod = ConfigPeriodModel(
+                            scope = scope,
+                            skeleton = skeleton::averageSubperiod
+                                .toAccessor()
+                                .getOrInit {
+                                    ConfigPeriodModel.Skeleton.create(
+                                        DatePeriod(
+                                            months = 1,
+                                        )
                                     )
-                                )
-                            }
+                                }
+                        )
                     )
-                )
-            }
+                },
+            )
         }
 
     internal val editableOperation: StateFlow<Editable<AnalyticsPageConfig.Operation>> = state

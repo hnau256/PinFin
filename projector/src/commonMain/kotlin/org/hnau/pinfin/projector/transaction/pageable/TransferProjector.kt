@@ -19,6 +19,7 @@ import org.hnau.commons.kotlin.KeyValue
 import org.hnau.commons.kotlin.coroutines.flow.state.mapState
 import org.hnau.pinfin.data.AccountId
 import org.hnau.pinfin.model.transaction.pageable.TransferModel
+import org.hnau.pinfin.model.transaction.pageable.fold
 import org.hnau.pinfin.model.utils.budget.state.AccountInfo
 import org.hnau.pinfin.projector.transaction.utils.ChooseOrCreateProjector
 import org.hnau.pinfin.projector.utils.ArrowDirection
@@ -126,30 +127,34 @@ class TransferProjector(
         private val type: StateFlow<PageType> = model
             .page
             .mapState(scope) { type ->
-                when (type) {
-                    is TransferModel.PageType.Amount -> PageType.Amount(
-                        projector = AmountProjector.Page(
-                            model = type.model,
-                            dependencies = dependencies.amount(),
+                type.fold(
+                    ifAmount = { model ->
+                        PageType.Amount(
+                            projector = AmountProjector.Page(
+                                model = model,
+                                dependencies = dependencies.amount(),
+                            )
                         )
-                    )
-
-                    is TransferModel.PageType.From -> PageType.From(
-                        projector = AccountProjector.createPage(
-                            model = type.model,
-                            dependencies = dependencies.accountCompanion(),
-                        ),
-                        dependencies = dependencies,
-                    )
-
-                    is TransferModel.PageType.To -> PageType.To(
-                        projector = AccountProjector.createPage(
-                            model = type.model,
-                            dependencies = dependencies.accountCompanion(),
-                        ),
-                        dependencies = dependencies,
-                    )
-                }
+                    },
+                    ifFrom = { model ->
+                        PageType.From(
+                            projector = AccountProjector.createPage(
+                                model = model,
+                                dependencies = dependencies.accountCompanion(),
+                            ),
+                            dependencies = dependencies,
+                        )
+                    },
+                    ifTo = { model ->
+                        PageType.To(
+                            projector = AccountProjector.createPage(
+                                model = model,
+                                dependencies = dependencies.accountCompanion(),
+                            ),
+                            dependencies = dependencies,
+                        )
+                    },
+                )
             }
 
         @Composable

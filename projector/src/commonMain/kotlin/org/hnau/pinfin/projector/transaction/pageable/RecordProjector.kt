@@ -42,6 +42,7 @@ import org.hnau.commons.kotlin.coroutines.flow.state.mapState
 import org.hnau.commons.kotlin.foldNullable
 import org.hnau.pinfin.data.CategoryId
 import org.hnau.pinfin.model.transaction.pageable.RecordModel
+import org.hnau.pinfin.model.transaction.pageable.fold
 import org.hnau.pinfin.model.utils.budget.state.CategoryInfo
 import org.hnau.pinfin.projector.Localization
 import org.hnau.pinfin.projector.transaction.utils.ChooseOrCreateMessages
@@ -165,27 +166,31 @@ class RecordProjector(
         private val type: StateFlow<PageType> = model
             .page
             .mapState(scope) { type ->
-                when (type) {
-                    is RecordModel.PageType.Amount -> PageType.Amount(
-                        projector = AmountProjector.Page(
-                            dependencies = dependencies.amountPage(),
-                            model = type.model,
+                type.fold(
+                    ifAmount = { model ->
+                        PageType.Amount(
+                            projector = AmountProjector.Page(
+                                dependencies = dependencies.amountPage(),
+                                model = model,
+                            )
                         )
-                    )
-
-                    is RecordModel.PageType.Category -> PageType.Category(
-                        projector = CategoryProjector.createPage(
-                            model = type.model,
-                            dependencies = dependencies.categoryCompanion(),
+                    },
+                    ifCategory = { model ->
+                        PageType.Category(
+                            projector = CategoryProjector.createPage(
+                                model = model,
+                                dependencies = dependencies.categoryCompanion(),
+                            )
                         )
-                    )
-
-                    is RecordModel.PageType.Comment -> PageType.Comment(
-                        projector = CommentProjector.Page(
-                            model = type.model,
+                    },
+                    ifComment = { model ->
+                        PageType.Comment(
+                            projector = CommentProjector.Page(
+                                model = model,
+                            )
                         )
-                    )
-                }
+                    },
+                )
             }
 
         @Composable

@@ -35,6 +35,7 @@ import org.hnau.commons.kotlin.mapper.Mapper
 import org.hnau.pinfin.data.Amount
 import org.hnau.pinfin.data.AmountDirection
 import org.hnau.pinfin.data.Hue
+import org.hnau.pinfin.data.fold
 import org.hnau.pinfin.model.budget.analytics.tab.graph.configured.GraphPageModel
 import org.hnau.pinfin.model.utils.analytics.AnalyticsPage
 import org.hnau.pinfin.model.utils.modelHueToHue
@@ -151,10 +152,10 @@ class GraphPageProjector(
         header(
             key = "${keyPrefix}_header",
             title = {
-                when (direction) {
-                    AmountDirection.Credit -> dependencies.localization.credits
-                    AmountDirection.Debit -> dependencies.localization.debits
-                }
+                direction.fold(
+                    ifCredit = { dependencies.localization.credits },
+                    ifDebit = { dependencies.localization.debits },
+                )
             },
             amount = KeyValue(direction, half.sum),
         )

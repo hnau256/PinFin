@@ -26,6 +26,7 @@ import org.hnau.commons.kotlin.KeyValue
 import org.hnau.commons.kotlin.coroutines.flow.state.mapWithScope
 import org.hnau.pinfin.data.AccountId
 import org.hnau.pinfin.model.transaction.pageable.EntryModel
+import org.hnau.pinfin.model.transaction.pageable.fold
 import org.hnau.pinfin.model.utils.budget.state.AccountInfo
 import org.hnau.pinfin.projector.Localization
 import org.hnau.pinfin.projector.transaction.utils.ChooseOrCreateProjector
@@ -123,22 +124,25 @@ class EntryProjector(
         private val type: StateFlow<PageType> = model
             .page
             .mapWithScope(scope) { scope, type ->
-                when (type) {
-                    is EntryModel.PageType.Records -> PageType.Records(
-                        projector = RecordsProjector.Page(
-                            scope = scope,
-                            model = type.model,
-                            dependencies = dependencies.records(),
+                type.fold(
+                    ifRecords = { model ->
+                        PageType.Records(
+                            projector = RecordsProjector.Page(
+                                scope = scope,
+                                model = model,
+                                dependencies = dependencies.records(),
+                            )
                         )
-                    )
-
-                    is EntryModel.PageType.Account -> PageType.Account(
-                        projector = AccountProjector.createPage(
-                            model = type.model,
-                            dependencies = dependencies.accountProjectorCompanion(),
+                    },
+                    ifAccount = { model ->
+                        PageType.Account(
+                            projector = AccountProjector.createPage(
+                                model = model,
+                                dependencies = dependencies.accountProjectorCompanion(),
+                            )
                         )
-                    )
-                }
+                    },
+                )
             }
 
         @Composable

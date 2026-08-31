@@ -23,7 +23,9 @@ import org.hnau.commons.kotlin.coroutines.flow.state.mutable.toMutableStateFlowA
 import org.hnau.commons.kotlin.mapper.Mapper
 import org.hnau.commons.kotlin.serialization.MutableStateFlowSerializer
 import org.hnau.pinfin.data.TransactionType
+import org.hnau.pinfin.data.fold
 import org.hnau.pinfin.model.utils.budget.state.TransactionInfo
+import org.hnau.pinfin.model.utils.budget.state.foldRaw
 
 class TypeModel(
     scope: CoroutineScope,
@@ -46,10 +48,10 @@ class TypeModel(
     sealed interface Type {
 
         val key: TransactionType
-            get() = when (this) {
-                is Entry -> TransactionType.Entry
-                is Transfer -> TransactionType.Transfer
-            }
+            get() = fold(
+                ifEntry = { _ -> TransactionType.Entry },
+                ifTransfer = { _ -> TransactionType.Transfer },
+            )
 
         val goBackHandler: GoBackHandler
 
@@ -74,10 +76,10 @@ class TypeModel(
         sealed interface Skeleton {
 
             val key: TransactionType
-                get() = when (this) {
-                    is Entry -> TransactionType.Entry
-                    is Transfer -> TransactionType.Transfer
-                }
+                get() = fold(
+                    ifEntry = { _ -> TransactionType.Entry },
+                    ifTransfer = { _ -> TransactionType.Transfer },
+                )
 
             @Serializable
             @SerialName("entry")
@@ -102,15 +104,18 @@ class TypeModel(
 
             fun createType(
                 type: TransactionType,
-            ): Type.Skeleton = when (type) {
-                TransactionType.Entry -> Type.Skeleton.Entry(
-                    skeleton = EntryModel.Skeleton.createForNew(),
-                )
-
-                TransactionType.Transfer -> Type.Skeleton.Transfer(
-                    skeleton = TransferModel.Skeleton.createForNew(),
-                )
-            }
+            ): Type.Skeleton = type.fold(
+                ifEntry = {
+                    Type.Skeleton.Entry(
+                        skeleton = EntryModel.Skeleton.createForNew(),
+                    )
+                },
+                ifTransfer = {
+                    Type.Skeleton.Transfer(
+                        skeleton = TransferModel.Skeleton.createForNew(),
+                    )
+                },
+            )
 
             fun createForNew(
                 type: TransactionType,
@@ -123,19 +128,22 @@ class TypeModel(
             fun createForEdit(
                 type: TransactionInfo.Type,
             ): Skeleton = Skeleton(
-                type = when (type) {
-                    is TransactionInfo.Type.Entry -> Type.Skeleton.Entry(
-                        skeleton = EntryModel.Skeleton.createForEdit(
-                            entry = type,
-                        ),
-                    )
-
-                    is TransactionInfo.Type.Transfer -> Type.Skeleton.Transfer(
-                        skeleton = TransferModel.Skeleton.createForEdit(
-                            transfer = type,
-                        ),
-                    )
-                }.toMutableStateFlowAsInitial()
+                type = type.foldRaw(
+                    ifEntry = { variant ->
+                        Type.Skeleton.Entry(
+                            skeleton = EntryModel.Skeleton.createForEdit(
+                                entry = variant,
+                            ),
+                        )
+                    },
+                    ifTransfer = { variant ->
+                        Type.Skeleton.Transfer(
+                            skeleton = TransferModel.Skeleton.createForEdit(
+                                transfer = variant,
+                            ),
+                        )
+                    },
+                ).toMutableStateFlowAsInitial()
             )
         }
     }
@@ -153,29 +161,32 @@ class TypeModel(
     val typeModel: StateFlow<Type> = skeleton
         .type
         .mapWithScope(scope) { scope, skeleton ->
-            when (skeleton) {
-                is Type.Skeleton.Entry -> Type.Entry(
-                    model = EntryModel(
-                        scope = scope,
-                        dependencies = dependencies.entry(),
-                        skeleton = skeleton.skeleton,
-                        isFocused = isFocused,
-                        requestFocus = requestFocus,
-                        goForward = goForward,
+            skeleton.fold(
+                ifEntry = { entrySkeleton ->
+                    Type.Entry(
+                        model = EntryModel(
+                            scope = scope,
+                            dependencies = dependencies.entry(),
+                            skeleton = entrySkeleton,
+                            isFocused = isFocused,
+                            requestFocus = requestFocus,
+                            goForward = goForward,
+                        )
                     )
-                )
-
-                is Type.Skeleton.Transfer -> Type.Transfer(
-                    model = TransferModel(
-                        scope = scope,
-                        dependencies = dependencies.transfer(),
-                        skeleton = skeleton.skeleton,
-                        isFocused = isFocused,
-                        requestFocus = requestFocus,
-                        goForward = goForward,
+                },
+                ifTransfer = { transferSkeleton ->
+                    Type.Transfer(
+                        model = TransferModel(
+                            scope = scope,
+                            dependencies = dependencies.transfer(),
+                            skeleton = transferSkeleton,
+                            isFocused = isFocused,
+                            requestFocus = requestFocus,
+                            goForward = goForward,
+                        )
                     )
-                )
-            }
+                },
+            )
         }
 
     class Page(
@@ -187,10 +198,10 @@ class TypeModel(
         sealed interface Type {
 
             val key: TransactionType
-                get() = when (this) {
-                    is Entry -> TransactionType.Entry
-                    is Transfer -> TransactionType.Transfer
-                }
+                get() = fold(
+                    ifEntry = { _ -> TransactionType.Entry },
+                    ifTransfer = { _ -> TransactionType.Transfer },
+                )
 
             val goBackHandler: GoBackHandler
 
@@ -220,27 +231,30 @@ class TypeModel(
     ): Page = Page(
         scope = scope,
         page = typeModel.mapWithScope(scope) { scope, typeModel ->
-            when (typeModel) {
-                is Type.Entry -> Page.Type.Entry(
-                    model = typeModel.model.createPage(
-                        scope = scope,
+            typeModel.fold(
+                ifEntry = { model ->
+                    Page.Type.Entry(
+                        model = model.createPage(
+                            scope = scope,
+                        )
                     )
-                )
-
-                is Type.Transfer -> Page.Type.Transfer(
-                    model = typeModel.model.createPage(
-                        scope = scope,
+                },
+                ifTransfer = { model ->
+                    Page.Type.Transfer(
+                        model = model.createPage(
+                            scope = scope,
+                        )
                     )
-                )
-            }
+                },
+            )
         }
     )
 
     internal val type: StateFlow<Editable<TransactionInfo.Type>> = typeModel.flatMapState(scope) { typeModel ->
-        when (typeModel) {
-            is Type.Entry -> typeModel.model.entry
-            is Type.Transfer -> typeModel.model.transfer
-        }
+        typeModel.fold(
+            ifEntry = { model -> model.entry },
+            ifTransfer = { model -> model.transfer },
+        )
     }
 
     val goBackHandler: GoBackHandler =

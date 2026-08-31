@@ -112,11 +112,11 @@ class BudgetModel(
             .pages
             .firstOrNull { it.tab == tab }
             .ifNull {
-                when (tab) {
-                    BudgetTab.Transactions -> PageSkeleton.transactions(FilterModel.Skeleton.create())
-                    BudgetTab.Analytics -> PageSkeleton.analytics()
-                    BudgetTab.Manage -> PageSkeleton.manage()
-                }.also(skeleton.pages::add)
+                tab.fold(
+                    ifTransactions = { PageSkeleton.transactions(FilterModel.Skeleton.create()) },
+                    ifAnalytics = { PageSkeleton.analytics() },
+                    ifManage = { PageSkeleton.manage() },
+                ).also(skeleton.pages::add)
             }
 
         return tabsCache

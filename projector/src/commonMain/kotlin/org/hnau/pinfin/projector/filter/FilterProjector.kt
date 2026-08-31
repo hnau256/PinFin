@@ -40,6 +40,7 @@ import org.hnau.commons.gen.pipe.annotations.Pipe
 import org.hnau.commons.kotlin.coroutines.flow.state.mapState
 import org.hnau.commons.kotlin.coroutines.flow.state.mapWithScope
 import org.hnau.pinfin.model.filter.FilterModel
+import org.hnau.pinfin.model.filter.fold
 
 class FilterProjector(
     scope: CoroutineScope,
@@ -114,21 +115,24 @@ class FilterProjector(
         private val page: StateFlow<Pair<FilterModel.Tab, Page>> = model
             .type
             .mapState(scope) { (tab, type) ->
-                val projector = when (type) {
-                    is FilterModel.Config.Type.Categories -> Page.Categories(
-                        SelectCategoriesProjector.Page(
-                            model = type.model,
-                            dependencies = dependencies.selectCategoriesPage(),
+                val projector = type.fold(
+                    ifCategories = { model ->
+                        Page.Categories(
+                            SelectCategoriesProjector.Page(
+                                model = model,
+                                dependencies = dependencies.selectCategoriesPage(),
+                            )
                         )
-                    )
-
-                    is FilterModel.Config.Type.Accounts -> Page.Accounts(
-                        SelectAccountsProjector.Page(
-                            model = type.model,
-                            dependencies = dependencies.selectAccountsPage(),
+                    },
+                    ifAccounts = { model ->
+                        Page.Accounts(
+                            SelectAccountsProjector.Page(
+                                model = model,
+                                dependencies = dependencies.selectAccountsPage(),
+                            )
                         )
-                    )
-                }
+                    },
+                )
                 tab to projector
             }
 

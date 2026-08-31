@@ -8,6 +8,7 @@ import org.hnau.pinfin.data.CategoryConfig
 import org.hnau.pinfin.data.Comment
 import org.hnau.pinfin.data.Transaction
 import org.hnau.pinfin.data.UpdateType
+import org.hnau.pinfin.data.foldRaw
 import org.hnau.pinfin.model.transaction.utils.toTransactionType
 
 suspend fun BudgetState.toOptimizedUpdates(
@@ -80,17 +81,18 @@ suspend fun BudgetState.toOptimizedUpdates(
 
 private fun Transaction.trimStrings(): Transaction = copy(
     comment = comment.optimize(),
-    type = when (val type = type) {
-        is Transaction.Type.Entry -> type.copy(
-            records = type.records.map { record ->
-                record.copy(
-                    comment = record.comment.optimize(),
-                )
-            },
-        )
-
-        is Transaction.Type.Transfer -> type
-    },
+    type = type.foldRaw(
+        ifEntry = { variant ->
+            variant.copy(
+                records = variant.records.map { record ->
+                    record.copy(
+                        comment = record.comment.optimize(),
+                    )
+                },
+            )
+        },
+        ifTransfer = { variant -> variant },
+    ),
 )
 
 private fun String.optimize(): String = trim()

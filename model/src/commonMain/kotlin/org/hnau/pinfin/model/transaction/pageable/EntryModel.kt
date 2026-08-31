@@ -188,19 +188,22 @@ class EntryModel(
         page = skeleton
             .part
             .mapWithScope(scope) { scope, part ->
-                when (part) {
-                    Part.Account -> PageType.Account(
-                        model = account.createPage(
-                            scope = scope,
-                        ),
-                    )
-
-                    Part.Records -> PageType.Records(
-                        model = records.createPage(
-                            scope = scope,
-                        ),
-                    )
-                }
+                part.fold(
+                    ifAccount = {
+                        PageType.Account(
+                            model = account.createPage(
+                                scope = scope,
+                            ),
+                        )
+                    },
+                    ifRecords = {
+                        PageType.Records(
+                            model = records.createPage(
+                                scope = scope,
+                            ),
+                        )
+                    },
+                )
             },
     )
 
@@ -227,9 +230,9 @@ class EntryModel(
     val goBackHandler: GoBackHandler = skeleton
         .part
         .flatMapWithScope(scope) { scope, part ->
-            when (part) {
-                Part.Account -> account.goBackHandler
-                Part.Records -> records.goBackHandler
-            }
+            part.fold(
+                ifAccount = { account.goBackHandler },
+                ifRecords = { records.goBackHandler },
+            )
         }
 }

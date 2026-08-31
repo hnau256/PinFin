@@ -17,6 +17,7 @@ import org.hnau.commons.app.projector.utils.Orientation
 import org.hnau.commons.gen.pipe.annotations.Pipe
 import org.hnau.commons.kotlin.ifTrue
 import org.hnau.pinfin.model.BudgetSwitchModel
+import org.hnau.pinfin.model.fold
 
 class BudgetSwitchProjector(
     private val model: BudgetSwitchModel,
@@ -48,10 +49,12 @@ class BudgetSwitchProjector(
                     items = budgets,
                 ) { budget ->
                     SPanel(
-                        actionOrElseOrDisabled = when (val state = budget.state) {
-                            is BudgetSwitchModel.Item.State.NotSelected -> state.select.collectAsState().value
-                            BudgetSwitchModel.Item.State.Selected -> null
-                        },
+                        actionOrElseOrDisabled = budget.state.fold(
+                            ifNotSelected = { select ->
+                                select.collectAsState().value
+                            },
+                            ifSelected = { null },
+                        ),
                         importanceToActivate = null,
                     ) {
                         Item(
@@ -67,10 +70,10 @@ class BudgetSwitchProjector(
     private fun Item(
         item: BudgetSwitchModel.Item,
     ) {
-        val selected = when (item.state) {
-            is BudgetSwitchModel.Item.State.NotSelected -> false
-            BudgetSwitchModel.Item.State.Selected -> true
-        }
+        val selected = item.state.fold(
+            ifNotSelected = { _ -> false },
+            ifSelected = { true },
+        )
         SItem(
             endAccessory = selected.ifTrue {
                 {

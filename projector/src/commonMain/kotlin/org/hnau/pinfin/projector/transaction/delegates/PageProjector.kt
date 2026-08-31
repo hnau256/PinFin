@@ -14,6 +14,7 @@ import org.hnau.commons.gen.fold.annotations.Fold
 import org.hnau.commons.gen.pipe.annotations.Pipe
 import org.hnau.commons.kotlin.coroutines.flow.state.mapWithScope
 import org.hnau.pinfin.model.transaction.TransactionModel
+import org.hnau.pinfin.model.transaction.fold
 import org.hnau.pinfin.projector.transaction.pageable.CommentProjector
 import org.hnau.pinfin.projector.transaction.pageable.DateProjector
 import org.hnau.pinfin.projector.transaction.pageable.TimeProjector
@@ -107,33 +108,38 @@ class PageProjector(
     private val page: StateFlow<Pair<TransactionModel.Part, Part>> = model
         .pageType
         .mapWithScope(scope) { scope, (page, model) ->
-            val projector = when (model) {
-                is TransactionModel.PageType.Date -> Part.Date(
-                    projector = DateProjector.Page(
-                        model = model.model,
+            val projector = model.fold(
+                ifComment = { model ->
+                    Part.Comment(
+                        projector = CommentProjector.Page(
+                            model = model,
+                        )
                     )
-                )
-
-                is TransactionModel.PageType.Comment -> Part.Comment(
-                    projector = CommentProjector.Page(
-                        model = model.model,
+                },
+                ifDate = { model ->
+                    Part.Date(
+                        projector = DateProjector.Page(
+                            model = model,
+                        )
                     )
-                )
-
-                is TransactionModel.PageType.Time -> Part.Time(
-                    projector = TimeProjector.Page(
-                        model = model.model,
+                },
+                ifTime = { model ->
+                    Part.Time(
+                        projector = TimeProjector.Page(
+                            model = model,
+                        )
                     )
-                )
-
-                is TransactionModel.PageType.Type -> Part.Type(
-                    projector = TypeProjector.Page(
-                        scope = scope,
-                        model = model.model,
-                        dependencies = dependencies.type(),
+                },
+                ifType = { model ->
+                    Part.Type(
+                        projector = TypeProjector.Page(
+                            scope = scope,
+                            model = model,
+                            dependencies = dependencies.type(),
+                        )
                     )
-                )
-            }
+                },
+            )
             page to projector
         }
 

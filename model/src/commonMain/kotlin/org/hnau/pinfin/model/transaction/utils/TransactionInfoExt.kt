@@ -3,11 +3,12 @@ package org.hnau.pinfin.model.transaction.utils
 import org.hnau.pinfin.data.Record
 import org.hnau.pinfin.data.Transaction
 import org.hnau.pinfin.model.utils.budget.state.TransactionInfo
+import org.hnau.pinfin.model.utils.budget.state.foldRaw
 
-fun TransactionInfo.Type.toTransactionType(): Transaction.Type = when (this) {
-    is TransactionInfo.Type.Transfer -> toTransactionTransferType()
-    is TransactionInfo.Type.Entry -> toTransactionEntryType()
-}
+fun TransactionInfo.Type.toTransactionType(): Transaction.Type = foldRaw(
+    ifTransfer = { variant -> variant.toTransactionTransferType() },
+    ifEntry = { variant -> variant.toTransactionEntryType() },
+)
 
 fun TransactionInfo.Type.Transfer.toTransactionTransferType(): Transaction.Type.Transfer =
     Transaction.Type.Transfer(

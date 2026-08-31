@@ -248,27 +248,32 @@ class TransactionModel(
     val pageType: StateFlow<Pair<Part, PageType>> = skeleton
         .part
         .mapWithScope(scope) { scope, part ->
-            val pageType = when (part) {
-                Part.Type -> PageType.Type(
-                    model = type.createPage(
-                        scope = scope,
-                    ),
-                )
-
-                Part.Date -> PageType.Date(
-                    model = date.createPage(),
-                )
-
-                Part.Time -> PageType.Time(
-                    model = time.createPage(),
-                )
-
-                Part.Comment -> PageType.Comment(
-                    model = comment.createPage(
-                        scope = scope,
-                    ),
-                )
-            }
+            val pageType = part.fold(
+                ifType = {
+                    PageType.Type(
+                        model = type.createPage(
+                            scope = scope,
+                        ),
+                    )
+                },
+                ifDate = {
+                    PageType.Date(
+                        model = date.createPage(),
+                    )
+                },
+                ifTime = {
+                    PageType.Time(
+                        model = time.createPage(),
+                    )
+                },
+                ifComment = {
+                    PageType.Comment(
+                        model = comment.createPage(
+                            scope = scope,
+                        ),
+                    )
+                },
+            )
 
             part to pageType
         }
@@ -473,12 +478,12 @@ class TransactionModel(
                     goBack.foldNullable(
                         ifNotNull = { it.toMutableStateFlowAsInitial() },
                         ifNull = {
-                            when (part) {
-                                Part.Type -> type.goBackHandler
-                                Part.Date -> date.goBackHandler
-                                Part.Time -> time.goBackHandler
-                                Part.Comment -> comment.goBackHandler
-                            }
+                            part.fold(
+                                ifType = { type.goBackHandler },
+                                ifDate = { date.goBackHandler },
+                                ifTime = { time.goBackHandler },
+                                ifComment = { comment.goBackHandler },
+                            )
                                 .flatMapWithScope(scope) { scope, partGoBackOrNull ->
                                     partGoBackOrNull.foldNullable(
                                         ifNull = { createLocalGoBackHandler(scope) },

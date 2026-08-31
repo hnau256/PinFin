@@ -13,6 +13,7 @@ import kotlinx.datetime.toLocalDateTime
 import org.hnau.commons.kotlin.foldNullable
 import org.hnau.commons.kotlin.map
 import org.hnau.pinfin.model.utils.analytics.config.AnalyticsSplitConfig
+import org.hnau.pinfin.model.utils.analytics.config.fold
 import org.hnau.pinfin.model.utils.budget.state.BudgetState
 
 data class AnalyticsPagesProvider(
@@ -28,13 +29,15 @@ data class AnalyticsPagesProvider(
             today = today,
         )
             .let { range ->
-                when (val period = config.period) {
-                    AnalyticsSplitConfig.Period.Inclusive -> nonEmptyListOf(range)
-                    is AnalyticsSplitConfig.Period.Fixed -> range.splitToPeriods(
-                        duration = period.duration,
-                        startOfOneOfPeriods = period.startOfOneOfPeriods,
-                    )
-                }
+                config.period.fold(
+                    ifInclusive = { nonEmptyListOf(range) },
+                    ifFixed = { duration, startOfOneOfPeriods ->
+                        range.splitToPeriods(
+                            duration = duration,
+                            startOfOneOfPeriods = startOfOneOfPeriods,
+                        )
+                    },
+                )
 
             }
             .let { periods ->

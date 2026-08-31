@@ -3,6 +3,7 @@ package org.hnau.pinfin.projector.budget.analytics.graph.utils
 import arrow.core.toNonEmptyListOrNull
 import kotlinx.datetime.DatePeriod
 import org.hnau.pinfin.model.utils.analytics.config.AnalyticsSplitConfig
+import org.hnau.pinfin.model.utils.analytics.config.fold
 import org.hnau.pinfin.projector.Localization
 
 internal fun DatePeriod.format(
@@ -30,12 +31,15 @@ internal fun DatePeriod.format(
 
 internal fun AnalyticsSplitConfig.Period.format(
     localization: Localization,
-): String = when (this) {
-    is AnalyticsSplitConfig.Period.Fixed -> duration.format(
-        localization = localization,
-    )
-
-    AnalyticsSplitConfig.Period.Inclusive -> localization
-        .inclusivePeriod
-        .replaceFirstChar(Char::lowercase)
-}
+): String = fold(
+    ifFixed = { duration, _ ->
+        duration.format(
+            localization = localization,
+        )
+    },
+    ifInclusive = {
+        localization
+            .inclusivePeriod
+            .replaceFirstChar(Char::lowercase)
+    },
+)

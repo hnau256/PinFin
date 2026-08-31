@@ -7,10 +7,10 @@ fun Expression.serialize(): String = serializeNode(parent = null, isRightChild =
 private fun Expression.serializeNode(
     parent: Expression.BinaryOperation.Type?,
     isRightChild: Boolean,
-): String = when (this) {
-    is Expression.Value -> value.toPlainString()
+): String = fold(
+    ifValue = { value -> value.toPlainString() },
 
-    is Expression.UnaryOperation -> "-${
+    ifUnaryOperation = { argument, _ -> "-${
         argument
             .serializeNode(parent = null, isRightChild = false)
             .let {
@@ -19,9 +19,9 @@ private fun Expression.serializeNode(
                     ifFalse = { it },
                 )
             }
-    }"
+    }" },
 
-    is Expression.BinaryOperation -> {
+    ifBinaryOperation = { argument1, argument2, type ->
         val left = argument1.serializeChild(parent = type, isRightChild = false)
         val right = argument2.serializeChild(parent = type, isRightChild = true)
         val expr = "$left${type.symbol}$right"
@@ -33,8 +33,8 @@ private fun Expression.serializeNode(
             ifTrue = { "($expr)" },
             ifFalse = { expr },
         )
-    }
-}
+    },
+)
 
 private fun Expression.serializeChild(
     parent: Expression.BinaryOperation.Type,
@@ -63,17 +63,17 @@ private fun needsParens(
 }
 
 private val Expression.BinaryOperation.Type.priority: Int
-    get() = when (this) {
-        Expression.BinaryOperation.Type.Plus -> 0
-        Expression.BinaryOperation.Type.Minus -> 0
-        Expression.BinaryOperation.Type.Times -> 1
-        Expression.BinaryOperation.Type.Divide -> 1
-    }
+    get() = fold(
+        ifPlus = { 0 },
+        ifMinus = { 0 },
+        ifTimes = { 1 },
+        ifDivide = { 1 },
+    )
 
 private val Expression.BinaryOperation.Type.symbol: String
-    get() = when (this) {
-        Expression.BinaryOperation.Type.Plus -> "+"
-        Expression.BinaryOperation.Type.Minus -> "-"
-        Expression.BinaryOperation.Type.Times -> "*"
-        Expression.BinaryOperation.Type.Divide -> "/"
-    }
+    get() = fold(
+        ifPlus = { "+" },
+        ifMinus = { "-" },
+        ifTimes = { "*" },
+        ifDivide = { "/" },
+    )

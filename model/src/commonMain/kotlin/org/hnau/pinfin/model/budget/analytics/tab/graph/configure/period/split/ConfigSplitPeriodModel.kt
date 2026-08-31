@@ -26,6 +26,7 @@ import org.hnau.commons.kotlin.serialization.MutableStateFlowSerializer
 import org.hnau.commons.kotlin.toAccessor
 import org.hnau.pinfin.model.budget.analytics.tab.graph.configure.period.ConfigPeriodModel
 import org.hnau.pinfin.model.utils.analytics.config.AnalyticsSplitConfig
+import org.hnau.pinfin.model.utils.analytics.config.fold
 import kotlin.time.Clock
 
 class ConfigSplitPeriodModel(
@@ -47,19 +48,22 @@ class ConfigSplitPeriodModel(
 
             fun create(
                 initial: AnalyticsSplitConfig.Period,
-            ): Skeleton = when (initial) {
-                AnalyticsSplitConfig.Period.Inclusive -> Skeleton(
-                    initialTab = Tab.Inclusive,
-                    fixed = null,
-                )
-
-                is AnalyticsSplitConfig.Period.Fixed -> Skeleton(
-                    initialTab = Tab.Fixed,
-                    fixed = ConfigPeriodModel.Skeleton.create(
-                        initial = initial.duration,
-                    ),
-                )
-            }
+            ): Skeleton = initial.fold(
+                ifInclusive = {
+                    Skeleton(
+                        initialTab = Tab.Inclusive,
+                        fixed = null,
+                    )
+                },
+                ifFixed = { duration, _ ->
+                    Skeleton(
+                        initialTab = Tab.Fixed,
+                        fixed = ConfigPeriodModel.Skeleton.create(
+                            initial = duration,
+                        ),
+                    )
+                },
+            )
         }
     }
 
@@ -69,23 +73,27 @@ class ConfigSplitPeriodModel(
     val state: StateFlow<ConfigSplitPeriodModelState<ConfigPeriodModel>> = skeleton
         .tab
         .mapWithScope(scope) { scope, tab ->
-            when (tab) {
-                Tab.Inclusive -> ConfigSplitPeriodModelState.Inclusive
-                Tab.Fixed -> ConfigSplitPeriodModelState.Fixed(
-                    period = ConfigPeriodModel(
-                        scope = scope,
-                        skeleton = skeleton::fixed
-                            .toAccessor()
-                            .getOrInit {
-                                ConfigPeriodModel.Skeleton.create(
-                                    DatePeriod(
-                                        months = 1,
+            tab.fold(
+                ifInclusive = {
+                    ConfigSplitPeriodModelState.Inclusive
+                },
+                ifFixed = {
+                    ConfigSplitPeriodModelState.Fixed(
+                        period = ConfigPeriodModel(
+                            scope = scope,
+                            skeleton = skeleton::fixed
+                                .toAccessor()
+                                .getOrInit {
+                                    ConfigPeriodModel.Skeleton.create(
+                                        DatePeriod(
+                                            months = 1,
+                                        )
                                     )
-                                )
-                            }
+                                }
+                        )
                     )
-                )
-            }
+                },
+            )
         }
 
     internal val editablePeriod: StateFlow<Editable<AnalyticsSplitConfig.Period>> = state

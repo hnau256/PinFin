@@ -165,17 +165,17 @@ class BudgetProjector(
     }
 
     private val BudgetTab.icon: ImageVector
-        get() = when (this) {
-            BudgetTab.Transactions -> Icons.AutoMirrored.Filled.List
-            BudgetTab.Analytics -> Icons.Filled.QueryStats
-            BudgetTab.Manage -> Icons.Filled.Build
-        }
+        get() = fold(
+            ifTransactions = { Icons.AutoMirrored.Filled.List },
+            ifAnalytics = { Icons.Filled.QueryStats },
+            ifManage = { Icons.Filled.Build },
+        )
 
     private val BudgetTab.title: String
         @Composable
-        get() = when (this) {
-            BudgetTab.Transactions -> dependencies.localization.transactions
-            BudgetTab.Analytics -> dependencies.localization.analytics
-            BudgetTab.Manage -> dependencies.localization.manage
-        }
+        get() = fold(
+            ifTransactions = { dependencies.localization.transactions },
+            ifAnalytics = { dependencies.localization.analytics },
+            ifManage = { dependencies.localization.manage },
+        )
 }

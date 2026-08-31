@@ -31,6 +31,7 @@ import org.hnau.commons.kotlin.coroutines.flow.state.mapWithScope
 import org.hnau.commons.kotlin.map
 import org.hnau.pinfin.model.budget.analytics.tab.graph.configured.GraphConfigModel
 import org.hnau.pinfin.model.utils.analytics.config.AnalyticsPageConfig
+import org.hnau.pinfin.model.utils.analytics.config.fold
 import org.hnau.pinfin.projector.Localization
 import org.hnau.pinfin.projector.budget.analytics.graph.utils.format
 
@@ -135,20 +136,23 @@ class GraphConfigProjector(
                         localization = dependencies.localization,
                     )
 
-                    when (val operation = config.page.operation) {
-                        AnalyticsPageConfig.Operation.Sum -> dependencies
-                            .localization
-                            .sumFor(period)
-
-                        is AnalyticsPageConfig.Operation.Average -> dependencies
-                            .localization
-                            .avgFor(
-                                period,
-                                operation.subperiod.format(
-                                    localization = dependencies.localization,
+                    config.page.operation.fold(
+                        ifSum = {
+                            dependencies
+                                .localization
+                                .sumFor(period)
+                        },
+                        ifAverage = { subperiod ->
+                            dependencies
+                                .localization
+                                .avgFor(
+                                    period,
+                                    subperiod.format(
+                                        localization = dependencies.localization,
+                                    )
                                 )
-                            )
-                    }
+                        },
+                    )
                 }
         )
     }

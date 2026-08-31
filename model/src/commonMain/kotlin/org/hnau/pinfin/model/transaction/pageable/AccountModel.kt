@@ -40,6 +40,7 @@ import org.hnau.pinfin.model.utils.budget.repository.BudgetRepository
 import org.hnau.pinfin.model.utils.budget.state.AccountInfo
 import org.hnau.pinfin.model.utils.budget.state.BudgetState
 import org.hnau.pinfin.model.utils.budget.state.TransactionInfo
+import org.hnau.pinfin.model.utils.budget.state.fold
 
 class AccountModel(
     scope: CoroutineScope,
@@ -94,10 +95,10 @@ class AccountModel(
                 }
                 .take(16)
                 .map { idWithTransaction ->
-                    when (val type = idWithTransaction.value.type) {
-                        is TransactionInfo.Type.Entry -> type.idWithAccount
-                        is TransactionInfo.Type.Transfer -> type.from
-                    }
+                    idWithTransaction.value.type.fold(
+                        ifEntry = { idWithAccount, _ -> idWithAccount },
+                        ifTransfer = { from, _, _ -> from },
+                    )
                 }
                 .groupBy(::identity)
                 .maxByOrNull { it.value.size }

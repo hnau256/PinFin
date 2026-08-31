@@ -16,20 +16,21 @@ import org.hnau.commons.kotlin.mapper.Mapper
 import org.hnau.pinfin.data.Amount
 import org.hnau.pinfin.data.AmountDirection
 import org.hnau.pinfin.data.Hue
+import org.hnau.pinfin.data.fold
 import org.hnau.pinfin.model.utils.modelHueToHue
 import org.hnau.pinfin.projector.utils.formatter.AmountFormatter
 
 val AmountDirection.icon: ImageVector
-    get() = when (this) {
-        AmountDirection.Credit -> Icons.Filled.AddCircle
-        AmountDirection.Debit -> Icons.Filled.DoNotDisturbOn
-    }
+    get() = fold(
+        ifCredit = { Icons.Filled.AddCircle },
+        ifDebit = { Icons.Filled.DoNotDisturbOn },
+    )
 
 val AmountDirection.hue: Hue
-    get() = when (this) {
-        AmountDirection.Credit -> Hue(135)
-        AmountDirection.Debit -> Hue(27)
-    }
+    get() = fold(
+        ifCredit = { Hue(135) },
+        ifDebit = { Hue(27) },
+    )
 
 @Composable
 fun SwitchHueToAmountDirection(

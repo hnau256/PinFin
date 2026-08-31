@@ -15,19 +15,21 @@ object ArrowIcon {
     fun get(
         direction: ArrowDirection,
         layoutDirection: LayoutDirection,
-    ): ImageVector = when (direction) {
-        ArrowDirection.StartToEnd -> when (layoutDirection) {
-            LayoutDirection.Ltr -> leftToRight
-            LayoutDirection.Rtl -> rightToLeft
-        }
-
-        ArrowDirection.EndToStart -> when (layoutDirection) {
-            LayoutDirection.Ltr -> rightToLeft
-            LayoutDirection.Rtl -> leftToRight
-        }
-
-        ArrowDirection.Both -> both
-    }
+    ): ImageVector = direction.fold(
+        ifStartToEnd = {
+            when (layoutDirection) {
+                LayoutDirection.Ltr -> leftToRight
+                LayoutDirection.Rtl -> rightToLeft
+            }
+        },
+        ifEndToStart = {
+            when (layoutDirection) {
+                LayoutDirection.Ltr -> rightToLeft
+                LayoutDirection.Rtl -> leftToRight
+            }
+        },
+        ifBoth = { both },
+    )
 
     @Composable
     operator fun get(

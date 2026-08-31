@@ -7,6 +7,7 @@ import kotlinx.datetime.toLocalDateTime
 import org.hnau.pinfin.data.AccountId
 import org.hnau.pinfin.data.CategoryId
 import org.hnau.pinfin.model.utils.budget.state.TransactionInfo
+import org.hnau.pinfin.model.utils.budget.state.fold
 
 internal fun Filters.check(
     transaction: TransactionInfo,
@@ -24,15 +25,15 @@ private fun NonEmptySet<CategoryId?>?.checkCategories(
         return true
     }
     val set = toSet()
-    return when (val type = transaction.type) {
-        is TransactionInfo.Type.Entry -> type
-            .records
-            .any { record ->
-                record.idWithCategory.key in set
-            }
-
-        is TransactionInfo.Type.Transfer -> null in set
-    }
+    return transaction.type.fold(
+        ifEntry = { _, records ->
+            records
+                .any { record ->
+                    record.idWithCategory.key in set
+                }
+        },
+        ifTransfer = { _, _, _ -> null in set },
+    )
 }
 
 private fun NonEmptySet<AccountId>?.checkAccounts(
@@ -42,13 +43,14 @@ private fun NonEmptySet<AccountId>?.checkAccounts(
         return true
     }
     val set = toSet()
-    return when (val type = transaction.type) {
-        is TransactionInfo.Type.Entry ->
-            type.idWithAccount.key in set
-
-        is TransactionInfo.Type.Transfer ->
-            type.from.key in set || type.to.key in set
-    }
+    return transaction.type.fold(
+        ifEntry = { idWithAccount, _ ->
+            idWithAccount.key in set
+        },
+        ifTransfer = { from, to, _ ->
+            from.key in set || to.key in set
+        },
+    )
 }
 
 private fun LocalDateRange?.checkPeriod(

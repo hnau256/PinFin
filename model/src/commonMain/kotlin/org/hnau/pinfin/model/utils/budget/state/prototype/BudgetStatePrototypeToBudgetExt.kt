@@ -10,6 +10,7 @@ import org.hnau.pinfin.data.BudgetId
 import org.hnau.pinfin.data.CategoryId
 import org.hnau.pinfin.data.Record
 import org.hnau.pinfin.data.Transaction
+import org.hnau.pinfin.data.foldRaw
 import org.hnau.pinfin.data.plus
 import org.hnau.pinfin.model.utils.amount
 import org.hnau.pinfin.model.utils.budget.state.AccountInfo
@@ -59,33 +60,32 @@ suspend fun BudgetStatePrototype.toBudgetState(
     }
 
     transactions.forEach { (_, transaction) ->
-        when (val type = transaction.type) {
-            is Transaction.Type.Entry -> {
+        transaction.type.foldRaw(
+            ifEntry = { variant ->
                 useAccount(
-                    id = type.account,
-                    amountOffset = type.amount(
+                    id = variant.account,
+                    amountOffset = variant.amount(
                         currency = info.currency,
                     ),
                 )
-                type.records.forEach { record ->
+                variant.records.forEach { record ->
                     useCategory(
                         id = record.category,
                     )
                 }
-            }
-
-            is Transaction.Type.Transfer -> {
-                val amount = type.amount.toAmount(info.currency.scale)
+            },
+            ifTransfer = { variant ->
+                val amount = variant.amount.toAmount(info.currency.scale)
                 useAccount(
-                    id = type.from,
+                    id = variant.from,
                     amountOffset = KeyValue(AmountDirection.Debit, amount)
                 )
                 useAccount(
-                    id = type.to,
+                    id = variant.to,
                     amountOffset = KeyValue(AmountDirection.Credit, amount)
                 )
-            }
-        }
+            },
+        )
     }
 
     BudgetState(
@@ -124,18 +124,21 @@ private fun TransactionInfo.Type.Companion.fromType(
     type: Transaction.Type,
     categories: Map<CategoryId, CategoryInfo>,
     accounts: Map<AccountId, AccountInfo>,
-): TransactionInfo.Type = when (type) {
-    is Transaction.Type.Entry -> TransactionInfo.Type.Entry.fromEntry(
-        entry = type,
-        categories = categories,
-        accounts = accounts,
-    )
-
-    is Transaction.Type.Transfer -> TransactionInfo.Type.Transfer.fromTransfer(
-        transfer = type,
-        accounts = accounts,
-    )
-}
+): TransactionInfo.Type = type.foldRaw(
+    ifEntry = { variant ->
+        TransactionInfo.Type.Entry.fromEntry(
+            entry = variant,
+            categories = categories,
+            accounts = accounts,
+        )
+    },
+    ifTransfer = { variant ->
+        TransactionInfo.Type.Transfer.fromTransfer(
+            transfer = variant,
+            accounts = accounts,
+        )
+    },
+)
 
 private fun TransactionInfo.Type.Entry.Companion.fromEntry(
     entry: Transaction.Type.Entry,

@@ -22,6 +22,7 @@ import org.hnau.commons.kotlin.coroutines.flow.state.mapWithScope
 import org.hnau.pinfin.data.TransactionType
 import org.hnau.pinfin.model.transaction.TransactionModel
 import org.hnau.pinfin.model.transaction.pageable.TypeModel
+import org.hnau.pinfin.model.transaction.pageable.fold
 import org.hnau.pinfin.projector.Localization
 import org.hnau.pinfin.projector.transaction.pageable.EntryProjector
 import org.hnau.pinfin.projector.transaction.pageable.TransferProjector
@@ -180,23 +181,26 @@ class TypeProjector(
         private val type: StateFlow<Type> = model
             .page
             .mapWithScope(scope) { scope, type ->
-                when (type) {
-                    is TypeModel.Page.Type.Entry -> Type.Entry(
-                        projector = EntryProjector.Page(
-                            scope = scope,
-                            dependencies = dependencies.entry(),
-                            model = type.model,
+                type.fold(
+                    ifEntry = { model ->
+                        Type.Entry(
+                            projector = EntryProjector.Page(
+                                scope = scope,
+                                dependencies = dependencies.entry(),
+                                model = model,
+                            )
                         )
-                    )
-
-                    is TypeModel.Page.Type.Transfer -> Type.Transfer(
-                        projector = TransferProjector.Page(
-                            scope = scope,
-                            dependencies = dependencies.transfer(),
-                            model = type.model,
+                    },
+                    ifTransfer = { model ->
+                        Type.Transfer(
+                            projector = TransferProjector.Page(
+                                scope = scope,
+                                dependencies = dependencies.transfer(),
+                                model = model,
+                            )
                         )
-                    )
-                }
+                    },
+                )
             }
 
         @Composable
@@ -247,22 +251,25 @@ class TypeProjector(
         .type
         .typeModel
         .mapWithScope(scope) { scope, model ->
-            when (model) {
-                is TypeModel.Type.Entry -> Type.Entry(
-                    projector = EntryProjector(
-                        scope = scope,
-                        model = model.model,
-                        dependencies = dependencies.entry(),
+            model.fold(
+                ifEntry = { model ->
+                    Type.Entry(
+                        projector = EntryProjector(
+                            scope = scope,
+                            model = model,
+                            dependencies = dependencies.entry(),
+                        )
                     )
-                )
-
-                is TypeModel.Type.Transfer -> Type.Transfer(
-                    projector = TransferProjector(
-                        model = model.model,
-                        dependencies = dependencies.transfer(),
+                },
+                ifTransfer = { model ->
+                    Type.Transfer(
+                        projector = TransferProjector(
+                            model = model,
+                            dependencies = dependencies.transfer(),
+                        )
                     )
-                )
-            }
+                },
+            )
         }
 
     @Composable

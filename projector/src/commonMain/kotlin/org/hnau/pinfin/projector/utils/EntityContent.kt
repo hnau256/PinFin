@@ -169,31 +169,34 @@ private sealed interface IconWithTitleState {
             suffixIcon: ImageVector?,
             title: String,
             viewMode: ViewMode,
-        ): IconWithTitleState = when (viewMode) {
-            ViewMode.Full -> icon.foldNullable(
-                ifNull = { Title(title) },
-                ifNotNull = { icon ->
-                    IconWithTitle(
-                        icon = icon,
-                        suffixIcon = suffixIcon,
-                        title = title,
-                    )
-                }
-            )
-
-            ViewMode.Icon -> icon.foldNullable(
-                ifNotNull = ::Icon,
-                ifNull = {
-                    title
-                        .extractNChars(2)
-                        .takeIf(String::isNotEmpty)
-                        .foldNullable(
-                            ifNull = { Empty },
-                            ifNotNull = ::TitleAsIcon,
+        ): IconWithTitleState = viewMode.fold(
+            ifFull = {
+                icon.foldNullable(
+                    ifNull = { Title(title) },
+                    ifNotNull = { icon ->
+                        IconWithTitle(
+                            icon = icon,
+                            suffixIcon = suffixIcon,
+                            title = title,
                         )
-                }
-            )
-        }
+                    }
+                )
+            },
+            ifIcon = {
+                icon.foldNullable(
+                    ifNotNull = ::Icon,
+                    ifNull = {
+                        title
+                            .extractNChars(2)
+                            .takeIf(String::isNotEmpty)
+                            .foldNullable(
+                                ifNull = { Empty },
+                                ifNotNull = ::TitleAsIcon,
+                            )
+                    }
+                )
+            },
+        )
 
         @Composable
         fun remember(

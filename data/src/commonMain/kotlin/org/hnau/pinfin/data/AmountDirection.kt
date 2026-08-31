@@ -20,10 +20,10 @@ enum class AmountDirection {
     ;
 
     val opposite: AmountDirection
-        get() = when (this) {
-            Credit -> Debit
-            Debit -> Credit
-        }
+        get() = fold(
+            ifCredit = { Debit },
+            ifDebit = { Credit },
+        )
 
     companion object {
 

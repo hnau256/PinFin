@@ -19,6 +19,7 @@ import org.hnau.commons.gen.pipe.annotations.Pipe
 import org.hnau.commons.kotlin.coroutines.ActionOrElse
 import org.hnau.commons.kotlin.coroutines.instant
 import org.hnau.pinfin.model.budget.manage.BudgetManageShareModel
+import org.hnau.pinfin.model.budget.manage.fold
 import org.hnau.pinfin.projector.Localization
 
 class BudgetManageShareProjector(
@@ -42,13 +43,14 @@ class BudgetManageShareProjector(
         scope.Subtable {
             SCell {
                 SPanel(
-                    actionOrElseOrDisabled = when (state) {
-                        is BudgetManageShareModel.State.Closed ->
-                            ActionOrElse.instant(state.openAndCopyCode)
-
-                        is BudgetManageShareModel.State.Opened ->
-                            ActionOrElse.instant(state.copyCode)
-                    },
+                    actionOrElseOrDisabled = state.fold(
+                        ifClosed = { openAndCopyCode ->
+                            ActionOrElse.instant(openAndCopyCode)
+                        },
+                        ifOpened = { _, copyCode ->
+                            ActionOrElse.instant(copyCode)
+                        },
+                    ),
                     importanceToActivate = null,
                 ) {
                     state
@@ -59,34 +61,37 @@ class BudgetManageShareProjector(
                                 showAlignment = Alignment.BottomCenter,
                             )
                         ) { state ->
-                            when (state) {
-                                is BudgetManageShareModel.State.Closed -> SItem(
-                                    startAccessory = {
-                                        SIcon(Drawable.Vector(Icons.Default.Share))
-                                    },
-                                ) {
-                                    SText(
-                                        dependencies.localization.shareBudget
-                                    )
-                                }
-
-                                is BudgetManageShareModel.State.Opened -> SItem(
-                                    topAccessory = {
-                                        SText(dependencies.localization.shareBudget)
-                                    },
-                                    startAccessory = {
-                                        SIcon(Drawable.Vector(Icons.Default.Share))
-                                    },
-                                    endAccessory = {
-                                        SIcon(Drawable.Vector(Icons.Default.ContentCopy))
-                                    },
-                                    bottomAccessory = {
-                                        SText(dependencies.localization.shareBudgetInfo)
-                                    },
-                                ) {
-                                    SText(state.code.collectAsState().value)
-                                }
-                            }
+                            state.fold(
+                                ifClosed = { _ ->
+                                    SItem(
+                                        startAccessory = {
+                                            SIcon(Drawable.Vector(Icons.Default.Share))
+                                        },
+                                    ) {
+                                        SText(
+                                            dependencies.localization.shareBudget
+                                        )
+                                    }
+                                },
+                                ifOpened = { code, _ ->
+                                    SItem(
+                                        topAccessory = {
+                                            SText(dependencies.localization.shareBudget)
+                                        },
+                                        startAccessory = {
+                                            SIcon(Drawable.Vector(Icons.Default.Share))
+                                        },
+                                        endAccessory = {
+                                            SIcon(Drawable.Vector(Icons.Default.ContentCopy))
+                                        },
+                                        bottomAccessory = {
+                                            SText(dependencies.localization.shareBudgetInfo)
+                                        },
+                                    ) {
+                                        SText(code.collectAsState().value)
+                                    }
+                                },
+                            )
                         }
                 }
             }

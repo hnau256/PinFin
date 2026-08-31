@@ -34,6 +34,7 @@ import org.hnau.commons.app.projector.utils.collectAsTextFieldValueMutableAccess
 import org.hnau.commons.app.projector.utils.horizontalDisplayPadding
 import org.hnau.commons.gen.pipe.annotations.Pipe
 import org.hnau.pinfin.model.transaction.utils.ChooseOrCreateModel
+import org.hnau.pinfin.model.transaction.utils.fold
 import org.hnau.pinfin.projector.Localization
 import org.hnau.pinfin.projector.utils.LabelDefaults
 
@@ -116,31 +117,35 @@ class ChooseOrCreateProjector<T>(
                 modifier = modifier,
                 label = "ChooseOrCreateFiltered",
                 contentKey = { filteredLocal ->
-                    when (filteredLocal) {
-                        ChooseOrCreateModel.State.Filtered.NothingToFilter -> 0
-                        is ChooseOrCreateModel.State.Filtered.Items<T> -> 1
-                        ChooseOrCreateModel.State.Filtered.AllAreExcluded -> 2
-                    }
+                    filteredLocal.fold(
+                        ifNothingToFilter = { 0 },
+                        ifItems = { _ -> 1 },
+                        ifAllAreExcluded = { 2 },
+                    )
                 },
                 transitionSpec = TransitionSpec.remember(
                     showAlignment = Alignment.BottomCenter,
                 ),
             ) { filteredLocal ->
-                when (filteredLocal) {
-                    ChooseOrCreateModel.State.Filtered.NothingToFilter -> Message(
-                        message = messages.noVariants,
-                        color = MaterialTheme.colorScheme.onSurface,
-                    )
-
-                    is ChooseOrCreateModel.State.Filtered.Items<T> -> ChipsFlowRow(
-                        all = filteredLocal.items,
-                    ) { item -> item.Content() }
-
-                    ChooseOrCreateModel.State.Filtered.AllAreExcluded -> Message(
-                        message = messages.notFound,
-                        color = MaterialTheme.colorScheme.error,
-                    )
-                }
+                filteredLocal.fold(
+                    ifNothingToFilter = {
+                        Message(
+                            message = messages.noVariants,
+                            color = MaterialTheme.colorScheme.onSurface,
+                        )
+                    },
+                    ifItems = { items ->
+                        ChipsFlowRow(
+                            all = items,
+                        ) { item -> item.Content() }
+                    },
+                    ifAllAreExcluded = {
+                        Message(
+                            message = messages.notFound,
+                            color = MaterialTheme.colorScheme.error,
+                        )
+                    },
+                )
             }
     }
 
@@ -219,11 +224,11 @@ class ChooseOrCreateProjector<T>(
         )
         val state by model.state.collectAsState()
         val requestFocus = remember(state) {
-            when (state.filtered) {
-                is ChooseOrCreateModel.State.Filtered.Items<T> -> false
-                ChooseOrCreateModel.State.Filtered.AllAreExcluded,
-                ChooseOrCreateModel.State.Filtered.NothingToFilter -> true
-            }
+            state.filtered.fold(
+                ifItems = { _ -> false },
+                ifAllAreExcluded = { true },
+                ifNothingToFilter = { true },
+            )
         }
         LaunchedEffect(focusRequester, requestFocus) {
             if (requestFocus) {

@@ -141,15 +141,18 @@ class FilterModel(
             selectedTabOrNull?.let { selectedTab ->
                 Config(
                     type = selectedTab.mapState(scope) { tab ->
-                        val model = when (tab) {
-                            Tab.SelectedCategories -> Config.Type.Categories(
-                                categories.createPage(),
-                            )
-
-                            Tab.SelectedAccounts -> Config.Type.Accounts(
-                                accounts.createPage(),
-                            )
-                        }
+                        val model = tab.fold(
+                            ifSelectedCategories = {
+                                Config.Type.Categories(
+                                    categories.createPage(),
+                                )
+                            },
+                            ifSelectedAccounts = {
+                                Config.Type.Accounts(
+                                    accounts.createPage(),
+                                )
+                            },
+                        )
                         tab to model
                     },
                     categories = categories,

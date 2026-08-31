@@ -210,23 +210,27 @@ class TransferModel(
         page = skeleton
             .part
             .mapWithScope(scope) { scope, part ->
-                when (part) {
-                    Part.From -> PageType.From(
-                        model = from.createPage(
-                            scope = scope,
-                        ),
-                    )
-
-                    Part.To -> PageType.To(
-                        model = to.createPage(
-                            scope = scope,
-                        ),
-                    )
-
-                    Part.Amount -> PageType.Amount(
-                        model = amount.createPage(),
-                    )
-                }
+                part.fold(
+                    ifFrom = {
+                        PageType.From(
+                            model = from.createPage(
+                                scope = scope,
+                            ),
+                        )
+                    },
+                    ifTo = {
+                        PageType.To(
+                            model = to.createPage(
+                                scope = scope,
+                            ),
+                        )
+                    },
+                    ifAmount = {
+                        PageType.Amount(
+                            model = amount.createPage(),
+                        )
+                    },
+                )
             },
     )
 
@@ -257,10 +261,10 @@ class TransferModel(
     val goBackHandler: GoBackHandler = skeleton
         .part
         .flatMapState(scope) { part ->
-            when (part) {
-                Part.From -> from.goBackHandler
-                Part.To -> to.goBackHandler
-                Part.Amount -> amount.goBackHandler
-            }
+            part.fold(
+                ifFrom = { from.goBackHandler },
+                ifTo = { to.goBackHandler },
+                ifAmount = { amount.goBackHandler },
+            )
         }
 }

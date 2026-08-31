@@ -16,6 +16,7 @@ import org.hnau.pinfin.data.Currency
 import org.hnau.pinfin.model.utils.budget.state.AccountInfo
 import org.hnau.pinfin.model.utils.budget.state.CategoryInfo
 import org.hnau.pinfin.model.utils.budget.state.TransactionInfo
+import org.hnau.pinfin.model.utils.budget.state.fold
 
 data class AnalyticsEntry(
     val idWithAccount: KeyValue<AccountId, AccountInfo>,
@@ -38,34 +39,34 @@ fun TransactionInfo.toAnalyticsEntries(
     currency: Currency,
 ): NonEmptyList<AnalyticsEntry> {
     val date = timestamp.toLocalDateTime(TimeZone.currentSystemDefault()).date
-    return when (val type = type) {
-        is TransactionInfo.Type.Transfer -> run {
-            val amount: Amount = type.amount.toAmount(currency.scale)
+    return type.fold(
+        ifTransfer = { from, to, amountExpression ->
+            val amount: Amount = amountExpression.toAmount(currency.scale)
             nonEmptyListOf(
                 AnalyticsEntry(
-                    idWithAccount = type.from,
+                    idWithAccount = from,
                     idWithCategoryOrDirection = Either.Left(AmountDirection.Debit),
                     amount = amount,
                     date = date,
                 ),
                 AnalyticsEntry(
-                    idWithAccount = type.to,
+                    idWithAccount = to,
                     idWithCategoryOrDirection = Either.Left(AmountDirection.Credit),
                     amount = amount,
                     date = date,
                 )
             )
-        }
-
-        is TransactionInfo.Type.Entry -> type
-            .records
-            .map { record ->
-                AnalyticsEntry(
-                    idWithAccount = type.idWithAccount,
-                    idWithCategoryOrDirection = Either.Right(record.idWithCategory),
-                    amount = record.amount.toAmount(currency.scale),
-                    date = date,
-                )
-            }
-    }
+        },
+        ifEntry = { idWithAccount, records ->
+            records
+                .map { record ->
+                    AnalyticsEntry(
+                        idWithAccount = idWithAccount,
+                        idWithCategoryOrDirection = Either.Right(record.idWithCategory),
+                        amount = record.amount.toAmount(currency.scale),
+                        date = date,
+                    )
+                }
+        },
+    )
 }

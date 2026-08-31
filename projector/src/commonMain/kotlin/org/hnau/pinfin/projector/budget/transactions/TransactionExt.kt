@@ -33,6 +33,7 @@ import org.hnau.pinfin.data.Currency
 import org.hnau.pinfin.data.sum
 import org.hnau.pinfin.model.utils.budget.state.TransactionInfo
 import org.hnau.pinfin.model.utils.budget.state.fold
+import org.hnau.pinfin.model.utils.budget.state.foldRaw
 import org.hnau.pinfin.projector.utils.AccountContent
 import org.hnau.pinfin.projector.utils.AmountContent
 import org.hnau.pinfin.projector.utils.ArrowDirection
@@ -89,17 +90,20 @@ fun TransactionInfo.CellContent(
             TimestampContent(
                 dependencies = dependencies,
             )
-            when (val type = type) {
-                is TransactionInfo.Type.Entry -> EntryContent(
-                    entry = type,
-                    dependencies = dependencies,
-                )
-
-                is TransactionInfo.Type.Transfer -> TransferContent(
-                    transfer = type,
-                    dependencies = dependencies,
-                )
-            }
+            type.foldRaw(
+                ifEntry = { variant ->
+                    EntryContent(
+                        entry = variant,
+                        dependencies = dependencies,
+                    )
+                },
+                ifTransfer = { variant ->
+                    TransferContent(
+                        transfer = variant,
+                        dependencies = dependencies,
+                    )
+                },
+            )
             CommentContent()
         }
 
@@ -150,16 +154,17 @@ private fun TransactionInfo.TimestampContent(
 private fun TransactionInfo.CommentContent() {
     val primary = comment.text.takeIf(String::isNotEmpty)
     val secondary = remember(type) {
-        when (val type = type) {
-            is TransactionInfo.Type.Transfer -> null
-            is TransactionInfo.Type.Entry -> type
-                .records
-                .mapNotNull { record ->
-                    record.comment.text.takeIf(String::isNotEmpty)
-                }
-                .toNonEmptyListOrNull()
-                ?.joinToString(separator = ", ")
-        }
+        type.fold(
+            ifTransfer = { _, _, _ -> null },
+            ifEntry = { _, records ->
+                records
+                    .mapNotNull { record ->
+                        record.comment.text.takeIf(String::isNotEmpty)
+                    }
+                    .toNonEmptyListOrNull()
+                    ?.joinToString(separator = ", ")
+            },
+        )
     }
     val comment = remember(primary, secondary) {
         listOfNotNull(

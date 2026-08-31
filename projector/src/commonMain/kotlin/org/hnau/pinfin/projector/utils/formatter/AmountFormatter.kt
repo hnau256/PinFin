@@ -8,6 +8,7 @@ import org.hnau.commons.kotlin.mapFirst
 import org.hnau.commons.kotlin.mapSecond
 import org.hnau.pinfin.data.Amount
 import org.hnau.pinfin.data.AmountDirection
+import org.hnau.pinfin.data.fold
 
 interface AmountFormatter {
     fun format(
@@ -64,13 +65,15 @@ interface AmountFormatter {
                         .filterNotNull()
                         .joinToString(".")
 
-                    return when (direction) {
-                        AmountDirection.Debit -> "-${absoluteString}"
-                        AmountDirection.Credit -> alwaysShowSign.foldBoolean(
-                            ifTrue = { "+${absoluteString}" },
-                            ifFalse = { absoluteString }
-                        )
-                    }
+                    return direction.fold(
+                        ifDebit = { "-${absoluteString}" },
+                        ifCredit = {
+                            alwaysShowSign.foldBoolean(
+                                ifTrue = { "+${absoluteString}" },
+                                ifFalse = { absoluteString }
+                            )
+                        },
+                    )
                 }
 
                 override fun parse(input: String): Amount? =

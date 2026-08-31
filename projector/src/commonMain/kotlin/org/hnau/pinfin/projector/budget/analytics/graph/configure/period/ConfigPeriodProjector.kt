@@ -13,6 +13,7 @@ import org.hnau.commons.gen.pipe.annotations.Pipe
 import org.hnau.pinfin.model.budget.analytics.tab.graph.configure.period.ConfigPeriodModel
 import org.hnau.pinfin.model.budget.analytics.tab.graph.configure.period.PeriodPart
 import org.hnau.pinfin.model.budget.analytics.tab.graph.configure.period.PeriodParts
+import org.hnau.pinfin.model.budget.analytics.tab.graph.configure.period.fold
 import org.hnau.pinfin.projector.Localization
 
 class ConfigPeriodProjector(
@@ -29,11 +30,11 @@ class ConfigPeriodProjector(
     private val parts: PeriodParts<NonNegativeCountProjector> = model.parts.map { part, count ->
         NonNegativeCountProjector(
             model = count,
-            title = when (part) {
-                PeriodPart.Years -> dependencies.localization.years
-                PeriodPart.Months -> dependencies.localization.month
-                PeriodPart.Days -> dependencies.localization.days
-            }
+            title = part.fold(
+                ifYears = { dependencies.localization.years },
+                ifMonths = { dependencies.localization.month },
+                ifDays = { dependencies.localization.days },
+            )
         )
     }
 
