@@ -45,6 +45,7 @@ class RecordModel(
     private val remove: StateFlow<(() -> Unit)?>,
 ) {
 
+    @Fold
     enum class Part {
 
         Comment, Category, Amount;

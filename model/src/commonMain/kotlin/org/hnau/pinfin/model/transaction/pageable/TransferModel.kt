@@ -37,6 +37,7 @@ class TransferModel(
     private val goForward: () -> Unit,
 ) {
 
+    @Fold
     enum class Part {
 
         From, To, Amount;

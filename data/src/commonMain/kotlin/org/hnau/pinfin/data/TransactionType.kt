@@ -2,7 +2,9 @@ package org.hnau.pinfin.data
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import org.hnau.commons.gen.fold.annotations.Fold
 
+@Fold
 @Serializable
 enum class TransactionType {
 

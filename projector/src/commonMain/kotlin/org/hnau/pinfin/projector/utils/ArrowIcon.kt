@@ -8,6 +8,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.unit.LayoutDirection
+import org.hnau.commons.gen.fold.annotations.Fold
 
 object ArrowIcon {
 
@@ -47,4 +48,5 @@ object ArrowIcon {
 
 }
 
+@Fold
 enum class ArrowDirection { StartToEnd, EndToStart, Both }

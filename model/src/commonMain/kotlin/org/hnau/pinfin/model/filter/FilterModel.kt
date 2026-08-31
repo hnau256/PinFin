@@ -38,6 +38,7 @@ class FilterModel(
         fun accounts(): SelectAccountsModel.Dependencies
     }
 
+    @Fold
     enum class Tab {
         SelectedCategories,
         SelectedAccounts;

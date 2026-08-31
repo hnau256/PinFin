@@ -47,6 +47,7 @@ class TransactionModel(
     private val onReady: () -> Unit,
 ) {
 
+    @Fold
     enum class Part {
 
         Date, Time, Comment, Type;

@@ -12,12 +12,14 @@ import androidx.compose.ui.text.style.TextAlign
 import org.hnau.commons.app.projector.uikit.ItemsRow
 import org.hnau.commons.app.projector.utils.Icon
 import org.hnau.commons.app.projector.utils.SwitchHue
+import org.hnau.commons.gen.fold.annotations.Fold
 import org.hnau.commons.kotlin.foldNullable
 import org.hnau.commons.kotlin.mapper.Mapper
 import org.hnau.pinfin.data.Hue
 import org.hnau.pinfin.model.utils.modelHueToHue
 
 
+@Fold
 enum class ViewMode {
     Full, Icon;
 

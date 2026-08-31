@@ -23,6 +23,7 @@ data class AnalyticsSplitConfig(
     val groupBy: GroupBy?,
 ) {
 
+    @Fold
     enum class GroupBy { Account, Category }
 
     @Fold

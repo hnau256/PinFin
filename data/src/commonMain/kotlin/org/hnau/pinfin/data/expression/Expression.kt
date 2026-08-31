@@ -15,6 +15,7 @@ sealed interface Expression {
         val type: Type,
     ) : Expression {
 
+        @Fold
         enum class Type { Minus }
     }
 
@@ -25,6 +26,7 @@ sealed interface Expression {
         val type: Type,
     ) : Expression {
 
+        @Fold
         enum class Type { Minus, Plus, Times, Divide }
     }
 

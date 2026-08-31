@@ -12,6 +12,7 @@ import kotlinx.serialization.Serializable
 import kotlinx.serialization.UseSerializers
 import org.hnau.commons.app.model.utils.Editable
 import org.hnau.commons.app.model.utils.flatMap
+import org.hnau.commons.gen.fold.annotations.Fold
 import org.hnau.commons.kotlin.coroutines.flow.state.flatMapWithScope
 import org.hnau.commons.kotlin.coroutines.flow.state.mapState
 import org.hnau.commons.kotlin.coroutines.flow.state.mapWithScope
@@ -27,6 +28,7 @@ class ConfigOperationModel(
     private val skeleton: Skeleton,
 ) {
 
+    @Fold
     enum class Tab { Sum, Average }
 
     @Serializable

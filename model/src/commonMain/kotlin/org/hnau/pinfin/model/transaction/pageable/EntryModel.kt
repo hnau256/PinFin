@@ -39,6 +39,7 @@ class EntryModel(
     private val goForward: () -> Unit,
 ) {
 
+    @Fold
     enum class Part {
 
         Records, Account;
