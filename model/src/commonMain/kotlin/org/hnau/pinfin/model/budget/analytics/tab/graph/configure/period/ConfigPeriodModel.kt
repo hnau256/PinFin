@@ -5,7 +5,8 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.datetime.DatePeriod
 import kotlinx.serialization.Serializable
 import org.hnau.commons.app.model.utils.Editable
-import org.hnau.commons.app.model.utils.combineEditableWith
+import org.hnau.commons.app.model.utils.editable
+import org.hnau.commons.kotlin.coroutines.flow.state.derivedStateFlowOf
 
 class ConfigPeriodModel(
     scope: CoroutineScope,
@@ -44,27 +45,13 @@ class ConfigPeriodModel(
             )
         }
 
-    internal val periodEditable: StateFlow<Editable<DatePeriod>> = parts
-        .map(NonNegativeCountModel::countEditable)
-        .let { parts ->
-            parts
-                .years
-                .combineEditableWith(
-                    scope = scope,
-                    other = parts.months,
-                ) { years, months ->
-                    years to months
-                }
-                .combineEditableWith(
-                    scope = scope,
-                    other = parts.days,
-                ) { (years, months), days ->
-                    //TODO validate is not zero
-                    DatePeriod(
-                        years = years,
-                        months = months,
-                        days = days,
-                    )
-                }
+    internal val periodEditable: StateFlow<Editable<DatePeriod>> = derivedStateFlowOf(scope) {
+        editable {
+            DatePeriod(
+                years = parts.years.countEditable.state.bind(),
+                months = parts.months.countEditable.state.bind(),
+                days = parts.days.countEditable.state.bind(),
+            )
         }
+    }
 }

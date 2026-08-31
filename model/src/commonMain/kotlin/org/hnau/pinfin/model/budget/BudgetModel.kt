@@ -13,7 +13,7 @@ import org.hnau.commons.app.model.goback.GoBackHandler
 import org.hnau.commons.gen.pipe.annotations.Pipe
 import org.hnau.commons.gen.sealup.annotations.SealUp
 import org.hnau.commons.gen.sealup.annotations.Variant
-import org.hnau.commons.kotlin.coroutines.flow.state.flatMapWithScope
+import org.hnau.commons.kotlin.coroutines.flow.state.derivedStateFlowOf
 import org.hnau.commons.kotlin.coroutines.flow.state.mapState
 import org.hnau.commons.kotlin.coroutines.flow.state.mutable.toMutableStateFlowAsInitial
 import org.hnau.commons.kotlin.ifNull
@@ -166,16 +166,13 @@ class BudgetModel(
     val currentModel: StateFlow<BudgetPageModel> = currentModelWithTab
         .mapState(scope, Pair<*, BudgetPageModel>::second)
 
-    val goBackHandler: GoBackHandler = currentModelWithTab
-        .flatMapWithScope(scope) { scope, (tab, model) ->
-            model.goBackHandler.mapState(scope) { modelGoBackOrNull ->
-                modelGoBackOrNull.ifNull {
-                    tab.takeIf { it != BudgetTab.default }?.let {
-                        { skeleton.selectedTab.value = BudgetTab.default }
-                    }
-                }
+    val goBackHandler: GoBackHandler = derivedStateFlowOf(scope) {
+        val (tab, model) = currentModelWithTab.state
+        model.goBackHandler.state
+            ?: tab.takeIf { it != BudgetTab.default }?.let {
+                { skeleton.selectedTab.value = BudgetTab.default }
             }
-        }
+    }
 }
 
 val BudgetPageModel.tab: BudgetTab

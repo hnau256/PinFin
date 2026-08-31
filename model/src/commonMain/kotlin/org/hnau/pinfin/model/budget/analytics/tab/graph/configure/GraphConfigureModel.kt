@@ -6,8 +6,8 @@ import kotlinx.serialization.Serializable
 import org.hnau.commons.app.model.goback.GoBackHandler
 import org.hnau.commons.app.model.goback.NeverGoBackHandler
 import org.hnau.commons.app.model.utils.Editable
-import org.hnau.commons.app.model.utils.combineEditableWith
-import org.hnau.commons.app.model.utils.map
+import org.hnau.commons.app.model.utils.editable
+import org.hnau.commons.kotlin.coroutines.flow.state.derivedStateFlowOf
 import org.hnau.commons.kotlin.coroutines.flow.state.mapState
 import org.hnau.commons.kotlin.foldBoolean
 import org.hnau.pinfin.model.budget.analytics.tab.graph.configure.period.operation.ConfigOperationModel
@@ -42,26 +42,20 @@ class GraphConfigureModel(
         skeleton = skeleton.operation,
     )
 
-    private val editableConfig: StateFlow<Editable<AnalyticsConfig>> = period
-        .editablePeriod
-        .combineEditableWith(
-            scope = scope,
-            other = operation.editableOperation,
-        ) { period, operation ->
-            period to operation
+    private val editableConfig: StateFlow<Editable<AnalyticsConfig>> = derivedStateFlowOf(scope) {
+        editable {
+            val period = period.editablePeriod.state.bind()
+            val operation = operation.editableOperation.state.bind()
+            skeleton.initial.copy(
+                split = skeleton.initial.split.copy(
+                    period = period,
+                ),
+                page = skeleton.initial.page.copy(
+                    operation = operation,
+                ),
+            )
         }
-        .mapState(scope) { editablePeriodAndOperation ->
-            editablePeriodAndOperation.map { (period, operation) ->
-                skeleton.initial.copy(
-                    split = skeleton.initial.split.copy(
-                        period = period,
-                    ),
-                    page = skeleton.initial.page.copy(
-                        operation = operation,
-                    )
-                )
-            }
-        }
+    }
 
     val save: StateFlow<(() -> Unit)?> = editableConfig.mapState(scope) { editableConfig ->
         when (editableConfig) {

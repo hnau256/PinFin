@@ -11,10 +11,11 @@ import kotlinx.serialization.Serializable
 import kotlinx.serialization.UseSerializers
 import org.hnau.commons.app.model.goback.GoBackHandler
 import org.hnau.commons.app.model.utils.Editable
-import org.hnau.commons.app.model.utils.combineEditableWith
+import org.hnau.commons.app.model.utils.editable
 import org.hnau.commons.gen.fold.annotations.Fold
 import org.hnau.commons.gen.pipe.annotations.Pipe
 import org.hnau.commons.kotlin.KeyValue
+import org.hnau.commons.kotlin.coroutines.flow.state.derivedStateFlowOf
 import org.hnau.commons.kotlin.coroutines.flow.state.flatMapState
 import org.hnau.commons.kotlin.coroutines.flow.state.flatMapWithScope
 import org.hnau.commons.kotlin.coroutines.flow.state.mapState
@@ -234,23 +235,15 @@ class TransferModel(
             },
     )
 
-    internal val transfer: StateFlow<Editable<TransactionInfo.Type.Transfer>> = from
-        .accountEditable
-        .combineEditableWith(
-            scope = scope,
-            other = to.accountEditable,
-            combine = ::Pair,
-        )
-        .combineEditableWith(
-            scope = scope,
-            other = amount.amountEditable,
-        ) { (from, to), amount ->
+    internal val transfer: StateFlow<Editable<TransactionInfo.Type.Transfer>> = derivedStateFlowOf(scope) {
+        editable {
             TransactionInfo.Type.Transfer(
-                to = to,
-                from = from,
-                amount = amount,
+                to = to.accountEditable.state.bind(),
+                from = from.accountEditable.state.bind(),
+                amount = amount.amountEditable.state.bind(),
             )
         }
+    }
 
     private fun Part.shift(
         offset: Int,
@@ -258,13 +251,12 @@ class TransferModel(
         .entries
         .getOrNull(ordinal + offset)
 
-    val goBackHandler: GoBackHandler = skeleton
-        .part
-        .flatMapState(scope) { part ->
-            part.fold(
-                ifFrom = { from.goBackHandler },
-                ifTo = { to.goBackHandler },
-                ifAmount = { amount.goBackHandler },
-            )
-        }
+    val goBackHandler: GoBackHandler = derivedStateFlowOf(scope) {
+        val currentPart = skeleton.part.state
+        currentPart.fold(
+            ifFrom = { from.goBackHandler },
+            ifTo = { to.goBackHandler },
+            ifAmount = { amount.goBackHandler },
+        ).state
+    }
 }

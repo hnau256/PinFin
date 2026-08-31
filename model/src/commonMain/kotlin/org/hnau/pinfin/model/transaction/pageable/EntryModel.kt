@@ -11,10 +11,11 @@ import kotlinx.serialization.Serializable
 import kotlinx.serialization.UseSerializers
 import org.hnau.commons.app.model.goback.GoBackHandler
 import org.hnau.commons.app.model.utils.Editable
-import org.hnau.commons.app.model.utils.combineEditableWith
+import org.hnau.commons.app.model.utils.editable
 import org.hnau.commons.gen.fold.annotations.Fold
 import org.hnau.commons.gen.pipe.annotations.Pipe
 import org.hnau.commons.kotlin.KeyValue
+import org.hnau.commons.kotlin.coroutines.flow.state.derivedStateFlowOf
 import org.hnau.commons.kotlin.coroutines.flow.state.flatMapState
 import org.hnau.commons.kotlin.coroutines.flow.state.flatMapWithScope
 import org.hnau.commons.kotlin.coroutines.flow.state.mapState
@@ -208,14 +209,13 @@ class EntryModel(
     )
 
     internal val entry: StateFlow<Editable<TransactionInfo.Type.Entry>> =
-        records.records.combineEditableWith(
-            scope = scope,
-            other = account.accountEditable,
-        ) { records, account ->
-            TransactionInfo.Type.Entry(
-                records = records,
-                idWithAccount = account,
-            )
+        derivedStateFlowOf(scope) {
+            editable {
+                TransactionInfo.Type.Entry(
+                    records = records.records.state.bind(),
+                    idWithAccount = account.accountEditable.state.bind(),
+                )
+            }
         }
 
     val amountOrZero: StateFlow<KeyValue<AmountDirection, Amount>>
@@ -227,12 +227,11 @@ class EntryModel(
         .entries
         .getOrNull(ordinal + offset)
 
-    val goBackHandler: GoBackHandler = skeleton
-        .part
-        .flatMapWithScope(scope) { scope, part ->
-            part.fold(
-                ifAccount = { account.goBackHandler },
-                ifRecords = { records.goBackHandler },
-            )
-        }
+    val goBackHandler: GoBackHandler = derivedStateFlowOf(scope) {
+        val currentPart = skeleton.part.state
+        currentPart.fold(
+            ifAccount = { account.goBackHandler },
+            ifRecords = { records.goBackHandler },
+        ).state
+    }
 }

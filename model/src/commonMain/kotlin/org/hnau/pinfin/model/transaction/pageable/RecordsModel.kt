@@ -18,13 +18,14 @@ import kotlinx.serialization.Serializable
 import kotlinx.serialization.UseSerializers
 import org.hnau.commons.app.model.goback.GoBackHandler
 import org.hnau.commons.app.model.utils.Editable
-import org.hnau.commons.app.model.utils.combineEditableWith
+import org.hnau.commons.app.model.utils.editable
 import org.hnau.commons.app.model.utils.map
 import org.hnau.commons.gen.pipe.annotations.Pipe
 import org.hnau.commons.kotlin.KeyValue
 import org.hnau.commons.kotlin.ZipList
 import org.hnau.commons.kotlin.coroutines.flow.state.combineState
 import org.hnau.commons.kotlin.coroutines.flow.state.combineStateWith
+import org.hnau.commons.kotlin.coroutines.flow.state.derivedStateFlowOf
 import org.hnau.commons.kotlin.coroutines.flow.state.flatMapState
 import org.hnau.commons.kotlin.coroutines.flow.state.flatMapWithScope
 import org.hnau.commons.kotlin.coroutines.flow.state.mapReusable
@@ -289,10 +290,8 @@ class RecordsModel(
                             .head
                             .record
                             .mapState(scope) { headRecordOrNull ->
-                                recordsOrIncorrect.combineEditableWith(
-                                    other = headRecordOrNull,
-                                ) { acc, record ->
-                                    acc + record
+                                editable {
+                                    recordsOrIncorrect.bind() + headRecordOrNull.bind()
                                 }
                             }
                             .add(
@@ -304,26 +303,12 @@ class RecordsModel(
             }
         )
 
-    val goBackHandler: GoBackHandler = items.flatMapWithScope(scope) { scope, items ->
-        items
-            .selected
-            .model
-            .goBackHandler
-            .flatMapWithScope(scope) { scope, recordGoBackOrNull ->
-                recordGoBackOrNull.foldNullable(
-                    ifNotNull = { it.toMutableStateFlowAsInitial() },
-                    ifNull = {
-                        skeleton
-                            .records
-                            .mapState(scope) { records ->
-                                records
-                                    .back()
-                                    ?.let { newRecords ->
-                                        { skeleton.records.value = newRecords }
-                                    }
-                            }
-                    }
-                )
-            }
+    val goBackHandler: GoBackHandler = derivedStateFlowOf(scope) {
+        items.state.selected.model.goBackHandler.state
+            ?: skeleton.records.state
+                .back()
+                ?.let { newRecords ->
+                    { skeleton.records.value = newRecords }
+                }
     }
 }

@@ -2,9 +2,11 @@ package org.hnau.pinfin.data
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import org.hnau.commons.gen.enumvalues.annotations.EnumValues
 import org.hnau.commons.gen.fold.annotations.Fold
 
 @Fold
+@EnumValues(serializable = true)
 @Serializable
 enum class TransactionType {
 
@@ -18,21 +20,4 @@ enum class TransactionType {
 
         val default = Entry
     }
-}
-
-@Serializable
-data class TransactionTypeValues<out T>(
-    @SerialName("entry")
-    val entry: T,
-
-    @SerialName("transfer")
-    val transfer: T,
-) {
-
-    operator fun get(
-        type: TransactionType,
-    ): T = type.fold(
-        ifEntry = { entry },
-        ifTransfer = { transfer },
-    )
 }

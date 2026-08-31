@@ -17,11 +17,9 @@ import org.hnau.commons.app.model.goback.GoBackHandler
 import org.hnau.commons.gen.pipe.annotations.Pipe
 import org.hnau.commons.gen.sealup.annotations.SealUp
 import org.hnau.commons.gen.sealup.annotations.Variant
-import org.hnau.commons.kotlin.coroutines.flow.state.flatMapState
-import org.hnau.commons.kotlin.coroutines.flow.state.mapState
+import org.hnau.commons.kotlin.coroutines.flow.state.derivedStateFlowOf
 import org.hnau.commons.kotlin.coroutines.flow.state.mapWithScope
 import org.hnau.commons.kotlin.coroutines.flow.state.mutable.toMutableStateFlowAsInitial
-import org.hnau.commons.kotlin.foldNullable
 import org.hnau.commons.kotlin.serialization.MutableStateFlowSerializer
 import org.hnau.pinfin.model.budget.analytics.tab.graph.configure.GraphConfigureModel
 import org.hnau.pinfin.model.budget.analytics.tab.graph.configured.GraphConfigFlowModel
@@ -140,26 +138,13 @@ class GraphModel(
         skeleton.state.value = newState
     }
 
-    val goBackHandler: GoBackHandler = state
-        .flatMapState(
-            scope = scope,
-            transform = GraphStateModel::goBackHandler,
-        )
-        .flatMapState(scope) { goBackOrNull: (() -> Unit)? ->
-            goBackOrNull.foldNullable(
-                ifNotNull = { it.toMutableStateFlowAsInitial() },
-                ifNull = {
-                    skeleton
-                        .state
-                        .mapState(scope) { state ->
-                            state.fold(
-                                ifConfigured = { null },
-                                ifConfigure = { ::switchToConfigured },
-                            )
-                        }
-                },
+    val goBackHandler: GoBackHandler = derivedStateFlowOf(scope) {
+        state.state.goBackHandler.state
+            ?: skeleton.state.state.fold(
+                ifConfigured = { null },
+                ifConfigure = { ::switchToConfigured },
             )
-        }
+    }
 
     companion object {
 

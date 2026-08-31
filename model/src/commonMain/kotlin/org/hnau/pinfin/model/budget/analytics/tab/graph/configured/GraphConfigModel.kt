@@ -10,8 +10,7 @@ import org.hnau.commons.app.model.goback.GoBackHandler
 import org.hnau.commons.gen.pipe.annotations.Pipe
 import org.hnau.commons.kotlin.Loadable
 import org.hnau.commons.kotlin.coroutines.Delayed
-import org.hnau.commons.kotlin.coroutines.flow.state.flatMapState
-import org.hnau.commons.kotlin.coroutines.flow.state.mutable.toMutableStateFlowAsInitial
+import org.hnau.commons.kotlin.coroutines.flow.state.derivedStateFlowOf
 import org.hnau.commons.kotlin.coroutines.flow.state.scopedInState
 import org.hnau.commons.kotlin.coroutines.mapStateDelayed
 import org.hnau.commons.kotlin.fold
@@ -98,11 +97,11 @@ class GraphConfigModel(
         value = config,
     )
 
-    val goBackHandler: GoBackHandler = pages.flatMapState(scope) { pagesOrLoading ->
-        pagesOrLoading.fold(
-            ifLoading = { null.toMutableStateFlowAsInitial() },
+    val goBackHandler: GoBackHandler = derivedStateFlowOf(scope) {
+        pages.state.fold(
+            ifLoading = { null },
             ifReady = { delayedPages ->
-                delayedPages.value.goBackHandler
+                delayedPages.value.goBackHandler.state
             }
         )
     }

@@ -18,8 +18,9 @@ import org.hnau.commons.app.model.input.factory.toInputModelFactory
 import org.hnau.commons.app.model.input.parser.ParsingMapper
 import org.hnau.commons.app.model.input.parser.createValidator
 import org.hnau.commons.app.model.utils.ModelSavableDelegate
-import org.hnau.commons.app.model.utils.combineEditableWith
+import org.hnau.commons.app.model.utils.editable
 import org.hnau.commons.gen.pipe.annotations.Pipe
+import org.hnau.commons.kotlin.coroutines.flow.state.derivedStateFlowOf
 import org.hnau.commons.kotlin.foldNullable
 import org.hnau.pinfin.data.BudgetConfig
 import org.hnau.pinfin.data.Currency
@@ -159,45 +160,22 @@ class BudgetSettingsModel(
 
     val savableDelegate: ModelSavableDelegate<BudgetInfo> = ModelSavableDelegate(
         scope = scope,
-        result = mainTitle.editable
-            .combineEditableWith(
-                scope = scope,
-                other = mainMantissaLength.editable,
-                combine = ::Pair,
-            )
-            .combineEditableWith(
-                scope = scope,
-                other = syncScheme.editable
-                    .combineEditableWith(
-                        scope = scope,
-                        other = syncHost.editable,
-                        combine = ::Pair,
-                    )
-                    .combineEditableWith(
-                        scope = scope,
-                        other = syncOnLaunch.editable,
-                        combine = { a, b -> a + b },
-                    )
-                    .combineEditableWith(
-                        scope = scope,
-                        other = syncOnUpdate.editable,
-                    ) { (scheme, host, syncOnLaunch), syncOnUpdate ->
-                        BudgetInfo.Sync(
-                            scheme = scheme,
-                            host = host,
-                            onLaunch = syncOnLaunch,
-                            onUpdate = syncOnUpdate,
-                        )
-                    }
-            ) { (title, mantissaLength), sync ->
+        result = derivedStateFlowOf(scope) {
+            editable {
                 BudgetInfo(
-                    title = title,
+                    title = mainTitle.editable.state.bind(),
                     currency = Currency(
-                        scale = mantissaLength,
+                        scale = mainMantissaLength.editable.state.bind(),
                     ),
-                    sync = sync,
+                    sync = BudgetInfo.Sync(
+                        scheme = syncScheme.editable.state.bind(),
+                        host = syncHost.editable.state.bind(),
+                        onLaunch = syncOnLaunch.editable.state.bind(),
+                        onUpdate = syncOnUpdate.editable.state.bind(),
+                    ),
                 )
-            },
+            }
+        },
         skeleton = skeleton.savableDelegate,
         modelGoBackHandler = NeverGoBackHandler,
         close = close,

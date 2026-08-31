@@ -12,12 +12,13 @@ import kotlinx.serialization.Serializable
 import kotlinx.serialization.UseSerializers
 import org.hnau.commons.app.model.goback.GoBackHandler
 import org.hnau.commons.app.model.utils.Editable
-import org.hnau.commons.app.model.utils.combineEditableWith
+import org.hnau.commons.app.model.utils.editable
 import org.hnau.commons.app.model.utils.valueOrNone
 import org.hnau.commons.gen.fold.annotations.Fold
 import org.hnau.commons.gen.pipe.annotations.Pipe
 import org.hnau.commons.kotlin.KeyValue
 import org.hnau.commons.kotlin.coroutines.flow.state.combineStateWith
+import org.hnau.commons.kotlin.coroutines.flow.state.derivedStateFlowOf
 import org.hnau.commons.kotlin.coroutines.flow.state.flatMapState
 import org.hnau.commons.kotlin.coroutines.flow.state.flatMapWithScope
 import org.hnau.commons.kotlin.coroutines.flow.state.mapState
@@ -368,23 +369,15 @@ class RecordModel(
             )
         }
 
-    internal val record: StateFlow<Editable<TransactionInfo.Type.Entry.Record>> = comment
-        .commentEditable
-        .combineEditableWith(
-            scope = scope,
-            other = category.categoryEditable,
-            combine = ::Pair,
-        )
-        .combineEditableWith(
-            scope = scope,
-            other = amount.amountEditable,
-        ) { (comment, category), amount ->
+    internal val record: StateFlow<Editable<TransactionInfo.Type.Entry.Record>> = derivedStateFlowOf(scope) {
+        editable {
             TransactionInfo.Type.Entry.Record(
-                amount = amount,
-                comment = comment,
-                idWithCategory = category,
+                amount = amount.amountEditable.state.bind(),
+                comment = comment.commentEditable.state.bind(),
+                idWithCategory = category.categoryEditable.state.bind(),
             )
         }
+    }
 
     private fun Part.shift(
         offset: Int,
@@ -392,17 +385,17 @@ class RecordModel(
         .entries
         .getOrNull(ordinal + offset)
 
-    val goBackHandler: GoBackHandler = part.flatMapWithScope(scope) { scope, part ->
-        part.fold(
+    val goBackHandler: GoBackHandler = derivedStateFlowOf(scope) {
+        val currentPart = part.state
+        currentPart.fold(
             ifComment = { comment.goBackHandler },
             ifCategory = { category.goBackHandler },
             ifAmount = { amount.goBackHandler },
-        ).mapState(scope) { partGoBackOrNull ->
-            partGoBackOrNull ?: part
+        ).state
+            ?: currentPart
                 .shift(-1)
                 ?.let { previousPart ->
                     { switchToPart(previousPart) }
                 }
-        }
     }
 }

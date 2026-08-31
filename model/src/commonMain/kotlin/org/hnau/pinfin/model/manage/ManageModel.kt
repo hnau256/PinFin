@@ -15,7 +15,7 @@ import org.hnau.commons.gen.pipe.annotations.Pipe
 import org.hnau.commons.gen.sealup.annotations.SealUp
 import org.hnau.commons.gen.sealup.annotations.Variant
 import org.hnau.commons.kotlin.KeyValue
-import org.hnau.commons.kotlin.coroutines.flow.state.flatMapState
+import org.hnau.commons.kotlin.coroutines.flow.state.derivedStateFlowOf
 import org.hnau.commons.kotlin.coroutines.flow.state.flatMapWithScope
 import org.hnau.commons.kotlin.coroutines.flow.state.mapState
 import org.hnau.commons.kotlin.coroutines.flow.state.mapWithScope
@@ -177,6 +177,7 @@ class ManageModel(
         }
     }
 
-    val goBackHandler: GoBackHandler = state
-        .flatMapState(scope, ManageStateModel::goBackHandler)
+    val goBackHandler: GoBackHandler = derivedStateFlowOf(scope) {
+        state.state.goBackHandler.state
+    }
 }

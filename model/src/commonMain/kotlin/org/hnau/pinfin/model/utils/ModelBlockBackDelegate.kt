@@ -15,11 +15,9 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.UseSerializers
 import org.hnau.commons.app.model.goback.GoBackHandler
-import org.hnau.commons.app.model.goback.withFallback
-import org.hnau.commons.kotlin.coroutines.flow.state.flatMapWithScope
+import org.hnau.commons.kotlin.coroutines.flow.state.derivedStateFlowOf
 import org.hnau.commons.kotlin.coroutines.flow.state.mapState
 import org.hnau.commons.kotlin.coroutines.flow.state.mutable.toMutableStateFlowAsInitial
-import org.hnau.commons.kotlin.foldNullable
 import org.hnau.commons.kotlin.serialization.MutableStateFlowSerializer
 
 @Deprecated("Move to commons-app-model")
@@ -53,27 +51,12 @@ class ModelBlockBackDelegate<B>(
                 .getOrNull()
         }
 
-    private fun createShowDialogIfNecessaryGoBackHandler(
-        scope: CoroutineScope,
-    ): GoBackHandler = blockReason.mapState(scope) { resultOrNone ->
-        resultOrNone
-            .map { blockReason -> { skeleton.visibleBlockReason.value = blockReason.some() } }
-            .getOrNull()
-    }
-
-    val goBackHandler: GoBackHandler = dialog.flatMapWithScope(
-        scope = scope,
-    ) { scope, stateOrNull ->
-        stateOrNull.foldNullable(
-            ifNotNull = {
-                { skeleton.visibleBlockReason.value = None }.toMutableStateFlowAsInitial()
-            },
-            ifNull = {
-                modelGoBackHandler.withFallback(
-                    scope = scope,
-                    createFallback = ::createShowDialogIfNecessaryGoBackHandler,
-                )
-            },
-        )
+    val goBackHandler: GoBackHandler = derivedStateFlowOf(scope) {
+        dialog.state
+            ?.let { { skeleton.visibleBlockReason.value = None } }
+            ?: modelGoBackHandler.state
+            ?: blockReason.state
+                .map { blockReason -> { skeleton.visibleBlockReason.value = blockReason.some() } }
+                .getOrNull()
     }
 }
