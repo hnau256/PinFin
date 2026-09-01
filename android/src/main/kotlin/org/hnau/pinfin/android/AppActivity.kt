@@ -31,7 +31,6 @@ class AppActivity : ComponentActivity() {
 
     private val viewModel: AppViewModel<RootModel, RootModel.Skeleton> by viewModels {
         AppViewModel.factory(
-            context = applicationContext,
             seed = createPinFinAppSeed(
                 dependencies = PinFinAppDependencies.impl(
                     clipboardAccessor = ClipboardAccessor.createForAndroid(
