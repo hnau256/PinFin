@@ -196,21 +196,17 @@ class GraphPageModel(
                 ifAverage = { _ ->
                     subperiodsAmounts
                         .sum()
-                        .map {
-                            it
-                                .value
-                                .div(subperiodsAmounts.size)
-                                .let(::Amount)
-                        }
+                        .map { sum -> sum / subperiodsAmounts.size }
                 },
             )
         }
 
-    private val NonEmptyList<Amount>.sum: Amount
-        get() = tail.fold(
-            initial = head,
-            operation = Amount::plus,
-        )
+    @Suppress("DEPRECATION")
+    private operator fun Amount.div(
+        divisor: Int,
+    ): Amount = Amount.createUnsafe(
+        value = value / divisor,
+    )
 
     private fun calcSubperiodAmount(
         subperiod: LocalDateRange,

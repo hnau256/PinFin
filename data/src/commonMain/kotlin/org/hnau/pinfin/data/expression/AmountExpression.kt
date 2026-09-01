@@ -1,10 +1,10 @@
 package org.hnau.pinfin.data.expression
 
+import com.ionspin.kotlin.bignum.decimal.BigDecimal
 import kotlinx.atomicfu.locks.SynchronizedObject
 import kotlinx.atomicfu.locks.synchronized
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.builtins.serializer
-import com.ionspin.kotlin.bignum.decimal.BigDecimal
 import org.hnau.commons.kotlin.mapper.Mapper
 import org.hnau.commons.kotlin.serialization.MappingKSerializer
 import org.hnau.pinfin.data.Amount
@@ -43,11 +43,12 @@ class AmountExpression @Deprecated("Use createOrNull") constructor(
             }
             ?.second
         if (result == null) {
+            @Suppress("DEPRECATION")
             result = expression
                 .evaluate(
                     decimalMode = scale.decimalMode,
                 )
-                .let(::Amount)
+                .let(Amount::createUnsafe)
             amountCache = scale to result
         }
         result
@@ -62,17 +63,17 @@ class AmountExpression @Deprecated("Use createOrNull") constructor(
             .parseOrNull(string)
             ?.let(::AmountExpression)
 
+        @Suppress("DEPRECATION")
         fun createOrNull(
             string: String,
             currency: Currency,
         ): AmountExpression? = createOrNullUnsafe(
             string = string,
-        )
-            ?.takeIf {
-                it
-                    .expression
-                    .evaluate(currency.scale.decimalMode) >= BigDecimal.ZERO
-            }
+        )?.takeIf { expression ->
+            expression
+                .expression
+                .evaluate(currency.scale.decimalMode) >= BigDecimal.ZERO
+        }
 
         val zero: AmountExpression =
             AmountExpression(Expression.zero)

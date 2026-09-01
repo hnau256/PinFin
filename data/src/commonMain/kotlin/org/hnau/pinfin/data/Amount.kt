@@ -11,25 +11,25 @@ import kotlin.jvm.JvmInline
 
 @JvmInline
 @Serializable(Amount.Serializer::class)
-value class Amount(
+value class Amount private constructor(
     val value: BigDecimal,
 ) : Comparable<Amount> {
 
     object Serializer : MappingKSerializer<String, Amount>(
         base = String.serializer(),
-        mapper = stringMapper,
+        mapper = Mapper(
+            direct = String::toBigDecimal,
+            reverse = BigDecimal::toStringExpanded
+        ) + Mapper(
+            direct = ::Amount,
+            reverse = Amount::value,
+        ),
     )
 
     operator fun plus(
         other: Amount,
     ): Amount = Amount(
         value = value + other.value,
-    )
-
-    operator fun minus(
-        other: Amount,
-    ): Amount = Amount(
-        value = value - other.value,
     )
 
     override fun compareTo(
@@ -42,10 +42,19 @@ value class Amount(
             value = BigDecimal.ZERO,
         )
 
-        val stringMapper: Mapper<String, Amount> = Mapper(
-            direct = String::toBigDecimal,
-            reverse = BigDecimal::toStringExpanded
-        ) + Mapper(::Amount, Amount::value)
+        @Deprecated("Use createOrNull instead")
+        fun createUnsafe(
+            value: BigDecimal,
+        ): Amount = Amount(
+            value = value,
+        )
+
+        @Suppress("DEPRECATION")
+        fun createOrNull(
+            value: BigDecimal,
+        ): Amount? = value
+            .takeIf { it >= BigDecimal.ZERO }
+            ?.let(::createUnsafe)
     }
 }
 

@@ -80,7 +80,7 @@ interface AmountFormatter {
                     input
                         .filterNot(Char::isWhitespace)
                         .let { runCatching { BigDecimal.parseString(it) }.getOrNull() }
-                        ?.let(::Amount)
+                        ?.let(Amount::createOrNull)
             }
     }
 }
