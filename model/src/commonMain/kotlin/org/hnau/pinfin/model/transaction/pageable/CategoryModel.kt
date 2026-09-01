@@ -29,7 +29,6 @@ import org.hnau.commons.kotlin.coroutines.flow.state.flatMapWithScope
 import org.hnau.commons.kotlin.coroutines.flow.state.mapState
 import org.hnau.commons.kotlin.coroutines.flow.state.mutable.toMutableStateFlowAsInitial
 import org.hnau.commons.kotlin.getOrInit
-import org.hnau.commons.kotlin.mapper.Mapper
 import org.hnau.commons.kotlin.serialization.MutableStateFlowSerializer
 import org.hnau.commons.kotlin.toAccessor
 import org.hnau.pinfin.data.AmountDirection
@@ -95,6 +94,7 @@ class CategoryModel(
         extractItemsFromState = BudgetState::categories,
         additionalItems = usedCategories,
         extractTitle = { it.value.title },
+        extractKey = { it.key },
         createNewItemsBasedOnQuery = { title ->
             AmountDirection.nonEmptyEntries.map { direction ->
                 val id = CategoryId(

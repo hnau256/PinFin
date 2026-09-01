@@ -60,8 +60,8 @@ fun <T : Any> EntityContent(
                             icon = UIConstants.absentValueIcon,
                             title = entityTypeName,
                             viewMode = viewMode,
-                            suffixIcon = null,
-                        )
+                        ),
+                        suffixIcon = null,
                     )
                 }
             }
@@ -81,9 +81,9 @@ fun <T : Any> EntityContent(
                             state = IconWithTitleState.remember(
                                 icon = extractIcon(existingEntity),
                                 title = extractTitle(existingEntity),
-                                suffixIcon = extractSuffixIcon(existingEntity),
                                 viewMode = viewMode,
-                            )
+                            ),
+                            suffixIcon = extractSuffixIcon(existingEntity),
                         )
                     }
                 }
@@ -95,41 +95,43 @@ fun <T : Any> EntityContent(
 @Composable
 private fun IconWithTitle(
     state: IconWithTitleState,
+    suffixIcon: ImageVector?,
     modifier: Modifier = Modifier,
 ) {
-    when (state) {
-        IconWithTitleState.Empty -> Unit
-        is IconWithTitleState.Icon -> Icon(
-            modifier = modifier,
-            icon = state.icon,
-        )
-
-        is IconWithTitleState.IconWithTitle -> ItemsRow(
-            modifier = modifier,
-        ) {
-            Icon(
+    ItemsRow(
+        modifier = modifier,
+    ) {
+        when (state) {
+            IconWithTitleState.Empty -> Unit
+            is IconWithTitleState.Icon -> Icon(
                 icon = state.icon,
             )
-            Title(
+
+            is IconWithTitleState.IconWithTitle -> {
+                Icon(
+                    icon = state.icon,
+                )
+                Title(
+                    text = state.title,
+                )
+            }
+
+            is IconWithTitleState.Title -> Title(
                 text = state.title,
             )
-            state
-                .suffixIcon
-                ?.let { Icon(it) }
+
+            is IconWithTitleState.TitleAsIcon -> Text(
+                text = state.titleFirstChars,
+                style = MaterialTheme.typography.titleMedium,
+                maxLines = 1,
+                textAlign = TextAlign.Center,
+            )
         }
-
-        is IconWithTitleState.Title -> Title(
-            text = state.title,
-            modifier = modifier,
-        )
-
-        is IconWithTitleState.TitleAsIcon -> Text(
-            modifier = modifier,
-            text = state.titleFirstChars,
-            style = MaterialTheme.typography.titleMedium,
-            maxLines = 1,
-            textAlign = TextAlign.Center,
-        )
+        suffixIcon?.let { suffixIcon ->
+            Icon(
+                icon = suffixIcon,
+            )
+        }
     }
 }
 
@@ -140,7 +142,6 @@ private sealed interface IconWithTitleState {
     @Immutable
     data class IconWithTitle(
         val icon: ImageVector,
-        val suffixIcon: ImageVector?,
         val title: String,
     ) : IconWithTitleState
 
@@ -166,7 +167,6 @@ private sealed interface IconWithTitleState {
 
         fun create(
             icon: ImageVector?,
-            suffixIcon: ImageVector?,
             title: String,
             viewMode: ViewMode,
         ): IconWithTitleState = viewMode.fold(
@@ -176,7 +176,6 @@ private sealed interface IconWithTitleState {
                     ifNotNull = { icon ->
                         IconWithTitle(
                             icon = icon,
-                            suffixIcon = suffixIcon,
                             title = title,
                         )
                     }
@@ -201,13 +200,11 @@ private sealed interface IconWithTitleState {
         @Composable
         fun remember(
             icon: ImageVector?,
-            suffixIcon: ImageVector?,
             title: String,
             viewMode: ViewMode,
-        ): IconWithTitleState = remember(icon, suffixIcon, title, viewMode) {
+        ): IconWithTitleState = remember(icon, title, viewMode) {
             create(
                 icon = icon,
-                suffixIcon = suffixIcon,
                 title = title,
                 viewMode = viewMode,
             )

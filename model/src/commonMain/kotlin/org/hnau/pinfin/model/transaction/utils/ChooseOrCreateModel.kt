@@ -23,7 +23,6 @@ import org.hnau.commons.kotlin.coroutines.flow.state.mutable.toMutableStateFlowA
 import org.hnau.commons.kotlin.coroutines.flow.state.scopedInState
 import org.hnau.commons.kotlin.foldBoolean
 import org.hnau.commons.kotlin.foldNullable
-import org.hnau.commons.kotlin.mapper.Mapper
 import org.hnau.commons.kotlin.serialization.MutableStateFlowSerializer
 import org.hnau.pinfin.model.utils.budget.repository.BudgetRepository
 import org.hnau.pinfin.model.utils.budget.state.BudgetState
@@ -36,7 +35,8 @@ class ChooseOrCreateModel<T>(
     extractItemsFromState: (BudgetState) -> List<T>,
     additionalItems: StateFlow<Iterable<T>>,
     private val extractTitle: (T) -> String,
-    private val createNewItemsBasedOnQuery: (String) -> NonEmptyList<T>,
+    private val extractKey: (T) -> Any?,
+    private val createNewItemsBasedOnQuery: (String) -> List<T>,
     private val selected: StateFlow<Option<T>>,
     onReady: (T) -> Unit,
 ) {
@@ -146,18 +146,18 @@ class ChooseOrCreateModel<T>(
                 },
                 ifNotNull = { query ->
                     val trimmedQuery = query.trim()
-                    val (filtered, hasAbsolutelySameAsQuery) = items.fold(
-                        initial = emptyList<State.Item<T>>() to false
-                    ) { (filtered, alreadyHasAbsolutelySameAsQuery), item ->
+                    val filtered = items.fold(
+                        initial = emptyList<State.Item<T>>()
+                    ) { filtered, item ->
                         val itemText = extractTitle(item).trim()
                         when {
-                            itemText == trimmedQuery -> (filtered + createItem(item)) to true
+                            itemText == trimmedQuery -> (filtered + createItem(item))
                             itemText.contains(
                                 other = trimmedQuery,
                                 ignoreCase = true,
-                            ) -> (filtered + createItem(item)) to alreadyHasAbsolutelySameAsQuery
+                            ) -> (filtered + createItem(item))
 
-                            else -> filtered to alreadyHasAbsolutelySameAsQuery
+                            else -> filtered
                         }
                     }
                     State(
@@ -169,20 +169,22 @@ class ChooseOrCreateModel<T>(
                                     State.Filtered.Items(items)
                                 }
                             ),
-                        new = hasAbsolutelySameAsQuery.foldBoolean(
-                            ifTrue = { null },
-                            ifFalse = {
-                                createNewItemsBasedOnQuery(
-                                    trimmedQuery.trim()
-                                ).map {
-                                    State.Item(
-                                        value = it,
-                                        isSelected = false.toMutableStateFlowAsInitial(),
-                                        onClick = { onReady(it) },
-                                    )
-                                }
-                            }
+                        new = createNewItemsBasedOnQuery(
+                            trimmedQuery.trim()
                         )
+                            .toNonEmptyListOrNull()
+                            ?.run {
+                                val itemsKeys = items.map(extractKey).toSet()
+                                filter { it.let(extractKey) !in itemsKeys }
+                            }
+                            ?.map {
+                                State.Item(
+                                    value = it,
+                                    isSelected = false.toMutableStateFlowAsInitial(),
+                                    onClick = { onReady(it) },
+                                )
+                            }
+                            ?.toNonEmptyListOrNull()
                     )
                 }
             )

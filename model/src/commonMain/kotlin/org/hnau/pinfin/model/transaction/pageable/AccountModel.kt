@@ -146,6 +146,7 @@ class AccountModel(
         extractItemsFromState = BudgetState::visibleAccounts,
         additionalItems = accountEditable.mapState(scope) { listOfNotNull(it.valueOrNone.getOrNull()) },
         extractTitle = { it.value.title },
+        extractKey = { it.key },
         createNewItemsBasedOnQuery = { title ->
             val id = AccountId(title)
             val accountInfo = AccountInfo.createDefault(
