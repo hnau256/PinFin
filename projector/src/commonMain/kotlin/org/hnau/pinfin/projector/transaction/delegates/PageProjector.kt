@@ -10,8 +10,9 @@ import kotlinx.coroutines.flow.StateFlow
 import org.hnau.commons.app.projector.uikit.state.StateContent
 import org.hnau.commons.app.projector.uikit.transition.getTransitionSpecForSlideByCompare
 import org.hnau.commons.app.projector.utils.Orientation
-import org.hnau.commons.gen.fold.annotations.Fold
 import org.hnau.commons.gen.pipe.annotations.Pipe
+import org.hnau.commons.gen.sealup.annotations.SealUp
+import org.hnau.commons.gen.sealup.annotations.Variant
 import org.hnau.commons.kotlin.coroutines.flow.state.mapWithScope
 import org.hnau.pinfin.model.transaction.TransactionModel
 import org.hnau.pinfin.model.transaction.fold
@@ -31,8 +32,29 @@ class PageProjector(
         fun type(): TypeProjector.Page.Dependencies
     }
 
-    @Fold
-    sealed interface Part {
+    @SealUp(
+        variants = [
+            Variant(
+                type = DateProjector.Page::class,
+                identifier = "date",
+            ),
+            Variant(
+                type = TimeProjector.Page::class,
+                identifier = "time",
+            ),
+            Variant(
+                type = CommentProjector.Page::class,
+                identifier = "comment",
+            ),
+            Variant(
+                type = TypeProjector.Page::class,
+                identifier = "type",
+            ),
+        ],
+        wrappedValuePropertyName = "projector",
+        sealedInterfaceName = "PageProjectorPart",
+    )
+    interface Part {
 
         @Composable
         fun Content(
@@ -40,99 +62,37 @@ class PageProjector(
             contentPadding: PaddingValues,
         )
 
-        data class Date(
-            val projector: DateProjector.Page,
-        ) : Part {
-
-            @Composable
-            override fun Content(
-                modifier: Modifier,
-                contentPadding: PaddingValues
-            ) {
-                projector.Content(
-                    modifier = modifier,
-                    contentPadding = contentPadding,
-                )
-            }
-        }
-
-        data class Time(
-            val projector: TimeProjector.Page,
-        ) : Part {
-
-            @Composable
-            override fun Content(
-                modifier: Modifier,
-                contentPadding: PaddingValues
-            ) {
-                projector.Content(
-                    modifier = modifier,
-                    contentPadding = contentPadding,
-                )
-            }
-        }
-
-        data class Comment(
-            val projector: CommentProjector.Page,
-        ) : Part {
-
-            @Composable
-            override fun Content(
-                modifier: Modifier,
-                contentPadding: PaddingValues
-            ) {
-                projector.Content(
-                    modifier = modifier,
-                    contentPadding = contentPadding,
-                )
-            }
-        }
-
-        data class Type(
-            val projector: TypeProjector.Page,
-        ) : Part {
-
-            @Composable
-            override fun Content(
-                modifier: Modifier,
-                contentPadding: PaddingValues
-            ) {
-                projector.Content(
-                    modifier = modifier,
-                    contentPadding = contentPadding,
-                )
-            }
-        }
+        companion object
     }
 
-    private val page: StateFlow<Pair<TransactionModel.Part, Part>> = model
+    private val page: StateFlow<Pair<TransactionModel.Part, PageProjectorPart>> = model
         .pageType
         .mapWithScope(scope) { scope, (page, model) ->
             val projector = model.fold(
                 ifComment = { model ->
-                    Part.Comment(
-                        projector = CommentProjector.Page(
+                    Part.comment(
+                        CommentProjector.Page(
                             model = model,
                         )
                     )
                 },
                 ifDate = { model ->
-                    Part.Date(
-                        projector = DateProjector.Page(
+                    Part.date(
+                        DateProjector.Page(
                             model = model,
                         )
                     )
                 },
                 ifTime = { model ->
-                    Part.Time(
-                        projector = TimeProjector.Page(
+                    Part.time(
+                        TimeProjector.Page(
                             model = model,
                         )
                     )
                 },
                 ifType = { model ->
-                    Part.Type(
-                        projector = TypeProjector.Page(
+                    Part.type(
+                        TypeProjector.Page(
                             scope = scope,
                             model = model,
                             dependencies = dependencies.type(),

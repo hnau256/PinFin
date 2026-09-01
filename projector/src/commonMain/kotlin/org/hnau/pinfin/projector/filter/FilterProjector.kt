@@ -35,8 +35,9 @@ import org.hnau.commons.app.projector.uikit.utils.Dimens
 import org.hnau.commons.app.projector.utils.Icon
 import org.hnau.commons.app.projector.utils.Orientation
 import org.hnau.commons.app.projector.utils.horizontalDisplayPadding
-import org.hnau.commons.gen.fold.annotations.Fold
 import org.hnau.commons.gen.pipe.annotations.Pipe
+import org.hnau.commons.gen.sealup.annotations.SealUp
+import org.hnau.commons.gen.sealup.annotations.Variant
 import org.hnau.commons.kotlin.coroutines.flow.state.mapState
 import org.hnau.commons.kotlin.coroutines.flow.state.mapWithScope
 import org.hnau.pinfin.model.filter.FilterModel
@@ -67,39 +68,26 @@ class FilterProjector(
         dependencies: Dependencies,
     ) {
 
-        @Fold
-        sealed interface Page {
-
-            val tab: FilterModel.Tab
+        @SealUp(
+            variants = [
+                Variant(
+                    type = SelectCategoriesProjector.Page::class,
+                    identifier = "categories",
+                ),
+                Variant(
+                    type = SelectAccountsProjector.Page::class,
+                    identifier = "accounts",
+                ),
+            ],
+            wrappedValuePropertyName = "projector",
+            sealedInterfaceName = "FilterConfigPage",
+        )
+        interface Page {
 
             @Composable
             fun Content()
 
-            data class Categories(
-                val projector: SelectCategoriesProjector.Page,
-            ) : Page {
-
-                override val tab: FilterModel.Tab
-                    get() = FilterModel.Tab.SelectedCategories
-
-                @Composable
-                override fun Content() {
-                    projector.Content()
-                }
-            }
-
-            data class Accounts(
-                val projector: SelectAccountsProjector.Page,
-            ) : Page {
-
-                override val tab: FilterModel.Tab
-                    get() = FilterModel.Tab.SelectedAccounts
-
-                @Composable
-                override fun Content() {
-                    projector.Content()
-                }
-            }
+            companion object
         }
 
         private val categories = SelectCategoriesProjector(
@@ -112,12 +100,12 @@ class FilterProjector(
             dependencies = dependencies.selectAccounts(),
         )
 
-        private val page: StateFlow<Pair<FilterModel.Tab, Page>> = model
+        private val page: StateFlow<Pair<FilterModel.Tab, FilterConfigPage>> = model
             .type
             .mapState(scope) { (tab, type) ->
                 val projector = type.fold(
                     ifCategories = { model ->
-                        Page.Categories(
+                        Page.categories(
                             SelectCategoriesProjector.Page(
                                 model = model,
                                 dependencies = dependencies.selectCategoriesPage(),
@@ -125,7 +113,7 @@ class FilterProjector(
                         )
                     },
                     ifAccounts = { model ->
-                        Page.Accounts(
+                        Page.accounts(
                             SelectAccountsProjector.Page(
                                 model = model,
                                 dependencies = dependencies.selectAccountsPage(),

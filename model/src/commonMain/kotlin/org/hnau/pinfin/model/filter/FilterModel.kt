@@ -14,6 +14,8 @@ import kotlinx.serialization.UseSerializers
 import org.hnau.commons.app.model.goback.GoBackHandler
 import org.hnau.commons.gen.fold.annotations.Fold
 import org.hnau.commons.gen.pipe.annotations.Pipe
+import org.hnau.commons.gen.sealup.annotations.SealUp
+import org.hnau.commons.gen.sealup.annotations.Variant
 import org.hnau.commons.kotlin.coroutines.flow.state.combineState
 import org.hnau.commons.kotlin.coroutines.flow.state.mapState
 import org.hnau.commons.kotlin.coroutines.flow.state.mutable.toMutableStateFlowAsInitial
@@ -76,21 +78,28 @@ class FilterModel(
     }
 
     class Config(
-        val type: StateFlow<Pair<Tab, Type>>,
+        val type: StateFlow<Pair<Tab, FilterConfigType>>,
         val categories: SelectCategoriesModel,
         val accounts: SelectAccountsModel,
     ) {
 
-        @Fold
-        sealed interface Type {
+        @SealUp(
+            variants = [
+                Variant(
+                    type = SelectCategoriesModel.Page::class,
+                    identifier = "categories",
+                ),
+                Variant(
+                    type = SelectAccountsModel.Page::class,
+                    identifier = "accounts",
+                ),
+            ],
+            wrappedValuePropertyName = "model",
+            sealedInterfaceName = "FilterConfigType",
+        )
+        interface Type {
 
-            data class Categories(
-                val model: SelectCategoriesModel.Page,
-            ) : Type
-
-            data class Accounts(
-                val model: SelectAccountsModel.Page,
-            ) : Type
+            companion object
         }
     }
 
@@ -143,12 +152,12 @@ class FilterModel(
                     type = selectedTab.mapState(scope) { tab ->
                         val model = tab.fold(
                             ifSelectedCategories = {
-                                Config.Type.Categories(
+                                Config.Type.categories(
                                     categories.createPage(),
                                 )
                             },
                             ifSelectedAccounts = {
-                                Config.Type.Accounts(
+                                Config.Type.accounts(
                                     accounts.createPage(),
                                 )
                             },

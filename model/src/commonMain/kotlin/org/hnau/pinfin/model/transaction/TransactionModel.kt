@@ -19,6 +19,8 @@ import org.hnau.commons.app.model.utils.Editable
 import org.hnau.commons.app.model.utils.editable
 import org.hnau.commons.gen.fold.annotations.Fold
 import org.hnau.commons.gen.pipe.annotations.Pipe
+import org.hnau.commons.gen.sealup.annotations.SealUp
+import org.hnau.commons.gen.sealup.annotations.Variant
 import org.hnau.commons.kotlin.coroutines.ActionOrElse
 import org.hnau.commons.kotlin.coroutines.CancelOrInProgress
 import org.hnau.commons.kotlin.coroutines.actionOrCancelIfExecuting
@@ -60,52 +62,33 @@ class TransactionModel(
         }
     }
 
-    @Fold
-    sealed interface PageType {
-
-        val key: Int
+    @SealUp(
+        variants = [
+            Variant(
+                type = TypeModel.Page::class,
+                identifier = "type",
+            ),
+            Variant(
+                type = DateModel.Page::class,
+                identifier = "date",
+            ),
+            Variant(
+                type = TimeModel.Page::class,
+                identifier = "time",
+            ),
+            Variant(
+                type = CommentModel.Page::class,
+                identifier = "comment",
+            ),
+        ],
+        wrappedValuePropertyName = "model",
+        sealedInterfaceName = "TransactionModelPageType",
+    )
+    interface PageType {
 
         val goBackHandler: GoBackHandler
 
-        data class Type(
-            val model: TypeModel.Page,
-        ) : PageType {
-            override val key: Int
-                get() = 0
-
-            override val goBackHandler: GoBackHandler
-                get() = model.goBackHandler
-        }
-
-        data class Date(
-            val model: DateModel.Page,
-        ) : PageType {
-            override val key: Int
-                get() = 1
-
-            override val goBackHandler: GoBackHandler
-                get() = model.goBackHandler
-        }
-
-        data class Time(
-            val model: TimeModel.Page,
-        ) : PageType {
-            override val key: Int
-                get() = 2
-
-            override val goBackHandler: GoBackHandler
-                get() = model.goBackHandler
-        }
-
-        data class Comment(
-            val model: CommentModel.Page,
-        ) : PageType {
-            override val key: Int
-                get() = 3
-
-            override val goBackHandler: GoBackHandler
-                get() = model.goBackHandler
-        }
+        companion object
     }
 
     @Pipe
@@ -246,30 +229,30 @@ class TransactionModel(
         goForward = createGoForward(Part.Comment),
     )
 
-    val pageType: StateFlow<Pair<Part, PageType>> = skeleton
+    val pageType: StateFlow<Pair<Part, TransactionModelPageType>> = skeleton
         .part
         .mapWithScope(scope) { scope, part ->
             val pageType = part.fold(
                 ifType = {
-                    PageType.Type(
-                        model = type.createPage(
+                    PageType.type(
+                        type.createPage(
                             scope = scope,
                         ),
                     )
                 },
                 ifDate = {
-                    PageType.Date(
-                        model = date.createPage(),
+                    PageType.date(
+                        date.createPage(),
                     )
                 },
                 ifTime = {
-                    PageType.Time(
-                        model = time.createPage(),
+                    PageType.time(
+                        time.createPage(),
                     )
                 },
                 ifComment = {
-                    PageType.Comment(
-                        model = comment.createPage(
+                    PageType.comment(
+                        comment.createPage(
                             scope = scope,
                         ),
                     )
