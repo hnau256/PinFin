@@ -2,11 +2,11 @@ package org.hnau.pinfin.data.expression
 
 import com.ionspin.kotlin.bignum.decimal.BigDecimal
 import com.ionspin.kotlin.bignum.decimal.DecimalMode
+import org.hnau.pinfin.data.Currency
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
 import kotlin.test.assertNull
-import org.hnau.pinfin.data.Currency
 
 class ExpressionTest {
     // region parse roundtrip

@@ -1,7 +1,6 @@
 package org.hnau.pinfin.model
 
 import arrow.core.left
-import arrow.core.plus
 import arrow.core.right
 import arrow.core.toNonEmptyListOrThrow
 import kotlinx.coroutines.CoroutineScope
@@ -22,7 +21,6 @@ import org.hnau.commons.app.model.utils.editable
 import org.hnau.commons.gen.pipe.annotations.Pipe
 import org.hnau.commons.kotlin.coroutines.flow.state.derivedStateFlowOf
 import org.hnau.commons.kotlin.foldNullable
-import org.hnau.pinfin.data.BudgetConfig
 import org.hnau.pinfin.data.Currency
 import org.hnau.pinfin.data.utils.DecimalScale
 import org.hnau.pinfin.model.utils.budget.repository.BudgetRepository

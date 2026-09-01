@@ -6,7 +6,6 @@ import org.hnau.commons.kotlin.KeyValue
 import org.hnau.pinfin.data.BudgetConfig
 import org.hnau.pinfin.data.BudgetId
 import org.hnau.pinfin.model.utils.budget.repository.BudgetRepository
-import org.hnau.pinfin.model.utils.budget.state.BudgetInfo
 
 interface BudgetsStorage {
 

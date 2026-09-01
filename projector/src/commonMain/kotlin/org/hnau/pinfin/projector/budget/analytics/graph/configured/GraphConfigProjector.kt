@@ -30,7 +30,6 @@ import org.hnau.commons.kotlin.Loadable
 import org.hnau.commons.kotlin.coroutines.flow.state.mapWithScope
 import org.hnau.commons.kotlin.map
 import org.hnau.pinfin.model.budget.analytics.tab.graph.configured.GraphConfigModel
-import org.hnau.pinfin.model.utils.analytics.config.AnalyticsPageConfig
 import org.hnau.pinfin.model.utils.analytics.config.fold
 import org.hnau.pinfin.projector.Localization
 import org.hnau.pinfin.projector.budget.analytics.graph.utils.format

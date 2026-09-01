@@ -2,8 +2,6 @@
 
 package org.hnau.pinfin.model.utils.icons
 
-import org.hnau.commons.gen.fold.annotations.Fold
-
 @Suppress("EnumEntryName", "unused")
 enum class IconVariant {
     Home,
