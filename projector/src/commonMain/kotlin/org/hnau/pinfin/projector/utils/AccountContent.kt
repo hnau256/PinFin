@@ -22,7 +22,11 @@ fun AccountContent(
         uiInfo = info?.rememberRun {
             EntityUiInfo(
                 hue = hue,
-                icon = icon?.image,
+                icon = icon?.image?.let { icon ->
+                    EntityUiInfo.Icon(
+                        main = icon,
+                    )
+                },
                 title = title,
             )
         },

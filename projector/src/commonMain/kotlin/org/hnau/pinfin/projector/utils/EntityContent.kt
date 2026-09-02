@@ -32,8 +32,18 @@ enum class ViewMode {
 
 data class EntityUiInfo(
     val hue: Hue,
-    val icon: ImageVector?,
+    val icon: EntityUiInfo.Icon?,
     val title: String,
+) {
+
+    data class Icon(
+        val main: ImageVector,
+        val additional: ImageVector? = null,
+    )
+}
+
+private val absentEntityUiInfoIcon = EntityUiInfo.Icon(
+    main = UIConstants.absentValueIcon,
 )
 
 @Composable
@@ -59,7 +69,7 @@ fun EntityContent(
                 content {
                     IconWithTitle(
                         state = IconWithTitleState.remember(
-                            icon = UIConstants.absentValueIcon,
+                            icon = absentEntityUiInfoIcon,
                             title = entityTypeName,
                             viewMode = viewMode,
                         ),
@@ -129,13 +139,24 @@ private fun IconWithTitle(
     }
 }
 
+@Composable
+private fun Icon(
+    icon: EntityUiInfo.Icon,
+    modifier: Modifier = Modifier,
+) {
+    Icon(
+        modifier = modifier,
+        icon = icon.main,
+    )
+}
+
 
 @Immutable
 private sealed interface IconWithTitleState {
 
     @Immutable
     data class IconWithTitle(
-        val icon: ImageVector,
+        val icon: EntityUiInfo.Icon,
         val title: String,
     ) : IconWithTitleState
 
@@ -146,7 +167,7 @@ private sealed interface IconWithTitleState {
 
     @Immutable
     data class Icon(
-        val icon: ImageVector,
+        val icon: EntityUiInfo.Icon,
     ) : IconWithTitleState
 
     @Immutable
@@ -160,7 +181,7 @@ private sealed interface IconWithTitleState {
     companion object {
 
         fun create(
-            icon: ImageVector?,
+            icon: EntityUiInfo.Icon?,
             title: String,
             viewMode: ViewMode,
         ): IconWithTitleState = viewMode.fold(
@@ -193,7 +214,7 @@ private sealed interface IconWithTitleState {
 
         @Composable
         fun remember(
-            icon: ImageVector?,
+            icon: EntityUiInfo.Icon?,
             title: String,
             viewMode: ViewMode,
         ): IconWithTitleState = remember(icon, title, viewMode) {
