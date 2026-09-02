@@ -30,13 +30,15 @@ enum class ViewMode {
     }
 }
 
+data class EntityUiInfo(
+    val hue: Hue,
+    val icon: ImageVector?,
+    val title: String,
+)
+
 @Composable
-fun <T : Any> EntityContent(
-    entity: T?,
-    extractHue: (T) -> Hue,
-    extractIcon: (T) -> ImageVector?,
-    extractSuffixIcon: (T) -> ImageVector?,
-    extractTitle: (T) -> String,
+fun EntityContent(
+    uiInfo: EntityUiInfo?,
     entityTypeName: String,
     modifier: Modifier = Modifier,
     selected: Boolean = true,
@@ -45,7 +47,7 @@ fun <T : Any> EntityContent(
     content: @Composable (inner: @Composable () -> Unit) -> Unit = { inner -> inner() },
     onClick: (() -> Unit)?,
 ) {
-    entity.foldNullable(
+    uiInfo.foldNullable(
         ifNull = {
             Label(
                 modifier = modifier,
@@ -61,14 +63,13 @@ fun <T : Any> EntityContent(
                             title = entityTypeName,
                             viewMode = viewMode,
                         ),
-                        suffixIcon = null,
                     )
                 }
             }
         },
-        ifNotNull = { existingEntity ->
+        ifNotNull = { info ->
             SwitchHue(
-                hue = extractHue(existingEntity).let(Mapper.modelHueToHue.reverse),
+                hue = info.hue.let(Mapper.modelHueToHue.reverse),
             ) {
                 Label(
                     modifier = modifier,
@@ -79,11 +80,10 @@ fun <T : Any> EntityContent(
                     content {
                         IconWithTitle(
                             state = IconWithTitleState.remember(
-                                icon = extractIcon(existingEntity),
-                                title = extractTitle(existingEntity),
+                                icon = info.icon,
+                                title = info.title,
                                 viewMode = viewMode,
                             ),
-                            suffixIcon = extractSuffixIcon(existingEntity),
                         )
                     }
                 }
@@ -95,7 +95,6 @@ fun <T : Any> EntityContent(
 @Composable
 private fun IconWithTitle(
     state: IconWithTitleState,
-    suffixIcon: ImageVector?,
     modifier: Modifier = Modifier,
 ) {
     ItemsRow(
@@ -125,11 +124,6 @@ private fun IconWithTitle(
                 style = MaterialTheme.typography.titleMedium,
                 maxLines = 1,
                 textAlign = TextAlign.Center,
-            )
-        }
-        suffixIcon?.let { suffixIcon ->
-            Icon(
-                icon = suffixIcon,
             )
         }
     }

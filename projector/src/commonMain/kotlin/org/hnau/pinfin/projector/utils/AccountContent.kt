@@ -3,6 +3,7 @@ package org.hnau.pinfin.projector.utils
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Shape
+import org.hnau.commons.app.projector.utils.rememberRun
 import org.hnau.pinfin.model.utils.budget.state.AccountInfo
 import org.hnau.pinfin.projector.Localization
 
@@ -18,17 +19,19 @@ fun AccountContent(
     content: @Composable (inner: @Composable () -> Unit) -> Unit = { inner -> inner() },
 ) {
     EntityContent(
-        entity = info,
+        uiInfo = info?.rememberRun {
+            EntityUiInfo(
+                hue = hue,
+                icon = icon?.image,
+                title = title,
+            )
+        },
         modifier = modifier,
         selected = selected,
         shape = shape,
         viewMode = viewMode,
         content = content,
         onClick = onClick,
-        extractHue = AccountInfo::hue,
-        extractIcon = { info -> info.icon?.image },
-        extractSuffixIcon = { null },
-        extractTitle = AccountInfo::title,
         entityTypeName = localization.account,
     )
 }
