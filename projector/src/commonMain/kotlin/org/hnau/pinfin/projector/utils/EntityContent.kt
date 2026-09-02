@@ -1,15 +1,26 @@
 package org.hnau.pinfin.projector.utils
 
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.size
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.drawWithContent
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Rect
+import androidx.compose.ui.graphics.ClipOp
+import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.graphics.drawscope.clipPath
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.dp
 import org.hnau.commons.app.projector.uikit.ItemsRow
+import org.hnau.commons.app.projector.uikit.utils.Dimens
 import org.hnau.commons.app.projector.utils.Icon
 import org.hnau.commons.app.projector.utils.SwitchHue
 import org.hnau.commons.gen.fold.annotations.Fold
@@ -45,6 +56,8 @@ data class EntityUiInfo(
 private val absentEntityUiInfoIcon = EntityUiInfo.Icon(
     main = UIConstants.absentValueIcon,
 )
+
+private val smallIconButtonTokensIconSize = 24.dp
 
 @Composable
 fun EntityContent(
@@ -144,10 +157,48 @@ private fun Icon(
     icon: EntityUiInfo.Icon,
     modifier: Modifier = Modifier,
 ) {
-    Icon(
-        modifier = modifier,
-        icon = icon.main,
-    )
+    val additional = icon.additional
+    if (additional == null) {
+        Icon(
+            modifier = modifier,
+            icon = icon.main,
+        )
+        return
+    }
+
+    val additionalSize = smallIconButtonTokensIconSize / 2
+    val holeDiameter = additionalSize + Dimens.border * 2
+
+    Box(modifier = modifier) {
+        Icon(
+            modifier = Modifier.drawWithContent {
+                val path = Path().apply {
+                    addOval(
+                        Rect(
+                            center = Offset(
+                                x = size.width - additionalSize.toPx() / 2,
+                                y = size.height - additionalSize.toPx() / 2,
+                            ),
+                            radius = holeDiameter.toPx() / 2,
+                        ),
+                    )
+                }
+                clipPath(
+                    path = path,
+                    clipOp = ClipOp.Difference,
+                ) {
+                    this@drawWithContent.drawContent()
+                }
+            },
+            icon = icon.main,
+        )
+        Icon(
+            modifier = Modifier
+                .align(Alignment.BottomEnd)
+                .size(additionalSize),
+            icon = additional,
+        )
+    }
 }
 
 
