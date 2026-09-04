@@ -21,6 +21,7 @@ from fractions import Fraction
 
 RECORD_RE = re.compile(r'\{"category":"([^"]*)","amount":"([^"]*)"')
 CATEGORY_CONFIG_ID_RE = re.compile(r'"type":"category_config","id":"([^"]*)"')
+TIMESTAMP_RE = re.compile(r'"timestamp":"[^"]*T[^"]*"')
 
 
 class ExpressionError(ValueError):
@@ -150,9 +151,18 @@ def process_record(match):
     return '{"category":"%s%s","amount":"%s"' % (direction, category, new_amount)
 
 
+def strip_time(match):
+    full = match.group(0)
+    date = full.split("T")[0]
+    return '"timestamp":"%s"' % date
+
+
 def process_line(line):
-    if '"type":"transaction"' in line and '"type":{"type":"entry"' in line:
-        return [RECORD_RE.sub(process_record, line)]
+    if '"type":"transaction"' in line:
+        line = TIMESTAMP_RE.sub(strip_time, line)
+        if '"type":{"type":"entry"' in line:
+            return [RECORD_RE.sub(process_record, line)]
+        return [line]
 
     if '"type":"category_config"' in line:
         m = CATEGORY_CONFIG_ID_RE.search(line)
