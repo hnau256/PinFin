@@ -7,6 +7,9 @@ import kotlinx.serialization.builtins.serializer
 import org.hnau.commons.kotlin.mapper.Mapper
 import org.hnau.commons.kotlin.mapper.plus
 import org.hnau.commons.kotlin.serialization.MappingKSerializer
+import org.hnau.pinfin.data.utils.DecimalScale
+import org.hnau.pinfin.data.utils.decimalMode
+import org.hnau.pinfin.data.utils.dividePrecisely
 import kotlin.jvm.JvmInline
 
 @JvmInline
@@ -62,3 +65,14 @@ fun Iterable<Amount>.sum(): Amount = fold(
     initial = Amount.zero,
     operation = Amount::plus,
 )
+
+@Suppress("DEPRECATION")
+fun Amount.div(
+    divisor: Int,
+    scale: DecimalScale,
+): Amount = value
+    .dividePrecisely(
+        other = divisor.toBigDecimal(),
+        decimalMode = scale.decimalMode,
+    )
+    .let(Amount::createUnsafe)

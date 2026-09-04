@@ -29,7 +29,7 @@ import org.hnau.pinfin.model.budget.analytics.AnalyticsModel
 import org.hnau.pinfin.model.budget.analytics.tab.AnalyticsTab
 import org.hnau.pinfin.model.budget.analytics.tab.AnalyticsTabValues
 import org.hnau.pinfin.projector.Localization
-import org.hnau.pinfin.projector.budget.analytics.graph.GraphProjector
+import org.hnau.pinfin.projector.budget.analytics.periods.PeriodsAnalyticsProjector
 
 @OptIn(ExperimentalMaterial3Api::class)
 class AnalyticsProjector(
@@ -45,7 +45,10 @@ class AnalyticsProjector(
 
         fun accounts(): AccountsProjector.Dependencies
 
-        fun graph(): GraphProjector.Dependencies
+        // Заменяет старый GraphProjector в этой вкладке (см. docs/analytics-v2-plan.md,
+        // "2.6. Структура кода") - идентификатор варианта "graph" сохранён, т.к. привязан к
+        // AnalyticsTab.Graph (персистится в Skeleton).
+        fun graph(): PeriodsAnalyticsProjector.Dependencies
     }
 
     @SealUp(
@@ -55,7 +58,7 @@ class AnalyticsProjector(
                 identifier = "accounts",
             ),
             Variant(
-                type = GraphProjector::class,
+                type = PeriodsAnalyticsProjector::class,
                 identifier = "graph",
             ),
         ],
@@ -79,7 +82,7 @@ class AnalyticsProjector(
         ),
         graph = TabProjector.graph(
             scope = scope,
-            model = model.graph,
+            model = model.periods,
             dependencies = dependencies.graph(),
         )
     )

@@ -15,7 +15,7 @@ import org.hnau.commons.kotlin.coroutines.flow.state.mutable.toMutableStateFlowA
 import org.hnau.commons.kotlin.serialization.MutableStateFlowSerializer
 import org.hnau.pinfin.model.budget.analytics.tab.AccountsModel
 import org.hnau.pinfin.model.budget.analytics.tab.AnalyticsTab
-import org.hnau.pinfin.model.budget.analytics.tab.graph.GraphModel
+import org.hnau.pinfin.model.budget.analytics.tab.periods.PeriodsAnalyticsModel
 
 class AnalyticsModel(
     private val scope: CoroutineScope,
@@ -28,7 +28,7 @@ class AnalyticsModel(
 
         fun accounts(): AccountsModel.Dependencies
 
-        fun graph(): GraphModel.Dependencies
+        fun periods(): PeriodsAnalyticsModel.Dependencies
     }
 
     @Serializable
@@ -36,7 +36,7 @@ class AnalyticsModel(
         val selectedTab: MutableStateFlow<AnalyticsTab> =
             AnalyticsTab.default.toMutableStateFlowAsInitial(),
         val accounts: AccountsModel.Skeleton = AccountsModel.Skeleton(),
-        val graph: GraphModel.Skeleton = GraphModel.Skeleton(),
+        val periods: PeriodsAnalyticsModel.Skeleton = PeriodsAnalyticsModel.Skeleton(),
     )
 
     val accounts: AccountsModel = AccountsModel(
@@ -45,10 +45,10 @@ class AnalyticsModel(
         skeleton = skeleton.accounts
     )
 
-    val graph: GraphModel = GraphModel(
+    val periods: PeriodsAnalyticsModel = PeriodsAnalyticsModel(
         scope = scope,
-        dependencies = dependencies.graph(),
-        skeleton = skeleton.graph,
+        dependencies = dependencies.periods(),
+        skeleton = skeleton.periods,
     )
 
     val selectedTab: MutableStateFlow<AnalyticsTab>

@@ -17,6 +17,7 @@ import org.hnau.commons.gen.pipe.annotations.Pipe
 import org.hnau.commons.gen.sealup.annotations.SealUp
 import org.hnau.commons.gen.sealup.annotations.Variant
 import org.hnau.commons.kotlin.coroutines.flow.state.combineState
+import org.hnau.commons.kotlin.coroutines.flow.state.combineStateWith
 import org.hnau.commons.kotlin.coroutines.flow.state.mapState
 import org.hnau.commons.kotlin.coroutines.flow.state.mutable.toMutableStateFlowAsInitial
 import org.hnau.commons.kotlin.coroutines.flow.state.stickNotNull
@@ -56,7 +57,7 @@ class FilterModel(
     data class Skeleton(
         val categories: SelectCategoriesModel.Skeleton,
         val accounts: SelectAccountsModel.Skeleton,
-        val period: @Serializable(LocalDateRangeSerializer::class) LocalDateRange?,
+        val period: MutableStateFlow<@Serializable(LocalDateRangeSerializer::class) LocalDateRange?>,
         val selectedTab: MutableStateFlow<Tab?> =
             null.toMutableStateFlowAsInitial(),
     ) {
@@ -72,7 +73,7 @@ class FilterModel(
                 accounts = SelectAccountsModel.Skeleton.create(
                     initialSelectedAccountsIds = initialFilters.accounts,
                 ),
-                period = initialFilters.period,
+                period = initialFilters.period.toMutableStateFlowAsInitial(),
             )
         }
     }
@@ -131,15 +132,27 @@ class FilterModel(
         requestFocus = createRequestFocus(Tab.SelectedAccounts),
     )
 
+    val period: MutableStateFlow<LocalDateRange?>
+        get() = skeleton.period
+
+    fun clearPeriod() {
+        skeleton.period.value = null
+    }
+
     val filters: StateFlow<Filters> = combineState(
         scope = scope,
         first = categories.selectedCategoriesIds,
         second = accounts.selectedAccountsIds,
     ) { categories, accounts ->
+        categories to accounts
+    }.combineStateWith(
+        scope = scope,
+        other = skeleton.period,
+    ) { (categories, accounts), period ->
         Filters(
             accounts = accounts,
             categories = categories,
-            period = skeleton.period, //TODO
+            period = period,
         )
     }
 

@@ -1,6 +1,7 @@
 package org.hnau.pinfin.projector.filter
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -14,9 +15,11 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.FilterAlt
 import androidx.compose.material3.Card
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
@@ -42,6 +45,9 @@ import org.hnau.commons.kotlin.coroutines.flow.state.mapState
 import org.hnau.commons.kotlin.coroutines.flow.state.mapWithScope
 import org.hnau.pinfin.model.filter.FilterModel
 import org.hnau.pinfin.model.filter.fold
+import org.hnau.pinfin.projector.Localization
+import org.hnau.pinfin.projector.utils.Label
+import org.hnau.pinfin.projector.utils.formatter.datetime.DateTimeFormatter
 
 class FilterProjector(
     scope: CoroutineScope,
@@ -52,6 +58,9 @@ class FilterProjector(
     @Pipe
     interface Dependencies {
 
+        val localization: Localization
+
+        val dateTimeFormatter: DateTimeFormatter
 
         fun selectCategories(): SelectCategoriesProjector.Dependencies
 
@@ -224,6 +233,45 @@ class FilterProjector(
                     }
                 }
             }
+            model
+                .period
+                .collectAsState()
+                .value
+                .NullableStateContent(
+                    modifier = Modifier.fillMaxWidth(),
+                    transitionSpec = TransitionSpec.remember(
+                        showAlignment = Alignment.CenterStart,
+                    ),
+                ) { period ->
+                    Row(
+                        modifier = Modifier.padding(
+                            horizontal = Dimens.separation,
+                            vertical = Dimens.extraSmallSeparation,
+                        ),
+                    ) {
+                        Label(
+                            containerColor = MaterialTheme.colorScheme.primaryContainer,
+                        ) {
+                            Row(
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.spacedBy(Dimens.extraSmallSeparation),
+                            ) {
+                                Text(
+                                    dependencies.localization.filterPeriod(
+                                        dependencies.dateTimeFormatter.formatDate(period.start),
+                                        dependencies.dateTimeFormatter.formatDate(period.endInclusive),
+                                    )
+                                )
+                                Icon(
+                                    icon = Icons.Default.Close,
+                                    modifier = Modifier
+                                        .size(Dimens.smallSeparation * 2)
+                                        .clickable(onClick = model::clearPeriod),
+                                )
+                            }
+                        }
+                    }
+                }
             config
                 .collectAsState()
                 .value

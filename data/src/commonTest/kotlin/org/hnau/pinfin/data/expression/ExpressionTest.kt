@@ -238,6 +238,31 @@ class ExpressionTest {
         )
     }
 
+    @Test
+    fun amountExpressionNonTerminatingDivisionRoundsToScale() {
+        val amount = AmountExpression
+            .createOrNull("1/3", Currency.default)!!
+            .toAmount(Currency.default.scale)
+        assertEquals(
+            expected = BigDecimal.parseString("0.33"),
+            actual = amount.value,
+        )
+    }
+
+    @Test
+    fun amountExpressionDivisionWithLargeOperandsIsExact() {
+        // Регрессия на фиксированный decimalPrecision (см. dividePrecisely): раньше константа,
+        // не зависящая от операндов, могла молча усечь результат для чисел с большим числом
+        // значащих цифр.
+        val amount = AmountExpression
+            .createOrNull("123456789012345/7", Currency.default)!!
+            .toAmount(Currency.default.scale)
+        assertEquals(
+            expected = BigDecimal.parseString("17636684144620.71"),
+            actual = amount.value,
+        )
+    }
+
     // endregion
 
     // region serialize unary inside binary (potential bugs)

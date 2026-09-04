@@ -28,7 +28,7 @@ import org.hnau.pinfin.model.CreateBudgetModel
 import org.hnau.pinfin.model.TransactionsModel
 import org.hnau.pinfin.model.accountstack.AccountStackModel
 import org.hnau.pinfin.model.budget.BudgetModel
-import org.hnau.pinfin.model.budget.analytics.tab.graph.TransactionsOpener
+import org.hnau.pinfin.model.budget.analytics.tab.periods.TransactionsOpener
 import org.hnau.pinfin.model.categorystack.CategoryStackModel
 import org.hnau.pinfin.model.transaction.TransactionModel
 import org.hnau.pinfin.model.utils.budget.repository.BudgetRepository

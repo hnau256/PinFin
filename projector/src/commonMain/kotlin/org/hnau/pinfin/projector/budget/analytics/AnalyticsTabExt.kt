@@ -11,5 +11,5 @@ fun AnalyticsTab.title(
     localization: Localization,
 ): String = fold(
     ifAccounts = { localization.accounts },
-    ifGraph = { localization.categories },
+    ifGraph = { localization.analyticsPeriods },
 )

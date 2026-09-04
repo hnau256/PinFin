@@ -2,6 +2,7 @@ package org.hnau.pinfin.data.expression
 
 import com.ionspin.kotlin.bignum.decimal.BigDecimal
 import com.ionspin.kotlin.bignum.decimal.DecimalMode
+import org.hnau.pinfin.data.utils.dividePrecisely
 
 fun Expression.evaluate(
     decimalMode: DecimalMode,
@@ -24,7 +25,17 @@ internal fun Expression.evaluateOrNull(
             ifPlus = { left + right },
             ifMinus = { left - right },
             ifTimes = { left * right },
-            ifDivide = { if (right.isZero()) null else left.divide(right, decimalMode) },
+            ifDivide = {
+                if (right.isZero()) {
+                    null
+                } else {
+                    // decimalMode == null только при пре-парсинговой проверке "делитель не ноль"
+                    // (см. ExpressionParser) - там точность результата не важна.
+                    decimalMode
+                        ?.let { mode -> left.dividePrecisely(right, mode) }
+                        ?: left.divide(right, decimalMode)
+                }
+            },
         )
     },
 )
