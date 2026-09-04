@@ -21,7 +21,7 @@ from fractions import Fraction
 
 RECORD_RE = re.compile(r'\{"category":"([^"]*)","amount":"([^"]*)"')
 CATEGORY_CONFIG_ID_RE = re.compile(r'"type":"category_config","id":"([^"]*)"')
-TIMESTAMP_RE = re.compile(r'"timestamp":"[^"]*T[^"]*"')
+TIMESTAMP_RE = re.compile(r'"timestamp":"([^"]*)"')
 
 
 class ExpressionError(ValueError):
@@ -152,8 +152,8 @@ def process_record(match):
 
 
 def strip_time(match):
-    full = match.group(0)
-    date = full.split("T")[0]
+    value = match.group(1)
+    date = value.split("T")[0]
     return '"timestamp":"%s"' % date
 
 

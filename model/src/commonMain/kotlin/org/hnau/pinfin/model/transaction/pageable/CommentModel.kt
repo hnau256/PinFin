@@ -25,7 +25,7 @@ import org.hnau.pinfin.data.Comment
 import org.hnau.pinfin.model.utils.budget.repository.BudgetRepository
 import org.hnau.pinfin.model.utils.budget.state.BudgetState
 import org.hnau.pinfin.model.utils.resolveSuggests
-import kotlin.time.Instant
+import kotlinx.datetime.LocalDate
 
 class CommentModel(
     scope: CoroutineScope,
@@ -33,7 +33,7 @@ class CommentModel(
     private val skeleton: Skeleton,
     val isFocused: StateFlow<Boolean>,
     val requestFocus: () -> Unit,
-    private val extractSuggests: suspend (BudgetState) -> List<Pair<Comment, Instant>>,
+    private val extractSuggests: suspend (BudgetState) -> List<Pair<Comment, LocalDate>>,
     val goForward: () -> Unit,
 ) {
 
@@ -68,7 +68,7 @@ class CommentModel(
         scope: CoroutineScope,
         dependencies: Dependencies,
         val comment: MutableStateFlow<EditingString>,
-        extractSuggests: suspend (BudgetState) -> List<Pair<Comment, Instant>>,
+        extractSuggests: suspend (BudgetState) -> List<Pair<Comment, LocalDate>>,
         private val goForward: () -> Unit,
     ) {
 
@@ -92,7 +92,7 @@ class CommentModel(
             searchQuery = comment.mapState(scope, EditingString::text),
             extractItems = extractSuggests,
             extractText = { it.first.text },
-            extractTimestamp = Pair<*, Instant>::second,
+            extractTimestamp = Pair<*, LocalDate>::second,
             convertToResult = { (item) ->
                 Suggest(
                     comment = item,

@@ -39,7 +39,7 @@ import org.hnau.pinfin.model.transaction.utils.allRecords
 import org.hnau.pinfin.model.utils.budget.repository.BudgetRepository
 import org.hnau.pinfin.model.utils.budget.state.BudgetState
 import org.hnau.pinfin.model.utils.budget.state.CategoryInfo
-import kotlin.time.Instant
+import kotlinx.datetime.LocalDate
 
 class CategoryModel(
     scope: CoroutineScope,
@@ -151,7 +151,7 @@ class CategoryModel(
                                         timestamp to recordWithSameComment.idWithCategory
                                     }
                             }
-                            .maxByOrNull(Pair<Instant, *>::first)
+                            .maxByOrNull(Pair<LocalDate, *>::first)
                             ?.second
                     }
                     .toOption()

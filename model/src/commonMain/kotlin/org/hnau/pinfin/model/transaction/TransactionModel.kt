@@ -8,10 +8,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
-import kotlinx.datetime.TimeZone
-import kotlinx.datetime.atTime
-import kotlinx.datetime.toInstant
-import kotlinx.datetime.toLocalDateTime
+import kotlinx.datetime.LocalDate
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.UseSerializers
 import org.hnau.commons.app.model.goback.GoBackHandler
@@ -37,7 +34,6 @@ import org.hnau.pinfin.data.Transaction
 import org.hnau.pinfin.data.TransactionType
 import org.hnau.pinfin.model.transaction.pageable.CommentModel
 import org.hnau.pinfin.model.transaction.pageable.DateModel
-import org.hnau.pinfin.model.transaction.pageable.TimeModel
 import org.hnau.pinfin.model.transaction.pageable.TypeModel
 import org.hnau.pinfin.model.transaction.utils.toTransactionType
 import org.hnau.pinfin.model.utils.budget.repository.BudgetRepository
@@ -53,7 +49,7 @@ class TransactionModel(
     @Fold
     enum class Part {
 
-        Date, Time, Comment, Type;
+        Date, Comment, Type;
 
         companion object {
 
@@ -71,10 +67,6 @@ class TransactionModel(
             Variant(
                 type = DateModel.Page::class,
                 identifier = "date",
-            ),
-            Variant(
-                type = TimeModel.Page::class,
-                identifier = "time",
             ),
             Variant(
                 type = CommentModel.Page::class,
@@ -107,7 +99,6 @@ class TransactionModel(
         val part: MutableStateFlow<Part> = Part.default.toMutableStateFlowAsInitial(),
         val type: TypeModel.Skeleton,
         val date: DateModel.Skeleton,
-        val time: TimeModel.Skeleton,
         val comment: CommentModel.Skeleton,
         val closeWithoutSavingDialogIsVisible: MutableStateFlow<Boolean> =
             false.toMutableStateFlowAsInitial(),
@@ -125,33 +116,24 @@ class TransactionModel(
                     type = type,
                 ),
                 date = DateModel.Skeleton.createForNew(),
-                time = TimeModel.Skeleton.createForNew(),
                 comment = CommentModel.Skeleton.createForNew(),
             )
 
             fun createForEdit(
                 id: Transaction.Id,
                 transaction: TransactionInfo,
-            ): Skeleton {
-                val timestamp = transaction
-                    .timestamp
-                    .toLocalDateTime(TimeZone.currentSystemDefault())
-                return Skeleton(
-                    id = id,
-                    type = TypeModel.Skeleton.createForEdit(
-                        type = transaction.type,
-                    ),
-                    date = DateModel.Skeleton.createForEdit(
-                        date = timestamp.date,
-                    ),
-                    time = TimeModel.Skeleton.createForEdit(
-                        time = timestamp.time,
-                    ),
-                    comment = CommentModel.Skeleton.createForEdit(
-                        comment = transaction.comment,
-                    ),
-                )
-            }
+            ): Skeleton = Skeleton(
+                id = id,
+                type = TypeModel.Skeleton.createForEdit(
+                    type = transaction.type,
+                ),
+                date = DateModel.Skeleton.createForEdit(
+                    date = transaction.timestamp,
+                ),
+                comment = CommentModel.Skeleton.createForEdit(
+                    comment = transaction.comment,
+                ),
+            )
         }
     }
 
@@ -199,14 +181,6 @@ class TransactionModel(
         goForward = createGoForward(Part.Date),
     )
 
-    val time = TimeModel(
-        scope = scope,
-        skeleton = skeleton.time,
-        isFocused = isPartFocused(Part.Time),
-        requestFocus = createRequestFocus(Part.Time),
-        goForward = createGoForward(Part.Time),
-    )
-
     val comment = CommentModel(
         scope = scope,
         dependencies = dependencies.comment(),
@@ -243,11 +217,6 @@ class TransactionModel(
                 ifDate = {
                     PageType.date(
                         date.createPage(),
-                    )
-                },
-                ifTime = {
-                    PageType.time(
-                        time.createPage(),
                     )
                 },
                 ifComment = {
@@ -309,9 +278,7 @@ class TransactionModel(
         editable {
             Transaction(
                 type = type.type.state.bind().toTransactionType(),
-                timestamp = date.dateEditable.state.bind()
-                    .atTime(time.timeEditable.state.bind())
-                    .toInstant(TimeZone.currentSystemDefault()),
+                timestamp = date.dateEditable.state.bind(),
                 comment = comment.commentEditable.state.bind(),
             )
         }
@@ -425,7 +392,6 @@ class TransactionModel(
                 .fold(
                     ifType = { type.goBackHandler },
                     ifDate = { date.goBackHandler },
-                    ifTime = { time.goBackHandler },
                     ifComment = { comment.goBackHandler },
                 )
                 .state

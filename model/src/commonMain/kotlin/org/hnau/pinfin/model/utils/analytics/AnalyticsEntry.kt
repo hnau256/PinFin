@@ -4,8 +4,6 @@ import arrow.core.Either
 import arrow.core.NonEmptyList
 import arrow.core.nonEmptyListOf
 import kotlinx.datetime.LocalDate
-import kotlinx.datetime.TimeZone
-import kotlinx.datetime.toLocalDateTime
 import org.hnau.commons.kotlin.KeyValue
 import org.hnau.commons.kotlin.it
 import org.hnau.pinfin.data.AccountId
@@ -38,7 +36,7 @@ data class AnalyticsEntry(
 fun TransactionInfo.toAnalyticsEntries(
     currency: Currency,
 ): NonEmptyList<AnalyticsEntry> {
-    val date = timestamp.toLocalDateTime(TimeZone.currentSystemDefault()).date
+    val date: LocalDate = timestamp
     return type.fold(
         ifTransfer = { from, to, amountExpression ->
             val amount: Amount = amountExpression.toAmount(currency.scale)

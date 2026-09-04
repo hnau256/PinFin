@@ -19,7 +19,6 @@ import org.hnau.commons.gen.pipe.annotations.Pipe
 import org.hnau.pinfin.model.transaction.TransactionModel
 import org.hnau.pinfin.projector.transaction.pageable.CommentProjector
 import org.hnau.pinfin.projector.transaction.pageable.DateProjector
-import org.hnau.pinfin.projector.transaction.pageable.TimeProjector
 
 class InfoProjector(
     private val model: TransactionModel,
@@ -33,19 +32,12 @@ class InfoProjector(
 
         fun date(): DateProjector.Dependencies
 
-        fun time(): TimeProjector.Dependencies
-
         fun comment(): CommentProjector.Dependencies
     }
 
     private val date = DateProjector(
         dependencies = dependencies.date(),
         model = model.date,
-    )
-
-    private val time = TimeProjector(
-        dependencies = dependencies.time(),
-        model = model.time,
     )
 
     private val comment = CommentProjector(
@@ -83,9 +75,6 @@ class InfoProjector(
                         verticalAlignment = Alignment.CenterVertically,
                     ) {
                         date.Content(
-                            modifier = Modifier.weight(1f),
-                        )
-                        time.Content(
                             modifier = Modifier.weight(1f),
                         )
                     }

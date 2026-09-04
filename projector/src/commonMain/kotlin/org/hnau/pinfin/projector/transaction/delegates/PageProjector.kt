@@ -18,7 +18,6 @@ import org.hnau.pinfin.model.transaction.TransactionModel
 import org.hnau.pinfin.model.transaction.fold
 import org.hnau.pinfin.projector.transaction.pageable.CommentProjector
 import org.hnau.pinfin.projector.transaction.pageable.DateProjector
-import org.hnau.pinfin.projector.transaction.pageable.TimeProjector
 
 class PageProjector(
     scope: CoroutineScope,
@@ -37,10 +36,6 @@ class PageProjector(
             Variant(
                 type = DateProjector.Page::class,
                 identifier = "date",
-            ),
-            Variant(
-                type = TimeProjector.Page::class,
-                identifier = "time",
             ),
             Variant(
                 type = CommentProjector.Page::class,
@@ -79,13 +74,6 @@ class PageProjector(
                 ifDate = { model ->
                     Part.date(
                         DateProjector.Page(
-                            model = model,
-                        )
-                    )
-                },
-                ifTime = { model ->
-                    Part.time(
-                        TimeProjector.Page(
                             model = model,
                         )
                     )

@@ -6,11 +6,7 @@ import kotlinx.datetime.DateTimeUnit
 import kotlinx.datetime.DayOfWeek
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.Month
-import kotlinx.datetime.TimeZone
-import kotlinx.datetime.atTime
 import kotlinx.datetime.plus
-import kotlinx.datetime.toInstant
-import kotlinx.datetime.toLocalDateTime
 import org.hnau.pinfin.data.AccountConfig
 import org.hnau.pinfin.data.AccountId
 import org.hnau.pinfin.data.AmountDirection
@@ -30,7 +26,6 @@ import kotlin.math.exp
 import kotlin.math.ln
 import kotlin.math.sqrt
 import kotlin.random.Random
-import kotlin.time.Instant
 
 class DemoBudgetGenerator(
     private val config: DemoBudgetConfig,
@@ -97,23 +92,17 @@ class DemoBudgetGenerator(
         return k - 1
     }
 
-    private fun randomTimestamp(date: LocalDate, fromHour: Int, toHour: Int): Instant {
-        val hour = nextInt(fromHour, toHour - 1)
-        val minute = nextInt(0, 59)
-        val second = nextInt(0, 59)
-        return date.atTime(hour, minute, second).toInstant(TimeZone.UTC)
-    }
-
-    private fun Instant.toLocalDate(): LocalDate =
-        toLocalDateTime(TimeZone.UTC).date
-
     private fun LocalDate.isWeekend(): Boolean =
         dayOfWeek == DayOfWeek.SATURDAY || dayOfWeek == DayOfWeek.SUNDAY
 
     private fun daysBetween(a: LocalDate, b: LocalDate): Int {
-        val aInstant = a.atTime(0, 0).toInstant(TimeZone.UTC)
-        val bInstant = b.atTime(0, 0).toInstant(TimeZone.UTC)
-        return ((bInstant - aInstant).inWholeDays).toInt()
+        var days = 0
+        var current = a
+        while (current < b) {
+            days++
+            current = current.plus(1, DateTimeUnit.DAY)
+        }
+        return days
     }
 
     private fun isLeapYear(year: Int): Boolean =
@@ -542,7 +531,7 @@ class DemoBudgetGenerator(
     )
 
     private fun mkEntry(
-        timestamp: Instant,
+        timestamp: LocalDate,
         account: AccountId,
         records: List<Record>,
         comment: String,
@@ -556,7 +545,7 @@ class DemoBudgetGenerator(
     )
 
     private fun mkTransfer(
-        timestamp: Instant,
+        timestamp: LocalDate,
         from: AccountId,
         to: AccountId,
         amountCents: Long,
@@ -889,9 +878,9 @@ class DemoBudgetGenerator(
         return result
     }
 
-    fun generate(start: Instant, end: Instant): List<UpdateType> {
-        val startDate = start.toLocalDate()
-        val endDate = end.toLocalDate()
+    fun generate(start: LocalDate, end: LocalDate): List<UpdateType> {
+        val startDate = start
+        val endDate = end
         val jobs = generateEmployment(startDate, endDate)
 
         val configUpdates = generateConfigUpdates()
@@ -947,7 +936,7 @@ class DemoBudgetGenerator(
             val inVacation =
                 vacationPeriods.any { currentDate >= it.first && currentDate <= it.second }
 
-            val dayTimestamp = randomTimestamp(currentDate, 6, 23)
+            val dayTimestamp = currentDate
 
             if (isPayday && job != null) {
                 val salaryCents = (job.monthlySalary * 100.0 * rate * inflationFactor).toLong()
@@ -969,7 +958,7 @@ class DemoBudgetGenerator(
                 if (taxCents > 0) {
                     transactions.add(
                         mkEntry(
-                            timestamp = randomTimestamp(currentDate, 9, 12),
+                            timestamp = currentDate,
                             account = cardAccount,
                             records = listOf(mkRecord(catTax, loc.taxComment, taxCents)),
                             comment = "",
@@ -1016,7 +1005,7 @@ class DemoBudgetGenerator(
                     balance.card -= actual
                     transactions.add(
                         mkEntry(
-                            timestamp = randomTimestamp(currentDate, 9, 18),
+                            timestamp = currentDate,
                             account = cardAccount,
                             records = listOf(mkRecord(bill.category, bill.name, actual)),
                             comment = "",
@@ -1036,7 +1025,7 @@ class DemoBudgetGenerator(
                     balance.card -= actual
                     transactions.add(
                         mkEntry(
-                            timestamp = randomTimestamp(currentDate, 8, 12),
+                            timestamp = currentDate,
                             account = cardAccount,
                             records = listOf(mkRecord(catRent, loc.rent, actual)),
                             comment = "",
@@ -1056,7 +1045,7 @@ class DemoBudgetGenerator(
                     balance.card -= actual
                     transactions.add(
                         mkEntry(
-                            timestamp = randomTimestamp(currentDate, 0, 23),
+                            timestamp = currentDate,
                             account = cardAccount,
                             records = listOf(mkRecord(catSubscriptions, sub.name, actual)),
                             comment = "",
@@ -1099,7 +1088,7 @@ class DemoBudgetGenerator(
                     daysSinceGas = 0
                     transactions.add(
                         mkEntry(
-                            timestamp = randomTimestamp(currentDate, 7, 21),
+                            timestamp = currentDate,
                             account = cardAccount,
                             records = listOf(mkRecord(catCar, loc.gas, actual)),
                             comment = "",
@@ -1120,7 +1109,7 @@ class DemoBudgetGenerator(
                     daysSinceCarWash = 0
                     transactions.add(
                         mkEntry(
-                            timestamp = randomTimestamp(currentDate, 8, 19),
+                            timestamp = currentDate,
                             account = cardAccount,
                             records = listOf(mkRecord(catCar, loc.carWash, actual)),
                             comment = "",
@@ -1141,7 +1130,7 @@ class DemoBudgetGenerator(
                         lastCarInsuranceYear = monthNumber
                         transactions.add(
                             mkEntry(
-                                timestamp = randomTimestamp(currentDate, 9, 17),
+                                timestamp = currentDate,
                                 account = cardAccount,
                                 records = listOf(mkRecord(catCar, loc.carInsurance, actual)),
                                 comment = "",
@@ -1161,7 +1150,7 @@ class DemoBudgetGenerator(
                     balance.card -= actual
                     transactions.add(
                         mkEntry(
-                            timestamp = randomTimestamp(currentDate, 8, 18),
+                            timestamp = currentDate,
                             account = cardAccount,
                             records = listOf(mkRecord(catCar, loc.carRepair, actual)),
                             comment = "",
@@ -1178,7 +1167,7 @@ class DemoBudgetGenerator(
                     balance.savings += transferAmount
                     transactions.add(
                         mkTransfer(
-                            timestamp = randomTimestamp(currentDate, 18, 22),
+                            timestamp = currentDate,
                             from = cardAccount,
                             to = savingsAccount,
                             amountCents = transferAmount,
@@ -1225,7 +1214,7 @@ class DemoBudgetGenerator(
                 if (totalWeight <= 0.0) continue
 
                 val picked = weightedPick(probMap.map { it.first to it.second })
-                val visitTimestamp = randomTimestamp(currentDate, 7, 22)
+                val visitTimestamp = currentDate
 
                 when (picked) {
                     is StoreDef.MultiItem -> {
@@ -1307,7 +1296,7 @@ class DemoBudgetGenerator(
                     val giftName = if (shouldHappen(0.6)) loc.birthdayGift else loc.holidayGift
                     transactions.add(
                         mkEntry(
-                            timestamp = randomTimestamp(currentDate, 10, 20),
+                            timestamp = currentDate,
                             account = cardAccount,
                             records = listOf(mkRecord(giftCategory, giftName, giftCents)),
                             comment = if (shouldHappen(0.5)) loc.giftComment else "",

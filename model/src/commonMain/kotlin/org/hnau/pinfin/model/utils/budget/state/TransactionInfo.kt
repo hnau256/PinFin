@@ -8,10 +8,10 @@ import org.hnau.pinfin.data.AmountDirection
 import org.hnau.pinfin.data.CategoryId
 import org.hnau.pinfin.data.Comment
 import org.hnau.pinfin.data.expression.AmountExpression
-import kotlin.time.Instant
+import kotlinx.datetime.LocalDate
 
 data class TransactionInfo(
-    val timestamp: Instant,
+    val timestamp: LocalDate,
     val comment: Comment,
     val type: Type,
 ) {

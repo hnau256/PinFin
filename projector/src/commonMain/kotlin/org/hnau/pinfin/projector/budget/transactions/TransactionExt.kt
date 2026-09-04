@@ -19,8 +19,6 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.util.fastForEach
 import arrow.core.nonEmptySetOf
 import arrow.core.toNonEmptyListOrNull
-import kotlinx.datetime.TimeZone
-import kotlinx.datetime.toLocalDateTime
 import org.hnau.commons.app.projector.fractal.table.STable
 import org.hnau.commons.app.projector.fractal.utils.rememberFShape
 import org.hnau.commons.app.projector.uikit.utils.Dimens
@@ -134,15 +132,8 @@ fun TransactionInfo.CellContent(
 private fun TransactionInfo.TimestampContent(
     dependencies: TransactionsProjector.Dependencies,
 ) {
-    val timestamp = timestamp
     val text = remember(timestamp) {
-        val localTimestamp = timestamp.toLocalDateTime(TimeZone.currentSystemDefault())
-        listOf(
-            localTimestamp.date.let(dependencies.dateTimeFormatter::formatDate),
-            localTimestamp.time.let(dependencies.dateTimeFormatter::formatTime),
-        ).joinToString(
-            separator = " ",
-        )
+        dependencies.dateTimeFormatter.formatDate(timestamp)
     }
     Text(
         text = text,

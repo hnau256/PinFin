@@ -1,15 +1,18 @@
 package org.hnau.pinfin.model.utils.budget.repository.demo
 
+import kotlinx.datetime.DateTimeUnit
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.minus
+import kotlinx.datetime.toLocalDateTime
 import org.hnau.pinfin.data.UpdateType
 import kotlin.time.Clock
-import kotlin.time.Duration.Companion.days
 
 object DemoBudget {
 
     val updates: List<UpdateType>
         get() = buildList {
-            val end = Clock.System.now()
-            val start = end - (10 * 365).days
+            val end = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()).date
+            val start = end.minus(10 * 365, DateTimeUnit.DAY)
             val generator = DemoBudgetGenerator(
                 config = DemoBudgetConfig(
                     currencyRate = 1.0,

@@ -8,8 +8,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalDateRange
-import kotlinx.datetime.TimeZone
-import kotlinx.datetime.toLocalDateTime
 import org.hnau.commons.kotlin.foldNullable
 import org.hnau.commons.kotlin.map
 import org.hnau.pinfin.model.utils.analytics.config.AnalyticsSplitConfig
@@ -120,8 +118,6 @@ data class AnalyticsPagesProvider(
                         idWithTransaction
                             .value
                             .timestamp
-                            .toLocalDateTime(TimeZone.currentSystemDefault())
-                            .date
                     }
                     .let { (min, max) -> min..max }
             }

@@ -10,9 +10,8 @@ import org.hnau.commons.kotlin.mapper.plus
 import org.hnau.commons.kotlin.mapper.stringToUuid
 import org.hnau.commons.kotlin.serialization.UuidSerializer
 import org.hnau.pinfin.data.expression.AmountExpression
-import org.hnau.pinfin.data.utils.InstantSerializer
+import kotlinx.datetime.LocalDate
 import kotlin.jvm.JvmInline
-import kotlin.time.Instant
 import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid
 
@@ -20,8 +19,7 @@ import kotlin.uuid.Uuid
 @Serializable
 data class Transaction(
     @SerialName("timestamp")
-    @Serializable(InstantSerializer::class)
-    val timestamp: Instant,
+    val timestamp: LocalDate,
 
     @SerialName("comment")
     val comment: Comment,

@@ -9,7 +9,7 @@ import org.hnau.commons.kotlin.coroutines.Delayed
 import org.hnau.commons.kotlin.coroutines.flow.state.combineStateWith
 import org.hnau.commons.kotlin.coroutines.mapStateDelayed
 import org.hnau.commons.kotlin.foldNullable
-import kotlin.time.Instant
+import kotlinx.datetime.LocalDate
 
 inline fun <S, T, R> resolveSuggests(
     scope: CoroutineScope,
@@ -17,7 +17,7 @@ inline fun <S, T, R> resolveSuggests(
     searchQuery: StateFlow<String>,
     crossinline extractItems: suspend (S) -> Collection<T>,
     crossinline extractText: (T) -> String,
-    crossinline extractTimestamp: (T) -> Instant,
+    crossinline extractTimestamp: (T) -> LocalDate,
     crossinline convertToResult: (T) -> R,
     limit: Int = 64,
 ): StateFlow<Loadable<Delayed<List<R>>>> = searchQuery
@@ -82,7 +82,7 @@ inline fun <S, T, R> resolveSuggests(
 internal data class ItemWrapper<out T>(
     val item: T,
     val equalsFromFirstChar: Boolean,
-    val timestamp: Instant,
+    val timestamp: LocalDate,
     val text: String,
 ) {
 

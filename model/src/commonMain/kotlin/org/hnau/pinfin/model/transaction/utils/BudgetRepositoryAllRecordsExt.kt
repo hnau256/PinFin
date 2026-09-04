@@ -1,11 +1,11 @@
 package org.hnau.pinfin.model.transaction.utils
 
+import kotlinx.datetime.LocalDate
 import org.hnau.pinfin.model.utils.budget.state.BudgetState
 import org.hnau.pinfin.model.utils.budget.state.TransactionInfo
 import org.hnau.pinfin.model.utils.budget.state.fold
-import kotlin.time.Instant
 
-val BudgetState.allRecords: List<Pair<Instant, TransactionInfo.Type.Entry.Record>>
+val BudgetState.allRecords: List<Pair<LocalDate, TransactionInfo.Type.Entry.Record>>
     get() = this
         .transactions
         .flatMap { idWithTransaction ->
