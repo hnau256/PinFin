@@ -19,6 +19,7 @@ import kotlinx.serialization.UseSerializers
 import org.hnau.commons.kotlin.coroutines.flow.state.derivedStateFlowOf
 import org.hnau.commons.kotlin.coroutines.flow.state.mapState
 import org.hnau.commons.kotlin.coroutines.flow.state.mutable.toMutableStateFlowAsInitial
+import org.hnau.commons.kotlin.foldBoolean
 import org.hnau.commons.kotlin.serialization.MutableStateFlowSerializer
 import org.hnau.pinfin.model.utils.analytics.period.PeriodUnit
 
@@ -131,8 +132,11 @@ internal fun defaultDaysAnchor(
     count: Int,
     firstTransactionDate: LocalDate,
     lastTransactionDate: LocalDate,
-): LocalDate = if (count % 7 == 0) {
-    firstTransactionDate.previousOrSame(DayOfWeek.MONDAY)
-} else {
-    lastTransactionDate
-}
+): LocalDate = (count % 7 == 0).foldBoolean(
+    ifTrue = {
+        firstTransactionDate.previousOrSame(DayOfWeek.MONDAY)
+    },
+    ifFalse = {
+        lastTransactionDate
+    },
+)

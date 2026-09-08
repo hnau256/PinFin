@@ -19,6 +19,7 @@ import kotlinx.serialization.UseSerializers
 import org.hnau.commons.app.model.goback.GoBackHandler
 import org.hnau.commons.app.model.utils.Editable
 import org.hnau.commons.app.model.utils.editable
+import org.hnau.commons.app.model.utils.fold
 import org.hnau.commons.app.model.utils.map
 import org.hnau.commons.gen.pipe.annotations.Pipe
 import org.hnau.commons.kotlin.KeyValue
@@ -201,9 +202,10 @@ class RecordsModel(
                     first = acc,
                     second = item.model.category.categoryEditable,
                 ) { acc, categoryOrIncorrect ->
-                    when (categoryOrIncorrect) {
-                        Editable.Incorrect -> acc
-                        is Editable.Value -> acc + categoryOrIncorrect.value
+                    categoryOrIncorrect.fold(
+                        ifIncorrect = { acc },
+                    ) { value, _ ->
+                        acc + value
                     }
                 }
             }
@@ -284,14 +286,15 @@ class RecordsModel(
             ifNull = { this },
             ifNotNull = { nonEmptyRemaining ->
                 flatMapWithScope(scope) { scope, recordsOrIncorrect ->
-                    when (recordsOrIncorrect) {
-                        Editable.Incorrect -> Editable.Incorrect.toMutableStateFlowAsInitial()
-                        is Editable.Value<NonEmptyList<Record<KeyValue<CategoryId, CategoryInfo>>>> -> nonEmptyRemaining
+                    recordsOrIncorrect.fold(
+                        ifIncorrect = { Editable.Incorrect.toMutableStateFlowAsInitial() },
+                    ) { value, _ ->
+                        nonEmptyRemaining
                             .head
                             .record
                             .mapState(scope) { headRecordOrNull ->
                                 editable {
-                                    recordsOrIncorrect.bind() + headRecordOrNull.bind()
+                                    value + headRecordOrNull.bind()
                                 }
                             }
                             .add(

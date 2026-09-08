@@ -14,6 +14,7 @@ import kotlinx.serialization.UseSerializers
 import org.hnau.commons.app.model.EditingString
 import org.hnau.commons.app.model.toEditingString
 import org.hnau.commons.app.model.utils.Editable
+import org.hnau.commons.app.model.utils.fold
 import org.hnau.commons.kotlin.coroutines.flow.state.mapState
 import org.hnau.commons.kotlin.coroutines.flow.state.mutable.toMutableStateFlowAsInitial
 import org.hnau.commons.kotlin.serialization.MutableStateFlowSerializer
@@ -85,9 +86,9 @@ class NonNegativeCountModel(
     )
 
     val isCorrect: StateFlow<Boolean> = countEditable.mapState(scope) { countEditable ->
-        when (countEditable) {
-            Editable.Incorrect -> false
-            is Editable.Value -> true
-        }
+        countEditable.fold(
+            ifIncorrect = { false },
+            ifValue = { _, _ -> true },
+        )
     }
 }

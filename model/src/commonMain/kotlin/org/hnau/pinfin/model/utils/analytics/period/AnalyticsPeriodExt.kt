@@ -10,6 +10,7 @@ import kotlinx.datetime.daysUntil
 import kotlinx.datetime.minus
 import kotlinx.datetime.number
 import kotlinx.datetime.plus
+import org.hnau.commons.kotlin.foldBoolean
 
 /**
  * Период, содержащий [date]. Границы считаются индексной арифметикой в единице периода
@@ -102,7 +103,7 @@ internal fun monthLength(
 ): Int = when (monthNumber) {
     1, 3, 5, 7, 8, 10, 12 -> 31
     4, 6, 9, 11 -> 30
-    2 -> if (isLeapYear(year)) 29 else 28
+    2 -> isLeapYear(year).foldBoolean(ifTrue = { 29 }, ifFalse = { 28 })
     else -> 30
 }
 

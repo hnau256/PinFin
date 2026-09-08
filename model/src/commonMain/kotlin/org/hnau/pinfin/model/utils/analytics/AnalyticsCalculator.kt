@@ -115,7 +115,10 @@ private fun GroupKey.constraints(
     },
     ifCategory = { idWithCategory ->
         val categoryId = idWithCategory?.key
-        val allowed = config.categories?.let { categoryId in it } ?: true
+        val allowed = config.categories.foldNullable(
+            ifNull = { true },
+            ifNotNull = { categories -> categoryId in categories },
+        )
         allowed.foldBoolean(
             ifTrue = {
                 EntryConstraints(
@@ -127,7 +130,10 @@ private fun GroupKey.constraints(
         )
     },
     ifAccount = { idWithAccount ->
-        val allowed = config.accounts?.let { idWithAccount.key in it } ?: true
+        val allowed = config.accounts.foldNullable(
+            ifNull = { true },
+            ifNotNull = { accounts -> idWithAccount.key in accounts },
+        )
         allowed.foldBoolean(
             ifTrue = {
                 EntryConstraints(
@@ -143,16 +149,19 @@ private fun GroupKey.constraints(
 private fun AnalyticsEntry.matches(
     constraints: EntryConstraints,
 ): Boolean {
-    val categories = constraints.categories
-    if (categories != null && idWithCategoryOrDirection.getOrNull()?.key !in categories) {
-        return false
-    }
-
-    val accounts = constraints.accounts
-    if (accounts != null && idWithAccount.key !in accounts) {
-        return false
-    }
-    return true
+    val categoriesPass = constraints.categories.foldNullable(
+        ifNull = { true },
+        ifNotNull = { categories ->
+            idWithCategoryOrDirection.getOrNull()?.key in categories
+        },
+    )
+    val accountsPass = constraints.accounts.foldNullable(
+        ifNull = { true },
+        ifNotNull = { accounts ->
+            idWithAccount.key in accounts
+        },
+    )
+    return categoriesPass && accountsPass
 }
 
 private fun calcGroupAmount(
@@ -183,8 +192,10 @@ private fun calcGroupAmount(
         // подпериода) — считаем по всем пересекающимся подпериодам (fallback, вариант (б)).
         val (summedSubperiods, divisor) = fullSubperiods
             .takeIf { it.isNotEmpty() }
-            ?.let { it to it.size }
-            ?: (subperiods to subperiods.size)
+            .foldNullable(
+                ifNull = { subperiods to subperiods.size },
+                ifNotNull = { subperiods -> subperiods to subperiods.size },
+            )
 
         summedSubperiods
             .map { subperiodRange ->

@@ -18,6 +18,7 @@ import org.hnau.commons.kotlin.coroutines.flow.state.combineStateWith
 import org.hnau.commons.kotlin.coroutines.flow.state.mapState
 import org.hnau.commons.kotlin.coroutines.flow.state.mapWithScope
 import org.hnau.commons.kotlin.coroutines.mapStateDelayed
+import org.hnau.commons.kotlin.foldNullable
 import org.hnau.commons.kotlin.ifNull
 import org.hnau.commons.kotlin.map
 import org.hnau.pinfin.data.Currency
@@ -191,17 +192,17 @@ class PeriodsModel(
     private fun currentIndex(
         periods: NonEmptyList<LocalDateRange>,
         startOrNull: LocalDate?,
-    ): Int {
-        if (startOrNull == null) {
-            return periods.lastIndex
-        }
-        val index = periods.indexOfFirst { range -> startOrNull in range }
-        return when {
-            index >= 0 -> index
-            startOrNull < periods.first().start -> 0
-            else -> periods.lastIndex
-        }
-    }
+    ): Int = startOrNull.foldNullable(
+        ifNull = { periods.lastIndex },
+        ifNotNull = { start ->
+            val index = periods.indexOfFirst { range -> start in range }
+            when {
+                index >= 0 -> index
+                start < periods.first().start -> 0
+                else -> periods.lastIndex
+            }
+        },
+    )
 
     val goBackHandler: GoBackHandler = selectedPeriodStart.mapState(scope) { startOrNull ->
         startOrNull?.let {

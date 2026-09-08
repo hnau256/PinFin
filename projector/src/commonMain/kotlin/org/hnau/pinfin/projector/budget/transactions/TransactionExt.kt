@@ -26,6 +26,7 @@ import org.hnau.commons.app.projector.utils.Icon
 import org.hnau.commons.app.projector.utils.Orientation
 import org.hnau.commons.app.projector.utils.horizontalDisplayPadding
 import org.hnau.commons.kotlin.KeyValue
+import org.hnau.commons.kotlin.foldNullable
 import org.hnau.pinfin.data.AccountId
 import org.hnau.pinfin.data.AmountDirection
 import org.hnau.pinfin.data.CategoryId
@@ -212,11 +213,15 @@ private fun EntryContent(
                                 acc?.takeIf { it == direction }
                             }
                         }
-                    when (allDirection) {
-                        AmountDirection.Credit -> ArrowDirection.EndToStart
-                        AmountDirection.Debit -> ArrowDirection.StartToEnd
-                        null -> ArrowDirection.Both
-                    }
+                    allDirection.foldNullable(
+                        ifNull = { ArrowDirection.Both },
+                        ifNotNull = { direction ->
+                            direction.fold(
+                                ifCredit = { ArrowDirection.EndToStart },
+                                ifDebit = { ArrowDirection.StartToEnd },
+                            )
+                        },
+                    )
                 }
             ],
         )

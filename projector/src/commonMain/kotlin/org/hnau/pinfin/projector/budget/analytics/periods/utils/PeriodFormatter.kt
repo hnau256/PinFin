@@ -6,6 +6,7 @@ import kotlinx.datetime.LocalDateRange
 import kotlinx.datetime.Month
 import kotlinx.datetime.number
 import kotlinx.datetime.toJavaLocalDate
+import org.hnau.commons.kotlin.foldBoolean
 import org.hnau.pinfin.model.utils.analytics.AnalyticsConfig
 import org.hnau.pinfin.model.utils.analytics.fold
 import org.hnau.pinfin.model.utils.analytics.period.AnalyticsPeriod
@@ -25,18 +26,16 @@ fun AnalyticsPeriod.formatPeriod(
 ): String = fold(
     ifWhole = { formatRange(period) },
     ifMonths = { count, startDay ->
-        if (count == 1 && startDay == 1 && period.start.day == 1) {
-            formatMonthAndYear(period.start)
-        } else {
-            formatRange(period)
-        }
+        (count == 1 && startDay == 1 && period.start.day == 1).foldBoolean(
+            ifTrue = { formatMonthAndYear(period.start) },
+            ifFalse = { formatRange(period) },
+        )
     },
     ifYears = { count, startMonth, startDay ->
-        if (count == 1 && startMonth == Month.JANUARY && startDay == 1 && period.start == yearStartOf(period.start)) {
-            period.start.year.toString()
-        } else {
-            formatRange(period)
-        }
+        (count == 1 && startMonth == Month.JANUARY && startDay == 1 && period.start == yearStartOf(period.start)).foldBoolean(
+            ifTrue = { period.start.year.toString() },
+            ifFalse = { formatRange(period) },
+        )
     },
     ifDays = { _, _ -> formatRange(period) },
 )
@@ -98,19 +97,20 @@ private fun AnalyticsPeriod.describe(
             3 -> localization.presetQuarter
             else -> "$count ${localization.months}"
         }
-        if (startDay == 1) base else "$base с ${startDay}-го"
+        (startDay == 1).foldBoolean(
+            ifTrue = { base },
+            ifFalse = { "$base с ${startDay}-го" },
+        )
     },
     ifYears = { count, startMonth, startDay ->
-        val base = if (count == 1) {
-            localization.year.replaceFirstChar(Char::uppercase)
-        } else {
-            "$count ${localization.years}"
-        }
-        if (startMonth == Month.JANUARY && startDay == 1) {
-            base
-        } else {
-            "$base с $startDay ${monthGenitive(startMonth)}"
-        }
+        val base = (count == 1).foldBoolean(
+            ifTrue = { localization.year.replaceFirstChar(Char::uppercase) },
+            ifFalse = { "$count ${localization.years}" },
+        )
+        (startMonth == Month.JANUARY && startDay == 1).foldBoolean(
+            ifTrue = { base },
+            ifFalse = { "$base с $startDay ${monthGenitive(startMonth)}" },
+        )
     },
     ifDays = { count, anchor ->
         if (count == 7) {
@@ -126,9 +126,9 @@ private fun AnalyticsPeriod.describe(
 private fun PeriodDuration.describe(
     localization: Localization,
 ): String = when (unit) {
-    PeriodUnit.Day -> if (count == 1) localization.day else "$count ${localization.days}"
-    PeriodUnit.Month -> if (count == 1) localization.month else "$count ${localization.months}"
-    PeriodUnit.Year -> if (count == 1) localization.year else "$count ${localization.years}"
+    PeriodUnit.Day -> (count == 1).foldBoolean(ifTrue = { localization.day }, ifFalse = { "$count ${localization.days}" })
+    PeriodUnit.Month -> (count == 1).foldBoolean(ifTrue = { localization.month }, ifFalse = { "$count ${localization.months}" })
+    PeriodUnit.Year -> (count == 1).foldBoolean(ifTrue = { localization.year }, ifFalse = { "$count ${localization.years}" })
 }
 
 private val monthGenitives = listOf(

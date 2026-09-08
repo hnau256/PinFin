@@ -11,11 +11,11 @@ import org.hnau.pinfin.data.CategoryId
 import org.hnau.pinfin.data.foldRaw
 import org.hnau.pinfin.data.plus
 import org.hnau.pinfin.model.transaction.utils.toResolved
-import org.hnau.pinfin.model.utils.totalAmount
 import org.hnau.pinfin.model.utils.budget.state.AccountInfo
 import org.hnau.pinfin.model.utils.budget.state.BudgetInfo
 import org.hnau.pinfin.model.utils.budget.state.BudgetState
 import org.hnau.pinfin.model.utils.budget.state.CategoryInfo
+import org.hnau.pinfin.model.utils.totalAmount
 
 suspend fun BudgetStatePrototype.toBudgetState(
     id: BudgetId,

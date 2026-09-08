@@ -2,6 +2,8 @@ package org.hnau.pinfin.model.filter
 
 import arrow.core.toNonEmptyListOrNull
 import org.hnau.commons.kotlin.KeyValue
+import org.hnau.commons.kotlin.foldNullable
+import org.hnau.commons.kotlin.ifTrue
 import org.hnau.pinfin.data.AccountId
 import org.hnau.pinfin.data.CategoryId
 import org.hnau.pinfin.data.Record
@@ -19,18 +21,23 @@ fun filterOrNull(
     val period = filters.period
     return transaction.type.foldRaw(
         ifEntry = { variant ->
-            val accountPasses = accountSet?.let { accounts -> variant.account.key in accounts } ?: true
-            val periodPasses = period?.let { range -> transaction.timestamp in range } ?: true
-            if (!accountPasses || !periodPasses) {
-                null
-            } else {
-                val categorySet = filters.categories?.toSet()
-                val records: List<Record<KeyValue<CategoryId, CategoryInfo>>> = variant.records.records.toList()
-                val (matching, additional) = if (categorySet == null) {
-                    records to emptyList()
-                } else {
-                    records.partition { record -> record.category.key in categorySet }
-                }
+            val categorySet = filters.categories?.toSet()
+            val records: List<Record<KeyValue<CategoryId, CategoryInfo>>> = variant.records.records.toList()
+            val (matching, additional) = categorySet.foldNullable(
+                ifNull = { records to emptyList() },
+                ifNotNull = { categories ->
+                    records.partition { record -> record.category.key in categories }
+                },
+            )
+            val accountPasses = accountSet.foldNullable(
+                ifNull = { true },
+                ifNotNull = { accounts -> variant.account.key in accounts },
+            )
+            val periodPasses = period.foldNullable(
+                ifNull = { true },
+                ifNotNull = { range -> transaction.timestamp in range },
+            )
+            (accountPasses && periodPasses).ifTrue {
                 matching
                     .toNonEmptyListOrNull()
                     ?.let { main ->
@@ -49,22 +56,26 @@ fun filterOrNull(
             }
         },
         ifTransfer = { variant ->
-            val accountPasses = accountSet?.let { accounts ->
-                variant.from.key in accounts || variant.to.key in accounts
-            } ?: true
-            val periodPasses = period?.let { range -> transaction.timestamp in range } ?: true
-            val categoryPasses = filters
-                .categories
-                ?.let { categories -> null in categories }
-                ?: true
-            if (accountPasses && periodPasses && categoryPasses) {
+            val accountPasses = accountSet.foldNullable(
+                ifNull = { true },
+                ifNotNull = { accounts ->
+                    variant.from.key in accounts || variant.to.key in accounts
+                },
+            )
+            val periodPasses = period.foldNullable(
+                ifNull = { true },
+                ifNotNull = { range -> transaction.timestamp in range },
+            )
+            val categoryPasses = filters.categories.foldNullable(
+                ifNull = { true },
+                ifNotNull = { categories -> null in categories },
+            )
+            (accountPasses && periodPasses && categoryPasses).ifTrue {
                 Transaction(
                     timestamp = transaction.timestamp,
                     comment = transaction.comment,
                     type = variant,
                 )
-            } else {
-                null
             }
         },
     )

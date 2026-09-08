@@ -13,6 +13,7 @@ import kotlinx.serialization.UseSerializers
 import org.hnau.commons.app.model.goback.GoBackHandler
 import org.hnau.commons.app.model.utils.Editable
 import org.hnau.commons.app.model.utils.editable
+import org.hnau.commons.app.model.utils.fold
 import org.hnau.commons.app.model.utils.valueOrNone
 import org.hnau.commons.gen.fold.annotations.Fold
 import org.hnau.commons.gen.pipe.annotations.Pipe
@@ -268,28 +269,29 @@ class RecordModel(
     val categoryWithAmount: StateFlow<Pair<KeyValue<CategoryId, CategoryInfo>, Amount>?> = category
         .categoryEditable
         .flatMapWithScope(scope) { scope, categoryOrIncorrect ->
-            when (categoryOrIncorrect) {
-                Editable.Incorrect -> null.toMutableStateFlowAsInitial()
-                is Editable.Value<KeyValue<CategoryId, CategoryInfo>> -> amount
-                    .amountEditable
-                    .flatMapWithScope(scope) { scope, amountOrNull ->
-                        amountOrNull
-                            .valueOrNone
-                            .getOrNull()
-                            .foldNullable(
-                                ifNull = { null.toMutableStateFlowAsInitial() },
-                                ifNotNull = { amountExpression ->
-                                    dependencies.budgetRepository.state
-                                        .mapState(scope) { state ->
-                                            categoryOrIncorrect.value to amountExpression.toAmount(
-                                                state.info.currency.scale
-                                            )
-                                        }
-                                }
-                            )
-                    }
-            }
+        categoryOrIncorrect.fold(
+            ifIncorrect = { null.toMutableStateFlowAsInitial() },
+        ) { value, _ ->
+            amount
+                .amountEditable
+                .flatMapWithScope(scope) { scope, amountOrNull ->
+                    amountOrNull
+                        .valueOrNone
+                        .getOrNull()
+                        .foldNullable(
+                            ifNull = { null.toMutableStateFlowAsInitial() },
+                            ifNotNull = { amountExpression ->
+                                dependencies.budgetRepository.state
+                                    .mapState(scope) { state ->
+                                        value to amountExpression.toAmount(
+                                            state.info.currency.scale
+                                        )
+                                    }
+                            }
+                        )
+                }
         }
+    }
 
     class Page(
         scope: CoroutineScope,

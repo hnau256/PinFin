@@ -17,6 +17,7 @@ import org.hnau.commons.app.model.utils.valueOrNone
 import org.hnau.commons.gen.fold.annotations.Fold
 import org.hnau.commons.kotlin.coroutines.flow.state.derivedStateFlowOf
 import org.hnau.commons.kotlin.coroutines.flow.state.mutable.toMutableStateFlowAsInitial
+import org.hnau.commons.kotlin.foldBoolean
 import org.hnau.commons.kotlin.serialization.MutableStateFlowSerializer
 import org.hnau.pinfin.model.utils.analytics.period.AnalyticsPeriod
 import org.hnau.pinfin.model.utils.analytics.period.PeriodDuration
@@ -196,8 +197,18 @@ class PeriodConfigModel(
                     else -> Preset.Custom
                 }
             },
-            ifYears = { count, _, _ -> if (count == 1) Preset.Year else Preset.Custom },
-            ifDays = { count, _ -> if (count == 7) Preset.Week else Preset.Custom },
+            ifYears = { count, _, _ ->
+                (count == 1).foldBoolean(
+                    ifTrue = { Preset.Year },
+                    ifFalse = { Preset.Custom },
+                )
+            },
+            ifDays = { count, _ ->
+                (count == 7).foldBoolean(
+                    ifTrue = { Preset.Week },
+                    ifFalse = { Preset.Custom },
+                )
+            },
         )
 
         private fun effectiveDurationOf(
