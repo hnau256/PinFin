@@ -22,7 +22,7 @@ import org.hnau.pinfin.data.records.FilteredRecords
 import org.hnau.pinfin.model.budgetstack.BudgetStackOpener
 import org.hnau.pinfin.model.filter.FilterModel
 import org.hnau.pinfin.model.filter.Filters
-import org.hnau.pinfin.model.filter.filterOrNull
+import org.hnau.pinfin.model.filter.applyFiltersOrNull
 import org.hnau.pinfin.model.utils.budget.repository.BudgetRepository
 import org.hnau.pinfin.model.utils.budget.state.AccountInfo
 import org.hnau.pinfin.model.utils.budget.state.CategoryInfo
@@ -75,37 +75,39 @@ class TransactionsModel(
         dependencies
             .budgetStackOpener
             .openNewTransaction(
-                transactionType = TransactionType.Companion.default,
+                transactionType = TransactionType.default,
             )
     }
 
     val onEditTransactionClick: (Transaction.Id, Transaction<KeyValue<AccountId, AccountInfo>, KeyValue<CategoryId, CategoryInfo>, *>) -> Unit
         get() = dependencies.budgetStackOpener::openEditTransaction
 
-    val transactions: StateFlow<Loadable<Delayed<List<KeyValue<Transaction.Id, Transaction<KeyValue<AccountId, AccountInfo>, KeyValue<CategoryId, CategoryInfo>, FilteredRecords<KeyValue<CategoryId, CategoryInfo>>>>>>>> = combineState(
-        scope = scope,
-        first = dependencies
-            .budgetRepository
-            .state
-            .mapState(scope) { it.transactions.asReversed() },
-        second = filter.filters,
-        combine = ::Pair,
-    ).mapStateDelayed(scope) { (transactions, filters) ->
-        withContext(Dispatchers.Default) {
-            transactions.mapNotNull { idWithTransaction ->
-                filterOrNull(
-                    transaction = idWithTransaction.value,
-                    filters = filters,
-                )
-                    ?.let { filteredTransaction ->
-                        KeyValue(
-                            key = idWithTransaction.key,
-                            value = filteredTransaction,
+    val transactions: StateFlow<Loadable<Delayed<List<KeyValue<Transaction.Id, Transaction<KeyValue<AccountId, AccountInfo>, KeyValue<CategoryId, CategoryInfo>, FilteredRecords<KeyValue<CategoryId, CategoryInfo>>>>>>>> =
+        combineState(
+            scope = scope,
+            first = dependencies
+                .budgetRepository
+                .state
+                .mapState(scope) { it.transactions.asReversed() },
+            second = filter.filters,
+            combine = ::Pair,
+        ).mapStateDelayed(scope) { (transactions, filters) ->
+            withContext(Dispatchers.Default) {
+                transactions.mapNotNull { idWithTransaction ->
+                    idWithTransaction
+                        .value
+                        .applyFiltersOrNull(
+                            filters = filters,
                         )
-                    }
+                        ?.let { filteredTransaction ->
+                            KeyValue(
+                                key = idWithTransaction.key,
+                                value = filteredTransaction,
+                            )
+                        }
+                }
             }
         }
-    }
 
     val goBackHandler: GoBackHandler
         get() = filter.goBackHandler
