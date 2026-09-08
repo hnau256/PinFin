@@ -12,7 +12,7 @@ import org.hnau.upchain.core.UpchainHash
 data class BudgetStatePrototype(
     val hash: UpchainHash?,
     val config: BudgetConfig,
-    val transactions: Map<Transaction.Id, Transaction>,
+    val transactions: Map<Transaction.Id, Transaction<AccountId, CategoryId>>,
     val accountsConfigs: Map<AccountId, AccountConfig>,
     val categoriesConfigs: Map<CategoryId, CategoryConfig>,
 ) {

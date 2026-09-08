@@ -11,10 +11,10 @@ import org.hnau.pinfin.data.Amount
 import org.hnau.pinfin.data.AmountDirection
 import org.hnau.pinfin.data.CategoryId
 import org.hnau.pinfin.data.Currency
+import org.hnau.pinfin.data.Transaction
+import org.hnau.pinfin.data.fold
 import org.hnau.pinfin.model.utils.budget.state.AccountInfo
 import org.hnau.pinfin.model.utils.budget.state.CategoryInfo
-import org.hnau.pinfin.model.utils.budget.state.TransactionInfo
-import org.hnau.pinfin.model.utils.budget.state.fold
 
 data class AnalyticsEntry(
     val idWithAccount: KeyValue<AccountId, AccountInfo>,
@@ -33,7 +33,7 @@ data class AnalyticsEntry(
         )
 }
 
-fun TransactionInfo.toAnalyticsEntries(
+fun Transaction<KeyValue<AccountId, AccountInfo>, KeyValue<CategoryId, CategoryInfo>>.toAnalyticsEntries(
     currency: Currency,
 ): NonEmptyList<AnalyticsEntry> {
     val date: LocalDate = timestamp
@@ -55,12 +55,12 @@ fun TransactionInfo.toAnalyticsEntries(
                 )
             )
         },
-        ifEntry = { idWithAccount, records ->
+        ifEntry = { account, records ->
             records
                 .map { record ->
                     AnalyticsEntry(
-                        idWithAccount = idWithAccount,
-                        idWithCategoryOrDirection = Either.Right(record.idWithCategory),
+                        idWithAccount = account,
+                        idWithCategoryOrDirection = Either.Right(record.category),
                         amount = record.amount.toAmount(currency.scale),
                         date = date,
                     )

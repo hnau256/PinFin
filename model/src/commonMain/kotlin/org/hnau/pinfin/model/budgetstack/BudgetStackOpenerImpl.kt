@@ -4,6 +4,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import org.hnau.commons.app.model.stack.NonEmptyStack
 import org.hnau.commons.app.model.stack.push
 import org.hnau.commons.gen.pipe.annotations.Pipe
+import org.hnau.commons.kotlin.KeyValue
 import org.hnau.pinfin.data.AccountId
 import org.hnau.pinfin.data.CategoryId
 import org.hnau.pinfin.data.Transaction
@@ -13,7 +14,6 @@ import org.hnau.pinfin.model.transaction.TransactionModel
 import org.hnau.pinfin.model.utils.budget.repository.BudgetRepository
 import org.hnau.pinfin.model.utils.budget.state.AccountInfo
 import org.hnau.pinfin.model.utils.budget.state.CategoryInfo
-import org.hnau.pinfin.model.utils.budget.state.TransactionInfo
 
 class BudgetStackOpenerImpl(
     private val stack: MutableStateFlow<NonEmptyStack<BudgetStackElementSkeleton>>,
@@ -46,7 +46,7 @@ class BudgetStackOpenerImpl(
 
     override fun openEditTransaction(
         id: Transaction.Id,
-        info: TransactionInfo,
+        info: Transaction<KeyValue<AccountId, AccountInfo>, KeyValue<CategoryId, CategoryInfo>>,
     ) {
         open(
             BudgetStackModel.ElementSkeleton.transaction(

@@ -30,14 +30,18 @@ import org.hnau.commons.kotlin.foldBoolean
 import org.hnau.commons.kotlin.foldNullable
 import org.hnau.commons.kotlin.ifTrue
 import org.hnau.commons.kotlin.serialization.MutableStateFlowSerializer
+import org.hnau.commons.kotlin.KeyValue
+import org.hnau.pinfin.data.AccountId
+import org.hnau.pinfin.data.CategoryId
 import org.hnau.pinfin.data.Transaction
 import org.hnau.pinfin.data.TransactionType
 import org.hnau.pinfin.model.transaction.pageable.CommentModel
 import org.hnau.pinfin.model.transaction.pageable.DateModel
 import org.hnau.pinfin.model.transaction.pageable.TypeModel
-import org.hnau.pinfin.model.transaction.utils.toTransactionType
+import org.hnau.pinfin.model.transaction.utils.toRawType
 import org.hnau.pinfin.model.utils.budget.repository.BudgetRepository
-import org.hnau.pinfin.model.utils.budget.state.TransactionInfo
+import org.hnau.pinfin.model.utils.budget.state.AccountInfo
+import org.hnau.pinfin.model.utils.budget.state.CategoryInfo
 
 class TransactionModel(
     private val scope: CoroutineScope,
@@ -121,7 +125,7 @@ class TransactionModel(
 
             fun createForEdit(
                 id: Transaction.Id,
-                transaction: TransactionInfo,
+                transaction: Transaction<KeyValue<AccountId, AccountInfo>, KeyValue<CategoryId, CategoryInfo>>,
             ): Skeleton = Skeleton(
                 id = id,
                 type = TypeModel.Skeleton.createForEdit(
@@ -276,8 +280,8 @@ class TransactionModel(
 
     private val state: StateFlow<State> = derivedStateFlowOf(scope) {
         editable {
-            Transaction(
-                type = type.type.state.bind().toTransactionType(),
+            Transaction<AccountId, CategoryId>(
+                type = type.type.state.bind().toRawType(),
                 timestamp = date.dateEditable.state.bind(),
                 comment = comment.commentEditable.state.bind(),
             )
@@ -289,7 +293,7 @@ class TransactionModel(
                 save = null,
             )
 
-            is Editable.Value<Transaction> -> transactionOrIncorrect
+            is Editable.Value<Transaction<AccountId, CategoryId>> -> transactionOrIncorrect
                 .changed
                 .foldBoolean(
                     ifFalse = { State.NoChanges.toMutableStateFlowAsInitial() },

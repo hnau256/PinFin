@@ -26,20 +26,28 @@ import org.hnau.commons.app.projector.utils.Icon
 import org.hnau.commons.app.projector.utils.Orientation
 import org.hnau.commons.app.projector.utils.horizontalDisplayPadding
 import org.hnau.commons.kotlin.KeyValue
+import org.hnau.pinfin.data.AccountId
 import org.hnau.pinfin.data.AmountDirection
+import org.hnau.pinfin.data.CategoryId
 import org.hnau.pinfin.data.Currency
+import org.hnau.pinfin.data.Transaction
+import org.hnau.pinfin.data.fold
+import org.hnau.pinfin.data.foldRaw
 import org.hnau.pinfin.data.sum
-import org.hnau.pinfin.model.utils.budget.state.TransactionInfo
-import org.hnau.pinfin.model.utils.budget.state.fold
-import org.hnau.pinfin.model.utils.budget.state.foldRaw
+import org.hnau.pinfin.model.utils.amount
+import org.hnau.pinfin.model.utils.budget.state.AccountInfo
+import org.hnau.pinfin.model.utils.budget.state.CategoryInfo
+import org.hnau.pinfin.model.utils.resolvedDirectionedAmount
 import org.hnau.pinfin.projector.utils.AccountContent
 import org.hnau.pinfin.projector.utils.AmountContent
 import org.hnau.pinfin.projector.utils.ArrowDirection
 import org.hnau.pinfin.projector.utils.ArrowIcon
 import org.hnau.pinfin.projector.utils.CategoryContent
 
+typealias ResolvedTransaction = Transaction<KeyValue<AccountId, AccountInfo>, KeyValue<CategoryId, CategoryInfo>>
+
 @Composable
-fun TransactionInfo.Content(
+fun ResolvedTransaction.Content(
     dependencies: TransactionsProjector.Dependencies,
     currency: Currency,
     onClick: () -> Unit,
@@ -62,7 +70,7 @@ fun TransactionInfo.Content(
 }
 
 @Composable
-fun TransactionInfo.CellContent(
+fun ResolvedTransaction.CellContent(
     modifier: Modifier = Modifier,
     shape: Shape,
     dependencies: TransactionsProjector.Dependencies,
@@ -110,7 +118,7 @@ fun TransactionInfo.CellContent(
                 ifEntry = { _, records ->
                     records
                         .map { record ->
-                            record.directionedAmount.map { expression ->
+                            record.resolvedDirectionedAmount.map { expression ->
                                 expression.toAmount(currency.scale)
                             }
                         }
@@ -129,7 +137,7 @@ fun TransactionInfo.CellContent(
 }
 
 @Composable
-private fun TransactionInfo.TimestampContent(
+private fun ResolvedTransaction.TimestampContent(
     dependencies: TransactionsProjector.Dependencies,
 ) {
     val text = remember(timestamp) {
@@ -142,7 +150,7 @@ private fun TransactionInfo.TimestampContent(
 }
 
 @Composable
-private fun TransactionInfo.CommentContent() {
+private fun ResolvedTransaction.CommentContent() {
     val primary = comment.text.takeIf(String::isNotEmpty)
     val secondary = remember(type) {
         type.fold(
@@ -176,7 +184,7 @@ private fun TransactionInfo.CommentContent() {
 @Composable
 private fun EntryContent(
     dependencies: TransactionsProjector.Dependencies,
-    entry: TransactionInfo.Type.Entry,
+    entry: Transaction.Type.Entry<KeyValue<AccountId, AccountInfo>, KeyValue<CategoryId, CategoryInfo>>,
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
@@ -187,14 +195,14 @@ private fun EntryContent(
             records
                 .tail
                 .fold(
-                    initial = nonEmptySetOf(records.head.idWithCategory),
+                    initial = nonEmptySetOf(records.head.category),
                 ) { acc, record ->
-                    acc + record.idWithCategory
+                    acc + record.category
                 }
                 .toNonEmptyList()
         }
         AccountContent(
-            info = entry.idWithAccount.value,
+            info = entry.account.value,
             localization = dependencies.localization,
         )
         Icon(
@@ -203,7 +211,7 @@ private fun EntryContent(
                 remember(records) {
                     val allDirection = records
                         .map {
-                            it.idWithCategory.key.direction
+                            it.category.key.direction
                         }
                         .let { directions ->
                             directions.tail.fold<AmountDirection, AmountDirection?>(
@@ -231,7 +239,7 @@ private fun EntryContent(
 
 @Composable
 private fun TransferContent(
-    transfer: TransactionInfo.Type.Transfer,
+    transfer: Transaction.Type.Transfer<KeyValue<AccountId, AccountInfo>, KeyValue<CategoryId, CategoryInfo>>,
     dependencies: TransactionsProjector.Dependencies,
 ) {
     Row(

@@ -30,11 +30,13 @@ import org.hnau.pinfin.data.Amount
 import org.hnau.pinfin.data.AmountDirection
 import org.hnau.pinfin.data.CategoryId
 import org.hnau.pinfin.data.Comment
+import org.hnau.pinfin.data.Record
+import org.hnau.pinfin.data.Transaction
 import org.hnau.pinfin.model.transaction.utils.ChooseOrCreateModel
 import org.hnau.pinfin.model.transaction.utils.allRecords
 import org.hnau.pinfin.model.utils.budget.repository.BudgetRepository
+import org.hnau.pinfin.model.utils.budget.state.AccountInfo
 import org.hnau.pinfin.model.utils.budget.state.CategoryInfo
-import org.hnau.pinfin.model.utils.budget.state.TransactionInfo
 
 class RecordModel(
     private val scope: CoroutineScope,
@@ -146,13 +148,13 @@ class RecordModel(
             )
 
             fun createForEdit(
-                record: TransactionInfo.Type.Entry.Record,
+                record: Record<KeyValue<CategoryId, CategoryInfo>>,
             ): Skeleton = Skeleton(
                 comment = CommentModel.Skeleton.createForEdit(
                     comment = record.comment,
                 ),
                 category = CategoryModel.Skeleton.createForEdit(
-                    idWithCategory = record.idWithCategory,
+                    idWithCategory = record.category,
                 ),
                 amount = AmountModel.Skeleton.createForEdit(
                     amount = record.amount,
@@ -369,12 +371,12 @@ class RecordModel(
             )
         }
 
-    internal val record: StateFlow<Editable<TransactionInfo.Type.Entry.Record>> = derivedStateFlowOf(scope) {
+    internal val record: StateFlow<Editable<Record<KeyValue<CategoryId, CategoryInfo>>>> = derivedStateFlowOf(scope) {
         editable {
-            TransactionInfo.Type.Entry.Record(
+            Record(
                 amount = amount.amountEditable.state.bind(),
                 comment = comment.commentEditable.state.bind(),
-                idWithCategory = category.categoryEditable.state.bind(),
+                category = category.categoryEditable.state.bind(),
             )
         }
     }

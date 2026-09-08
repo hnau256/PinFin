@@ -8,16 +8,15 @@ import org.hnau.pinfin.data.Amount
 import org.hnau.pinfin.data.AmountDirection
 import org.hnau.pinfin.data.BudgetId
 import org.hnau.pinfin.data.CategoryId
-import org.hnau.pinfin.data.Record
 import org.hnau.pinfin.data.Transaction
 import org.hnau.pinfin.data.foldRaw
 import org.hnau.pinfin.data.plus
+import org.hnau.pinfin.model.transaction.utils.toResolved
 import org.hnau.pinfin.model.utils.amount
 import org.hnau.pinfin.model.utils.budget.state.AccountInfo
 import org.hnau.pinfin.model.utils.budget.state.BudgetInfo
 import org.hnau.pinfin.model.utils.budget.state.BudgetState
 import org.hnau.pinfin.model.utils.budget.state.CategoryInfo
-import org.hnau.pinfin.model.utils.budget.state.TransactionInfo
 
 suspend fun BudgetStatePrototype.toBudgetState(
     id: BudgetId,
@@ -92,12 +91,11 @@ suspend fun BudgetStatePrototype.toBudgetState(
         prototype = this@toBudgetState,
         transactions = transactions
             .map { (id, transaction) ->
-                val transaction = TransactionInfo.fromTransaction(
-                    transaction = transaction,
+                val resolved = transaction.toResolved(
                     categories = categories,
                     accounts = accounts,
                 )
-                KeyValue(id, transaction)
+                KeyValue(id, resolved)
             }
             .sortedBy { it.value.timestamp },
         categories = categories.map { (key, value) -> KeyValue(key, value) },
@@ -105,83 +103,3 @@ suspend fun BudgetStatePrototype.toBudgetState(
         info = info,
     )
 }
-
-private fun TransactionInfo.Companion.fromTransaction(
-    transaction: Transaction,
-    categories: Map<CategoryId, CategoryInfo>,
-    accounts: Map<AccountId, AccountInfo>,
-): TransactionInfo = TransactionInfo(
-    timestamp = transaction.timestamp,
-    comment = transaction.comment,
-    type = TransactionInfo.Type.fromType(
-        type = transaction.type,
-        categories = categories,
-        accounts = accounts,
-    )
-)
-
-private fun TransactionInfo.Type.Companion.fromType(
-    type: Transaction.Type,
-    categories: Map<CategoryId, CategoryInfo>,
-    accounts: Map<AccountId, AccountInfo>,
-): TransactionInfo.Type = type.foldRaw(
-    ifEntry = { variant ->
-        TransactionInfo.Type.Entry.fromEntry(
-            entry = variant,
-            categories = categories,
-            accounts = accounts,
-        )
-    },
-    ifTransfer = { variant ->
-        TransactionInfo.Type.Transfer.fromTransfer(
-            transfer = variant,
-            accounts = accounts,
-        )
-    },
-)
-
-private fun TransactionInfo.Type.Entry.Companion.fromEntry(
-    entry: Transaction.Type.Entry,
-    categories: Map<CategoryId, CategoryInfo>,
-    accounts: Map<AccountId, AccountInfo>,
-): TransactionInfo.Type.Entry = TransactionInfo.Type.Entry(
-    idWithAccount = KeyValue(
-        key = entry.account,
-        value = accounts.getValue(entry.account),
-    ),
-    records = entry
-        .records
-        .map { record ->
-            TransactionInfo.Type.Entry.Record.fromRecord(
-                record = record,
-                categories = categories,
-            )
-        }
-)
-
-private fun TransactionInfo.Type.Entry.Record.Companion.fromRecord(
-    record: Record,
-    categories: Map<CategoryId, CategoryInfo>,
-): TransactionInfo.Type.Entry.Record = TransactionInfo.Type.Entry.Record(
-    idWithCategory = KeyValue(
-        key = record.category,
-        value = categories.getValue(record.category),
-    ),
-    amount = record.amount,
-    comment = record.comment,
-)
-
-private fun TransactionInfo.Type.Transfer.Companion.fromTransfer(
-    transfer: Transaction.Type.Transfer,
-    accounts: Map<AccountId, AccountInfo>,
-): TransactionInfo.Type.Transfer = TransactionInfo.Type.Transfer(
-    from = KeyValue(
-        key = transfer.from,
-        value = accounts.getValue(transfer.from),
-    ),
-    to = KeyValue(
-        key = transfer.to,
-        value = accounts.getValue(transfer.to),
-    ),
-    amount = transfer.amount,
-)

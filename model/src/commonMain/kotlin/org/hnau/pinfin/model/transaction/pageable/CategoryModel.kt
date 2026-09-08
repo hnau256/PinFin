@@ -148,7 +148,7 @@ class CategoryModel(
                                         )
                                     }
                                     ?.let { recordWithSameComment ->
-                                        timestamp to recordWithSameComment.idWithCategory
+                                        timestamp to recordWithSameComment.category
                                     }
                             }
                             .maxByOrNull(Pair<LocalDate, *>::first)

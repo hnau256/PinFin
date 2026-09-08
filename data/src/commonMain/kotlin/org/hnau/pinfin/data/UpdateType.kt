@@ -18,7 +18,7 @@ sealed interface UpdateType {
         val id: TransactionDTO.Id,
 
         @SerialName("transaction")
-        val transaction: TransactionDTO,
+        val transaction: TransactionDTO<AccountId, CategoryId>,
     ) : UpdateType
 
     @Serializable

@@ -3,13 +3,15 @@ package org.hnau.pinfin.model.utils.budget.state
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.hnau.pinfin.data.AccountConfig
+import org.hnau.pinfin.data.AccountId
 import org.hnau.pinfin.data.BudgetId
 import org.hnau.pinfin.data.CategoryConfig
+import org.hnau.pinfin.data.CategoryId
 import org.hnau.pinfin.data.Comment
 import org.hnau.pinfin.data.Transaction
 import org.hnau.pinfin.data.UpdateType
 import org.hnau.pinfin.data.foldRaw
-import org.hnau.pinfin.model.transaction.utils.toTransactionType
+import org.hnau.pinfin.model.transaction.utils.toRawType
 
 suspend fun BudgetState.toOptimizedUpdates(
     sourceId: BudgetId,
@@ -66,20 +68,20 @@ suspend fun BudgetState.toOptimizedUpdates(
                 }
         },
 
-        transactions.map { (id, transactionInfo) ->
+        transactions.map { (id, resolvedTransaction) ->
             UpdateType.Transaction(
                 id = id,
-                transaction = Transaction(
-                    timestamp = transactionInfo.timestamp,
-                    comment = transactionInfo.comment,
-                    type = transactionInfo.type.toTransactionType(),
+                transaction = Transaction<AccountId, CategoryId>(
+                    timestamp = resolvedTransaction.timestamp,
+                    comment = resolvedTransaction.comment,
+                    type = resolvedTransaction.type.toRawType(),
                 ).trimStrings(),
             )
         },
     ).flatten()
 }
 
-private fun Transaction.trimStrings(): Transaction = copy(
+private fun Transaction<AccountId, CategoryId>.trimStrings(): Transaction<AccountId, CategoryId> = copy(
     comment = comment.optimize(),
     type = type.foldRaw(
         ifEntry = { variant ->

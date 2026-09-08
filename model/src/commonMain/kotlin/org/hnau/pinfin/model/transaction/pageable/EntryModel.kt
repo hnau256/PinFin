@@ -27,9 +27,12 @@ import org.hnau.commons.kotlin.serialization.MutableStateFlowSerializer
 import org.hnau.pinfin.data.AccountId
 import org.hnau.pinfin.data.Amount
 import org.hnau.pinfin.data.AmountDirection
+import org.hnau.pinfin.data.CategoryId
+import org.hnau.pinfin.data.Record
+import org.hnau.pinfin.data.Transaction
 import org.hnau.pinfin.model.transaction.utils.ChooseOrCreateModel
 import org.hnau.pinfin.model.utils.budget.state.AccountInfo
-import org.hnau.pinfin.model.utils.budget.state.TransactionInfo
+import org.hnau.pinfin.model.utils.budget.state.CategoryInfo
 
 class EntryModel(
     private val scope: CoroutineScope,
@@ -103,10 +106,10 @@ class EntryModel(
             )
 
             fun createForEdit(
-                entry: TransactionInfo.Type.Entry,
+                entry: Transaction.Type.Entry<KeyValue<AccountId, AccountInfo>, KeyValue<CategoryId, CategoryInfo>>,
             ): Skeleton = Skeleton(
                 account = AccountModel.Skeleton.createForEdit(
-                    idWithAccount = entry.idWithAccount,
+                    idWithAccount = entry.account,
                 ),
                 records = RecordsModel.Skeleton.createForEdit(
                     records = entry.records,
@@ -208,12 +211,12 @@ class EntryModel(
             },
     )
 
-    internal val entry: StateFlow<Editable<TransactionInfo.Type.Entry>> =
+    internal val entry: StateFlow<Editable<Transaction.Type.Entry<KeyValue<AccountId, AccountInfo>, KeyValue<CategoryId, CategoryInfo>>>> =
         derivedStateFlowOf(scope) {
             editable {
-                TransactionInfo.Type.Entry(
+                Transaction.Type.Entry(
                     records = records.records.state.bind(),
-                    idWithAccount = account.accountEditable.state.bind(),
+                    account = account.accountEditable.state.bind(),
                 )
             }
         }

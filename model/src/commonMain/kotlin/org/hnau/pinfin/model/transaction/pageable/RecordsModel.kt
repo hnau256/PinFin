@@ -38,11 +38,13 @@ import org.hnau.commons.kotlin.toZipListOrNull
 import org.hnau.pinfin.data.Amount
 import org.hnau.pinfin.data.AmountDirection
 import org.hnau.pinfin.data.CategoryId
+import org.hnau.pinfin.data.Record
+import org.hnau.pinfin.data.Transaction
 import org.hnau.pinfin.data.plus
 import org.hnau.pinfin.model.transaction.utils.RecordId
 import org.hnau.pinfin.model.transaction.utils.remove
+import org.hnau.pinfin.model.utils.budget.state.AccountInfo
 import org.hnau.pinfin.model.utils.budget.state.CategoryInfo
-import org.hnau.pinfin.model.utils.budget.state.TransactionInfo
 
 class RecordsModel(
     scope: CoroutineScope,
@@ -73,7 +75,7 @@ class RecordsModel(
             )
 
             fun createForEdit(
-                records: NonEmptyList<TransactionInfo.Type.Entry.Record>
+                records: NonEmptyList<Record<KeyValue<CategoryId, CategoryInfo>>>
             ): Skeleton = createInner(
                 records = records.map(RecordModel.Skeleton.Companion::createForEdit),
             )
@@ -256,7 +258,7 @@ class RecordsModel(
         addNewRecord = ::addNewRecord,
     )
 
-    internal val records: StateFlow<Editable<NonEmptyList<TransactionInfo.Type.Entry.Record>>> =
+    internal val records: StateFlow<Editable<NonEmptyList<Record<KeyValue<CategoryId, CategoryInfo>>>>> =
         items.flatMapWithScope(scope) { scope, idWithRecords ->
 
             val records = idWithRecords
@@ -275,10 +277,10 @@ class RecordsModel(
                 )
         }
 
-    private fun StateFlow<Editable<NonEmptyList<TransactionInfo.Type.Entry.Record>>>.add(
+    private fun StateFlow<Editable<NonEmptyList<Record<KeyValue<CategoryId, CategoryInfo>>>>>.add(
         scope: CoroutineScope,
         remaining: List<RecordModel>,
-    ): StateFlow<Editable<NonEmptyList<TransactionInfo.Type.Entry.Record>>> = remaining
+    ): StateFlow<Editable<NonEmptyList<Record<KeyValue<CategoryId, CategoryInfo>>>>> = remaining
         .toNonEmptyListOrNull()
         .foldNullable(
             ifNull = { this },
@@ -286,7 +288,7 @@ class RecordsModel(
                 flatMapWithScope(scope) { scope, recordsOrIncorrect ->
                     when (recordsOrIncorrect) {
                         Editable.Incorrect -> Editable.Incorrect.toMutableStateFlowAsInitial()
-                        is Editable.Value<NonEmptyList<TransactionInfo.Type.Entry.Record>> -> nonEmptyRemaining
+                        is Editable.Value<NonEmptyList<Record<KeyValue<CategoryId, CategoryInfo>>>> -> nonEmptyRemaining
                             .head
                             .record
                             .mapState(scope) { headRecordOrNull ->

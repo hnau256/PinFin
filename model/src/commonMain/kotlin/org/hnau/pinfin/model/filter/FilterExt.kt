@@ -2,13 +2,17 @@ package org.hnau.pinfin.model.filter
 
 import arrow.core.NonEmptySet
 import kotlinx.datetime.LocalDateRange
+import org.hnau.commons.kotlin.KeyValue
 import org.hnau.pinfin.data.AccountId
 import org.hnau.pinfin.data.CategoryId
-import org.hnau.pinfin.model.utils.budget.state.TransactionInfo
-import org.hnau.pinfin.model.utils.budget.state.fold
+import org.hnau.pinfin.data.Record
+import org.hnau.pinfin.data.Transaction
+import org.hnau.pinfin.data.fold
+import org.hnau.pinfin.model.utils.budget.state.AccountInfo
+import org.hnau.pinfin.model.utils.budget.state.CategoryInfo
 
 internal fun Filters.check(
-    transaction: TransactionInfo,
+    transaction: Transaction<KeyValue<AccountId, AccountInfo>, KeyValue<CategoryId, CategoryInfo>>,
 ): Boolean = when {
     !categories.checkCategories(transaction) -> false
     !accounts.checkAccounts(transaction) -> false
@@ -17,7 +21,7 @@ internal fun Filters.check(
 }
 
 private fun NonEmptySet<CategoryId?>?.checkCategories(
-    transaction: TransactionInfo,
+    transaction: Transaction<KeyValue<AccountId, AccountInfo>, KeyValue<CategoryId, CategoryInfo>>,
 ): Boolean {
     if (this == null) {
         return true
@@ -27,7 +31,7 @@ private fun NonEmptySet<CategoryId?>?.checkCategories(
         ifEntry = { _, records ->
             records
                 .any { record ->
-                    record.idWithCategory.key in set
+                    record.category.key in set
                 }
         },
         ifTransfer = { _, _, _ -> null in set },
@@ -35,15 +39,15 @@ private fun NonEmptySet<CategoryId?>?.checkCategories(
 }
 
 private fun NonEmptySet<AccountId>?.checkAccounts(
-    transaction: TransactionInfo,
+    transaction: Transaction<KeyValue<AccountId, AccountInfo>, KeyValue<CategoryId, CategoryInfo>>,
 ): Boolean {
     if (this == null) {
         return true
     }
     val set = toSet()
     return transaction.type.fold(
-        ifEntry = { idWithAccount, _ ->
-            idWithAccount.key in set
+        ifEntry = { account, _ ->
+            account.key in set
         },
         ifTransfer = { from, to, _ ->
             from.key in set || to.key in set
@@ -52,7 +56,7 @@ private fun NonEmptySet<AccountId>?.checkAccounts(
 }
 
 private fun LocalDateRange?.checkPeriod(
-    transaction: TransactionInfo,
+    transaction: Transaction<KeyValue<AccountId, AccountInfo>, KeyValue<CategoryId, CategoryInfo>>,
 ): Boolean {
     if (this == null) {
         return true

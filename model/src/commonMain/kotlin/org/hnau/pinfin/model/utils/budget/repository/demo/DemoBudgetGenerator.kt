@@ -524,7 +524,7 @@ class DemoBudgetGenerator(
         category: CategoryId,
         comment: String,
         amountCents: Long,
-    ): Record = Record(
+    ): Record<CategoryId> = Record(
         category = category,
         amount = centsToAmountExpr(amountCents),
         comment = Comment(comment),
@@ -533,9 +533,9 @@ class DemoBudgetGenerator(
     private fun mkEntry(
         timestamp: LocalDate,
         account: AccountId,
-        records: List<Record>,
+        records: List<Record<CategoryId>>,
         comment: String,
-    ): Transaction = Transaction(
+    ): Transaction<AccountId, CategoryId> = Transaction(
         timestamp = timestamp,
         comment = Comment(comment),
         type = Transaction.Type.Entry(
@@ -550,7 +550,7 @@ class DemoBudgetGenerator(
         to: AccountId,
         amountCents: Long,
         comment: String,
-    ): Transaction = Transaction(
+    ): Transaction<AccountId, CategoryId> = Transaction(
         timestamp = timestamp,
         comment = Comment(comment),
         type = Transaction.Type.Transfer(
@@ -884,7 +884,7 @@ class DemoBudgetGenerator(
         val jobs = generateEmployment(startDate, endDate)
 
         val configUpdates = generateConfigUpdates()
-        val transactions = mutableListOf<Transaction>()
+        val transactions = mutableListOf<Transaction<AccountId, CategoryId>>()
 
         val balance = BalanceTracker()
         val rate = config.currencyRate
@@ -1219,7 +1219,7 @@ class DemoBudgetGenerator(
                 when (picked) {
                     is StoreDef.MultiItem -> {
                         val numItems = nextInt(picked.minItems, picked.maxItems)
-                        val records = mutableListOf<Record>()
+                        val records = mutableListOf<Record<CategoryId>>()
                         var itemsTotal = 0L
                         for (i in 0 until numItems) {
                             val poolIdx = weightedPick(

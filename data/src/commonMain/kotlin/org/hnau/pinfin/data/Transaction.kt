@@ -17,7 +17,7 @@ import kotlin.uuid.Uuid
 
 @OptIn(ExperimentalUuidApi::class)
 @Serializable
-data class Transaction(
+data class Transaction<out A, out C>(
     @SerialName("timestamp")
     val timestamp: LocalDate,
 
@@ -25,7 +25,7 @@ data class Transaction(
     val comment: Comment,
 
     @SerialName("type")
-    val type: Type,
+    val type: Type<A, C>,
 ) {
 
     @Serializable
@@ -52,34 +52,32 @@ data class Transaction(
 
     @Fold
     @Serializable
-    sealed interface Type {
+    sealed interface Type<out A, out C> {
 
         @Serializable
         @SerialName("entry")
-        data class Entry(
+        data class Entry<out A, out C>(
 
             @SerialName("account")
-            val account: AccountId,
+            val account: A,
 
             @SerialName("records")
             @Serializable(NonEmptyListSerializer::class)
-            val records: NonEmptyList<Record>,
-        ) : Type
+            val records: NonEmptyList<Record<C>>,
+        ) : Type<A, C>
 
         @Serializable
         @SerialName("transfer")
-        data class Transfer(
+        data class Transfer<out A, out C>(
 
             @SerialName("from")
-            val from: AccountId,
+            val from: A,
 
             @SerialName("to")
-            val to: AccountId,
+            val to: A,
 
             @SerialName("amount")
             val amount: AmountExpression,
-        ) : Type
+        ) : Type<A, C>
     }
 }
-
-

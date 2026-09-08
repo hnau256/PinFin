@@ -1,6 +1,8 @@
 package org.hnau.pinfin.model.utils.budget.repository
 
 import kotlinx.coroutines.flow.StateFlow
+import org.hnau.pinfin.data.AccountId
+import org.hnau.pinfin.data.CategoryId
 import org.hnau.pinfin.data.Transaction
 import org.hnau.pinfin.data.UpdateType
 import org.hnau.pinfin.model.utils.budget.state.BudgetState
@@ -12,7 +14,7 @@ class BudgetRepositoryTransactionsDelegate(
 
     suspend fun addOrUpdate(
         id: Transaction.Id?,
-        transaction: Transaction,
+        transaction: Transaction<AccountId, CategoryId>,
     ) {
         addUpdate(
             UpdateType.Transaction(
