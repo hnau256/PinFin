@@ -25,6 +25,7 @@ import org.hnau.pinfin.model.BudgetSettingsModel
 import org.hnau.pinfin.model.BudgetSwitchModel
 import org.hnau.pinfin.model.CategoriesModel
 import org.hnau.pinfin.model.CreateBudgetModel
+import org.hnau.pinfin.model.TransactionViewModel
 import org.hnau.pinfin.model.TransactionsModel
 import org.hnau.pinfin.model.accountstack.AccountStackModel
 import org.hnau.pinfin.model.budget.BudgetModel
@@ -65,7 +66,9 @@ class BudgetStackModel(
 
             fun budget(): BudgetModel.Dependencies
 
-            fun transaction(): TransactionModel.Dependencies
+            fun transactionView(): TransactionViewModel.Dependencies
+
+            fun transactionEdit(): TransactionModel.Dependencies
 
             fun transactions(): TransactionsModel.Dependencies
 
@@ -87,8 +90,12 @@ class BudgetStackModel(
                 identifier = "budget",
             ),
             Variant(
+                type = TransactionViewModel::class,
+                identifier = "transactionView",
+            ),
+            Variant(
                 type = TransactionModel::class,
-                identifier = "transaction",
+                identifier = "transactionEdit",
             ),
             Variant(
                 type = TransactionsModel::class,
@@ -136,8 +143,12 @@ class BudgetStackModel(
                 identifier = "budget",
             ),
             Variant(
+                type = TransactionViewModel.Skeleton::class,
+                identifier = "transactionView",
+            ),
+            Variant(
                 type = TransactionModel.Skeleton::class,
-                identifier = "transaction",
+                identifier = "transactionEdit",
             ),
             Variant(
                 type = TransactionsModel.Skeleton::class,
@@ -217,11 +228,19 @@ class BudgetStackModel(
                 dependencies = dependenciesWithOpeners.budget(),
             )
         },
-        ifTransaction = { transactionSkeleton ->
-            Element.transaction(
+        ifTransactionEdit = { transactionEditSkeleton ->
+            Element.transactionEdit(
                 scope = modelScope,
-                skeleton = transactionSkeleton,
-                dependencies = dependenciesWithOpeners.transaction(),
+                skeleton = transactionEditSkeleton,
+                dependencies = dependenciesWithOpeners.transactionEdit(),
+                onReady = { this@BudgetStackModel.skeleton.stack.tryDropLast() },
+            )
+        },
+        ifTransactionView = { transactionViewSkeleton ->
+            Element.transactionView(
+                scope = modelScope,
+                skeleton = transactionViewSkeleton,
+                dependencies = dependenciesWithOpeners.transactionView(),
                 onReady = { this@BudgetStackModel.skeleton.stack.tryDropLast() },
             )
         },

@@ -28,6 +28,7 @@ import org.hnau.commons.kotlin.coroutines.flow.state.mapWithScope
 import org.hnau.commons.kotlin.coroutines.flow.state.mutable.toMutableStateFlowAsInitial
 import org.hnau.commons.kotlin.foldBoolean
 import org.hnau.commons.kotlin.foldNullable
+import org.hnau.commons.kotlin.ifNull
 import org.hnau.commons.kotlin.ifTrue
 import org.hnau.commons.kotlin.serialization.MutableStateFlowSerializer
 import org.hnau.pinfin.data.AccountId
@@ -105,8 +106,6 @@ class TransactionModel(
         val comment: CommentModel.Skeleton,
         val closeWithoutSavingDialogIsVisible: MutableStateFlow<Boolean> =
             false.toMutableStateFlowAsInitial(),
-        val removeDialogIsVisible: MutableStateFlow<Boolean> =
-            false.toMutableStateFlowAsInitial(), //TODO Use ModelSavableDelegate
     ) {
 
         companion object {
@@ -310,7 +309,7 @@ class TransactionModel(
                     }
                 )
         }
-        }
+    }
 
     val saveOrDisabled: StateFlow<ActionOrElse<Unit, CancelOrInProgress.Cancel>?> =
         state.flatMapWithScope(scope) { scope, state ->
@@ -350,38 +349,6 @@ class TransactionModel(
             }
         }
 
-    val remove: (() -> Unit)? = skeleton.id?.let { id ->
-        { skeleton.removeDialogIsVisible.value = true }
-    }
-
-    data class RemoveDialogInfo(
-        val close: () -> Unit,
-        val remove: () -> Unit,
-    )
-
-    private fun closeRemoveDialog() {
-        skeleton.removeDialogIsVisible.value = false
-    }
-
-    val removeDialogInfo: StateFlow<RemoveDialogInfo?> = skeleton
-        .removeDialogIsVisible
-        .mapState(scope) { removeDialogIsVisible ->
-            removeDialogIsVisible.ifTrue {
-                RemoveDialogInfo(
-                    close = ::closeRemoveDialog,
-                    remove = {
-                        scope.launch {
-                            dependencies
-                                .budgetRepository
-                                .transactions
-                                .remove(skeleton.id!!)
-                            onReady()
-                        }
-                    }
-                )
-            }
-        }
-
     private fun Part.shift(
         offset: Int,
     ): Part? = Part
@@ -390,25 +357,14 @@ class TransactionModel(
 
     val goBackHandler: GoBackHandler = derivedStateFlowOf(scope) {
         val (part, pageModel) = pageType.state
-        pageModel.goBackHandler.state
-            ?: part
+        pageModel.goBackHandler.state.ifNull {
+            part
                 .fold(
                     ifType = { type.goBackHandler },
                     ifDate = { date.goBackHandler },
                     ifComment = { comment.goBackHandler },
                 )
                 .state
-            ?: skeleton.removeDialogIsVisible.state.foldBoolean(
-                ifTrue = { ::closeRemoveDialog },
-                ifFalse = {
-                    when (val currentState = state.state) {
-                        State.NoChanges -> null
-                        is State.HasChanges -> currentState.closeWithoutSavingDialogInfo.foldNullable(
-                            ifNull = { { setCloseWithoutSavingDialogIsVisible(true) } },
-                            ifNotNull = { { setCloseWithoutSavingDialogIsVisible(false) } },
-                        )
-                    }
-                }
-            )
+        }
     }
 }

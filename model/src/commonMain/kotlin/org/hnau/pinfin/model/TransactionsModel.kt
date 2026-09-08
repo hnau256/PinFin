@@ -79,8 +79,8 @@ class TransactionsModel(
             )
     }
 
-    val onEditTransactionClick: (Transaction.Id, Transaction<KeyValue<AccountId, AccountInfo>, KeyValue<CategoryId, CategoryInfo>, *>) -> Unit
-        get() = dependencies.budgetStackOpener::openEditTransaction
+    val onViewTransactionClick: (Transaction.Id, Transaction<KeyValue<AccountId, AccountInfo>, KeyValue<CategoryId, CategoryInfo>, FilteredRecords<KeyValue<CategoryId, CategoryInfo>>>) -> Unit
+        get() = dependencies.budgetStackOpener::openViewTransaction
 
     val transactions: StateFlow<Loadable<Delayed<List<KeyValue<Transaction.Id, Transaction<KeyValue<AccountId, AccountInfo>, KeyValue<CategoryId, CategoryInfo>, FilteredRecords<KeyValue<CategoryId, CategoryInfo>>>>>>>> =
         combineState(

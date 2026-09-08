@@ -9,7 +9,9 @@ import org.hnau.pinfin.data.AccountId
 import org.hnau.pinfin.data.CategoryId
 import org.hnau.pinfin.data.Transaction
 import org.hnau.pinfin.data.TransactionType
+import org.hnau.pinfin.data.records.FilteredRecords
 import org.hnau.pinfin.model.BudgetSettingsModel
+import org.hnau.pinfin.model.TransactionViewModel
 import org.hnau.pinfin.model.transaction.TransactionModel
 import org.hnau.pinfin.model.utils.budget.repository.BudgetRepository
 import org.hnau.pinfin.model.utils.budget.state.AccountInfo
@@ -36,9 +38,23 @@ class BudgetStackOpenerImpl(
         transactionType: TransactionType,
     ) {
         open(
-            BudgetStackModel.ElementSkeleton.transaction(
-                transaction = TransactionModel.Skeleton.createForNew(
+            BudgetStackModel.ElementSkeleton.transactionEdit(
+                transactionEdit = TransactionModel.Skeleton.createForNew(
                     type = transactionType,
+                )
+            )
+        )
+    }
+
+    override fun openViewTransaction(
+        id: Transaction.Id,
+        info: Transaction<KeyValue<AccountId, AccountInfo>, KeyValue<CategoryId, CategoryInfo>, FilteredRecords<KeyValue<CategoryId, CategoryInfo>>>
+    ) {
+        open(
+            BudgetStackModel.ElementSkeleton.transactionView(
+                transactionView = TransactionViewModel.Skeleton(
+                    id = id,
+                    transaction = info,
                 )
             )
         )
@@ -49,8 +65,8 @@ class BudgetStackOpenerImpl(
         info: Transaction<KeyValue<AccountId, AccountInfo>, KeyValue<CategoryId, CategoryInfo>, *>,
     ) {
         open(
-            BudgetStackModel.ElementSkeleton.transaction(
-                transaction = TransactionModel.Skeleton.createForEdit(
+            BudgetStackModel.ElementSkeleton.transactionEdit(
+                transactionEdit = TransactionModel.Skeleton.createForEdit(
                     id = id,
                     transaction = info,
                 )

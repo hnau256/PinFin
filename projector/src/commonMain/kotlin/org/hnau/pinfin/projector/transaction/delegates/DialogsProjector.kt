@@ -29,7 +29,6 @@ class DialogsProjector(
     @Composable
     fun Content() {
         Cancel()
-        Remove()
     }
 
     @OptIn(ExperimentalMaterial3Api::class)
@@ -65,36 +64,6 @@ class DialogsProjector(
                                         content = { Text((dependencies.localization.save)) },
                                     )
                                 }
-                            )
-                        }
-                    )
-                }
-            }
-    }
-
-    @OptIn(ExperimentalMaterial3Api::class)
-    @Composable
-    private fun Remove() {
-        model
-            .removeDialogInfo
-            .collectAsState()
-            .value
-            ?.let { info ->
-                BasicAlertDialog(
-                    onDismissRequest = info.close,
-                ) {
-                    AlertDialogContent(
-                        title = { Text((dependencies.localization.removeTransaction)) },
-                        dismissButton = {
-                            TextButton(
-                                onClick = info.close,
-                                content = { Text((dependencies.localization.no)) },
-                            )
-                        },
-                        confirmButton = {
-                            TextButton(
-                                onClick = info.remove,
-                                content = { Text((dependencies.localization.yes)) },
                             )
                         }
                     )

@@ -141,7 +141,7 @@ class TransactionsProjector(
                                     dependencies = dependencies,
                                     currency = currency,
                                     onClick = {
-                                        model.onEditTransactionClick(
+                                        model.onViewTransactionClick(
                                             idWithTransaction.key,
                                             idWithTransaction.value,
                                         )

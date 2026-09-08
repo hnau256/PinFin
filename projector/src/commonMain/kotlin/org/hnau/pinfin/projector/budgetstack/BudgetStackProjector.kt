@@ -16,6 +16,7 @@ import org.hnau.pinfin.projector.BudgetSettingsProjector
 import org.hnau.pinfin.projector.BudgetSwitchProjector
 import org.hnau.pinfin.projector.CategoriesProjector
 import org.hnau.pinfin.projector.CreateBudgetProjector
+import org.hnau.pinfin.projector.TransactionViewProjector
 import org.hnau.pinfin.projector.accountstack.AccountStackProjector
 import org.hnau.pinfin.projector.budget.BudgetProjector
 import org.hnau.pinfin.projector.budget.transactions.TransactionsProjector
@@ -33,7 +34,9 @@ class BudgetStackProjector(
 
         fun budget(): BudgetProjector.Dependencies
 
-        fun transaction(): TransactionProjector.Dependencies
+        fun transactionView(): TransactionViewProjector.Dependencies
+
+        fun transactionEdit(): TransactionProjector.Dependencies
 
         fun transactions(): TransactionsProjector.Dependencies
 
@@ -57,8 +60,12 @@ class BudgetStackProjector(
                 identifier = "budget",
             ),
             Variant(
+                type = TransactionViewProjector::class,
+                identifier = "transactionView",
+            ),
+            Variant(
                 type = TransactionProjector::class,
-                identifier = "transaction",
+                identifier = "transactionEdit",
             ),
             Variant(
                 type = TransactionsProjector::class,
@@ -116,11 +123,18 @@ class BudgetStackProjector(
                             dependencies = dependencies.budget(),
                         )
                     },
-                    ifTransaction = { transactionModel ->
-                        Element.transaction(
+                    ifTransactionView = { transactionModel ->
+                        Element.transactionView(
                             scope = scope,
                             model = transactionModel,
-                            dependencies = dependencies.transaction(),
+                            dependencies = dependencies.transactionView(),
+                        )
+                    },
+                    ifTransactionEdit = { transactionModel ->
+                        Element.transactionEdit(
+                            scope = scope,
+                            model = transactionModel,
+                            dependencies = dependencies.transactionEdit(),
                         )
                     },
                     ifTransactions = { transactionsModel ->
