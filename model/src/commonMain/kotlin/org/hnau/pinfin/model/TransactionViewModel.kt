@@ -16,6 +16,7 @@ import org.hnau.commons.kotlin.coroutines.flow.state.mutable.toMutableStateFlowA
 import org.hnau.commons.kotlin.ifTrue
 import org.hnau.pinfin.data.AccountId
 import org.hnau.pinfin.data.CategoryId
+import org.hnau.pinfin.data.Currency
 import org.hnau.pinfin.data.Transaction
 import org.hnau.pinfin.data.records.FilteredRecords
 import org.hnau.pinfin.model.budgetstack.BudgetStackOpener
@@ -47,6 +48,11 @@ class TransactionViewModel(
 
     val transaction: Transaction<KeyValue<AccountId, AccountInfo>, KeyValue<CategoryId, CategoryInfo>, FilteredRecords<KeyValue<CategoryId, CategoryInfo>>>
         get() = skeleton.transaction
+
+    val currency: StateFlow<Currency> = dependencies
+        .budgetRepository
+        .state
+        .mapState(scope) { it.info.currency }
 
     fun edit() {
         dependencies

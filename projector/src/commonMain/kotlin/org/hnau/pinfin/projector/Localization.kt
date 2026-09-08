@@ -74,6 +74,7 @@ data class Localization(
     val hue: String = "Цвет",
     val icon: String = "Иконка",
     val records: String = "Записи",
+    val additionalRecords: String = "Дополнительные записи",
     val credits: String = "Доходы",
     val debits: String = "Расходы",
     val total: String = "Всего",
