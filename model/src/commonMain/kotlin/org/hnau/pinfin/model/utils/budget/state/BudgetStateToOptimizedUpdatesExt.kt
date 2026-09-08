@@ -11,6 +11,7 @@ import org.hnau.pinfin.data.Comment
 import org.hnau.pinfin.data.Transaction
 import org.hnau.pinfin.data.UpdateType
 import org.hnau.pinfin.data.foldRaw
+import org.hnau.pinfin.data.records.Records
 import org.hnau.pinfin.data.records.SimpleRecords
 import org.hnau.pinfin.model.transaction.utils.toRawType
 
@@ -72,7 +73,7 @@ suspend fun BudgetState.toOptimizedUpdates(
         transactions.map { (id, resolvedTransaction) ->
             UpdateType.Transaction(
                 id = id,
-                transaction = Transaction<AccountId, CategoryId, SimpleRecords<CategoryId>>(
+                transaction = Transaction<AccountId, CategoryId, Records<CategoryId>>(
                     timestamp = resolvedTransaction.timestamp,
                     comment = resolvedTransaction.comment,
                     type = resolvedTransaction.type.toRawType(),
@@ -82,7 +83,7 @@ suspend fun BudgetState.toOptimizedUpdates(
     ).flatten()
 }
 
-private fun Transaction<AccountId, CategoryId, SimpleRecords<CategoryId>>.trimStrings(): Transaction<AccountId, CategoryId, SimpleRecords<CategoryId>> = copy(
+private fun Transaction<AccountId, CategoryId, Records<CategoryId>>.trimStrings(): Transaction<AccountId, CategoryId, Records<CategoryId>> = copy(
     comment = comment.optimize(),
     type = type.foldRaw(
         ifEntry = { variant ->

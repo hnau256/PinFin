@@ -7,13 +7,12 @@ import org.hnau.pinfin.data.AccountId
 import org.hnau.pinfin.data.CategoryId
 import org.hnau.pinfin.data.Record
 import org.hnau.pinfin.data.Transaction
-import org.hnau.pinfin.data.records.Records
 import org.hnau.pinfin.data.fold
 import org.hnau.pinfin.model.utils.budget.state.AccountInfo
 import org.hnau.pinfin.model.utils.budget.state.CategoryInfo
 
-internal fun <R : Records<KeyValue<CategoryId, CategoryInfo>>> Filters.check(
-    transaction: Transaction<KeyValue<AccountId, AccountInfo>, KeyValue<CategoryId, CategoryInfo>, R>,
+internal fun Filters.check(
+    transaction: Transaction<KeyValue<AccountId, AccountInfo>, KeyValue<CategoryId, CategoryInfo>, *>,
 ): Boolean = when {
     !categories.checkCategories(transaction) -> false
     !accounts.checkAccounts(transaction) -> false
@@ -21,8 +20,8 @@ internal fun <R : Records<KeyValue<CategoryId, CategoryInfo>>> Filters.check(
     else -> true
 }
 
-private fun <R : Records<KeyValue<CategoryId, CategoryInfo>>> NonEmptySet<CategoryId?>?.checkCategories(
-    transaction: Transaction<KeyValue<AccountId, AccountInfo>, KeyValue<CategoryId, CategoryInfo>, R>,
+private fun NonEmptySet<CategoryId?>?.checkCategories(
+    transaction: Transaction<KeyValue<AccountId, AccountInfo>, KeyValue<CategoryId, CategoryInfo>, *>,
 ): Boolean {
     if (this == null) {
         return true
@@ -40,8 +39,8 @@ private fun <R : Records<KeyValue<CategoryId, CategoryInfo>>> NonEmptySet<Catego
     )
 }
 
-private fun <R : Records<KeyValue<CategoryId, CategoryInfo>>> NonEmptySet<AccountId>?.checkAccounts(
-    transaction: Transaction<KeyValue<AccountId, AccountInfo>, KeyValue<CategoryId, CategoryInfo>, R>,
+private fun NonEmptySet<AccountId>?.checkAccounts(
+    transaction: Transaction<KeyValue<AccountId, AccountInfo>, KeyValue<CategoryId, CategoryInfo>, *>,
 ): Boolean {
     if (this == null) {
         return true
@@ -57,8 +56,8 @@ private fun <R : Records<KeyValue<CategoryId, CategoryInfo>>> NonEmptySet<Accoun
     )
 }
 
-private fun <R : Records<KeyValue<CategoryId, CategoryInfo>>> LocalDateRange?.checkPeriod(
-    transaction: Transaction<KeyValue<AccountId, AccountInfo>, KeyValue<CategoryId, CategoryInfo>, R>,
+private fun LocalDateRange?.checkPeriod(
+    transaction: Transaction<KeyValue<AccountId, AccountInfo>, KeyValue<CategoryId, CategoryInfo>, *>,
 ): Boolean {
     if (this == null) {
         return true

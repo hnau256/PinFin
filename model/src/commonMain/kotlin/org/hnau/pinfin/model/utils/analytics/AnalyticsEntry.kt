@@ -13,7 +13,6 @@ import org.hnau.pinfin.data.CategoryId
 import org.hnau.pinfin.data.Currency
 import org.hnau.pinfin.data.Transaction
 import org.hnau.pinfin.data.fold
-import org.hnau.pinfin.data.records.Records
 import org.hnau.pinfin.model.utils.budget.state.AccountInfo
 import org.hnau.pinfin.model.utils.budget.state.CategoryInfo
 
@@ -34,7 +33,7 @@ data class AnalyticsEntry(
         )
 }
 
-fun <R : Records<KeyValue<CategoryId, CategoryInfo>>> Transaction<KeyValue<AccountId, AccountInfo>, KeyValue<CategoryId, CategoryInfo>, R>.toAnalyticsEntries(
+fun Transaction<KeyValue<AccountId, AccountInfo>, KeyValue<CategoryId, CategoryInfo>, *>.toAnalyticsEntries(
     currency: Currency,
 ): NonEmptyList<AnalyticsEntry> {
     val date: LocalDate = timestamp

@@ -45,10 +45,8 @@ import org.hnau.pinfin.projector.utils.ArrowDirection
 import org.hnau.pinfin.projector.utils.ArrowIcon
 import org.hnau.pinfin.projector.utils.CategoryContent
 
-typealias ResolvedTransaction = Transaction<KeyValue<AccountId, AccountInfo>, KeyValue<CategoryId, CategoryInfo>, Records<KeyValue<CategoryId, CategoryInfo>>>
-
 @Composable
-fun ResolvedTransaction.Content(
+fun Transaction<KeyValue<AccountId, AccountInfo>, KeyValue<CategoryId, CategoryInfo>, Records<KeyValue<CategoryId, CategoryInfo>>>.Content(
     dependencies: TransactionsProjector.Dependencies,
     currency: Currency,
     onClick: () -> Unit,
@@ -71,7 +69,7 @@ fun ResolvedTransaction.Content(
 }
 
 @Composable
-fun ResolvedTransaction.CellContent(
+fun Transaction<KeyValue<AccountId, AccountInfo>, KeyValue<CategoryId, CategoryInfo>, Records<KeyValue<CategoryId, CategoryInfo>>>.CellContent(
     modifier: Modifier = Modifier,
     shape: Shape,
     dependencies: TransactionsProjector.Dependencies,
@@ -139,7 +137,7 @@ fun ResolvedTransaction.CellContent(
 }
 
 @Composable
-private fun ResolvedTransaction.TimestampContent(
+private fun Transaction<KeyValue<AccountId, AccountInfo>, KeyValue<CategoryId, CategoryInfo>, Records<KeyValue<CategoryId, CategoryInfo>>>.TimestampContent(
     dependencies: TransactionsProjector.Dependencies,
 ) {
     val text = remember(timestamp) {
@@ -152,7 +150,7 @@ private fun ResolvedTransaction.TimestampContent(
 }
 
 @Composable
-private fun ResolvedTransaction.CommentContent() {
+private fun Transaction<KeyValue<AccountId, AccountInfo>, KeyValue<CategoryId, CategoryInfo>, Records<KeyValue<CategoryId, CategoryInfo>>>.CommentContent() {
     val primary = comment.text.takeIf(String::isNotEmpty)
     val secondary = remember(type) {
         type.fold(
