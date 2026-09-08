@@ -29,6 +29,8 @@ import org.hnau.pinfin.data.CategoryId
 import org.hnau.pinfin.data.Transaction
 import org.hnau.pinfin.data.fold
 import org.hnau.pinfin.data.foldRaw
+import org.hnau.pinfin.data.records.Records
+import org.hnau.pinfin.data.records.SimpleRecords
 import org.hnau.pinfin.model.utils.budget.state.AccountInfo
 import org.hnau.pinfin.model.utils.budget.state.CategoryInfo
 
@@ -131,7 +133,7 @@ class TypeModel(
             )
 
             fun createForEdit(
-                type: Transaction.Type<KeyValue<AccountId, AccountInfo>, KeyValue<CategoryId, CategoryInfo>>,
+                type: Transaction.Type<KeyValue<AccountId, AccountInfo>, KeyValue<CategoryId, CategoryInfo>, Records<KeyValue<CategoryId, CategoryInfo>>>,
             ): Skeleton = Skeleton(
                 type = type.foldRaw(
                     ifEntry = { variant ->
@@ -255,7 +257,7 @@ class TypeModel(
         }
     )
 
-    internal val type: StateFlow<Editable<Transaction.Type<KeyValue<AccountId, AccountInfo>, KeyValue<CategoryId, CategoryInfo>>>> = typeModel.flatMapState(scope) { typeModel ->
+    internal val type: StateFlow<Editable<Transaction.Type<KeyValue<AccountId, AccountInfo>, KeyValue<CategoryId, CategoryInfo>, *>>> = typeModel.flatMapState(scope) { typeModel ->
         typeModel.fold(
             ifEntry = { model -> model.entry },
             ifTransfer = { model -> model.transfer },

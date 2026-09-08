@@ -5,6 +5,7 @@ import org.hnau.pinfin.data.AccountId
 import org.hnau.pinfin.data.CategoryId
 import org.hnau.pinfin.data.Transaction
 import org.hnau.pinfin.data.UpdateType
+import org.hnau.pinfin.data.records.Records
 import org.hnau.pinfin.model.utils.budget.state.BudgetState
 
 class BudgetRepositoryTransactionsDelegate(
@@ -14,7 +15,7 @@ class BudgetRepositoryTransactionsDelegate(
 
     suspend fun addOrUpdate(
         id: Transaction.Id?,
-        transaction: Transaction<AccountId, CategoryId>,
+        transaction: Transaction<AccountId, CategoryId, Records<CategoryId>>,
     ) {
         addUpdate(
             UpdateType.Transaction(

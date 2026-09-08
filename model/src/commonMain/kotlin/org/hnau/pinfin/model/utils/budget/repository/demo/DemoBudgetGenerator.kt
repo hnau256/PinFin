@@ -20,6 +20,7 @@ import org.hnau.pinfin.data.Transaction
 import org.hnau.pinfin.data.UpdateType
 import org.hnau.pinfin.data.expression.AmountExpression
 import org.hnau.pinfin.data.expression.Expression
+import org.hnau.pinfin.data.records.SimpleRecords
 import org.hnau.pinfin.model.utils.icons.IconVariant
 import org.hnau.pinfin.model.utils.icons.icon
 import kotlin.math.exp
@@ -535,12 +536,14 @@ class DemoBudgetGenerator(
         account: AccountId,
         records: List<Record<CategoryId>>,
         comment: String,
-    ): Transaction<AccountId, CategoryId> = Transaction(
+    ): Transaction<AccountId, CategoryId, SimpleRecords<CategoryId>> = Transaction(
         timestamp = timestamp,
         comment = Comment(comment),
         type = Transaction.Type.Entry(
             account = account,
-            records = records.toNonEmptyListOrNull()!!,
+            records = SimpleRecords(
+                records = records.toNonEmptyListOrNull()!!,
+            ),
         ),
     )
 
@@ -550,7 +553,7 @@ class DemoBudgetGenerator(
         to: AccountId,
         amountCents: Long,
         comment: String,
-    ): Transaction<AccountId, CategoryId> = Transaction(
+    ): Transaction<AccountId, CategoryId, SimpleRecords<CategoryId>> = Transaction(
         timestamp = timestamp,
         comment = Comment(comment),
         type = Transaction.Type.Transfer(
@@ -884,7 +887,7 @@ class DemoBudgetGenerator(
         val jobs = generateEmployment(startDate, endDate)
 
         val configUpdates = generateConfigUpdates()
-        val transactions = mutableListOf<Transaction<AccountId, CategoryId>>()
+        val transactions = mutableListOf<Transaction<AccountId, CategoryId, SimpleRecords<CategoryId>>>()
 
         val balance = BalanceTracker()
         val rate = config.currencyRate

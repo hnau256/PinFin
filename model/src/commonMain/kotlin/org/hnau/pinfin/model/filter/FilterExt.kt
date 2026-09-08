@@ -7,12 +7,13 @@ import org.hnau.pinfin.data.AccountId
 import org.hnau.pinfin.data.CategoryId
 import org.hnau.pinfin.data.Record
 import org.hnau.pinfin.data.Transaction
+import org.hnau.pinfin.data.records.Records
 import org.hnau.pinfin.data.fold
 import org.hnau.pinfin.model.utils.budget.state.AccountInfo
 import org.hnau.pinfin.model.utils.budget.state.CategoryInfo
 
-internal fun Filters.check(
-    transaction: Transaction<KeyValue<AccountId, AccountInfo>, KeyValue<CategoryId, CategoryInfo>>,
+internal fun <R : Records<KeyValue<CategoryId, CategoryInfo>>> Filters.check(
+    transaction: Transaction<KeyValue<AccountId, AccountInfo>, KeyValue<CategoryId, CategoryInfo>, R>,
 ): Boolean = when {
     !categories.checkCategories(transaction) -> false
     !accounts.checkAccounts(transaction) -> false
@@ -20,8 +21,8 @@ internal fun Filters.check(
     else -> true
 }
 
-private fun NonEmptySet<CategoryId?>?.checkCategories(
-    transaction: Transaction<KeyValue<AccountId, AccountInfo>, KeyValue<CategoryId, CategoryInfo>>,
+private fun <R : Records<KeyValue<CategoryId, CategoryInfo>>> NonEmptySet<CategoryId?>?.checkCategories(
+    transaction: Transaction<KeyValue<AccountId, AccountInfo>, KeyValue<CategoryId, CategoryInfo>, R>,
 ): Boolean {
     if (this == null) {
         return true
@@ -30,6 +31,7 @@ private fun NonEmptySet<CategoryId?>?.checkCategories(
     return transaction.type.fold(
         ifEntry = { _, records ->
             records
+                .records
                 .any { record ->
                     record.category.key in set
                 }
@@ -38,8 +40,8 @@ private fun NonEmptySet<CategoryId?>?.checkCategories(
     )
 }
 
-private fun NonEmptySet<AccountId>?.checkAccounts(
-    transaction: Transaction<KeyValue<AccountId, AccountInfo>, KeyValue<CategoryId, CategoryInfo>>,
+private fun <R : Records<KeyValue<CategoryId, CategoryInfo>>> NonEmptySet<AccountId>?.checkAccounts(
+    transaction: Transaction<KeyValue<AccountId, AccountInfo>, KeyValue<CategoryId, CategoryInfo>, R>,
 ): Boolean {
     if (this == null) {
         return true
@@ -55,8 +57,8 @@ private fun NonEmptySet<AccountId>?.checkAccounts(
     )
 }
 
-private fun LocalDateRange?.checkPeriod(
-    transaction: Transaction<KeyValue<AccountId, AccountInfo>, KeyValue<CategoryId, CategoryInfo>>,
+private fun <R : Records<KeyValue<CategoryId, CategoryInfo>>> LocalDateRange?.checkPeriod(
+    transaction: Transaction<KeyValue<AccountId, AccountInfo>, KeyValue<CategoryId, CategoryInfo>, R>,
 ): Boolean {
     if (this == null) {
         return true

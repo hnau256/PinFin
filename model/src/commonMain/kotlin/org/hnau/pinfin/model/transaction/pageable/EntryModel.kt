@@ -30,6 +30,8 @@ import org.hnau.pinfin.data.AmountDirection
 import org.hnau.pinfin.data.CategoryId
 import org.hnau.pinfin.data.Record
 import org.hnau.pinfin.data.Transaction
+import org.hnau.pinfin.data.records.Records
+import org.hnau.pinfin.data.records.SimpleRecords
 import org.hnau.pinfin.model.transaction.utils.ChooseOrCreateModel
 import org.hnau.pinfin.model.utils.budget.state.AccountInfo
 import org.hnau.pinfin.model.utils.budget.state.CategoryInfo
@@ -106,13 +108,13 @@ class EntryModel(
             )
 
             fun createForEdit(
-                entry: Transaction.Type.Entry<KeyValue<AccountId, AccountInfo>, KeyValue<CategoryId, CategoryInfo>>,
+                entry: Transaction.Type.Entry<KeyValue<AccountId, AccountInfo>, KeyValue<CategoryId, CategoryInfo>, Records<KeyValue<CategoryId, CategoryInfo>>>,
             ): Skeleton = Skeleton(
                 account = AccountModel.Skeleton.createForEdit(
                     idWithAccount = entry.account,
                 ),
                 records = RecordsModel.Skeleton.createForEdit(
-                    records = entry.records,
+                    records = entry.records.records,
                 ),
             )
         }
@@ -211,11 +213,13 @@ class EntryModel(
             },
     )
 
-    internal val entry: StateFlow<Editable<Transaction.Type.Entry<KeyValue<AccountId, AccountInfo>, KeyValue<CategoryId, CategoryInfo>>>> =
+    internal val entry: StateFlow<Editable<Transaction.Type.Entry<KeyValue<AccountId, AccountInfo>, KeyValue<CategoryId, CategoryInfo>, SimpleRecords<KeyValue<CategoryId, CategoryInfo>>>>> =
         derivedStateFlowOf(scope) {
             editable {
                 Transaction.Type.Entry(
-                    records = records.records.state.bind(),
+                    records = SimpleRecords(
+                        records = records.records.state.bind(),
+                    ),
                     account = account.accountEditable.state.bind(),
                 )
             }

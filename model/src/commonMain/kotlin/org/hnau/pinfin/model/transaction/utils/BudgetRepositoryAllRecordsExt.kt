@@ -17,6 +17,7 @@ val BudgetState.allRecords: List<Pair<LocalDate, Record<KeyValue<CategoryId, Cat
             idWithTransaction.value.type.fold(
                 ifEntry = { _, records ->
                     records
+                        .records
                         .toList()
                         .map { record -> idWithTransaction.value.timestamp to record }
                 },

@@ -9,6 +9,7 @@ import org.hnau.pinfin.data.AccountId
 import org.hnau.pinfin.data.CategoryId
 import org.hnau.pinfin.data.Transaction
 import org.hnau.pinfin.data.TransactionType
+import org.hnau.pinfin.data.records.Records
 import org.hnau.pinfin.model.BudgetSettingsModel
 import org.hnau.pinfin.model.transaction.TransactionModel
 import org.hnau.pinfin.model.utils.budget.repository.BudgetRepository
@@ -46,7 +47,7 @@ class BudgetStackOpenerImpl(
 
     override fun openEditTransaction(
         id: Transaction.Id,
-        info: Transaction<KeyValue<AccountId, AccountInfo>, KeyValue<CategoryId, CategoryInfo>>,
+        info: Transaction<KeyValue<AccountId, AccountInfo>, KeyValue<CategoryId, CategoryInfo>, Records<KeyValue<CategoryId, CategoryInfo>>>,
     ) {
         open(
             BudgetStackModel.ElementSkeleton.transaction(

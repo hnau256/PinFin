@@ -12,13 +12,15 @@ import org.hnau.pinfin.data.Transaction
 import org.hnau.pinfin.data.directionedAmount
 import org.hnau.pinfin.data.expression.AmountExpression
 import org.hnau.pinfin.data.plus
+import org.hnau.pinfin.data.records.Records
 import org.hnau.pinfin.model.utils.budget.state.AccountInfo
 import org.hnau.pinfin.model.utils.budget.state.CategoryInfo
 
 
-fun Transaction.Type.Entry<AccountId, CategoryId>.amount(
+fun <R : Records<CategoryId>> Transaction.Type.Entry<AccountId, CategoryId, R>.amount(
     currency: Currency,
 ): KeyValue<AmountDirection, Amount> = records
+    .records
     .map(Record<CategoryId>::directionedAmount)
     .amount(currency)
 

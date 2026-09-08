@@ -18,6 +18,7 @@ import org.hnau.pinfin.data.CategoryId
 import org.hnau.pinfin.data.Currency
 import org.hnau.pinfin.data.Transaction
 import org.hnau.pinfin.data.TransactionType
+import org.hnau.pinfin.data.records.Records
 import org.hnau.pinfin.model.budgetstack.BudgetStackOpener
 import org.hnau.pinfin.model.filter.FilterModel
 import org.hnau.pinfin.model.filter.Filters
@@ -78,10 +79,10 @@ class TransactionsModel(
             )
     }
 
-    val onEditTransactionClick: (Transaction.Id, Transaction<KeyValue<AccountId, AccountInfo>, KeyValue<CategoryId, CategoryInfo>>) -> Unit
+    val onEditTransactionClick: (Transaction.Id, Transaction<KeyValue<AccountId, AccountInfo>, KeyValue<CategoryId, CategoryInfo>, Records<KeyValue<CategoryId, CategoryInfo>>>) -> Unit
         get() = dependencies.budgetStackOpener::openEditTransaction
 
-    val transactions: StateFlow<Loadable<Delayed<List<KeyValue<Transaction.Id, Transaction<KeyValue<AccountId, AccountInfo>, KeyValue<CategoryId, CategoryInfo>>>>>>> = combineState(
+    val transactions: StateFlow<Loadable<Delayed<List<KeyValue<Transaction.Id, Transaction<KeyValue<AccountId, AccountInfo>, KeyValue<CategoryId, CategoryInfo>, Records<KeyValue<CategoryId, CategoryInfo>>>>>>>> = combineState(
         scope = scope,
         first = dependencies
             .budgetRepository

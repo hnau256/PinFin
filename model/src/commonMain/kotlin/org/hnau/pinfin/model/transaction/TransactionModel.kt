@@ -35,6 +35,8 @@ import org.hnau.pinfin.data.AccountId
 import org.hnau.pinfin.data.CategoryId
 import org.hnau.pinfin.data.Transaction
 import org.hnau.pinfin.data.TransactionType
+import org.hnau.pinfin.data.records.Records
+import org.hnau.pinfin.data.records.SimpleRecords
 import org.hnau.pinfin.model.transaction.pageable.CommentModel
 import org.hnau.pinfin.model.transaction.pageable.DateModel
 import org.hnau.pinfin.model.transaction.pageable.TypeModel
@@ -125,7 +127,7 @@ class TransactionModel(
 
             fun createForEdit(
                 id: Transaction.Id,
-                transaction: Transaction<KeyValue<AccountId, AccountInfo>, KeyValue<CategoryId, CategoryInfo>>,
+                transaction: Transaction<KeyValue<AccountId, AccountInfo>, KeyValue<CategoryId, CategoryInfo>, Records<KeyValue<CategoryId, CategoryInfo>>>,
             ): Skeleton = Skeleton(
                 id = id,
                 type = TypeModel.Skeleton.createForEdit(
@@ -280,7 +282,7 @@ class TransactionModel(
 
     private val state: StateFlow<State> = derivedStateFlowOf(scope) {
         editable {
-            Transaction<AccountId, CategoryId>(
+            Transaction<AccountId, CategoryId, SimpleRecords<CategoryId>>(
                 type = type.type.state.bind().toRawType(),
                 timestamp = date.dateEditable.state.bind(),
                 comment = comment.commentEditable.state.bind(),
@@ -293,7 +295,7 @@ class TransactionModel(
                 save = null,
             )
 
-            is Editable.Value<Transaction<AccountId, CategoryId>> -> transactionOrIncorrect
+            is Editable.Value<Transaction<AccountId, CategoryId, SimpleRecords<CategoryId>>> -> transactionOrIncorrect
                 .changed
                 .foldBoolean(
                     ifFalse = { State.NoChanges.toMutableStateFlowAsInitial() },

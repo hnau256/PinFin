@@ -33,6 +33,7 @@ import org.hnau.pinfin.data.Currency
 import org.hnau.pinfin.data.Transaction
 import org.hnau.pinfin.data.fold
 import org.hnau.pinfin.data.foldRaw
+import org.hnau.pinfin.data.records.Records
 import org.hnau.pinfin.data.sum
 import org.hnau.pinfin.model.utils.amount
 import org.hnau.pinfin.model.utils.budget.state.AccountInfo
@@ -44,7 +45,7 @@ import org.hnau.pinfin.projector.utils.ArrowDirection
 import org.hnau.pinfin.projector.utils.ArrowIcon
 import org.hnau.pinfin.projector.utils.CategoryContent
 
-typealias ResolvedTransaction = Transaction<KeyValue<AccountId, AccountInfo>, KeyValue<CategoryId, CategoryInfo>>
+typealias ResolvedTransaction = Transaction<KeyValue<AccountId, AccountInfo>, KeyValue<CategoryId, CategoryInfo>, Records<KeyValue<CategoryId, CategoryInfo>>>
 
 @Composable
 fun ResolvedTransaction.Content(
@@ -117,6 +118,7 @@ fun ResolvedTransaction.CellContent(
             value = type.fold(
                 ifEntry = { _, records ->
                     records
+                        .records
                         .map { record ->
                             record.resolvedDirectionedAmount.map { expression ->
                                 expression.toAmount(currency.scale)
@@ -157,6 +159,7 @@ private fun ResolvedTransaction.CommentContent() {
             ifTransfer = { _, _, _ -> null },
             ifEntry = { _, records ->
                 records
+                    .records
                     .mapNotNull { record ->
                         record.comment.text.takeIf(String::isNotEmpty)
                     }
@@ -184,13 +187,13 @@ private fun ResolvedTransaction.CommentContent() {
 @Composable
 private fun EntryContent(
     dependencies: TransactionsProjector.Dependencies,
-    entry: Transaction.Type.Entry<KeyValue<AccountId, AccountInfo>, KeyValue<CategoryId, CategoryInfo>>,
+    entry: Transaction.Type.Entry<KeyValue<AccountId, AccountInfo>, KeyValue<CategoryId, CategoryInfo>, Records<KeyValue<CategoryId, CategoryInfo>>>,
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(Dimens.smallSeparation),
     ) {
-        val records = entry.records
+        val records = entry.records.records
         val categories = remember(records) {
             records
                 .tail

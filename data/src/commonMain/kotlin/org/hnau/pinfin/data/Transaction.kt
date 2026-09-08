@@ -1,7 +1,6 @@
 package org.hnau.pinfin.data
 
-import arrow.core.NonEmptyList
-import arrow.core.serialization.NonEmptyListSerializer
+import kotlinx.serialization.Contextual
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import org.hnau.commons.gen.fold.annotations.Fold
@@ -10,6 +9,7 @@ import org.hnau.commons.kotlin.mapper.plus
 import org.hnau.commons.kotlin.mapper.stringToUuid
 import org.hnau.commons.kotlin.serialization.UuidSerializer
 import org.hnau.pinfin.data.expression.AmountExpression
+import org.hnau.pinfin.data.records.Records
 import kotlinx.datetime.LocalDate
 import kotlin.jvm.JvmInline
 import kotlin.uuid.ExperimentalUuidApi
@@ -17,7 +17,7 @@ import kotlin.uuid.Uuid
 
 @OptIn(ExperimentalUuidApi::class)
 @Serializable
-data class Transaction<out A, out C>(
+data class Transaction<out A, out C, out R : Records<C>>(
     @SerialName("timestamp")
     val timestamp: LocalDate,
 
@@ -25,7 +25,7 @@ data class Transaction<out A, out C>(
     val comment: Comment,
 
     @SerialName("type")
-    val type: Type<A, C>,
+    val type: Type<A, C, R>,
 ) {
 
     @Serializable
@@ -52,19 +52,19 @@ data class Transaction<out A, out C>(
 
     @Fold
     @Serializable
-    sealed interface Type<out A, out C> {
+    sealed interface Type<out A, out C, out R : Records<C>> {
 
         @Serializable
         @SerialName("entry")
-        data class Entry<out A, out C>(
+        data class Entry<out A, out C, out R : Records<C>>(
 
             @SerialName("account")
             val account: A,
 
             @SerialName("records")
-            @Serializable(NonEmptyListSerializer::class)
-            val records: NonEmptyList<Record<C>>,
-        ) : Type<A, C>
+            @Contextual
+            val records: R,
+        ) : Type<A, C, R>
 
         @Serializable
         @SerialName("transfer")
@@ -78,6 +78,6 @@ data class Transaction<out A, out C>(
 
             @SerialName("amount")
             val amount: AmountExpression,
-        ) : Type<A, C>
+        ) : Type<A, C, Nothing>
     }
 }
