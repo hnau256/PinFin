@@ -20,7 +20,6 @@ import org.hnau.pinfin.data.Transaction
 import org.hnau.pinfin.data.UpdateType
 import org.hnau.pinfin.data.expression.AmountExpression
 import org.hnau.pinfin.data.expression.Expression
-import org.hnau.pinfin.data.records.Records
 import org.hnau.pinfin.data.records.SimpleRecords
 import org.hnau.pinfin.model.utils.icons.IconVariant
 import org.hnau.pinfin.model.utils.icons.icon
@@ -537,7 +536,7 @@ class DemoBudgetGenerator(
         account: AccountId,
         records: List<Record<CategoryId>>,
         comment: String,
-    ): Transaction<AccountId, CategoryId, Records<CategoryId>> = Transaction(
+    ): Transaction<AccountId, CategoryId, *> = Transaction(
         timestamp = timestamp,
         comment = Comment(comment),
         type = Transaction.Type.Entry(
@@ -554,7 +553,7 @@ class DemoBudgetGenerator(
         to: AccountId,
         amountCents: Long,
         comment: String,
-    ): Transaction<AccountId, CategoryId, Records<CategoryId>> = Transaction(
+    ): Transaction<AccountId, CategoryId, *> = Transaction(
         timestamp = timestamp,
         comment = Comment(comment),
         type = Transaction.Type.Transfer(
@@ -888,7 +887,7 @@ class DemoBudgetGenerator(
         val jobs = generateEmployment(startDate, endDate)
 
         val configUpdates = generateConfigUpdates()
-        val transactions = mutableListOf<Transaction<AccountId, CategoryId, Records<CategoryId>>>()
+        val transactions = mutableListOf<Transaction<AccountId, CategoryId, *>>()
 
         val balance = BalanceTracker()
         val rate = config.currencyRate

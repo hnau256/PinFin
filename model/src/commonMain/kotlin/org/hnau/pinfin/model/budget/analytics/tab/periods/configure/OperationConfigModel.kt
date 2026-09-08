@@ -21,9 +21,9 @@ import org.hnau.commons.kotlin.serialization.MutableStateFlowSerializer
 import org.hnau.commons.kotlin.toAccessor
 import org.hnau.pinfin.model.budget.analytics.tab.periods.configure.period.DurationModel
 import org.hnau.pinfin.model.utils.analytics.AnalyticsConfig
+import org.hnau.pinfin.model.utils.analytics.fold
 import org.hnau.pinfin.model.utils.analytics.period.PeriodDuration
 import org.hnau.pinfin.model.utils.analytics.period.PeriodUnit
-import org.hnau.pinfin.model.utils.analytics.fold
 
 /**
  * Сумма / среднее (docs/analytics-v2-plan.md, "2.3", "2.6"). Порт старого

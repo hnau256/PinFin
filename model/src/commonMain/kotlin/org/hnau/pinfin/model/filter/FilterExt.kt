@@ -5,7 +5,6 @@ import kotlinx.datetime.LocalDateRange
 import org.hnau.commons.kotlin.KeyValue
 import org.hnau.pinfin.data.AccountId
 import org.hnau.pinfin.data.CategoryId
-import org.hnau.pinfin.data.Record
 import org.hnau.pinfin.data.Transaction
 import org.hnau.pinfin.data.fold
 import org.hnau.pinfin.model.utils.budget.state.AccountInfo

@@ -8,7 +8,6 @@ import org.hnau.pinfin.data.Amount
 import org.hnau.pinfin.data.AmountDirection
 import org.hnau.pinfin.data.BudgetId
 import org.hnau.pinfin.data.CategoryId
-import org.hnau.pinfin.data.Transaction
 import org.hnau.pinfin.data.foldRaw
 import org.hnau.pinfin.data.plus
 import org.hnau.pinfin.model.transaction.utils.toResolved

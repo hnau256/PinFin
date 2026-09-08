@@ -23,7 +23,6 @@ import org.hnau.pinfin.model.budget.analytics.tab.periods.configure.AnalyticsCon
 import org.hnau.pinfin.model.utils.analytics.AnalyticsConfig
 import org.hnau.pinfin.model.utils.analytics.period.AnalyticsPeriod
 import org.hnau.pinfin.model.utils.budget.repository.BudgetRepository
-import org.hnau.pinfin.model.utils.budget.state.BudgetState
 
 /**
  * Заменяет старый `GraphModel` (см. docs/analytics-v2-plan.md, "2.6. Структура кода"): хранит

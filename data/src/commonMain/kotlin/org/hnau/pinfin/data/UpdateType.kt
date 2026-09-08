@@ -6,7 +6,6 @@ import org.hnau.commons.gen.fold.annotations.Fold
 import org.hnau.pinfin.data.AccountConfig as AccountConfigDTO
 import org.hnau.pinfin.data.CategoryConfig as CategoryConfigDTO
 import org.hnau.pinfin.data.Transaction as TransactionDTO
-import org.hnau.pinfin.data.records.Records
 
 @Fold
 @Serializable
@@ -19,7 +18,7 @@ sealed interface UpdateType {
         val id: TransactionDTO.Id,
 
         @SerialName("transaction")
-        val transaction: TransactionDTO<AccountId, CategoryId, Records<CategoryId>>,
+        val transaction: TransactionDTO<AccountId, CategoryId, *>,
     ) : UpdateType
 
     @Serializable

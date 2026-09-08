@@ -8,6 +8,7 @@ import arrow.core.toOption
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.datetime.LocalDate
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.UseSerializers
 import org.hnau.commons.app.model.EditingString
@@ -25,7 +26,6 @@ import org.hnau.pinfin.data.Comment
 import org.hnau.pinfin.model.utils.budget.repository.BudgetRepository
 import org.hnau.pinfin.model.utils.budget.state.BudgetState
 import org.hnau.pinfin.model.utils.resolveSuggests
-import kotlinx.datetime.LocalDate
 
 class CommentModel(
     scope: CoroutineScope,

@@ -5,7 +5,6 @@
 package org.hnau.pinfin.model.budget.analytics.tab.periods.configure.period
 
 import arrow.core.Option
-import arrow.core.flatMap
 import arrow.core.some
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow

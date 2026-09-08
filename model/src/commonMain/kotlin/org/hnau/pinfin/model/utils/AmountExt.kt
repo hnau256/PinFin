@@ -12,7 +12,6 @@ import org.hnau.pinfin.data.Transaction
 import org.hnau.pinfin.data.directionedAmount
 import org.hnau.pinfin.data.expression.AmountExpression
 import org.hnau.pinfin.data.plus
-import org.hnau.pinfin.model.utils.budget.state.AccountInfo
 import org.hnau.pinfin.model.utils.budget.state.CategoryInfo
 
 

@@ -28,7 +28,6 @@ import org.hnau.pinfin.data.AccountId
 import org.hnau.pinfin.data.Amount
 import org.hnau.pinfin.data.AmountDirection
 import org.hnau.pinfin.data.CategoryId
-import org.hnau.pinfin.data.Record
 import org.hnau.pinfin.data.Transaction
 import org.hnau.pinfin.data.records.SimpleRecords
 import org.hnau.pinfin.model.transaction.utils.ChooseOrCreateModel

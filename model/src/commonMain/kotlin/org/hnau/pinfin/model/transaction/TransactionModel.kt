@@ -8,7 +8,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
-import kotlinx.datetime.LocalDate
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.UseSerializers
 import org.hnau.commons.app.model.goback.GoBackHandler
@@ -18,6 +17,7 @@ import org.hnau.commons.gen.fold.annotations.Fold
 import org.hnau.commons.gen.pipe.annotations.Pipe
 import org.hnau.commons.gen.sealup.annotations.SealUp
 import org.hnau.commons.gen.sealup.annotations.Variant
+import org.hnau.commons.kotlin.KeyValue
 import org.hnau.commons.kotlin.coroutines.ActionOrElse
 import org.hnau.commons.kotlin.coroutines.CancelOrInProgress
 import org.hnau.commons.kotlin.coroutines.actionOrCancelIfExecuting
@@ -30,12 +30,10 @@ import org.hnau.commons.kotlin.foldBoolean
 import org.hnau.commons.kotlin.foldNullable
 import org.hnau.commons.kotlin.ifTrue
 import org.hnau.commons.kotlin.serialization.MutableStateFlowSerializer
-import org.hnau.commons.kotlin.KeyValue
 import org.hnau.pinfin.data.AccountId
 import org.hnau.pinfin.data.CategoryId
 import org.hnau.pinfin.data.Transaction
 import org.hnau.pinfin.data.TransactionType
-import org.hnau.pinfin.data.records.Records
 import org.hnau.pinfin.model.transaction.pageable.CommentModel
 import org.hnau.pinfin.model.transaction.pageable.DateModel
 import org.hnau.pinfin.model.transaction.pageable.TypeModel
@@ -126,7 +124,7 @@ class TransactionModel(
 
             fun createForEdit(
                 id: Transaction.Id,
-                transaction: Transaction<KeyValue<AccountId, AccountInfo>, KeyValue<CategoryId, CategoryInfo>, Records<KeyValue<CategoryId, CategoryInfo>>>,
+                transaction: Transaction<KeyValue<AccountId, AccountInfo>, KeyValue<CategoryId, CategoryInfo>, *>,
             ): Skeleton = Skeleton(
                 id = id,
                 type = TypeModel.Skeleton.createForEdit(
@@ -281,7 +279,7 @@ class TransactionModel(
 
     private val state: StateFlow<State> = derivedStateFlowOf(scope) {
         editable {
-            Transaction<AccountId, CategoryId, Records<CategoryId>>(
+            Transaction(
                 type = type.type.state.bind().toRawType(),
                 timestamp = date.dateEditable.state.bind(),
                 comment = comment.commentEditable.state.bind(),

@@ -73,7 +73,7 @@ suspend fun BudgetState.toOptimizedUpdates(
         transactions.map { (id, resolvedTransaction) ->
             UpdateType.Transaction(
                 id = id,
-                transaction = Transaction<AccountId, CategoryId, Records<CategoryId>>(
+                transaction = Transaction(
                     timestamp = resolvedTransaction.timestamp,
                     comment = resolvedTransaction.comment,
                     type = resolvedTransaction.type.toRawType(),
@@ -83,7 +83,7 @@ suspend fun BudgetState.toOptimizedUpdates(
     ).flatten()
 }
 
-private fun Transaction<AccountId, CategoryId, Records<CategoryId>>.trimStrings(): Transaction<AccountId, CategoryId, Records<CategoryId>> = copy(
+private fun Transaction<AccountId, CategoryId, *>.trimStrings(): Transaction<AccountId, CategoryId, Records<CategoryId>> = copy(
     comment = comment.optimize(),
     type = type.foldRaw(
         ifEntry = { variant ->

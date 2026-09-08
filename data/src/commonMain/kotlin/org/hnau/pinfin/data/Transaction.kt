@@ -1,5 +1,6 @@
 package org.hnau.pinfin.data
 
+import kotlinx.datetime.LocalDate
 import kotlinx.serialization.Contextual
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -10,7 +11,6 @@ import org.hnau.commons.kotlin.mapper.stringToUuid
 import org.hnau.commons.kotlin.serialization.UuidSerializer
 import org.hnau.pinfin.data.expression.AmountExpression
 import org.hnau.pinfin.data.records.Records
-import kotlinx.datetime.LocalDate
 import kotlin.jvm.JvmInline
 import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid

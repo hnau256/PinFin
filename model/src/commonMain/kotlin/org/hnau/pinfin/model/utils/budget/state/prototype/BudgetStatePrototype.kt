@@ -7,13 +7,12 @@ import org.hnau.pinfin.data.BudgetConfig
 import org.hnau.pinfin.data.CategoryConfig
 import org.hnau.pinfin.data.CategoryId
 import org.hnau.pinfin.data.Transaction
-import org.hnau.pinfin.data.records.Records
 import org.hnau.upchain.core.UpchainHash
 
 data class BudgetStatePrototype(
     val hash: UpchainHash?,
     val config: BudgetConfig,
-    val transactions: Map<Transaction.Id, Transaction<AccountId, CategoryId, Records<CategoryId>>>,
+    val transactions: Map<Transaction.Id, Transaction<AccountId, CategoryId, *>>,
     val accountsConfigs: Map<AccountId, AccountConfig>,
     val categoriesConfigs: Map<CategoryId, CategoryConfig>,
 ) {
