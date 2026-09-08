@@ -20,7 +20,6 @@ data class SimpleRecords<out C>(
     override val records: NonEmptyList<Record<C>>,
 ) : Records<C>
 
-@Serializable
 data class FilteredRecords<out C>(
     val main: NonEmptyList<Record<C>>,
     val additional: List<Record<C>>,

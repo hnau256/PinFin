@@ -3,6 +3,8 @@ package org.hnau.pinfin.data
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import org.hnau.commons.gen.fold.annotations.Fold
+import org.hnau.pinfin.data.records.Records
+import org.hnau.pinfin.data.records.RecordsSerializer
 import org.hnau.pinfin.data.AccountConfig as AccountConfigDTO
 import org.hnau.pinfin.data.CategoryConfig as CategoryConfigDTO
 import org.hnau.pinfin.data.Transaction as TransactionDTO
@@ -18,7 +20,7 @@ sealed interface UpdateType {
         val id: TransactionDTO.Id,
 
         @SerialName("transaction")
-        val transaction: TransactionDTO<AccountId, CategoryId, *>,
+        val transaction: TransactionDTO<AccountId, CategoryId, @Serializable(RecordsSerializer::class) Records<CategoryId>>,
     ) : UpdateType
 
     @Serializable
