@@ -13,6 +13,7 @@ import org.hnau.pinfin.data.BudgetId
 import org.hnau.pinfin.model.BudgetSyncDelegate
 import org.hnau.pinfin.model.budgetstack.BudgetStackOpener
 import org.hnau.pinfin.model.manage.BudgetOpener
+import org.hnau.pinfin.model.mcp.MCPModel
 import org.hnau.pinfin.model.utils.budget.repository.BudgetRepository
 import org.hnau.pinfin.model.utils.budget.state.toOptimizedUpdates
 import org.hnau.pinfin.model.utils.budget.storage.BudgetsStorage
@@ -39,18 +40,17 @@ class BudgetManageModel(
 
         val sync: BudgetSyncDelegate
 
+        val mcp: MCPModel
+
         fun remove(): BudgetManageRemoveModel.Dependencies
 
         fun share(): BudgetManageShareModel.Dependencies
-
-        fun mcp(): BudgetMCPModel.Dependencies
     }
 
     @Serializable
     data class Skeleton(
         val remove: BudgetManageRemoveModel.Skeleton = BudgetManageRemoveModel.Skeleton(),
         val share: BudgetManageShareModel.Skeleton = BudgetManageShareModel.Skeleton(),
-        val mcp: BudgetMCPModel.Skeleton = BudgetMCPModel.Skeleton(),
     )
 
     val sync: BudgetSyncDelegate
@@ -62,11 +62,8 @@ class BudgetManageModel(
         dependencies = dependencies.remove(),
     )
 
-    val mcp = BudgetMCPModel(
-        scope = scope,
-        skeleton = skeleton.mcp,
-        dependencies = dependencies.mcp(),
-    )
+    val mcp: MCPModel
+        get() = dependencies.mcp
 
     val share = BudgetManageShareModel(
         scope = scope,

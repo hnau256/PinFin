@@ -17,11 +17,11 @@ import org.hnau.commons.app.projector.utils.Drawable
 import org.hnau.commons.gen.pipe.annotations.Pipe
 import org.hnau.commons.kotlin.coroutines.ActionOrElse
 import org.hnau.commons.kotlin.coroutines.instant
-import org.hnau.pinfin.model.budget.manage.BudgetMCPModel
+import org.hnau.pinfin.model.mcp.MCPModel
 import org.hnau.pinfin.projector.Localization
 
 class BudgetMCPProjector(
-    private val model: BudgetMCPModel,
+    private val model: MCPModel,
     private val dependencies: Dependencies,
 ) {
 
@@ -45,10 +45,10 @@ class BudgetMCPProjector(
                     ?.let { info ->
                         buildList {
                             info.ipv4?.let {
-                                add("$it:${BudgetMCPModel.MCP_PORT}${BudgetMCPModel.MCP_PATH}")
+                                add("$it:${MCPModel.MCP_PORT}${MCPModel.MCP_PATH}")
                             }
                             info.ipv6?.let {
-                                add("[$it]:${BudgetMCPModel.MCP_PORT}${BudgetMCPModel.MCP_PATH}")
+                                add("[$it]:${MCPModel.MCP_PORT}${MCPModel.MCP_PATH}")
                             }
                         }
                     }

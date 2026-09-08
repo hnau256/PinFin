@@ -32,6 +32,9 @@ import org.hnau.pinfin.data.BudgetId
 import org.hnau.pinfin.model.BudgetRootModel
 import org.hnau.pinfin.model.CreateBudgetModel
 import org.hnau.pinfin.model.IconModel
+import org.hnau.pinfin.model.mcp.MCPModel
+import org.hnau.pinfin.model.utils.budget.query.BudgetsQuery
+import org.hnau.pinfin.model.utils.budget.query.impl.BudgetsStorageQuery
 import org.hnau.pinfin.model.utils.budget.repository.BudgetRepository
 import org.hnau.pinfin.model.utils.budget.storage.BudgetsStorage
 
@@ -48,6 +51,10 @@ class ManageModel(
 
         val budgetsStorage: BudgetsStorage
 
+        fun mcp(
+            budgetsQuery: BudgetsQuery,
+        ): MCPModel.Dependencies
+
         @Pipe
         interface WithOpener {
 
@@ -61,6 +68,7 @@ class ManageModel(
 
         fun withOpener(
             budgetOpener: BudgetOpener,
+            mcp: MCPModel,
         ): WithOpener
     }
 
@@ -69,6 +77,7 @@ class ManageModel(
         var budgetSkeleton: KeyValue<BudgetId, BudgetRootModel.Skeleton>? = null,
         var create: CreateBudgetModel.Skeleton? = null,
         var icon: IconModel.Skeleton? = null,
+        val mcp: MCPModel.Skeleton = MCPModel.Skeleton(),
     )
 
     @SealUp(
@@ -130,8 +139,17 @@ class ManageModel(
             )
         }
 
+    val mcp: MCPModel = MCPModel(
+        scope = scope,
+        dependencies = dependencies.mcp(
+            budgetsQuery = BudgetsStorageQuery(dependencies.budgetsStorage),
+        ),
+        skeleton = skeleton.mcp,
+    )
+
     private val dependenciesWithOpener = dependencies.withOpener(
         budgetOpener = selectedBudgetPreference.update,
+        mcp = mcp,
     )
 
     val state: StateFlow<ManageStateModel> = selectedBudget.mapWithScope(

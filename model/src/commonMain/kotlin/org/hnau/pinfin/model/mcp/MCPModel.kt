@@ -2,20 +2,15 @@
     MutableStateFlowSerializer::class,
 )
 
-package org.hnau.pinfin.model.budget.manage
+package org.hnau.pinfin.model.mcp
 
 import io.ktor.server.cio.CIO
 import io.ktor.server.engine.embeddedServer
 import io.modelcontextprotocol.kotlin.sdk.server.Server
 import io.modelcontextprotocol.kotlin.sdk.server.ServerOptions
 import io.modelcontextprotocol.kotlin.sdk.server.mcpStreamableHttp
-import io.modelcontextprotocol.kotlin.sdk.types.CallToolResult
 import io.modelcontextprotocol.kotlin.sdk.types.Implementation
-import io.modelcontextprotocol.kotlin.sdk.types.ReadResourceResult
 import io.modelcontextprotocol.kotlin.sdk.types.ServerCapabilities
-import io.modelcontextprotocol.kotlin.sdk.types.TextContent
-import io.modelcontextprotocol.kotlin.sdk.types.TextResourceContents
-import io.modelcontextprotocol.kotlin.sdk.types.ToolSchema
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.awaitCancellation
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -23,23 +18,23 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.UseSerializers
-import kotlinx.serialization.json.buildJsonObject
-import kotlinx.serialization.json.contentOrNull
-import kotlinx.serialization.json.jsonPrimitive
-import kotlinx.serialization.json.put
 import org.hnau.commons.gen.pipe.annotations.Pipe
 import org.hnau.commons.kotlin.coroutines.flow.state.mutable.toMutableStateFlowAsInitial
 import org.hnau.commons.kotlin.ifTrue
 import org.hnau.commons.kotlin.serialization.MutableStateFlowSerializer
+import org.hnau.pinfin.model.utils.budget.query.BudgetsQuery
 
-class BudgetMCPModel(
+class MCPModel(
     private val scope: CoroutineScope,
-    dependencies: Dependencies,
+    private val dependencies: Dependencies,
     private val skeleton: Skeleton,
 ) {
 
     @Pipe
-    interface Dependencies
+    interface Dependencies {
+
+        val budgetsQuery: BudgetsQuery
+    }
 
     @Serializable
     data class Skeleton(
@@ -84,54 +79,15 @@ class BudgetMCPModel(
     private fun createMcpServer(): Server = Server(
         serverInfo = Implementation(
             name = "pinfin",
-            version = "0.1.0",
+            version = "0.2.0",
         ),
         options = ServerOptions(
             capabilities = ServerCapabilities(
-                resources = ServerCapabilities.Resources(),
                 tools = ServerCapabilities.Tools(),
             ),
         ),
-    ) {
-        addResourceTemplate(
-            uriTemplate = "echo://{text}",
-            name = "echo",
-            description = "Returns the managed part of the URI path",
-            mimeType = "text/plain",
-        ) { request, variables ->
-            ReadResourceResult(
-                contents = listOf(
-                    TextResourceContents(
-                        text = variables["text"].orEmpty(),
-                        uri = request.params.uri,
-                        mimeType = "text/plain",
-                    ),
-                ),
-            )
-        }
-
-        addTool(
-            name = "echo",
-            description = "Returns the string passed to it",
-            inputSchema = ToolSchema(
-                properties = buildJsonObject {
-                    put("text", buildJsonObject { put("type", "string") })
-                },
-                required = listOf("text"),
-            ),
-        ) { request ->
-            CallToolResult(
-                content = listOf(
-                    TextContent(
-                        text = request.params.arguments
-                            ?.get("text")
-                            ?.jsonPrimitive
-                            ?.contentOrNull
-                            .orEmpty(),
-                    ),
-                ),
-            )
-        }
+    ).apply {
+        registerPinFinTools(dependencies.budgetsQuery)
     }
 
     companion object {
