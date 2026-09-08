@@ -1,67 +1,71 @@
 package org.hnau.pinfin.model.filter
 
-import arrow.core.NonEmptySet
-import kotlinx.datetime.LocalDateRange
+import arrow.core.toNonEmptyListOrNull
 import org.hnau.commons.kotlin.KeyValue
 import org.hnau.pinfin.data.AccountId
 import org.hnau.pinfin.data.CategoryId
+import org.hnau.pinfin.data.Record
 import org.hnau.pinfin.data.Transaction
-import org.hnau.pinfin.data.fold
+import org.hnau.pinfin.data.foldRaw
+import org.hnau.pinfin.data.records.FilteredRecords
 import org.hnau.pinfin.model.utils.budget.state.AccountInfo
 import org.hnau.pinfin.model.utils.budget.state.CategoryInfo
 
-internal fun Filters.check(
+fun filterOrNull(
     transaction: Transaction<KeyValue<AccountId, AccountInfo>, KeyValue<CategoryId, CategoryInfo>, *>,
-): Boolean = when {
-    !categories.checkCategories(transaction) -> false
-    !accounts.checkAccounts(transaction) -> false
-    !period.checkPeriod(transaction) -> false
-    else -> true
-}
-
-private fun NonEmptySet<CategoryId?>?.checkCategories(
-    transaction: Transaction<KeyValue<AccountId, AccountInfo>, KeyValue<CategoryId, CategoryInfo>, *>,
-): Boolean {
-    if (this == null) {
-        return true
-    }
-    val set = toSet()
-    return transaction.type.fold(
-        ifEntry = { _, records ->
-            records
-                .records
-                .any { record ->
-                    record.category.key in set
+    filters: Filters,
+): Transaction<KeyValue<AccountId, AccountInfo>, KeyValue<CategoryId, CategoryInfo>, FilteredRecords<KeyValue<CategoryId, CategoryInfo>>>? {
+    val accountSet = filters.accounts?.toSet()
+    val period = filters.period
+    return transaction.type.foldRaw(
+        ifEntry = { variant ->
+            val accountPasses = accountSet?.let { accounts -> variant.account.key in accounts } ?: true
+            val periodPasses = period?.let { range -> transaction.timestamp in range } ?: true
+            if (!accountPasses || !periodPasses) {
+                null
+            } else {
+                val categorySet = filters.categories?.toSet()
+                val records: List<Record<KeyValue<CategoryId, CategoryInfo>>> = variant.records.records.toList()
+                val (matching, additional) = if (categorySet == null) {
+                    records to emptyList()
+                } else {
+                    records.partition { record -> record.category.key in categorySet }
                 }
+                matching
+                    .toNonEmptyListOrNull()
+                    ?.let { main ->
+                        Transaction(
+                            timestamp = transaction.timestamp,
+                            comment = transaction.comment,
+                            type = Transaction.Type.Entry(
+                                account = variant.account,
+                                records = FilteredRecords(
+                                    main = main,
+                                    additional = additional,
+                                ),
+                            ),
+                        )
+                    }
+            }
         },
-        ifTransfer = { _, _, _ -> null in set },
+        ifTransfer = { variant ->
+            val accountPasses = accountSet?.let { accounts ->
+                variant.from.key in accounts || variant.to.key in accounts
+            } ?: true
+            val periodPasses = period?.let { range -> transaction.timestamp in range } ?: true
+            val categoryPasses = filters
+                .categories
+                ?.let { categories -> null in categories }
+                ?: true
+            if (accountPasses && periodPasses && categoryPasses) {
+                Transaction(
+                    timestamp = transaction.timestamp,
+                    comment = transaction.comment,
+                    type = variant,
+                )
+            } else {
+                null
+            }
+        },
     )
-}
-
-private fun NonEmptySet<AccountId>?.checkAccounts(
-    transaction: Transaction<KeyValue<AccountId, AccountInfo>, KeyValue<CategoryId, CategoryInfo>, *>,
-): Boolean {
-    if (this == null) {
-        return true
-    }
-    val set = toSet()
-    return transaction.type.fold(
-        ifEntry = { account, _ ->
-            account.key in set
-        },
-        ifTransfer = { from, to, _ ->
-            from.key in set || to.key in set
-        },
-    )
-}
-
-private fun LocalDateRange?.checkPeriod(
-    transaction: Transaction<KeyValue<AccountId, AccountInfo>, KeyValue<CategoryId, CategoryInfo>, *>,
-): Boolean {
-    if (this == null) {
-        return true
-    }
-    val date = transaction.timestamp
-
-    return date in this
 }

@@ -33,10 +33,10 @@ import org.hnau.pinfin.data.Currency
 import org.hnau.pinfin.data.Transaction
 import org.hnau.pinfin.data.fold
 import org.hnau.pinfin.data.foldRaw
-import org.hnau.pinfin.data.sum
+import org.hnau.pinfin.data.records.FilteredRecords
 import org.hnau.pinfin.model.utils.budget.state.AccountInfo
 import org.hnau.pinfin.model.utils.budget.state.CategoryInfo
-import org.hnau.pinfin.model.utils.resolvedDirectionedAmount
+import org.hnau.pinfin.model.utils.filteredAmount
 import org.hnau.pinfin.projector.utils.AccountContent
 import org.hnau.pinfin.projector.utils.AmountContent
 import org.hnau.pinfin.projector.utils.ArrowDirection
@@ -44,7 +44,7 @@ import org.hnau.pinfin.projector.utils.ArrowIcon
 import org.hnau.pinfin.projector.utils.CategoryContent
 
 @Composable
-fun Transaction<KeyValue<AccountId, AccountInfo>, KeyValue<CategoryId, CategoryInfo>, *>.Content(
+fun Transaction<KeyValue<AccountId, AccountInfo>, KeyValue<CategoryId, CategoryInfo>, FilteredRecords<KeyValue<CategoryId, CategoryInfo>>>.Content(
     dependencies: TransactionsProjector.Dependencies,
     currency: Currency,
     onClick: () -> Unit,
@@ -67,7 +67,7 @@ fun Transaction<KeyValue<AccountId, AccountInfo>, KeyValue<CategoryId, CategoryI
 }
 
 @Composable
-fun Transaction<KeyValue<AccountId, AccountInfo>, KeyValue<CategoryId, CategoryInfo>, *>.CellContent(
+fun Transaction<KeyValue<AccountId, AccountInfo>, KeyValue<CategoryId, CategoryInfo>, FilteredRecords<KeyValue<CategoryId, CategoryInfo>>>.CellContent(
     modifier: Modifier = Modifier,
     shape: Shape,
     dependencies: TransactionsProjector.Dependencies,
@@ -113,14 +113,7 @@ fun Transaction<KeyValue<AccountId, AccountInfo>, KeyValue<CategoryId, CategoryI
         AmountContent(
             value = type.fold(
                 ifEntry = { _, records ->
-                    records
-                        .records
-                        .map { record ->
-                            record.resolvedDirectionedAmount.map { expression ->
-                                expression.toAmount(currency.scale)
-                            }
-                        }
-                        .sum()
+                    records.filteredAmount(currency)
                 },
                 ifTransfer = { _, _, amount ->
                     KeyValue(
@@ -135,7 +128,7 @@ fun Transaction<KeyValue<AccountId, AccountInfo>, KeyValue<CategoryId, CategoryI
 }
 
 @Composable
-private fun Transaction<KeyValue<AccountId, AccountInfo>, KeyValue<CategoryId, CategoryInfo>, *>.TimestampContent(
+private fun Transaction<KeyValue<AccountId, AccountInfo>, KeyValue<CategoryId, CategoryInfo>, FilteredRecords<KeyValue<CategoryId, CategoryInfo>>>.TimestampContent(
     dependencies: TransactionsProjector.Dependencies,
 ) {
     val text = remember(timestamp) {
@@ -148,7 +141,7 @@ private fun Transaction<KeyValue<AccountId, AccountInfo>, KeyValue<CategoryId, C
 }
 
 @Composable
-private fun Transaction<KeyValue<AccountId, AccountInfo>, KeyValue<CategoryId, CategoryInfo>, *>.CommentContent() {
+private fun Transaction<KeyValue<AccountId, AccountInfo>, KeyValue<CategoryId, CategoryInfo>, FilteredRecords<KeyValue<CategoryId, CategoryInfo>>>.CommentContent() {
     val primary = comment.text.takeIf(String::isNotEmpty)
     val secondary = remember(type) {
         type.fold(
@@ -183,13 +176,13 @@ private fun Transaction<KeyValue<AccountId, AccountInfo>, KeyValue<CategoryId, C
 @Composable
 private fun EntryContent(
     dependencies: TransactionsProjector.Dependencies,
-    entry: Transaction.Type.Entry<KeyValue<AccountId, AccountInfo>, KeyValue<CategoryId, CategoryInfo>, *>,
+    entry: Transaction.Type.Entry<KeyValue<AccountId, AccountInfo>, KeyValue<CategoryId, CategoryInfo>, FilteredRecords<KeyValue<CategoryId, CategoryInfo>>>,
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(Dimens.smallSeparation),
     ) {
-        val records = entry.records.records
+        val records = entry.records.main
         val categories = remember(records) {
             records
                 .tail
