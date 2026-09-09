@@ -4,6 +4,8 @@ import com.ionspin.kotlin.bignum.decimal.BigDecimal
 import com.ionspin.kotlin.bignum.decimal.RoundingMode
 import org.hnau.commons.kotlin.KeyValue
 import org.hnau.commons.kotlin.foldBoolean
+import org.hnau.commons.kotlin.ifFalse
+import org.hnau.commons.kotlin.ifTrue
 import org.hnau.commons.kotlin.mapFirst
 import org.hnau.commons.kotlin.mapSecond
 import org.hnau.pinfin.data.Amount
@@ -64,6 +66,10 @@ interface AmountFormatter {
                         .toList()
                         .filterNotNull()
                         .joinToString(".")
+
+                    absolute
+                        .isPositive
+                        .ifFalse { return absoluteString }
 
                     return direction.fold(
                         ifDebit = { "-${absoluteString}" },

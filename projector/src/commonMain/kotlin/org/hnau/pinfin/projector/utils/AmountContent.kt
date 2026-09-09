@@ -11,6 +11,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.TextStyle
 import org.hnau.commons.app.projector.fractal.SText
+import org.hnau.commons.app.projector.fractal.context.FContext
+import org.hnau.commons.app.projector.fractal.utils.Importance
+import org.hnau.commons.app.projector.fractal.utils.Mood
 import org.hnau.commons.app.projector.utils.SwitchHue
 import org.hnau.commons.kotlin.KeyValue
 import org.hnau.commons.kotlin.mapper.Mapper
@@ -38,10 +41,25 @@ fun SwitchHueToAmountDirection(
     amountDirection: AmountDirection,
     content: @Composable () -> Unit,
 ) {
-    SwitchHue(
-        hue = amountDirection.hue.let(Mapper.modelHueToHue.reverse),
-        content = content,
-    )
+    FContext(
+        update = {
+            copy(
+                mood = amountDirection.fold(
+                    ifCredit = {
+                        Mood.Active(
+                            importance = Importance.Primary,
+                        )
+                    },
+                    ifDebit = { Mood.Error }
+                ),
+            )
+        }
+    ) {
+        SwitchHue(
+            hue = amountDirection.hue.let(Mapper.modelHueToHue.reverse),
+            content = content,
+        )
+    }
 }
 
 
