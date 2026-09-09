@@ -165,6 +165,12 @@ class TransactionViewProjector(
                                     ifTransfer = ::it,
                                 )
 
+                            val entryAccount: KeyValue<AccountId, AccountInfo>? =
+                                transaction.type.foldRaw(
+                                    ifEntry = { it.account },
+                                    ifTransfer = { null },
+                                )
+
                             val total = amount(
                                 transaction = transaction,
                                 currency = currency,
@@ -191,6 +197,13 @@ class TransactionViewProjector(
                                             SCell {
                                                 SPanel {
                                                     SText(dependencies.localization.transfer)
+                                                }
+                                            }
+                                        }
+                                        entryAccount?.let {
+                                            SCell {
+                                                SPanel {
+                                                    SText(dependencies.localization.account)
                                                 }
                                             }
                                         }
@@ -223,6 +236,17 @@ class TransactionViewProjector(
                                             SCell {
                                                 SPanel {
                                                     TransferContent(transfer = transfer)
+                                                }
+                                            }
+                                        }
+                                        entryAccount?.let { account ->
+                                            SCell {
+                                                SPanel {
+                                                    AccountContent(
+                                                        info = account.value,
+                                                        localization = dependencies.localization,
+                                                        viewMode = ViewMode.Full,
+                                                    )
                                                 }
                                             }
                                         }
