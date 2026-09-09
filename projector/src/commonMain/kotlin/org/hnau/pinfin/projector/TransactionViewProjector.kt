@@ -1,12 +1,15 @@
 package org.hnau.pinfin.projector
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Cancel
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import arrow.core.NonEmptyList
 import kotlinx.coroutines.CoroutineScope
@@ -14,11 +17,15 @@ import org.hnau.commons.app.projector.fractal.DialogContentInfo
 import org.hnau.commons.app.projector.fractal.SButton
 import org.hnau.commons.app.projector.fractal.SContentWithActions
 import org.hnau.commons.app.projector.fractal.SDialog
+import org.hnau.commons.app.projector.fractal.SIcon
 import org.hnau.commons.app.projector.fractal.SItem
+import org.hnau.commons.app.projector.fractal.SLine
 import org.hnau.commons.app.projector.fractal.SPanel
 import org.hnau.commons.app.projector.fractal.SScreen
 import org.hnau.commons.app.projector.fractal.SText
 import org.hnau.commons.app.projector.fractal.context.FContext
+import org.hnau.commons.app.projector.fractal.distance.LocalDistance
+import org.hnau.commons.app.projector.fractal.size.units
 import org.hnau.commons.app.projector.fractal.table.STable
 import org.hnau.commons.app.projector.fractal.table.STableHeader
 import org.hnau.commons.app.projector.fractal.table.Subtable
@@ -40,6 +47,7 @@ import org.hnau.commons.kotlin.KeyValue
 import org.hnau.commons.kotlin.coroutines.ActionOrElse
 import org.hnau.commons.kotlin.coroutines.flow.state.mapState
 import org.hnau.commons.kotlin.coroutines.instant
+import org.hnau.commons.kotlin.it
 import org.hnau.pinfin.data.AccountId
 import org.hnau.pinfin.data.Amount
 import org.hnau.pinfin.data.AmountDirection
@@ -150,13 +158,13 @@ class TransactionViewProjector(
                         orientation = Orientation.Vertical,
                     ) {
                         cell(key = "base") {
-                            var transferVariant: Transaction.Type.Transfer<KeyValue<AccountId, AccountInfo>, KeyValue<CategoryId, CategoryInfo>>? = null
-                            transaction.type.foldRaw(
-                                ifEntry = {},
-                                ifTransfer = { transfer ->
-                                    transferVariant = transfer
-                                },
-                            )
+
+                            val transferVariant: Transaction.Type.Transfer<KeyValue<AccountId, AccountInfo>, KeyValue<CategoryId, CategoryInfo>>? =
+                                transaction.type.foldRaw(
+                                    ifEntry = { null },
+                                    ifTransfer = ::it,
+                                )
+
                             val total = amount(
                                 transaction = transaction,
                                 currency = currency,
@@ -230,19 +238,15 @@ class TransactionViewProjector(
                                 }
                             }
                         }
-                        var entryVariant: Transaction.Type.Entry<KeyValue<AccountId, AccountInfo>, KeyValue<CategoryId, CategoryInfo>, FilteredRecords<KeyValue<CategoryId, CategoryInfo>>>? = null
                         transaction.type.foldRaw(
                             ifTransfer = {},
                             ifEntry = { entry ->
-                                entryVariant = entry
+                                EntrySections(
+                                    entry = entry,
+                                    currency = currency,
+                                )
                             },
                         )
-                        if (entryVariant != null) {
-                            EntrySections(
-                                entry = entryVariant,
-                                currency = currency,
-                            )
-                        }
                     }
                 },
                 actions = {
@@ -317,13 +321,6 @@ class TransactionViewProjector(
         ) { record ->
             SPanel {
                 SItem(
-                    startAccessory = {
-                        CategoryContent(
-                            info = record.category,
-                            localization = dependencies.localization,
-                            viewMode = ViewMode.Full,
-                        )
-                    },
                     content = record
                         .comment
                         .text
@@ -332,13 +329,34 @@ class TransactionViewProjector(
                             { SText(comment) }
                         },
                     endAccessory = {
-                        AmountContent(
-                            value = KeyValue(
-                                key = record.resolvedDirection,
-                                value = record.amount.toAmount(currency.scale),
-                            ),
-                            amountFormatter = dependencies.amountFormatter,
-                        )
+                        SLine(
+                            orientation = Orientation.Horizontal,
+                            separation = LocalDistance.current.units.padding.along.small,
+                            acrossOrientation = Alignment.CenterHorizontally,
+                        ) {
+                            CategoryContent(
+                                info = record.category,
+                                localization = dependencies.localization,
+                                viewMode = ViewMode.Full,
+                            )
+                            SIcon(
+                                Drawable.Vector(
+                                    ArrowIcon[
+                                        record.category.key.direction.fold(
+                                            ifCredit = { ArrowDirection.EndToStart },
+                                            ifDebit = { ArrowDirection.StartToEnd },
+                                        )
+                                    ]
+                                ),
+                            )
+                            AmountContent(
+                                value = KeyValue(
+                                    key = record.resolvedDirection,
+                                    value = record.amount.toAmount(currency.scale),
+                                ),
+                                amountFormatter = dependencies.amountFormatter,
+                            )
+                        }
                     },
                 )
             }
@@ -380,15 +398,6 @@ class TransactionViewProjector(
             records.totalAmount(currency)
         },
     )
-
-    private fun NonEmptyList<Record<KeyValue<CategoryId, CategoryInfo>>>.sumAmount(
-        currency: Currency,
-    ): KeyValue<AmountDirection, Amount> = map { record ->
-        KeyValue(
-            key = record.resolvedDirection,
-            value = record.amount.toAmount(currency.scale),
-        )
-    }.sum()
 
     private fun List<Record<KeyValue<CategoryId, CategoryInfo>>>.sumAmount(
         currency: Currency,

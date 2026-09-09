@@ -10,6 +10,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.TextStyle
+import org.hnau.commons.app.projector.fractal.SText
 import org.hnau.commons.app.projector.utils.SwitchHue
 import org.hnau.commons.kotlin.KeyValue
 import org.hnau.commons.kotlin.mapper.Mapper
@@ -49,7 +50,6 @@ fun AmountContent(
     value: KeyValue<AmountDirection, Amount>,
     amountFormatter: AmountFormatter,
     modifier: Modifier = Modifier,
-    style: TextStyle = MaterialTheme.typography.titleLarge,
 ) {
 
     if (value.value == Amount.zero) {
@@ -57,7 +57,6 @@ fun AmountContent(
             value = value,
             amountFormatter = amountFormatter,
             modifier = modifier,
-            style = style,
         )
         return
     }
@@ -69,7 +68,6 @@ fun AmountContent(
             value = value,
             amountFormatter = amountFormatter,
             modifier = modifier,
-            style = style,
         )
     }
 }
@@ -79,12 +77,9 @@ private fun AmountContentWithoutHue(
     value: KeyValue<AmountDirection, Amount>,
     amountFormatter: AmountFormatter,
     modifier: Modifier = Modifier,
-    style: TextStyle = MaterialTheme.typography.titleLarge,
 ) {
-    Text(
+    SText(
         modifier = modifier,
-        style = style,
-        color = MaterialTheme.colorScheme.primary,
         text = remember(value) {
             amountFormatter.format(
                 amount = value,
