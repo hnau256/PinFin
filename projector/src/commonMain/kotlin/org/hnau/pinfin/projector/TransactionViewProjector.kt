@@ -1,8 +1,6 @@
 package org.hnau.pinfin.projector
 
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Cancel
 import androidx.compose.material.icons.filled.Delete
@@ -11,7 +9,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import arrow.core.NonEmptyList
 import kotlinx.coroutines.CoroutineScope
 import org.hnau.commons.app.projector.fractal.DialogContentInfo
 import org.hnau.commons.app.projector.fractal.SButton
@@ -28,6 +25,7 @@ import org.hnau.commons.app.projector.fractal.distance.LocalDistance
 import org.hnau.commons.app.projector.fractal.size.units
 import org.hnau.commons.app.projector.fractal.table.STable
 import org.hnau.commons.app.projector.fractal.table.STableHeader
+import org.hnau.commons.app.projector.fractal.table.STableScope
 import org.hnau.commons.app.projector.fractal.table.Subtable
 import org.hnau.commons.app.projector.fractal.table.lazy.SLazyTable
 import org.hnau.commons.app.projector.fractal.table.lazy.SLazyTableScope
@@ -59,7 +57,6 @@ import org.hnau.pinfin.data.fold
 import org.hnau.pinfin.data.foldRaw
 import org.hnau.pinfin.data.plus
 import org.hnau.pinfin.data.records.FilteredRecords
-import org.hnau.pinfin.data.sum
 import org.hnau.pinfin.model.TransactionViewModel
 import org.hnau.pinfin.model.utils.budget.state.AccountInfo
 import org.hnau.pinfin.model.utils.budget.state.CategoryInfo
@@ -159,106 +156,69 @@ class TransactionViewProjector(
                     ) {
                         cell(key = "base") {
 
-                            val transferVariant: Transaction.Type.Transfer<KeyValue<AccountId, AccountInfo>, KeyValue<CategoryId, CategoryInfo>>? =
-                                transaction.type.foldRaw(
-                                    ifEntry = { null },
-                                    ifTransfer = ::it,
-                                )
-
-                            val entryAccount: KeyValue<AccountId, AccountInfo>? =
-                                transaction.type.foldRaw(
-                                    ifEntry = { it.account },
-                                    ifTransfer = { null },
-                                )
-
-                            val total = amount(
-                                transaction = transaction,
-                                currency = currency,
-                            )
-                            val comment = transaction.comment.text.takeIf(String::isNotEmpty)
                             STable(
                                 orientation = Orientation.Vertical,
                             ) {
-                                Subtable {
-                                    Subtable {
-                                        SCell {
-                                            SPanel {
-                                                SText(dependencies.localization.date)
-                                            }
-                                        }
-                                        comment?.let {
-                                            SCell {
-                                                SPanel {
-                                                    SText(dependencies.localization.comment)
-                                                }
-                                            }
-                                        }
-                                        transferVariant?.let {
-                                            SCell {
-                                                SPanel {
-                                                    SText(dependencies.localization.transfer)
-                                                }
-                                            }
-                                        }
-                                        entryAccount?.let {
-                                            SCell {
-                                                SPanel {
-                                                    SText(dependencies.localization.account)
-                                                }
-                                            }
-                                        }
-                                        SCell {
-                                            SPanel {
-                                                SText(dependencies.localization.amount)
-                                            }
+                                HeaderRow(
+                                    label = dependencies.localization.date,
+                                ) {
+                                    SText(
+                                        dependencies
+                                            .dateTimeFormatter
+                                            .formatDate(transaction.timestamp),
+                                    )
+                                }
+                                transaction
+                                    .comment
+                                    .text
+                                    .takeIf(String::isNotEmpty)
+                                    ?.let {
+                                        HeaderRow(
+                                            label = dependencies.localization.comment,
+                                        ) {
+                                            SText(it)
                                         }
                                     }
-                                    Subtable(
-                                        modifier = Modifier.weight(1f),
-                                    ) {
-                                        SCell {
-                                            SPanel {
-                                                SText(
-                                                    dependencies
-                                                        .dateTimeFormatter
-                                                        .formatDate(transaction.timestamp),
-                                                )
-                                            }
-                                        }
-                                        comment?.let { commentNotNull ->
-                                            SCell {
-                                                SPanel {
-                                                    SText(commentNotNull)
-                                                }
-                                            }
-                                        }
-                                        transferVariant?.let { transfer ->
-                                            SCell {
-                                                SPanel {
-                                                    TransferContent(transfer = transfer)
-                                                }
-                                            }
-                                        }
-                                        entryAccount?.let { account ->
-                                            SCell {
-                                                SPanel {
-                                                    AccountContent(
-                                                        info = account.value,
-                                                        localization = dependencies.localization,
-                                                        viewMode = ViewMode.Full,
-                                                    )
-                                                }
-                                            }
-                                        }
-                                        SCell {
-                                            SPanel {
-                                                AmountContent(
-                                                    value = total,
-                                                    amountFormatter = dependencies.amountFormatter,
-                                                )
-                                            }
+                                transaction
+                                    .type
+                                    .foldRaw(
+                                        ifEntry = { null },
+                                        ifTransfer = ::it,
+                                    )
+                                    ?.let { transfer ->
+                                        HeaderRow(
+                                            label = dependencies.localization.transfer,
+                                        ) {
+                                            TransferContent(transfer = transfer)
                                         }
                                     }
+                                transaction
+                                    .type
+                                    .foldRaw(
+                                        ifEntry = { it.account },
+                                        ifTransfer = { null },
+                                    )
+                                    ?.let { account ->
+                                        HeaderRow(
+                                            label = dependencies.localization.account,
+                                        ) {
+                                            AccountContent(
+                                                info = account.value,
+                                                localization = dependencies.localization,
+                                                viewMode = ViewMode.Full,
+                                            )
+                                        }
+                                    }
+                                HeaderRow(
+                                    label = dependencies.localization.amount,
+                                ) {
+                                    AmountContent(
+                                        value = amount(
+                                            transaction = transaction,
+                                            currency = currency,
+                                        ),
+                                        amountFormatter = dependencies.amountFormatter,
+                                    )
                                 }
                             }
                         }
@@ -286,6 +246,25 @@ class TransactionViewProjector(
             SDialog(
                 info = removeDialog,
             )
+        }
+    }
+
+    @Composable
+    private fun STableScope.HeaderRow(
+        label: String,
+        content: @Composable () -> Unit,
+    ) {
+        Subtable {
+            SCell(modifier = Modifier.weight(1f)) {
+                SPanel {
+                    SText(label)
+                }
+            }
+            SCell(modifier = Modifier.weight(1f)) {
+                SPanel {
+                    content()
+                }
+            }
         }
     }
 
