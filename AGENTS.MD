@@ -1,0 +1,1 @@
+You can find org.hnau.* libraries sources in common parent folder (e.g. ../commons, ../upchain)
