@@ -66,9 +66,9 @@ suspend fun BudgetStatePrototype.toBudgetState(
                         currency = info.currency,
                     ),
                 )
-                variant.records.records.forEach { record ->
+                variant.records.forEach { entry ->
                     useCategory(
-                        id = record.category,
+                        id = entry.record.category,
                     )
                 }
             },

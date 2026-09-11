@@ -6,7 +6,7 @@ import org.hnau.pinfin.data.CategoryId
 import org.hnau.pinfin.data.Record
 import org.hnau.pinfin.data.Transaction
 import org.hnau.pinfin.data.foldRaw
-import org.hnau.pinfin.data.records.SimpleRecords
+import org.hnau.pinfin.data.records.SimpleRecord
 import org.hnau.pinfin.model.utils.budget.state.AccountInfo
 import org.hnau.pinfin.model.utils.budget.state.CategoryInfo
 
@@ -20,15 +20,11 @@ fun <A, C, A1, C1> Transaction<A, C, *>.map(
         ifEntry = { variant ->
             Transaction.Type.Entry(
                 account = mapA(variant.account),
-                records = SimpleRecords(
-                    records = variant.records.records.map { record ->
-                        Record(
-                            category = mapC(record.category),
-                            amount = record.amount,
-                            comment = record.comment,
-                        )
-                    },
-                ),
+                records = variant.records.map { entry ->
+                    SimpleRecord(
+                        record = entry.record.mapCategory(mapC),
+                    )
+                },
             )
         },
         ifTransfer = { variant ->
@@ -61,15 +57,11 @@ fun Transaction.Type<KeyValue<AccountId, AccountInfo>, KeyValue<CategoryId, Cate
     ifEntry = { variant ->
         Transaction.Type.Entry(
             account = variant.account.key,
-            records = SimpleRecords(
-                records = variant.records.records.map { record ->
-                    Record(
-                        category = record.category.key,
-                        amount = record.amount,
-                        comment = record.comment,
-                    )
-                },
-            ),
+            records = variant.records.map { entry ->
+                SimpleRecord(
+                    record = entry.record.mapCategory { category -> category.key },
+                )
+            },
         )
     },
     ifTransfer = { variant ->

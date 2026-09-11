@@ -57,12 +57,11 @@ fun Transaction<KeyValue<AccountId, AccountInfo>, KeyValue<CategoryId, CategoryI
         },
         ifEntry = { account, records ->
             records
-                .records
-                .map { record ->
+                .map { entry ->
                     AnalyticsEntry(
                         idWithAccount = account,
-                        idWithCategoryOrDirection = Either.Right(record.category),
-                        amount = record.amount.toAmount(currency.scale),
+                        idWithCategoryOrDirection = Either.Right(entry.record.category),
+                        amount = entry.record.amount.toAmount(currency.scale),
                         date = date,
                     )
                 }

@@ -18,7 +18,7 @@ import org.hnau.pinfin.data.AccountId
 import org.hnau.pinfin.data.CategoryId
 import org.hnau.pinfin.data.Currency
 import org.hnau.pinfin.data.Transaction
-import org.hnau.pinfin.data.records.FilteredRecords
+import org.hnau.pinfin.data.records.FilteredRecord
 import org.hnau.pinfin.model.budgetstack.BudgetStackOpener
 import org.hnau.pinfin.model.utils.budget.repository.BudgetRepository
 import org.hnau.pinfin.model.utils.budget.state.AccountInfo
@@ -42,11 +42,11 @@ class TransactionViewModel(
     @Serializable
     data class Skeleton(
         val id: Transaction.Id,
-        val transaction: Transaction<KeyValue<AccountId, AccountInfo>, KeyValue<CategoryId, CategoryInfo>, FilteredRecords<KeyValue<CategoryId, CategoryInfo>>>,
+        val transaction: Transaction<KeyValue<AccountId, AccountInfo>, KeyValue<CategoryId, CategoryInfo>, FilteredRecord<KeyValue<CategoryId, CategoryInfo>>>,
         val removeDialogIsVisible: MutableStateFlow<Boolean> = false.toMutableStateFlowAsInitial()
     )
 
-    val transaction: Transaction<KeyValue<AccountId, AccountInfo>, KeyValue<CategoryId, CategoryInfo>, FilteredRecords<KeyValue<CategoryId, CategoryInfo>>>
+    val transaction: Transaction<KeyValue<AccountId, AccountInfo>, KeyValue<CategoryId, CategoryInfo>, FilteredRecord<KeyValue<CategoryId, CategoryInfo>>>
         get() = skeleton.transaction
 
     val currency: StateFlow<Currency> = dependencies

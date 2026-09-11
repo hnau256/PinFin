@@ -29,7 +29,7 @@ import org.hnau.pinfin.data.Amount
 import org.hnau.pinfin.data.AmountDirection
 import org.hnau.pinfin.data.CategoryId
 import org.hnau.pinfin.data.Transaction
-import org.hnau.pinfin.data.records.SimpleRecords
+import org.hnau.pinfin.data.records.SimpleRecord
 import org.hnau.pinfin.model.transaction.utils.ChooseOrCreateModel
 import org.hnau.pinfin.model.utils.budget.state.AccountInfo
 import org.hnau.pinfin.model.utils.budget.state.CategoryInfo
@@ -112,7 +112,7 @@ class EntryModel(
                     idWithAccount = entry.account,
                 ),
                 records = RecordsModel.Skeleton.createForEdit(
-                    records = entry.records.records,
+                    records = entry.records.map { it.record },
                 ),
             )
         }
@@ -215,9 +215,7 @@ class EntryModel(
         derivedStateFlowOf(scope) {
             editable {
                 Transaction.Type.Entry(
-                    records = SimpleRecords(
-                        records = records.records.state.bind(),
-                    ),
+                    records = records.records.state.bind().map(::SimpleRecord),
                     account = account.accountEditable.state.bind(),
                 )
             }

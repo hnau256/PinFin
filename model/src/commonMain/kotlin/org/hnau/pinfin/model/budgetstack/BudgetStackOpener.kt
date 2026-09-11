@@ -5,7 +5,7 @@ import org.hnau.pinfin.data.AccountId
 import org.hnau.pinfin.data.CategoryId
 import org.hnau.pinfin.data.Transaction
 import org.hnau.pinfin.data.TransactionType
-import org.hnau.pinfin.data.records.FilteredRecords
+import org.hnau.pinfin.data.records.FilteredRecord
 import org.hnau.pinfin.model.utils.budget.state.AccountInfo
 import org.hnau.pinfin.model.utils.budget.state.CategoryInfo
 
@@ -17,7 +17,7 @@ interface BudgetStackOpener {
 
     fun openViewTransaction(
         id: Transaction.Id,
-        info: Transaction<KeyValue<AccountId, AccountInfo>, KeyValue<CategoryId, CategoryInfo>, FilteredRecords<KeyValue<CategoryId, CategoryInfo>>>,
+        info: Transaction<KeyValue<AccountId, AccountInfo>, KeyValue<CategoryId, CategoryInfo>, FilteredRecord<KeyValue<CategoryId, CategoryInfo>>>,
     )
 
     fun openEditTransaction(

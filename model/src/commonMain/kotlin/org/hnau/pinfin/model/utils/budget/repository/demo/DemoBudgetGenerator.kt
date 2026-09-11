@@ -20,7 +20,7 @@ import org.hnau.pinfin.data.Transaction
 import org.hnau.pinfin.data.UpdateType
 import org.hnau.pinfin.data.expression.AmountExpression
 import org.hnau.pinfin.data.expression.Expression
-import org.hnau.pinfin.data.records.SimpleRecords
+import org.hnau.pinfin.data.records.SimpleRecord
 import org.hnau.pinfin.model.utils.icons.IconVariant
 import org.hnau.pinfin.model.utils.icons.icon
 import kotlin.math.exp
@@ -541,9 +541,7 @@ class DemoBudgetGenerator(
         comment = Comment(comment),
         type = Transaction.Type.Entry(
             account = account,
-            records = SimpleRecords(
-                records = records.toNonEmptyListOrNull()!!,
-            ),
+            records = records.toNonEmptyListOrNull()!!.map(::SimpleRecord),
         ),
     )
 

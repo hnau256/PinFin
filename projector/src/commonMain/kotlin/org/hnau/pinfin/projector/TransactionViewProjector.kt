@@ -56,10 +56,12 @@ import org.hnau.pinfin.data.Transaction
 import org.hnau.pinfin.data.fold
 import org.hnau.pinfin.data.foldRaw
 import org.hnau.pinfin.data.plus
-import org.hnau.pinfin.data.records.FilteredRecords
+import org.hnau.pinfin.data.records.FilteredRecord
 import org.hnau.pinfin.model.TransactionViewModel
+import org.hnau.pinfin.model.utils.additionalRecords
 import org.hnau.pinfin.model.utils.budget.state.AccountInfo
 import org.hnau.pinfin.model.utils.budget.state.CategoryInfo
+import org.hnau.pinfin.model.utils.includedRecords
 import org.hnau.pinfin.model.utils.resolvedDirection
 import org.hnau.pinfin.model.utils.totalAmount
 import org.hnau.pinfin.projector.utils.AccountContent
@@ -269,18 +271,19 @@ class TransactionViewProjector(
     }
 
     private fun SLazyTableScope.EntrySections(
-        entry: Transaction.Type.Entry<KeyValue<AccountId, AccountInfo>, KeyValue<CategoryId, CategoryInfo>, FilteredRecords<KeyValue<CategoryId, CategoryInfo>>>,
+        entry: Transaction.Type.Entry<KeyValue<AccountId, AccountInfo>, KeyValue<CategoryId, CategoryInfo>, FilteredRecord<KeyValue<CategoryId, CategoryInfo>>>,
         currency: Currency,
     ) {
-        val additional = entry.records.additional
+        val main = entry.records.includedRecords()
+        val additional = entry.records.additionalRecords()
         val additionalPresent = additional.isNotEmpty()
         RecordsSection(
             sectionKey = "main",
             title = dependencies.localization.records,
             headerAmount = additionalPresent.takeIf { it }?.let {
-                entry.records.main.sumAmount(currency)
+                main.sumAmount(currency)
             },
-            records = entry.records.main,
+            records = main,
             currency = currency,
         )
         if (additionalPresent) {
@@ -388,7 +391,7 @@ class TransactionViewProjector(
     }
 
     private fun amount(
-        transaction: Transaction<KeyValue<AccountId, AccountInfo>, KeyValue<CategoryId, CategoryInfo>, FilteredRecords<KeyValue<CategoryId, CategoryInfo>>>,
+        transaction: Transaction<KeyValue<AccountId, AccountInfo>, KeyValue<CategoryId, CategoryInfo>, FilteredRecord<KeyValue<CategoryId, CategoryInfo>>>,
         currency: Currency,
     ): KeyValue<AmountDirection, Amount> = transaction.type.fold(
         ifTransfer = { _, _, amount ->
