@@ -35,20 +35,16 @@ fun NonEmptyList<FilteredRecord<KeyValue<CategoryId, CategoryInfo>>>.filteredAmo
     .map { record -> KeyValue(record.resolvedDirection, record.amount) }
     .amount(currency)
 
-fun <C> NonEmptyList<FilteredRecord<C>>.includedRecords(): NonEmptyList<Record<C>> = filter { it.included }
-    .map { it.record }
-    .toNonEmptyListOrThrow()
-
-fun <C> NonEmptyList<FilteredRecord<C>>.additionalRecords(): List<Record<C>> = filterNot { it.included }
+fun <C> NonEmptyList<FilteredRecord<C>>.includedRecords(): List<Record<C>> = filter { it.included }
     .map { it.record }
 
 val Record<KeyValue<CategoryId, CategoryInfo>>.resolvedDirection: AmountDirection
     get() = category.key.direction
 
-private fun NonEmptyList<KeyValue<AmountDirection, AmountExpression>>.amount(
+private fun List<KeyValue<AmountDirection, AmountExpression>>.amount(
     currency: Currency,
-): KeyValue<AmountDirection, Amount> = tail.fold(
-    initial = head.map { it.toAmount(currency.scale) },
+): KeyValue<AmountDirection, Amount> = fold(
+    initial = KeyValue(AmountDirection.Credit, Amount.zero),
 ) { acc, record ->
     acc + record.map { it.toAmount(currency.scale) }
 }

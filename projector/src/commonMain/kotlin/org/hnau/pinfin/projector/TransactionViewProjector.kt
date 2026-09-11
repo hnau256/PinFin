@@ -1,6 +1,7 @@
 package org.hnau.pinfin.projector
 
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.text.BasicText
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Cancel
 import androidx.compose.material.icons.filled.Delete
@@ -9,6 +10,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.style.TextDecoration
 import kotlinx.coroutines.CoroutineScope
 import org.hnau.commons.app.projector.fractal.DialogContentInfo
 import org.hnau.commons.app.projector.fractal.SButton
@@ -21,17 +23,20 @@ import org.hnau.commons.app.projector.fractal.SPanel
 import org.hnau.commons.app.projector.fractal.SScreen
 import org.hnau.commons.app.projector.fractal.SText
 import org.hnau.commons.app.projector.fractal.context.FContext
+import org.hnau.commons.app.projector.fractal.context.LocalFContext
+import org.hnau.commons.app.projector.fractal.context.color
+import org.hnau.commons.app.projector.fractal.context.contentOverlay
 import org.hnau.commons.app.projector.fractal.distance.LocalDistance
+import org.hnau.commons.app.projector.fractal.padding.LocalContentPaddingBox
+import org.hnau.commons.app.projector.fractal.size.SizeType
 import org.hnau.commons.app.projector.fractal.size.units
 import org.hnau.commons.app.projector.fractal.table.STable
-import org.hnau.commons.app.projector.fractal.table.STableHeader
 import org.hnau.commons.app.projector.fractal.table.STableScope
 import org.hnau.commons.app.projector.fractal.table.Subtable
 import org.hnau.commons.app.projector.fractal.table.lazy.SLazyTable
 import org.hnau.commons.app.projector.fractal.table.lazy.SLazyTableScope
 import org.hnau.commons.app.projector.fractal.table.lazy.cell
 import org.hnau.commons.app.projector.fractal.table.lazy.cells
-import org.hnau.commons.app.projector.fractal.table.lazy.item
 import org.hnau.commons.app.projector.fractal.utils.Importance
 import org.hnau.commons.app.projector.fractal.utils.Mood
 import org.hnau.commons.app.projector.uikit.ItemsRow
@@ -51,17 +56,14 @@ import org.hnau.pinfin.data.Amount
 import org.hnau.pinfin.data.AmountDirection
 import org.hnau.pinfin.data.CategoryId
 import org.hnau.pinfin.data.Currency
-import org.hnau.pinfin.data.Record
 import org.hnau.pinfin.data.Transaction
 import org.hnau.pinfin.data.fold
 import org.hnau.pinfin.data.foldRaw
 import org.hnau.pinfin.data.plus
 import org.hnau.pinfin.data.records.FilteredRecord
 import org.hnau.pinfin.model.TransactionViewModel
-import org.hnau.pinfin.model.utils.additionalRecords
 import org.hnau.pinfin.model.utils.budget.state.AccountInfo
 import org.hnau.pinfin.model.utils.budget.state.CategoryInfo
-import org.hnau.pinfin.model.utils.includedRecords
 import org.hnau.pinfin.model.utils.resolvedDirection
 import org.hnau.pinfin.model.utils.totalAmount
 import org.hnau.pinfin.projector.utils.AccountContent
@@ -214,12 +216,22 @@ class TransactionViewProjector(
                                 HeaderRow(
                                     label = dependencies.localization.amount,
                                 ) {
-                                    AmountContent(
-                                        value = amount(
-                                            transaction = transaction,
-                                            currency = currency,
-                                        ),
-                                        amountFormatter = dependencies.amountFormatter,
+                                    transaction.type.foldRaw(
+                                        ifTransfer = {
+                                            AmountContent(
+                                                value = amount(
+                                                    transaction = transaction,
+                                                    currency = currency,
+                                                ),
+                                                amountFormatter = dependencies.amountFormatter,
+                                            )
+                                        },
+                                        ifEntry = { entry ->
+                                            EntryAmount(
+                                                records = entry.records,
+                                                currency = currency,
+                                            )
+                                        },
                                     )
                                 }
                             }
@@ -227,8 +239,8 @@ class TransactionViewProjector(
                         transaction.type.foldRaw(
                             ifTransfer = {},
                             ifEntry = { entry ->
-                                EntrySections(
-                                    entry = entry,
+                                RecordsSection(
+                                    records = entry.records,
                                     currency = currency,
                                 )
                             },
@@ -270,69 +282,29 @@ class TransactionViewProjector(
         }
     }
 
-    private fun SLazyTableScope.EntrySections(
-        entry: Transaction.Type.Entry<KeyValue<AccountId, AccountInfo>, KeyValue<CategoryId, CategoryInfo>, FilteredRecord<KeyValue<CategoryId, CategoryInfo>>>,
-        currency: Currency,
-    ) {
-        val main = entry.records.includedRecords()
-        val additional = entry.records.additionalRecords()
-        val additionalPresent = additional.isNotEmpty()
-        RecordsSection(
-            sectionKey = "main",
-            title = dependencies.localization.records,
-            headerAmount = additionalPresent.takeIf { it }?.let {
-                main.sumAmount(currency)
-            },
-            records = main,
-            currency = currency,
-        )
-        if (additionalPresent) {
-            RecordsSection(
-                sectionKey = "additional",
-                title = dependencies.localization.additionalRecords,
-                headerAmount = additional.sumAmount(currency),
-                records = additional,
-                currency = currency,
-            )
-        }
-    }
-
     private fun SLazyTableScope.RecordsSection(
-        sectionKey: String,
-        title: String,
-        headerAmount: KeyValue<AmountDirection, Amount>?,
-        records: List<Record<KeyValue<CategoryId, CategoryInfo>>>,
+        records: List<FilteredRecord<KeyValue<CategoryId, CategoryInfo>>>,
         currency: Currency,
     ) {
-        item(key = "header_$sectionKey") {
-            STableHeader {
-                SItem(
-                    content = {
-                        SText(title)
-                    },
-                    endAccessory = headerAmount?.let { amount ->
-                        {
-                            AmountContent(
-                                value = amount,
-                                amountFormatter = dependencies.amountFormatter,
-                            )
-                        }
-                    },
-                )
-            }
-        }
         cells(
-            items = records,
-            key = { record -> record.category.key.id + records.indexOf(record) },
-        ) { record ->
+            count = records.size,
+            key = { index -> records[index].record.category.key.id + index },
+        ) { index ->
+            val record = records[index]
             SPanel {
                 SItem(
                     content = record
+                        .record
                         .comment
                         .text
                         .takeIf(String::isNotEmpty)
                         ?.let { comment ->
-                            { SText(comment) }
+                            {
+                                CommentText(
+                                    text = comment,
+                                    strikethrough = !record.included,
+                                )
+                            }
                         },
                     endAccessory = {
                         SLine(
@@ -341,14 +313,14 @@ class TransactionViewProjector(
                             acrossOrientation = Alignment.CenterHorizontally,
                         ) {
                             CategoryContent(
-                                info = record.category,
+                                info = record.record.category,
                                 localization = dependencies.localization,
                                 viewMode = ViewMode.Full,
                             )
                             SIcon(
                                 Drawable.Vector(
                                     ArrowIcon[
-                                        record.category.key.direction.fold(
+                                        record.record.category.key.direction.fold(
                                             ifCredit = { ArrowDirection.EndToStart },
                                             ifDebit = { ArrowDirection.StartToEnd },
                                         )
@@ -357,8 +329,8 @@ class TransactionViewProjector(
                             )
                             AmountContent(
                                 value = KeyValue(
-                                    key = record.resolvedDirection,
-                                    value = record.amount.toAmount(currency.scale),
+                                    key = record.record.resolvedDirection,
+                                    value = record.record.amount.toAmount(currency.scale),
                                 ),
                                 amountFormatter = dependencies.amountFormatter,
                             )
@@ -366,6 +338,67 @@ class TransactionViewProjector(
                     },
                 )
             }
+        }
+    }
+
+    @Composable
+    private fun CommentText(
+        text: String,
+        strikethrough: Boolean,
+    ) {
+        if (!strikethrough) {
+            SText(text)
+            return
+        }
+        LocalContentPaddingBox {
+            FContext(
+                update = { contentOverlay() }
+            ) {
+                val fContext = LocalFContext.current
+                BasicText(
+                    text = text,
+                    style = LocalDistance.current.units.textStyle[SizeType.default].merge(
+                        color = fContext.color,
+                        textDecoration = TextDecoration.LineThrough,
+                    ),
+                )
+            }
+        }
+    }
+
+    @Composable
+    private fun EntryAmount(
+        records: List<FilteredRecord<KeyValue<CategoryId, CategoryInfo>>>,
+        currency: Currency,
+    ) {
+        val hasIncluded = records.any { it.included }
+        val hasExcluded = records.any { !it.included }
+        if (!hasIncluded || !hasExcluded) {
+            AmountContent(
+                value = records.sumAmount(currency),
+                amountFormatter = dependencies.amountFormatter,
+            )
+            return
+        }
+        SLine(
+            orientation = Orientation.Horizontal,
+            separation = LocalDistance.current.units.padding.along.small,
+            acrossOrientation = Alignment.CenterHorizontally,
+        ) {
+            AmountContent(
+                value = records.filter { it.included }.sumAmount(currency),
+                amountFormatter = dependencies.amountFormatter,
+            )
+            SText("+")
+            AmountContent(
+                value = records.filterNot { it.included }.sumAmount(currency),
+                amountFormatter = dependencies.amountFormatter,
+            )
+            SText("=")
+            AmountContent(
+                value = records.sumAmount(currency),
+                amountFormatter = dependencies.amountFormatter,
+            )
         }
     }
 
@@ -405,7 +438,7 @@ class TransactionViewProjector(
         },
     )
 
-    private fun List<Record<KeyValue<CategoryId, CategoryInfo>>>.sumAmount(
+    private fun List<FilteredRecord<KeyValue<CategoryId, CategoryInfo>>>.sumAmount(
         currency: Currency,
     ): KeyValue<AmountDirection, Amount> = fold(
         initial = KeyValue(
@@ -414,8 +447,8 @@ class TransactionViewProjector(
         ),
     ) { acc, record ->
         acc + KeyValue(
-            key = record.resolvedDirection,
-            value = record.amount.toAmount(currency.scale),
+            key = record.record.resolvedDirection,
+            value = record.record.amount.toAmount(currency.scale),
         )
     }
 }

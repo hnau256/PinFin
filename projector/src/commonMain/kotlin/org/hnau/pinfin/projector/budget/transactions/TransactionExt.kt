@@ -186,13 +186,12 @@ private fun EntryContent(
         val records = entry.records.includedRecords()
         val categories = remember(records) {
             records
-                .tail
                 .fold(
-                    initial = nonEmptySetOf(records.head.category),
+                    initial = emptySet<KeyValue<CategoryId, CategoryInfo>>(),
                 ) { acc, record ->
                     acc + record.category
                 }
-                .toNonEmptyList()
+                .toList()
         }
         AccountContent(
             info = entry.account.value,
@@ -203,10 +202,11 @@ private fun EntryContent(
             icon = ArrowIcon[
                 remember(records) {
                     val allDirection = records
-                        .map {
+                        .toNonEmptyListOrNull()
+                        ?.map {
                             it.category.key.direction
                         }
-                        .let { directions ->
+                        ?.let { directions ->
                             directions.tail.fold<AmountDirection, AmountDirection?>(
                                 initial = directions.head,
                             ) { acc, direction ->
