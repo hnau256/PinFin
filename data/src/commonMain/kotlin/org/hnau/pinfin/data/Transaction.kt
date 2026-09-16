@@ -73,7 +73,7 @@ data class Transaction<out A, out C, out R : RecordEntry<C>>(
 
         @Serializable
         @SerialName("transfer")
-        data class Transfer<out A, out C>(
+        data class Transfer<out A>(
 
             @SerialName("from")
             val from: A,
@@ -83,6 +83,6 @@ data class Transaction<out A, out C, out R : RecordEntry<C>>(
 
             @SerialName("amount")
             val amount: AmountExpression,
-        ) : Type<A, C, Nothing>
+        ) : Type<A, Nothing, Nothing>
     }
 }
