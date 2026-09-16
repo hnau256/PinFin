@@ -18,6 +18,7 @@ enum class TransactionType {
 
     companion object {
 
-        val default = Entry
+        val default: TransactionType
+            get() = Entry
     }
 }

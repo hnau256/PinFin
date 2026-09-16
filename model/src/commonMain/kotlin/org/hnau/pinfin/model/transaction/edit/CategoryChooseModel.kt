@@ -23,6 +23,7 @@ import org.hnau.commons.kotlin.foldNullable
 import org.hnau.pinfin.data.AmountDirection
 import org.hnau.pinfin.data.CategoryId
 import org.hnau.pinfin.data.Comment
+import org.hnau.pinfin.model.transaction.edit.utils.EditNavigateContext
 import org.hnau.pinfin.model.transaction.utils.allRecords
 import org.hnau.pinfin.model.utils.budget.repository.BudgetRepository
 import org.hnau.pinfin.model.utils.budget.state.CategoryInfo
@@ -32,6 +33,7 @@ class CategoryChooseModel(
     private val dependencies: Dependencies,
     skeleton: Skeleton,
     private val commentToFindDefault: StateFlow<Comment>,
+    navigateContext: EditNavigateContext,
 ) {
 
     @Pipe
@@ -78,12 +80,14 @@ class CategoryChooseModel(
     val choose: ChooseOrCreateModel<KeyValue<CategoryId, CategoryInfo>> = ChooseOrCreateModel(
         scope = scope,
         skeleton = skeleton.choose,
-        variants = dependencies
-            .budgetRepository
-            .state
-            .mapState(scope) { state ->
-                state.categories
-            },
+        getBaseVariants = { scope ->
+            dependencies
+                .budgetRepository
+                .state
+                .mapState(scope) { state ->
+                    state.categories
+                }
+        },
         selected = selectedCategory.mapState(scope) { it.toOption() },
         onSelectedChanged = skeleton.manualIdWithCategory::value::set,
         createAdditionalVariants = { query ->
@@ -103,6 +107,7 @@ class CategoryChooseModel(
         },
         extractKey = { it.key },
         extractTitle = { it.value.title },
+        navigateContext = navigateContext,
     )
 
     val categoryEditable: StateFlow<Editable<KeyValue<CategoryId, CategoryInfo>>> =

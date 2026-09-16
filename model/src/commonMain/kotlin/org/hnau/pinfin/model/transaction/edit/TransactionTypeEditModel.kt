@@ -7,7 +7,6 @@ import kotlinx.coroutines.flow.update
 import kotlinx.serialization.Serializable
 import org.hnau.commons.app.model.goback.GoBackHandler
 import org.hnau.commons.app.model.utils.Editable
-import org.hnau.commons.app.model.utils.bind
 import org.hnau.commons.app.model.utils.editable
 import org.hnau.commons.gen.pipe.annotations.Pipe
 import org.hnau.commons.gen.sealup.annotations.SealUp
@@ -22,7 +21,9 @@ import org.hnau.pinfin.data.CategoryId
 import org.hnau.pinfin.data.Transaction
 import org.hnau.pinfin.data.TransactionType
 import org.hnau.pinfin.data.fold
+import org.hnau.pinfin.data.foldRaw
 import org.hnau.pinfin.data.records.RecordEntry
+import org.hnau.pinfin.model.transaction.edit.utils.EditNavigateContext
 import org.hnau.pinfin.model.utils.budget.state.AccountInfo
 import org.hnau.pinfin.model.utils.budget.state.CategoryInfo
 
@@ -30,6 +31,7 @@ class TransactionTypeEditModel(
     scope: CoroutineScope,
     dependencies: Dependencies,
     private val skeleton: Skeleton,
+    navigateContext: EditNavigateContext,
 ) {
 
     @Pipe
@@ -95,6 +97,29 @@ class TransactionTypeEditModel(
                     type = type,
                 ).toMutableStateFlowAsInitial()
             )
+
+            fun create(
+                type: Transaction.Type<KeyValue<AccountId, AccountInfo>, KeyValue<CategoryId, CategoryInfo>, *>,
+            ): Skeleton = Skeleton(
+                type = type
+                    .foldRaw(
+                        ifEntry = { entrySkeleton ->
+                            TransactionTypeEditModelTypeSkeleton.Entry(
+                                TransactionEntryEditModel.Skeleton.create(
+                                    entry = entrySkeleton,
+                                )
+                            )
+                        },
+                        ifTransfer = { transferSkeleton ->
+                            TransactionTypeEditModelTypeSkeleton.Transfer(
+                                TransactionTransferEditModel.Skeleton.create(
+                                    entry = transferSkeleton,
+                                )
+                            )
+                        }
+                    )
+                    .toMutableStateFlowAsInitial()
+            )
         }
     }
 
@@ -108,6 +133,7 @@ class TransactionTypeEditModel(
                         scope = scope,
                         skeleton = entrySkeleton,
                         dependencies = dependencies.entry(),
+                        navigateContext = navigateContext,
                     )
                 },
                 ifTransfer = { transferSkeleton ->
@@ -115,6 +141,7 @@ class TransactionTypeEditModel(
                         scope = scope,
                         skeleton = transferSkeleton,
                         dependencies = dependencies.transfer(),
+                        navigateContext = navigateContext,
                     )
                 }
             )
@@ -145,18 +172,19 @@ class TransactionTypeEditModel(
             }
     }
 
-    val typeEditable: StateFlow<Editable<Transaction.Type<KeyValue<AccountId, AccountInfo>, KeyValue<CategoryId, CategoryInfo>, RecordEntry<KeyValue<CategoryId, CategoryInfo>>>>> = derivedStateFlowOf(scope) {
-        editable {
-            type.state.fold(
-                ifEntry = {
-                    it.entryEditable.state.bind()
-                },
-                ifTransfer = {
-                    it.transferEditable.state.bind()
-                }
-            )
+    val typeEditable: StateFlow<Editable<Transaction.Type<KeyValue<AccountId, AccountInfo>, KeyValue<CategoryId, CategoryInfo>, RecordEntry<KeyValue<CategoryId, CategoryInfo>>>>> =
+        derivedStateFlowOf(scope) {
+            editable {
+                type.state.fold(
+                    ifEntry = {
+                        it.entryEditable.state.bind()
+                    },
+                    ifTransfer = {
+                        it.transferEditable.state.bind()
+                    }
+                )
+            }
         }
-    }
 
     val goBackHandler: GoBackHandler = derivedStateFlowOf(scope) {
         type.state.goBackHandler.state

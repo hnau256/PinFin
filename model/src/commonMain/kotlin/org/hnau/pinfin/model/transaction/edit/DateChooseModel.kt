@@ -22,14 +22,13 @@ import org.hnau.commons.app.model.utils.Editable
 import org.hnau.commons.kotlin.coroutines.flow.state.mutable.toMutableStateFlowAsInitial
 import org.hnau.commons.kotlin.ifNull
 import org.hnau.commons.kotlin.serialization.MutableStateFlowSerializer
+import org.hnau.pinfin.model.transaction.edit.utils.EditNavigateContext
 import kotlin.time.Clock
 
 class DateChooseModel(
     scope: CoroutineScope,
     private val skeleton: Skeleton,
-    val isFocused: StateFlow<Boolean>,
-    val requestFocus: () -> Unit,
-    private val goForward: () -> Unit,
+    val navigateContext: EditNavigateContext,
 ) {
 
     @Serializable
@@ -66,7 +65,7 @@ class DateChooseModel(
                 val localCache = cache
                 cache = newTime
                 if (newTime != localCache) {
-                    goForward()
+                    navigateContext.goForward()
                 }
             }
         }

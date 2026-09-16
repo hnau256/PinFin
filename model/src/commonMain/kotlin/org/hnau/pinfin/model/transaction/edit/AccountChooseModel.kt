@@ -22,6 +22,7 @@ import org.hnau.pinfin.data.AccountId
 import org.hnau.pinfin.data.Amount
 import org.hnau.pinfin.data.AmountDirection
 import org.hnau.pinfin.data.fold
+import org.hnau.pinfin.model.transaction.edit.utils.EditNavigateContext
 import org.hnau.pinfin.model.utils.budget.repository.BudgetRepository
 import org.hnau.pinfin.model.utils.budget.state.AccountInfo
 
@@ -30,6 +31,7 @@ class AccountChooseModel(
     private val dependencies: Dependencies,
     skeleton: Skeleton,
     useMostPopularAccountAsDefault: Boolean,
+    navigateContext: EditNavigateContext,
 ) {
 
     @Pipe
@@ -79,12 +81,14 @@ class AccountChooseModel(
     val choose: ChooseOrCreateModel<KeyValue<AccountId, AccountInfo>> = ChooseOrCreateModel(
         scope = scope,
         skeleton = skeleton.choose,
-        variants = dependencies
-            .budgetRepository
-            .state
-            .mapState(scope) { state ->
-                state.accounts
-            },
+        getBaseVariants = { scope ->
+            dependencies
+                .budgetRepository
+                .state
+                .mapState(scope) { state ->
+                    state.accounts
+                }
+        },
         selected = selectedAccount.mapState(scope) { it.toOption() },
         onSelectedChanged = skeleton.manualIdWithAccount::value::set,
         createAdditionalVariants = { query ->
@@ -102,6 +106,7 @@ class AccountChooseModel(
         },
         extractKey = { it.key.id },
         extractTitle = { it.value.title },
+        navigateContext = navigateContext,
     )
 
     val accountEditable: StateFlow<Editable<KeyValue<AccountId, AccountInfo>>> =
