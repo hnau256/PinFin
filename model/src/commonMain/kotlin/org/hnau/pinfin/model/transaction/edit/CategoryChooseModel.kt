@@ -32,7 +32,7 @@ class CategoryChooseModel(
     scope: CoroutineScope,
     private val dependencies: Dependencies,
     skeleton: Skeleton,
-    private val commentToFindDefault: StateFlow<Comment>,
+    private val suggestedCategory: StateFlow<KeyValue<CategoryId, CategoryInfo>?>,
     navigateContext: EditNavigateContext,
 ) {
 
@@ -71,9 +71,7 @@ class CategoryChooseModel(
                     ifNotNull = { manual ->
                         manual.toMutableStateFlowAsInitial()
                     },
-                    ifNull = {
-                        getCategoryBasedOnComment(scope)
-                    }
+                    ifNull = { suggestedCategory }
                 )
         }
 
@@ -115,49 +113,6 @@ class CategoryChooseModel(
             scope = scope,
             valueOrNone = selectedCategory.mapState(scope) { it.toOption() },
             initialValueOrNone = skeleton.initialIdWithCategory.toOption(),
-        )
-
-    private fun getCategoryBasedOnComment(
-        scope: CoroutineScope,
-    ): StateFlow<KeyValue<CategoryId, CategoryInfo>?> = dependencies
-        .budgetRepository
-        .state
-        .combineStateWith(
-            scope = scope,
-            other = commentToFindDefault,
-        ) { state, comment ->
-            state to comment
-        }
-        .mapLatest { (state, commentRaw) ->
-            withContext(Dispatchers.Default) {
-                commentRaw
-                    .text
-                    .trim()
-                    .takeIf(String::isNotEmpty)
-                    ?.let { comment ->
-                        state
-                            .allRecords
-                            .mapNotNull { (timestamp, record) ->
-                                record
-                                    .takeIf {
-                                        it.comment.text.trim().equals(
-                                            other = comment,
-                                            ignoreCase = true,
-                                        )
-                                    }
-                                    ?.let { recordWithSameComment ->
-                                        timestamp to recordWithSameComment.category
-                                    }
-                            }
-                            .maxByOrNull(Pair<LocalDate, *>::first)
-                            ?.second
-                    }
-            }
-        }
-        .stateIn(
-            scope = scope,
-            started = SharingStarted.Eagerly,
-            initialValue = null,
         )
 
     val goBackHandler: GoBackHandler

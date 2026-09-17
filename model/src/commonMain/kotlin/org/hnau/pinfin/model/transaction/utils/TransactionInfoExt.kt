@@ -53,6 +53,11 @@ fun Transaction<AccountId, CategoryId, *>.toResolved(
     mapC = { id -> KeyValue(id, categories.getValue(id)) },
 )
 
+fun Transaction<KeyValue<AccountId, AccountInfo>, KeyValue<CategoryId, CategoryInfo>, *>.toRaw(): Transaction<AccountId, CategoryId, *> = map(
+    mapA = { it.key },
+    mapC = { it.key },
+)
+
 fun Transaction.Type<KeyValue<AccountId, AccountInfo>, KeyValue<CategoryId, CategoryInfo>, *>.toRawType(): Transaction.Type<AccountId, CategoryId, *> = foldRaw(
     ifEntry = { variant ->
         Transaction.Type.Entry(

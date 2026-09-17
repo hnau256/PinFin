@@ -5,7 +5,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.serialization.Serializable
 import org.hnau.commons.app.model.goback.GoBackHandler
-import org.hnau.commons.app.model.goback.NeverGoBackHandler
 import org.hnau.commons.app.model.utils.Editable
 import org.hnau.commons.app.model.utils.ModelSavableDelegate
 import org.hnau.commons.app.model.utils.editable
@@ -21,13 +20,15 @@ import org.hnau.pinfin.data.TransactionType
 import org.hnau.pinfin.data.records.RecordEntry
 import org.hnau.pinfin.model.transaction.edit.utils.EditNavigateContext
 import org.hnau.pinfin.model.transaction.edit.utils.SelectedPartDelegate
+import org.hnau.pinfin.model.transaction.utils.toRaw
+import org.hnau.pinfin.model.utils.budget.repository.BudgetRepository
 import org.hnau.pinfin.model.utils.budget.state.AccountInfo
 import org.hnau.pinfin.model.utils.budget.state.CategoryInfo
 
 class TransactionEditModel(
     scope: CoroutineScope,
-    dependencies: Dependencies,
-    skeleton: Skeleton,
+    private val dependencies: Dependencies,
+    private val skeleton: Skeleton,
     onReady: () -> Unit,
 ) {
 
@@ -48,6 +49,8 @@ class TransactionEditModel(
     @Pipe
     interface Dependencies {
 
+        val budgetRepository: BudgetRepository
+
         fun comment(): CommentEditModel.Dependencies
 
         fun type(): TransactionTypeEditModel.Dependencies
@@ -55,6 +58,7 @@ class TransactionEditModel(
 
     @Serializable
     data class Skeleton(
+        val id: Transaction.Id?,
         val date: DateChooseModel.Skeleton,
         val comment: CommentEditModel.Skeleton,
         val type: TransactionTypeEditModel.Skeleton,
@@ -65,6 +69,7 @@ class TransactionEditModel(
         companion object {
 
             fun createForNew(): Skeleton = Skeleton(
+                id = null,
                 date = DateChooseModel.Skeleton.createForNew(),
                 comment = CommentEditModel.Skeleton.createForNew(),
                 type = TransactionTypeEditModel.Skeleton.createForNew(
@@ -73,8 +78,10 @@ class TransactionEditModel(
             )
 
             fun create(
+                id: Transaction.Id,
                 transaction: Transaction<KeyValue<AccountId, AccountInfo>, KeyValue<CategoryId, CategoryInfo>, *>,
             ): Skeleton = Skeleton(
+                id = id,
                 date = DateChooseModel.Skeleton.createForEdit(
                     date = transaction.timestamp,
                 ),
@@ -147,10 +154,16 @@ class TransactionEditModel(
         scope = scope,
         result = editableTransaction,
         skeleton = skeleton.saveableDelegate,
-        modelGoBackHandler = NeverGoBackHandler,
+        modelGoBackHandler = type.goBackHandler,
         close = onReady,
         save = { transactionToSave ->
-            TODO()
+            dependencies
+                .budgetRepository
+                .transactions
+                .addOrUpdate(
+                    id = skeleton.id,
+                    transaction = transactionToSave.toRaw(),
+                )
             onReady()
         },
     )

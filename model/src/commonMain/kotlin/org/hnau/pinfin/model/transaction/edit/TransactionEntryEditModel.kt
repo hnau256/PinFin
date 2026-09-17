@@ -12,7 +12,6 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.UseSerializers
 import org.hnau.commons.app.model.goback.GoBackHandler
-import org.hnau.commons.app.model.goback.NeverGoBackHandler
 import org.hnau.commons.app.model.utils.Editable
 import org.hnau.commons.app.model.utils.editable
 import org.hnau.commons.gen.fold.annotations.Fold
@@ -38,6 +37,7 @@ class TransactionEntryEditModel(
     navigateContext: EditNavigateContext,
 ) {
 
+    @Fold
     enum class Part {
         Account,
         Records;
@@ -115,6 +115,24 @@ class TransactionEntryEditModel(
         }
     }
 
-    val goBackHandler: GoBackHandler
-        get() = NeverGoBackHandler
+    private fun Part.shift(
+        offset: Int,
+    ): Part? = Part
+        .entries
+        .getOrNull(ordinal + offset)
+
+    val goBackHandler: GoBackHandler = derivedStateFlowOf(scope) {
+        val currentPart = skeleton.selectedPart.state
+        currentPart
+            .fold(
+                ifAccount = { account.goBackHandler },
+                ifRecords = { records.goBackHandler },
+            )
+            .state
+            ?: currentPart
+                .shift(-1)
+                ?.let { previousPart ->
+                    { skeleton.selectedPart.value = previousPart }
+                }
+    }
 }
