@@ -2,26 +2,34 @@ package org.hnau.pinfin.projector.transaction.edit
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import org.hnau.commons.app.model.utils.fold
 import org.hnau.commons.app.projector.fractal.SItem
 import org.hnau.commons.app.projector.fractal.SText
 import org.hnau.commons.app.projector.uikit.state.BooleanStateContent
 import org.hnau.commons.app.projector.uikit.transition.TransitionSpec
+import org.hnau.commons.gen.pipe.annotations.Pipe
 import org.hnau.pinfin.model.transaction.edit.CategoryChooseModel
 import org.hnau.pinfin.projector.Localization
 
 class CategoryChooseEditProjector(
     private val model: CategoryChooseModel,
-    private val localization: Localization,
+    private val dependencies: Dependencies,
 ) {
+
+    @Pipe
+    interface Dependencies {
+
+        val localization: Localization
+    }
 
     @Composable
     fun Content(
         modifier: Modifier = Modifier,
     ) {
-        val isFocused = model.choose.navigateContext.isFocused.collectAsState().value
-        val category = model.categoryEditable.collectAsState().value
+        val isFocused by model.choose.navigateContext.isFocused.collectAsState()
+        val category by model.categoryEditable.collectAsState()
         val categoryInfo = category.fold(
             ifIncorrect = { null },
             ifValue = { value, _ -> value.value },
@@ -30,14 +38,14 @@ class CategoryChooseEditProjector(
         SItem(
             modifier = modifier,
             topAccessory = {
-                SText(localization.category)
+                SText(dependencies.localization.category)
             },
         ) {
             isFocused.BooleanStateContent(
                 transitionSpec = TransitionSpec.rememberCrossfade(),
                 falseContent = {
                     ReadOnlyValue(
-                        text = categoryInfo?.title ?: localization.category,
+                        text = categoryInfo?.title ?: dependencies.localization.category,
                         onClick = model.choose.navigateContext.requestFocus,
                     )
                 },

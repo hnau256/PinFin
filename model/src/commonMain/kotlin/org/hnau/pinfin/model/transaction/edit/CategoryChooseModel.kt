@@ -3,6 +3,7 @@ package org.hnau.pinfin.model.transaction.edit
 import arrow.core.toOption
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -60,6 +61,7 @@ class CategoryChooseModel(
         }
     }
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     class Delegate(
         val scope: CoroutineScope,
         val skeleton: Skeleton,

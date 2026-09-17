@@ -31,7 +31,7 @@ import org.hnau.pinfin.model.accountstack.AccountStackModel
 import org.hnau.pinfin.model.budget.BudgetModel
 import org.hnau.pinfin.model.budget.analytics.tab.periods.TransactionsOpener
 import org.hnau.pinfin.model.categorystack.CategoryStackModel
-import org.hnau.pinfin.model.transaction.TransactionModel
+import org.hnau.pinfin.model.transaction.edit.TransactionEditModel
 import org.hnau.pinfin.model.utils.budget.repository.BudgetRepository
 
 class BudgetStackModel(
@@ -68,7 +68,7 @@ class BudgetStackModel(
 
             fun transactionView(): TransactionViewModel.Dependencies
 
-            fun transactionEdit(): TransactionModel.Dependencies
+            fun transactionEdit(): TransactionEditModel.Dependencies
 
             fun transactions(): TransactionsModel.Dependencies
 
@@ -94,7 +94,7 @@ class BudgetStackModel(
                 identifier = "transactionView",
             ),
             Variant(
-                type = TransactionModel::class,
+                type = TransactionEditModel::class,
                 identifier = "transactionEdit",
             ),
             Variant(
@@ -147,7 +147,7 @@ class BudgetStackModel(
                 identifier = "transactionView",
             ),
             Variant(
-                type = TransactionModel.Skeleton::class,
+                type = TransactionEditModel.Skeleton::class,
                 identifier = "transactionEdit",
             ),
             Variant(

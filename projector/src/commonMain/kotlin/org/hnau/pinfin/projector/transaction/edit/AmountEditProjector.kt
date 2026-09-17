@@ -2,12 +2,14 @@ package org.hnau.pinfin.projector.transaction.edit
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import org.hnau.commons.app.model.utils.fold
 import org.hnau.commons.app.projector.fractal.SItem
 import org.hnau.commons.app.projector.fractal.SText
 import org.hnau.commons.app.projector.uikit.state.BooleanStateContent
 import org.hnau.commons.app.projector.uikit.transition.TransitionSpec
+import org.hnau.commons.gen.pipe.annotations.Pipe
 import org.hnau.commons.kotlin.KeyValue
 import org.hnau.pinfin.data.Amount
 import org.hnau.pinfin.data.AmountDirection
@@ -15,25 +17,30 @@ import org.hnau.pinfin.data.expression.AmountExpression
 import org.hnau.pinfin.data.expression.Expression
 import org.hnau.pinfin.data.expression.fold
 import org.hnau.pinfin.model.transaction.edit.AmountEditModel
-import org.hnau.pinfin.model.utils.budget.repository.BudgetRepository
 import org.hnau.pinfin.projector.Localization
 import org.hnau.pinfin.projector.utils.formatter.AmountFormatter
 
 class AmountEditProjector(
     private val model: AmountEditModel,
-    private val localization: Localization,
-    private val amountFormatter: AmountFormatter,
-    private val budgetRepository: BudgetRepository,
+    private val dependencies: Dependencies,
 ) {
+
+    @Pipe
+    interface Dependencies {
+
+        val localization: Localization
+
+        val amountFormatter: AmountFormatter
+    }
 
     @Composable
     fun Content(
         modifier: Modifier = Modifier,
     ) {
-        val isFocused = model.navigateContext.isFocused.collectAsState().value
-        val input = model.input.collectAsState().value
-        val editable = model.amountEditable.collectAsState().value
-        val currency = budgetRepository.state.collectAsState().value.info.currency
+        val isFocused by model.navigateContext.isFocused.collectAsState()
+        val input by model.input.collectAsState()
+        val editable by model.amountEditable.collectAsState()
+        val currency by model.currency.collectAsState()
 
         val expression = editable.fold(
             ifIncorrect = { null },
@@ -54,7 +61,7 @@ class AmountEditProjector(
         SItem(
             modifier = modifier,
             topAccessory = {
-                SText(localization.amount)
+                SText(dependencies.localization.amount)
             },
             bottomAccessory = resultText
                 ?.takeIf { isFocused && hasOperations }
@@ -66,7 +73,7 @@ class AmountEditProjector(
                 transitionSpec = TransitionSpec.rememberCrossfade(),
                 falseContent = {
                     ReadOnlyValue(
-                        text = resultText ?: localization.amount,
+                        text = resultText ?: dependencies.localization.amount,
                         onClick = model.navigateContext.requestFocus,
                     )
                 },
@@ -83,7 +90,7 @@ class AmountEditProjector(
 
     private fun formatResult(
         amount: Amount,
-    ): String = amountFormatter.format(
+    ): String = dependencies.amountFormatter.format(
         amount = KeyValue(
             key = AmountDirection.Credit,
             value = amount,

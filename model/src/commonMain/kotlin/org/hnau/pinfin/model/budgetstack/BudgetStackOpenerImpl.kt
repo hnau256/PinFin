@@ -12,7 +12,7 @@ import org.hnau.pinfin.data.TransactionType
 import org.hnau.pinfin.data.records.FilteredRecord
 import org.hnau.pinfin.model.BudgetSettingsModel
 import org.hnau.pinfin.model.TransactionViewModel
-import org.hnau.pinfin.model.transaction.TransactionModel
+import org.hnau.pinfin.model.transaction.edit.TransactionEditModel
 import org.hnau.pinfin.model.utils.budget.repository.BudgetRepository
 import org.hnau.pinfin.model.utils.budget.state.AccountInfo
 import org.hnau.pinfin.model.utils.budget.state.CategoryInfo
@@ -39,7 +39,7 @@ class BudgetStackOpenerImpl(
     ) {
         open(
             BudgetStackModel.ElementSkeleton.transactionEdit(
-                transactionEdit = TransactionModel.Skeleton.createForNew(
+                transactionEdit = TransactionEditModel.Skeleton.createForNew(
                     type = transactionType,
                 )
             )
@@ -66,7 +66,7 @@ class BudgetStackOpenerImpl(
     ) {
         open(
             BudgetStackModel.ElementSkeleton.transactionEdit(
-                transactionEdit = TransactionModel.Skeleton.createForEdit(
+                transactionEdit = TransactionEditModel.Skeleton.create(
                     id = id,
                     transaction = info,
                 )

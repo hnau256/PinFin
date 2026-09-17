@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import org.hnau.commons.app.projector.fractal.SItem
@@ -14,28 +15,36 @@ import org.hnau.commons.app.projector.fractal.size.units
 import org.hnau.commons.app.projector.uikit.state.BooleanStateContent
 import org.hnau.commons.app.projector.uikit.state.NullableStateContent
 import org.hnau.commons.app.projector.uikit.transition.TransitionSpec
+import org.hnau.commons.gen.pipe.annotations.Pipe
 import org.hnau.commons.kotlin.coroutines.ActionOrElse
+import org.hnau.commons.kotlin.coroutines.instant
 import org.hnau.commons.kotlin.fold
 import org.hnau.pinfin.model.transaction.edit.CommentEditModel
 import org.hnau.pinfin.projector.Localization
 
 class CommentEditProjector(
     private val model: CommentEditModel,
-    private val localization: Localization,
+    private val dependencies: Dependencies,
 ) {
+
+    @Pipe
+    interface Dependencies {
+
+        val localization: Localization
+    }
 
     @Composable
     fun Content(
         modifier: Modifier = Modifier,
     ) {
-        val isFocused = model.navigateContext.isFocused.collectAsState().value
-        val input = model.input.collectAsState().value
-        val suggestsLoadable = model.suggests.collectAsState().value
+        val isFocused by model.navigateContext.isFocused.collectAsState()
+        val input by model.input.collectAsState()
+        val suggestsLoadable by model.suggests.collectAsState()
 
         SItem(
             modifier = modifier,
             topAccessory = {
-                SText(localization.comment)
+                SText(dependencies.localization.comment)
             },
         ) {
             Column(
@@ -63,7 +72,7 @@ class CommentEditProjector(
                     transitionSpec = TransitionSpec.rememberCrossfade(),
                     falseContent = {
                         ReadOnlyValue(
-                            text = input.ifEmpty { localization.comment },
+                            text = input.ifEmpty { dependencies.localization.comment },
                             onClick = model.navigateContext.requestFocus,
                         )
                     },

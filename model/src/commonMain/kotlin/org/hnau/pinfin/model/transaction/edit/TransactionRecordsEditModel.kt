@@ -55,7 +55,7 @@ class TransactionRecordsEditModel(
 
         companion object {
 
-            fun createForNew(): Skeleton = create(
+            fun createForNew(): Skeleton = createFromSkeletons(
                 records = nonEmptyListOf(
                     TransactionRecordEditModel.Skeleton.createForNew()
                 )
@@ -63,11 +63,11 @@ class TransactionRecordsEditModel(
 
             fun create(
                 records: NonEmptyList<Record<KeyValue<CategoryId, CategoryInfo>>>,
-            ): Skeleton = create(
+            ): Skeleton = createFromSkeletons(
                 records = records.map(TransactionRecordEditModel.Skeleton::create)
             )
 
-            private fun create(
+            private fun createFromSkeletons(
                 records: NonEmptyList<TransactionRecordEditModel.Skeleton>,
             ): Skeleton = Skeleton(
                 records = records
@@ -89,46 +89,49 @@ class TransactionRecordsEditModel(
         }
     }
 
-    val records: StateFlow<ZipList<TransactionRecordEditModel>> =
+    val records: StateFlow<ZipList<KeyValue<RecordId, TransactionRecordEditModel>>> =
         skeleton.records.mapZipListReusable(
             scope = scope,
             extractKey = { idWithValue -> idWithValue.key },
             transform = { scope, (id, recordSkeleton) ->
-                TransactionRecordEditModel(
-                    scope = scope,
-                    dependencies = dependencies.record(),
-                    skeleton = recordSkeleton,
-                    remove = skeleton.records.mapState(scope) { records ->
-                        records.remove { it.key == id }
-                            ?.let { newRecords ->
-                                { skeleton.records.value = newRecords }
-                            }
-                    },
-                    navigateContext = EditNavigateContext(
-                        isFocused = derivedStateFlowOf(scope) {
-                            navigateContext.isFocused.state && skeleton.records.state.selected.key == id
-                        },
-                        requestFocus = {
-                            skeleton
-                                .records
-                                .update { records ->
-                                    records
-                                        .toZipListOrNull { it.key == id }
-                                        ?: return@EditNavigateContext //TODO log error
+                KeyValue(
+                    key = id,
+                    value = TransactionRecordEditModel(
+                        scope = scope,
+                        dependencies = dependencies.record(),
+                        skeleton = recordSkeleton,
+                        remove = skeleton.records.mapState(scope) { records ->
+                            records.remove { it.key == id }
+                                ?.let { newRecords ->
+                                    { skeleton.records.value = newRecords }
                                 }
-                            navigateContext.requestFocus()
                         },
-                        goForward = {
-                            skeleton
-                                .records
-                                .value
-                                .forward()
-                                .foldNullable(
-                                    ifNull = ::addNewRecord,
-                                    ifNotNull = skeleton.records::value::set,
-                                )
-                        }
-                    )
+                        navigateContext = EditNavigateContext(
+                            isFocused = derivedStateFlowOf(scope) {
+                                navigateContext.isFocused.state && skeleton.records.state.selected.key == id
+                            },
+                            requestFocus = {
+                                skeleton
+                                    .records
+                                    .update { records ->
+                                        records
+                                            .toZipListOrNull { it.key == id }
+                                            ?: return@EditNavigateContext //TODO log error
+                                    }
+                                navigateContext.requestFocus()
+                            },
+                            goForward = {
+                                skeleton
+                                    .records
+                                    .value
+                                    .forward()
+                                    .foldNullable(
+                                        ifNull = ::addNewRecord,
+                                        ifNotNull = skeleton.records::value::set,
+                                    )
+                            }
+                        )
+                    ),
                 )
             }
         )
@@ -149,8 +152,8 @@ class TransactionRecordsEditModel(
     val recordsEditable: StateFlow<Editable<NonEmptyList<Record<KeyValue<CategoryId, CategoryInfo>>>>> =
         derivedStateFlowOf(scope) {
             editable {
-                records.state.map { record ->
-                    record.recordEditable.state.bind()
+                records.state.map { idWithRecord ->
+                    idWithRecord.value.recordEditable.state.bind()
                 }.toNonEmptyList()
             }
         }
@@ -159,6 +162,7 @@ class TransactionRecordsEditModel(
         records
             .state
             .selected
+            .value
             .goBackHandler
             .state
             .ifNull {

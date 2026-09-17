@@ -10,8 +10,10 @@ import org.hnau.commons.app.model.goback.NeverGoBackHandler
 import org.hnau.commons.app.model.utils.Editable
 import org.hnau.commons.gen.pipe.annotations.Pipe
 import org.hnau.commons.kotlin.coroutines.flow.state.derivedStateFlowOf
+import org.hnau.commons.kotlin.coroutines.flow.state.mapState
 import org.hnau.commons.kotlin.coroutines.flow.state.mutable.toMutableStateFlowAsInitial
 import org.hnau.commons.kotlin.ifNull
+import org.hnau.pinfin.data.Currency
 import org.hnau.pinfin.data.expression.AmountExpression
 import org.hnau.pinfin.data.expression.serialize
 import org.hnau.pinfin.model.transaction.edit.utils.EditNavigateContext
@@ -56,6 +58,11 @@ class AmountEditModel(
 
     val input: MutableStateFlow<String>
         get() = skeleton.input
+
+    val currency: StateFlow<Currency> = dependencies
+        .budgetRepository
+        .state
+        .mapState(scope) { state -> state.info.currency }
 
     val amountEditable: StateFlow<Editable<AmountExpression>> = Editable.create(
         scope = scope,

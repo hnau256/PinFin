@@ -21,7 +21,7 @@ import org.hnau.pinfin.projector.accountstack.AccountStackProjector
 import org.hnau.pinfin.projector.budget.BudgetProjector
 import org.hnau.pinfin.projector.budget.transactions.TransactionsProjector
 import org.hnau.pinfin.projector.categorystack.CategoryStackProjector
-import org.hnau.pinfin.projector.transaction.TransactionProjector
+import org.hnau.pinfin.projector.transaction.edit.TransactionEditProjector
 
 class BudgetStackProjector(
     private val scope: CoroutineScope,
@@ -36,7 +36,7 @@ class BudgetStackProjector(
 
         fun transactionView(): TransactionViewProjector.Dependencies
 
-        fun transactionEdit(): TransactionProjector.Dependencies
+        fun transactionEdit(): TransactionEditProjector.Dependencies
 
         fun transactions(): TransactionsProjector.Dependencies
 
@@ -64,7 +64,7 @@ class BudgetStackProjector(
                 identifier = "transactionView",
             ),
             Variant(
-                type = TransactionProjector::class,
+                type = TransactionEditProjector::class,
                 identifier = "transactionEdit",
             ),
             Variant(

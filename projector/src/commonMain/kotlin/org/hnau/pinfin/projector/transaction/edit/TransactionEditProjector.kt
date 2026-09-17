@@ -2,31 +2,32 @@ package org.hnau.pinfin.projector.transaction.edit
 
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.material.icons.Icons
-import androidx.compose.ui.Modifier
 import androidx.compose.material.icons.filled.Save
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.getValue
+import kotlinx.coroutines.CoroutineScope
+import org.hnau.commons.app.projector.fractal.DialogContentInfo
 import org.hnau.commons.app.projector.fractal.SButton
 import org.hnau.commons.app.projector.fractal.SContentWithActions
+import org.hnau.commons.app.projector.fractal.SDialog
 import org.hnau.commons.app.projector.fractal.SScreen
 import org.hnau.commons.app.projector.fractal.SText
 import org.hnau.commons.app.projector.fractal.table.lazy.SLazyTable
 import org.hnau.commons.app.projector.fractal.table.lazy.cell
-import org.hnau.commons.app.projector.fractal.table.lazy.cells
-import org.hnau.commons.app.projector.fractal.table.lazy.separator
 import org.hnau.commons.app.projector.utils.Drawable
 import org.hnau.commons.app.projector.utils.Orientation
 import org.hnau.commons.app.projector.utils.TitleOrIcon
 import org.hnau.commons.gen.pipe.annotations.Pipe
+import org.hnau.commons.kotlin.coroutines.ActionOrElse
+import org.hnau.commons.kotlin.coroutines.flow.state.mapState
+import org.hnau.commons.kotlin.coroutines.instant
+import org.hnau.commons.kotlin.foldNullable
 import org.hnau.pinfin.model.transaction.edit.TransactionEditModel
-import org.hnau.pinfin.model.transaction.edit.fold
-import org.hnau.pinfin.model.utils.budget.repository.BudgetRepository
 import org.hnau.pinfin.projector.Localization
-import org.hnau.pinfin.projector.utils.formatter.AmountFormatter
-import org.hnau.pinfin.projector.utils.formatter.datetime.DateTimeFormatter
 
 class TransactionEditProjector(
+    scope: CoroutineScope,
     private val model: TransactionEditModel,
     private val dependencies: Dependencies,
 ) {
@@ -36,24 +37,73 @@ class TransactionEditProjector(
 
         val localization: Localization
 
-        val amountFormatter: AmountFormatter
+        fun date(): DateEditProjector.Dependencies
 
-        val dateTimeFormatter: DateTimeFormatter
+        fun comment(): CommentEditProjector.Dependencies
 
-        val budgetRepository: BudgetRepository
+        fun type(): TransactionTypeEditProjector.Dependencies
     }
+
+    private val date = DateEditProjector(
+        model = model.date,
+        dependencies = dependencies.date(),
+    )
+
+    private val comment = CommentEditProjector(
+        model = model.comment,
+        dependencies = dependencies.comment(),
+    )
+
+    private val type = TransactionTypeEditProjector(
+        scope = scope,
+        model = model.type,
+        currency = model.currency,
+        dependencies = dependencies.type(),
+    )
+
+    private val dialogInfo = model
+        .goBackDelegate
+        .dialog
+        .mapState(scope) { dialog ->
+            dialog?.let { dialogNotNull ->
+                DialogContentInfo(
+                    content = {
+                        SText(dependencies.localization.saveChanges)
+                    },
+                    actions = {
+                        Action(
+                            actionOrElseOrDisabled = ActionOrElse.instant(dialogNotNull.exitWithoutSaving),
+                            titleOrIcon = TitleOrIcon.Title(dependencies.localization.notSave),
+                        )
+                        dialogNotNull
+                            .saveAndExitIfPossible
+                            .foldNullable(
+                                ifNull = {
+                                    Action(
+                                        actionOrElseOrDisabled = ActionOrElse.instant(dialogNotNull.returnToEditing),
+                                        titleOrIcon = TitleOrIcon.Title(dependencies.localization.close),
+                                    )
+                                },
+                                ifNotNull = { saveAction ->
+                                    Action(
+                                        actionOrElseOrDisabled = saveAction.collectAsState().value,
+                                        titleOrIcon = TitleOrIcon.Title(dependencies.localization.save),
+                                    )
+                                },
+                            )
+                    },
+                    cancel = dialogNotNull.returnToEditing,
+                )
+            }
+        }
 
     @Composable
     fun Content(
         contentPadding: PaddingValues,
     ) {
         val localization = dependencies.localization
-        val amountFormatter = dependencies.amountFormatter
-        val dateTimeFormatter = dependencies.dateTimeFormatter
-        val budgetRepository = dependencies.budgetRepository
-
-        val type = model.type.type.collectAsState().value
-        val records = type.fold(
+        val typeValue by type.value.collectAsState()
+        val recordProjectors = typeValue.fold(
             ifEntry = { entry -> entry.records.records.collectAsState().value },
             ifTransfer = { null },
         )
@@ -70,92 +120,50 @@ class TransactionEditProjector(
                         orientation = Orientation.Vertical,
                     ) {
                         cell(key = "date") {
-                            val projector = remember(model) {
-                                DateEditProjector(
-                                    model = model.date,
-                                    localization = localization,
-                                    dateTimeFormatter = dateTimeFormatter,
-                                )
-                            }
-                            projector.Content()
+                            date.Content()
                         }
                         cell(key = "comment") {
-                            val projector = remember(model) {
-                                CommentEditProjector(
-                                    model = model.comment,
-                                    localization = localization,
-                                )
-                            }
-                            projector.Content()
+                            comment.Content()
                         }
                         cell(key = "type") {
-                            val projector = remember(model) {
-                                TypeEditProjector(
-                                    model = model.type,
-                                    localization = localization,
-                                )
-                            }
-                            projector.Content()
+                            type.Content()
                         }
-
-                        type.fold(
+                        typeValue.fold(
                             ifEntry = { entry ->
-                                EntryEditProjector(
-                                    model = entry,
-                                    localization = localization,
-                                    amountFormatter = amountFormatter,
-                                    budgetRepository = budgetRepository,
-                                ).Cells()
-                            },
-                            ifTransfer = { transfer ->
-                                TransferEditProjector(
-                                    model = transfer,
-                                    localization = localization,
-                                    amountFormatter = amountFormatter,
-                                    budgetRepository = budgetRepository,
-                                ).Cells()
-                            },
-                        )
-
-                        records?.let { recordsNotNull ->
-                            separator(key = "records_separator")
-                            val selected = recordsNotNull.selected
-                            cells(
-                                items = recordsNotNull,
-                                key = { it },
-                            ) { record ->
-                                val projector = remember(record) {
-                                    RecordEditProjector(
-                                        model = record,
-                                        localization = localization,
-                                        amountFormatter = amountFormatter,
-                                        budgetRepository = budgetRepository,
+                                recordProjectors?.let { recordProjectorsNotNull ->
+                                    entry.Content(
+                                        scope = this,
+                                        recordProjectors = recordProjectorsNotNull,
                                     )
                                 }
-                                projector.Content(
-                                    selected = record === selected,
-                                    modifier = Modifier.animateItem(),
+                            },
+                            ifTransfer = { transfer ->
+                                transfer.Content(
+                                    scope = this,
                                 )
-                            }
-                        }
+                            },
+                        )
                     }
                 },
                 actions = {
-                    val saveAction = model
+                    val saveAction by model
                         .goBackDelegate
                         .saveOrInactive
                         .collectAsState()
-                        .value
+                    val saveActionValue = saveAction
                         ?.collectAsState()
                         ?.value
                     SButton(
-                        actionOrElseOrDisabled = saveAction,
+                        actionOrElseOrDisabled = saveActionValue,
                         titleOrIcon = TitleOrIcon.Both(
                             title = localization.save,
                             icon = Drawable.Vector(Icons.Default.Save),
                         ),
                     )
                 },
+            )
+            SDialog(
+                info = dialogInfo,
             )
         }
     }

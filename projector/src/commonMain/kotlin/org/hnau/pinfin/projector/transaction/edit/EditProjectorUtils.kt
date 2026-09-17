@@ -11,6 +11,7 @@ import androidx.compose.foundation.text.input.KeyboardActionHandler
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -26,6 +27,7 @@ import org.hnau.commons.app.projector.fractal.size.units
 import org.hnau.commons.app.projector.uikit.state.NullableStateContent
 import org.hnau.commons.app.projector.uikit.transition.TransitionSpec
 import org.hnau.commons.kotlin.coroutines.ActionOrElse
+import org.hnau.commons.kotlin.coroutines.instant
 import org.hnau.commons.kotlin.foldBoolean
 import org.hnau.commons.kotlin.ifFalse
 import org.hnau.commons.kotlin.ifTrue
@@ -42,7 +44,7 @@ internal fun EditTextField(
 ) {
     val focusRequester = remember { FocusRequester() }
     val focusManager = LocalFocusManager.current
-    val isFocused = navigateContext.isFocused.collectAsState().value
+    val isFocused by navigateContext.isFocused.collectAsState()
     LaunchedEffect(isFocused) {
         isFocused.foldBoolean(
             ifTrue = { focusRequester.requestFocus() },
@@ -105,8 +107,8 @@ internal fun <T> ChooseOrCreateContent(
     model: ChooseOrCreateModel<T>,
     itemContent: @Composable (T) -> Unit,
 ) {
-    val input = model.input.collectAsState().value
-    val variants = model.variants.collectAsState().value
+    val input by model.input.collectAsState()
+    val variants by model.variants.collectAsState()
     Column(
         verticalArrangement = Arrangement.spacedBy(LocalDistance.current.units.padding.along.small),
     ) {

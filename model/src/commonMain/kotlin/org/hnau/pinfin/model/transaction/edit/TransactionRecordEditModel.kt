@@ -27,7 +27,7 @@ import org.hnau.pinfin.model.utils.budget.state.CategoryInfo
 
 class TransactionRecordEditModel(
     scope: CoroutineScope,
-    private val dependencies: Dependencies,
+    dependencies: Dependencies,
     private val skeleton: Skeleton,
     val remove: StateFlow<(() -> Unit)?>,
     navigateContext: EditNavigateContext,

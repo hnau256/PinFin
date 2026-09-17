@@ -11,10 +11,12 @@ import org.hnau.commons.app.model.utils.editable
 import org.hnau.commons.gen.pipe.annotations.Pipe
 import org.hnau.commons.kotlin.KeyValue
 import org.hnau.commons.kotlin.coroutines.flow.state.derivedStateFlowOf
+import org.hnau.commons.kotlin.coroutines.flow.state.mapState
 import org.hnau.commons.kotlin.coroutines.flow.state.mutable.toMutableStateFlowAsInitial
 import org.hnau.pinfin.data.AccountId
 import org.hnau.pinfin.data.CategoryId
 import org.hnau.pinfin.data.Comment
+import org.hnau.pinfin.data.Currency
 import org.hnau.pinfin.data.Transaction
 import org.hnau.pinfin.data.TransactionType
 import org.hnau.pinfin.data.records.RecordEntry
@@ -68,12 +70,14 @@ class TransactionEditModel(
 
         companion object {
 
-            fun createForNew(): Skeleton = Skeleton(
+            fun createForNew(
+                type: TransactionType = TransactionType.default,
+            ): Skeleton = Skeleton(
                 id = null,
                 date = DateChooseModel.Skeleton.createForNew(),
                 comment = CommentEditModel.Skeleton.createForNew(),
                 type = TransactionTypeEditModel.Skeleton.createForNew(
-                    type = TransactionType.default,
+                    type = type,
                 ),
             )
 
@@ -138,6 +142,11 @@ class TransactionEditModel(
         skeleton = skeleton.type,
         navigateContext = selectedPart.createPartNavigateContext(Part.Type),
     )
+
+    val currency: StateFlow<Currency> = dependencies
+        .budgetRepository
+        .state
+        .mapState(scope) { state -> state.info.currency }
 
     val editableTransaction: StateFlow<Editable<Transaction<KeyValue<AccountId, AccountInfo>, KeyValue<CategoryId, CategoryInfo>, RecordEntry<KeyValue<CategoryId, CategoryInfo>>>>> =
         derivedStateFlowOf(scope) {
