@@ -25,11 +25,9 @@ import org.hnau.commons.kotlin.foldBoolean
 import org.hnau.commons.kotlin.foldNullable
 import org.hnau.commons.kotlin.serialization.MutableStateFlowSerializer
 import org.hnau.pinfin.data.AccountId
-import org.hnau.pinfin.data.CategoryId
 import org.hnau.pinfin.data.Transaction
 import org.hnau.pinfin.model.transaction.utils.ChooseOrCreateModel
 import org.hnau.pinfin.model.utils.budget.state.AccountInfo
-import org.hnau.pinfin.model.utils.budget.state.CategoryInfo
 
 class TransferModel(
     private val scope: CoroutineScope,
@@ -115,7 +113,7 @@ class TransferModel(
             )
 
             fun createForEdit(
-                transfer: Transaction.Type.Transfer<KeyValue<AccountId, AccountInfo>, KeyValue<CategoryId, CategoryInfo>>,
+                transfer: Transaction.Type.Transfer<KeyValue<AccountId, AccountInfo>>,
             ): Skeleton = Skeleton(
                 from = AccountModel.Skeleton.createForEdit(
                     idWithAccount = transfer.from,
@@ -237,7 +235,7 @@ class TransferModel(
             },
     )
 
-    internal val transfer: StateFlow<Editable<Transaction.Type.Transfer<KeyValue<AccountId, AccountInfo>, KeyValue<CategoryId, CategoryInfo>>>> = derivedStateFlowOf(scope) {
+    internal val transfer: StateFlow<Editable<Transaction.Type.Transfer<KeyValue<AccountId, AccountInfo>>>> = derivedStateFlowOf(scope) {
         editable {
             Transaction.Type.Transfer(
                 to = to.accountEditable.state.bind(),

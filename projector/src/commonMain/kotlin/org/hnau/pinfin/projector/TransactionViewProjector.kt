@@ -36,7 +36,6 @@ import org.hnau.commons.app.projector.fractal.table.Subtable
 import org.hnau.commons.app.projector.fractal.table.lazy.SLazyTable
 import org.hnau.commons.app.projector.fractal.table.lazy.SLazyTableScope
 import org.hnau.commons.app.projector.fractal.table.lazy.cell
-import org.hnau.commons.app.projector.fractal.table.lazy.cells
 import org.hnau.commons.app.projector.fractal.table.lazy.separator
 import org.hnau.commons.app.projector.fractal.utils.Importance
 import org.hnau.commons.app.projector.fractal.utils.Mood
@@ -406,7 +405,7 @@ class TransactionViewProjector(
 
     @Composable
     private fun TransferContent(
-        transfer: Transaction.Type.Transfer<KeyValue<AccountId, AccountInfo>, KeyValue<CategoryId, CategoryInfo>>,
+        transfer: Transaction.Type.Transfer<KeyValue<AccountId, AccountInfo>>,
     ) {
         ItemsRow {
             AccountContent(

@@ -236,7 +236,7 @@ private fun EntryContent(
 
 @Composable
 private fun TransferContent(
-    transfer: Transaction.Type.Transfer<KeyValue<AccountId, AccountInfo>, KeyValue<CategoryId, CategoryInfo>>,
+    transfer: Transaction.Type.Transfer<KeyValue<AccountId, AccountInfo>>,
     dependencies: TransactionsProjector.Dependencies,
 ) {
     Row(
