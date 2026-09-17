@@ -29,10 +29,7 @@ import org.hnau.pinfin.model.utils.budget.repository.BudgetRepository
 import org.hnau.pinfin.model.utils.budget.state.CategoryInfo
 
 class CategoryChooseModel(
-    scope: CoroutineScope,
-    private val dependencies: Dependencies,
-    skeleton: Skeleton,
-    private val suggestedCategory: StateFlow<KeyValue<CategoryId, CategoryInfo>?>,
+    delegate: Delegate,
     navigateContext: EditNavigateContext,
 ) {
 
@@ -63,31 +60,77 @@ class CategoryChooseModel(
         }
     }
 
-    private val selectedCategory: StateFlow<KeyValue<CategoryId, CategoryInfo>?> = skeleton
-        .manualIdWithCategory
-        .flatMapWithScope(scope) { scope, manualCategoryOrNull ->
-            manualCategoryOrNull
-                .foldNullable(
-                    ifNotNull = { manual ->
-                        manual.toMutableStateFlowAsInitial()
-                    },
-                    ifNull = { suggestedCategory }
-                )
-        }
+    class Delegate(
+        val scope: CoroutineScope,
+        val skeleton: Skeleton,
+        val dependencies: Dependencies,
+        comment: StateFlow<Comment>,
+    ) {
+
+        private val suggestedCategory: StateFlow<KeyValue<CategoryId, CategoryInfo>?> = dependencies
+            .budgetRepository
+            .state
+            .combineStateWith(
+                scope = scope,
+                other = comment,
+            ) { state, comment -> state to comment }
+            .mapLatest { (state, comment) ->
+                withContext(Dispatchers.Default) {
+                    comment
+                        .text
+                        .trim()
+                        .takeIf(String::isNotEmpty)
+                        ?.let { comment ->
+                            state
+                                .allRecords
+                                .mapNotNull { (timestamp, record) ->
+                                    record
+                                        .takeIf {
+                                            it.comment.text.trim().equals(
+                                                other = comment,
+                                                ignoreCase = true,
+                                            )
+                                        }
+                                        ?.let { recordWithSameComment ->
+                                            timestamp to recordWithSameComment.category
+                                        }
+                                }
+                                .maxByOrNull(Pair<LocalDate, *>::first)
+                                ?.second
+                        }
+                }
+            }
+            .stateIn(
+                scope = scope,
+                started = SharingStarted.Eagerly,
+                initialValue = null,
+            )
+
+        val actualCategory: StateFlow<KeyValue<CategoryId, CategoryInfo>?> = skeleton
+            .manualIdWithCategory
+            .flatMapWithScope(scope) { scope, manualCategoryOrNull ->
+                manualCategoryOrNull
+                    .foldNullable(
+                        ifNotNull = { it.toMutableStateFlowAsInitial() },
+                        ifNull = { suggestedCategory },
+                    )
+            }
+    }
 
     val choose: ChooseOrCreateModel<KeyValue<CategoryId, CategoryInfo>> = ChooseOrCreateModel(
-        scope = scope,
-        skeleton = skeleton.choose,
+        scope = delegate.scope,
+        skeleton = delegate.skeleton.choose,
         getBaseVariants = { scope ->
-            dependencies
+            delegate
+                .dependencies
                 .budgetRepository
                 .state
                 .mapState(scope) { state ->
                     state.categories
                 }
         },
-        selected = selectedCategory.mapState(scope) { it.toOption() },
-        onSelectedChanged = skeleton.manualIdWithCategory::value::set,
+        selected = delegate.actualCategory.mapState(delegate.scope) { it.toOption() },
+        onSelectedChanged = delegate.skeleton.manualIdWithCategory::value::set,
         createAdditionalVariants = { query ->
             AmountDirection.entries.map { direction ->
                 val id = CategoryId(
@@ -110,9 +153,9 @@ class CategoryChooseModel(
 
     val categoryEditable: StateFlow<Editable<KeyValue<CategoryId, CategoryInfo>>> =
         Editable.create(
-            scope = scope,
-            valueOrNone = selectedCategory.mapState(scope) { it.toOption() },
-            initialValueOrNone = skeleton.initialIdWithCategory.toOption(),
+            scope = delegate.scope,
+            valueOrNone = delegate.actualCategory.mapState(delegate.scope) { it.toOption() },
+            initialValueOrNone = delegate.skeleton.initialIdWithCategory.toOption(),
         )
 
     val goBackHandler: GoBackHandler

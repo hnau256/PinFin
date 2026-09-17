@@ -1,14 +1,8 @@
 package org.hnau.pinfin.model.transaction.edit
 
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.mapLatest
-import kotlinx.coroutines.flow.stateIn
-import kotlinx.coroutines.withContext
-import kotlinx.datetime.LocalDate
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import org.hnau.commons.app.model.goback.GoBackHandler
@@ -17,13 +11,11 @@ import org.hnau.commons.app.model.utils.editable
 import org.hnau.commons.gen.fold.annotations.Fold
 import org.hnau.commons.gen.pipe.annotations.Pipe
 import org.hnau.commons.kotlin.KeyValue
-import org.hnau.commons.kotlin.coroutines.flow.state.combineStateWith
 import org.hnau.commons.kotlin.coroutines.flow.state.derivedStateFlowOf
 import org.hnau.commons.kotlin.coroutines.flow.state.flatMapWithScope
 import org.hnau.commons.kotlin.coroutines.flow.state.mapState
 import org.hnau.commons.kotlin.coroutines.flow.state.mutable.toMutableStateFlowAsInitial
 import org.hnau.commons.kotlin.foldNullable
-import org.hnau.commons.kotlin.ifNull
 import org.hnau.pinfin.data.CategoryId
 import org.hnau.pinfin.data.Comment
 import org.hnau.pinfin.data.Record
@@ -145,7 +137,7 @@ class TransactionRecordEditModel(
             scope = scope,
             selectedPart = resolvePart(
                 scope = scope,
-                suggestedCategory = null,
+                actualCategory = null,
             ),
             onPartChanged = { skeleton.selectedPart.value = Skeleton.Part.Simple(it) },
             navigateContext = navigateContext,
@@ -156,57 +148,24 @@ class TransactionRecordEditModel(
             ),
     )
 
-    private val suggestedCategory: StateFlow<KeyValue<CategoryId, CategoryInfo>?> = dependencies
-        .budgetRepository
-        .state
-        .combineStateWith(
-            scope = scope,
-            other = comment.commentEditable,
-        ) { state, comment -> state to comment }
-        .mapLatest { (state, commentRaw) ->
-            withContext(Dispatchers.Default) {
-                commentRaw
-                    .value
-                    .text
-                    .trim()
-                    .takeIf(String::isNotEmpty)
-                    ?.let { comment ->
-                        state
-                            .allRecords
-                            .mapNotNull { (timestamp, record) ->
-                                record
-                                    .takeIf {
-                                        it.comment.text.trim().equals(
-                                            other = comment,
-                                            ignoreCase = true,
-                                        )
-                                    }
-                                    ?.let { recordWithSameComment ->
-                                        timestamp to recordWithSameComment.category
-                                    }
-                            }
-                            .maxByOrNull(Pair<LocalDate, *>::first)
-                            ?.second
-                    }
-            }
-        }
-        .stateIn(
-            scope = scope,
-            started = SharingStarted.Eagerly,
-            initialValue = null,
-        )
+    private val categoryDelegate = CategoryChooseModel.Delegate(
+        scope = scope,
+        skeleton = skeleton.category,
+        dependencies = dependencies.category(),
+        comment = comment.commentEditable.mapState(scope) { it.value },
+    )
 
 
     private fun resolvePart(
         scope: CoroutineScope,
-        suggestedCategory: StateFlow<KeyValue<CategoryId, CategoryInfo>?>?,
-    ) = skeleton
+        actualCategory: StateFlow<KeyValue<CategoryId, CategoryInfo>?>?,
+    ): StateFlow<Part> = skeleton
         .selectedPart
         .flatMapWithScope(scope) { scope, part ->
             part.fold(
                 ifSimple = { it.toMutableStateFlowAsInitial() },
                 ifAfterComment = {
-                    suggestedCategory.foldNullable(
+                    actualCategory.foldNullable(
                         ifNull = {
                             Part.Category.toMutableStateFlowAsInitial()
                         },
@@ -226,7 +185,7 @@ class TransactionRecordEditModel(
 
     private val effectivePart: StateFlow<Part> = resolvePart(
         scope = scope,
-        suggestedCategory = suggestedCategory,
+        actualCategory = categoryDelegate.actualCategory,
     )
 
     private val selectedPart: SelectedPartDelegate<Part> = SelectedPartDelegate.create(
@@ -237,10 +196,7 @@ class TransactionRecordEditModel(
     )
 
     val category = CategoryChooseModel(
-        scope = scope,
-        dependencies = dependencies.category(),
-        skeleton = skeleton.category,
-        suggestedCategory = suggestedCategory,
+        delegate = categoryDelegate,
         navigateContext = selectedPart.createPartNavigateContext(Part.Category),
     )
 
