@@ -1,11 +1,9 @@
 @file:UseSerializers(
-    NonEmptyListSerializer::class,
     MutableStateFlowSerializer::class,
 )
 
 package org.hnau.pinfin.model.transaction.edit
 
-import arrow.core.serialization.NonEmptyListSerializer
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow

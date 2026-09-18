@@ -1,5 +1,4 @@
 @file:UseSerializers(
-    MutableStateFlowSerializer::class,
     OptionSerializer::class,
 )
 
@@ -22,7 +21,6 @@ import org.hnau.commons.kotlin.coroutines.actionOrCancelIfExecuting
 import org.hnau.commons.kotlin.coroutines.flow.state.mapState
 import org.hnau.commons.kotlin.coroutines.flow.state.mapWithScope
 import org.hnau.commons.kotlin.foldBoolean
-import org.hnau.commons.kotlin.serialization.MutableStateFlowSerializer
 
 @Deprecated("Move to commons-app-model")
 class ModelSavableDelegate<T>(

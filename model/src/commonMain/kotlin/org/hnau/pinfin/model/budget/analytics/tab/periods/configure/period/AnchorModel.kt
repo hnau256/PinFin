@@ -1,6 +1,5 @@
 @file:UseSerializers(
     MutableStateFlowSerializer::class,
-    MonthSerializer::class,
 )
 
 package org.hnau.pinfin.model.budget.analytics.tab.periods.configure.period
@@ -13,7 +12,6 @@ import kotlinx.datetime.DayOfWeek
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.Month
 import kotlinx.datetime.previousOrSame
-import kotlinx.datetime.serializers.MonthSerializer
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.UseSerializers
 import org.hnau.commons.kotlin.coroutines.flow.state.derivedStateFlowOf

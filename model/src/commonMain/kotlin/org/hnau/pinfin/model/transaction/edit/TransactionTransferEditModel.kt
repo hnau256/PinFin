@@ -1,9 +1,14 @@
+@file:UseSerializers(
+    MutableStateFlowSerializer::class,
+)
+
 package org.hnau.pinfin.model.transaction.edit
 
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.UseSerializers
 import org.hnau.commons.app.model.goback.GoBackHandler
 import org.hnau.commons.app.model.utils.Editable
 import org.hnau.commons.app.model.utils.editable
@@ -11,6 +16,7 @@ import org.hnau.commons.gen.fold.annotations.Fold
 import org.hnau.commons.gen.pipe.annotations.Pipe
 import org.hnau.commons.kotlin.coroutines.flow.state.derivedStateFlowOf
 import org.hnau.commons.kotlin.coroutines.flow.state.mutable.toMutableStateFlowAsInitial
+import org.hnau.commons.kotlin.serialization.MutableStateFlowSerializer
 import org.hnau.pinfin.data.Transaction
 import org.hnau.pinfin.model.transaction.edit.utils.EditNavigateContext
 import org.hnau.pinfin.model.transaction.edit.utils.SelectedPartDelegate

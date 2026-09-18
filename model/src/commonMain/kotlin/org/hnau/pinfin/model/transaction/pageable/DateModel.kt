@@ -1,6 +1,5 @@
 @file:UseSerializers(
     MutableStateFlowSerializer::class,
-    LocalDateIso8601Serializer::class,
 )
 
 package org.hnau.pinfin.model.transaction.pageable
@@ -12,7 +11,6 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.TimeZone
-import kotlinx.datetime.serializers.LocalDateIso8601Serializer
 import kotlinx.datetime.toLocalDateTime
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.UseSerializers
