@@ -64,12 +64,12 @@ import org.hnau.pinfin.model.utils.budget.state.AccountIdWithInfo
 import org.hnau.pinfin.model.utils.budget.state.CategoryIdWithInfo
 import org.hnau.pinfin.model.utils.resolvedDirection
 import org.hnau.pinfin.model.utils.totalAmount
-import org.hnau.pinfin.projector.utils.AccountContent
 import org.hnau.pinfin.projector.utils.AmountContent
 import org.hnau.pinfin.projector.utils.ArrowDirection
 import org.hnau.pinfin.projector.utils.ArrowIcon
-import org.hnau.pinfin.projector.utils.CategoryContent
+import org.hnau.pinfin.projector.utils.EntityContent
 import org.hnau.pinfin.projector.utils.ViewMode
+import org.hnau.pinfin.projector.utils.rememberEntityUiInfo
 import org.hnau.pinfin.projector.utils.formatter.AmountFormatter
 import org.hnau.pinfin.projector.utils.formatter.datetime.DateTimeFormatter
 
@@ -204,9 +204,12 @@ class TransactionViewProjector(
                                         HeaderRow(
                                             label = dependencies.localization.account,
                                         ) {
-                                            AccountContent(
-                                                info = account.value,
-                                                localization = dependencies.localization,
+                                            EntityContent(
+                                                uiInfo = account
+                                                    .value
+                                                    .rememberEntityUiInfo(
+                                                        localization = dependencies.localization,
+                                                    ),
                                                 viewMode = ViewMode.Full,
                                             )
                                         }
@@ -311,9 +314,13 @@ class TransactionViewProjector(
                             separation = LocalDistance.current.units.padding.along.small,
                             acrossOrientation = Alignment.CenterHorizontally,
                         ) {
-                            CategoryContent(
-                                info = record.record.category,
-                                localization = dependencies.localization,
+                            EntityContent(
+                                uiInfo = record
+                                    .record
+                                    .category
+                                    .rememberEntityUiInfo(
+                                        localization = dependencies.localization,
+                                    ),
                                 viewMode = ViewMode.Full,
                             )
                             SIcon(
@@ -406,17 +413,25 @@ class TransactionViewProjector(
         transfer: Transaction.Type.Transfer<AccountIdWithInfo>,
     ) {
         ItemsRow {
-            AccountContent(
-                info = transfer.from.value,
-                localization = dependencies.localization,
+            EntityContent(
+                uiInfo = transfer
+                    .from
+                    .value
+                    .rememberEntityUiInfo(
+                        localization = dependencies.localization,
+                    ),
                 viewMode = ViewMode.Full,
             )
             Icon(
                 icon = ArrowIcon[ArrowDirection.StartToEnd],
             )
-            AccountContent(
-                info = transfer.to.value,
-                localization = dependencies.localization,
+            EntityContent(
+                uiInfo = transfer
+                    .to
+                    .value
+                    .rememberEntityUiInfo(
+                        localization = dependencies.localization,
+                    ),
                 viewMode = ViewMode.Full,
             )
         }

@@ -60,7 +60,7 @@ class CommentEditProjector(
                             hideAlignment = Alignment.BottomStart,
                         )
                     ) {
-                        LazyRow {  }
+
                     }
                 }
                 Column(

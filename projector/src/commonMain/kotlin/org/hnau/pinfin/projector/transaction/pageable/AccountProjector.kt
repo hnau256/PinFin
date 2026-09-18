@@ -10,8 +10,9 @@ import org.hnau.pinfin.model.utils.budget.state.AccountIdWithInfo
 import org.hnau.pinfin.projector.Localization
 import org.hnau.pinfin.projector.transaction.utils.ChooseOrCreateMessages
 import org.hnau.pinfin.projector.transaction.utils.ChooseOrCreateProjector
-import org.hnau.pinfin.projector.utils.AccountContent
+import org.hnau.pinfin.projector.utils.EntityContent
 import org.hnau.pinfin.projector.utils.ViewMode
+import org.hnau.pinfin.projector.utils.rememberEntityUiInfo
 
 class AccountProjector(
     private val model: AccountModel,
@@ -29,12 +30,18 @@ class AccountProjector(
     fun Content(
         modifier: Modifier = Modifier,
     ) {
-        AccountContent(
-            info = model.idWithAccount.collectAsState().value?.value,
+        EntityContent(
+            uiInfo = model
+                .idWithAccount
+                .collectAsState()
+                .value
+                ?.value
+                .rememberEntityUiInfo(
+                    localization = dependencies.localization,
+                ),
             modifier = modifier,
             selected = model.isFocused.collectAsState().value,
             onClick = model.requestFocus,
-            localization = dependencies.localization,
             viewMode = ViewMode.Full,
         )
     }
@@ -65,11 +72,14 @@ class AccountProjector(
             model = model,
             dependencies = dependencies.chooseOrCreate(),
         ) { idWithAccount, isSelected, onClick ->
-            AccountContent(
-                info = idWithAccount.value,
+            EntityContent(
+                uiInfo = idWithAccount
+                    .value
+                    .rememberEntityUiInfo(
+                        localization = dependencies.localization,
+                    ),
                 selected = isSelected.collectAsState().value,
                 onClick = onClick,
-                localization = dependencies.localization,
                 viewMode = ViewMode.Full,
             )
         }

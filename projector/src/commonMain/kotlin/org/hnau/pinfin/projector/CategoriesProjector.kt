@@ -24,8 +24,9 @@ import org.hnau.commons.app.projector.uikit.transition.TransitionSpec
 import org.hnau.commons.app.projector.utils.Icon
 import org.hnau.commons.gen.pipe.annotations.Pipe
 import org.hnau.pinfin.model.CategoriesModel
-import org.hnau.pinfin.projector.utils.CategoryContent
+import org.hnau.pinfin.projector.utils.EntityContent
 import org.hnau.pinfin.projector.utils.ViewMode
+import org.hnau.pinfin.projector.utils.rememberEntityUiInfo
 
 
 class CategoriesProjector(
@@ -84,9 +85,12 @@ class CategoriesProjector(
                                         .fillMaxWidth()
                                         .clickable(onClick = category.onClick),
                                     headlineContent = {
-                                        CategoryContent(
-                                            info = category.idWithCategory,
-                                            localization = dependencies.localization,
+                                        EntityContent(
+                                            uiInfo = category
+                                                .idWithCategory
+                                                .rememberEntityUiInfo(
+                                                    localization = dependencies.localization,
+                                                ),
                                             viewMode = ViewMode.Full,
                                         )
                                     },

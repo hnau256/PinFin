@@ -46,9 +46,10 @@ import org.hnau.pinfin.model.utils.budget.state.CategoryIdWithInfo
 import org.hnau.pinfin.projector.Localization
 import org.hnau.pinfin.projector.transaction.utils.ChooseOrCreateMessages
 import org.hnau.pinfin.projector.transaction.utils.ChooseOrCreateProjector
-import org.hnau.pinfin.projector.utils.CategoryContent
+import org.hnau.pinfin.projector.utils.EntityContent
 import org.hnau.pinfin.projector.utils.Label
 import org.hnau.pinfin.projector.utils.UIConstants
+import org.hnau.pinfin.projector.utils.rememberEntityUiInfo
 import org.hnau.pinfin.projector.utils.formatter.AmountFormatter
 
 class RecordProjector(
@@ -346,12 +347,13 @@ class RecordProjector(
                     }
                 },
                 ifNotNull = { (idWithCategory, amount) ->
-                    CategoryContent(
+                    EntityContent(
                         modifier = modifier,
-                        info = idWithCategory,
+                        uiInfo = idWithCategory.rememberEntityUiInfo(
+                            localization = dependencies.localization,
+                        ),
                         onClick = onClick,
                         selected = selected,
-                        localization = dependencies.localization,
                     ) { category ->
                         ItemsRow {
                             category()

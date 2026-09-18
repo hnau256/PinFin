@@ -42,10 +42,10 @@ import org.hnau.pinfin.model.utils.analytics.PeriodResult
 import org.hnau.pinfin.model.utils.analytics.fold
 import org.hnau.pinfin.model.utils.modelHueToHue
 import org.hnau.pinfin.projector.Localization
-import org.hnau.pinfin.projector.utils.AccountContent
 import org.hnau.pinfin.projector.utils.AmountContent
-import org.hnau.pinfin.projector.utils.CategoryContent
+import org.hnau.pinfin.projector.utils.EntityContent
 import org.hnau.pinfin.projector.utils.ViewMode
+import org.hnau.pinfin.projector.utils.rememberEntityUiInfo
 import org.hnau.pinfin.projector.utils.formatter.AmountFormatter
 
 /**
@@ -208,9 +208,10 @@ class PeriodProjector(
                     direction = direction,
                     max = max,
                     title = {
-                        CategoryContent(
-                            info = idWithCategory,
-                            localization = dependencies.localization,
+                        EntityContent(
+                            uiInfo = idWithCategory.rememberEntityUiInfo(
+                                localization = dependencies.localization,
+                            ),
                             viewMode = ViewMode.Full,
                         )
                     },
@@ -223,9 +224,12 @@ class PeriodProjector(
                     direction = direction,
                     max = max,
                     title = {
-                        AccountContent(
-                            info = idWithAccount.value,
-                            localization = dependencies.localization,
+                        EntityContent(
+                            uiInfo = idWithAccount
+                                .value
+                                .rememberEntityUiInfo(
+                                    localization = dependencies.localization,
+                                ),
                             viewMode = ViewMode.Full,
                         )
                     },

@@ -36,11 +36,11 @@ import org.hnau.pinfin.model.utils.budget.state.AccountIdWithInfo
 import org.hnau.pinfin.model.utils.budget.state.CategoryIdWithInfo
 import org.hnau.pinfin.model.utils.filteredAmount
 import org.hnau.pinfin.model.utils.includedRecords
-import org.hnau.pinfin.projector.utils.AccountContent
 import org.hnau.pinfin.projector.utils.AmountContent
 import org.hnau.pinfin.projector.utils.ArrowDirection
 import org.hnau.pinfin.projector.utils.ArrowIcon
-import org.hnau.pinfin.projector.utils.CategoryContent
+import org.hnau.pinfin.projector.utils.EntityContent
+import org.hnau.pinfin.projector.utils.rememberEntityUiInfo
 
 @Composable
 fun Transaction<AccountIdWithInfo, CategoryIdWithInfo, FilteredRecord<CategoryIdWithInfo>>.Content(
@@ -190,9 +190,13 @@ private fun EntryContent(
                 }
                 .toList()
         }
-        AccountContent(
-            info = entry.account.value,
-            localization = dependencies.localization,
+        EntityContent(
+            uiInfo = entry
+                .account
+                .value
+                .rememberEntityUiInfo(
+                    localization = dependencies.localization,
+                ),
         )
         Icon(
             tint = MaterialTheme.colorScheme.onSurface,
@@ -223,9 +227,10 @@ private fun EntryContent(
             ],
         )
         categories.fastForEach { idWithCategory ->
-            CategoryContent(
-                info = idWithCategory,
-                localization = dependencies.localization,
+            EntityContent(
+                uiInfo = idWithCategory.rememberEntityUiInfo(
+                    localization = dependencies.localization,
+                ),
             )
         }
     }
@@ -239,9 +244,13 @@ private fun TransferContent(
     Row(
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        AccountContent(
-            info = transfer.from.value,
-            localization = dependencies.localization,
+        EntityContent(
+            uiInfo = transfer
+                .from
+                .value
+                .rememberEntityUiInfo(
+                    localization = dependencies.localization,
+                ),
         )
         Icon(
             modifier = Modifier.padding(
@@ -249,9 +258,13 @@ private fun TransferContent(
             ),
             icon = ArrowIcon[ArrowDirection.StartToEnd],
         )
-        AccountContent(
-            info = transfer.to.value,
-            localization = dependencies.localization,
+        EntityContent(
+            uiInfo = transfer
+                .to
+                .value
+                .rememberEntityUiInfo(
+                    localization = dependencies.localization,
+                ),
         )
     }
 }

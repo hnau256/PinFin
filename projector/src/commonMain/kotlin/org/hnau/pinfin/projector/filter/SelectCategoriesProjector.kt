@@ -16,8 +16,9 @@ import org.hnau.commons.kotlin.foldNullable
 import org.hnau.pinfin.model.filter.pageable.SelectCategoriesModel
 import org.hnau.pinfin.model.utils.budget.state.CategoryIdWithInfo
 import org.hnau.pinfin.projector.Localization
-import org.hnau.pinfin.projector.utils.CategoryContent
+import org.hnau.pinfin.projector.utils.EntityContent
 import org.hnau.pinfin.projector.utils.Label
+import org.hnau.pinfin.projector.utils.rememberEntityUiInfo
 
 class SelectCategoriesProjector(
     private val model: SelectCategoriesModel,
@@ -48,11 +49,14 @@ class SelectCategoriesProjector(
                 all = categories,
             ) { item ->
                 var selected by item.selected.collectAsMutableAccessor()
-                CategoryContent(
-                    info = item.run { KeyValue(id, info) },
+                EntityContent(
+                    uiInfo = item
+                        .run { KeyValue(id, info) }
+                        .rememberEntityUiInfo(
+                            localization = dependencies.localization,
+                        ),
                     selected = selected,
                     onClick = { selected = !selected },
-                    localization = dependencies.localization,
                 )
             }
         }

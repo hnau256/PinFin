@@ -43,7 +43,7 @@ enum class ViewMode {
 
 data class EntityUiInfo(
     val hue: Hue,
-    val icon: EntityUiInfo.Icon?,
+    val icon: Icon?,
     val title: String,
 ) {
 
@@ -51,68 +51,60 @@ data class EntityUiInfo(
         val main: ImageVector,
         val additional: ImageVector? = null,
     )
-}
 
-private val absentEntityUiInfoIcon = EntityUiInfo.Icon(
-    main = UIConstants.absentValueIcon,
-)
+    companion object {
+
+        fun forNoItem(
+            entityTypeName: String,
+        ): EntityUiInfo = EntityUiInfo(
+            hue = UIConstants.absentValueHue,
+            icon = Icon(
+                main = UIConstants.absentValueIcon,
+            ),
+            title = entityTypeName,
+        )
+
+        @Composable
+        fun rememberForNoItem(
+            entityTypeName: String,
+        ): EntityUiInfo = remember(entityTypeName) {
+            forNoItem(entityTypeName)
+        }
+    }
+}
 
 private val smallIconButtonTokensIconSize = 24.dp
 
 @Composable
 fun EntityContent(
-    uiInfo: EntityUiInfo?,
-    entityTypeName: String,
+    uiInfo: EntityUiInfo,
     modifier: Modifier = Modifier,
-    selected: Boolean = true,
+    selected: Boolean = false,
     shape: Shape = LabelDefaults.shape,
     viewMode: ViewMode = ViewMode.default,
+    onClick: (() -> Unit)? = null,
     content: @Composable (inner: @Composable () -> Unit) -> Unit = { inner -> inner() },
-    onClick: (() -> Unit)?,
 ) {
-    uiInfo.foldNullable(
-        ifNull = {
-            Label(
-                modifier = modifier,
-                containerColor = UIConstants.absentValueColor,
-                selected = selected,
-                onClick = onClick,
-                shape = shape,
-            ) {
-                content {
-                    IconWithTitle(
-                        state = IconWithTitleState.remember(
-                            icon = absentEntityUiInfoIcon,
-                            title = entityTypeName,
-                            viewMode = viewMode,
-                        ),
-                    )
-                }
-            }
-        },
-        ifNotNull = { info ->
-            SwitchHue(
-                hue = info.hue.let(Mapper.modelHueToHue.reverse),
-            ) {
-                Label(
-                    modifier = modifier,
-                    selected = selected,
-                    onClick = onClick,
-                    shape = shape,
-                ) {
-                    content {
-                        IconWithTitle(
-                            state = IconWithTitleState.remember(
-                                icon = info.icon,
-                                title = info.title,
-                                viewMode = viewMode,
-                            ),
-                        )
-                    }
-                }
+    SwitchHue(
+        hue = uiInfo.hue.let(Mapper.modelHueToHue.reverse),
+    ) {
+        Label(
+            modifier = modifier,
+            selected = selected,
+            onClick = onClick,
+            shape = shape,
+        ) {
+            content {
+                IconWithTitle(
+                    state = IconWithTitleState.remember(
+                        icon = uiInfo.icon,
+                        title = uiInfo.title,
+                        viewMode = viewMode,
+                    ),
+                )
             }
         }
-    )
+    }
 }
 
 @Composable
@@ -157,48 +149,49 @@ private fun Icon(
     icon: EntityUiInfo.Icon,
     modifier: Modifier = Modifier,
 ) {
-    val additional = icon.additional
-    if (additional == null) {
-        Icon(
-            modifier = modifier,
-            icon = icon.main,
-        )
-        return
-    }
+    icon.additional.foldNullable(
+        ifNull = {
+            Icon(
+                modifier = modifier,
+                icon = icon.main,
+            )
+        },
+        ifNotNull = { additional ->
+            val additionalSize = smallIconButtonTokensIconSize / 2
+            val holeDiameter = additionalSize + Dimens.border * 2
 
-    val additionalSize = smallIconButtonTokensIconSize / 2
-    val holeDiameter = additionalSize + Dimens.border * 2
-
-    Box(modifier = modifier) {
-        Icon(
-            modifier = Modifier.drawWithContent {
-                val path = Path().apply {
-                    addOval(
-                        Rect(
-                            center = Offset(
-                                x = size.width - additionalSize.toPx() / 2,
-                                y = size.height - additionalSize.toPx() / 2,
-                            ),
-                            radius = holeDiameter.toPx() / 2,
-                        ),
-                    )
-                }
-                clipPath(
-                    path = path,
-                    clipOp = ClipOp.Difference,
-                ) {
-                    this@drawWithContent.drawContent()
-                }
-            },
-            icon = icon.main,
-        )
-        Icon(
-            modifier = Modifier
-                .align(Alignment.BottomEnd)
-                .size(additionalSize),
-            icon = additional,
-        )
-    }
+            Box(modifier = modifier) {
+                Icon(
+                    modifier = Modifier.drawWithContent {
+                        val path = Path().apply {
+                            addOval(
+                                Rect(
+                                    center = Offset(
+                                        x = size.width - additionalSize.toPx() / 2,
+                                        y = size.height - additionalSize.toPx() / 2,
+                                    ),
+                                    radius = holeDiameter.toPx() / 2,
+                                ),
+                            )
+                        }
+                        clipPath(
+                            path = path,
+                            clipOp = ClipOp.Difference,
+                        ) {
+                            this@drawWithContent.drawContent()
+                        }
+                    },
+                    icon = icon.main,
+                )
+                Icon(
+                    modifier = Modifier
+                        .align(Alignment.BottomEnd)
+                        .size(additionalSize),
+                    icon = additional,
+                )
+            }
+        },
+    )
 }
 
 

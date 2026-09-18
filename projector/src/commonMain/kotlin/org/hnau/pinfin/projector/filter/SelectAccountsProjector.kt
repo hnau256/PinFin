@@ -15,8 +15,9 @@ import org.hnau.commons.kotlin.foldNullable
 import org.hnau.pinfin.model.filter.pageable.SelectAccountsModel
 import org.hnau.pinfin.model.utils.budget.state.AccountIdWithInfo
 import org.hnau.pinfin.projector.Localization
-import org.hnau.pinfin.projector.utils.AccountContent
+import org.hnau.pinfin.projector.utils.EntityContent
 import org.hnau.pinfin.projector.utils.Label
+import org.hnau.pinfin.projector.utils.rememberEntityUiInfo
 
 class SelectAccountsProjector(
     private val model: SelectAccountsModel,
@@ -47,11 +48,14 @@ class SelectAccountsProjector(
                 all = accounts,
             ) { item ->
                 var selected by item.selected.collectAsMutableAccessor()
-                AccountContent(
-                    info = item.info,
+                EntityContent(
+                    uiInfo = item
+                        .info
+                        .rememberEntityUiInfo(
+                            localization = dependencies.localization,
+                        ),
                     selected = selected,
                     onClick = { selected = !selected },
-                    localization = dependencies.localization,
                 )
             }
         }
