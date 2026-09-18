@@ -8,6 +8,7 @@ import arrow.core.toOption
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.getAndUpdate
 import kotlinx.coroutines.launch
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.TimeZone
@@ -56,16 +57,12 @@ class DateChooseModel(
         }
     }
 
-    init {
-        scope.launch {
-            var cache = skeleton.date.value
-            skeleton.date.collect { newTime ->
-                val localCache = cache
-                cache = newTime
-                if (newTime != localCache) {
-                    navigateContext.goForward()
-                }
-            }
+    fun updateDate(
+        date: LocalDate,
+    ) {
+        val oldDate = skeleton.date.getAndUpdate { date  }
+        if (oldDate != date) {
+            navigateContext.goForward()
         }
     }
 

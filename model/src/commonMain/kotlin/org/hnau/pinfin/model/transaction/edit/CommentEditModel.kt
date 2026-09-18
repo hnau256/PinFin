@@ -73,18 +73,7 @@ class CommentEditModel(
         val onClick: () -> Unit,
     )
 
-    val suggests: StateFlow<Loadable<Delayed<List<Suggest>>>?> = navigateContext
-        .isFocused
-        .flatMapWithScope(scope) { scope, isFocused ->
-            isFocused.foldBoolean(
-                ifFalse = { null.toMutableStateFlowAsInitial() },
-                ifTrue = { createSuggests(scope) },
-            )
-        }
-
-    private fun createSuggests(
-        scope: CoroutineScope,
-    ): StateFlow<Loadable<Delayed<List<Suggest>>>> = resolveSuggests(
+    val suggests: StateFlow<Loadable<Delayed<List<Suggest>>>> = resolveSuggests(
         scope = scope,
         source = dependencies
             .budgetRepository

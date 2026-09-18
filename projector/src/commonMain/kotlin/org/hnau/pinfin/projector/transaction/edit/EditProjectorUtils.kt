@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.text.input.KeyboardActionHandler
+import androidx.compose.foundation.text.input.TextFieldLineLimits
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -24,6 +25,7 @@ import org.hnau.commons.app.projector.fractal.SText
 import org.hnau.commons.app.projector.fractal.STextField
 import org.hnau.commons.app.projector.fractal.distance.LocalDistance
 import org.hnau.commons.app.projector.fractal.size.units
+import org.hnau.commons.app.projector.uikit.state.BooleanStateContent
 import org.hnau.commons.app.projector.uikit.state.NullableStateContent
 import org.hnau.commons.app.projector.uikit.transition.TransitionSpec
 import org.hnau.commons.kotlin.coroutines.ActionOrElse
@@ -33,6 +35,45 @@ import org.hnau.commons.kotlin.ifFalse
 import org.hnau.commons.kotlin.ifTrue
 import org.hnau.pinfin.model.transaction.edit.ChooseOrCreateModel
 import org.hnau.pinfin.model.transaction.edit.utils.EditNavigateContext
+
+@Composable
+internal fun SFocusablePanel(
+    modifier: Modifier = Modifier,
+    navigateContext: EditNavigateContext,
+    content: @Composable (isFocused: Boolean) -> Unit,
+) {
+    val isFocused: Boolean by navigateContext.isFocused.collectAsState()
+    SPanel(
+        modifier = modifier,
+        actionOrElseOrDisabled = isFocused.ifFalse {
+            ActionOrElse.instant(navigateContext.requestFocus)
+        },
+        importanceToActivate = null,
+    ) {
+        content(
+            isFocused,
+        )
+    }
+}
+
+@Composable
+internal fun SFocusablePanel(
+    modifier: Modifier = Modifier,
+    navigateContext: EditNavigateContext,
+    notFocusedContent: @Composable () -> Unit,
+    focusedContent: @Composable () -> Unit,
+) {
+    SFocusablePanel(
+        modifier = modifier,
+        navigateContext = navigateContext,
+    ) { isFocused ->
+        isFocused.BooleanStateContent(
+            transitionSpec = TransitionSpec.rememberCrossfade(),
+            falseContent = notFocusedContent,
+            trueContent = focusedContent,
+        )
+    }
+}
 
 @Composable
 internal fun EditTextField(
@@ -62,6 +103,7 @@ internal fun EditTextField(
                     navigateContext.requestFocus()
                 }
             },
+        lineLimits = TextFieldLineLimits.SingleLine,
         keyboardOptions = keyboardOptions,
         onKeyboardAction = KeyboardActionHandler { navigateContext.goForward() },
     )
