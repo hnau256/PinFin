@@ -125,7 +125,8 @@ data class Localization(
     val nameShouldNotByEmpty: String = "Название не может быть пустым",
     val mantissaLength: String = "Количество знаков после запятой",
     val incorrectMantissaLength: String = "Некорректное количество знаков после запятой",
-    val accessByMCP: String = "Доступ через MCP"
+    val accessByMCP: String = "Доступ через MCP",
+    val noSuggests: String = "Нет предложений",
 ) {
 
     companion object {
