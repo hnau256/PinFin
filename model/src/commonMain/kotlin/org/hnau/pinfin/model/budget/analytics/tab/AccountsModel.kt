@@ -22,6 +22,7 @@ import org.hnau.commons.kotlin.serialization.MutableStateFlowSerializer
 import org.hnau.pinfin.data.AccountId
 import org.hnau.pinfin.model.budgetstack.BudgetStackOpener
 import org.hnau.pinfin.model.utils.budget.repository.BudgetRepository
+import org.hnau.pinfin.model.utils.budget.state.AccountIdWithInfo
 import org.hnau.pinfin.model.utils.budget.state.AccountInfo
 
 class AccountsModel(
@@ -47,7 +48,7 @@ class AccountsModel(
     val scrollState: MutableStateFlow<ListScrollState>
         get() = skeleton.scrollState
 
-    val accounts: StateFlow<NonEmptyList<KeyValue<AccountId, AccountInfo>>?> = dependencies
+    val accounts: StateFlow<NonEmptyList<AccountIdWithInfo>?> = dependencies
         .budgetsRepository
         .state
         .mapState(scope) { budgetState ->

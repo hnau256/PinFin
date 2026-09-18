@@ -37,6 +37,7 @@ import org.hnau.pinfin.data.AmountDirection
 import org.hnau.pinfin.data.fold
 import org.hnau.pinfin.model.transaction.utils.ChooseOrCreateModel
 import org.hnau.pinfin.model.utils.budget.repository.BudgetRepository
+import org.hnau.pinfin.model.utils.budget.state.AccountIdWithInfo
 import org.hnau.pinfin.model.utils.budget.state.AccountInfo
 import org.hnau.pinfin.model.utils.budget.state.BudgetState
 
@@ -60,9 +61,9 @@ class AccountModel(
 
     @Serializable
     data class Skeleton(
-        val initialIdWithAccount: KeyValue<AccountId, AccountInfo>?,
+        val initialIdWithAccount: AccountIdWithInfo?,
         var chooseOrCreate: ChooseOrCreateModel.Skeleton? = null,
-        val manualIdWithAccount: MutableStateFlow<KeyValue<AccountId, AccountInfo>?> = initialIdWithAccount.toMutableStateFlowAsInitial(),
+        val manualIdWithAccount: MutableStateFlow<AccountIdWithInfo?> = initialIdWithAccount.toMutableStateFlowAsInitial(),
     ) {
 
         companion object {
@@ -72,7 +73,7 @@ class AccountModel(
             )
 
             fun createForEdit(
-                idWithAccount: KeyValue<AccountId, AccountInfo>,
+                idWithAccount: AccountIdWithInfo,
             ): Skeleton = Skeleton(
                 initialIdWithAccount = idWithAccount,
             )
@@ -82,7 +83,7 @@ class AccountModel(
 
     private fun resolveMostPopularAccount(
         scope: CoroutineScope,
-    ): StateFlow<Option<KeyValue<AccountId, AccountInfo>>> = dependencies
+    ): StateFlow<Option<AccountIdWithInfo>> = dependencies
         .budgetRepository
         .state
         .map { state ->
@@ -109,7 +110,7 @@ class AccountModel(
             initialValue = None,
         )
 
-    internal val accountEditable: StateFlow<Editable<KeyValue<AccountId, AccountInfo>>> =
+    internal val accountEditable: StateFlow<Editable<AccountIdWithInfo>> =
         Editable.create(
             scope = scope,
             valueOrNone = skeleton
@@ -130,12 +131,12 @@ class AccountModel(
             initialValueOrNone = skeleton.initialIdWithAccount.toOption(),
         )
 
-    val idWithAccount: StateFlow<KeyValue<AccountId, AccountInfo>?> = accountEditable
+    val idWithAccount: StateFlow<AccountIdWithInfo?> = accountEditable
         .mapState(scope) { it.valueOrNone.getOrNull() }
 
     fun createPage(
         scope: CoroutineScope,
-    ): ChooseOrCreateModel<KeyValue<AccountId, AccountInfo>> = ChooseOrCreateModel(
+    ): ChooseOrCreateModel<AccountIdWithInfo> = ChooseOrCreateModel(
         scope = scope,
         dependencies = dependencies.chooseOrCreate(),
         skeleton = skeleton::chooseOrCreate
@@ -157,7 +158,7 @@ class AccountModel(
         },
         selected = accountEditable.mapState(
             scope,
-            Editable<KeyValue<AccountId, AccountInfo>>::valueOrNone
+            Editable<AccountIdWithInfo>::valueOrNone
         ),
         onReady = { selected ->
             skeleton.manualIdWithAccount.value = selected

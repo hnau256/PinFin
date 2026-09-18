@@ -6,19 +6,17 @@ import arrow.core.nonEmptyListOf
 import kotlinx.datetime.LocalDate
 import org.hnau.commons.kotlin.KeyValue
 import org.hnau.commons.kotlin.it
-import org.hnau.pinfin.data.AccountId
 import org.hnau.pinfin.data.Amount
 import org.hnau.pinfin.data.AmountDirection
-import org.hnau.pinfin.data.CategoryId
 import org.hnau.pinfin.data.Currency
 import org.hnau.pinfin.data.Transaction
 import org.hnau.pinfin.data.fold
-import org.hnau.pinfin.model.utils.budget.state.AccountInfo
-import org.hnau.pinfin.model.utils.budget.state.CategoryInfo
+import org.hnau.pinfin.model.utils.budget.state.AccountIdWithInfo
+import org.hnau.pinfin.model.utils.budget.state.CategoryIdWithInfo
 
 data class AnalyticsEntry(
-    val idWithAccount: KeyValue<AccountId, AccountInfo>,
-    val idWithCategoryOrDirection: Either<AmountDirection, KeyValue<CategoryId, CategoryInfo>>,
+    val idWithAccount: AccountIdWithInfo,
+    val idWithCategoryOrDirection: Either<AmountDirection, CategoryIdWithInfo>,
     val amount: Amount,
     val date: LocalDate,
 ) {
@@ -33,7 +31,7 @@ data class AnalyticsEntry(
         )
 }
 
-fun Transaction<KeyValue<AccountId, AccountInfo>, KeyValue<CategoryId, CategoryInfo>, *>.toAnalyticsEntries(
+fun Transaction<AccountIdWithInfo, CategoryIdWithInfo, *>.toAnalyticsEntries(
     currency: Currency,
 ): NonEmptyList<AnalyticsEntry> {
     val date: LocalDate = timestamp

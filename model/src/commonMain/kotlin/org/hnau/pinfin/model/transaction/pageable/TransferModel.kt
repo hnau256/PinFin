@@ -14,7 +14,6 @@ import org.hnau.commons.app.model.utils.Editable
 import org.hnau.commons.app.model.utils.editable
 import org.hnau.commons.gen.fold.annotations.Fold
 import org.hnau.commons.gen.pipe.annotations.Pipe
-import org.hnau.commons.kotlin.KeyValue
 import org.hnau.commons.kotlin.coroutines.flow.state.derivedStateFlowOf
 import org.hnau.commons.kotlin.coroutines.flow.state.flatMapState
 import org.hnau.commons.kotlin.coroutines.flow.state.flatMapWithScope
@@ -24,10 +23,9 @@ import org.hnau.commons.kotlin.coroutines.flow.state.mutable.toMutableStateFlowA
 import org.hnau.commons.kotlin.foldBoolean
 import org.hnau.commons.kotlin.foldNullable
 import org.hnau.commons.kotlin.serialization.MutableStateFlowSerializer
-import org.hnau.pinfin.data.AccountId
 import org.hnau.pinfin.data.Transaction
 import org.hnau.pinfin.model.transaction.utils.ChooseOrCreateModel
-import org.hnau.pinfin.model.utils.budget.state.AccountInfo
+import org.hnau.pinfin.model.utils.budget.state.AccountIdWithInfo
 
 class TransferModel(
     private val scope: CoroutineScope,
@@ -58,7 +56,7 @@ class TransferModel(
         val goBackHandler: GoBackHandler
 
         data class From(
-            val model: ChooseOrCreateModel<KeyValue<AccountId, AccountInfo>>,
+            val model: ChooseOrCreateModel<AccountIdWithInfo>,
         ) : PageType {
             override val key: Int
                 get() = 0
@@ -68,7 +66,7 @@ class TransferModel(
         }
 
         data class To(
-            val model: ChooseOrCreateModel<KeyValue<AccountId, AccountInfo>>,
+            val model: ChooseOrCreateModel<AccountIdWithInfo>,
         ) : PageType {
             override val key: Int
                 get() = 1
@@ -113,7 +111,7 @@ class TransferModel(
             )
 
             fun createForEdit(
-                transfer: Transaction.Type.Transfer<KeyValue<AccountId, AccountInfo>>,
+                transfer: Transaction.Type.Transfer<AccountIdWithInfo>,
             ): Skeleton = Skeleton(
                 from = AccountModel.Skeleton.createForEdit(
                     idWithAccount = transfer.from,
@@ -235,7 +233,7 @@ class TransferModel(
             },
     )
 
-    internal val transfer: StateFlow<Editable<Transaction.Type.Transfer<KeyValue<AccountId, AccountInfo>>>> = derivedStateFlowOf(scope) {
+    internal val transfer: StateFlow<Editable<Transaction.Type.Transfer<AccountIdWithInfo>>> = derivedStateFlowOf(scope) {
         editable {
             Transaction.Type.Transfer(
                 to = to.accountEditable.state.bind(),

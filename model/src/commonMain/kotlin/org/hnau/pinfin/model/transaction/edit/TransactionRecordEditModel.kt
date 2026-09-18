@@ -10,20 +10,18 @@ import org.hnau.commons.app.model.utils.Editable
 import org.hnau.commons.app.model.utils.editable
 import org.hnau.commons.gen.fold.annotations.Fold
 import org.hnau.commons.gen.pipe.annotations.Pipe
-import org.hnau.commons.kotlin.KeyValue
 import org.hnau.commons.kotlin.coroutines.flow.state.derivedStateFlowOf
 import org.hnau.commons.kotlin.coroutines.flow.state.flatMapWithScope
 import org.hnau.commons.kotlin.coroutines.flow.state.mapState
 import org.hnau.commons.kotlin.coroutines.flow.state.mutable.toMutableStateFlowAsInitial
 import org.hnau.commons.kotlin.foldNullable
-import org.hnau.pinfin.data.CategoryId
 import org.hnau.pinfin.data.Comment
 import org.hnau.pinfin.data.Record
 import org.hnau.pinfin.model.transaction.edit.utils.EditNavigateContext
 import org.hnau.pinfin.model.transaction.edit.utils.SelectedPartDelegate
 import org.hnau.pinfin.model.transaction.utils.allRecords
 import org.hnau.pinfin.model.utils.budget.repository.BudgetRepository
-import org.hnau.pinfin.model.utils.budget.state.CategoryInfo
+import org.hnau.pinfin.model.utils.budget.state.CategoryIdWithInfo
 
 class TransactionRecordEditModel(
     scope: CoroutineScope,
@@ -95,7 +93,7 @@ class TransactionRecordEditModel(
             )
 
             fun create(
-                record: Record<KeyValue<CategoryId, CategoryInfo>>,
+                record: Record<CategoryIdWithInfo>,
             ): Skeleton = Skeleton(
                 comment = CommentEditModel.Skeleton.create(
                     initial = record.comment,
@@ -158,7 +156,7 @@ class TransactionRecordEditModel(
 
     private fun resolvePart(
         scope: CoroutineScope,
-        actualCategory: StateFlow<KeyValue<CategoryId, CategoryInfo>?>?,
+        actualCategory: StateFlow<CategoryIdWithInfo?>?,
     ): StateFlow<Part> = skeleton
         .selectedPart
         .flatMapWithScope(scope) { scope, part ->
@@ -207,7 +205,7 @@ class TransactionRecordEditModel(
         navigateContext = selectedPart.createPartNavigateContext(Part.Amount),
     )
 
-    val recordEditable: StateFlow<Editable<Record<KeyValue<CategoryId, CategoryInfo>>>> =
+    val recordEditable: StateFlow<Editable<Record<CategoryIdWithInfo>>> =
         derivedStateFlowOf(scope) {
             editable {
                 Record(

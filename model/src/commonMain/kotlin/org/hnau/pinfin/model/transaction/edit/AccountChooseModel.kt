@@ -24,6 +24,7 @@ import org.hnau.pinfin.data.AmountDirection
 import org.hnau.pinfin.data.fold
 import org.hnau.pinfin.model.transaction.edit.utils.EditNavigateContext
 import org.hnau.pinfin.model.utils.budget.repository.BudgetRepository
+import org.hnau.pinfin.model.utils.budget.state.AccountIdWithInfo
 import org.hnau.pinfin.model.utils.budget.state.AccountInfo
 
 class AccountChooseModel(
@@ -42,9 +43,9 @@ class AccountChooseModel(
 
     @Serializable
     data class Skeleton(
-        val initialIdWithAccount: KeyValue<AccountId, AccountInfo>?,
+        val initialIdWithAccount: AccountIdWithInfo?,
         val choose: ChooseOrCreateModel.Skeleton = ChooseOrCreateModel.Skeleton(),
-        val manualIdWithAccount: MutableStateFlow<KeyValue<AccountId, AccountInfo>?> = initialIdWithAccount.toMutableStateFlowAsInitial(),
+        val manualIdWithAccount: MutableStateFlow<AccountIdWithInfo?> = initialIdWithAccount.toMutableStateFlowAsInitial(),
     ) {
 
         companion object {
@@ -54,14 +55,14 @@ class AccountChooseModel(
             )
 
             fun create(
-                idWithAccount: KeyValue<AccountId, AccountInfo>,
+                idWithAccount: AccountIdWithInfo,
             ): Skeleton = Skeleton(
                 initialIdWithAccount = idWithAccount,
             )
         }
     }
 
-    private val selectedAccount: StateFlow<KeyValue<AccountId, AccountInfo>?> = skeleton
+    private val selectedAccount: StateFlow<AccountIdWithInfo?> = skeleton
         .manualIdWithAccount
         .flatMapWithScope(scope) { scope, manualAccountOrNull ->
             manualAccountOrNull
@@ -78,7 +79,7 @@ class AccountChooseModel(
                 )
         }
 
-    val choose: ChooseOrCreateModel<KeyValue<AccountId, AccountInfo>> = ChooseOrCreateModel(
+    val choose: ChooseOrCreateModel<AccountIdWithInfo> = ChooseOrCreateModel(
         scope = scope,
         skeleton = skeleton.choose,
         getBaseVariants = { scope ->
@@ -109,7 +110,7 @@ class AccountChooseModel(
         navigateContext = navigateContext,
     )
 
-    val accountEditable: StateFlow<Editable<KeyValue<AccountId, AccountInfo>>> =
+    val accountEditable: StateFlow<Editable<AccountIdWithInfo>> =
         Editable.create(
             scope = scope,
             valueOrNone = selectedAccount.mapState(scope) { it.toOption() },
@@ -118,7 +119,7 @@ class AccountChooseModel(
 
     private fun resolveMostPopularAccount(
         scope: CoroutineScope,
-    ): StateFlow<KeyValue<AccountId, AccountInfo>?> = dependencies
+    ): StateFlow<AccountIdWithInfo?> = dependencies
         .budgetRepository
         .state
         .map { state ->

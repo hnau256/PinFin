@@ -38,12 +38,11 @@ import org.hnau.commons.kotlin.serialization.MutableStateFlowSerializer
 import org.hnau.commons.kotlin.toZipListOrNull
 import org.hnau.pinfin.data.Amount
 import org.hnau.pinfin.data.AmountDirection
-import org.hnau.pinfin.data.CategoryId
 import org.hnau.pinfin.data.Record
 import org.hnau.pinfin.data.plus
 import org.hnau.pinfin.model.transaction.utils.RecordId
 import org.hnau.pinfin.model.transaction.utils.remove
-import org.hnau.pinfin.model.utils.budget.state.CategoryInfo
+import org.hnau.pinfin.model.utils.budget.state.CategoryIdWithInfo
 
 class RecordsModel(
     scope: CoroutineScope,
@@ -74,7 +73,7 @@ class RecordsModel(
             )
 
             fun createForEdit(
-                records: NonEmptyList<Record<KeyValue<CategoryId, CategoryInfo>>>
+                records: NonEmptyList<Record<CategoryIdWithInfo>>
             ): Skeleton = createInner(
                 records = records.map(RecordModel.Skeleton.Companion::createForEdit),
             )
@@ -192,10 +191,10 @@ class RecordsModel(
                 }
         }
 
-    private val usedCategories: StateFlow<List<KeyValue<CategoryId, CategoryInfo>>> = items
+    private val usedCategories: StateFlow<List<CategoryIdWithInfo>> = items
         .flatMapWithScope(scope) { scope, items ->
             items.fold(
-                initial = MutableStateFlow(emptyList<KeyValue<CategoryId, CategoryInfo>>()).asStateFlow(),
+                initial = MutableStateFlow(emptyList<CategoryIdWithInfo>()).asStateFlow(),
             ) { acc, item ->
                 combineState(
                     scope = scope,
@@ -258,7 +257,7 @@ class RecordsModel(
         addNewRecord = ::addNewRecord,
     )
 
-    internal val records: StateFlow<Editable<NonEmptyList<Record<KeyValue<CategoryId, CategoryInfo>>>>> =
+    internal val records: StateFlow<Editable<NonEmptyList<Record<CategoryIdWithInfo>>>> =
         items.flatMapWithScope(scope) { scope, idWithRecords ->
 
             val records = idWithRecords
@@ -277,10 +276,10 @@ class RecordsModel(
                 )
         }
 
-    private fun StateFlow<Editable<NonEmptyList<Record<KeyValue<CategoryId, CategoryInfo>>>>>.add(
+    private fun StateFlow<Editable<NonEmptyList<Record<CategoryIdWithInfo>>>>.add(
         scope: CoroutineScope,
         remaining: List<RecordModel>,
-    ): StateFlow<Editable<NonEmptyList<Record<KeyValue<CategoryId, CategoryInfo>>>>> = remaining
+    ): StateFlow<Editable<NonEmptyList<Record<CategoryIdWithInfo>>>> = remaining
         .toNonEmptyListOrNull()
         .foldNullable(
             ifNull = { this },

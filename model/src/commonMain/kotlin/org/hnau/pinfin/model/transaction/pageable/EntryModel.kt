@@ -24,15 +24,13 @@ import org.hnau.commons.kotlin.coroutines.flow.state.mutable.toMutableStateFlowA
 import org.hnau.commons.kotlin.foldBoolean
 import org.hnau.commons.kotlin.foldNullable
 import org.hnau.commons.kotlin.serialization.MutableStateFlowSerializer
-import org.hnau.pinfin.data.AccountId
 import org.hnau.pinfin.data.Amount
 import org.hnau.pinfin.data.AmountDirection
-import org.hnau.pinfin.data.CategoryId
 import org.hnau.pinfin.data.Transaction
 import org.hnau.pinfin.data.records.SimpleRecord
 import org.hnau.pinfin.model.transaction.utils.ChooseOrCreateModel
-import org.hnau.pinfin.model.utils.budget.state.AccountInfo
-import org.hnau.pinfin.model.utils.budget.state.CategoryInfo
+import org.hnau.pinfin.model.utils.budget.state.AccountIdWithInfo
+import org.hnau.pinfin.model.utils.budget.state.CategoryIdWithInfo
 
 class EntryModel(
     private val scope: CoroutineScope,
@@ -63,7 +61,7 @@ class EntryModel(
         val goBackHandler: GoBackHandler
 
         data class Account(
-            val model: ChooseOrCreateModel<KeyValue<AccountId, AccountInfo>>,
+            val model: ChooseOrCreateModel<AccountIdWithInfo>,
         ) : PageType {
             override val key: Int
                 get() = 0
@@ -106,7 +104,7 @@ class EntryModel(
             )
 
             fun createForEdit(
-                entry: Transaction.Type.Entry<KeyValue<AccountId, AccountInfo>, KeyValue<CategoryId, CategoryInfo>, *>,
+                entry: Transaction.Type.Entry<AccountIdWithInfo, CategoryIdWithInfo, *>,
             ): Skeleton = Skeleton(
                 account = AccountModel.Skeleton.createForEdit(
                     idWithAccount = entry.account,
@@ -211,7 +209,7 @@ class EntryModel(
             },
     )
 
-    internal val entry: StateFlow<Editable<Transaction.Type.Entry<KeyValue<AccountId, AccountInfo>, KeyValue<CategoryId, CategoryInfo>, *>>> =
+    internal val entry: StateFlow<Editable<Transaction.Type.Entry<AccountIdWithInfo, CategoryIdWithInfo, *>>> =
         derivedStateFlowOf(scope) {
             editable {
                 Transaction.Type.Entry(

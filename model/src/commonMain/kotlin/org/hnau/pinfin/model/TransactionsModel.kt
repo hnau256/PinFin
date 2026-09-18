@@ -13,8 +13,6 @@ import org.hnau.commons.kotlin.coroutines.Delayed
 import org.hnau.commons.kotlin.coroutines.flow.state.combineState
 import org.hnau.commons.kotlin.coroutines.flow.state.mapState
 import org.hnau.commons.kotlin.coroutines.mapStateDelayed
-import org.hnau.pinfin.data.AccountId
-import org.hnau.pinfin.data.CategoryId
 import org.hnau.pinfin.data.Currency
 import org.hnau.pinfin.data.Transaction
 import org.hnau.pinfin.data.TransactionType
@@ -24,8 +22,8 @@ import org.hnau.pinfin.model.filter.FilterModel
 import org.hnau.pinfin.model.filter.Filters
 import org.hnau.pinfin.model.filter.applyFiltersOrNull
 import org.hnau.pinfin.model.utils.budget.repository.BudgetRepository
-import org.hnau.pinfin.model.utils.budget.state.AccountInfo
-import org.hnau.pinfin.model.utils.budget.state.CategoryInfo
+import org.hnau.pinfin.model.utils.budget.state.AccountIdWithInfo
+import org.hnau.pinfin.model.utils.budget.state.CategoryIdWithInfo
 
 class TransactionsModel(
     private val scope: CoroutineScope,
@@ -79,10 +77,10 @@ class TransactionsModel(
             )
     }
 
-    val onViewTransactionClick: (Transaction.Id, Transaction<KeyValue<AccountId, AccountInfo>, KeyValue<CategoryId, CategoryInfo>, FilteredRecord<KeyValue<CategoryId, CategoryInfo>>>) -> Unit
+    val onViewTransactionClick: (Transaction.Id, Transaction<AccountIdWithInfo, CategoryIdWithInfo, FilteredRecord<CategoryIdWithInfo>>) -> Unit
         get() = dependencies.budgetStackOpener::openViewTransaction
 
-    val transactions: StateFlow<Loadable<Delayed<List<KeyValue<Transaction.Id, Transaction<KeyValue<AccountId, AccountInfo>, KeyValue<CategoryId, CategoryInfo>, FilteredRecord<KeyValue<CategoryId, CategoryInfo>>>>>>>> =
+    val transactions: StateFlow<Loadable<Delayed<List<KeyValue<Transaction.Id, Transaction<AccountIdWithInfo, CategoryIdWithInfo, FilteredRecord<CategoryIdWithInfo>>>>>>> =
         combineState(
             scope = scope,
             first = dependencies

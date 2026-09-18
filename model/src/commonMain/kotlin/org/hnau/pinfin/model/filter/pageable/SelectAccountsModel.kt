@@ -30,6 +30,7 @@ import org.hnau.commons.kotlin.ifTrue
 import org.hnau.commons.kotlin.serialization.MutableStateFlowSerializer
 import org.hnau.pinfin.data.AccountId
 import org.hnau.pinfin.model.utils.budget.repository.BudgetRepository
+import org.hnau.pinfin.model.utils.budget.state.AccountIdWithInfo
 import org.hnau.pinfin.model.utils.budget.state.AccountInfo
 
 class SelectAccountsModel(
@@ -120,7 +121,7 @@ class SelectAccountsModel(
                 }
         }
 
-    val selectedAccounts: StateFlow<NonEmptyList<KeyValue<AccountId, AccountInfo>>?> = accounts
+    val selectedAccounts: StateFlow<NonEmptyList<AccountIdWithInfo>?> = accounts
         .mapWithScope(scope) { scope, accounts ->
             accounts.map { account ->
                 account
@@ -144,7 +145,7 @@ class SelectAccountsModel(
                     initial = accounts
                         .firstOrNull()
                         .foldNullable(
-                            ifNull = { emptySet<KeyValue<AccountId, AccountInfo>>().toMutableStateFlowAsInitial() },
+                            ifNull = { emptySet<AccountIdWithInfo>().toMutableStateFlowAsInitial() },
                             ifNotNull = { first ->
                                 first.mapState(scope) { setOfNotNull(it) }
                             }

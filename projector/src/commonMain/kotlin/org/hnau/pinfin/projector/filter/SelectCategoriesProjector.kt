@@ -13,9 +13,8 @@ import org.hnau.commons.gen.pipe.annotations.Pipe
 import org.hnau.commons.kotlin.KeyValue
 import org.hnau.commons.kotlin.foldBoolean
 import org.hnau.commons.kotlin.foldNullable
-import org.hnau.pinfin.data.CategoryId
 import org.hnau.pinfin.model.filter.pageable.SelectCategoriesModel
-import org.hnau.pinfin.model.utils.budget.state.CategoryInfo
+import org.hnau.pinfin.model.utils.budget.state.CategoryIdWithInfo
 import org.hnau.pinfin.projector.Localization
 import org.hnau.pinfin.projector.utils.CategoryContent
 import org.hnau.pinfin.projector.utils.Label
@@ -61,7 +60,7 @@ class SelectCategoriesProjector(
 
     @Composable
     fun Content() {
-        val selectedCategories: NonEmptyList<KeyValue<CategoryId, CategoryInfo>>? by model.selectedCategories.collectAsState()
+        val selectedCategories: NonEmptyList<CategoryIdWithInfo>? by model.selectedCategories.collectAsState()
         val hasSelectedCategories: Boolean = selectedCategories != null
         Label(
             selected = model.isFocused.collectAsState().value,

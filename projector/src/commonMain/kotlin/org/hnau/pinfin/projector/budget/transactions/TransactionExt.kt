@@ -17,7 +17,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.util.fastForEach
-import arrow.core.nonEmptySetOf
 import arrow.core.toNonEmptyListOrNull
 import org.hnau.commons.app.projector.fractal.table.STable
 import org.hnau.commons.app.projector.fractal.utils.rememberFShape
@@ -27,16 +26,14 @@ import org.hnau.commons.app.projector.utils.Orientation
 import org.hnau.commons.app.projector.utils.horizontalDisplayPadding
 import org.hnau.commons.kotlin.KeyValue
 import org.hnau.commons.kotlin.foldNullable
-import org.hnau.pinfin.data.AccountId
 import org.hnau.pinfin.data.AmountDirection
-import org.hnau.pinfin.data.CategoryId
 import org.hnau.pinfin.data.Currency
 import org.hnau.pinfin.data.Transaction
 import org.hnau.pinfin.data.fold
 import org.hnau.pinfin.data.foldRaw
 import org.hnau.pinfin.data.records.FilteredRecord
-import org.hnau.pinfin.model.utils.budget.state.AccountInfo
-import org.hnau.pinfin.model.utils.budget.state.CategoryInfo
+import org.hnau.pinfin.model.utils.budget.state.AccountIdWithInfo
+import org.hnau.pinfin.model.utils.budget.state.CategoryIdWithInfo
 import org.hnau.pinfin.model.utils.filteredAmount
 import org.hnau.pinfin.model.utils.includedRecords
 import org.hnau.pinfin.projector.utils.AccountContent
@@ -46,7 +43,7 @@ import org.hnau.pinfin.projector.utils.ArrowIcon
 import org.hnau.pinfin.projector.utils.CategoryContent
 
 @Composable
-fun Transaction<KeyValue<AccountId, AccountInfo>, KeyValue<CategoryId, CategoryInfo>, FilteredRecord<KeyValue<CategoryId, CategoryInfo>>>.Content(
+fun Transaction<AccountIdWithInfo, CategoryIdWithInfo, FilteredRecord<CategoryIdWithInfo>>.Content(
     dependencies: TransactionsProjector.Dependencies,
     currency: Currency,
     onClick: () -> Unit,
@@ -69,7 +66,7 @@ fun Transaction<KeyValue<AccountId, AccountInfo>, KeyValue<CategoryId, CategoryI
 }
 
 @Composable
-fun Transaction<KeyValue<AccountId, AccountInfo>, KeyValue<CategoryId, CategoryInfo>, FilteredRecord<KeyValue<CategoryId, CategoryInfo>>>.CellContent(
+fun Transaction<AccountIdWithInfo, CategoryIdWithInfo, FilteredRecord<CategoryIdWithInfo>>.CellContent(
     modifier: Modifier = Modifier,
     shape: Shape,
     dependencies: TransactionsProjector.Dependencies,
@@ -130,7 +127,7 @@ fun Transaction<KeyValue<AccountId, AccountInfo>, KeyValue<CategoryId, CategoryI
 }
 
 @Composable
-private fun Transaction<KeyValue<AccountId, AccountInfo>, KeyValue<CategoryId, CategoryInfo>, FilteredRecord<KeyValue<CategoryId, CategoryInfo>>>.TimestampContent(
+private fun Transaction<AccountIdWithInfo, CategoryIdWithInfo, FilteredRecord<CategoryIdWithInfo>>.TimestampContent(
     dependencies: TransactionsProjector.Dependencies,
 ) {
     val text = remember(timestamp) {
@@ -143,7 +140,7 @@ private fun Transaction<KeyValue<AccountId, AccountInfo>, KeyValue<CategoryId, C
 }
 
 @Composable
-private fun Transaction<KeyValue<AccountId, AccountInfo>, KeyValue<CategoryId, CategoryInfo>, FilteredRecord<KeyValue<CategoryId, CategoryInfo>>>.CommentContent() {
+private fun Transaction<AccountIdWithInfo, CategoryIdWithInfo, FilteredRecord<CategoryIdWithInfo>>.CommentContent() {
     val primary = comment.text.takeIf(String::isNotEmpty)
     val secondary = remember(type) {
         type.fold(
@@ -177,7 +174,7 @@ private fun Transaction<KeyValue<AccountId, AccountInfo>, KeyValue<CategoryId, C
 @Composable
 private fun EntryContent(
     dependencies: TransactionsProjector.Dependencies,
-    entry: Transaction.Type.Entry<KeyValue<AccountId, AccountInfo>, KeyValue<CategoryId, CategoryInfo>, FilteredRecord<KeyValue<CategoryId, CategoryInfo>>>,
+    entry: Transaction.Type.Entry<AccountIdWithInfo, CategoryIdWithInfo, FilteredRecord<CategoryIdWithInfo>>,
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
@@ -187,7 +184,7 @@ private fun EntryContent(
         val categories = remember(records) {
             records
                 .fold(
-                    initial = emptySet<KeyValue<CategoryId, CategoryInfo>>(),
+                    initial = emptySet<CategoryIdWithInfo>(),
                 ) { acc, record ->
                     acc + record.category
                 }
@@ -236,7 +233,7 @@ private fun EntryContent(
 
 @Composable
 private fun TransferContent(
-    transfer: Transaction.Type.Transfer<KeyValue<AccountId, AccountInfo>>,
+    transfer: Transaction.Type.Transfer<AccountIdWithInfo>,
     dependencies: TransactionsProjector.Dependencies,
 ) {
     Row(

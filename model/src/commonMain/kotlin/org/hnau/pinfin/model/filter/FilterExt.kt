@@ -1,21 +1,18 @@
 package org.hnau.pinfin.model.filter
 
 import arrow.core.toNonEmptyListOrNull
-import org.hnau.commons.kotlin.KeyValue
 import org.hnau.commons.kotlin.foldNullable
 import org.hnau.commons.kotlin.ifFalse
-import org.hnau.pinfin.data.AccountId
-import org.hnau.pinfin.data.CategoryId
 import org.hnau.pinfin.data.Record
 import org.hnau.pinfin.data.Transaction
 import org.hnau.pinfin.data.foldRaw
 import org.hnau.pinfin.data.records.FilteredRecord
-import org.hnau.pinfin.model.utils.budget.state.AccountInfo
-import org.hnau.pinfin.model.utils.budget.state.CategoryInfo
+import org.hnau.pinfin.model.utils.budget.state.AccountIdWithInfo
+import org.hnau.pinfin.model.utils.budget.state.CategoryIdWithInfo
 
-internal fun Transaction<KeyValue<AccountId, AccountInfo>, KeyValue<CategoryId, CategoryInfo>, *>.applyFiltersOrNull(
+internal fun Transaction<AccountIdWithInfo, CategoryIdWithInfo, *>.applyFiltersOrNull(
     filters: Filters,
-): Transaction<KeyValue<AccountId, AccountInfo>, KeyValue<CategoryId, CategoryInfo>, FilteredRecord<KeyValue<CategoryId, CategoryInfo>>>? {
+): Transaction<AccountIdWithInfo, CategoryIdWithInfo, FilteredRecord<CategoryIdWithInfo>>? {
     val accountSet = filters.accounts?.toSet()
     val period = filters.period
     period
@@ -31,7 +28,7 @@ internal fun Transaction<KeyValue<AccountId, AccountInfo>, KeyValue<CategoryId, 
 
                 val categorySet = filters.categories?.toSet()
 
-                val records: List<Record<KeyValue<CategoryId, CategoryInfo>>> =
+                val records: List<Record<CategoryIdWithInfo>> =
                     variant.records.map { it.record }
 
                 val (matching, additional) =

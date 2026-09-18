@@ -9,13 +9,9 @@ import org.hnau.commons.app.model.utils.Editable
 import org.hnau.commons.app.model.utils.ModelSavableDelegate
 import org.hnau.commons.app.model.utils.editable
 import org.hnau.commons.gen.pipe.annotations.Pipe
-import org.hnau.commons.kotlin.KeyValue
 import org.hnau.commons.kotlin.coroutines.flow.state.derivedStateFlowOf
 import org.hnau.commons.kotlin.coroutines.flow.state.mapState
 import org.hnau.commons.kotlin.coroutines.flow.state.mutable.toMutableStateFlowAsInitial
-import org.hnau.pinfin.data.AccountId
-import org.hnau.pinfin.data.CategoryId
-import org.hnau.pinfin.data.Comment
 import org.hnau.pinfin.data.Currency
 import org.hnau.pinfin.data.Transaction
 import org.hnau.pinfin.data.TransactionType
@@ -24,8 +20,8 @@ import org.hnau.pinfin.model.transaction.edit.utils.EditNavigateContext
 import org.hnau.pinfin.model.transaction.edit.utils.SelectedPartDelegate
 import org.hnau.pinfin.model.transaction.utils.toRaw
 import org.hnau.pinfin.model.utils.budget.repository.BudgetRepository
-import org.hnau.pinfin.model.utils.budget.state.AccountInfo
-import org.hnau.pinfin.model.utils.budget.state.CategoryInfo
+import org.hnau.pinfin.model.utils.budget.state.AccountIdWithInfo
+import org.hnau.pinfin.model.utils.budget.state.CategoryIdWithInfo
 
 class TransactionEditModel(
     scope: CoroutineScope,
@@ -65,7 +61,7 @@ class TransactionEditModel(
         val comment: CommentEditModel.Skeleton,
         val type: TransactionTypeEditModel.Skeleton,
         val selectedPart: MutableStateFlow<Part> = Part.default.toMutableStateFlowAsInitial(),
-        val saveableDelegate: ModelSavableDelegate.Skeleton<Transaction<KeyValue<AccountId, AccountInfo>, KeyValue<CategoryId, CategoryInfo>, RecordEntry<KeyValue<CategoryId, CategoryInfo>>>> = ModelSavableDelegate.Skeleton(),
+        val saveableDelegate: ModelSavableDelegate.Skeleton<Transaction<AccountIdWithInfo, CategoryIdWithInfo, RecordEntry<CategoryIdWithInfo>>> = ModelSavableDelegate.Skeleton(),
     ) {
 
         companion object {
@@ -83,7 +79,7 @@ class TransactionEditModel(
 
             fun create(
                 id: Transaction.Id,
-                transaction: Transaction<KeyValue<AccountId, AccountInfo>, KeyValue<CategoryId, CategoryInfo>, *>,
+                transaction: Transaction<AccountIdWithInfo, CategoryIdWithInfo, *>,
             ): Skeleton = Skeleton(
                 id = id,
                 date = DateChooseModel.Skeleton.createForEdit(
@@ -148,7 +144,7 @@ class TransactionEditModel(
         .state
         .mapState(scope) { state -> state.info.currency }
 
-    val editableTransaction: StateFlow<Editable<Transaction<KeyValue<AccountId, AccountInfo>, KeyValue<CategoryId, CategoryInfo>, RecordEntry<KeyValue<CategoryId, CategoryInfo>>>>> =
+    val editableTransaction: StateFlow<Editable<Transaction<AccountIdWithInfo, CategoryIdWithInfo, RecordEntry<CategoryIdWithInfo>>>> =
         derivedStateFlowOf(scope) {
             editable {
                 Transaction(
@@ -159,7 +155,7 @@ class TransactionEditModel(
             }
         }
 
-    val goBackDelegate: ModelSavableDelegate<Transaction<KeyValue<AccountId, AccountInfo>, KeyValue<CategoryId, CategoryInfo>, RecordEntry<KeyValue<CategoryId, CategoryInfo>>>> = ModelSavableDelegate(
+    val goBackDelegate: ModelSavableDelegate<Transaction<AccountIdWithInfo, CategoryIdWithInfo, RecordEntry<CategoryIdWithInfo>>> = ModelSavableDelegate(
         scope = scope,
         result = editableTransaction,
         skeleton = skeleton.saveableDelegate,

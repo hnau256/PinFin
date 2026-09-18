@@ -22,12 +22,10 @@ import org.hnau.commons.app.projector.utils.Icon
 import org.hnau.commons.app.projector.utils.Orientation
 import org.hnau.commons.gen.fold.annotations.Fold
 import org.hnau.commons.gen.pipe.annotations.Pipe
-import org.hnau.commons.kotlin.KeyValue
 import org.hnau.commons.kotlin.coroutines.flow.state.mapWithScope
-import org.hnau.pinfin.data.AccountId
 import org.hnau.pinfin.model.transaction.pageable.EntryModel
 import org.hnau.pinfin.model.transaction.pageable.fold
-import org.hnau.pinfin.model.utils.budget.state.AccountInfo
+import org.hnau.pinfin.model.utils.budget.state.AccountIdWithInfo
 import org.hnau.pinfin.projector.Localization
 import org.hnau.pinfin.projector.transaction.utils.ChooseOrCreateProjector
 import org.hnau.pinfin.projector.utils.ArrowDirection
@@ -100,7 +98,7 @@ class EntryProjector(
             }
 
             data class Account(
-                val projector: ChooseOrCreateProjector<KeyValue<AccountId, AccountInfo>>,
+                val projector: ChooseOrCreateProjector<AccountIdWithInfo>,
             ) : PageType {
                 override val key: Int
                     get() = 1

@@ -13,8 +13,6 @@ import org.hnau.commons.gen.pipe.annotations.Pipe
 import org.hnau.commons.kotlin.KeyValue
 import org.hnau.pinfin.data.Amount
 import org.hnau.pinfin.data.AmountDirection
-import org.hnau.pinfin.data.expression.AmountExpression
-import org.hnau.pinfin.data.expression.Expression
 import org.hnau.pinfin.data.expression.fold
 import org.hnau.pinfin.model.transaction.edit.AmountEditModel
 import org.hnau.pinfin.projector.Localization

@@ -28,12 +28,11 @@ import org.hnau.commons.kotlin.foldNullable
 import org.hnau.commons.kotlin.ifNull
 import org.hnau.commons.kotlin.serialization.MutableStateFlowSerializer
 import org.hnau.commons.kotlin.toZipListOrNull
-import org.hnau.pinfin.data.CategoryId
 import org.hnau.pinfin.data.Record
 import org.hnau.pinfin.model.transaction.edit.utils.EditNavigateContext
 import org.hnau.pinfin.model.transaction.utils.RecordId
 import org.hnau.pinfin.model.transaction.utils.remove
-import org.hnau.pinfin.model.utils.budget.state.CategoryInfo
+import org.hnau.pinfin.model.utils.budget.state.CategoryIdWithInfo
 
 class TransactionRecordsEditModel(
     scope: CoroutineScope,
@@ -62,7 +61,7 @@ class TransactionRecordsEditModel(
             )
 
             fun create(
-                records: NonEmptyList<Record<KeyValue<CategoryId, CategoryInfo>>>,
+                records: NonEmptyList<Record<CategoryIdWithInfo>>,
             ): Skeleton = createFromSkeletons(
                 records = records.map(TransactionRecordEditModel.Skeleton::create)
             )
@@ -149,7 +148,7 @@ class TransactionRecordsEditModel(
         }
     }
 
-    val recordsEditable: StateFlow<Editable<NonEmptyList<Record<KeyValue<CategoryId, CategoryInfo>>>>> =
+    val recordsEditable: StateFlow<Editable<NonEmptyList<Record<CategoryIdWithInfo>>>> =
         derivedStateFlowOf(scope) {
             editable {
                 records.state.map { idWithRecord ->

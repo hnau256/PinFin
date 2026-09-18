@@ -7,7 +7,6 @@ package org.hnau.pinfin.model.transaction
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.UseSerializers
 import org.hnau.commons.app.model.goback.GoBackHandler
@@ -17,7 +16,6 @@ import org.hnau.commons.gen.fold.annotations.Fold
 import org.hnau.commons.gen.pipe.annotations.Pipe
 import org.hnau.commons.gen.sealup.annotations.SealUp
 import org.hnau.commons.gen.sealup.annotations.Variant
-import org.hnau.commons.kotlin.KeyValue
 import org.hnau.commons.kotlin.coroutines.ActionOrElse
 import org.hnau.commons.kotlin.coroutines.CancelOrInProgress
 import org.hnau.commons.kotlin.coroutines.actionOrCancelIfExecuting
@@ -40,8 +38,8 @@ import org.hnau.pinfin.model.transaction.pageable.DateModel
 import org.hnau.pinfin.model.transaction.pageable.TypeModel
 import org.hnau.pinfin.model.transaction.utils.toRawType
 import org.hnau.pinfin.model.utils.budget.repository.BudgetRepository
-import org.hnau.pinfin.model.utils.budget.state.AccountInfo
-import org.hnau.pinfin.model.utils.budget.state.CategoryInfo
+import org.hnau.pinfin.model.utils.budget.state.AccountIdWithInfo
+import org.hnau.pinfin.model.utils.budget.state.CategoryIdWithInfo
 
 class TransactionModel(
     private val scope: CoroutineScope,
@@ -123,7 +121,7 @@ class TransactionModel(
 
             fun createForEdit(
                 id: Transaction.Id,
-                transaction: Transaction<KeyValue<AccountId, AccountInfo>, KeyValue<CategoryId, CategoryInfo>, *>,
+                transaction: Transaction<AccountIdWithInfo, CategoryIdWithInfo, *>,
             ): Skeleton = Skeleton(
                 id = id,
                 type = TypeModel.Skeleton.createForEdit(

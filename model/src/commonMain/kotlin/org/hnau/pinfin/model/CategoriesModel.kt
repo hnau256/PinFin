@@ -12,13 +12,11 @@ import kotlinx.serialization.UseSerializers
 import org.hnau.commons.app.model.goback.GoBackHandler
 import org.hnau.commons.app.model.goback.NeverGoBackHandler
 import org.hnau.commons.gen.pipe.annotations.Pipe
-import org.hnau.commons.kotlin.KeyValue
 import org.hnau.commons.kotlin.coroutines.flow.state.mapState
 import org.hnau.commons.kotlin.serialization.MutableStateFlowSerializer
-import org.hnau.pinfin.data.CategoryId
 import org.hnau.pinfin.model.budgetstack.BudgetStackOpener
 import org.hnau.pinfin.model.utils.budget.repository.BudgetRepository
-import org.hnau.pinfin.model.utils.budget.state.CategoryInfo
+import org.hnau.pinfin.model.utils.budget.state.CategoryIdWithInfo
 
 class CategoriesModel(
     scope: CoroutineScope,
@@ -35,7 +33,7 @@ class CategoriesModel(
 
 
     data class Item(
-        val idWithCategory: KeyValue<CategoryId, CategoryInfo>,
+        val idWithCategory: CategoryIdWithInfo,
         val onClick: () -> Unit,
     )
 

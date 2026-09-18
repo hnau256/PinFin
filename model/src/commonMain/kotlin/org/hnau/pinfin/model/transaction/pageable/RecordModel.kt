@@ -29,13 +29,12 @@ import org.hnau.commons.kotlin.foldNullable
 import org.hnau.commons.kotlin.serialization.MutableStateFlowSerializer
 import org.hnau.pinfin.data.Amount
 import org.hnau.pinfin.data.AmountDirection
-import org.hnau.pinfin.data.CategoryId
 import org.hnau.pinfin.data.Comment
 import org.hnau.pinfin.data.Record
 import org.hnau.pinfin.model.transaction.utils.ChooseOrCreateModel
 import org.hnau.pinfin.model.transaction.utils.allRecords
 import org.hnau.pinfin.model.utils.budget.repository.BudgetRepository
-import org.hnau.pinfin.model.utils.budget.state.CategoryInfo
+import org.hnau.pinfin.model.utils.budget.state.CategoryIdWithInfo
 
 class RecordModel(
     private val scope: CoroutineScope,
@@ -77,7 +76,7 @@ class RecordModel(
         }
 
         data class Category(
-            val model: ChooseOrCreateModel<KeyValue<CategoryId, CategoryInfo>>,
+            val model: ChooseOrCreateModel<CategoryIdWithInfo>,
         ) : PageType {
             override val key: Int
                 get() = 1
@@ -147,7 +146,7 @@ class RecordModel(
             )
 
             fun createForEdit(
-                record: Record<KeyValue<CategoryId, CategoryInfo>>,
+                record: Record<CategoryIdWithInfo>,
             ): Skeleton = Skeleton(
                 comment = CommentModel.Skeleton.createForEdit(
                     comment = record.comment,
@@ -162,7 +161,7 @@ class RecordModel(
         }
     }
 
-    private val selectedCategoryWrapper: MutableStateFlow<StateFlow<KeyValue<CategoryId, CategoryInfo>?>> =
+    private val selectedCategoryWrapper: MutableStateFlow<StateFlow<CategoryIdWithInfo?>> =
         null.toMutableStateFlowAsInitial().toMutableStateFlowAsInitial()
 
     private val part: StateFlow<Part> = skeleton
@@ -266,7 +265,7 @@ class RecordModel(
         goForward = createGoForward(Part.Amount),
     )
 
-    val categoryWithAmount: StateFlow<Pair<KeyValue<CategoryId, CategoryInfo>, Amount>?> = category
+    val categoryWithAmount: StateFlow<Pair<CategoryIdWithInfo, Amount>?> = category
         .categoryEditable
         .flatMapWithScope(scope) { scope, categoryOrIncorrect ->
         categoryOrIncorrect.fold(
@@ -308,7 +307,7 @@ class RecordModel(
 
     fun createPage(
         scope: CoroutineScope,
-        usedCategories: StateFlow<List<KeyValue<CategoryId, CategoryInfo>>>,
+        usedCategories: StateFlow<List<CategoryIdWithInfo>>,
     ): Page = Page(
         scope = scope,
         remove = remove,
@@ -371,7 +370,7 @@ class RecordModel(
             )
         }
 
-    internal val record: StateFlow<Editable<Record<KeyValue<CategoryId, CategoryInfo>>>> = derivedStateFlowOf(scope) {
+    internal val record: StateFlow<Editable<Record<CategoryIdWithInfo>>> = derivedStateFlowOf(scope) {
         editable {
             Record(
                 amount = amount.amountEditable.state.bind(),

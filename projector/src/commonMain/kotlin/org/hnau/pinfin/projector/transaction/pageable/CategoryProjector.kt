@@ -4,11 +4,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import org.hnau.commons.gen.pipe.annotations.Pipe
-import org.hnau.commons.kotlin.KeyValue
-import org.hnau.pinfin.data.CategoryId
 import org.hnau.pinfin.model.transaction.pageable.CategoryModel
 import org.hnau.pinfin.model.transaction.utils.ChooseOrCreateModel
-import org.hnau.pinfin.model.utils.budget.state.CategoryInfo
+import org.hnau.pinfin.model.utils.budget.state.CategoryIdWithInfo
 import org.hnau.pinfin.projector.Localization
 import org.hnau.pinfin.projector.transaction.utils.ChooseOrCreateProjector
 import org.hnau.pinfin.projector.utils.CategoryContent
@@ -71,9 +69,9 @@ class CategoryProjector(
         }
 
         fun createPage(
-            model: ChooseOrCreateModel<KeyValue<CategoryId, CategoryInfo>>,
+            model: ChooseOrCreateModel<CategoryIdWithInfo>,
             dependencies: Dependencies,
-        ): ChooseOrCreateProjector<KeyValue<CategoryId, CategoryInfo>> = ChooseOrCreateProjector(
+        ): ChooseOrCreateProjector<CategoryIdWithInfo> = ChooseOrCreateProjector(
             model = model,
             dependencies = dependencies.chooseOrCreate(),
         ) { category, isSelected, onClick ->

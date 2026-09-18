@@ -16,21 +16,18 @@ import org.hnau.commons.app.model.goback.GoBackHandler
 import org.hnau.commons.app.model.utils.Editable
 import org.hnau.commons.gen.fold.annotations.Fold
 import org.hnau.commons.gen.pipe.annotations.Pipe
-import org.hnau.commons.kotlin.KeyValue
 import org.hnau.commons.kotlin.coroutines.flow.state.flatMapState
 import org.hnau.commons.kotlin.coroutines.flow.state.mapWithScope
 import org.hnau.commons.kotlin.coroutines.flow.state.mutable.mapMutableState
 import org.hnau.commons.kotlin.coroutines.flow.state.mutable.toMutableStateFlowAsInitial
 import org.hnau.commons.kotlin.mapper.Mapper
 import org.hnau.commons.kotlin.serialization.MutableStateFlowSerializer
-import org.hnau.pinfin.data.AccountId
-import org.hnau.pinfin.data.CategoryId
 import org.hnau.pinfin.data.Transaction
 import org.hnau.pinfin.data.TransactionType
 import org.hnau.pinfin.data.fold
 import org.hnau.pinfin.data.foldRaw
-import org.hnau.pinfin.model.utils.budget.state.AccountInfo
-import org.hnau.pinfin.model.utils.budget.state.CategoryInfo
+import org.hnau.pinfin.model.utils.budget.state.AccountIdWithInfo
+import org.hnau.pinfin.model.utils.budget.state.CategoryIdWithInfo
 
 class TypeModel(
     scope: CoroutineScope,
@@ -131,7 +128,7 @@ class TypeModel(
             )
 
             fun createForEdit(
-                type: Transaction.Type<KeyValue<AccountId, AccountInfo>, KeyValue<CategoryId, CategoryInfo>, *>,
+                type: Transaction.Type<AccountIdWithInfo, CategoryIdWithInfo, *>,
             ): Skeleton = Skeleton(
                 type = type.foldRaw(
                     ifEntry = { variant ->
@@ -255,7 +252,7 @@ class TypeModel(
         }
     )
 
-    internal val type: StateFlow<Editable<Transaction.Type<KeyValue<AccountId, AccountInfo>, KeyValue<CategoryId, CategoryInfo>, *>>> = typeModel.flatMapState(scope) { typeModel ->
+    internal val type: StateFlow<Editable<Transaction.Type<AccountIdWithInfo, CategoryIdWithInfo, *>>> = typeModel.flatMapState(scope) { typeModel ->
         typeModel.fold(
             ifEntry = { model -> model.entry },
             ifTransfer = { model -> model.transfer },

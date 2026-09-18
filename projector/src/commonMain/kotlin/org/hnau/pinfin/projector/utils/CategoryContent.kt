@@ -4,15 +4,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Shape
 import org.hnau.commons.app.projector.utils.rememberRun
-import org.hnau.commons.kotlin.KeyValue
 import org.hnau.commons.kotlin.foldNullable
-import org.hnau.pinfin.data.CategoryId
-import org.hnau.pinfin.model.utils.budget.state.CategoryInfo
+import org.hnau.pinfin.model.utils.budget.state.CategoryIdWithInfo
 import org.hnau.pinfin.projector.Localization
 
 @Composable
 fun CategoryContent(
-    info: KeyValue<CategoryId, CategoryInfo>?,
+    info: CategoryIdWithInfo?,
     localization: Localization,
     modifier: Modifier = Modifier,
     selected: Boolean = false,

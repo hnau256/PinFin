@@ -39,6 +39,7 @@ import org.hnau.pinfin.model.transaction.utils.ChooseOrCreateModel
 import org.hnau.pinfin.model.transaction.utils.allRecords
 import org.hnau.pinfin.model.utils.budget.repository.BudgetRepository
 import org.hnau.pinfin.model.utils.budget.state.BudgetState
+import org.hnau.pinfin.model.utils.budget.state.CategoryIdWithInfo
 import org.hnau.pinfin.model.utils.budget.state.CategoryInfo
 
 class CategoryModel(
@@ -62,8 +63,8 @@ class CategoryModel(
     @Serializable
     data class Skeleton(
         var chooseOrCreate: ChooseOrCreateModel.Skeleton? = null,
-        val initialIdWithCategory: KeyValue<CategoryId, CategoryInfo>?,
-        val manualIdWithCategory: MutableStateFlow<KeyValue<CategoryId, CategoryInfo>?> =
+        val initialIdWithCategory: CategoryIdWithInfo?,
+        val manualIdWithCategory: MutableStateFlow<CategoryIdWithInfo?> =
             initialIdWithCategory.toMutableStateFlowAsInitial(),
     ) {
 
@@ -74,7 +75,7 @@ class CategoryModel(
             )
 
             fun createForEdit(
-                idWithCategory: KeyValue<CategoryId, CategoryInfo>,
+                idWithCategory: CategoryIdWithInfo,
             ): Skeleton = Skeleton(
                 initialIdWithCategory = idWithCategory,
             )
@@ -83,8 +84,8 @@ class CategoryModel(
 
     fun createPage(
         scope: CoroutineScope,
-        usedCategories: StateFlow<List<KeyValue<CategoryId, CategoryInfo>>>,
-    ): ChooseOrCreateModel<KeyValue<CategoryId, CategoryInfo>> = ChooseOrCreateModel(
+        usedCategories: StateFlow<List<CategoryIdWithInfo>>,
+    ): ChooseOrCreateModel<CategoryIdWithInfo> = ChooseOrCreateModel(
         scope = scope,
         comparator = compareBy { it.value },
         dependencies = dependencies.chooseOrCreate(),
@@ -111,7 +112,7 @@ class CategoryModel(
         },
         selected = categoryEditable.mapState(
             scope = scope,
-            transform = Editable<KeyValue<CategoryId, CategoryInfo>>::valueOrNone,
+            transform = Editable<CategoryIdWithInfo>::valueOrNone,
         ),
         onReady = { selected ->
             skeleton.manualIdWithCategory.value = selected
@@ -121,7 +122,7 @@ class CategoryModel(
 
     private fun getCategoryBasedOnComment(
         scope: CoroutineScope,
-    ): StateFlow<Option<KeyValue<CategoryId, CategoryInfo>>> = dependencies
+    ): StateFlow<Option<CategoryIdWithInfo>> = dependencies
         .budgetRepository
         .state
         .combineStateWith(
@@ -163,7 +164,7 @@ class CategoryModel(
             initialValue = None,
         )
 
-    internal val categoryEditable: StateFlow<Editable<KeyValue<CategoryId, CategoryInfo>>> =
+    internal val categoryEditable: StateFlow<Editable<CategoryIdWithInfo>> =
         Editable.create(
             scope = scope,
             valueOrNone = skeleton
@@ -179,7 +180,7 @@ class CategoryModel(
             initialValueOrNone = skeleton.initialIdWithCategory.toOption(),
         )
 
-    val category: StateFlow<KeyValue<CategoryId, CategoryInfo>?> = categoryEditable
+    val category: StateFlow<CategoryIdWithInfo?> = categoryEditable
         .mapState(scope) { it.valueOrNone.getOrNull() }
 
     val goBackHandler: GoBackHandler

@@ -11,21 +11,18 @@ import org.hnau.commons.app.model.utils.editable
 import org.hnau.commons.gen.pipe.annotations.Pipe
 import org.hnau.commons.gen.sealup.annotations.SealUp
 import org.hnau.commons.gen.sealup.annotations.Variant
-import org.hnau.commons.kotlin.KeyValue
 import org.hnau.commons.kotlin.coroutines.flow.state.derivedStateFlowOf
 import org.hnau.commons.kotlin.coroutines.flow.state.mapState
 import org.hnau.commons.kotlin.coroutines.flow.state.mapWithScope
 import org.hnau.commons.kotlin.coroutines.flow.state.mutable.toMutableStateFlowAsInitial
-import org.hnau.pinfin.data.AccountId
-import org.hnau.pinfin.data.CategoryId
 import org.hnau.pinfin.data.Transaction
 import org.hnau.pinfin.data.TransactionType
 import org.hnau.pinfin.data.fold
 import org.hnau.pinfin.data.foldRaw
 import org.hnau.pinfin.data.records.RecordEntry
 import org.hnau.pinfin.model.transaction.edit.utils.EditNavigateContext
-import org.hnau.pinfin.model.utils.budget.state.AccountInfo
-import org.hnau.pinfin.model.utils.budget.state.CategoryInfo
+import org.hnau.pinfin.model.utils.budget.state.AccountIdWithInfo
+import org.hnau.pinfin.model.utils.budget.state.CategoryIdWithInfo
 
 class TransactionTypeEditModel(
     scope: CoroutineScope,
@@ -99,7 +96,7 @@ class TransactionTypeEditModel(
             )
 
             fun create(
-                type: Transaction.Type<KeyValue<AccountId, AccountInfo>, KeyValue<CategoryId, CategoryInfo>, *>,
+                type: Transaction.Type<AccountIdWithInfo, CategoryIdWithInfo, *>,
             ): Skeleton = Skeleton(
                 type = type
                     .foldRaw(
@@ -172,7 +169,7 @@ class TransactionTypeEditModel(
             }
     }
 
-    val typeEditable: StateFlow<Editable<Transaction.Type<KeyValue<AccountId, AccountInfo>, KeyValue<CategoryId, CategoryInfo>, RecordEntry<KeyValue<CategoryId, CategoryInfo>>>>> =
+    val typeEditable: StateFlow<Editable<Transaction.Type<AccountIdWithInfo, CategoryIdWithInfo, RecordEntry<CategoryIdWithInfo>>>> =
         derivedStateFlowOf(scope) {
             editable {
                 type.state.fold(

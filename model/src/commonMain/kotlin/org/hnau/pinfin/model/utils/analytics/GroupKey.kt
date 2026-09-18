@@ -1,11 +1,8 @@
 package org.hnau.pinfin.model.utils.analytics
 
 import org.hnau.commons.gen.fold.annotations.Fold
-import org.hnau.commons.kotlin.KeyValue
-import org.hnau.pinfin.data.AccountId
-import org.hnau.pinfin.data.CategoryId
-import org.hnau.pinfin.model.utils.budget.state.AccountInfo
-import org.hnau.pinfin.model.utils.budget.state.CategoryInfo
+import org.hnau.pinfin.model.utils.budget.state.AccountIdWithInfo
+import org.hnau.pinfin.model.utils.budget.state.CategoryIdWithInfo
 
 /**
  * Ключ группы для [calcPeriod]: то, по чему разбиваются суммы на странице аналитики —
@@ -19,10 +16,10 @@ sealed interface GroupKey {
     data object None : GroupKey
 
     data class Category(
-        val idWithCategory: KeyValue<CategoryId, CategoryInfo>?,
+        val idWithCategory: CategoryIdWithInfo?,
     ) : GroupKey
 
     data class Account(
-        val idWithAccount: KeyValue<AccountId, AccountInfo>,
+        val idWithAccount: AccountIdWithInfo,
     ) : GroupKey
 }

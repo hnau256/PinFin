@@ -1,7 +1,6 @@
 package org.hnau.pinfin.model.utils
 
 import arrow.core.NonEmptyList
-import arrow.core.toNonEmptyListOrThrow
 import org.hnau.commons.kotlin.KeyValue
 import org.hnau.pinfin.data.Amount
 import org.hnau.pinfin.data.AmountDirection
@@ -12,7 +11,7 @@ import org.hnau.pinfin.data.expression.AmountExpression
 import org.hnau.pinfin.data.plus
 import org.hnau.pinfin.data.records.FilteredRecord
 import org.hnau.pinfin.data.records.RecordEntry
-import org.hnau.pinfin.model.utils.budget.state.CategoryInfo
+import org.hnau.pinfin.model.utils.budget.state.CategoryIdWithInfo
 import kotlin.jvm.JvmName
 
 
@@ -23,13 +22,13 @@ fun NonEmptyList<RecordEntry<CategoryId>>.totalAmount(
     KeyValue(entry.record.category.direction, entry.record.amount)
 }.amount(currency)
 
-fun NonEmptyList<RecordEntry<KeyValue<CategoryId, CategoryInfo>>>.totalAmount(
+fun NonEmptyList<RecordEntry<CategoryIdWithInfo>>.totalAmount(
     currency: Currency,
 ): KeyValue<AmountDirection, Amount> = map { entry ->
     KeyValue(entry.record.resolvedDirection, entry.record.amount)
 }.amount(currency)
 
-fun NonEmptyList<FilteredRecord<KeyValue<CategoryId, CategoryInfo>>>.filteredAmount(
+fun NonEmptyList<FilteredRecord<CategoryIdWithInfo>>.filteredAmount(
     currency: Currency,
 ): KeyValue<AmountDirection, Amount> = includedRecords()
     .map { record -> KeyValue(record.resolvedDirection, record.amount) }
@@ -38,7 +37,7 @@ fun NonEmptyList<FilteredRecord<KeyValue<CategoryId, CategoryInfo>>>.filteredAmo
 fun <C> NonEmptyList<FilteredRecord<C>>.includedRecords(): List<Record<C>> = filter { it.included }
     .map { it.record }
 
-val Record<KeyValue<CategoryId, CategoryInfo>>.resolvedDirection: AmountDirection
+val Record<CategoryIdWithInfo>.resolvedDirection: AmountDirection
     get() = category.key.direction
 
 private fun List<KeyValue<AmountDirection, AmountExpression>>.amount(

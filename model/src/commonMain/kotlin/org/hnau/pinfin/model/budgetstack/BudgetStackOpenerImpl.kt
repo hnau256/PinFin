@@ -4,7 +4,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import org.hnau.commons.app.model.stack.NonEmptyStack
 import org.hnau.commons.app.model.stack.push
 import org.hnau.commons.gen.pipe.annotations.Pipe
-import org.hnau.commons.kotlin.KeyValue
 import org.hnau.pinfin.data.AccountId
 import org.hnau.pinfin.data.CategoryId
 import org.hnau.pinfin.data.Transaction
@@ -14,7 +13,9 @@ import org.hnau.pinfin.model.BudgetSettingsModel
 import org.hnau.pinfin.model.TransactionViewModel
 import org.hnau.pinfin.model.transaction.edit.TransactionEditModel
 import org.hnau.pinfin.model.utils.budget.repository.BudgetRepository
+import org.hnau.pinfin.model.utils.budget.state.AccountIdWithInfo
 import org.hnau.pinfin.model.utils.budget.state.AccountInfo
+import org.hnau.pinfin.model.utils.budget.state.CategoryIdWithInfo
 import org.hnau.pinfin.model.utils.budget.state.CategoryInfo
 
 class BudgetStackOpenerImpl(
@@ -48,7 +49,7 @@ class BudgetStackOpenerImpl(
 
     override fun openViewTransaction(
         id: Transaction.Id,
-        info: Transaction<KeyValue<AccountId, AccountInfo>, KeyValue<CategoryId, CategoryInfo>, FilteredRecord<KeyValue<CategoryId, CategoryInfo>>>
+        info: Transaction<AccountIdWithInfo, CategoryIdWithInfo, FilteredRecord<CategoryIdWithInfo>>
     ) {
         open(
             BudgetStackModel.ElementSkeleton.transactionView(
@@ -62,7 +63,7 @@ class BudgetStackOpenerImpl(
 
     override fun openEditTransaction(
         id: Transaction.Id,
-        info: Transaction<KeyValue<AccountId, AccountInfo>, KeyValue<CategoryId, CategoryInfo>, *>,
+        info: Transaction<AccountIdWithInfo, CategoryIdWithInfo, *>,
     ) {
         open(
             BudgetStackModel.ElementSkeleton.transactionEdit(

@@ -7,7 +7,9 @@ import org.hnau.pinfin.data.Record
 import org.hnau.pinfin.data.Transaction
 import org.hnau.pinfin.data.foldRaw
 import org.hnau.pinfin.data.records.SimpleRecord
+import org.hnau.pinfin.model.utils.budget.state.AccountIdWithInfo
 import org.hnau.pinfin.model.utils.budget.state.AccountInfo
+import org.hnau.pinfin.model.utils.budget.state.CategoryIdWithInfo
 import org.hnau.pinfin.model.utils.budget.state.CategoryInfo
 
 fun <A, C, A1, C1> Transaction<A, C, *>.map(
@@ -48,17 +50,17 @@ fun <C, C1> Record<C>.mapCategory(
 fun Transaction<AccountId, CategoryId, *>.toResolved(
     categories: Map<CategoryId, CategoryInfo>,
     accounts: Map<AccountId, AccountInfo>,
-): Transaction<KeyValue<AccountId, AccountInfo>, KeyValue<CategoryId, CategoryInfo>, *> = map(
+): Transaction<AccountIdWithInfo, CategoryIdWithInfo, *> = map(
     mapA = { id -> KeyValue(id, accounts.getValue(id)) },
     mapC = { id -> KeyValue(id, categories.getValue(id)) },
 )
 
-fun Transaction<KeyValue<AccountId, AccountInfo>, KeyValue<CategoryId, CategoryInfo>, *>.toRaw(): Transaction<AccountId, CategoryId, *> = map(
+fun Transaction<AccountIdWithInfo, CategoryIdWithInfo, *>.toRaw(): Transaction<AccountId, CategoryId, *> = map(
     mapA = { it.key },
     mapC = { it.key },
 )
 
-fun Transaction.Type<KeyValue<AccountId, AccountInfo>, KeyValue<CategoryId, CategoryInfo>, *>.toRawType(): Transaction.Type<AccountId, CategoryId, *> = foldRaw(
+fun Transaction.Type<AccountIdWithInfo, CategoryIdWithInfo, *>.toRawType(): Transaction.Type<AccountId, CategoryId, *> = foldRaw(
     ifEntry = { variant ->
         Transaction.Type.Entry(
             account = variant.account.key,

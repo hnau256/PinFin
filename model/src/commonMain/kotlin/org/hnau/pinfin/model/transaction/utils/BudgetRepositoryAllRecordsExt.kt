@@ -1,14 +1,12 @@
 package org.hnau.pinfin.model.transaction.utils
 
 import kotlinx.datetime.LocalDate
-import org.hnau.commons.kotlin.KeyValue
-import org.hnau.pinfin.data.CategoryId
 import org.hnau.pinfin.data.Record
 import org.hnau.pinfin.data.fold
 import org.hnau.pinfin.model.utils.budget.state.BudgetState
-import org.hnau.pinfin.model.utils.budget.state.CategoryInfo
+import org.hnau.pinfin.model.utils.budget.state.CategoryIdWithInfo
 
-val BudgetState.allRecords: List<Pair<LocalDate, Record<KeyValue<CategoryId, CategoryInfo>>>>
+val BudgetState.allRecords: List<Pair<LocalDate, Record<CategoryIdWithInfo>>>
     get() = this
         .transactions
         .flatMap { idWithTransaction ->

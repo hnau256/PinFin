@@ -27,6 +27,7 @@ import org.hnau.pinfin.data.Comment
 import org.hnau.pinfin.model.transaction.edit.utils.EditNavigateContext
 import org.hnau.pinfin.model.transaction.utils.allRecords
 import org.hnau.pinfin.model.utils.budget.repository.BudgetRepository
+import org.hnau.pinfin.model.utils.budget.state.CategoryIdWithInfo
 import org.hnau.pinfin.model.utils.budget.state.CategoryInfo
 
 class CategoryChooseModel(
@@ -42,9 +43,9 @@ class CategoryChooseModel(
 
     @Serializable
     data class Skeleton(
-        val initialIdWithCategory: KeyValue<CategoryId, CategoryInfo>?,
+        val initialIdWithCategory: CategoryIdWithInfo?,
         val choose: ChooseOrCreateModel.Skeleton = ChooseOrCreateModel.Skeleton(),
-        val manualIdWithCategory: MutableStateFlow<KeyValue<CategoryId, CategoryInfo>?> = initialIdWithCategory.toMutableStateFlowAsInitial(),
+        val manualIdWithCategory: MutableStateFlow<CategoryIdWithInfo?> = initialIdWithCategory.toMutableStateFlowAsInitial(),
     ) {
 
         companion object {
@@ -54,7 +55,7 @@ class CategoryChooseModel(
             )
 
             fun create(
-                idWithCategory: KeyValue<CategoryId, CategoryInfo>,
+                idWithCategory: CategoryIdWithInfo,
             ): Skeleton = Skeleton(
                 initialIdWithCategory = idWithCategory,
             )
@@ -69,7 +70,7 @@ class CategoryChooseModel(
         comment: StateFlow<Comment>,
     ) {
 
-        private val suggestedCategory: StateFlow<KeyValue<CategoryId, CategoryInfo>?> = dependencies
+        private val suggestedCategory: StateFlow<CategoryIdWithInfo?> = dependencies
             .budgetRepository
             .state
             .combineStateWith(
@@ -108,7 +109,7 @@ class CategoryChooseModel(
                 initialValue = null,
             )
 
-        val actualCategory: StateFlow<KeyValue<CategoryId, CategoryInfo>?> = skeleton
+        val actualCategory: StateFlow<CategoryIdWithInfo?> = skeleton
             .manualIdWithCategory
             .flatMapWithScope(scope) { scope, manualCategoryOrNull ->
                 manualCategoryOrNull
@@ -119,7 +120,7 @@ class CategoryChooseModel(
             }
     }
 
-    val choose: ChooseOrCreateModel<KeyValue<CategoryId, CategoryInfo>> = ChooseOrCreateModel(
+    val choose: ChooseOrCreateModel<CategoryIdWithInfo> = ChooseOrCreateModel(
         scope = delegate.scope,
         skeleton = delegate.skeleton.choose,
         getBaseVariants = { scope ->
@@ -153,7 +154,7 @@ class CategoryChooseModel(
         navigateContext = navigateContext,
     )
 
-    val categoryEditable: StateFlow<Editable<KeyValue<CategoryId, CategoryInfo>>> =
+    val categoryEditable: StateFlow<Editable<CategoryIdWithInfo>> =
         Editable.create(
             scope = delegate.scope,
             valueOrNone = delegate.actualCategory.mapState(delegate.scope) { it.toOption() },

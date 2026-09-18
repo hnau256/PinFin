@@ -51,10 +51,8 @@ import org.hnau.commons.kotlin.coroutines.ActionOrElse
 import org.hnau.commons.kotlin.coroutines.flow.state.mapState
 import org.hnau.commons.kotlin.coroutines.instant
 import org.hnau.commons.kotlin.it
-import org.hnau.pinfin.data.AccountId
 import org.hnau.pinfin.data.Amount
 import org.hnau.pinfin.data.AmountDirection
-import org.hnau.pinfin.data.CategoryId
 import org.hnau.pinfin.data.Currency
 import org.hnau.pinfin.data.Transaction
 import org.hnau.pinfin.data.fold
@@ -62,8 +60,8 @@ import org.hnau.pinfin.data.foldRaw
 import org.hnau.pinfin.data.plus
 import org.hnau.pinfin.data.records.FilteredRecord
 import org.hnau.pinfin.model.TransactionViewModel
-import org.hnau.pinfin.model.utils.budget.state.AccountInfo
-import org.hnau.pinfin.model.utils.budget.state.CategoryInfo
+import org.hnau.pinfin.model.utils.budget.state.AccountIdWithInfo
+import org.hnau.pinfin.model.utils.budget.state.CategoryIdWithInfo
 import org.hnau.pinfin.model.utils.resolvedDirection
 import org.hnau.pinfin.model.utils.totalAmount
 import org.hnau.pinfin.projector.utils.AccountContent
@@ -284,7 +282,7 @@ class TransactionViewProjector(
     }
 
     private fun SLazyTableScope.RecordsSection(
-        records: List<FilteredRecord<KeyValue<CategoryId, CategoryInfo>>>,
+        records: List<FilteredRecord<CategoryIdWithInfo>>,
         currency: Currency,
     ) {
         cells(
@@ -369,7 +367,7 @@ class TransactionViewProjector(
 
     @Composable
     private fun EntryAmount(
-        records: List<FilteredRecord<KeyValue<CategoryId, CategoryInfo>>>,
+        records: List<FilteredRecord<CategoryIdWithInfo>>,
         currency: Currency,
     ) {
         val hasIncluded = records.any { it.included }
@@ -405,7 +403,7 @@ class TransactionViewProjector(
 
     @Composable
     private fun TransferContent(
-        transfer: Transaction.Type.Transfer<KeyValue<AccountId, AccountInfo>>,
+        transfer: Transaction.Type.Transfer<AccountIdWithInfo>,
     ) {
         ItemsRow {
             AccountContent(
@@ -425,7 +423,7 @@ class TransactionViewProjector(
     }
 
     private fun amount(
-        transaction: Transaction<KeyValue<AccountId, AccountInfo>, KeyValue<CategoryId, CategoryInfo>, FilteredRecord<KeyValue<CategoryId, CategoryInfo>>>,
+        transaction: Transaction<AccountIdWithInfo, CategoryIdWithInfo, FilteredRecord<CategoryIdWithInfo>>,
         currency: Currency,
     ): KeyValue<AmountDirection, Amount> = transaction.type.fold(
         ifTransfer = { _, _, amount ->
@@ -439,7 +437,7 @@ class TransactionViewProjector(
         },
     )
 
-    private fun List<FilteredRecord<KeyValue<CategoryId, CategoryInfo>>>.sumAmount(
+    private fun List<FilteredRecord<CategoryIdWithInfo>>.sumAmount(
         currency: Currency,
     ): KeyValue<AmountDirection, Amount> = fold(
         initial = KeyValue(

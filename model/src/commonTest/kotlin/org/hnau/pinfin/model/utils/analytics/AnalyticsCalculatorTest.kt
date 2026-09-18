@@ -14,7 +14,9 @@ import org.hnau.pinfin.data.expression.AmountExpression
 import org.hnau.pinfin.model.utils.analytics.period.AnalyticsPeriod
 import org.hnau.pinfin.model.utils.analytics.period.PeriodDuration
 import org.hnau.pinfin.model.utils.analytics.period.PeriodUnit
+import org.hnau.pinfin.model.utils.budget.state.AccountIdWithInfo
 import org.hnau.pinfin.model.utils.budget.state.AccountInfo
+import org.hnau.pinfin.model.utils.budget.state.CategoryIdWithInfo
 import org.hnau.pinfin.model.utils.budget.state.CategoryInfo
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -55,10 +57,10 @@ class AnalyticsCalculatorTest {
         .toAmount(currency.scale)
 
     private fun entry(
-        category: KeyValue<CategoryId, CategoryInfo>,
+        category: CategoryIdWithInfo,
         amount: String,
         date: LocalDate,
-        account: KeyValue<AccountId, AccountInfo> = this.account,
+        account: AccountIdWithInfo = this.account,
     ): AnalyticsEntry = AnalyticsEntry(
         idWithAccount = account,
         idWithCategoryOrDirection = Either.Right(category),
