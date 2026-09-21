@@ -102,7 +102,7 @@ class TransactionEditProjector(
         contentPadding: PaddingValues,
     ) {
         val localization = dependencies.localization
-        val typeValue by type.value.collectAsState()
+        val typeValue by type.variant.collectAsState()
         val recordProjectors = typeValue.fold(
             ifEntry = { entry -> entry.records.records.collectAsState().value },
             ifTransfer = { null },
@@ -126,7 +126,7 @@ class TransactionEditProjector(
                             comment.Content()
                         }
                         cell(key = "type") {
-                            type.Content()
+                            type.CellContent()
                         }
                         typeValue.fold(
                             ifEntry = { entry ->

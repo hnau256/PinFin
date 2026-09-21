@@ -8,15 +8,21 @@ import arrow.core.nonEmptyListOf
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.StateFlow
 import org.hnau.commons.app.projector.fractal.SItem
+import org.hnau.commons.app.projector.fractal.SPanel
 import org.hnau.commons.app.projector.fractal.STabs
 import org.hnau.commons.app.projector.fractal.SText
-import org.hnau.commons.gen.fold.annotations.Fold
+import org.hnau.commons.app.projector.fractal.table.lazy.SLazyTableScope
 import org.hnau.commons.gen.pipe.annotations.Pipe
+import org.hnau.commons.gen.sealup.annotations.SealUp
+import org.hnau.commons.gen.sealup.annotations.Variant
+import org.hnau.commons.kotlin.KeyValue
+import org.hnau.commons.kotlin.ZipList
 import org.hnau.commons.kotlin.coroutines.flow.state.mapWithScope
 import org.hnau.pinfin.data.Currency
 import org.hnau.pinfin.data.TransactionType
 import org.hnau.pinfin.model.transaction.edit.TransactionTypeEditModel
 import org.hnau.pinfin.model.transaction.edit.fold
+import org.hnau.pinfin.model.transaction.utils.RecordId
 import org.hnau.pinfin.projector.Localization
 import org.hnau.pinfin.projector.utils.title
 
@@ -37,24 +43,31 @@ class TransactionTypeEditProjector(
         fun transfer(): TransactionTransferEditProjector.Dependencies
     }
 
-    @Fold
-    sealed interface Value {
+    @SealUp(
+        variants = [
+            Variant(
+                type = TransactionEntryEditProjector::class,
+                identifier = "entry",
+            ),
+            Variant(
+                type = TransactionTransferEditProjector::class,
+                identifier = "transfer",
+            ),
+        ],
+        sealedInterfaceName = "TransactionTypeVariantProjector",
+        wrappedValuePropertyName = "projector",
+    )
+    interface Variant {
 
-        data class Entry(
-            val projector: TransactionEntryEditProjector,
-        ) : Value
-
-        data class Transfer(
-            val projector: TransactionTransferEditProjector,
-        ) : Value
+        companion object
     }
 
-    val value: StateFlow<Value> = model
+    val variant: StateFlow<TransactionTypeVariantProjector> = model
         .type
         .mapWithScope(scope) { scope, typeModel ->
             typeModel.fold(
                 ifEntry = { entryModel ->
-                    Value.Entry(
+                    TransactionTypeVariantProjector.Entry(
                         projector = TransactionEntryEditProjector(
                             scope = scope,
                             model = entryModel,
@@ -64,7 +77,7 @@ class TransactionTypeEditProjector(
                     )
                 },
                 ifTransfer = { transferModel ->
-                    Value.Transfer(
+                    TransactionTypeVariantProjector.Transfer(
                         projector = TransactionTransferEditProjector(
                             model = transferModel,
                             dependencies = dependencies.transfer(),
@@ -75,26 +88,35 @@ class TransactionTypeEditProjector(
         }
 
     @Composable
-    fun Content(
+    fun CellContent(
         modifier: Modifier = Modifier,
     ) {
-        val variant by model.typeVariant.collectAsState()
-        SItem(
-            modifier = modifier,
-            topAccessory = {
+        SPanel {
+            val variant by model.typeVariant.collectAsState()
+            SItem(
+                modifier = modifier,
+                endAccessory = {
+                    STabs(
+                        items = nonEmptyListOf(
+                            TransactionType.Entry,
+                            TransactionType.Transfer,
+                        ),
+                        getSelection = { variant },
+                        onSelectionChanged = model::setType,
+                    ) { type ->
+                        SText(type.title(dependencies.localization))
+                    }
+                }
+            ) {
                 SText(dependencies.localization.type)
-            },
-        ) {
-            STabs(
-                items = nonEmptyListOf(
-                    TransactionType.Entry,
-                    TransactionType.Transfer,
-                ),
-                getSelection = { variant },
-                onSelectionChanged = model::setType,
-            ) { type ->
-                SText(type.title(dependencies.localization))
             }
         }
     }
 }
+
+fun TransactionTypeVariantProjector.Content(
+    scope: SLazyTableScope,
+) = fold(
+    ifEntry = { it.Content(scope) },
+    ifTransfer = { it.Content(scope) },
+)

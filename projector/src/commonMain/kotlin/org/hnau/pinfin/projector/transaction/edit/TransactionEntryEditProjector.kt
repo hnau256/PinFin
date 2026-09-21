@@ -57,6 +57,14 @@ class TransactionEntryEditProjector(
         dependencies = dependencies.records(),
     )
 
+
+
+    fun Content(
+        scope: SLazyTableScope,
+    ) {
+
+    }
+
     fun Content(
         scope: SLazyTableScope,
         recordProjectors: ZipList<KeyValue<RecordId, TransactionRecordEditProjector>>,

@@ -36,6 +36,7 @@ class TransactionTransferEditProjector(
         dependencies = dependencies.amount(),
     )
 
+
     fun Content(
         scope: SLazyTableScope,
     ) {
