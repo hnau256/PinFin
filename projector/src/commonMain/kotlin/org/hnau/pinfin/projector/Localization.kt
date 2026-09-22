@@ -1,6 +1,7 @@
 package org.hnau.pinfin.projector
 
 import androidx.compose.runtime.Immutable
+import kotlinx.datetime.format.MonthNames
 import org.hnau.pinfin.model.utils.budget.repository.demo.DemoBudgetLocalization
 
 @Immutable
@@ -127,6 +128,57 @@ data class Localization(
     val incorrectMantissaLength: String = "Некорректное количество знаков после запятой",
     val accessByMCP: String = "Доступ через MCP",
     val noSuggests: String = "Нет предложений",
+    val monthNamesGenitive: MonthNames = MonthNames(
+        january = "января",
+        february = "февраля",
+        march = "марта",
+        april = "апреля",
+        may = "мая",
+        june = "июня",
+        july = "июля",
+        august = "августа",
+        september = "сентября",
+        october = "октября",
+        november = "ноября",
+        december = "декабря",
+    ),
+    val monthNamesNominative: MonthNames = MonthNames(
+        january = "Январь",
+        february = "Февраль",
+        march = "Март",
+        april = "Апрель",
+        may = "Май",
+        june = "Июнь",
+        july = "Июль",
+        august = "Август",
+        september = "Сентябрь",
+        october = "Октябрь",
+        november = "Ноябрь",
+        december = "Декабрь",
+    ),
+    val monthNamesAbbreviated: MonthNames = MonthNames(
+        january = "янв",
+        february = "фев",
+        march = "мар",
+        april = "апр",
+        may = "мая",
+        june = "июн",
+        july = "июл",
+        august = "авг",
+        september = "сен",
+        october = "окт",
+        november = "ноя",
+        december = "дек",
+    ),
+    val weekdayNamesGenitive: List<String> = listOf(
+        "понедельника",
+        "вторника",
+        "среды",
+        "четверга",
+        "пятницы",
+        "субботы",
+        "воскресенья",
+    ),
 ) {
 
     companion object {

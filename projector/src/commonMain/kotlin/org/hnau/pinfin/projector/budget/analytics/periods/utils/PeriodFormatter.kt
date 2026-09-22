@@ -4,8 +4,8 @@ import kotlinx.datetime.DayOfWeek
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalDateRange
 import kotlinx.datetime.Month
-import kotlinx.datetime.number
-import kotlinx.datetime.toJavaLocalDate
+import kotlinx.datetime.format.DateTimeFormat
+import kotlinx.datetime.format.char
 import org.hnau.commons.kotlin.foldBoolean
 import org.hnau.pinfin.model.utils.analytics.AnalyticsConfig
 import org.hnau.pinfin.model.utils.analytics.fold
@@ -14,8 +14,6 @@ import org.hnau.pinfin.model.utils.analytics.period.PeriodDuration
 import org.hnau.pinfin.model.utils.analytics.period.PeriodUnit
 import org.hnau.pinfin.model.utils.analytics.period.fold
 import org.hnau.pinfin.projector.Localization
-import java.util.Locale
-import java.time.format.DateTimeFormatter as JavaDateTimeFormatterFromJava
 
 /**
  * Заголовок периода (docs/analytics-v2-plan.md, "2.4. Навигация по периодам"): для месяца
@@ -23,49 +21,61 @@ import java.time.format.DateTimeFormatter as JavaDateTimeFormatterFromJava
  */
 fun AnalyticsPeriod.formatPeriod(
     period: LocalDateRange,
+    localization: Localization,
 ): String = fold(
-    ifWhole = { formatRange(period) },
+    ifWhole = { formatRange(period, localization) },
     ifMonths = { count, startDay ->
         (count == 1 && startDay == 1 && period.start.day == 1).foldBoolean(
-            ifTrue = { formatMonthAndYear(period.start) },
-            ifFalse = { formatRange(period) },
+            ifTrue = { formatMonthAndYear(period.start, localization) },
+            ifFalse = { formatRange(period, localization) },
         )
     },
     ifYears = { count, startMonth, startDay ->
         (count == 1 && startMonth == Month.JANUARY && startDay == 1 && period.start == yearStartOf(period.start)).foldBoolean(
             ifTrue = { period.start.year.toString() },
-            ifFalse = { formatRange(period) },
+            ifFalse = { formatRange(period, localization) },
         )
     },
-    ifDays = { _, _ -> formatRange(period) },
+    ifDays = { _, _ -> formatRange(period, localization) },
 )
 
 private fun yearStartOf(
     date: LocalDate,
 ): LocalDate = LocalDate(date.year, Month.JANUARY, 1)
 
-private val monthYearFormatter: JavaDateTimeFormatterFromJava =
-    JavaDateTimeFormatterFromJava.ofPattern("LLLL yyyy", Locale("ru"))
+private fun monthYearFormat(
+    localization: Localization,
+): DateTimeFormat<LocalDate> = LocalDate.Format {
+    monthName(localization.monthNamesNominative)
+    char(' ')
+    year()
+}
 
-private val shortDateFormatter: JavaDateTimeFormatterFromJava =
-    JavaDateTimeFormatterFromJava.ofPattern("d MMM", Locale("ru"))
+private fun shortFormat(
+    localization: Localization,
+): DateTimeFormat<LocalDate> = LocalDate.Format {
+    day()
+    char(' ')
+    monthName(localization.monthNamesAbbreviated)
+}
 
 private fun formatMonthAndYear(
     date: LocalDate,
-): String = date
-    .toJavaLocalDate()
-    .format(monthYearFormatter)
+    localization: Localization,
+): String = monthYearFormat(localization)
+    .format(date)
     .replaceFirstChar(Char::uppercase)
 
 private fun formatShort(
     date: LocalDate,
-): String = date
-    .toJavaLocalDate()
-    .format(shortDateFormatter)
+    localization: Localization,
+): String = shortFormat(localization)
+    .format(date)
 
 private fun formatRange(
     period: LocalDateRange,
-): String = "${formatShort(period.start)} – ${formatShort(period.endInclusive)} ${period.endInclusive.year}"
+    localization: Localization,
+): String = "${formatShort(period.start, localization)} – ${formatShort(period.endInclusive, localization)} ${period.endInclusive.year}"
 
 /**
  * Резюме конфига одной строкой для карточки над списком (docs/analytics-v2-plan.md,
@@ -109,14 +119,14 @@ private fun AnalyticsPeriod.describe(
         )
         (startMonth == Month.JANUARY && startDay == 1).foldBoolean(
             ifTrue = { base },
-            ifFalse = { "$base с $startDay ${monthGenitive(startMonth)}" },
+            ifFalse = { "$base с $startDay ${monthGenitive(startMonth, localization)}" },
         )
     },
     ifDays = { count, anchor ->
         if (count == 7) {
-            "${localization.presetWeek} с ${weekdayGenitive(anchor.dayOfWeek)}"
+            "${localization.presetWeek} с ${weekdayGenitive(anchor.dayOfWeek, localization)}"
         } else if (count % 7 == 0) {
-            "${count / 7} × ${localization.presetWeek.lowercase()} с ${weekdayGenitive(anchor.dayOfWeek)}"
+            "${count / 7} × ${localization.presetWeek.lowercase()} с ${weekdayGenitive(anchor.dayOfWeek, localization)}"
         } else {
             "$count ${localization.days}"
         }
@@ -131,24 +141,17 @@ private fun PeriodDuration.describe(
     PeriodUnit.Year -> (count == 1).foldBoolean(ifTrue = { localization.year }, ifFalse = { "$count ${localization.years}" })
 }
 
-private val monthGenitives = listOf(
-    "января", "февраля", "марта", "апреля", "мая", "июня",
-    "июля", "августа", "сентября", "октября", "ноября", "декабря",
-)
-
 private fun monthGenitive(
     month: Month,
-): String = monthGenitives.getOrElse(month.number - 1) { month.name }
+    localization: Localization,
+): String = localization
+    .monthNamesGenitive
+    .names
+    .getOrElse(month.ordinal) { month.name }
 
 private fun weekdayGenitive(
     dayOfWeek: DayOfWeek,
-): String = when (dayOfWeek) {
-    DayOfWeek.MONDAY -> "понедельника"
-    DayOfWeek.TUESDAY -> "вторника"
-    DayOfWeek.WEDNESDAY -> "среды"
-    DayOfWeek.THURSDAY -> "четверга"
-    DayOfWeek.FRIDAY -> "пятницы"
-    DayOfWeek.SATURDAY -> "субботы"
-    DayOfWeek.SUNDAY -> "воскресенья"
-    else -> dayOfWeek.name
-}
+    localization: Localization,
+): String = localization
+    .weekdayNamesGenitive
+    .getOrElse(dayOfWeek.ordinal) { dayOfWeek.name }

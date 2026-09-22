@@ -7,3 +7,4 @@ build
 storage.json
 app/budgets
 app/preferences.txt
+kotlin-js-store/

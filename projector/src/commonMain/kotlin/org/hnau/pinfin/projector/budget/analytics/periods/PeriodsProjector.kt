@@ -112,7 +112,7 @@ class PeriodsProjector(
                                             style = MaterialTheme.typography.titleMedium,
                                             maxLines = 1,
                                             textAlign = TextAlign.Center,
-                                            text = periodsModel.config.period.formatPeriod(period),
+                                            text = periodsModel.config.period.formatPeriod(period, dependencies.localization),
                                         )
                                         NavigateIcon(
                                             onClick = switchToNext,

@@ -11,7 +11,7 @@ import org.hnau.commons.gen.pipe.annotations.Pipe
 import org.hnau.pinfin.model.RootModel
 import org.hnau.pinfin.projector.utils.formatter.AmountFormatter
 import org.hnau.pinfin.projector.utils.formatter.datetime.DateTimeFormatter
-import org.hnau.pinfin.projector.utils.formatter.datetime.JavaDateTimeFormatter
+import org.hnau.pinfin.projector.utils.formatter.datetime.createDateTimeFormatter
 
 class RootProjector(
     private val scope: CoroutineScope,
@@ -38,7 +38,7 @@ class RootProjector(
         scope = scope,
         dependencies = dependencies.loadBudgets(
             //bubblesShower = bubblesHolder,
-            dateTimeFormatter = JavaDateTimeFormatter(), //TODO
+            dateTimeFormatter = createDateTimeFormatter(Localization.default), //TODO
             amountFormatter = AmountFormatter.test,
         ),
         model = model.loadBudgets,
