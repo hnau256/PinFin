@@ -59,6 +59,10 @@ class TransactionTypeEditProjector(
     )
     interface Variant {
 
+        fun Content(
+            scope: SLazyTableScope,
+        )
+
         companion object
     }
 
@@ -97,10 +101,7 @@ class TransactionTypeEditProjector(
                 modifier = modifier,
                 endAccessory = {
                     STabs(
-                        items = nonEmptyListOf(
-                            TransactionType.Entry,
-                            TransactionType.Transfer,
-                        ),
+                        items = TransactionType.nonEmptyEntries,
                         getSelection = { variant },
                         onSelectionChanged = model::setType,
                     ) { type ->
@@ -113,10 +114,3 @@ class TransactionTypeEditProjector(
         }
     }
 }
-
-fun TransactionTypeVariantProjector.Content(
-    scope: SLazyTableScope,
-) = fold(
-    ifEntry = { it.Content(scope) },
-    ifTransfer = { it.Content(scope) },
-)

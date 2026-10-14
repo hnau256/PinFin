@@ -5,7 +5,9 @@ import kotlinx.serialization.Serializable
 import org.hnau.commons.gen.enumvalues.annotations.EnumValues
 import org.hnau.commons.gen.fold.annotations.Fold
 
-@Fold
+@Fold(
+    nonEmptyEntries = true,
+)
 @EnumValues(serializable = true)
 @Serializable
 enum class TransactionType {
