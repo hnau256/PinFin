@@ -74,7 +74,6 @@ class TransactionEntryEditProjector(
         }
         records.Content(
             scope = scope,
-            recordProjectors = recordProjectors,
         )
     }
 

@@ -43,7 +43,6 @@ class TransactionRecordsEditProjector(
 
     fun Content(
         scope: SLazyTableScope,
-        recordProjectors: ZipList<KeyValue<RecordId, TransactionRecordEditProjector>>,
     ) {
         with(scope) {
             separator(key = "records_separator")
