@@ -6,6 +6,7 @@ import androidx.compose.material.icons.filled.Save
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import arrow.core.Either
 import kotlinx.coroutines.CoroutineScope
 import org.hnau.commons.app.projector.fractal.DialogContentInfo
 import org.hnau.commons.app.projector.fractal.SButton
@@ -14,17 +15,22 @@ import org.hnau.commons.app.projector.fractal.SDialog
 import org.hnau.commons.app.projector.fractal.SScreen
 import org.hnau.commons.app.projector.fractal.SText
 import org.hnau.commons.app.projector.fractal.table.lazy.SLazyTable
+import org.hnau.commons.app.projector.fractal.table.lazy.SLazyTableScope
 import org.hnau.commons.app.projector.fractal.table.lazy.cell
 import org.hnau.commons.app.projector.utils.Drawable
 import org.hnau.commons.app.projector.utils.Orientation
 import org.hnau.commons.app.projector.utils.TitleOrIcon
 import org.hnau.commons.gen.pipe.annotations.Pipe
+import org.hnau.commons.kotlin.KeyValue
+import org.hnau.commons.kotlin.ZipList
 import org.hnau.commons.kotlin.coroutines.ActionOrElse
 import org.hnau.commons.kotlin.coroutines.flow.state.mapState
 import org.hnau.commons.kotlin.coroutines.instant
 import org.hnau.commons.kotlin.foldNullable
 import org.hnau.pinfin.model.transaction.edit.TransactionEditModel
+import org.hnau.pinfin.model.transaction.utils.RecordId
 import org.hnau.pinfin.projector.Localization
+import org.hnau.pinfin.projector.transaction.edit.utils.TransactionSection
 
 class TransactionEditProjector(
     scope: CoroutineScope,
@@ -54,12 +60,11 @@ class TransactionEditProjector(
         dependencies = dependencies.comment(),
     )
 
-    private val type = TransactionTypeEditProjector(
+    private val type: TransactionSection<Either<KeyValue<ZipList<KeyValue<RecordId, TransactionRecordEditProjector>>, SLazyTableScope.(ZipList<KeyValue<RecordId, TransactionRecordEditProjector>>) -> Unit>, KeyValue<Unit, SLazyTableScope.(Unit) -> Unit>>> = TransactionTypeEditProjector(
         scope = scope,
         model = model.type,
-        currency = model.currency,
         dependencies = dependencies.type(),
-    )
+    ).section
 
     private val dialogInfo = model
         .goBackDelegate
@@ -102,11 +107,7 @@ class TransactionEditProjector(
         contentPadding: PaddingValues,
     ) {
         val localization = dependencies.localization
-        val typeValue by type.variant.collectAsState()
-        val recordProjectors = typeValue.fold(
-            ifEntry = { entry -> entry.records.records.collectAsState().value },
-            ifTransfer = { null },
-        )
+        val typeState by type.state.collectAsState()
 
         SScreen(
             contentPadding = contentPadding,
@@ -125,24 +126,7 @@ class TransactionEditProjector(
                         cell(key = "comment") {
                             comment.Content()
                         }
-                        cell(key = "type") {
-                            type.CellContent()
-                        }
-                        typeValue.fold(
-                            ifEntry = { entry ->
-                                recordProjectors?.let { recordProjectorsNotNull ->
-                                    entry.Content(
-                                        scope = this,
-                                        recordProjectors = recordProjectorsNotNull,
-                                    )
-                                }
-                            },
-                            ifTransfer = { transfer ->
-                                transfer.Content(
-                                    scope = this,
-                                )
-                            },
-                        )
+                        type.content(this, typeState)
                     }
                 },
                 actions = {

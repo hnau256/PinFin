@@ -4,6 +4,7 @@ import com.ionspin.kotlin.bignum.decimal.BigDecimal
 import com.ionspin.kotlin.bignum.decimal.toBigDecimal
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.builtins.serializer
+import org.hnau.commons.kotlin.KeyValue
 import org.hnau.commons.kotlin.mapper.Mapper
 import org.hnau.commons.kotlin.mapper.plus
 import org.hnau.commons.kotlin.serialization.MappingKSerializer
@@ -43,6 +44,11 @@ value class Amount private constructor(
 
         val zero: Amount = Amount(
             value = BigDecimal.ZERO,
+        )
+
+        val zeroDirectioned: KeyValue<AmountDirection, Amount> = KeyValue(
+            key = AmountDirection.Credit,
+            value = zero,
         )
 
         @Deprecated("Use createOrNull instead")

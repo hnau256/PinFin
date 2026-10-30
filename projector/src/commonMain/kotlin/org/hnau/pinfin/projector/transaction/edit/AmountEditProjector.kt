@@ -6,7 +6,9 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import org.hnau.commons.app.model.utils.fold
 import org.hnau.commons.app.projector.fractal.SItem
+import org.hnau.commons.app.projector.fractal.SPanel
 import org.hnau.commons.app.projector.fractal.SText
+import org.hnau.commons.app.projector.fractal.table.lazy.cell
 import org.hnau.commons.app.projector.uikit.state.BooleanStateContent
 import org.hnau.commons.app.projector.uikit.transition.TransitionSpec
 import org.hnau.commons.gen.pipe.annotations.Pipe
@@ -16,6 +18,7 @@ import org.hnau.pinfin.data.AmountDirection
 import org.hnau.pinfin.data.expression.fold
 import org.hnau.pinfin.model.transaction.edit.AmountEditModel
 import org.hnau.pinfin.projector.Localization
+import org.hnau.pinfin.projector.transaction.edit.utils.TransactionSection
 import org.hnau.pinfin.projector.utils.formatter.AmountFormatter
 
 class AmountEditProjector(
@@ -29,6 +32,14 @@ class AmountEditProjector(
         val localization: Localization
 
         val amountFormatter: AmountFormatter
+    }
+
+    val section: TransactionSection<Unit> = TransactionSection.immutable {
+        cell {
+            SPanel {
+                Content()
+            }
+        }
     }
 
     @Composable

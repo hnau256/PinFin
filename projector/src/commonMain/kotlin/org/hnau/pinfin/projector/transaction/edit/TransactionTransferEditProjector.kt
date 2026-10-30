@@ -1,12 +1,13 @@
 package org.hnau.pinfin.projector.transaction.edit
 
-import androidx.compose.ui.Modifier
-import org.hnau.commons.app.projector.fractal.table.lazy.SLazyTableScope
-import org.hnau.commons.app.projector.fractal.table.lazy.cell
+import kotlinx.coroutines.CoroutineScope
 import org.hnau.commons.gen.pipe.annotations.Pipe
+import org.hnau.commons.kotlin.mapper.Mapper
 import org.hnau.pinfin.model.transaction.edit.TransactionTransferEditModel
+import org.hnau.pinfin.projector.transaction.edit.utils.TransactionSection
 
 class TransactionTransferEditProjector(
+    scope: CoroutineScope,
     model: TransactionTransferEditModel,
     private val dependencies: Dependencies,
 ) {
@@ -14,21 +15,19 @@ class TransactionTransferEditProjector(
     @Pipe
     interface Dependencies {
 
-        fun from(): AccountChooseEditProjector.Dependencies
-
-        fun to(): AccountChooseEditProjector.Dependencies
+        fun accountChoose(): AccountChooseEditProjector.Dependencies
 
         fun amount(): AmountEditProjector.Dependencies
     }
 
     private val from = AccountChooseEditProjector(
         model = model.from,
-        dependencies = dependencies.from(),
+        dependencies = dependencies.accountChoose(),
     )
 
     private val to = AccountChooseEditProjector(
         model = model.to,
-        dependencies = dependencies.to(),
+        dependencies = dependencies.accountChoose(),
     )
 
     private val amount = AmountEditProjector(
@@ -36,26 +35,21 @@ class TransactionTransferEditProjector(
         dependencies = dependencies.amount(),
     )
 
-
-    fun Content(
-        scope: SLazyTableScope,
-    ) {
-        with(scope) {
-            cell(key = "transfer_from") {
-                from.Content(
-                    modifier = Modifier.animateItem(),
-                )
-            }
-            cell(key = "transfer_to") {
-                to.Content(
-                    modifier = Modifier.animateItem(),
-                )
-            }
-            cell(key = "transfer_amount") {
-                amount.Content(
-                    modifier = Modifier.animateItem(),
-                )
-            }
-        }
-    }
+    val section: TransactionSection<Unit> = TransactionSection.composed(
+        scope = scope,
+        first = TransactionSection.composed(
+            scope = scope,
+            first = from.section,
+            second = to.section,
+            joiner = Mapper(
+                direct = {},
+                reverse = { Unit to Unit },
+            ),
+        ),
+        second = amount.section,
+        joiner = Mapper(
+            direct = {},
+            reverse = { Unit to Unit },
+        ),
+    )
 }

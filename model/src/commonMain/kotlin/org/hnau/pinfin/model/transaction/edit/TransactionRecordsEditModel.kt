@@ -15,10 +15,12 @@ import kotlinx.serialization.UseSerializers
 import org.hnau.commons.app.model.goback.GoBackHandler
 import org.hnau.commons.app.model.utils.Editable
 import org.hnau.commons.app.model.utils.editable
+import org.hnau.commons.app.model.utils.fold
 import org.hnau.commons.gen.pipe.annotations.Pipe
 import org.hnau.commons.kotlin.KeyValue
 import org.hnau.commons.kotlin.ZipList
 import org.hnau.commons.kotlin.coroutines.flow.state.derivedStateFlowOf
+import org.hnau.commons.kotlin.coroutines.flow.state.flatMapWithScope
 import org.hnau.commons.kotlin.coroutines.flow.state.mapState
 import org.hnau.commons.kotlin.coroutines.flow.state.mapZipListReusable
 import org.hnau.commons.kotlin.coroutines.flow.state.mutable.toMutableStateFlowAsInitial
@@ -26,10 +28,15 @@ import org.hnau.commons.kotlin.foldNullable
 import org.hnau.commons.kotlin.ifNull
 import org.hnau.commons.kotlin.serialization.MutableStateFlowSerializer
 import org.hnau.commons.kotlin.toZipListOrNull
+import org.hnau.pinfin.data.Amount
+import org.hnau.pinfin.data.AmountDirection
+import org.hnau.pinfin.data.Currency
 import org.hnau.pinfin.data.Record
+import org.hnau.pinfin.data.plus
 import org.hnau.pinfin.model.transaction.edit.utils.EditNavigateContext
 import org.hnau.pinfin.model.transaction.utils.RecordId
 import org.hnau.pinfin.model.transaction.utils.remove
+import org.hnau.pinfin.model.utils.budget.repository.BudgetRepository
 import org.hnau.pinfin.model.utils.budget.state.CategoryIdWithInfo
 
 class TransactionRecordsEditModel(
@@ -41,6 +48,8 @@ class TransactionRecordsEditModel(
 
     @Pipe
     interface Dependencies {
+
+        val budgetRepository: BudgetRepository
 
         fun record(): TransactionRecordEditModel.Dependencies
     }
@@ -133,6 +142,7 @@ class TransactionRecordsEditModel(
             }
         )
 
+
     private fun addNewRecord() {
         skeleton.records.update { records ->
             ZipList(
@@ -152,6 +162,28 @@ class TransactionRecordsEditModel(
                 records.state.map { idWithRecord ->
                     idWithRecord.value.recordEditable.state.bind()
                 }.toNonEmptyList()
+            }
+        }
+
+    val totalAmount: StateFlow<KeyValue<AmountDirection, Amount>> = dependencies
+        .budgetRepository
+        .state
+        .mapState(scope) { state -> state.info.currency }
+        .flatMapWithScope(scope) { scope, currency ->
+            recordsEditable.mapState(scope) { records ->
+                records.fold(
+                    ifIncorrect = { Amount.zeroDirectioned },
+                    ifValue = { records, _ ->
+                        records
+                            .map { record ->
+                                KeyValue(
+                                    key = record.category.key.direction,
+                                    value = record.amount.toAmount(currency.scale)
+                                )
+                            }
+                            .reduce(KeyValue<AmountDirection, Amount>::plus)
+                    }
+                )
             }
         }
 
