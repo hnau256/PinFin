@@ -50,7 +50,7 @@ class CategoryChooseModel(
     @Serializable
     data class Skeleton(
         val initialIdWithCategory: CategoryIdWithInfo?,
-        val choose: ChooseOrCreateModel.Skeleton = ChooseOrCreateModel.Skeleton(),
+        val choose: ChooseOrCreateModelOld.Skeleton = ChooseOrCreateModelOld.Skeleton(),
         val manualIdWithCategory: MutableStateFlow<CategoryIdWithInfo?> = initialIdWithCategory.toMutableStateFlowAsInitial(),
     ) {
 
@@ -126,7 +126,7 @@ class CategoryChooseModel(
             }
     }
 
-    val choose: ChooseOrCreateModel<CategoryIdWithInfo> = ChooseOrCreateModel(
+    val choose: ChooseOrCreateModelOld<CategoryIdWithInfo> = ChooseOrCreateModelOld(
         scope = delegate.scope,
         skeleton = delegate.skeleton.choose,
         getBaseVariants = { scope ->

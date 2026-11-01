@@ -33,7 +33,7 @@ import org.hnau.commons.kotlin.coroutines.instant
 import org.hnau.commons.kotlin.foldBoolean
 import org.hnau.commons.kotlin.ifFalse
 import org.hnau.commons.kotlin.ifTrue
-import org.hnau.pinfin.model.transaction.edit.ChooseOrCreateModel
+import org.hnau.pinfin.model.transaction.edit.ChooseOrCreateModelOld
 import org.hnau.pinfin.model.transaction.edit.utils.EditNavigateContext
 
 @Composable
@@ -145,8 +145,8 @@ internal fun <T> ChipsRow(
 }
 
 @Composable
-internal fun <T> ChooseOrCreateContent(
-    model: ChooseOrCreateModel<T>,
+internal fun <T> ChooseOrCreateContentOld(
+    model: ChooseOrCreateModelOld<T>,
     itemContent: @Composable (T) -> Unit,
 ) {
     val input by model.input.collectAsState()

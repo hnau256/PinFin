@@ -48,7 +48,7 @@ class AccountChooseEditProjector(
                             )
                         },
                         trueContent = {
-                            ChooseOrCreateContent(model = model.choose) { idWithAccount ->
+                            ChooseOrCreateContentOld(model = model.choose) { idWithAccount ->
                                 SText(idWithAccount.value.title)
                             }
                         },

@@ -50,7 +50,7 @@ class CategoryChooseEditProjector(
                     )
                 },
                 trueContent = {
-                    ChooseOrCreateContent(model = model.choose) { idWithCategory ->
+                    ChooseOrCreateContentOld(model = model.choose) { idWithCategory ->
                         SText(idWithCategory.value.title)
                     }
                 },

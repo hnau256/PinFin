@@ -50,7 +50,7 @@ class AccountChooseModel(
     @Serializable
     data class Skeleton(
         val initialIdWithAccount: AccountIdWithInfo?,
-        val choose: ChooseOrCreateModel.Skeleton = ChooseOrCreateModel.Skeleton(),
+        val choose: ChooseOrCreateModelOld.Skeleton = ChooseOrCreateModelOld.Skeleton(),
         val manualIdWithAccount: MutableStateFlow<AccountIdWithInfo?> = initialIdWithAccount.toMutableStateFlowAsInitial(),
     ) {
 
@@ -85,7 +85,7 @@ class AccountChooseModel(
                 )
         }
 
-    val choose: ChooseOrCreateModel<AccountIdWithInfo> = ChooseOrCreateModel(
+    val choose: ChooseOrCreateModelOld<AccountIdWithInfo> = ChooseOrCreateModelOld(
         scope = scope,
         skeleton = skeleton.choose,
         getBaseVariants = { scope ->

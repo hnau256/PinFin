@@ -21,7 +21,7 @@ import org.hnau.commons.kotlin.ifTrue
 import org.hnau.commons.kotlin.serialization.MutableStateFlowSerializer
 import org.hnau.pinfin.model.transaction.edit.utils.EditNavigateContext
 
-class ChooseOrCreateModel<T>(
+class ChooseOrCreateModelOld<T>(
     scope: CoroutineScope,
     private val skeleton: Skeleton,
     private val getBaseVariants: (CoroutineScope) -> StateFlow<List<T>>,
