@@ -1,9 +1,7 @@
 package org.hnau.pinfin.projector.transaction.edit
 
-import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.Modifier
 import org.hnau.commons.app.model.utils.fold
 import org.hnau.commons.app.projector.fractal.SItem
 import org.hnau.commons.app.projector.fractal.SPanel
@@ -17,6 +15,7 @@ import org.hnau.pinfin.projector.Localization
 import org.hnau.pinfin.projector.transaction.edit.utils.TransactionSection
 
 class AccountChooseEditProjector(
+    private val title: String,
     private val model: AccountChooseModel,
     private val dependencies: Dependencies,
 ) {
@@ -38,9 +37,7 @@ class AccountChooseEditProjector(
                 )
 
                 SItem(
-                    topAccessory = {
-                        SText(dependencies.localization.account)
-                    },
+                    topAccessory = { SText(title) },
                 ) {
                     isFocused.BooleanStateContent(
                         transitionSpec = TransitionSpec.rememberCrossfade(),

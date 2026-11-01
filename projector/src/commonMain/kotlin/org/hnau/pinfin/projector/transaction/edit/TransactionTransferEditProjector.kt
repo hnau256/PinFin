@@ -4,6 +4,7 @@ import kotlinx.coroutines.CoroutineScope
 import org.hnau.commons.gen.pipe.annotations.Pipe
 import org.hnau.commons.kotlin.mapper.Mapper
 import org.hnau.pinfin.model.transaction.edit.TransactionTransferEditModel
+import org.hnau.pinfin.projector.Localization
 import org.hnau.pinfin.projector.transaction.edit.utils.TransactionSection
 
 class TransactionTransferEditProjector(
@@ -15,17 +16,21 @@ class TransactionTransferEditProjector(
     @Pipe
     interface Dependencies {
 
+        val localization: Localization
+
         fun accountChoose(): AccountChooseEditProjector.Dependencies
 
         fun amount(): AmountEditProjector.Dependencies
     }
 
     private val from = AccountChooseEditProjector(
+        title = dependencies.localization.accountFrom,
         model = model.from,
         dependencies = dependencies.accountChoose(),
     )
 
     private val to = AccountChooseEditProjector(
+        title = dependencies.localization.accountTo,
         model = model.to,
         dependencies = dependencies.accountChoose(),
     )

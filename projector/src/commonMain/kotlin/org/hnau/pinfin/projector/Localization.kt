@@ -30,6 +30,8 @@ data class Localization(
     val noTransactions: String = "Транзакции отсутствуют",
     val addTransaction: String = "Добавить транзакцию",
     val account: String = "Счёт",
+    val accountFrom: String = "Откуда",
+    val accountTo: String = "Куда",
     val removeRecord: String = "Удалить запись?",
     val yes: String = "Да",
     val no: String = "Нет",

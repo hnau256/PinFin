@@ -8,17 +8,20 @@ import org.hnau.commons.app.projector.fractal.SItem
 import org.hnau.commons.app.projector.fractal.SPanel
 import org.hnau.commons.app.projector.fractal.STabs
 import org.hnau.commons.app.projector.fractal.SText
+import org.hnau.commons.app.projector.fractal.table.lazy.SLazyTableScope
 import org.hnau.commons.app.projector.fractal.table.lazy.cell
 import org.hnau.commons.gen.pipe.annotations.Pipe
 import org.hnau.commons.gen.sealup.annotations.SealUp
 import org.hnau.commons.gen.sealup.annotations.Variant
 import org.hnau.commons.kotlin.KeyValue
+import org.hnau.commons.kotlin.ZipList
 import org.hnau.commons.kotlin.coroutines.flow.state.flatMapWithScope
 import org.hnau.commons.kotlin.coroutines.flow.state.mapState
 import org.hnau.pinfin.data.TransactionType
 import org.hnau.pinfin.data.nonEmptyEntries
 import org.hnau.pinfin.model.transaction.edit.TransactionTypeEditModel
 import org.hnau.pinfin.model.transaction.edit.fold
+import org.hnau.pinfin.model.transaction.utils.RecordId
 import org.hnau.pinfin.projector.Localization
 import org.hnau.pinfin.projector.transaction.edit.utils.TransactionSection
 import org.hnau.pinfin.projector.utils.title
@@ -58,7 +61,7 @@ class TransactionTypeEditProjector(
         companion object
     }
 
-    val section = TransactionSection(
+    val section: TransactionSection<Either<KeyValue<ZipList<KeyValue<RecordId, TransactionRecordEditProjector>>, SLazyTableScope.(ZipList<KeyValue<RecordId, TransactionRecordEditProjector>>) -> Unit>, KeyValue<Unit, SLazyTableScope.(Unit) -> Unit>>> = TransactionSection(
         state = model
             .type
             .flatMapWithScope(scope) { scope, typeModel ->
