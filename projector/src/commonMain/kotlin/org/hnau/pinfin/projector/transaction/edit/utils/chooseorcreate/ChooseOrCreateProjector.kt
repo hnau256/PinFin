@@ -34,6 +34,7 @@ import org.hnau.pinfin.model.transaction.edit.utils.chooseorcreate.BaseOrAdditio
 import org.hnau.pinfin.model.transaction.edit.utils.chooseorcreate.BaseOrAdditionalValues
 import org.hnau.pinfin.model.transaction.edit.utils.chooseorcreate.ChooseOrCreateModel
 import org.hnau.pinfin.model.transaction.edit.utils.chooseorcreate.fold
+import org.hnau.pinfin.model.transaction.edit.utils.chooseorcreate.foldRaw
 import org.hnau.pinfin.projector.Localization
 import org.hnau.pinfin.projector.transaction.edit.SChipsRow
 import org.hnau.pinfin.projector.transaction.edit.utils.TransactionSection
@@ -279,23 +280,26 @@ class ChooseOrCreateProjector<T>(
     private val state: StateFlow<State<T>> = model
         .state
         .mapWithScope(scope) { scope, state ->
-            when (state) {
-                is ChooseOrCreateModel.State.Focused -> State.Focused(
-                    scope = scope,
-                    state = state,
-                    extractChipInfo = extractChipInfo,
-                    dependencies = dependencies.focused(),
-                    messages = messages,
-                )
-
-                is ChooseOrCreateModel.State.Unfocused -> State.Unfocused(
-                    scope = scope,
-                    title = title,
-                    state = state,
-                    extractChipInfo = extractChipInfo,
-                    messages = messages,
-                )
-            }
+            state.foldRaw(
+                ifFocused = { state ->
+                    State.Focused(
+                        scope = scope,
+                        state = state,
+                        extractChipInfo = extractChipInfo,
+                        dependencies = dependencies.focused(),
+                        messages = messages,
+                    )
+                },
+                ifUnfocused = { state ->
+                    State.Unfocused(
+                        scope = scope,
+                        title = title,
+                        state = state,
+                        extractChipInfo = extractChipInfo,
+                        messages = messages,
+                    )
+                }
+            )
         }
 
     val section: TransactionSection<Unit> = TransactionSection.immutable {

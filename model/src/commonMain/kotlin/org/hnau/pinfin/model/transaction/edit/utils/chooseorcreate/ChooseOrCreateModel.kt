@@ -50,6 +50,7 @@ class ChooseOrCreateModel<T>(
         val input: MutableStateFlow<String> = "".toMutableStateFlowAsInitial(),
     )
 
+    @Fold
     sealed interface State<out T> {
 
         data class Unfocused<out T>(
