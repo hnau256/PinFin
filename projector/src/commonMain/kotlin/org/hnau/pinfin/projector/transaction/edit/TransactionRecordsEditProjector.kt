@@ -74,7 +74,7 @@ class TransactionRecordsEditProjector(
                 separator(key = "records_separator")
                 cells(
                     items = records,
-                    key = { it.key },
+                    key = { it.key.id },
                 ) { record ->
                     record.value.Content(
                         selected = record === records.selected,
