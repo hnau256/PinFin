@@ -17,6 +17,7 @@ class AccountChooseEditProjector(
     scope: CoroutineScope,
     private val model: AccountChooseModel,
     private val dependencies: Dependencies,
+    title: String = dependencies.localization.account,
 ) {
 
     @Pipe
@@ -29,6 +30,7 @@ class AccountChooseEditProjector(
 
     private val delegate: ChooseOrCreateProjector<AccountIdWithInfo> = ChooseOrCreateProjector(
         scope = scope,
+        title = title,
         model = model.choose,
         dependencies = dependencies.chooseOrCreate(),
         extractChipInfo = { it.value.chipInfo },

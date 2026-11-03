@@ -43,6 +43,7 @@ import kotlin.coroutines.EmptyCoroutineContext
 
 class ChooseOrCreateProjector<T>(
     scope: CoroutineScope,
+    title: String,
     model: ChooseOrCreateModel<T>,
     dependencies: Dependencies,
     private val messages: ChooseOrCreateMessages,
@@ -65,14 +66,13 @@ class ChooseOrCreateProjector<T>(
 
         data class Variant(
             val info: ChipInfo,
-            val selected: Boolean,
             val onClick: ActionOrElse.Action<Unit>?,
         ) {
 
             @Composable
             fun Content() {
                 Chip(
-                    selected = selected,
+                    selected = onClick == null,
                     info = info,
                     actionOrElseOrDisabled = onClick,
                 )
@@ -81,6 +81,7 @@ class ChooseOrCreateProjector<T>(
 
         data class Unfocused<out T>(
             private val scope: CoroutineScope,
+            private val title: String,
             private val state: ChooseOrCreateModel.State.Unfocused<T>,
             private val extractChipInfo: (T) -> ChipInfo,
             private val messages: ChooseOrCreateMessages,
@@ -95,17 +96,24 @@ class ChooseOrCreateProjector<T>(
                             ifSome = extractChipInfo,
                         ),
                         onClick = state.onClick,
-                        selected = true,
                     )
 
                 }
 
             @Composable
             override fun Content() {
-                variant
-                    .collectAsState()
-                    .value
-                    .Content()
+                SLine(
+                    orientation = Orientation.Vertical,
+                    separation = LocalDistance.current.units.padding.along.medium,
+                ) {
+                    SText(
+                        text = title,
+                    )
+                    variant
+                        .collectAsState()
+                        .value
+                        .Content()
+                }
             }
         }
 
@@ -227,7 +235,6 @@ class ChooseOrCreateProjector<T>(
                                             variants.map { variant ->
                                                 Variant(
                                                     info = extractChipInfo(variant.value),
-                                                    selected = variant.onClick == null,
                                                     onClick = variant.onClick,
                                                 )
                                             }
@@ -283,6 +290,7 @@ class ChooseOrCreateProjector<T>(
 
                 is ChooseOrCreateModel.State.Unfocused -> State.Unfocused(
                     scope = scope,
+                    title = title,
                     state = state,
                     extractChipInfo = extractChipInfo,
                     messages = messages,

@@ -27,12 +27,14 @@ class TransactionTransferEditProjector(
         scope = scope,
         model = model.from,
         dependencies = dependencies.accountChoose(),
+        title = dependencies.localization.accountFrom,
     )
 
     private val to = AccountChooseEditProjector(
         scope = scope,
         model = model.to,
         dependencies = dependencies.accountChoose(),
+        title = dependencies.localization.accountTo,
     )
 
     private val amount = AmountEditProjector(

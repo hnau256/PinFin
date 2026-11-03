@@ -16,6 +16,7 @@ class CategoryChooseEditProjector(
     scope: CoroutineScope,
     model: CategoryChooseModel,
     dependencies: Dependencies,
+    title: String = dependencies.localization.category,
 ) {
 
     @Pipe
@@ -28,6 +29,7 @@ class CategoryChooseEditProjector(
 
     private val delegate: ChooseOrCreateProjector<CategoryIdWithInfo> = ChooseOrCreateProjector(
         scope = scope,
+        title = title,
         model = model.choose,
         dependencies = dependencies.chooseOrCreate(),
         extractChipInfo = CategoryIdWithInfo::chipInfo,
