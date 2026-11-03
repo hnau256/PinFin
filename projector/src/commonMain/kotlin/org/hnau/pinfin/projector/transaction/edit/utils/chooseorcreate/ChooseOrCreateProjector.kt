@@ -67,13 +67,14 @@ class ChooseOrCreateProjector<T>(
 
         data class Variant(
             val info: ChipInfo,
-            val onClick: ActionOrElse.Action<Unit>?,
+            val selected: Boolean,
+            val onClick: ActionOrElse.Action<Unit>,
         ) {
 
             @Composable
             fun Content() {
                 Chip(
-                    selected = onClick == null,
+                    selected = selected,
                     info = info,
                     actionOrElseOrDisabled = onClick,
                 )
@@ -96,6 +97,7 @@ class ChooseOrCreateProjector<T>(
                             ifEmpty = { ChipInfo.forNoItem(messages.entityTypeName) },
                             ifSome = extractChipInfo,
                         ),
+                        selected = false,
                         onClick = state.onClick,
                     )
 
@@ -236,6 +238,7 @@ class ChooseOrCreateProjector<T>(
                                             variants.map { variant ->
                                                 Variant(
                                                     info = extractChipInfo(variant.value),
+                                                    selected = variant.selected,
                                                     onClick = variant.onClick,
                                                 )
                                             }

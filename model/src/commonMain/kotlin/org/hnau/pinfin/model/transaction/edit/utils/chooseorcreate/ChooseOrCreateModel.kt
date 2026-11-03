@@ -79,7 +79,8 @@ class ChooseOrCreateModel<T>(
 
             data class Variant<out T>(
                 val value: T,
-                val onClick: ActionOrElse.Action<Unit>?,
+                val selected: Boolean,
+                val onClick: ActionOrElse.Action<Unit>,
             )
         }
     }
@@ -238,17 +239,15 @@ class ChooseOrCreateModel<T>(
                                 variants.map { variant ->
                                     State.Focused.Variant(
                                         value = variant,
-                                        onClick = selectedKey
+                                        selected = selectedKey
                                             .fold(
                                                 ifEmpty = { true },
                                                 ifSome = { variant.let(extractKey) != it }
-                                            )
-                                            .ifTrue {
-                                                ActionOrElse.instant {
-                                                    onSelectedChanged(variant)
-                                                    navigateContext.goForward()
-                                                }
-                                            },
+                                            ),
+                                        onClick = ActionOrElse.instant {
+                                            onSelectedChanged(variant)
+                                            navigateContext.goForward()
+                                        },
                                     )
                                 }
                             }
