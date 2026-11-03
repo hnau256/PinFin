@@ -1,10 +1,14 @@
 package org.hnau.pinfin.projector.utils
 
 import androidx.compose.runtime.Composable
+import org.hnau.commons.app.projector.utils.Drawable
 import org.hnau.commons.app.projector.utils.rememberRun
 import org.hnau.commons.kotlin.foldNullable
 import org.hnau.pinfin.model.utils.budget.state.AccountInfo
 import org.hnau.pinfin.projector.Localization
+import org.hnau.pinfin.projector.utils.hue
+import org.hnau.pinfin.projector.utils.icon
+import org.hnau.pinfin.projector.utils.title
 
 @Composable
 fun AccountInfo?.rememberEntityUiInfo(
@@ -32,3 +36,13 @@ fun AccountInfo?.rememberEntityUiInfo(
         }
     },
 )
+
+
+val AccountInfo.chipInfo: ChipInfo
+    get() = ChipInfo(
+        hue = hue,
+        leading = icon
+            ?.image
+            ?.let(Drawable::Vector),
+        title = title,
+    )

@@ -3,7 +3,6 @@ package org.hnau.pinfin.projector.transaction.edit
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.text.KeyboardOptions
@@ -14,7 +13,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
@@ -24,16 +22,15 @@ import org.hnau.commons.app.projector.fractal.SPanel
 import org.hnau.commons.app.projector.fractal.SText
 import org.hnau.commons.app.projector.fractal.STextField
 import org.hnau.commons.app.projector.fractal.distance.LocalDistance
+import org.hnau.commons.app.projector.fractal.padding.LocalContentPaddingBox
 import org.hnau.commons.app.projector.fractal.size.units
 import org.hnau.commons.app.projector.uikit.state.BooleanStateContent
-import org.hnau.commons.app.projector.uikit.state.NullableStateContent
 import org.hnau.commons.app.projector.uikit.transition.TransitionSpec
 import org.hnau.commons.kotlin.coroutines.ActionOrElse
 import org.hnau.commons.kotlin.coroutines.instant
 import org.hnau.commons.kotlin.foldBoolean
 import org.hnau.commons.kotlin.ifFalse
 import org.hnau.commons.kotlin.ifTrue
-import org.hnau.pinfin.model.transaction.edit.ChooseOrCreateModelOld
 import org.hnau.pinfin.model.transaction.edit.utils.EditNavigateContext
 
 @Composable
@@ -125,53 +122,23 @@ internal fun ReadOnlyValue(
 }
 
 @Composable
-internal fun <T> ChipsRow(
+internal fun <T> SChipsRow(
     items: List<T>,
     itemContent: @Composable (T) -> Unit,
 ) {
-    items
-        .isEmpty()
-        .ifFalse {
-            val separation = LocalDistance.current.units.padding.along.small
-            FlowRow(
-                horizontalArrangement = Arrangement.spacedBy(separation),
-                verticalArrangement = Arrangement.spacedBy(separation),
-            ) {
-                items.forEach { item ->
-                    itemContent(item)
-                }
-            }
-        }
-}
-
-@Composable
-internal fun <T> ChooseOrCreateContentOld(
-    model: ChooseOrCreateModelOld<T>,
-    itemContent: @Composable (T) -> Unit,
-) {
-    val input by model.input.collectAsState()
-    val variants by model.variants.collectAsState()
-    Column(
-        verticalArrangement = Arrangement.spacedBy(LocalDistance.current.units.padding.along.small),
-    ) {
-        variants.NullableStateContent(
-            transitionSpec = TransitionSpec.remember(
-                showAlignment = Alignment.BottomCenter,
-            ),
-        ) { variantsNotNull ->
-            ChipsRow(items = variantsNotNull) { variant ->
-                SPanel(
-                    actionOrElseOrDisabled = ActionOrElse.instant(variant.onClickIfNotSelected),
-                    isSelected = variant.onClickIfNotSelected == null,
+    LocalContentPaddingBox {
+        items
+            .isEmpty()
+            .ifFalse {
+                val separation = LocalDistance.current.units.padding.along.small
+                FlowRow(
+                    horizontalArrangement = Arrangement.spacedBy(separation),
+                    verticalArrangement = Arrangement.spacedBy(separation),
                 ) {
-                    itemContent(variant.value)
+                    items.forEach { item ->
+                        itemContent(item)
+                    }
                 }
             }
-        }
-        EditTextField(
-            value = input,
-            onValueChanged = { model.input.value = it },
-            navigateContext = model.navigateContext,
-        )
     }
 }

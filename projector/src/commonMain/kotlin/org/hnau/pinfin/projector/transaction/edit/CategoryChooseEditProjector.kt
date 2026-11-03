@@ -1,60 +1,63 @@
 package org.hnau.pinfin.projector.transaction.edit
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import org.hnau.commons.app.model.utils.fold
-import org.hnau.commons.app.projector.fractal.SItem
-import org.hnau.commons.app.projector.fractal.SText
-import org.hnau.commons.app.projector.uikit.state.BooleanStateContent
-import org.hnau.commons.app.projector.uikit.transition.TransitionSpec
+import kotlinx.coroutines.CoroutineScope
 import org.hnau.commons.gen.pipe.annotations.Pipe
 import org.hnau.pinfin.model.transaction.edit.CategoryChooseModel
+import org.hnau.pinfin.model.transaction.edit.utils.chooseorcreate.BaseOrAdditionalValues
+import org.hnau.pinfin.model.utils.budget.state.CategoryIdWithInfo
 import org.hnau.pinfin.projector.Localization
+import org.hnau.pinfin.projector.transaction.edit.utils.chooseorcreate.ChooseOrCreateMessages
+import org.hnau.pinfin.projector.transaction.edit.utils.chooseorcreate.ChooseOrCreateProjector
+import org.hnau.pinfin.projector.utils.chipInfo
 
 class CategoryChooseEditProjector(
-    private val model: CategoryChooseModel,
-    private val dependencies: Dependencies,
+    scope: CoroutineScope,
+    model: CategoryChooseModel,
+    dependencies: Dependencies,
 ) {
 
     @Pipe
     interface Dependencies {
 
         val localization: Localization
+
+        fun chooseOrCreate(): ChooseOrCreateProjector.Dependencies
     }
+
+    private val delegate: ChooseOrCreateProjector<CategoryIdWithInfo> = ChooseOrCreateProjector(
+        scope = scope,
+        model = model.choose,
+        dependencies = dependencies.chooseOrCreate(),
+        extractChipInfo = CategoryIdWithInfo::chipInfo,
+        messages = dependencies
+            .localization
+            .run {
+                ChooseOrCreateMessages(
+                    entityTypeName = category,
+                    sections = BaseOrAdditionalValues(
+                        base = ChooseOrCreateMessages.Section(
+                            title = chooseCategoryVariantsTitle,
+                            noVariantsNoInput = chooseCategoryVariantsEmptyNoInput,
+                            noVariantsWithInput = chooseCategoryVariantsEmptyInput,
+                        ),
+                        additional = ChooseOrCreateMessages.Section(
+                            title = chooseCategoryAdditionalVariantsTitle,
+                            noVariantsNoInput = chooseCategoryAdditionalVariantsEmptyNoInput,
+                            noVariantsWithInput = chooseCategoryAdditionalVariantsEmptyInput,
+                        ),
+                    )
+                )
+            },
+    )
 
     @Composable
     fun Content(
         modifier: Modifier = Modifier,
     ) {
-        val isFocused by model.choose.navigateContext.isFocused.collectAsState()
-        val category by model.categoryEditable.collectAsState()
-        val categoryInfo = category.fold(
-            ifIncorrect = { null },
-            ifValue = { value, _ -> value.value },
-        )
-
-        SItem(
+        delegate.Content(
             modifier = modifier,
-            topAccessory = {
-                SText(dependencies.localization.category)
-            },
-        ) {
-            isFocused.BooleanStateContent(
-                transitionSpec = TransitionSpec.rememberCrossfade(),
-                falseContent = {
-                    ReadOnlyValue(
-                        text = categoryInfo?.title ?: dependencies.localization.category,
-                        onClick = model.choose.navigateContext.requestFocus,
-                    )
-                },
-                trueContent = {
-                    ChooseOrCreateContentOld(model = model.choose) { idWithCategory ->
-                        SText(idWithCategory.value.title)
-                    }
-                },
-            )
-        }
+        )
     }
 }

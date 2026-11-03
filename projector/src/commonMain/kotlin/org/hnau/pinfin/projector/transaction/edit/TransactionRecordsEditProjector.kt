@@ -43,10 +43,11 @@ class TransactionRecordsEditProjector(
                 .mapZipListReusable(
                     scope = scope,
                     extractKey = { idWithRecord -> idWithRecord.key },
-                    transform = { _, idWithRecord ->
+                    transform = { scope, idWithRecord ->
                         KeyValue(
                             key = idWithRecord.key,
                             value = TransactionRecordEditProjector(
+                                scope = scope,
                                 model = idWithRecord.value,
                                 dependencies = dependencies.record(),
                             ),

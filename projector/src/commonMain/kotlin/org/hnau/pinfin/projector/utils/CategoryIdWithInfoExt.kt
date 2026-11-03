@@ -1,8 +1,10 @@
 package org.hnau.pinfin.projector.utils
 
 import androidx.compose.runtime.Composable
+import org.hnau.commons.app.projector.utils.Drawable
 import org.hnau.commons.app.projector.utils.rememberRun
 import org.hnau.commons.kotlin.foldNullable
+import org.hnau.commons.kotlin.ifNull
 import org.hnau.pinfin.model.utils.budget.state.CategoryIdWithInfo
 import org.hnau.pinfin.projector.Localization
 
@@ -38,3 +40,19 @@ fun CategoryIdWithInfo?.rememberEntityUiInfo(
         }
     },
 )
+
+
+val CategoryIdWithInfo.chipInfo: ChipInfo
+    get() {
+        val directionIcon = key.direction.icon
+        val icon = value.icon?.image
+        return ChipInfo(
+            hue = value.hue,
+            leading = icon
+                .ifNull { directionIcon }
+                .let(Drawable::Vector),
+            trailing = icon
+                ?.let { Drawable.Vector(directionIcon) },
+            title = value.title,
+        )
+    }

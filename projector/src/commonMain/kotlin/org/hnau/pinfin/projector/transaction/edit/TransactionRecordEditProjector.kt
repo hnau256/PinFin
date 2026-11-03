@@ -1,5 +1,6 @@
 package org.hnau.pinfin.projector.transaction.edit
 
+import androidx.compose.animation.scaleIn
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -10,6 +11,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import kotlinx.coroutines.CoroutineScope
 import org.hnau.commons.app.model.utils.fold
 import org.hnau.commons.app.projector.fractal.SIcon
 import org.hnau.commons.app.projector.fractal.SLine
@@ -34,6 +36,7 @@ import org.hnau.pinfin.projector.utils.AmountContent
 import org.hnau.pinfin.projector.utils.formatter.AmountFormatter
 
 class TransactionRecordEditProjector(
+    scope: CoroutineScope,
     val model: TransactionRecordEditModel,
     private val dependencies: Dependencies,
 ) {
@@ -58,6 +61,7 @@ class TransactionRecordEditProjector(
     )
 
     private val category = CategoryChooseEditProjector(
+        scope = scope,
         model = model.category,
         dependencies = dependencies.category(),
     )

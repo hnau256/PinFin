@@ -1,21 +1,20 @@
 package org.hnau.pinfin.projector.transaction.edit
 
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import org.hnau.commons.app.model.utils.fold
-import org.hnau.commons.app.projector.fractal.SItem
-import org.hnau.commons.app.projector.fractal.SPanel
-import org.hnau.commons.app.projector.fractal.SText
-import org.hnau.commons.app.projector.fractal.table.lazy.cell
-import org.hnau.commons.app.projector.uikit.state.BooleanStateContent
-import org.hnau.commons.app.projector.uikit.transition.TransitionSpec
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import kotlinx.coroutines.CoroutineScope
 import org.hnau.commons.gen.pipe.annotations.Pipe
 import org.hnau.pinfin.model.transaction.edit.AccountChooseModel
+import org.hnau.pinfin.model.transaction.edit.utils.chooseorcreate.BaseOrAdditionalValues
+import org.hnau.pinfin.model.utils.budget.state.AccountIdWithInfo
 import org.hnau.pinfin.projector.Localization
 import org.hnau.pinfin.projector.transaction.edit.utils.TransactionSection
+import org.hnau.pinfin.projector.transaction.edit.utils.chooseorcreate.ChooseOrCreateMessages
+import org.hnau.pinfin.projector.transaction.edit.utils.chooseorcreate.ChooseOrCreateProjector
+import org.hnau.pinfin.projector.utils.chipInfo
 
 class AccountChooseEditProjector(
-    private val title: String,
+    scope: CoroutineScope,
     private val model: AccountChooseModel,
     private val dependencies: Dependencies,
 ) {
@@ -24,37 +23,45 @@ class AccountChooseEditProjector(
     interface Dependencies {
 
         val localization: Localization
+
+        fun chooseOrCreate(): ChooseOrCreateProjector.Dependencies
     }
 
-    val section: TransactionSection<Unit> = TransactionSection.immutable {
-        cell {
-            SPanel {
-                val isFocused by model.choose.navigateContext.isFocused.collectAsState()
-                val account by model.accountEditable.collectAsState()
-                val accountInfo = account.fold(
-                    ifIncorrect = { null },
-                    ifValue = { value, _ -> value.value },
-                )
-
-                SItem(
-                    topAccessory = { SText(title) },
-                ) {
-                    isFocused.BooleanStateContent(
-                        transitionSpec = TransitionSpec.rememberCrossfade(),
-                        falseContent = {
-                            ReadOnlyValue(
-                                text = accountInfo?.title ?: dependencies.localization.account,
-                                onClick = model.choose.navigateContext.requestFocus,
-                            )
-                        },
-                        trueContent = {
-                            ChooseOrCreateContentOld(model = model.choose) { idWithAccount ->
-                                SText(idWithAccount.value.title)
-                            }
-                        },
+    private val delegate: ChooseOrCreateProjector<AccountIdWithInfo> = ChooseOrCreateProjector(
+        scope = scope,
+        model = model.choose,
+        dependencies = dependencies.chooseOrCreate(),
+        extractChipInfo = { it.value.chipInfo },
+        messages = dependencies
+            .localization
+            .run {
+                ChooseOrCreateMessages(
+                    entityTypeName = category,
+                    sections = BaseOrAdditionalValues(
+                        base = ChooseOrCreateMessages.Section(
+                            title = chooseAccountVariantsTitle,
+                            noVariantsNoInput = chooseAccountVariantsEmptyNoInput,
+                            noVariantsWithInput = chooseAccountVariantsEmptyInput,
+                        ),
+                        additional = ChooseOrCreateMessages.Section(
+                            title = chooseAccountAdditionalVariantsTitle,
+                            noVariantsNoInput = chooseAccountAdditionalVariantsEmptyNoInput,
+                            noVariantsWithInput = chooseAccountAdditionalVariantsEmptyInput,
+                        ),
                     )
-                }
-            }
-        }
+                )
+            },
+    )
+
+    val section: TransactionSection<Unit>
+        get() = delegate.section
+
+    @Composable
+    fun Content(
+        modifier: Modifier = Modifier,
+    ) {
+        delegate.Content(
+            modifier = modifier,
+        )
     }
 }

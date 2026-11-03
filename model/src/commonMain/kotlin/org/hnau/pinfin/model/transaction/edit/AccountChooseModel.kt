@@ -29,6 +29,7 @@ import org.hnau.pinfin.data.Amount
 import org.hnau.pinfin.data.AmountDirection
 import org.hnau.pinfin.data.fold
 import org.hnau.pinfin.model.transaction.edit.utils.EditNavigateContext
+import org.hnau.pinfin.model.transaction.edit.utils.chooseorcreate.ChooseOrCreateModel
 import org.hnau.pinfin.model.utils.budget.repository.BudgetRepository
 import org.hnau.pinfin.model.utils.budget.state.AccountIdWithInfo
 import org.hnau.pinfin.model.utils.budget.state.AccountInfo
@@ -50,7 +51,7 @@ class AccountChooseModel(
     @Serializable
     data class Skeleton(
         val initialIdWithAccount: AccountIdWithInfo?,
-        val choose: ChooseOrCreateModelOld.Skeleton = ChooseOrCreateModelOld.Skeleton(),
+        val choose: ChooseOrCreateModel.Skeleton = ChooseOrCreateModel.Skeleton(),
         val manualIdWithAccount: MutableStateFlow<AccountIdWithInfo?> = initialIdWithAccount.toMutableStateFlowAsInitial(),
     ) {
 
@@ -85,7 +86,7 @@ class AccountChooseModel(
                 )
         }
 
-    val choose: ChooseOrCreateModelOld<AccountIdWithInfo> = ChooseOrCreateModelOld(
+    val choose: ChooseOrCreateModel<AccountIdWithInfo> = ChooseOrCreateModel(
         scope = scope,
         skeleton = skeleton.choose,
         getBaseVariants = { scope ->

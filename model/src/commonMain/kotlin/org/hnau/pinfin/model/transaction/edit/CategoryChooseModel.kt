@@ -31,6 +31,7 @@ import org.hnau.pinfin.data.AmountDirection
 import org.hnau.pinfin.data.CategoryId
 import org.hnau.pinfin.data.Comment
 import org.hnau.pinfin.model.transaction.edit.utils.EditNavigateContext
+import org.hnau.pinfin.model.transaction.edit.utils.chooseorcreate.ChooseOrCreateModel
 import org.hnau.pinfin.model.transaction.utils.allRecords
 import org.hnau.pinfin.model.utils.budget.repository.BudgetRepository
 import org.hnau.pinfin.model.utils.budget.state.CategoryIdWithInfo
@@ -50,7 +51,7 @@ class CategoryChooseModel(
     @Serializable
     data class Skeleton(
         val initialIdWithCategory: CategoryIdWithInfo?,
-        val choose: ChooseOrCreateModelOld.Skeleton = ChooseOrCreateModelOld.Skeleton(),
+        val choose: ChooseOrCreateModel.Skeleton = ChooseOrCreateModel.Skeleton(),
         val manualIdWithCategory: MutableStateFlow<CategoryIdWithInfo?> = initialIdWithCategory.toMutableStateFlowAsInitial(),
     ) {
 
@@ -126,7 +127,7 @@ class CategoryChooseModel(
             }
     }
 
-    val choose: ChooseOrCreateModelOld<CategoryIdWithInfo> = ChooseOrCreateModelOld(
+    val choose: ChooseOrCreateModel<CategoryIdWithInfo> = ChooseOrCreateModel(
         scope = delegate.scope,
         skeleton = delegate.skeleton.choose,
         getBaseVariants = { scope ->

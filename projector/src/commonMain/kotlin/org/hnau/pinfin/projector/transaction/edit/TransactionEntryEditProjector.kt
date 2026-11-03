@@ -32,7 +32,7 @@ class TransactionEntryEditProjector(
     val section: TransactionSection<ZipList<KeyValue<RecordId, TransactionRecordEditProjector>>> = TransactionSection.composed(
         scope = scope,
         first = AccountChooseEditProjector(
-            title = dependencies.localization.account,
+            scope = scope,
             model = model.account,
             dependencies = dependencies.account(),
         ).section,

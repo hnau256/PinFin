@@ -24,13 +24,13 @@ class TransactionTransferEditProjector(
     }
 
     private val from = AccountChooseEditProjector(
-        title = dependencies.localization.accountFrom,
+        scope = scope,
         model = model.from,
         dependencies = dependencies.accountChoose(),
     )
 
     private val to = AccountChooseEditProjector(
-        title = dependencies.localization.accountTo,
+        scope = scope,
         model = model.to,
         dependencies = dependencies.accountChoose(),
     )
