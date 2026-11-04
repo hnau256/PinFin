@@ -60,7 +60,10 @@ fun Chip(
     ) {
         SPanel(
             modifier = modifier,
-            isSelected = selected,
+            contrast = selected.foldBoolean(
+                ifTrue = { Contrast.content },
+                ifFalse = { Contrast.container },
+            ),
             contentOrientation = Orientation.Horizontal,
             actionOrElseOrDisabled = actionOrElseOrDisabled,
         ) {

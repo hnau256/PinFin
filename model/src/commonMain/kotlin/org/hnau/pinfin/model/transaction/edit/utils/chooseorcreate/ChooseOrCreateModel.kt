@@ -241,8 +241,8 @@ class ChooseOrCreateModel<T>(
                                         value = variant,
                                         selected = selectedKey
                                             .fold(
-                                                ifEmpty = { true },
-                                                ifSome = { variant.let(extractKey) != it }
+                                                ifEmpty = { false },
+                                                ifSome = { variant.let(extractKey) == it }
                                             ),
                                         onClick = ActionOrElse.instant {
                                             onSelectedChanged(variant)
