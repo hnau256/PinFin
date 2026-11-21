@@ -16,6 +16,11 @@ kotlin {
                 implementation(libs.bignum) //TODO use from bom
             }
         }
+        desktopMain {
+            dependencies {
+                implementation(hnau.kotlinx.io)
+            }
+        }
     }
 }
 

@@ -1,27 +1,23 @@
 package org.hnau.pinfin.app
 
-import org.hnau.commons.app.model.app.AppFilesDirProvider
-import org.hnau.commons.app.model.app.AppSeed
+import org.hnau.commons.app.model.app.RootModelFactory
 import org.hnau.commons.app.model.file.File
 import org.hnau.commons.app.model.file.absolutePath
 import org.hnau.commons.app.model.file.mkDirs
 import org.hnau.commons.app.model.file.plus
 import org.hnau.commons.app.model.preferences.impl.FileBasedPreferences
-import org.hnau.commons.kotlin.coroutines.flow.state.mutable.toMutableStateFlowAsInitial
-import org.hnau.pinfin.data.Currency
 import org.hnau.pinfin.model.RootModel
 import org.hnau.pinfin.model.impl
 import org.hnau.pinfin.model.utils.budget.storage.BudgetsStorage
 import org.hnau.pinfin.model.utils.budget.storage.impl.files
 
-fun createPinFinAppSeed(
+fun createPinFinRootModelFactory(
     dependencies: PinFinAppDependencies,
-    appFilesDirProvider: AppFilesDirProvider,
-): AppSeed<RootModel, RootModel.Skeleton> = AppSeed(
+    appFilesDir: File,
+): RootModelFactory<RootModel.Skeleton, RootModel> = RootModelFactory(
     skeletonSerializer = RootModel.Skeleton.serializer(),
     createDefaultSkeleton = { RootModel.Skeleton() },
-    createModel = { scope, skeleton ->
-        val appFilesDir = appFilesDirProvider.getAppFilesDir()
+    createRootModel = { scope, skeleton ->
         RootModel(
             scope = scope,
             dependencies = RootModel.Dependencies.impl(
@@ -38,4 +34,5 @@ fun createPinFinAppSeed(
             skeleton = skeleton,
         )
     },
+    extractGoBackHandler = RootModel::goBackHandler,
 )
