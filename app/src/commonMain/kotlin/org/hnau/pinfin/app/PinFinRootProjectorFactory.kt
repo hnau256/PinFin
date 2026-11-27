@@ -9,7 +9,7 @@ import org.hnau.pinfin.projector.impl
 
 val PinFinRootProjectorFactory: RootProjectorFactory<RootModel, RootProjector> = RootProjectorFactory(
     fallbackHue = Hue(300),
-    createRootProjector = { scope, model ->
+    createRootProjector = { scope, model, _ ->
         RootProjector(
             scope = scope,
             model = model,
